@@ -13,6 +13,8 @@ import { TrendInsightsSection } from "@/components/dashboard/TrendInsightsSectio
 import { PageShell } from "@/components/layout/PageShell";
 import { dailyReportSchema } from "@/lib/agent/schema";
 
+export const dynamic = "force-dynamic";
+
 async function getReport() {
   const filePath = join(process.cwd(), "data/04_reports/daily-report.json");
   const content = await readFile(filePath, "utf8");

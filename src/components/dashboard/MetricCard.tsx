@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 
 type MetricCardProps = {
   label: string;
@@ -8,9 +9,10 @@ type MetricCardProps = {
   helper: string;
   icon: React.ReactNode;
   accent?: string;
+  href?: string;
 };
 
-export function MetricCard({ label, value, helper, icon, accent = "accent" }: MetricCardProps) {
+export function MetricCard({ label, value, helper, icon, accent = "accent", href }: MetricCardProps) {
   const [displayValue, setDisplayValue] = useState<string>("0");
   const ref = useRef<HTMLDivElement>(null);
   const animated = useRef(false);
@@ -43,7 +45,7 @@ export function MetricCard({ label, value, helper, icon, accent = "accent" }: Me
     cool: "var(--cool)",
   };
 
-  return (
+  const card = (
     <section
       ref={ref}
       className="rounded-xl border border-line bg-panel p-5 shadow-sm transition-shadow hover:shadow-md"
@@ -59,4 +61,13 @@ export function MetricCard({ label, value, helper, icon, accent = "accent" }: Me
       <p className="mt-1.5 text-sm leading-6 text-muted">{helper}</p>
     </section>
   );
+
+  if (href) {
+    return (
+      <Link href={href} className="block cursor-pointer">
+        {card}
+      </Link>
+    );
+  }
+  return card;
 }

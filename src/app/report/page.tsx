@@ -7,6 +7,8 @@ import { MarkdownRenderer } from "@/components/report/MarkdownRenderer";
 import { generateMarkdown } from "@/lib/report/generate-markdown";
 import { dailyReportSchema } from "@/lib/agent/schema";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Full Report - Daily AI Insight Engine",
   description: "AI 舆情分析日报完整报告",
