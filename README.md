@@ -1,73 +1,203 @@
-# 🧠 Daily AI Insight Engine (AI 舆情分析日报系统)
+# Daily AI Insight Engine
 
-> 一个基于 Next.js 与 Claude Agent SDK 构建的自动化 AI 资讯分析与洞察系统。
-> 采用“数据离线管道处理 + 前端静态渲染”的读写分离架构，致力于将每日海量碎片化新闻转化为高信噪比的结构化洞察。
+AI 舆情分析日报系统 MVP：从每日 AI 新闻中抽取结构化洞察，生成可读分析报告，并用 Next.js Dashboard 展示可视化结果。
 
-## 📖 项目背景与目标
+本项目围绕笔试题的核心原则实现：**重设计、轻爬虫、巧组装**。它不把原始新闻一次性丢给大模型生成全文，而是采用“单篇结构化抽取 + 全局聚合分析”的离线 pipeline，让处理逻辑、Schema 设计和 AI 使用边界都可以被审查。
 
-面对每日爆发式的 AI 行业资讯，单纯的新闻聚合已无法满足深度的信息理解需求。本项目旨在构建一个最小可用（MVP）的**自动化运营工具链**，通过大模型执行信息抽取、情绪分析与趋势聚类，输出具备高度结构化与商业洞察的“AI 分析日报”，辅助技术追踪、舆情监测与投资决策。
+## 项目目标
 
-## 🏗 系统架构与核心设计决策
+- 获取并保存 10-20 条 AI 相关新闻原始数据。
+- 将非结构化新闻转成可排序、可聚合、可视化的结构化数据。
+- 基于结构化结果生成 AI 分析日报，包括 Top 事件、深度总结、趋势判断、风险与机会提示。
+- 用前端页面展示完整日报和基础图表。
 
-本项目没有采用常规的“一把梭”将所有数据丢给大模型的做法，而是基于**工程化可靠性**和**大模型上下文控制**的考量，设计了如下架构：
+## 技术栈
 
-### 1. 读写分离架构 (Read-Write Separation)
-* **Write (离线分析管道):** 在 `scripts/` 目录下通过 Node.js 运行离线 Pipeline。彻底规避 Vercel 等 Serverless 部署环境下的 API 请求超时限制，同时方便后续接入定时任务（Cron Job）。
-* **Read (前端可视化):** Next.js App Router 仅负责读取生成的本地静态 JSON 报告进行可视化渲染，保证页面加载的极致速度与稳定性。
+- Next.js App Router、React、TypeScript
+- Tailwind CSS 4
+- Zod：Schema 定义与运行时校验
+- `@anthropic-ai/claude-agent-sdk`：Agent 分析核心接入点
+- pnpm：依赖安装与脚本运行
 
-### 2. Map-Reduce 抽取分析流
-应对长文本幻觉和信息遗漏，采用两段式处理：
-* **Map 阶段（微观结构化）:** 遍历原始数据，对**单篇文章**独立调用 LLM，强制将其提纯为严格包含实体、情绪、影响力的 JSON 结构。
-* **Reduce 阶段（宏观聚类）:** 汇总所有单篇的结构化数据（剔除了大量冗余文本，极大降低 Token 消耗），让 LLM 站在全局视角生成 Top 事件总结与趋势预判。
+依赖在 `package.json` 中使用 `latest`，以满足“使用最新版依赖”的要求。当前一次安装解析出的核心版本包括 Next.js 16.2.5、React 19.2.6、Tailwind CSS 4.2.4。
 
----
+## 数据源说明
 
-## 🛠 核心处理流程 (Pipeline)
+MVP 使用 `data/raw/articles.json` 中的 15 条静态样例数据，覆盖英文与中文信源：
 
-系统的工作流定义在 `scripts/run-pipeline.ts` 中，包含四大核心步骤：
+- 官方渠道：OpenAI Blog、Google DeepMind Blog、Anthropic News、NVIDIA Blog、Microsoft AI Blog、Meta AI Blog
+- 科技媒体：TechCrunch、The Verge、机器之心、量子位、36氪
+- 研究与社区：arXiv、Hugging Face、Product Hunt、Hacker News
 
-1. **数据获取 (Ingestion):** 通过轻量级脚本从预设数据源拉取最新资讯。
-2. **数据清洗 (Cleaning):** 去除 HTML 标签、广告等噪音，仅保留核心正文，提升 LLM 输入信噪比。
-3. **结构化抽取 (Extraction):** 依托 `claude-agent-sdk`，将清洗后的文本转化为预定义的 TypeScript / Zod Schema（实体、分类、情绪得分）。
-4. **洞察生成 (Synthesis):** 基于高维度的结构化集合，生成最终的趋势洞察报告并落盘为 `reports/daily.json`。
+选择理由：
 
----
+- 官方渠道适合捕捉模型、产品、平台能力的一手发布。
+- 科技媒体适合观察商业化、资本、用户信任和产业竞争。
+- 研究与开发者社区适合发现技术路线、开源生态和实践阻力。
+- 中英文混合能够避免只看到海外叙事或本土叙事，提升日报的行业完整度。
 
-## 📊 数据源说明与选择决策
+## 系统架构
 
-* **数据来源：** * Hacker News / Product Hunt (API/RSS)：捕获最新的开发者社区讨论与独立产品发布。
-  * arXiv AI 分类 (RSS)：追踪核心前沿论文与技术突破。
-  * TechCrunch (网页抓取)：获取资本动向与大厂商业决策。
-* **数据特点：** 中英文混合，覆盖学术界、开源社区与商业界。
-* **选择理由：** 此组合能够构建完整的行业视角。学术突破（arXiv）往往领先商业落地（TechCrunch）数月，而社区讨论（HN）能最快反映技术实施的阻力与开发者情绪。综合数据源使得最终的“风险与机会提示”更具立体逻辑支撑。
+```text
+data/raw/articles.json
+        |
+        v
+Cleaning: 文本清洗、HTML 去噪、长度截断
+        |
+        v
+Map: 单篇文章结构化抽取 StructuredInsight
+        |
+        v
+data/processed/structured-insights.json
+        |
+        v
+Reduce: 基于结构化数据生成 DailyReport
+        |
+        v
+data/reports/daily-report.json
+        |
+        v
+Next.js Dashboard 静态读取与可视化展示
+```
 
----
+### 关键设计决策
 
-## 🤖 AI 应用与工程化约束
+- **读写分离**：耗时、可能失败、需要密钥的 AI pipeline 放在 `scripts/run-pipeline.ts`；前端只读取本地 JSON，避免把长任务放进 Serverless 请求链路。
+- **Map-Reduce**：Map 阶段逐篇抽取，Reduce 阶段只聚合已经校验过的结构化结果，满足“不一次性丢给 AI”的限制。
+- **Schema first**：`src/lib/agent/schema.ts` 同时约束 pipeline、Agent 输出、验证脚本和前端消费，减少自由文本带来的不稳定。
+- **Mock fallback**：默认使用确定性 heuristic 生成示例报告；设置 `AI_ENGINE_USE_CLAUDE=true` 后可走 Claude Agent SDK，便于无 API Key 环境下评审。
 
-为了保证输出的绝对稳定，本项目在 AI 层的工程实践包括：
+## Schema 设计思路
 
-1. **强类型约束 (Structured Output):** 使用 `Zod` 定义 Schema，结合 `claude-agent-sdk` 的 Tool Calling 机制，强制模型按照精确的 JSON 格式输出，杜绝“自由发挥”导致的解析崩溃。
-2. **Prompt 设计 (Prompt Engineering):**
-   * **角色设定:** 设定为资深 AI 行业分析师，具备敏锐的商业与技术嗅觉。
-   * **Few-Shot:** 在 Prompt 中注入 1-2 个标准输出示例，极大地提高了分类（如 `event_type`）和打分（`impact_score`）的准确性。
-3. **容错机制 (Error Handling):**
-   单篇文章抽取失败（如接口超时、格式错误）会被 Catch 并记录日志，跳过该条目，保障整体 Pipeline 运行不会中断。
+项目定义了三层核心数据模型：
 
----
+### RawArticle
 
-## 🚀 快速启动
+字段包括 `id`、`title`、`url`、`source`、`language`、`publishedAt`、`summary`、`content`。
 
-### 前置要求
-* Node.js (>= 18.x)
-* pnpm 或 npm
-* Anthropic API Key (Claude)
+设计目的：保留原始数据证据链，让每条洞察都能追溯到标题、来源和发布时间，满足提交要求中的“原始数据文件”和“数据来源说明”。
 
-### 环境配置
+### StructuredInsight
+
+字段包括 `articleId`、`eventType`、`topicTags`、`entities`、`sentiment`、`impactScore`、`urgencyScore`、`keyFacts`、`risks`、`opportunities`。
+
+设计目的：这不是 summary，而是把文章转成可计算特征：
+
+- `eventType` 用于事件分类和聚类。
+- `topicTags` 用于趋势归纳。
+- `entities` 用于识别公司、技术、人物、产品和区域热度。
+- `impactScore` 用于 Top 事件排序。
+- `urgencyScore` 用于判断短期跟踪优先级。
+- `sentiment`、`risks`、`opportunities` 服务舆情和决策辅助。
+
+### DailyReport
+
+字段包括 `date`、`dataSourceSummary`、`topEvents`、`deepDives`、`trendInsights`、`riskSignals`、`opportunitySignals`、`visualizationData`。
+
+设计目的：让前端页面无需再次调用模型，直接消费稳定 JSON；同时把可视化数据预计算出来，保证展示层简单可靠。
+
+## AI 使用方式
+
+Agent 层位于 `src/lib/agent/`：
+
+- `prompts.ts` 管理抽取和聚合 Prompt。
+- `schema.ts` 定义 Zod Schema。
+- `index.ts` 封装 `AIInsightEngine`，提供 `extractArticle` 和 `synthesizeReport`。
+- `heuristics.ts` 提供无密钥 fallback，保证示例可复现。
+
+默认运行不会调用外部模型。若需要启用 Claude：
+
 ```bash
-git clone [https://github.com/yourusername/daily-ai-insight-engine.git](https://github.com/yourusername/daily-ai-insight-engine.git)
-cd daily-ai-insight-engine
-pnpm install
-
-# 复制环境变量文件并填入你的 CLAUDE_API_KEY
 cp .env.example .env
+```
+
+设置：
+
+```bash
+ANTHROPIC_API_KEY=your_anthropic_api_key_here
+AI_ENGINE_USE_CLAUDE=true
+```
+
+错误处理策略：
+
+- 单篇文章抽取失败时记录错误并跳过，不中断整条 pipeline。
+- 所有输出写入前都通过 Zod 校验。
+- Reduce 阶段只接收结构化后的 `StructuredInsight[]`，不直接接收原始长文本。
+
+## 目录结构
+
+```text
+data/
+  raw/articles.json
+  processed/structured-insights.json
+  reports/daily-report.json
+scripts/
+  run-pipeline.ts
+  validate-report.ts
+src/
+  app/
+    page.tsx
+    layout.tsx
+    globals.css
+  components/dashboard/
+  lib/
+    agent/
+    data/
+    report/
+```
+
+## 快速启动
+
+安装依赖：
+
+```bash
+pnpm install
+```
+
+生成结构化结果和日报：
+
+```bash
+pnpm pipeline
+```
+
+校验数据文件：
+
+```bash
+pnpm validate
+```
+
+启动前端：
+
+```bash
+pnpm dev
+```
+
+访问：
+
+```text
+http://localhost:3000
+```
+
+## 输出结果示例
+
+- 原始数据：`data/raw/articles.json`
+- 单篇结构化抽取结果：`data/processed/structured-insights.json`
+- 完整 AI 分析日报：`data/reports/daily-report.json`
+- 可视化页面：`src/app/page.tsx`
+
+## 验证命令
+
+```bash
+pnpm typecheck
+pnpm validate
+pnpm build
+pnpm lint
+```
+
+## 局限性与后续优化
+
+- 当前数据源为静态整理，后续可增加 RSS/API 抓取模块。
+- 当前可视化使用轻量 CSS 图表，后续可接入 Recharts 或 ECharts 增强交互。
+- 当前默认 heuristic fallback，后续可针对 Claude Agent SDK 增加更严格的 JSON repair 和重试策略。
+- 可增加人工审核界面，在日报发布前调整风险级别和事件优先级。
+- 可将日报读取能力封装为 MCP Server，供其他 Agent 工作流调用。

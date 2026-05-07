@@ -1,0 +1,64 @@
+/* ============================================================================
+   globals.css — 全局样式 & 设计系统 Token
+
+   本文件定义：
+     1. Tailwind CSS v4 导入（使用 @import "tailwindcss" 新语法）
+     2. CSS 自定义属性（设计 Token）：颜色、阴影
+     3. 全局重置样式
+     4. @theme inline 块将 CSS 变量注册为 Tailwind 主题扩展
+
+   设计系统说明：
+     - 主色调采用低饱和度的蓝灰/暖色搭配，营造专业、冷静的阅读感
+     - --signal (深青)、--amber (琥珀)、--berry (莓红) 三色用于数据可视化
+     - --shadow-soft 提供柔和的卡片阴影，避免 Material Design 风格的重阴影
+   ============================================================================ */
+
+@import "tailwindcss";
+
+:root {
+  --background: #f5f7fb;   /* 页面底色：微蓝灰，比纯白更护眼 */
+  --foreground: #17212b;   /* 主文字色：深蓝黑，对比度充足 */
+  --muted: #5f6b7a;        /* 辅助文字色：中灰蓝 */
+  --line: #d7dde8;         /* 分割线色：浅灰蓝 */
+  --panel: #ffffff;        /* 面板底色：纯白，与背景形成层次 */
+  --signal: #2f6f73;       /* 主题强调色：深青 */
+  --amber: #b9770e;        /* 暖色强调色：琥珀 */
+  --berry: #8f3f71;        /* 冷色强调色：莓红 */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--background);
+}
+
+body {
+  margin: 0;
+  color: var(--foreground);
+  background: var(--background);
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+/* 链接继承父元素颜色，在分析报告场景中链接通常不是主要交互元素 */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Tailwind v4 @theme inline：将 CSS 变量映射为 Tailwind utility class，
+   使组件中可直接使用 bg-signal、text-muted、shadow-soft 等 */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-panel: var(--panel);
+  --color-signal: var(--signal);
+  --color-amber: var(--amber);
+  --color-berry: var(--berry);
+  --shadow-soft: 0 16px 50px rgba(25, 36, 47, 0.08);
+}
