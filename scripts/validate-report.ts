@@ -22,12 +22,12 @@ import { readJsonFile } from "@/lib/data/files";
 // ============================================================================
 
 async function main() {
-  await readJsonFile(join(process.cwd(), "data/raw/articles.json"), rawArticleListSchema);
+  await readJsonFile(join(process.cwd(), "data/01_raw/articles.json"), rawArticleListSchema);
   await readJsonFile(
-    join(process.cwd(), "data/processed/structured-insights.json"),
+    join(process.cwd(), "data/02_processed/structured-insights.json"),
     structuredInsightListSchema,
   );
-  await readJsonFile(join(process.cwd(), "data/reports/daily-report.json"), dailyReportSchema);
+  await readJsonFile(join(process.cwd(), "data/04_reports/daily-report.json"), dailyReportSchema);
   console.log("All data files passed Zod validation.");
 }
 

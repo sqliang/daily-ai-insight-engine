@@ -1,3 +1,4 @@
+import { writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { AIInsightEngine } from "@/lib/agent";
 import {
@@ -7,6 +8,7 @@ import {
 } from "@/lib/agent/schema";
 import { cleanArticle } from "@/lib/data/cleaner";
 import { readJsonFile, writeJsonFile } from "@/lib/data/files";
+import { generateMarkdown } from "@/lib/report/generate-markdown";
 
 // ============================================================================
 // run-pipeline.ts — 日报流水线入口脚本
@@ -23,14 +25,15 @@ import { readJsonFile, writeJsonFile } from "@/lib/data/files";
 // 任何校验失败都会立即抛错终止流水线。
 //
 // 输出文件：
-//   data/processed/structured-insights.json — Map 阶段产物
-//   data/reports/daily-report.json          — 最终日报
+//   data/02_processed/structured-insights.json — Map 阶段产物
+//   data/04_reports/daily-report.json          — 最终日报
 // ============================================================================
 
 const root = process.cwd();
-const rawPath = join(root, "data/raw/articles.json");
-const structuredPath = join(root, "data/processed/structured-insights.json");
-const reportPath = join(root, "data/reports/daily-report.json");
+const rawPath = join(root, "data/01_raw/articles.json");
+const structuredPath = join(root, "data/02_processed/structured-insights.json");
+const reportPath = join(root, "data/04_reports/daily-report.json");
+const markdownPath = join(root, "data/04_reports/daily-report.md");
 
 async function main() {
   const startedAt = Date.now();
@@ -66,9 +69,13 @@ async function main() {
   const report = dailyReportSchema.parse(await engine.synthesizeReport(structured));
   await writeJsonFile(reportPath, report);
 
+  // Write markdown report alongside JSON
+  await writeFile(markdownPath, generateMarkdown(report), "utf8");
+
   console.log(`Pipeline completed in ${Math.round((Date.now() - startedAt) / 1000)}s.`);
   console.log(`Structured insights: ${structuredPath}`);
-  console.log(`Daily report: ${reportPath}`);
+  console.log(`Daily report (JSON): ${reportPath}`);
+  console.log(`Daily report (MD):   ${markdownPath}`);
 }
 
 main().catch((error) => {

@@ -3,27 +3,52 @@
 
    本文件定义：
      1. Tailwind CSS v4 导入（使用 @import "tailwindcss" 新语法）
-     2. CSS 自定义属性（设计 Token）：颜色、阴影
+     2. oklch 设计 Token：颜色、阴影、动画
      3. 全局重置样式
      4. @theme inline 块将 CSS 变量注册为 Tailwind 主题扩展
 
    设计系统说明：
-     - 主色调采用低饱和度的蓝灰/暖色搭配，营造专业、冷静的阅读感
-     - --signal (深青)、--amber (琥珀)、--berry (莓红) 三色用于数据可视化
-     - --shadow-soft 提供柔和的卡片阴影，避免 Material Design 风格的重阴影
+     - 主色调采用 oklch 色彩空间，感知均匀、饱和度可控
+     - --accent (teal) 品牌主色，--warm (amber) 暖色强调，--cool (plum) 冷色强调
+     - 阴影使用 oklch + alpha，营造有层次的柔和深度感
+     - 语义色：positive (绿)、negative (红)、warning (琥珀)
    ============================================================================ */
 
 @import "tailwindcss";
 
 :root {
-  --background: #f5f7fb;   /* 页面底色：微蓝灰，比纯白更护眼 */
-  --foreground: #17212b;   /* 主文字色：深蓝黑，对比度充足 */
-  --muted: #5f6b7a;        /* 辅助文字色：中灰蓝 */
-  --line: #d7dde8;         /* 分割线色：浅灰蓝 */
-  --panel: #ffffff;        /* 面板底色：纯白，与背景形成层次 */
-  --signal: #2f6f73;       /* 主题强调色：深青 */
-  --amber: #b9770e;        /* 暖色强调色：琥珀 */
-  --berry: #8f3f71;        /* 冷色强调色：莓红 */
+  /* Surfaces — 冷暖平衡的中性色阶 */
+  --background: oklch(0.975 0.005 260);
+  --surface:    oklch(0.992 0.003 260);
+  --panel:      oklch(1 0 0);
+  --foreground: oklch(0.18 0.02 260);
+  --muted:      oklch(0.48 0.02 255);
+  --line:       oklch(0.88 0.012 260);
+
+  /* Accent — sophisticated teal for brand, interactive, key data */
+  --accent:       oklch(0.55 0.13 200);
+  --accent-light: oklch(0.90 0.04 200);
+  --accent-dark:  oklch(0.35 0.09 200);
+  --accent-glow:  oklch(0.55 0.13 200 / 0.12);
+
+  /* Warm — amber/gold for sentiment, opportunities */
+  --warm:       oklch(0.60 0.16 85);
+  --warm-light: oklch(0.93 0.06 85);
+
+  /* Cool — berry/plum for impact, risks */
+  --cool:       oklch(0.45 0.16 340);
+  --cool-light: oklch(0.92 0.04 340);
+
+  /* Semantic */
+  --positive: oklch(0.55 0.16 150);
+  --negative: oklch(0.50 0.20 20);
+  --warning:  oklch(0.65 0.18 90);
+
+  /* Shadows — oklch multi-layered for atmospheric depth */
+  --shadow-sm:   0 1px 2px oklch(0.18 0.02 260 / 0.06);
+  --shadow-md:   0 4px 12px oklch(0.18 0.02 260 / 0.08);
+  --shadow-lg:   0 12px 40px oklch(0.18 0.02 260 / 0.10);
+  --shadow-glow: 0 0 30px oklch(0.55 0.13 200 / 0.15);
 }
 
 * {
@@ -32,6 +57,8 @@
 
 html {
   background: var(--background);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
@@ -41,24 +68,72 @@ body {
   font-family:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
 
-/* 链接继承父元素颜色，在分析报告场景中链接通常不是主要交互元素 */
 a {
   color: inherit;
   text-decoration: none;
 }
 
-/* Tailwind v4 @theme inline：将 CSS 变量映射为 Tailwind utility class，
-   使组件中可直接使用 bg-signal、text-muted、shadow-soft 等 */
+/* ==========================================================================
+   Entrance animations — subtle fade-up for sections
+   ========================================================================== */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes count-up {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* ==========================================================================
+   Print styles — hide nav, adjust colors for paper
+   ========================================================================== */
+@media print {
+  nav { display: none; }
+  body { background: white; color: black; }
+  .shadow-soft, .shadow-md, .shadow-lg { box-shadow: none; }
+  .border-line { border-color: #ccc; }
+}
+
+/* ==========================================================================
+   Tailwind v4 @theme inline — 将 CSS 变量映射为 Tailwind utility class
+   ========================================================================== */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
   --color-line: var(--line);
   --color-panel: var(--panel);
-  --color-signal: var(--signal);
-  --color-amber: var(--amber);
-  --color-berry: var(--berry);
-  --shadow-soft: 0 16px 50px rgba(25, 36, 47, 0.08);
+  --color-surface: var(--surface);
+  --color-accent: var(--accent);
+  --color-accent-light: var(--accent-light);
+  --color-accent-dark: var(--accent-dark);
+  --color-warm: var(--warm);
+  --color-warm-light: var(--warm-light);
+  --color-cool: var(--cool);
+  --color-cool-light: var(--cool-light);
+  --color-positive: var(--positive);
+  --color-negative: var(--negative);
+  --color-warning: var(--warning);
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-glow: var(--shadow-glow);
+  --animate-fade-up: fade-up 0.5s ease-out both;
+  --animate-count-up: count-up 0.6s ease-out both;
 }

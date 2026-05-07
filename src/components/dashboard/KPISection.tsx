@@ -1,21 +1,3 @@
-// ============================================================================
-// KPISection.tsx — KPI 指标卡片区组件
-//
-// 职责：渲染日报首屏的三个核心 KPI 指标卡片，向审阅者快速传达：
-//   1. 样本量（totalArticles）：当日处理的原始文章数量
-//   2. 信源数（sources）：覆盖的不同媒体/平台数量
-//   3. 语言覆盖（languages）：中英文信源混合情况
-//
-// 每个卡片包含：
-//   - 指标标签（label）
-//   - 核心数值（value）：大字高亮显示
-//   - 辅助说明（helper）：解释该指标的统计口径或意义
-//
-// 设计决策：
-//   - 响应式三列布局（md:grid-cols-3），移动端单列堆叠
-//   - MetricCard 内部已包含样式封装，此组件仅做数据映射和布局
-// ============================================================================
-
 import { MetricCard } from "@/components/dashboard/MetricCard";
 import type { DailyReport } from "@/lib/agent/schema";
 
@@ -30,16 +12,36 @@ export function KPISection({ dataSourceSummary }: KPISectionProps) {
         label="样本量"
         value={dataSourceSummary.totalArticles}
         helper="逐篇 Map 抽取后再 Reduce 聚合"
+        accent="accent"
+        icon={
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <path d="M2 3h4l2 2h6v7H2V3z" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        }
       />
       <MetricCard
         label="信源数"
         value={dataSourceSummary.sources.length}
         helper={dataSourceSummary.sources.slice(0, 4).join(" / ")}
+        accent="warm"
+        icon={
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <circle cx="8" cy="8" r="6" />
+            <ellipse cx="8" cy="8" rx="3" ry="6" />
+            <path d="M2 8h12" />
+          </svg>
+        }
       />
       <MetricCard
         label="语言覆盖"
         value={dataSourceSummary.languages.join(" + ")}
         helper="混合中英文信源，兼顾全球与本土语境"
+        accent="cool"
+        icon={
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <path d="M2 5h12M5 2v3m6-3v3M3 8h10v5a1 1 0 01-1 1H4a1 1 0 01-1-1V8z" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        }
       />
     </section>
   );

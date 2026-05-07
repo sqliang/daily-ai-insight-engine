@@ -39,7 +39,7 @@ MVP 使用 `data/raw/articles.json` 中的 15 条静态样例数据，覆盖英�
 ## 系统架构
 
 ```text
-data/raw/articles.json
+data/01_raw/articles.json
         |
         v
 Cleaning: 文本清洗、HTML 去噪、长度截断
@@ -48,13 +48,13 @@ Cleaning: 文本清洗、HTML 去噪、长度截断
 Map: 单篇文章结构化抽取 StructuredInsight
         |
         v
-data/processed/structured-insights.json
+data/02_processed/structured-insights.json
         |
         v
 Reduce: 基于结构化数据生成 DailyReport
         |
         v
-data/reports/daily-report.json
+data/04_reports/daily-report.json
         |
         v
 Next.js Dashboard 静态读取与可视化展示
@@ -180,9 +180,9 @@ http://localhost:3000
 
 ## 输出结果示例
 
-- 原始数据：`data/raw/articles.json`
-- 单篇结构化抽取结果：`data/processed/structured-insights.json`
-- 完整 AI 分析日报：`data/reports/daily-report.json`
+- 原始数据：`data/01_raw/articles.json`
+- 单篇结构化抽取结果：`data/02_processed/structured-insights.json`
+- 完整 AI 分析日报：`data/04_reports/daily-report.json`
 - 可视化页面：`src/app/page.tsx`
 
 ## 验证命令

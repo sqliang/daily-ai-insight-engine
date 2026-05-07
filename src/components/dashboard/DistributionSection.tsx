@@ -1,23 +1,4 @@
-// ============================================================================
-// DistributionSection.tsx — 分布图表区组件
-//
-// 职责：渲染事件类型分布和情感分布两个柱状图，以双栏布局展示。
-//
-// 数据处理：
-//   - eventTypeDistribution：原始 label（英文枚举）→ 中文标签（eventTypeLabels）
-//   - sentimentDistribution：原始 label（英文枚举）→ 中文标签（sentimentLabels）
-//   - Bars 组件负责归一化渲染，以最大值为 100% 计算各柱宽度
-//
-// 布局设计：
-//   - 两列 grid 布局（grid gap-5），上下排列于主内容区
-//   - sentimentBars 使用 tone="amber"（暖色）区分于默认的 signal 色
-//
-// 复用说明：
-//   - 此组件组合了 Bars 组件，实现分布数据的免打扰渲染
-//   - 如需调整柱条样式，仅需修改 Bars 组件或传入不同 tone 参数
-// ============================================================================
-
-import { Bars } from "@/components/dashboard/Bars";
+import { DonutChart, type DonutDatum } from "@/components/charts/DonutChart";
 import { eventTypeLabels, sentimentLabels } from "@/lib/report/labels";
 import type { DailyReport } from "@/lib/agent/schema";
 
@@ -25,21 +6,129 @@ type DistributionSectionProps = {
   visualizationData: DailyReport["visualizationData"];
 };
 
-export function DistributionSection({ visualizationData }: DistributionSectionProps) {
-  const eventBars = visualizationData.eventTypeDistribution.map((item) => ({
-    label: eventTypeLabels[item.label],
-    value: item.count,
-  }));
+const eventTypeColors: Record<string, string> = {
+  model_release: "oklch(0.55 0.13 200)",
+  product_launch: "oklch(0.62 0.16 170)",
+  research_breakthrough: "oklch(0.50 0.15 230)",
+  policy_regulation: "oklch(0.60 0.16 85)",
+  funding_market: "oklch(0.45 0.16 340)",
+  open_source: "oklch(0.55 0.08 140)",
+  safety_risk: "oklch(0.50 0.20 20)",
+  industry_adoption: "oklch(0.48 0.06 280)",
+};
 
-  const sentimentBars = visualizationData.sentimentDistribution.map((item) => ({
-    label: sentimentLabels[item.label],
+const sentimentColors: Record<string, string> = {
+  positive: "oklch(0.55 0.16 150)",
+  neutral: "oklch(0.55 0.02 260)",
+  negative: "oklch(0.50 0.20 20)",
+  mixed: "oklch(0.65 0.18 90)",
+};
+
+function toDonutData(
+  items: { label: string; count: number }[],
+  labelMap: Record<string, string>,
+  colorMap: Record<string, string>,
+): DonutDatum[] {
+  return items.map((item) => ({
+    name: labelMap[item.label] ?? item.label,
     value: item.count,
+    color: colorMap[item.label] ?? "oklch(0.55 0.02 260)",
   }));
+}
+
+function summarizeEventTypes(
+  items: { label: string; count: number }[],
+  labelMap: Record<string, string>,
+) {
+  const sorted = [...items].sort((a, b) => b.count - a.count);
+  const top = sorted.slice(0, 2);
+  const rest = sorted.slice(2);
+  const restTotal = rest.reduce((s, i) => s + i.count, 0);
+  const lines: string[] = [];
+
+  if (top.length > 0) {
+    const topNames = top.map((t) => `「${labelMap[t.label] ?? t.label}」`).join("、");
+    lines.push(`${topNames} 占比最高，合计 ${top.reduce((s, t) => s + t.count, 0)} 条`);
+  }
+  if (rest.length > 0 && restTotal > 0) {
+    const restNames = rest.slice(0, 2).map((r) => `「${labelMap[r.label] ?? r.label}」`).join("、");
+    lines.push(`其余如 ${restNames} 等 ${rest.length} 类共 ${restTotal} 条，反映多元议题并行`);
+  }
+
+  return lines;
+}
+
+function summarizeSentiment(items: { label: string; count: number }[], total: number) {
+  const sorted = [...items].sort((a, b) => b.count - a.count);
+  const top = sorted[0];
+  const lines: string[] = [];
+
+  if (!top) return lines;
+
+  const pct = Math.round((top.count / total) * 100);
+
+  if (top.label === "neutral" || top.label === "mixed") {
+    lines.push(`整体基调偏「${sentimentLabels[top.label]}」，${top.label === "neutral" ? "媒体以事实报道为主，情绪化表达较少" : "正面与负面信息交织，各方观点存在分歧"}`);
+  } else if (top.label === "positive") {
+    lines.push(`整体基调偏「正向」（${pct}%），行业利好信号集中，市场信心较强`);
+  } else if (top.label === "negative") {
+    lines.push(`整体基调偏「负向」（${pct}%），需关注风险事件对行业信心的冲击`);
+  }
+
+  const hasNegative = items.some((i) => i.label === "negative" && i.count > 0);
+  if (hasNegative && top.label !== "negative") {
+    lines.push(`存在少量负向信号，需持续跟踪是否发酵`);
+  }
+
+  return lines;
+}
+
+export function DistributionSection({ visualizationData }: DistributionSectionProps) {
+  const total = visualizationData.eventTypeDistribution.reduce((s, i) => s + i.count, 0);
+  const eventDonut = toDonutData(
+    visualizationData.eventTypeDistribution,
+    eventTypeLabels,
+    eventTypeColors,
+  );
+  const sentimentDonut = toDonutData(
+    visualizationData.sentimentDistribution,
+    sentimentLabels,
+    sentimentColors,
+  );
+
+  const eventSummary = summarizeEventTypes(
+    visualizationData.eventTypeDistribution,
+    eventTypeLabels,
+  );
+  const sentimentSummary = summarizeSentiment(
+    visualizationData.sentimentDistribution,
+    total,
+  );
 
   return (
-    <div className="grid gap-5">
-      <Bars title="事件类型分布" data={eventBars} />
-      <Bars title="情绪分布" data={sentimentBars} tone="amber" />
+    <div className="grid gap-5 lg:grid-cols-2">
+      <section className="rounded-xl border border-line bg-panel p-5 shadow-sm">
+        <h2 className="text-base font-semibold">事件类型分布</h2>
+        <DonutChart data={eventDonut} centerLabel={`总计 ${total}`} />
+        {eventSummary.length > 0 && (
+          <div className="mt-4 space-y-1.5 border-t border-line pt-4 text-sm leading-7 text-muted">
+            {eventSummary.map((line, i) => (
+              <p key={i}>{line}</p>
+            ))}
+          </div>
+        )}
+      </section>
+      <section className="rounded-xl border border-line bg-panel p-5 shadow-sm">
+        <h2 className="text-base font-semibold">情绪分布</h2>
+        <DonutChart data={sentimentDonut} centerLabel={`总计 ${total}`} />
+        {sentimentSummary.length > 0 && (
+          <div className="mt-4 space-y-1.5 border-t border-line pt-4 text-sm leading-7 text-muted">
+            {sentimentSummary.map((line, i) => (
+              <p key={i}>{line}</p>
+            ))}
+          </div>
+        )}
+      </section>
     </div>
   );
 }

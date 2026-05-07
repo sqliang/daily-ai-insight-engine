@@ -1,48 +1,67 @@
 import { severityLabels } from "@/lib/report/labels";
 import type { DailyReport } from "@/lib/agent/schema";
 
-// ============================================================================
-// SignalList.tsx — 风险 / 机会信号列表组件
-//
-// 在报告底部以两列布局展示风险提示和机会提示。
-// 每个信号条目包含：
-//   - 信号标题
-//   - 严重程度标签（低/中/高，颜色随级别变化）
-//   - 判断依据说明
-//
-// 严重程度颜色映射：
-//   - low:    灰色边框 + 灰色文字（中性，无需紧张）
-//   - medium: 琥珀色（值得关注）
-//   - high:   莓红色（需要重视）
-// ============================================================================
-
 type SignalListProps = {
   title: string;
   items: DailyReport["riskSignals"];
 };
 
-const severityTone = {
-  low: "border-slate-300 text-slate-600",
-  medium: "border-amber text-amber",
-  high: "border-berry text-berry",
+const severityStyle = {
+  low: {
+    pill: "bg-slate-100 text-slate-600",
+    bar: "bg-slate-300",
+    tint: "",
+  },
+  medium: {
+    pill: "bg-warm-light text-warm",
+    bar: "bg-warm",
+    tint: "bg-warm-light/20",
+  },
+  high: {
+    pill: "bg-cool-light text-cool",
+    bar: "bg-cool",
+    tint: "bg-cool-light/20",
+  },
+};
+
+const severityWidth = {
+  low: "w-1/4",
+  medium: "w-3/5",
+  high: "w-full",
 };
 
 export function SignalList({ title, items }: SignalListProps) {
+  const isRisk = title.includes("风险");
+
   return (
-    <section className="rounded-md border border-line bg-panel p-5 shadow-soft">
-      <h2 className="text-base font-semibold">{title}</h2>
-      <div className="mt-4 space-y-4">
-        {items.map((item) => (
-          <article key={`${item.signal}-${item.rationale}`} className="border-t border-line pt-4 first:border-t-0 first:pt-0">
-            <div className="flex items-start justify-between gap-3">
-              <h3 className="text-sm font-semibold leading-6">{item.signal}</h3>
-              <span className={`shrink-0 rounded-sm border px-2 py-1 text-xs ${severityTone[item.severity]}`}>
-                {severityLabels[item.severity]}
-              </span>
-            </div>
-            <p className="mt-2 text-sm leading-6 text-muted">{item.rationale}</p>
-          </article>
-        ))}
+    <section className="rounded-xl border border-line bg-panel p-5 shadow-sm">
+      <div className="flex items-center gap-2">
+        <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-accent-light text-accent text-sm">
+          {isRisk ? "!" : "?"}
+        </span>
+        <h2 className="text-base font-semibold">{title}</h2>
+      </div>
+      <div className="mt-4 space-y-3">
+        {items.map((item) => {
+          const style = severityStyle[item.severity];
+          return (
+            <article
+              key={`${item.signal}-${item.rationale}`}
+              className={`rounded-lg border border-line p-4 first:border-t ${style.tint}`}
+            >
+              <div className="flex items-start justify-between gap-3">
+                <h3 className="text-sm font-semibold leading-6">{item.signal}</h3>
+                <span className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium ${style.pill}`}>
+                  {severityLabels[item.severity]}
+                </span>
+              </div>
+              <div className="mt-2 h-1 w-full rounded-full bg-line">
+                <div className={`h-1 rounded-full ${style.bar} ${severityWidth[item.severity]}`} />
+              </div>
+              <p className="mt-2 text-sm leading-6 text-muted">{item.rationale}</p>
+            </article>
+          );
+        })}
       </div>
     </section>
   );
