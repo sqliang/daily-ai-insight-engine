@@ -1,0 +1,31 @@
+"""
+AI 舆情分析日报系统核心认知模型 (Daily AI Insight Schema)
+============================================================
+
+本模块采用领域驱动设计 (DDD) 与价值投资视角，将非结构化的嘈杂新闻，
+降维解构为：信息论状态、生态博弈、技术基元与商业护城河。
+
+它是构建自动化 AI 行业雷达、前端可视化大屏以及后续多 Agent 协同调度的核心数据契约。
+
+设计流程：
+    Phase 1 → 提取 baseInfo + factExtraction（基础元信息 + 事实浓缩）
+    Phase 2 → 并行深度分析，三维度平铺（定性研判 / 价值评估 / 前瞻行动），汇总聚合
+"""
+
+from .base_info import BaseInfo
+from .fact_extraction import FactExtraction
+from .deep_analysis import (
+    QualitativeAssessment,
+    ValueAssessment,
+    ForesightAndActionability,
+)
+from .daily_ai_insight import DailyAIInsight
+
+__all__ = [
+    "BaseInfo",
+    "FactExtraction",
+    "QualitativeAssessment",
+    "ValueAssessment",
+    "ForesightAndActionability",
+    "DailyAIInsight",
+]

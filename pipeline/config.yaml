@@ -1,0 +1,552 @@
+# =============================================================================
+# Daily AI Insight Engine - Pipeline Configuration
+# =============================================================================
+# 驱动 4 阶段流水线：ingest → extract → analyze → synthesize
+# 数据源按 "黄金三角" 体系组织：学术/技术 · 产品/社区 · 商业/资本
+
+# =============================================================================
+# 全局流水线设置
+# =============================================================================
+pipeline:
+  name: "Daily AI Insight Engine"
+  version: "1.0.0"
+
+  data_dirs:
+    raw: "data/01_raw"
+    processed: "data/02_processed"
+    extracted: "data/02_extracted"
+    structured: "data/03_structured"
+    reports: "data/04_reports"
+
+# =============================================================================
+# 数据源配置
+# =============================================================================
+# sourceType 枚举 (对齐 pipeline/schemas/base_info.py:SourceType):
+#   academic_paper       - 学术论文 (arXiv 等)
+#   tech_blog            - 技术博客/官方发布
+#   news_media           - 科技媒体
+#   community_discussion - 社区讨论/社交媒体
+# =============================================================================
+
+sources:
+
+  # ===========================================================================
+  # 顶点 A: 技术与前沿 (Academic & Technical)
+  # ===========================================================================
+
+  - name: "arxiv-cs-ai"
+    type: academic_paper
+    tier: A
+    enabled: true
+    description: "arXiv 计算机科学 · AI 分类"
+    url: "https://rss.arxiv.org/rss/cs.AI"
+    language: en
+    fetch_strategy: rss
+    filter:
+      keywords:
+        - "LLM"
+        - "Agent"
+        - "VLA"
+        - "RLHF"
+        - "RAG"
+        - "Transformer"
+        - "diffusion"
+        - "multimodal"
+        - "alignment"
+        - "reasoning"
+        - "fine-tuning"
+        - "benchmark"
+      max_age_hours: 48
+    truncation:
+      mode: abstract_only
+    target_dir: "arxiv"
+
+  - name: "openai-blog"
+    type: tech_blog
+    tier: A
+    enabled: true
+    description: "OpenAI 官方博客"
+    url: "https://openai.com/blog/rss.xml"
+    language: en
+    fetch_strategy: rss
+    filter:
+      keywords:
+        - "GPT"
+        - "ChatGPT"
+        - "agent"
+        - "model"
+        - "API"
+        - "safety"
+        - "alignment"
+      max_age_hours: 72
+    truncation:
+      mode: first_n_chars
+      limit: 3000
+
+  - name: "deepmind-blog"
+    type: tech_blog
+    tier: A
+    enabled: true
+    description: "Google AI Blog (含 DeepMind)"
+    url: "https://blog.google/technology/ai/rss/"
+    language: en
+    fetch_strategy: rss
+    filter:
+      keywords: []  # Google AI blog 内容广泛, 不过滤关键词
+      max_age_hours: 72
+    truncation:
+      mode: first_n_chars
+      limit: 3000
+
+  - name: "anthropic-blog"
+    type: tech_blog
+    tier: A
+    enabled: true
+    description: "Anthropic 官方新闻 (sitemap 解析)"
+    url: "https://www.anthropic.com/sitemap.xml"
+    language: en
+    fetch_strategy: scrape
+    filter:
+      keywords:
+        - "Claude"
+        - "safety"
+        - "alignment"
+        - "constitutional"
+        - "agent"
+        - "enterprise"
+        - "API"
+      max_age_hours: 72
+    truncation:
+      mode: first_n_chars
+      limit: 3000
+
+  - name: "nvidia-blog"
+    type: tech_blog
+    tier: A
+    enabled: true
+    description: "NVIDIA AI 技术博客"
+    url: "https://blogs.nvidia.com/feed/"
+    language: en
+    fetch_strategy: rss
+    filter:
+      keywords:
+        - "GPU"
+        - "inference"
+        - "training"
+        - "CUDA"
+        - "H100"
+        - "B100"
+        - "TensorRT"
+        - "model"
+        - "AI"
+      max_age_hours: 72
+    truncation:
+      mode: first_n_chars
+      limit: 3000
+
+  - name: "meta-ai-blog"
+    type: tech_blog
+    tier: A
+    enabled: false
+    description: "Meta AI 官方博客 (无 RSS, 待实现 HTML 抓取)"
+    url: "https://ai.meta.com/blog/"
+    language: en
+    fetch_strategy: scrape
+    filter:
+      keywords:
+        - "Llama"
+        - "open source"
+        - "model"
+        - "tooling"
+        - "fine-tuning"
+        - "multimodal"
+      max_age_hours: 72
+    truncation:
+      mode: first_n_chars
+      limit: 3000
+
+  - name: "microsoft-ai-blog"
+    type: tech_blog
+    tier: A
+    enabled: false
+    description: "Microsoft AI 官方博客 (RSS 已停更, 最新文章 2022 年)"
+    filter:
+      keywords:
+        - "AI"
+        - "Copilot"
+        - "Azure"
+        - "model"
+        - "agent"
+        - "data"
+        - "open source"
+      max_age_hours: 72
+    truncation:
+      mode: first_n_chars
+      limit: 3000
+
+  - name: "huggingface-blog"
+    type: tech_blog
+    tier: A
+    enabled: true
+    description: "Hugging Face 官方博客"
+    url: "https://huggingface.co/blog/feed.xml"
+    language: en
+    fetch_strategy: rss
+    filter:
+      keywords:
+        - "model"
+        - "LLM"
+        - "dataset"
+        - "benchmark"
+        - "training"
+        - "agent"
+        - "RL"
+        - "fine-tun"
+        - "vLLM"
+        - "open source"
+      max_age_hours: 72
+    truncation:
+      mode: first_n_chars
+      limit: 3000
+
+  # ===========================================================================
+  # 顶点 B: 产品与开发者情绪 (Product & Developer Sentiment)
+  # ===========================================================================
+
+  - name: "hackernews"
+    type: community_discussion
+    tier: B
+    enabled: true
+    description: "Hacker News (hnrss.org, points >= 100)"
+    url: "https://hnrss.org/frontpage?points=100"
+    language: en
+    fetch_strategy: rss
+    filter:
+      keywords: []  # hnrss 已按 points>=100 过滤
+      max_age_hours: 72
+    truncation:
+      mode: none
+
+  - name: "producthunt"
+    type: community_discussion
+    tier: B
+    enabled: true
+    description: "Product Hunt 热门产品"
+    url: "https://www.producthunt.com/feed"
+    language: en
+    fetch_strategy: rss
+    filter:
+      keywords:
+        - "AI"
+        - "LLM"
+        - "agent"
+        - "copilot"
+      max_age_hours: 72
+      min_upvotes: 50
+    truncation:
+      mode: first_n_chars
+      limit: 2000
+
+  - name: "github-trending"
+    type: community_discussion
+    tier: B
+    enabled: true
+    description: "GitHub Trending (每日热门仓库)"
+    url: "https://mshibanami.github.io/GitHubTrendingRSS/daily/all.xml"
+    language: en
+    fetch_strategy: rss
+    filter:
+      keywords:
+        - "AI"
+        - "LLM"
+        - "agent"
+        - "model"
+        - "RAG"
+        - "MCP"
+        - "deep"
+        - "transformer"
+        - "diffusion"
+        - "chat"
+      max_age_hours: 72
+    truncation:
+      mode: none
+
+  - name: "bensbites"
+    type: community_discussion
+    tier: B
+    enabled: true
+    description: "Ben's Bites AI 日报 Newsletter"
+    url: "https://www.bensbites.com/feed"
+    language: en
+    fetch_strategy: rss
+    filter:
+      keywords: []
+      max_age_hours: 72
+    truncation:
+      mode: first_n_chars
+      limit: 5000
+    target_dir: "bensbites"
+
+  # ===========================================================================
+  # 顶点 C: 商业落地与资本动向 (Business & Capital)
+  # ===========================================================================
+
+  - name: "techcrunch"
+    type: news_media
+    tier: C
+    enabled: true
+    description: "TechCrunch 科技新闻"
+    url: "https://techcrunch.com/feed/"
+    language: en
+    fetch_strategy: rss
+    filter:
+      keywords:
+        - "AI"
+        - "startup"
+        - "funding"
+        - "acquisition"
+        - "IPO"
+        - "agent"
+        - "enterprise"
+        - "model"
+      max_age_hours: 72
+    truncation:
+      mode: first_n_chars
+      limit: 3000
+    target_dir: "techcrunch"
+
+  - name: "theverge"
+    type: news_media
+    tier: C
+    enabled: true
+    description: "The Verge AI 报道"
+    url: "https://www.theverge.com/rss/index.xml"
+    language: en
+    fetch_strategy: rss
+    filter:
+      keywords:
+        - "AI"
+        - "artificial intelligence"
+        - "ChatGPT"
+        - "Google"
+        - "Microsoft"
+        - "Apple"
+        - "Meta"
+      max_age_hours: 72
+    truncation:
+      mode: first_n_chars
+      limit: 3000
+
+  - name: "kdnuggets"
+    type: news_media
+    tier: C
+    enabled: true
+    description: "KDnuggets 数据科学与 AI 教程/新闻"
+    url: "https://www.kdnuggets.com/feed/"
+    language: en
+    fetch_strategy: rss
+    filter:
+      keywords:
+        - "AI"
+        - "machine learning"
+        - "LLM"
+        - "data science"
+        - "Python"
+        - "tutorial"
+        - "tool"
+      max_age_hours: 72
+    truncation:
+      mode: first_n_chars
+      limit: 4000
+    target_dir: "kdnuggets"
+
+  - name: "tldrai"
+    type: news_media
+    tier: C
+    enabled: true
+    description: "TLDR AI 每日 AI 新闻聚合 (HTML 解析)"
+    url: "https://tldr.tech/api/latest/ai"
+    language: en
+    fetch_strategy: scrape
+    filter:
+      keywords: []
+      max_age_hours: 72
+    truncation:
+      mode: first_n_chars
+      limit: 5000
+    target_dir: "tldrai"
+
+  - name: "machine-heart"
+    type: news_media
+    tier: C
+    enabled: false
+    description: "机器之心 - 中国 AI 产业媒体 (SPA 渲染, 需 headless browser)"
+    url: "https://www.jiqizhixin.com/"
+    language: zh
+    fetch_strategy: scrape
+    filter:
+      keywords:
+        - "大模型"
+        - "AI"
+        - "融资"
+        - "Agent"
+        - "开源"
+        - "芯片"
+        - "应用"
+        - "GPT"
+        - "Claude"
+      max_age_hours: 72
+    truncation:
+      mode: first_n_chars
+      limit: 3000
+
+  - name: "qubit"
+    type: news_media
+    tier: C
+    enabled: true
+    description: "量子位 - 中国 AI 前沿科技媒体"
+    url: "https://www.qbitai.com/feed"
+    language: zh
+    fetch_strategy: rss
+    filter:
+      keywords:
+        - "大模型"
+        - "AI"
+        - "融资"
+        - "芯片"
+        - "开源"
+        - "Agent"
+        - "应用"
+        - "GPU"
+        - "算力"
+      max_age_hours: 72
+    truncation:
+      mode: first_n_chars
+      limit: 3000
+
+  - name: "36kr"
+    type: news_media
+    tier: C
+    enabled: true
+    description: "36氪 AI 产业创投报道"
+    url: "https://36kr.com/feed"
+    language: zh
+    fetch_strategy: rss
+    filter:
+      keywords:
+        - "AI"
+        - "人工智能"
+        - "融资"
+        - "大模型"
+        - "AIGC"
+        - "Agent"
+        - "创业"
+        - "IPO"
+        - "SaaS"
+      max_age_hours: 72
+    truncation:
+      mode: first_n_chars
+      limit: 3000
+
+# =============================================================================
+# LLM 配置 (按流水线阶段)
+# =============================================================================
+llm:
+  provider: "anthropic"
+  models:
+    extract:
+      name: "claude-sonnet-4-6"
+      temperature: 0.1
+      max_tokens: 4096
+    analyze:
+      name: "claude-opus-4-7"
+      temperature: 0.3
+      max_tokens: 8192
+    synthesize:
+      name: "claude-opus-4-7"
+      temperature: 0.4
+      max_tokens: 16384
+
+  retry:
+    max_retries: 3
+    backoff: exponential
+    initial_delay_seconds: 2
+
+  rate_limit:
+    requests_per_minute: 50
+    concurrent_requests: 5
+
+# =============================================================================
+# 各阶段参数
+# =============================================================================
+stages:
+
+  ingest:
+    time_window_hours: 48
+    max_articles_per_source: 5
+    hard_filters:
+      dedup_by_url: true
+      dedup_by_title_similarity: 0.85
+      skip_non_english_without_translation: false
+    output:
+      format: markdown
+      frontmatter_fields:
+        - title
+        - source
+        - author
+        - published
+        - created
+        - description
+        - tags
+
+  extract:
+    schema: "pipeline/schemas/fact_extraction.py::FactExtraction"
+    input_dir: "data/01_raw"
+    output:
+      processed_dir: "data/02_processed"
+      structured_file: "data/03_structured/daily-insights-{date}.json"
+    batch_size: 5
+    skip_existing: true
+
+  analyze:
+    input_dir: "data/02_processed"
+    output_dir: "data/02_processed"
+    personas:
+      - name: "tech-architect"
+        description: "技术架构师视角"
+        schema: "pipeline/schemas/deep_analysis.py::QualitativeAssessment"
+      - name: "capital-analyst"
+        description: "资本分析师视角"
+        schema: "pipeline/schemas/deep_analysis.py::ValueAssessment"
+      - name: "risk-assessor"
+        description: "风控专家视角"
+        schema: "pipeline/schemas/deep_analysis.py::ForesightAndActionability"
+    concurrency: 3
+    skip_existing: true
+
+  synthesize:
+    input:
+      dir: "data/02_processed"
+      frontmatter_only: true
+    output:
+      report_file: "data/04_reports/daily-report-{date}.json"
+      markdown_report: "data/04_reports/daily-report-{date}.md"
+    top_n: 5
+    sections:
+      - "executive_summary"
+      - "top_events"
+      - "trend_insights"
+      - "risk_signals"
+      - "opportunity_signals"
+    max_input_articles: 25
+
+# =============================================================================
+# 配额分配
+# =============================================================================
+quotas:
+  per_tier:
+    A: 5
+    B: 5
+    C: 5
+  total_target: 15
+  overflow: drop_by_impact
