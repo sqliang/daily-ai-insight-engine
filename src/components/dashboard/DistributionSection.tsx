@@ -7,14 +7,11 @@ type DistributionSectionProps = {
 };
 
 const eventTypeColors: Record<string, string> = {
-  model_release: "oklch(0.55 0.13 200)",
-  product_launch: "oklch(0.62 0.16 170)",
-  research_breakthrough: "oklch(0.50 0.15 230)",
-  policy_regulation: "oklch(0.60 0.16 85)",
-  funding_market: "oklch(0.45 0.16 340)",
-  open_source: "oklch(0.55 0.08 140)",
-  safety_risk: "oklch(0.50 0.20 20)",
-  industry_adoption: "oklch(0.48 0.06 280)",
+  infrastructure_update: "oklch(0.55 0.13 200)",
+  framework_tools: "oklch(0.62 0.16 170)",
+  capital_movement: "oklch(0.45 0.16 340)",
+  application_landing: "oklch(0.60 0.16 85)",
+  policy_and_safety: "oklch(0.50 0.20 20)",
 };
 
 const sentimentColors: Record<string, string> = {

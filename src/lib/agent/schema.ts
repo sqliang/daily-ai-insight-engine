@@ -17,14 +17,11 @@ import { z } from "zod";
 export const languageSchema = z.enum(["zh", "en", "mixed"]);
 
 export const eventTypeSchema = z.enum([
-  "model_release",         // 模型发布：如 GPT-5、Claude 4 等基座模型发布
-  "product_launch",        // 产品发布：面向终端用户的应用/功能上线
-  "research_breakthrough", // 研究突破：论文、基准测试、学术进展
-  "policy_regulation",     // 政策监管：法规、合规、安全治理
-  "funding_market",        // 资本市场：融资、估值、IPO、收购
-  "open_source",           // 开源生态：模型权重、工具链、社区贡献
-  "safety_risk",           // 安全风险：版权、滥用、偏见、事故
-  "industry_adoption",     // 行业落地：企业客户、部署案例、垂直场景
+  "infrastructure_update",   // 基建更新：新模型发布、芯片算力更新、训练框架升级
+  "framework_tools",         // 框架与工具：新的 Agent 框架、开发者工具开源、API 标准
+  "capital_movement",        // 资本动向：巨额融资、并购、财报、IPO
+  "application_landing",     // 应用落地：具体的 ToB/ToC AI 产品发布与迭代
+  "policy_and_safety",       // 政策与安全：监管、版权诉讼、安全事故、伦理争议
 ]);
 
 export const sentimentSchema = z.enum(["positive", "neutral", "negative", "mixed"]);

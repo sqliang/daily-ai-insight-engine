@@ -22,12 +22,13 @@ from pathlib import Path
 from typing import Optional
 
 from ..core.frontmatter_utils import read_frontmatter, write_frontmatter
-from ..extraction.agent import (
+from ..core.agent import (
     AgentCallError,
     StageResult,
     call_agent_with_retry,
     parse_json_response,
 )
+from ..core.enum_utils import fuzzy_match_enum
 from ..schemas.deep_analysis import (
     QualitativeAssessment,
     ValueAssessment,
@@ -255,35 +256,6 @@ _ACTIONABLE_INSIGHT_FUZZY: dict[str, str] = {
 }
 
 
-def _fuzzy_match_enum(value: str, mapping: dict[str, str], enum_name: str) -> Optional[str]:
-    """
-    模糊匹配枚举值。匹配策略：
-        1. 直接查找映射表（小写归一化）
-        2. 尝试在映射表中做子串包含匹配
-
-    参数：
-        value: Agent 返回的原始值
-        mapping: 模糊匹配映射表
-        enum_name: 枚举类名（仅用于日志）
-
-    返回：
-        匹配到的标准枚举值，未匹配返回 None
-    """
-    key = value.lower().strip()
-
-    # 直接匹配
-    if key in mapping:
-        return mapping[key]
-
-    # 子串包含匹配
-    for k, v in mapping.items():
-        if k in key or key in k:
-            logger.info("模糊匹配 %s: '%s' → '%s' (匹配键 '%s')", enum_name, value, v, k)
-            return v
-
-    return None
-
-
 # =============================================================================
 # 校验函数
 # =============================================================================
@@ -343,19 +315,19 @@ def _validate_qualitative(data: dict) -> QualitativeAssessment:
 
             # 顶层枚举字段
             if field_path == "sentiment":
-                matched = _fuzzy_match_enum(raw_value, _SENTIMENT_FUZZY, "sentiment")
+                matched = fuzzy_match_enum(raw_value, _SENTIMENT_FUZZY, "sentiment")
                 if matched:
                     repaired["sentiment"] = matched
                     logger.info("sentiment 修复: '%s' → '%s'", raw_value, matched)
 
             elif field_path == "informationEntropy":
-                matched = _fuzzy_match_enum(raw_value, _ENTROPY_FUZZY, "informationEntropy")
+                matched = fuzzy_match_enum(raw_value, _ENTROPY_FUZZY, "informationEntropy")
                 if matched:
                     repaired["informationEntropy"] = matched
                     logger.info("informationEntropy 修复: '%s' → '%s'", raw_value, matched)
 
             elif field_path == "engineeringComplexity":
-                matched = _fuzzy_match_enum(raw_value, _ENGINEERING_COMPLEXITY_FUZZY, "engineeringComplexity")
+                matched = fuzzy_match_enum(raw_value, _ENGINEERING_COMPLEXITY_FUZZY, "engineeringComplexity")
                 if matched:
                     repaired["engineeringComplexity"] = matched
                     logger.info("engineeringComplexity 修复: '%s' → '%s'", raw_value, matched)
@@ -363,14 +335,14 @@ def _validate_qualitative(data: dict) -> QualitativeAssessment:
             # 嵌套枚举字段
             elif field_path == "developerSentiment" and len(loc) > 1:
                 if loc[1] == "tone":
-                    matched = _fuzzy_match_enum(raw_value, _DEVELOPER_TONE_FUZZY, "developerSentiment.tone")
+                    matched = fuzzy_match_enum(raw_value, _DEVELOPER_TONE_FUZZY, "developerSentiment.tone")
                     if matched and isinstance(repaired.get("developerSentiment"), dict):
                         repaired["developerSentiment"]["tone"] = matched
                         logger.info("developerSentiment.tone 修复: '%s' → '%s'", raw_value, matched)
 
             elif field_path == "hypeAssessment" and len(loc) > 1:
                 if loc[1] == "level":
-                    matched = _fuzzy_match_enum(raw_value, _HYPE_LEVEL_FUZZY, "hypeAssessment.level")
+                    matched = fuzzy_match_enum(raw_value, _HYPE_LEVEL_FUZZY, "hypeAssessment.level")
                     if matched and isinstance(repaired.get("hypeAssessment"), dict):
                         repaired["hypeAssessment"]["level"] = matched
                         logger.info("hypeAssessment.level 修复: '%s' → '%s'", raw_value, matched)
@@ -416,13 +388,13 @@ def _validate_value(data: dict) -> ValueAssessment:
 
             field_path = loc[0]
             if field_path == "valueCaptureLayer":
-                matched = _fuzzy_match_enum(raw_value, _VALUE_CAPTURE_FUZZY, "valueCaptureLayer")
+                matched = fuzzy_match_enum(raw_value, _VALUE_CAPTURE_FUZZY, "valueCaptureLayer")
                 if matched:
                     repaired["valueCaptureLayer"] = matched
                     logger.info("valueCaptureLayer 修复: '%s' → '%s'", raw_value, matched)
 
             elif field_path == "moatImpact":
-                matched = _fuzzy_match_enum(raw_value, _MOAT_IMPACT_FUZZY, "moatImpact")
+                matched = fuzzy_match_enum(raw_value, _MOAT_IMPACT_FUZZY, "moatImpact")
                 if matched:
                     repaired["moatImpact"] = matched
                     logger.info("moatImpact 修复: '%s' → '%s'", raw_value, matched)
@@ -471,7 +443,7 @@ def _validate_foresight(data: dict) -> ForesightAndActionability:
             field_path = loc[0]
             # 顶层枚举
             if field_path == "actionableInsight":
-                matched = _fuzzy_match_enum(raw_value, _ACTIONABLE_INSIGHT_FUZZY, "actionableInsight")
+                matched = fuzzy_match_enum(raw_value, _ACTIONABLE_INSIGHT_FUZZY, "actionableInsight")
                 if matched:
                     repaired["actionableInsight"] = matched
                     logger.info("actionableInsight 修复: '%s' → '%s'", raw_value, matched)
@@ -480,7 +452,7 @@ def _validate_foresight(data: dict) -> ForesightAndActionability:
             elif field_path == "confidence" and len(loc) > 1:
                 sub_field = loc[1]
                 if sub_field in ("impact", "compound", "hype"):
-                    matched = _fuzzy_match_enum(raw_value, _CONFIDENCE_FUZZY, f"confidence.{sub_field}")
+                    matched = fuzzy_match_enum(raw_value, _CONFIDENCE_FUZZY, f"confidence.{sub_field}")
                     if matched and isinstance(repaired.get("confidence"), dict):
                         repaired["confidence"][sub_field] = matched
                         logger.info("confidence.%s 修复: '%s' → '%s'", sub_field, raw_value, matched)

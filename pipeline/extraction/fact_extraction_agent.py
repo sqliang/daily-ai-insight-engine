@@ -27,12 +27,14 @@ from ..schemas.fact_extraction import (
     EpistemicStatus,
     Entities,
 )
-from .agent import (
+from ..core.agent import (
     AgentCallError,
     StageResult,
     call_agent_with_retry,
     parse_json_response,
 )
+from ..core.text_utils import truncate_at_natural_break
+from ..core.enum_utils import fuzzy_match_enum
 from .prompts import (
     get_fact_extraction_system_prompt,
     build_fact_extraction_user_prompt,
@@ -112,78 +114,6 @@ _EPISTEMIC_FUZZY: dict[str, str] = {
 }
 
 
-def _fuzzy_match_enum(value: str, mapping: dict[str, str], enum_name: str) -> Optional[str]:
-    """
-    模糊匹配枚举值。
-
-    匹配策略：
-        1. 直接查找映射表（小写归一化）
-        2. 尝试在映射表中做子串包含匹配
-
-    参数：
-        value: Agent 返回的原始值
-        mapping: 模糊匹配映射表
-        enum_name: 枚举类名（仅用于日志）
-
-    返回：
-        匹配到的标准枚举值，未匹配返回 None
-    """
-    key = value.lower().strip()
-
-    # 直接匹配
-    if key in mapping:
-        return mapping[key]
-
-    # 子串包含匹配：检查 key 是否包含映射键或被映射键包含
-    for k, v in mapping.items():
-        if k in key or key in k:
-            logger.info("模糊匹配 %s: '%s' → '%s' (匹配键 '%s')", enum_name, value, v, k)
-            return v
-
-    return None
-
-
-# =============================================================================
-# 文本截断工具
-# =============================================================================
-
-def _truncate_at_natural_break(text: str, max_len: int) -> str:
-    """
-    在自然断句处截断文本，避免中文句子被拦腰截断。
-
-    三级回退策略：
-        1. 强断句（。！？.!?\n）— 在 max_len 往前 30 字符范围内搜索
-        2. 弱断句（；，,; ）— 在 max_len 往前 20 字符范围内搜索
-        3. 硬截断 — 在 max_len 处直接截断，去掉末尾不完整的字符
-
-    参数：
-        text: 待截断的原始文本
-        max_len: 目标最大字符数
-
-    返回：
-        截断后的文本（已去除首尾空白）
-    """
-    if len(text) <= max_len:
-        return text.strip()
-
-    truncated = text[:max_len]
-
-    # 策略 1: 强断句 — 搜索 。！？.!?\n
-    search_start = max(max_len - 30, 0)
-    for cut_pos in range(max_len, search_start, -1):
-        if truncated[cut_pos - 1] in "。！？.!?\n":
-            return truncated[:cut_pos].strip()
-
-    # 策略 2: 弱断句 — 搜索 ；，,;
-    search_start = max(max_len - 20, 0)
-    for cut_pos in range(max_len, search_start, -1):
-        if truncated[cut_pos - 1] in "；，,; ":
-            return truncated[:cut_pos].strip()
-
-    # 策略 3: 硬截断
-    return truncated.strip()
-
-
 # =============================================================================
 # 校验函数
 # =============================================================================
@@ -232,14 +162,14 @@ def _validate_fact_extraction(data: dict) -> FactExtraction:
 
             # 修复 eventType
             if field_name in ("eventType", "event_type") and isinstance(raw_value, str):
-                matched = _fuzzy_match_enum(raw_value, _EVENT_TYPE_FUZZY, "eventType")
+                matched = fuzzy_match_enum(raw_value, _EVENT_TYPE_FUZZY, "eventType")
                 if matched:
                     repaired[field_name] = matched
                     logger.info("eventType 修复: '%s' → '%s'", raw_value, matched)
 
             # 修复 epistemicStatus
             if field_name in ("epistemicStatus", "epistemic_status") and isinstance(raw_value, str):
-                matched = _fuzzy_match_enum(raw_value, _EPISTEMIC_FUZZY, "epistemicStatus")
+                matched = fuzzy_match_enum(raw_value, _EPISTEMIC_FUZZY, "epistemicStatus")
                 if matched:
                     repaired[field_name] = matched
                     logger.info("epistemicStatus 修复: '%s' → '%s'", raw_value, matched)
@@ -257,23 +187,23 @@ def _validate_fact_extraction(data: dict) -> FactExtraction:
                 # 检查 evt_raw 是否更像是 epistemicStatus 值，且 eps_raw 是否更像是 eventType 值
                 evt_is_eps = (
                     evt_raw in _EPISTEMIC_FUZZY
-                    or _fuzzy_match_enum(evt_raw, _EPISTEMIC_FUZZY, "eventType→epistemicStatus") is not None
+                    or fuzzy_match_enum(evt_raw, _EPISTEMIC_FUZZY, "eventType→epistemicStatus") is not None
                     or evt_raw in EpistemicStatus.__members__
                 )
                 eps_is_evt = (
                     eps_raw in _EVENT_TYPE_FUZZY
-                    or _fuzzy_match_enum(eps_raw, _EVENT_TYPE_FUZZY, "epistemicStatus→eventType") is not None
+                    or fuzzy_match_enum(eps_raw, _EVENT_TYPE_FUZZY, "epistemicStatus→eventType") is not None
                     or eps_raw in EventType.__members__
                 )
 
                 if evt_is_eps and eps_is_evt:
                     # 交叉互换：swap 两个字段的值
                     evt_matched = (
-                        _fuzzy_match_enum(eps_raw, _EVENT_TYPE_FUZZY, "epistemicStatus→eventType")
+                        fuzzy_match_enum(eps_raw, _EVENT_TYPE_FUZZY, "epistemicStatus→eventType")
                         or eps_raw
                     )
                     eps_matched = (
-                        _fuzzy_match_enum(evt_raw, _EPISTEMIC_FUZZY, "eventType→epistemicStatus")
+                        fuzzy_match_enum(evt_raw, _EPISTEMIC_FUZZY, "eventType→epistemicStatus")
                         or evt_raw
                     )
                     evt_key = "eventType" if "eventType" in repaired else "event_type"
@@ -300,15 +230,15 @@ def _validate_fact_extraction(data: dict) -> FactExtraction:
 
             if isinstance(evt_val, str) and isinstance(eps_val, str):
                 # 检查 eventType 值是否可以匹配为 EpistemicStatus
-                evt_as_eps = _fuzzy_match_enum(evt_val, _EPISTEMIC_FUZZY, "eventType→epistemicStatus")
+                evt_as_eps = fuzzy_match_enum(evt_val, _EPISTEMIC_FUZZY, "eventType→epistemicStatus")
                 # 检查 eventType 值是否可以匹配为 EventType（包括严格枚举值）
-                evt_as_evt = _fuzzy_match_enum(evt_val, _EVENT_TYPE_FUZZY, "eventType")
+                evt_as_evt = fuzzy_match_enum(evt_val, _EVENT_TYPE_FUZZY, "eventType")
                 evt_is_valid_event = (
                     evt_as_evt is not None
                     or evt_val in EventType.__members__
                 )
                 # 检查 epistemicStatus 值是否已经合法
-                eps_as_eps = _fuzzy_match_enum(eps_val, _EPISTEMIC_FUZZY, "epistemicStatus")
+                eps_as_eps = fuzzy_match_enum(eps_val, _EPISTEMIC_FUZZY, "epistemicStatus")
                 eps_is_valid_eps = (
                     eps_as_eps is not None
                     or eps_val in EpistemicStatus.__members__
@@ -327,7 +257,7 @@ def _validate_fact_extraction(data: dict) -> FactExtraction:
                     )
                 # 反之：epistemicStatus 能匹配为 EventType，但不能匹配为 EpistemicStatus
                 elif eps_as_eps is None and not eps_is_valid_eps:
-                    eps_as_evt = _fuzzy_match_enum(eps_val, _EVENT_TYPE_FUZZY, "epistemicStatus→eventType")
+                    eps_as_evt = fuzzy_match_enum(eps_val, _EVENT_TYPE_FUZZY, "epistemicStatus→eventType")
                     if eps_as_evt is not None:
                         repaired[evt_key] = eps_as_evt
                         repaired[eps_key] = "verified_fact"
@@ -349,14 +279,14 @@ def _validate_fact_extraction(data: dict) -> FactExtraction:
         # 三级回退断句策略：强断句（。！？.!?\n）→ 弱断句（；，,; ）→ 硬截断
         if "tldr" in repaired and isinstance(repaired["tldr"], str):
             if len(repaired["tldr"]) > 80:
-                truncated = _truncate_at_natural_break(repaired["tldr"], 80)
+                truncated = truncate_at_natural_break(repaired["tldr"], 80)
                 repaired["tldr"] = truncated
                 logger.info("tldr 截断: %d → %d 字符",
                            len(data.get("tldr", "")), len(repaired["tldr"]))
 
         if "objectiveSummary" in repaired and isinstance(repaired["objectiveSummary"], str):
             if len(repaired["objectiveSummary"]) > 150:
-                truncated = _truncate_at_natural_break(repaired["objectiveSummary"], 150)
+                truncated = truncate_at_natural_break(repaired["objectiveSummary"], 150)
                 repaired["objectiveSummary"] = truncated
                 logger.info("objectiveSummary 截断: %d → %d 字符",
                            len(data.get("objectiveSummary", "")), len(repaired["objectiveSummary"]))

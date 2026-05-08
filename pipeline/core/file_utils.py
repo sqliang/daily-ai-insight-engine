@@ -83,7 +83,8 @@ def get_next_sequence_number(target_dir: Path) -> int:
 def resolve_data_dir(stage_key: str) -> Path:
     """
     解析数据目录路径。
-    stage_key 可选: manifest, raw, processed, extracted, structured, analyzed, reports
+    stage_key 可选: manifest, raw, processed, extracted, structured,
+                    analyzed, synthesize_structured, reports
     """
     project = get_project_root()
     key_to_path = {
@@ -93,6 +94,7 @@ def resolve_data_dir(stage_key: str) -> Path:
         "extracted": project / "data" / "02_extracted",
         "structured": project / "data" / "03_structured",
         "analyzed": project / "data" / "03_analyzed",
+        "synthesize_structured": project / "data" / "04_structured",
         "reports": project / "data" / "04_reports",
     }
     path = key_to_path.get(stage_key)

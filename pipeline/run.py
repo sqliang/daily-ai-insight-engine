@@ -112,12 +112,13 @@ if __name__ == "__main__":
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 示例:
+  python pipeline/run.py aggregate                  聚合 frontmatter (Stage 4a)
+  python pipeline/run.py synthesize                 日报合成 (Stage 4b)
+  python pipeline/run.py synthesize --dry-run       显示 prompt 预估
   python pipeline/run.py extract                    处理所有文件 (Stage 2)
   python pipeline/run.py analyze                    深度分析所有文件 (Stage 3)
   python pipeline/run.py analyze --stage qualitative 只运行定性研判
-  python pipeline/run.py analyze --dry-run          列出将处理的文件
   python pipeline/run.py analyze --concurrency 2    限制并发文件数
-  python pipeline/run.py analyze --force            强制重新分析
         """,
     )
     subparsers = parser.add_subparsers(dest="command", help="流水线阶段")
@@ -246,6 +247,56 @@ if __name__ == "__main__":
         help="显示详细日志",
     )
 
+    # ------- aggregate 子命令 (Stage 4a) -------
+    aggregate_parser = subparsers.add_parser(
+        "aggregate",
+        help="Stage 4a: 提取 Frontmatter 并聚合为结构化 JSON",
+        description="递归扫描 data/03_analyzed/ 下所有 .md 文件，提取 YAML frontmatter，按数据源分组输出 JSON",
+    )
+    aggregate_parser.add_argument(
+        "--input", "-i", type=str, default=None,
+        help="输入目录 (默认: data/03_analyzed/)",
+    )
+    aggregate_parser.add_argument(
+        "--output", "-o", type=str, default=None,
+        help="输出目录 (默认: data/04_structured/)",
+    )
+    aggregate_parser.add_argument(
+        "--dry-run", action="store_true",
+        help="仅列出文件，不实际写入",
+    )
+
+    # ------- synthesize 子命令 (Stage 4b) -------
+    synthesize_parser = subparsers.add_parser(
+        "synthesize",
+        help="Stage 4b: Editor-in-Chief 日报合成",
+        description="读取聚合后的结构化 JSON，调用 Claude Opus 生成完整日报（JSON + Markdown）",
+    )
+    synthesize_parser.add_argument(
+        "--input", "-i", type=str, default=None,
+        help="all_articles.json 路径 (默认: data/04_structured/all_articles.json)",
+    )
+    synthesize_parser.add_argument(
+        "--output", "-o", type=str, default=None,
+        help="输出目录 (默认: data/04_reports/)",
+    )
+    synthesize_parser.add_argument(
+        "--model", "-m", type=str, default=None,
+        help="LLM 模型名称 (默认: claude-opus-4-7)",
+    )
+    synthesize_parser.add_argument(
+        "--max-detail", type=int, default=30,
+        help="完整展示的文章数 (默认: 30)",
+    )
+    synthesize_parser.add_argument(
+        "--dry-run", action="store_true",
+        help="仅显示 prompt 预估，不调用 LLM",
+    )
+    synthesize_parser.add_argument(
+        "--verbose", "-v", action="store_true",
+        help="显示详细日志",
+    )
+
     args = parser.parse_args()
 
     # 如果没有任何子命令，打印帮助
@@ -320,6 +371,38 @@ if __name__ == "__main__":
         if errors:
             sys.exit(1)
         sys.exit(0)
+
+    elif args.command == "aggregate":
+        from pipeline.synthesis.aggregate_frontmatter import main as aggregate_main
+
+        aggregate_argv = []
+        if args.input:
+            aggregate_argv.extend(["--input", args.input])
+        if args.output:
+            aggregate_argv.extend(["--output", args.output])
+        if args.dry_run:
+            aggregate_argv.append("--dry-run")
+
+        sys.exit(aggregate_main(aggregate_argv))
+
+    elif args.command == "synthesize":
+        from pipeline.synthesis.run_synthesis import main as synthesize_main
+
+        synthesize_argv = []
+        if args.input:
+            synthesize_argv.extend(["--input", args.input])
+        if args.output:
+            synthesize_argv.extend(["--output", args.output])
+        if args.model:
+            synthesize_argv.extend(["--model", args.model])
+        if args.max_detail != 30:
+            synthesize_argv.extend(["--max-detail", str(args.max_detail)])
+        if args.dry_run:
+            synthesize_argv.append("--dry-run")
+        if args.verbose:
+            synthesize_argv.append("--verbose")
+
+        sys.exit(synthesize_main(synthesize_argv))
 
     elif args.command == "extract":
         # 导入并执行 extraction 模块

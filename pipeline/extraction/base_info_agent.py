@@ -25,7 +25,7 @@ import asyncio
 from ..core.frontmatter_utils import read_frontmatter, write_frontmatter
 from ..core.id_utils import generate_id
 from ..schemas.base_info import BaseInfo
-from .agent import (
+from ..core.agent import (
     AgentCallError,
     StageResult,
     call_agent_with_retry,

@@ -36,7 +36,7 @@ from ..core.file_utils import get_project_root, resolve_data_dir, ensure_dir, li
 from ..core.config_loader import get_llm_config, get_stage_config
 from .base_info_agent import run_base_info_stage
 from .fact_extraction_agent import run_fact_extraction_stage
-from .agent import StageResult
+from ..core.agent import StageResult
 
 # ---------------------------------------------------------------------------
 # 日志

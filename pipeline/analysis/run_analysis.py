@@ -196,7 +196,7 @@ async def run_analysis(
 
 def _print_summary(results: list, stages: str) -> None:
     """打印分析结果汇总。"""
-    from ..extraction.agent import StageResult
+    from ..core.agent import StageResult
 
     success = [r for r in results if isinstance(r, StageResult) and r.success and not r.skipped]
     skipped = [r for r in results if isinstance(r, StageResult) and r.skipped]
@@ -310,7 +310,7 @@ def main(argv: Optional[list[str]] = None) -> int:
         ))
 
         # 检查是否有失败
-        from ..extraction.agent import StageResult
+        from ..core.agent import StageResult
         failed = [r for r in results if isinstance(r, StageResult) and not r.success]
         if failed:
             return 1
