@@ -21,6 +21,11 @@ class Sentiment(str, Enum):
     行业情绪倾向枚举
 
     与 impactScore 正交：高冲击力可以是坏消息，低冲击力可以是好消息。
+
+    - positive: 利好 AI 行业（如技术突破、开源发布、政策松绑）
+    - negative: 利空 AI 行业（如安全事故、监管收紧、关键人才流失）
+    - neutral: 中性信息（如例行财报、人事变动）
+    - mixed: 影响复杂 / 多空交织（如大厂开源挤压小厂但利好生态）
     """
 
     POSITIVE = "positive"
@@ -34,6 +39,13 @@ class DeveloperTone(str, Enum):
     开发者情绪语气枚举
 
     用脚投票的开发者群体的真实反馈，而非大众媒体的表层叙事。
+    开发者情绪是技术落地阻力/推力的最前置指标——
+    大众觉得牛逼，但开发者可能觉得 API 太贵或协议流氓。
+
+    - excited: 兴奋期待（对新技术/新工具的正面反应）
+    - skeptical: 怀疑质疑（对宣传话术或性能声明的合理怀疑）
+    - frustrated: 沮丧不满（对 API 变更、定价策略或生态锁定的抗拒）
+    - neutral: 中性观望（尚无明确情绪倾向）
     """
 
     EXCITED = "excited"
@@ -62,6 +74,10 @@ class InformationEntropy(str, Enum):
 
     与 hypeAssessment 正交：低水分文章也可能是旧闻重发（低熵），
     高水分文章也可能有真实突破（高熵）。
+
+    - high: 高密度新知（开创性理念、颠覆性架构、独家爆料），值得逐字精读
+    - medium: 常规迭代（版本更新、功能补齐、行业研报），可快速扫读
+    - low: 陈旧信息（重复解读、情绪宣泄、无实质内容），可跳过
     """
 
     HIGH = "high"
@@ -74,6 +90,11 @@ class EngineeringComplexity(str, Enum):
     工程落地复杂度/技术成熟度枚举
 
     防忽悠机制。矫正市场对短期技术落地速度的盲目乐观。
+
+    - conceptual: 概念验证阶段（白皮书、博客设想，无可用代码）
+    - prototype: 实验室原型/论文代码（跑通了，但不可靠，无生产级保障）
+    - production_ready: 生产级可用（SLA 有保障，可直接接入业务系统）
+    - infrastructure: 泛用型基建（已成为行业标准，如 Transformer、Kubernetes）
     """
 
     CONCEPTUAL = "conceptual"
@@ -87,6 +108,13 @@ class ValueCaptureLayer(str, Enum):
     价值捕获层枚举
 
     此次事件的红利最终沉淀在科技栈的哪一层？
+    从底层硬件到终端应用，不同层级的利润率、壁垒高度和规模效应截然不同。
+
+    - hardware_compute: 硬件与算力层（GPU、芯片、数据中心）—— 重资产、高壁垒
+    - cloud_platform: 云平台层（AWS、Azure、GCP 等）—— 规模效应极强
+    - foundation_model: 基础模型层（GPT、Claude、Llama 等）—— 技术壁垒高但开源冲击大
+    - agent_middleware: 智能体与中间件层（MCP、Agent 框架、工具链）—— 生态位竞争激烈
+    - end_application: 终端应用层（ChatGPT、Copilot、行业 SaaS）—— 离用户最近但护城河最浅
     """
 
     HARDWARE_COMPUTE = "hardware_compute"
@@ -100,7 +128,12 @@ class MoatImpact(str, Enum):
     """
     护城河影响枚举
 
-    事件对行业竞争格局的重塑。
+    事件对行业竞争格局的重塑方向。
+
+    - strengthens_monopoly: 加强垄断（巨头受益，小玩家被挤出——如大厂发布免费原生功能）
+    - democratizes_access: 民主化（降低门槛，更多玩家入场——如高质量开源模型发布）
+    - creates_new_moat: 创造新护城河（新的竞争壁垒正在形成——如新的数据飞轮或分发渠道）
+    - neutral: 无明显影响（事件对竞争格局不产生实质性改变）
     """
 
     STRENGTHENS_MONOPOLY = "strengthens_monopoly"
@@ -114,6 +147,9 @@ class ConfidenceLevel(str, Enum):
     AI 研判置信度等级枚举
 
     标记 LLM 对自身判断的确定程度，避免"所有结论同样可信"的错觉。
+    - high: 高置信度（信息源可靠、证据链完整、推理链条稳固），可直接作为决策参考
+    - medium: 中等置信度（信息源基本可信但存在部分推断或信息缺口），需交叉验证后采信
+    - low: 低置信度（信息源模糊、推断链路长、或领域超出 LLM 知识边界），仅作参考不可作为行动依据
     """
 
     HIGH = "high"
@@ -125,7 +161,12 @@ class ActionableInsight(str, Enum):
     """
     可执行建议枚举
 
-    分析做完后，读者应该做什么。
+    分析做完后，读者应该做什么。此字段为分类标签，具体战略陈述见 ForesightAndActionability.marketOpportunities。
+    - deep_dive: 值得深入阅读原文（高熵高冲击事件，原文有不可替代的细节和上下文）
+    - monitor: 持续跟踪后续进展（事件重要但尚未尘埃落定，如早期产品发布、政策草案征求意见）
+    - strategic_invest: 具备战略投资/研究方向价值（有明确的赛道机会或技能学习路径）—— 配合 marketOpportunities 使用
+    - speculative_watch: 投机性关注，不确定性高（概念阶段、尚无落地路径、或炒作水分大）
+    - ignore: 噪音，可跳过（无实质内容的 PR 通稿、旧闻重发、低熵低冲击）
     """
 
     DEEP_DIVE = "deep_dive"

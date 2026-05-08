@@ -26,6 +26,11 @@ class EventType(str, Enum):
     背后的思维维度：构建宏观趋势大屏（如饼图、柱状图）的基石。
     通过这个字段，系统可以统计出"本周资本是在投基建还是在投应用"，
     从而敏锐捕捉行业周期的切换。
+    - infrastructure_update: 基建演进（新模型发布、芯片算力更新、训练框架升级）—— 底层能力驱动
+    - framework_tools: 框架与工具（新的 Agent 框架、开发者工具开源、API 标准）—— 开发者生态驱动
+    - capital_movement: 资本动向（巨额融资、并购、财报、IPO）—— 资本流向驱动
+    - application_landing: 应用落地（具体的 ToB/ToC AI 产品发布与迭代）—— 商业价值驱动
+    - policy_and_safety: 政策与安全（监管、版权诉讼、安全事故、伦理争议）—— 规则边界驱动
     """
 
     INFRASTRUCTURE_UPDATE = "infrastructure_update"
@@ -42,6 +47,10 @@ class EpistemicStatus(str, Enum):
     这条信息的声明本质是什么？
     物理隔离"确凿事实"与"期货大饼"，聚合时赋予不同可信度权重。
     rumor 即使 impactScore 高也应降权。
+    - verified_fact: 已验证事实（如 GitHub 正式开源、财报发布、产品上线、论文被顶会接收）—— 可直接作为推演起点
+    - pr_statement: 公关声明（官方发声但包含包装话术、尚未交付的"期货"）—— 需剔除话术水分后采信
+    - theoretical_claim: 理论主张（如 arXiv 论文 Benchmark、白皮书设想，尚未经工业界验证）—— 需关注工程落地可行性
+    - rumor_leak: 坊间传闻或灰度泄露（如媒体爆料、匿名信源、融资传言）—— 需等待后续确认，聚合时降权
     """
 
     VERIFIED_FACT = "verified_fact"
