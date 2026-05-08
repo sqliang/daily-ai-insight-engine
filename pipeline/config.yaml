@@ -287,6 +287,37 @@ sources:
       limit: 5000
     target_dir: "bensbites"
 
+  - name: "zhihu"
+    type: community_discussion
+    tier: B
+    enabled: true
+    description: "知乎发现页热门 (浏览器渲染，通过关键字过滤 AI 内容)"
+    url: "https://www.zhihu.com/explore"
+    language: zh
+    fetch_strategy: browser
+    wait_for: "a[href*='/question/']"
+    filter:
+      keywords:
+        - "AI"
+        - "大模型"
+        - "GPT"
+        - "Claude"
+        - "LLM"
+        - "Agent"
+        - "深度学习"
+        - "训练"
+        - "推理"
+        - "开源"
+        - "transformer"
+        - "prompt"
+        - "RAG"
+        - "fine-tune"
+      max_age_hours: 72
+    truncation:
+      mode: first_n_chars
+      limit: 3000
+    target_dir: "zhihu"
+
   # ===========================================================================
   # 顶点 C: 商业落地与资本动向 (Business & Capital)
   # ===========================================================================
@@ -379,11 +410,12 @@ sources:
   - name: "machine-heart"
     type: news_media
     tier: C
-    enabled: false
-    description: "机器之心 - 中国 AI 产业媒体 (SPA 渲染, 需 headless browser)"
+    enabled: true
+    description: "机器之心 - 中国 AI 产业媒体 (浏览器渲染)"
     url: "https://www.jiqizhixin.com/"
     language: zh
-    fetch_strategy: scrape
+    fetch_strategy: browser
+    wait_for: ".article-item"
     filter:
       keywords:
         - "大模型"

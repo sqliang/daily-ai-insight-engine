@@ -35,6 +35,11 @@ from pipeline.core.id_utils import generate_id
 from pipeline.core.web_utils import extract_article_content, extract_metadata, fetch_url
 
 
+def _ensure_browser_session():
+    from pipeline.core.browser_utils import BrowserSession
+    return BrowserSession()
+
+
 def run_ingest(manifest_name: Optional[str] = None, force: bool = False) -> List[Path]:
     """
     主入口：读取清单文件，抓取正文，生成 .md 文件。
@@ -60,69 +65,85 @@ def run_ingest(manifest_name: Optional[str] = None, force: bool = False) -> List
     state = _load_state()
     seen_hashes: Set[str] = set(state.get("seen_hashes", [])) if not force else set()
 
+    # 检测是否有 browser 策略的源，提前创建 browser session
+    needs_browser = False
+    for manifest_path in manifest_paths:
+        manifest_data = read_json(manifest_path)
+        if manifest_data:
+            src = get_source_by_name(manifest_data.get("source", ""))
+            if src and src.get("fetch_strategy") == "browser":
+                needs_browser = True
+                break
+    browser_session = None
+    if needs_browser:
+        browser_session = _ensure_browser_session().__enter__()
+
     output_files: List[Path] = []
     total_ingested = 0
     total_skipped = 0
 
-    for manifest_path in manifest_paths:
-        manifest = read_json(manifest_path)
-        if not manifest:
-            continue
-
-        source_name = manifest.get("source", "")
-        source_config = get_source_by_name(source_name) or {}
-        target_dir_name = source_config.get("target_dir", source_name)
-        target_dir = raw_dir / target_dir_name
-        ensure_dir(target_dir)
-
-        articles = manifest.get("articles", [])
-        print(f"\n处理: {source_name} ({len(articles)} 篇) → {target_dir_name}/")
-
-        for article in articles:
-            url = article.get("url", "")
-            if not url:
+    try:
+        for manifest_path in manifest_paths:
+            manifest = read_json(manifest_path)
+            if not manifest:
                 continue
 
-            # 去重检查：使用 00_manifest 阶段生成的 SHA-256 ID 替代旧的 MD5 哈希
-            # manifest 中预计算的 article.id 与后续所有阶段的 id 完全一致
-            article_id = article.get("id") or generate_id(url)
-            if not force and article_id in seen_hashes:
-                total_skipped += 1
-                continue
+            source_name = manifest.get("source", "")
+            source_config = get_source_by_name(source_name) or {}
+            target_dir_name = source_config.get("target_dir", source_name)
+            target_dir = raw_dir / target_dir_name
+            ensure_dir(target_dir)
 
-            print(f"  [抓取] {article.get('title', url)[:60]}...")
+            articles = manifest.get("articles", [])
+            print(f"\n处理: {source_name} ({len(articles)} 篇) → {target_dir_name}/")
 
-            result = _ingest_one(article, source_config)
-            if result is None:
-                print(f"         失败: 无法提取正文")
-                continue
+            for article in articles:
+                url = article.get("url", "")
+                if not url:
+                    continue
 
-            # 生成序号文件名
-            seq = get_next_sequence_number(target_dir)
-            output_path = target_dir / f"{seq:02d}.md"
+                # 去重检查：使用 00_manifest 阶段生成的 SHA-256 ID 替代旧的 MD5 哈希
+                article_id = article.get("id") or generate_id(url)
+                if not force and article_id in seen_hashes:
+                    total_skipped += 1
+                    continue
 
-            # 构建 frontmatter + 正文
-            # 传入 article_id，使其从"出生"就刻入 frontmatter，贯穿所有后续阶段
-            fm = build_ingestion_frontmatter(
-                title=result.get("title") or article.get("title", ""),
-                url=url,
-                published=result.get("published") or article.get("published", ""),
-                author=result.get("author") or article.get("author", ""),
-                description=result.get("description") or article.get("summary", ""),
-                source_name=source_name,
-                article_id=article_id,
-            )
+                print(f"  [抓取] {article.get('title', url)[:60]}...")
 
-            # 正文截断
-            body = result.get("content", "")
-            body = _apply_truncation(body, source_config)
+                result = _ingest_one(article, source_config, browser_session)
+                if result is None:
+                    print(f"         失败: 无法提取正文")
+                    continue
 
-            write_frontmatter(output_path, fm, body)
-            output_files.append(output_path)
+                # 生成序号文件名
+                seq = get_next_sequence_number(target_dir)
+                output_path = target_dir / f"{seq:02d}.md"
 
-            # 更新去重状态（使用统一的 SHA-256 ID 替代旧的 MD5 hash）
-            seen_hashes.add(article_id)
-            total_ingested += 1
+                # 构建 frontmatter + 正文
+                fm = build_ingestion_frontmatter(
+                    title=result.get("title") or article.get("title", ""),
+                    url=url,
+                    published=result.get("published") or article.get("published", ""),
+                    author=result.get("author") or article.get("author", ""),
+                    description=result.get("description") or article.get("summary", ""),
+                    source_name=source_name,
+                    article_id=article_id,
+                )
+
+                # 正文截断
+                body = result.get("content", "")
+                body = _apply_truncation(body, source_config)
+
+                write_frontmatter(output_path, fm, body)
+                output_files.append(output_path)
+
+                # 更新去重状态（使用统一的 SHA-256 ID 替代旧的 MD5 hash）
+                seen_hashes.add(article_id)
+                total_ingested += 1
+
+    finally:
+        if browser_session:
+            browser_session.__exit__(None, None, None)
 
     # 持久化去重状态
     state["seen_hashes"] = sorted(seen_hashes)
@@ -133,15 +154,30 @@ def run_ingest(manifest_name: Optional[str] = None, force: bool = False) -> List
     return output_files
 
 
-def _ingest_one(article: dict, source_config: dict) -> Optional[dict]:
+def _ingest_one(article: dict, source_config: dict, browser_session=None) -> Optional[dict]:
     """
     抓取单篇文章：获取 HTML → 提取元数据 → 提取正文。
+    当 source 的 fetch_strategy 为 browser 时，使用 Playwright 获取渲染后 HTML。
     返回 {"title", "author", "published", "description", "content"} 或 None。
     """
     url = article.get("url", "")
     timeout = source_config.get("timeout", 30)
+    strategy = source_config.get("fetch_strategy", "rss")
 
-    html = fetch_url(url, timeout=timeout)
+    if strategy == "browser":
+        wait_for = source_config.get("wait_for")
+        if browser_session:
+            html = browser_session.fetch_page_html(
+                url, wait_for=wait_for, timeout=timeout * 1000
+            )
+        else:
+            from pipeline.core.browser_utils import fetch_rendered_html
+            html = fetch_rendered_html(
+                url, wait_for=wait_for, timeout=timeout * 1000
+            )
+    else:
+        html = fetch_url(url, timeout=timeout)
+
     if not html:
         return None
 

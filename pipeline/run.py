@@ -112,12 +112,12 @@ if __name__ == "__main__":
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 示例:
-  python pipeline/run.py extract                    处理所有文件
-  python pipeline/run.py extract --input data/01_raw/arxiv/01.md
-  python pipeline/run.py extract --stage base_info  只运行 BaseInfo 提取
-  python pipeline/run.py extract --dry-run          列出将处理的文件
-  python pipeline/run.py extract --concurrency 3    限制并发数
-  python pipeline/run.py extract --force            强制重新提取
+  python pipeline/run.py extract                    处理所有文件 (Stage 2)
+  python pipeline/run.py analyze                    深度分析所有文件 (Stage 3)
+  python pipeline/run.py analyze --stage qualitative 只运行定性研判
+  python pipeline/run.py analyze --dry-run          列出将处理的文件
+  python pipeline/run.py analyze --concurrency 2    限制并发文件数
+  python pipeline/run.py analyze --force            强制重新分析
         """,
     )
     subparsers = parser.add_subparsers(dest="command", help="流水线阶段")
@@ -189,6 +189,58 @@ if __name__ == "__main__":
         help="LLM 模型名称 (默认: 从 config.yaml 读取)",
     )
     extract_parser.add_argument(
+        "--verbose", "-v",
+        action="store_true",
+        help="显示详细日志",
+    )
+
+    # ------- analyze 子命令 -------
+    analyze_parser = subparsers.add_parser(
+        "analyze",
+        help="Stage 3: 深度分析（定性研判 + 价值评估 + 前瞻预测）",
+        description="从 data/02_extracted/ 读取 Markdown 文件，执行 3 维度深度分析，写入 data/03_analyzed/",
+    )
+    analyze_parser.add_argument(
+        "--input", "-i",
+        type=str,
+        default=None,
+        help="输入 .md 文件或目录路径 (默认: data/02_extracted/)",
+    )
+    analyze_parser.add_argument(
+        "--concurrency", "-c",
+        type=int,
+        default=None,
+        help="并发文件处理数 (默认: 从 config.yaml 读取，3)",
+    )
+    analyze_parser.add_argument(
+        "--stage",
+        choices=["qualitative", "value", "foresight", "all"],
+        default="all",
+        help="只运行指定评估维度 (默认: all)",
+    )
+    analyze_parser.add_argument(
+        "--skip-existing",
+        action="store_true",
+        default=True,
+        help="跳过已分析的文件 (默认: 启用)",
+    )
+    analyze_parser.add_argument(
+        "--force",
+        action="store_true",
+        help="强制重新分析 (忽略 skip-existing)",
+    )
+    analyze_parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="只列出将处理的文件，不实际调用 LLM",
+    )
+    analyze_parser.add_argument(
+        "--model", "-m",
+        type=str,
+        default=None,
+        help="LLM 模型名称 (默认: 从 config.yaml 读取)",
+    )
+    analyze_parser.add_argument(
         "--verbose", "-v",
         action="store_true",
         help="显示详细日志",
@@ -296,3 +348,26 @@ if __name__ == "__main__":
             extract_argv.append("--skip-existing")
 
         sys.exit(extract_main(extract_argv))
+
+    elif args.command == "analyze":
+        from pipeline.analysis.run_analysis import main as analyze_main
+
+        analyze_argv = []
+        if args.input:
+            analyze_argv.extend(["--input", args.input])
+        if args.concurrency is not None:
+            analyze_argv.extend(["--concurrency", str(args.concurrency)])
+        if args.stage != "all":
+            analyze_argv.extend(["--stage", args.stage])
+        if args.force:
+            analyze_argv.append("--force")
+        if args.dry_run:
+            analyze_argv.append("--dry-run")
+        if args.model:
+            analyze_argv.extend(["--model", args.model])
+        if args.verbose:
+            analyze_argv.append("--verbose")
+        if not args.force:
+            analyze_argv.append("--skip-existing")
+
+        sys.exit(analyze_main(analyze_argv))
