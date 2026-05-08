@@ -182,6 +182,8 @@ daily-ai-insight-engine/
 
 ### 看板截图
 
+![看板截图](./dashboard.png)
+
 看板包含：
 - 执行摘要 + KPI 指标卡片（样本量/信源数/语言覆盖）
 - 事件类型 × 情绪分布双 Donut 饼图
