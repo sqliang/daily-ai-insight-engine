@@ -26,14 +26,14 @@ import { generateMarkdown } from "@/lib/report/generate-markdown";
 //
 // 输出文件：
 //   data/02_processed/structured-insights.json — Map 阶段产物
-//   data/04_reports/daily-report.json          — 最终日报
+//   data/05_reports/daily-report.json          — 最终日报
 // ============================================================================
 
 const root = process.cwd();
 const rawPath = join(root, "data/01_raw/articles.json");
 const structuredPath = join(root, "data/02_processed/structured-insights.json");
-const reportPath = join(root, "data/04_reports/daily-report.json");
-const markdownPath = join(root, "data/04_reports/daily-report.md");
+const reportPath = join(root, "data/05_reports/daily-report.json");
+const markdownPath = join(root, "data/05_reports/daily-report.md");
 
 async function main() {
   const startedAt = Date.now();

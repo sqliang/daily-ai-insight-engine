@@ -76,7 +76,7 @@ export const topEventSchema = z.object({
   eventType: eventTypeSchema,
   impactScore: z.number().int().min(1).max(10),
   whyItMatters: z.string(),                        // 为什么重要：面向决策者的简短判断
-  evidence: z.array(z.string()).min(1).max(4),      // 支撑证据（1-4 条原文关键事实）
+  evidence: z.array(z.string()).min(2).max(6),      // 支撑证据（2-6 条原文关键事实）
 });
 
 export const deepDiveSchema = z.object({

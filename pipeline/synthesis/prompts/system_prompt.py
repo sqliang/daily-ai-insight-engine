@@ -30,7 +30,7 @@ Return ONLY a valid JSON object matching this schema:
       "eventType": "infrastructure_update|framework_tools|capital_movement|application_landing|policy_and_safety",
       "impactScore": <1-10 integer>,
       "whyItMatters": "2-3 sentence assessment for decision-makers in Chinese",
-      "evidence": ["key fact 1 from article keyLogicFlow", "key fact 2", "key fact 3"]
+      "evidence": ["key fact 1 from article keyLogicFlow", "key fact 2", "key fact 3", "key fact 4 (optional)"]
     }
   ],
   "deepDives": [
@@ -98,6 +98,7 @@ Return ONLY a valid JSON object matching this schema:
    - Downgrade events with epistemicStatus=rumor_leak or hypeAssessment.level=high
    - Upgrade events with informationEntropy=high AND cross-source corroboration
    - evidence must reference actual keyLogicFlow items from the source articles
+   - evidence array: minimum 2, maximum 4 items per event
 
 5. **deepDives**: Exactly 3 deep dives, selecting events that are strategically significant beyond raw impactScore. Consider compoundValue and moatImpact.
 

@@ -95,7 +95,7 @@ def resolve_data_dir(stage_key: str) -> Path:
         "structured": project / "data" / "03_structured",
         "analyzed": project / "data" / "03_analyzed",
         "synthesize_structured": project / "data" / "04_structured",
-        "reports": project / "data" / "04_reports",
+        "reports": project / "data" / "05_reports",
     }
     path = key_to_path.get(stage_key)
     if path is None:

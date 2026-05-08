@@ -16,7 +16,7 @@ import { dailyReportSchema } from "@/lib/agent/schema";
 export const dynamic = "force-dynamic";
 
 async function getReport() {
-  const filePath = join(process.cwd(), "data/04_reports/daily-report.json");
+  const filePath = join(process.cwd(), "data/05_reports/daily-report.json");
   const content = await readFile(filePath, "utf8");
   return dailyReportSchema.parse(JSON.parse(content));
 }

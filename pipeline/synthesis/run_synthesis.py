@@ -41,7 +41,7 @@ def synthesize_report(
 
     参数：
         input_path: all_articles.json 路径（默认 data/04_structured/all_articles.json）
-        output_dir: 输出目录（默认 data/04_reports/）
+        output_dir: 输出目录（默认 data/05_reports/）
         model: LLM 模型名称
         max_detail: user prompt 中完整展示的文章数
         dry_run: True 时仅显示 prompt 预估，不调用 LLM
@@ -128,7 +128,7 @@ def main(argv: Optional[list[str]] = None) -> int:
     )
     parser.add_argument(
         "--output", "-o", type=str, default=None,
-        help="输出目录 (默认: data/04_reports/)",
+        help="输出目录 (默认: data/05_reports/)",
     )
     parser.add_argument(
         "--model", "-m", type=str, default=None,

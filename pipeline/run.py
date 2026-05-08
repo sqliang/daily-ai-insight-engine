@@ -278,7 +278,7 @@ if __name__ == "__main__":
     )
     synthesize_parser.add_argument(
         "--output", "-o", type=str, default=None,
-        help="输出目录 (默认: data/04_reports/)",
+        help="输出目录 (默认: data/05_reports/)",
     )
     synthesize_parser.add_argument(
         "--model", "-m", type=str, default=None,

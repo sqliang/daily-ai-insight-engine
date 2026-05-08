@@ -16,12 +16,12 @@ export const metadata: Metadata = {
 
 async function getReportMarkdown(): Promise<string> {
   try {
-    const mdPath = join(process.cwd(), "data/04_reports/daily-report.md");
+    const mdPath = join(process.cwd(), "data/05_reports/daily-report.md");
     const raw = await readFile(mdPath, "utf8");
     // Strip YAML frontmatter (--- ... ---)
     return raw.replace(/^---[\s\S]*?---\n*/, "").trimStart();
   } catch {
-    const jsonPath = join(process.cwd(), "data/04_reports/daily-report.json");
+    const jsonPath = join(process.cwd(), "data/05_reports/daily-report.json");
     const content = await readFile(jsonPath, "utf8");
     const report = dailyReportSchema.parse(JSON.parse(content));
     return generateMarkdown(report).replace(/^---[\s\S]*?---\n*/, "").trimStart();

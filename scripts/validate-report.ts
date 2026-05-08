@@ -27,7 +27,7 @@ async function main() {
     join(process.cwd(), "data/02_processed/structured-insights.json"),
     structuredInsightListSchema,
   );
-  await readJsonFile(join(process.cwd(), "data/04_reports/daily-report.json"), dailyReportSchema);
+  await readJsonFile(join(process.cwd(), "data/05_reports/daily-report.json"), dailyReportSchema);
   console.log("All data files passed Zod validation.");
 }
 

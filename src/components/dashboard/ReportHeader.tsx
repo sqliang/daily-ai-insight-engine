@@ -1,5 +1,11 @@
 import type { DailyReport } from "@/lib/agent/schema";
 
+function formatGeneratedAt(iso: string): string {
+  const d = new Date(iso);
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())} ${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())} UTC`;
+}
+
 type ReportHeaderProps = {
   report: Pick<DailyReport, "reportTitle" | "date" | "generatedAt" | "executiveSummary">;
 };
@@ -110,7 +116,7 @@ export function ReportHeader({ report }: ReportHeaderProps) {
               <circle cx="8" cy="8" r="6.5" />
               <path d="M8 4.5V8l3 2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-            {new Date(report.generatedAt).toLocaleString("zh-CN")}
+            {formatGeneratedAt(report.generatedAt)}
           </span>
         </div>
 

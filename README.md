@@ -1,203 +1,241 @@
 # Daily AI Insight Engine
 
-AI 舆情分析日报系统 MVP：从每日 AI 新闻中抽取结构化洞察，生成可读分析报告，并用 Next.js Dashboard 展示可视化结果。
+> 四阶段离线 AI 资讯处理流水线 × Next.js 可视化日报看板
 
-本项目围绕笔试题的核心原则实现：**重设计、轻爬虫、巧组装**。它不把原始新闻一次性丢给大模型生成全文，而是采用“单篇结构化抽取 + 全局聚合分析”的离线 pipeline，让处理逻辑、Schema 设计和 AI 使用边界都可以被审查。
+Daily AI Insight Engine 从 19 个中英文信源自动采集每日 AI 资讯，经采集→事实提取→深度分析→综合合成四阶段处理，生成包含 Top 事件、深度研判、趋势判断、风险与机会信号的完整日报，并通过 Next.js 仪表盘进行交互式可视化。
 
-## 项目目标
+---
 
-- 获取并保存 10-20 条 AI 相关新闻原始数据。
-- 将非结构化新闻转成可排序、可聚合、可视化的结构化数据。
-- 基于结构化结果生成 AI 分析日报，包括 Top 事件、深度总结、趋势判断、风险与机会提示。
-- 用前端页面展示完整日报和基础图表。
+## 架构一览
 
-## 技术栈
-
-- Next.js App Router、React、TypeScript
-- Tailwind CSS 4
-- Zod：Schema 定义与运行时校验
-- `@anthropic-ai/claude-agent-sdk`：Agent 分析核心接入点
-- pnpm：依赖安装与脚本运行
-
-依赖在 `package.json` 中使用 `latest`，以满足“使用最新版依赖”的要求。当前一次安装解析出的核心版本包括 Next.js 16.2.5、React 19.2.6、Tailwind CSS 4.2.4。
-
-## 数据源说明
-
-MVP 使用 `data/raw/articles.json` 中的 15 条静态样例数据，覆盖英文与中文信源：
-
-- 官方渠道：OpenAI Blog、Google DeepMind Blog、Anthropic News、NVIDIA Blog、Microsoft AI Blog、Meta AI Blog
-- 科技媒体：TechCrunch、The Verge、机器之心、量子位、36氪
-- 研究与社区：arXiv、Hugging Face、Product Hunt、Hacker News
-
-选择理由：
-
-- 官方渠道适合捕捉模型、产品、平台能力的一手发布。
-- 科技媒体适合观察商业化、资本、用户信任和产业竞争。
-- 研究与开发者社区适合发现技术路线、开源生态和实践阻力。
-- 中英文混合能够避免只看到海外叙事或本土叙事，提升日报的行业完整度。
-
-## 系统架构
-
-```text
-data/01_raw/articles.json
-        |
-        v
-Cleaning: 文本清洗、HTML 去噪、长度截断
-        |
-        v
-Map: 单篇文章结构化抽取 StructuredInsight
-        |
-        v
-data/02_processed/structured-insights.json
-        |
-        v
-Reduce: 基于结构化数据生成 DailyReport
-        |
-        v
-data/04_reports/daily-report.json
-        |
-        v
-Next.js Dashboard 静态读取与可视化展示
+```
+19 个信源 (arXiv/OpenAI/HN/TechCrunch/知乎...)
+        │
+        ▼
+┌──────────────────────────────────────┐
+│  Stage 1: 数据采集 (Scout + Ingest)   │  → data/01_raw/{source}/*.md
+│  Stage 2: 事实提取 (BaseInfo + Fact)  │  → data/02_extracted/{source}/*.md
+│  Stage 3: 深度分析 (3 维度 × 并发)    │  → data/03_analyzed/{source}/*.md
+│  Stage 4a: Frontmatter JSON 聚合      │  → data/04_structured/all_articles.json
+│  Stage 4b: Editor-in-Chief 日报合成   │  → data/05_reports/daily-report.json
+└──────────────────────────────────────┘
+        │
+        ▼
+┌──────────────────────────────────────┐
+│  Next.js 16 · Recharts · Tailwind     │
+│  服务端 readFile → Zod 校验 → 渲染     │
+└──────────────────────────────────────┘
 ```
 
-### 关键设计决策
+---
 
-- **读写分离**：耗时、可能失败、需要密钥的 AI pipeline 放在 `scripts/run-pipeline.ts`；前端只读取本地 JSON，避免把长任务放进 Serverless 请求链路。
-- **Map-Reduce**：Map 阶段逐篇抽取，Reduce 阶段只聚合已经校验过的结构化结果，满足“不一次性丢给 AI”的限制。
-- **Schema first**：`src/lib/agent/schema.ts` 同时约束 pipeline、Agent 输出、验证脚本和前端消费，减少自由文本带来的不稳定。
-- **Mock fallback**：默认使用确定性 heuristic 生成示例报告；设置 `AI_ENGINE_USE_CLAUDE=true` 后可走 Claude Agent SDK，便于无 API Key 环境下评审。
+## 快速开始
 
-## Schema 设计思路
+### 环境要求
 
-项目定义了三层核心数据模型：
+- Python 3.11+ + `uv`（Python 依赖管理）
+- Node.js 20+ + `pnpm`
+- Claude API Key（需设置为环境变量 `ANTHROPIC_API_KEY`）
 
-### RawArticle
-
-字段包括 `id`、`title`、`url`、`source`、`language`、`publishedAt`、`summary`、`content`。
-
-设计目的：保留原始数据证据链，让每条洞察都能追溯到标题、来源和发布时间，满足提交要求中的“原始数据文件”和“数据来源说明”。
-
-### StructuredInsight
-
-字段包括 `articleId`、`eventType`、`topicTags`、`entities`、`sentiment`、`impactScore`、`urgencyScore`、`keyFacts`、`risks`、`opportunities`。
-
-设计目的：这不是 summary，而是把文章转成可计算特征：
-
-- `eventType` 用于事件分类和聚类。
-- `topicTags` 用于趋势归纳。
-- `entities` 用于识别公司、技术、人物、产品和区域热度。
-- `impactScore` 用于 Top 事件排序。
-- `urgencyScore` 用于判断短期跟踪优先级。
-- `sentiment`、`risks`、`opportunities` 服务舆情和决策辅助。
-
-### DailyReport
-
-字段包括 `date`、`dataSourceSummary`、`topEvents`、`deepDives`、`trendInsights`、`riskSignals`、`opportunitySignals`、`visualizationData`。
-
-设计目的：让前端页面无需再次调用模型，直接消费稳定 JSON；同时把可视化数据预计算出来，保证展示层简单可靠。
-
-## AI 使用方式
-
-Agent 层位于 `src/lib/agent/`：
-
-- `prompts.ts` 管理抽取和聚合 Prompt。
-- `schema.ts` 定义 Zod Schema。
-- `index.ts` 封装 `AIInsightEngine`，提供 `extractArticle` 和 `synthesizeReport`。
-- `heuristics.ts` 提供无密钥 fallback，保证示例可复现。
-
-默认运行不会调用外部模型。若需要启用 Claude：
+### 安装
 
 ```bash
-cp .env.example .env
-```
+# 1. 克隆仓库
+git clone <repo-url> && cd daily-ai-insight-engine
 
-设置：
+# 2. 安装 Python 依赖
+cd pipeline && uv pip install -r requirements.txt && cd ..
 
-```bash
-ANTHROPIC_API_KEY=your_anthropic_api_key_here
-AI_ENGINE_USE_CLAUDE=true
-```
-
-错误处理策略：
-
-- 单篇文章抽取失败时记录错误并跳过，不中断整条 pipeline。
-- 所有输出写入前都通过 Zod 校验。
-- Reduce 阶段只接收结构化后的 `StructuredInsight[]`，不直接接收原始长文本。
-
-## 目录结构
-
-```text
-data/
-  raw/articles.json
-  processed/structured-insights.json
-  reports/daily-report.json
-scripts/
-  run-pipeline.ts
-  validate-report.ts
-src/
-  app/
-    page.tsx
-    layout.tsx
-    globals.css
-  components/dashboard/
-  lib/
-    agent/
-    data/
-    report/
-```
-
-## 快速启动
-
-安装依赖：
-
-```bash
+# 3. 安装前端依赖
 pnpm install
+
+# 4. 配置环境变量
+cp .env.example .env
+# 编辑 .env：填入 ANTHROPIC_API_KEY
 ```
 
-生成结构化结果和日报：
+### 运行流水线
 
 ```bash
-pnpm pipeline
+# 完整四阶段运行
+python pipeline/run.py scout          # Stage 1a: 生成 URL 清单
+python pipeline/run.py ingest         # Stage 1b: 下载清洗正文
+python pipeline/run.py extract        # Stage 2: 事实提取
+python pipeline/run.py analyze        # Stage 3: 深度分析
+python pipeline/run.py aggregate      # Stage 4a: Frontmatter 聚合
+python pipeline/run.py synthesize     # Stage 4b: 日报合成
 ```
 
-校验数据文件：
+支持断点续传 —— 所有阶段默认 `--skip-existing`，已处理的文件自动跳过。重新处理可加 `--force`。
 
-```bash
-pnpm validate
-```
-
-启动前端：
+### 启动前端看板
 
 ```bash
 pnpm dev
+# 打开 http://localhost:3000 查看日报看板
+# 打开 http://localhost:3000/report 查看完整报告
 ```
 
-访问：
+---
 
-```text
-http://localhost:3000
+## 项目结构
+
+```
+daily-ai-insight-engine/
+├── pipeline/                          # Python 离线流水线
+│   ├── run.py                         #   统一 CLI 入口
+│   ├── config.yaml                    #   19 信源 + LLM 参数 + 配额配置
+│   ├── core/                          #   共享工具库 (Agent/文件/枚举/前端/Web)
+│   ├── schemas/                       #   Pydantic 数据模型 (5 个 Schema 文件)
+│   ├── ingestion/                     #   Stage 1: 信源采集
+│   ├── extraction/                    #   Stage 2: 事实提取
+│   ├── analysis/                      #   Stage 3: 多维深度分析
+│   └── synthesis/                     #   Stage 4: 聚合 + Editor-in-Chief 合成
+│
+├── src/                               # Next.js 前端
+│   ├── app/                           #   App Router 页面
+│   │   ├── page.tsx                   #   仪表盘 (直接 readFile daily-report.json)
+│   │   ├── report/page.tsx            #   完整报告 (Markdown 渲染)
+│   │   └── sources/page.tsx           #   信源清单
+│   ├── components/                    #   React 组件
+│   │   ├── dashboard/                 #   看板组件 (Header/KPI/Charts/Signals...)
+│   │   ├── charts/                    #   图表组件 (Donut/Bar/Radar)
+│   │   ├── report/                    #   Markdown 渲染器
+│   │   └── sources/                   #   信源卡片
+│   └── lib/                           #   工具库
+│       ├── agent/                     #   Zod Schema + Agent 引擎
+│       ├── data/                      #   文件 I/O + 数据加载
+│       └── report/                    #   标签映射 + Markdown 生成
+│
+├── data/                              # 数据产物 (gitignored)
+│   ├── 00_manifest/                   #   URL 清单
+│   ├── 01_raw/                        #   清洗后的纯文本
+│   ├── 02_extracted/                  #   事实提取层
+│   ├── 03_analyzed/                   #   深度分析层
+│   ├── 04_structured/                 #   Frontmatter JSON 聚合
+│   └── 05_reports/                    #   最终日报 (daily-report.json + .md)
+│
+├── docs/                              # 设计文档
+│   ├── 0_整体设计说明.md               #   架构总览
+│   ├── 1_数据源筛选与获取设计说明.md     #   Stage 1 详细设计
+│   ├── 2_Schema设计说明.md             #   Schema 契约设计
+│   └── 3_核心流程设计说明.md           #   Stage 4 核心流程设计
+│
+└── scripts/                           # 辅助脚本
+    ├── validate-report.ts             #   数据完整性 Zod 校验
+    └── run-pipeline.ts                #   TypeScript 侧流水线脚本
 ```
 
-## 输出结果示例
+---
 
-- 原始数据：`data/01_raw/articles.json`
-- 单篇结构化抽取结果：`data/02_processed/structured-insights.json`
-- 完整 AI 分析日报：`data/04_reports/daily-report.json`
-- 可视化页面：`src/app/page.tsx`
+## 黄金三角信源体系
 
-## 验证命令
+| Tier | 定位 | 信源 | 数量 |
+|------|------|------|------|
+| **A** | 学术 / 技术前沿 | arXiv CS.AI, OpenAI Blog, Google/DeepMind, Anthropic, NVIDIA, HuggingFace | 6 |
+| **B** | 产品 / 开发者情绪 | Hacker News, Product Hunt, GitHub Trending, Ben's Bites, 知乎 | 5 |
+| **C** | 商业 / 资本动向 | TechCrunch, The Verge, KDnuggets, TLDR AI, 机器之心, 量子位, 36氪 | 8 |
 
-```bash
-pnpm typecheck
-pnpm validate
-pnpm build
-pnpm lint
+每 Tier 配额上限 5 篇，总目标 15 篇，超出按 impact_score 淘汰。支持 RSS / API / HTML 抓取 / 浏览器渲染四种抓取策略。
+
+---
+
+## 数据 Schema
+
+每篇文章经流水线处理后累积 32+ 个结构化字段，分属 5 个评估维度：
+
+| Block | 维度 | 核心字段 | 产出阶段 |
+|-------|------|----------|----------|
+| 0 | BaseInfo | `id`, `source_type`, `published`, `created` | Stage 2 |
+| 1 | FactExtraction | `event_type`, `entities`, `key_logic_flow`, `impact_score` | Stage 2 |
+| 2 | QualitativeAssessment | `sentiment`, `developer_sentiment`, `hype_assessment`, `information_entropy` | Stage 3 |
+| 3 | ValueAssessment | `compound_value`, `value_capture_layer`, `moat_impact` | Stage 3 |
+| 4 | ForesightAndActionability | `risk_matrix`, `market_opportunities`, `actionable_insight` | Stage 3 |
+
+双端 Schema 契约：Python 侧 Pydantic（权威数据源），TypeScript 侧 Zod（前端消费）。
+
+---
+
+## 日报输出
+
+### JSON 报告 (`data/05_reports/daily-report.json`)
+
+```json
+{
+  "date": "2026-05-08",
+  "generatedAt": "2026-05-08T12:00:00Z",
+  "reportTitle": "2026-05-08 AI 行业情报日报",
+  "executiveSummary": "...",
+  "topEvents": [5],
+  "deepDives": [3],
+  "trendInsights": [4],
+  "riskSignals": [5-7],
+  "opportunitySignals": [5-7],
+  "visualizationData": {
+    "eventTypeDistribution": [...],
+    "sentimentDistribution": [...],
+    "impactRanking": [10],
+    "entityFrequency": [20]
+  }
+}
 ```
 
-## 局限性与后续优化
+### 看板截图
 
-- 当前数据源为静态整理，后续可增加 RSS/API 抓取模块。
-- 当前可视化使用轻量 CSS 图表，后续可接入 Recharts 或 ECharts 增强交互。
-- 当前默认 heuristic fallback，后续可针对 Claude Agent SDK 增加更严格的 JSON repair 和重试策略。
-- 可增加人工审核界面，在日报发布前调整风险级别和事件优先级。
-- 可将日报读取能力封装为 MCP Server，供其他 Agent 工作流调用。
+看板包含：
+- 执行摘要 + KPI 指标卡片（样本量/信源数/语言覆盖）
+- 事件类型 × 情绪分布双 Donut 饼图
+- Top 5 事件详情卡片（含影响力评分 + 支撑证据）
+- 影响力排名 + 高频实体双栏柱状图
+- 4 维度趋势判断（技术/应用/政策/资本）
+- 3 篇深度研判（背景/影响/后续关注）
+- 风险信号 + 机会信号列表（含严重程度标签）
+
+---
+
+## 技术栈
+
+| 层 | 技术 |
+|----|------|
+| 流水线语言 | Python 3.11+ (asyncio) |
+| LLM 调用 | `claude-agent-sdk` (Anthropic) — 流式响应 + 指数退避重试 |
+| 数据校验 | Pydantic v2 (Python) + Zod (TypeScript) |
+| 前端框架 | Next.js 16 App Router + Turbopack |
+| 图表 | Recharts + CSS 自定义 |
+| 样式 | Tailwind CSS 4 (深色主题) |
+| 抓取 | feedparser, trafilatura, readability-lxml, Playwright |
+| 包管理 | pnpm (前端), uv (Python) |
+
+---
+
+## 运行命令速查
+
+| 命令 | 用途 |
+|------|------|
+| `python pipeline/run.py scout` | Stage 1a: 生成 URL 清单 |
+| `python pipeline/run.py ingest` | Stage 1b: 下载清洗正文 |
+| `python pipeline/run.py extract` | Stage 2: 事实提取 |
+| `python pipeline/run.py analyze` | Stage 3: 深度分析 |
+| `python pipeline/run.py aggregate` | Stage 4a: Frontmatter 聚合 |
+| `python pipeline/run.py synthesize` | Stage 4b: 日报合成 |
+| `python pipeline/run.py synthesize --dry-run` | 预估 token 消耗，不调用 LLM |
+| `python pipeline/run.py analyze --stage qualitative` | 仅运行单一分析维度 |
+| `pnpm dev` | 启动 Next.js 开发服务器 |
+| `pnpm validate` | Zod 校验数据文件完整性 |
+
+---
+
+## 设计文档
+
+| 文档 | 内容 |
+|------|------|
+| [整体设计说明](./docs/0_整体设计说明.md) | 架构总览、数据目录结构、技术栈、信源体系 |
+| [数据源筛选与获取设计说明](./docs/1_数据源筛选与获取设计说明.md) | Stage 1 详细设计：Scout/Ingest 流程、四种抓取策略、过滤管线 |
+| [Schema 设计说明](./docs/2_Schema设计说明.md) | Pydantic/Zod 双端 Schema 契约、12 种枚举类型、5 Block 架构 |
+| [核心流程设计说明](./docs/3_核心流程设计说明.md) | Stage 4 详细设计：Prompt 工程、JSON 解析、数据结构桥接 |
+
+---
+
+## 许可证
+
+MIT
