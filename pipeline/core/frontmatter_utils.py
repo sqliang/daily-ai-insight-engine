@@ -72,10 +72,15 @@ def build_ingestion_frontmatter(
     author: str = "",
     description: str = "",
     source_name: str = "",
+    article_id: str = "",
 ) -> Dict[str, Any]:
     """
     构建 Stage 1 产出的标准 Frontmatter 字段。
     与 data/01_raw/ 中现有 .md 文件的 frontmatter 格式对齐。
+
+    article_id: 由 00_manifest 阶段预生成的 SHA-256 文章 ID。
+                如果提供，将写入 frontmatter 作为该文章在流水线中的唯一标识。
+                后续所有阶段都基于此 ID 进行去重和关联。
     """
     authors = []
     if author:
@@ -91,6 +96,11 @@ def build_ingestion_frontmatter(
         "description": description,
         "tags": ["clippings"],
     }
+
+    # 将预生成的文章 ID 置入 frontmatter，成为该文件在流水线中的"身份证"
+    if article_id:
+        fm["id"] = article_id
+
     return fm
 
 

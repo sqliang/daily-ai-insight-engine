@@ -1,0 +1,461 @@
+"""
+pipeline/extraction/agent.py — Claude Agent SDK 共享传输层
+
+提供统一的 Agent 调用封装，包括：
+    - call_agent(): 核心 SDK 调用，流式收集响应文本
+    - call_agent_with_retry(): 带指数退避重试的包装
+    - parse_json_response(): 从 Agent 响应中提取 JSON（3 级回退策略）
+    - build_agent_options(): 构造标准 ClaudeAgentOptions
+
+设计原则：
+    - 所有 Agent 调用都经过本模块，便于统一管理重试、超时、错误信息
+    - Agent 不需要文件系统工具（allowed_tools=[]），只做思考+文本输出
+    - bypassPermissions 模式避免交互式权限提示
+    - 遵循 config.yaml 中的 retry 配置（最大重试 3 次、指数退避、初始延迟 2s）
+"""
+
+import asyncio
+import json
+import logging
+import re
+from typing import Optional
+
+from claude_agent_sdk import query, ClaudeAgentOptions
+from claude_agent_sdk.types import AssistantMessage, TextBlock, ResultMessage
+
+# ---------------------------------------------------------------------------
+# 日志配置
+# ---------------------------------------------------------------------------
+logger = logging.getLogger(__name__)
+
+
+# ---------------------------------------------------------------------------
+# 数据结构
+# ---------------------------------------------------------------------------
+
+from dataclasses import dataclass, field
+
+
+@dataclass
+class StageResult:
+    """
+    单个文件的提取结果。
+
+    字段：
+        input_path: 输入文件路径
+        output_path: 输出文件路径
+        success: 是否成功完成
+        fields_extracted: 成功提取的字段名列表
+        error: 失败原因（仅在 success=False 时有值）
+        skipped: 是否因已有所有字段而跳过
+    """
+
+    input_path: str
+    output_path: str
+    success: bool
+    fields_extracted: list = field(default_factory=list)
+    error: str = ""
+    skipped: bool = False
+
+
+# ---------------------------------------------------------------------------
+# 异常定义
+# ---------------------------------------------------------------------------
+
+class AgentCallError(Exception):
+    """Agent 调用失败异常。retryable=True 时可重试，False 时直接向上抛出。"""
+
+    def __init__(self, message: str, retryable: bool = True) -> None:
+        super().__init__(message)
+        self.message = message
+        self.retryable = retryable
+
+
+# ---------------------------------------------------------------------------
+# 核心函数：调用 Claude Agent
+# ---------------------------------------------------------------------------
+
+async def call_agent(
+    prompt: str,
+    system_prompt: str = "",
+    *,
+    model: Optional[str] = None,
+    max_turns: int = 3,
+) -> str:
+    """
+    调用 claude-agent-sdk query() 并收集完整文本响应。
+
+    工作流程：
+        1. 构造 ClaudeAgentOptions（system_prompt、model、permissions 等）
+        2. 调用 query() 获取异步消息流
+        3. 遍历消息流：
+            - AssistantMessage → 收集所有 TextBlock 文本
+            - ResultMessage → 检查是否有错误（is_error）
+        4. 返回拼接后的完整文本
+
+    参数：
+        prompt: 用户提示词（包含文章正文和提取要求）
+        system_prompt: 系统提示词（定义 Agent 角色和输出格式）
+        model: 模型名称，None 时使用 CLI 默认模型
+        max_turns: 最大对话轮数（默认 3，提取任务不需要多轮交互）
+
+    返回：
+        Agent 响应的完整文本
+
+    异常：
+        AgentCallError: 当 Agent 返回错误或未产生任何文本时抛出
+    """
+    options = build_agent_options(
+        system_prompt=system_prompt,
+        model=model,
+        max_turns=max_turns,
+    )
+
+    collected_text: list[str] = []
+    has_error = False
+    error_messages: list[str] = []
+
+    try:
+        # 流式遍历 query() 返回的消息
+        async for message in query(prompt=prompt, options=options):
+            # --- 处理 Assistant 消息：收集文本块 ---
+            if isinstance(message, AssistantMessage):
+                for block in message.content:
+                    if isinstance(block, TextBlock):
+                        collected_text.append(block.text)
+
+            # --- 处理 Result 消息：检查是否有错误 ---
+            elif isinstance(message, ResultMessage):
+                if message.is_error:
+                    has_error = True
+                    if message.errors:
+                        error_messages.extend(message.errors)
+
+    except Exception as exc:
+        # SDK 级别的异常（网络错误、连接失败等）
+        raise AgentCallError(
+            message=f"Agent SDK 调用异常: {exc}",
+            retryable=True,
+        ) from exc
+
+    # 如果 Agent 报告了错误
+    if has_error:
+        error_text = "; ".join(error_messages) if error_messages else "未知错误"
+        raise AgentCallError(
+            message=f"Agent 返回错误: {error_text}",
+            retryable=True,  # 服务端错误通常可重试
+        )
+
+    # 合并所有文本块（不去 strip，由 parse_json_response 处理清理）
+    full_text = "".join(collected_text)
+
+    # 如果没有收到任何文本
+    if not full_text:
+        raise AgentCallError(
+            message="Agent 未返回任何文本内容",
+            retryable=True,
+        )
+
+    return full_text
+
+
+# ---------------------------------------------------------------------------
+# 重试逻辑
+# ---------------------------------------------------------------------------
+
+async def call_agent_with_retry(
+    prompt: str,
+    system_prompt: str = "",
+    *,
+    model: Optional[str] = None,
+    max_turns: int = 3,
+    max_retries: int = 3,
+    initial_delay: float = 2.0,
+) -> str:
+    """
+    带指数退避重试的 Agent 调用包装。
+
+    重试策略（来自 config.yaml llm.retry）：
+        - 指数退避: delay = initial_delay * (2 ** attempt)
+        - 最大重试 3 次
+        - 初始延迟 2 秒
+
+    可重试的错误类型：
+        - 网络错误（Agent SDK 调用异常）
+        - 服务端错误（Agent 返回 is_error=True）
+        - 空响应（Agent 未返回文本）
+
+    不可重试的错误类型：
+        - 认证失败（API Key 无效）
+        - 参数错误（400 Bad Request）
+
+    参数：
+        prompt: 用户提示词
+        system_prompt: 系统提示词
+        model: 模型名称
+        max_turns: 最大对话轮数
+        max_retries: 最大重试次数（含首次调用）
+        initial_delay: 初始延迟秒数
+
+    返回：
+        Agent 响应的完整文本
+
+    异常：
+        AgentCallError: 所有重试耗尽后仍失败
+    """
+    last_error: Optional[Exception] = None
+
+    for attempt in range(max_retries):
+        try:
+            return await call_agent(
+                prompt=prompt,
+                system_prompt=system_prompt,
+                model=model,
+                max_turns=max_turns,
+            )
+        except AgentCallError as exc:
+            last_error = exc
+
+            # 不可重试的错误直接抛出
+            if not exc.retryable:
+                raise
+
+            # 最后一次尝试失败，不再重试
+            if attempt == max_retries - 1:
+                break
+
+            # 计算退避延迟
+            delay = initial_delay * (2 ** attempt)
+            logger.warning(
+                "Agent 调用失败 (第 %d/%d 次): %s — %0.1fs 后重试",
+                attempt + 1,
+                max_retries,
+                exc.message,
+                delay,
+            )
+            await asyncio.sleep(delay)
+
+    # 所有重试耗尽
+    raise AgentCallError(
+        message=f"Agent 调用失败（已重试 {max_retries} 次）: {last_error}",
+        retryable=False,
+    )
+
+
+# ---------------------------------------------------------------------------
+# JSON 解析
+# ---------------------------------------------------------------------------
+
+# 匹配 ```json ... ``` 代码块
+_JSON_FENCE_RE = re.compile(r"```(?:json)?\s*\n?(.*?)\n?```", re.DOTALL)
+
+
+def _close_json(partial: str) -> str:
+    """
+    补全截断 JSON 中未闭合的括号、引号和花括号。
+
+    遍历字符串，追踪是否处于字符串内部（含转义处理），
+    统计未闭合的 { 和 [ 数量，按数组先、对象后的顺序补全。
+    如果截断点位于字符串值内部，先补引号再补括号。
+
+    参数：
+        partial: 截断的 JSON 片段（从第一个 { 开始）
+
+    返回：
+        补全后的 JSON 字符串
+    """
+    in_string = False
+    escape = False
+    open_braces = 0
+    open_brackets = 0
+
+    for ch in partial:
+        if escape:
+            escape = False
+            continue
+        if ch == "\\":
+            escape = True
+            continue
+        if ch == '"' and not in_string:
+            in_string = True
+            continue
+        if ch == '"' and in_string:
+            in_string = False
+            continue
+        if in_string:
+            continue
+        if ch == "{":
+            open_braces += 1
+        elif ch == "}":
+            open_braces -= 1
+        elif ch == "[":
+            open_brackets += 1
+        elif ch == "]":
+            open_brackets -= 1
+
+    result = partial
+    if in_string:
+        result += '"'
+    result += "]" * max(0, open_brackets)
+    result += "}" * max(0, open_braces)
+    return result
+
+
+def _try_recover_truncated_json(text: str) -> Optional[dict]:
+    """
+    尝试从截断的 JSON 文本中恢复可解析的 dict。
+
+    策略：
+        1. 在完整文本上调用 _close_json() 补全括号，尝试解析
+        2. 如果失败，从末尾逐步向前截断（每次去掉 1 个字符），
+           对每个截断点调用 _close_json() 再尝试 json.loads()
+        3. 逐步截断可以处理截断点位于字符串值或键名中间的情况
+
+    参数：
+        text: 包含截断 JSON 的原始文本
+
+    返回：
+        解析成功的 dict，所有尝试失败时返回 None
+    """
+    start = text.find("{")
+    if start == -1:
+        return None
+
+    truncated = text[start:]
+
+    # 首先尝试在完整截断文本上补全
+    closed = _close_json(truncated)
+    try:
+        result = json.loads(closed)
+        logger.info("截断 JSON 恢复成功（无需修剪）")
+        return result
+    except json.JSONDecodeError:
+        pass
+
+    # 逐步修剪末尾并重试（最多修剪 500 字符，避免过度消耗）
+    max_trim = min(len(truncated), 500)
+    for trim in range(1, max_trim + 1):
+        candidate = truncated[: len(truncated) - trim]
+        closed = _close_json(candidate)
+        try:
+            result = json.loads(closed)
+            logger.info("截断 JSON 恢复成功（修剪 %d 字符后）", trim)
+            return result
+        except json.JSONDecodeError:
+            continue
+
+    return None
+
+
+def parse_json_response(text: str) -> dict:
+    """
+    从 Agent 响应文本中提取 JSON 对象。
+
+    4 级回退策略（按优先级）：
+        1. 直接 json.loads() — 响应就是纯 JSON 对象
+        2. 正则提取 ```json ... ``` 代码块 — Agent 可能用 Markdown 包裹
+        3. 正则提取第一个 { ... } 对 — 行内 JSON 片段
+        4. 从第一个 { 到第一个 } 的精确平衡匹配 — 处理嵌套对象
+
+    参数：
+        text: Agent 返回的原始文本
+
+    返回：
+        解析后的 dict
+
+    异常：
+        ValueError: 所有策略都失败时抛出，附带原始文本用于调试
+    """
+    if not text:
+        raise ValueError("Agent 响应为空")
+
+    # 先去除首尾空白和 BOM 字符
+    cleaned = text.strip().lstrip("﻿")
+
+    # --- 策略 1: 直接解析 ---
+    try:
+        return json.loads(cleaned)
+    except json.JSONDecodeError:
+        pass
+
+    # --- 策略 2: 提取 ```json ... ``` 或 ``` ... ``` 代码块 ---
+    fence_matches = _JSON_FENCE_RE.findall(cleaned)
+    for match in fence_matches:
+        stripped = match.strip()
+        try:
+            return json.loads(stripped)
+        except json.JSONDecodeError:
+            continue
+
+    # --- 策略 3: 查找第一个 { 和最后一个 } ---
+    start = cleaned.find("{")
+    end = cleaned.rfind("}")
+    if start != -1 and end != -1 and end > start:
+        candidate = cleaned[start : end + 1]
+        try:
+            return json.loads(candidate)
+        except json.JSONDecodeError:
+            pass
+
+    # --- 策略 4: 行级处理（尝试去除 markdown 标记后直接找 JSON）---
+    # 去掉所有以 ``` 开头的行（代码块标记）
+    lines = cleaned.split("\n")
+    stripped_lines = [l for l in lines if not l.strip().startswith("```")]
+    plain_text = "\n".join(stripped_lines).strip()
+    if plain_text != cleaned:
+        try:
+            return json.loads(plain_text)
+        except json.JSONDecodeError:
+            pass
+
+    # --- 策略 5: 截断 JSON 恢复 ---
+    # 处理 Agent 输出在中途被截断的情况（如网络超时、token 限制等）
+    # 通过补全未闭合的括号/引号，尝试恢复可解析的 JSON
+    try:
+        recovered = _try_recover_truncated_json(cleaned)
+        if recovered is not None:
+            logger.warning("从截断 JSON 中恢复了解析结果")
+            return recovered
+    except Exception:
+        pass
+
+    # --- 所有策略失败 ---
+    preview = text[:500] + "..." if len(text) > 500 else text
+    raise ValueError(f"无法从 Agent 响应中提取有效 JSON。响应预览:\n{preview}")
+
+
+# ---------------------------------------------------------------------------
+# 选项构造
+# ---------------------------------------------------------------------------
+
+def build_agent_options(
+    system_prompt: str = "",
+    *,
+    model: Optional[str] = None,
+    max_turns: int = 3,
+) -> ClaudeAgentOptions:
+    """
+    构造标准 ClaudeAgentOptions。
+
+    设计决策：
+        - permission_mode="bypassPermissions": 不进行交互式权限询问
+        - allowed_tools=[]: Agent 无需文件系统工具，只做思考→输出文本
+        - tools=[]: 禁用所有内置工具，减少不必要的 tool_use 消耗
+        - max_turns: 控制最大对话轮数（提取任务 1 轮即可完成）
+
+    参数：
+        system_prompt: 系统提示词
+        model: 模型名称
+        max_turns: 最大对话轮数
+
+    返回：
+        配置好的 ClaudeAgentOptions 实例
+    """
+    return ClaudeAgentOptions(
+        system_prompt=system_prompt,
+        model=model,
+        max_turns=max_turns,
+        permission_mode="bypassPermissions",
+        allowed_tools=[],
+        tools=[],
+    )
