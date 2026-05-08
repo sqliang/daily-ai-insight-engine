@@ -74,14 +74,11 @@ const technologyNames = [
 // 事件类型信号匹配表：按优先级排序的正则对，第一个命中即为事件类型
 // 每个事件类型都配有多语言信号词，确保中英文信源都被覆盖
 const eventSignals: Array<[EventType, RegExp]> = [
-  ["policy_regulation", /policy|regulat|监管|法规|法案|合规|安全治理/i],
-  ["funding_market", /funding|raised|valuation|acquisition|IPO|投资|融资|估值|资本/i],
-  ["research_breakthrough", /paper|arxiv|research|benchmark|研究|论文|突破|评测/i],
-  ["open_source", /open source|github|release|开源|模型权重/i],
-  ["safety_risk", /risk|lawsuit|copyright|安全|风险|版权|诉讼|滥用/i],
-  ["industry_adoption", /enterprise|customer|adoption|deploy|落地|企业|客户|行业/i],
-  ["product_launch", /launch|product|app|assistant|发布|上线|产品|工具/i],
-  ["model_release", /model|GPT|Claude|Gemini|Llama|模型/i],
+  ["policy_and_safety", /policy|regulat|safety|risk|lawsuit|copyright|监管|法规|法案|合规|安全|风险|版权|诉讼|滥用/i],
+  ["capital_movement", /funding|raised|valuation|acquisition|IPO|投资|融资|估值|资本/i],
+  ["infrastructure_update", /paper|arxiv|research|benchmark|model|GPT|Claude|Gemini|Llama|研究|论文|突破|评测|模型/i],
+  ["framework_tools", /open source|github|release|开源|模型权重|tool|framework/i],
+  ["application_landing", /enterprise|customer|adoption|deploy|launch|product|app|assistant|落地|企业|客户|行业|发布|上线|产品|工具/i],
 ];
 
 // ============================================================================
@@ -164,22 +161,22 @@ export function heuristicSynthesize(insights: StructuredInsight[]): DailyReport 
       {
         dimension: "technology",
         judgment: "模型竞争继续从参数规模转向推理能力、多模态体验和工程可用性。",
-        supportingSignals: pickSignals(insights, ["model_release", "research_breakthrough", "open_source"]),
+        supportingSignals: pickSignals(insights, ["infrastructure_update", "framework_tools"]),
       },
       {
         dimension: "application",
         judgment: "企业采用更关注稳定部署、工作流集成和可衡量 ROI，单纯演示型产品吸引力下降。",
-        supportingSignals: pickSignals(insights, ["industry_adoption", "product_launch"]),
+        supportingSignals: pickSignals(insights, ["application_landing"]),
       },
       {
         dimension: "policy",
         judgment: "监管和安全议题逐渐成为发布节奏的一部分，版权、数据来源和模型风险需要前置处理。",
-        supportingSignals: pickSignals(insights, ["policy_regulation", "safety_risk"]),
+        supportingSignals: pickSignals(insights, ["policy_and_safety"]),
       },
       {
         dimension: "capital",
         judgment: "资本仍追逐基础设施和高频应用入口，但估值叙事会更依赖真实使用量与毛利改善。",
-        supportingSignals: pickSignals(insights, ["funding_market", "industry_adoption"]),
+        supportingSignals: pickSignals(insights, ["capital_movement", "application_landing"]),
       },
     ],
     riskSignals: buildReportSignals(insights, "risk"),
@@ -193,16 +190,16 @@ export function heuristicSynthesize(insights: StructuredInsight[]): DailyReport 
 // ============================================================================
 
 // 事件类型检测：遍历 eventSignals 匹配表，返回第一个命中的类型；
-// 若无匹配则默认归为 industry_adoption（兜底策略）
+// 若无匹配则默认归为 application_landing（兜底策略）
 function detectEventType(text: string): EventType {
-  return eventSignals.find(([, pattern]) => pattern.test(text))?.[0] ?? "industry_adoption";
+  return eventSignals.find(([, pattern]) => pattern.test(text))?.[0] ?? "application_landing";
 }
 
 // 情感检测：负面关键词优先 → 混合信号 → 事件类型推断 → 默认中性
 function detectSentiment(text: string, eventType: EventType): Sentiment {
   if (/lawsuit|risk|concern|ban|breach|安全|风险|诉讼|争议|下架|裁员/i.test(text)) return "negative";
   if (/mixed|debate|scrutiny|监管|争议|但|however/i.test(text)) return "mixed";
-  if (["product_launch", "model_release", "funding_market", "research_breakthrough"].includes(eventType)) {
+  if (["application_landing", "infrastructure_update", "capital_movement"].includes(eventType)) {
     return "positive";
   }
   return "neutral";
@@ -212,13 +209,13 @@ function detectSentiment(text: string, eventType: EventType): Sentiment {
 function scoreImpact(text: string, entityCount: number, eventType: EventType): number {
   let score = 5 + Math.min(2, entityCount);
   if (/OpenAI|Google|Anthropic|Microsoft|NVIDIA|Meta|Apple|监管|policy|funding|融资/i.test(text)) score += 2;
-  if (["policy_regulation", "funding_market", "model_release"].includes(eventType)) score += 1;
+  if (["policy_and_safety", "capital_movement", "infrastructure_update"].includes(eventType)) score += 1;
   return Math.min(10, score);
 }
 
 // 紧迫度评分：政策/安全/产品类事件默认偏高，含即时性关键词再加权
 function scoreUrgency(text: string, eventType: EventType): number {
-  let score = ["policy_regulation", "safety_risk", "product_launch"].includes(eventType) ? 7 : 5;
+  let score = ["policy_and_safety", "application_landing"].includes(eventType) ? 7 : 5;
   if (/today|now|urgent|immediately|今日|最新|刚刚|宣布/i.test(text)) score += 1;
   return Math.min(10, score);
 }
@@ -264,17 +261,16 @@ function buildAnalyticalSummary(article: RawArticle, eventType: EventType, impac
 
 // 风险生成：根据事件类型返回针对性的风险描述
 function buildRisks(eventType: EventType, companies: string[]): string[] {
-  if (eventType === "policy_regulation") return ["监管要求可能提高模型发布和数据合规成本。"];
-  if (eventType === "safety_risk") return ["负面舆情可能扩大到品牌信任、版权或安全治理层面。"];
-  if (eventType === "funding_market") return ["估值预期可能领先商业化兑现，存在资本回调压力。"];
+  if (eventType === "policy_and_safety") return ["监管要求可能提高模型发布和数据合规成本。", "负面舆情可能扩大到品牌信任、版权或安全治理层面。"];
+  if (eventType === "capital_movement") return ["估值预期可能领先商业化兑现，存在资本回调压力。"];
   return companies.length > 0 ? [`${companies[0]} 等主体的快速迭代可能加剧同类产品竞争。`] : [];
 }
 
 // 机会生成：根据事件类型返回针对性的机会描述
 function buildOpportunities(eventType: EventType, technologies: string[]): string[] {
-  if (eventType === "open_source") return ["开源模型和工具链降低开发者试验成本。"];
-  if (eventType === "industry_adoption") return ["垂直行业场景进入可复制部署阶段。"];
-  if (eventType === "model_release") return ["新模型能力可带动应用层体验升级。"];
+  if (eventType === "framework_tools") return ["开源模型和工具链降低开发者试验成本。"];
+  if (eventType === "application_landing") return ["垂直行业场景进入可复制部署阶段。"];
+  if (eventType === "infrastructure_update") return ["新模型能力可带动应用层体验升级。"];
   return technologies.length > 0 ? [`${technologies[0]} 相关能力存在产品化机会。`] : [];
 }
 
