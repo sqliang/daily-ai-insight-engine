@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { DailyReport } from "@/lib/agent/schema";
 
 function formatGeneratedAt(iso: string): string {
@@ -88,36 +89,44 @@ export function ReportHeader({ report }: ReportHeaderProps) {
         </h1>
 
         {/* Metadata row */}
-        <div className="mt-5 flex flex-wrap items-center gap-3">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/70 backdrop-blur">
-            <svg
-              width="12"
-              height="12"
-              viewBox="0 0 16 16"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              className="text-accent-light"
-            >
-              <rect x="2" y="3" width="12" height="11" rx="2" />
-              <path d="M2 7h12M5 2v3m6-3v3" strokeLinecap="round" />
-            </svg>
-            {report.date}
-          </span>
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/50 backdrop-blur">
-            <svg
-              width="12"
-              height="12"
-              viewBox="0 0 16 16"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-            >
-              <circle cx="8" cy="8" r="6.5" />
-              <path d="M8 4.5V8l3 2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            {formatGeneratedAt(report.generatedAt)}
-          </span>
+        <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/70 backdrop-blur">
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                className="text-accent-light"
+              >
+                <rect x="2" y="3" width="12" height="11" rx="2" />
+                <path d="M2 7h12M5 2v3m6-3v3" strokeLinecap="round" />
+              </svg>
+              {report.date}
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/50 backdrop-blur">
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+              >
+                <circle cx="8" cy="8" r="6.5" />
+                <path d="M8 4.5V8l3 2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              {formatGeneratedAt(report.generatedAt)}
+            </span>
+          </div>
+          <Link
+            href="/report"
+            className="inline-flex items-center rounded-full bg-accent px-4 py-1.5 text-xs font-semibold text-white shadow-glow transition-all duration-200 hover:bg-accent-dark"
+          >
+            完整报告
+          </Link>
         </div>
 
         {/* Executive summary — glass panel */}

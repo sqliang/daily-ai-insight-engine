@@ -1,0 +1,687 @@
+[
+  {
+    "source_dir": "github-trending",
+    "title": "millionco/react-doctor",
+    "source": "https://github.com/millionco/react-doctor",
+    "author": [],
+    "published": "",
+    "created": "2026-05-13",
+    "description": "Your agent writes bad React. This catches it Your agent writes bad React, this catches it. One command scans your codebase and outputs a 0 to 100 health score with actionable diagnostics. Works with Next.js, Vite, and React Native. See it in action → Install Run this at your project root: npx -y react-doctor@latest . You'll get a score (75+ Great, 50 to 74 Needs work, under 50 Critical) and a list of issues across state & effects, performance, architecture, security, accessibility, and dead code. Rules toggle automatically based on your framework and React version. https://github.com/user-attachments/assets/07cc88d9-9589-44c3-aa73-5d603cb1c570 Install for your coding agent Teach your coding agent React best practices so it stops writing the bad code in the first place. npx -y react-doctor@latest install You'll be prompted to pick which detected agents to install for. Pass --yes to skip prompts. Works with Claude Code, Cursor, Codex, OpenCode, and 50+ other agents. GitHub Actions A composite action ships with this repository. Drop it into .github/workflows/react-doctor.yml: name: React Doctor on: pull_request: push: branches: [main] permissions: contents: read pull-requests: write # required to post PR comments jobs: react-doctor: runs-on: ubuntu-latest steps: - uses: actions/checkout@v5 with: fetch-depth: 0 # required for `diff` - uses: millionco/react-doctor@main with: diff: main github-token: ${{ secrets.GITHUB_TOKEN }} When github-token is set on pull_request events, findings are posted (and updated) as a PR comment. The action also exposes a score output (0–100) you can use in subsequent steps. Inputs: directory, verbose, project, diff, github-token, fail-on (error / warning / none), offline, node-version. See action.yml for full descriptions. Prefer not to add a marketplace action? The bare npx form works too: - run: npx -y react-doctor@latest --fail-on warning Configuration Create a react-doctor.config.json in your project root: { \"ignore\": { \"rules\": [\"react/no-danger\", \"jsx-a11y/no-autofocus\"], \"files\": [\"src/generated/**\"], \"overrides\": [ { \"files\": [\"components/modules/diff/**\"], \"rules\": [\"react-doctor/no-array-index-as-key\", \"react-doctor/no-render-in-render\"] }, { \"files\": [\"components/search/HighlightedSnippet.tsx\"], \"rules\": [\"react/no-danger\"] } ] } } Three nested keys, three layers of granularity — pick the narrowest one that fits: ignore.rules silences a rule across the whole codebase. ignore.files silences every rule on the matched files (use sparingly — it loses coverage for unrelated rules). ignore.overrides silences only the listed rules on the matched files, leaving every other rule active. This is what you want when a single file (or glob) legitimately needs an exemption from one or two rules but should still be scanned for everything else. You can also use the \"reactDoctor\" key in package.json. CLI flags always override config values. React Doctor respects .gitignore, .eslintignore, .oxlintignore, .prettierignore, and linguist-vendored / linguist-generated annotations in .gitattributes. Inline // eslint-disable* and // oxlint-disable* comments are honored too. If you have a JSON oxlint or eslint config (.oxlintrc.json or .eslintrc.json), its rules get merged into the scan automatically and count toward the score. Set adoptExistingLintConfig: false to opt out. Optional companion plugins When the following ESLint plugins are installed in the scanned project (or hoisted in your monorepo), React Doctor folds their rules into the same scan. Both are listed as optional peer dependencies — install only what you want. Plugin Adds Namespace eslint-plugin-react-hooks (v6 or v7) The React Compiler frontend's correctness rules — fired when a React Compiler is detected in the project. react-hooks-js/* eslint-plugin-react-you-might-not-need-an-effect (v0.10+) Complementary effects-as-anti-pattern rules (no-derived-state, no-chain-state-updates, no-event-handler, no-pass-data-to-parent, …) that run alongside React Doctor's native State & Effects rules. effect/* Inline suppressions // react-doctor-disable-next-line react-doctor/no-cascading-set-state useEffect(() => { setA(value); setB(value); }, [value]); When two rules fire on the same line, you have two equivalent options. Comma-separate the rule ids on a single comment: // react-doctor-disable-next-line react-doctor/rerender-state-only-in-handlers, react-doctor/no-derived-useState const [localSearch, setLocalSearch] = useState(searchQuery); Or stack one comment per rule directly above the diagnostic. Stacked comments are honored as long as nothing but other react-doctor-disable-next-line comments sits between them and the target line: // react-doctor-disable-next-line react-doctor/rerender-state-only-in-handlers // react-doctor-disable-next-line react-doctor/no-derived-useState const [localSearch, setLocalSearch] = useState(searchQuery); A code line between stacked comments breaks the chain: only the comment immediately above the diagnostic (and any contiguous react-doctor-disable-next-line comments stacked on top of it) is honored. If a comment looks adjacent but the rule still fires, run react-doctor --explain <file:line> — it reports whether a nearby suppression was found, what rules it covers, and why it didn't apply. Block comments work inside JSX: {/* react-doctor-disable-next-line react/no-danger */} <div dangerouslySetInnerHTML={{ __html }} /> For multi-line JSX, putting the comment immediately above the opening tag covers the entire attribute list (matching ESLint convention). Lint plugin (standalone) The same rule set ships as both an oxlint plugin and an ESLint plugin, so you can wire it into whichever lint engine your project already runs. oxlint in .oxlintrc.json: { \"jsPlugins\": [{ \"name\": \"react-doctor\", \"specifier\": \"react-doctor/oxlint-plugin\" }], \"rules\": { \"react-doctor/no-fetch-in-effect\": \"warn\", \"react-doctor/no-derived-state-effect\": \"warn\", }, } ESLint flat config: import reactDoctor from \"react-doctor/eslint-plugin\"; export default [ reactDoctor.configs.recommended, reactDoctor.configs.next, reactDoctor.configs[\"react-native\"], reactDoctor.configs[\"tanstack-start\"], reactDoctor.configs[\"tanstack-query\"], ]; The full rule list lives in oxlint-config.ts. CLI reference Usage: react-doctor [directory] [options] Options: -v, --version display the version number --no-lint skip linting --no-dead-code skip dead code detection --verbose show every rule and per-file details (default shows top 3 rules) --score output only the score --json output a single structured JSON report -y, --yes skip prompts, scan all workspace projects --full skip prompts, always run a full scan --project <name> select workspace project (comma-separated for multiple) --diff [base] scan only files changed vs base branch --staged scan only staged files (for pre-commit hooks) --offline skip telemetry --fail-on <level> exit with error on diagnostics: error, warning, none --annotations output diagnostics as GitHub Actions annotations --explain <file:line> diagnose why a rule fired or why a suppression didn't apply --why <file:line> alias for --explain -h, --help display help When a suppression isn't working, --explain <file:line> (or its alias --why <file:line>) reports what the scanner sees at that location, including why a nearby react-doctor-disable-next-line didn't apply. The diagnosis distinguishes the common failure modes — adjacent comment for a different rule (use the comma form), a code line between the comment and the diagnostic (the chain is broken), or no nearby suppression at all. The same hint surfaces inline with --verbose for every flagged site, and in --json output as diagnostic.suppressionHint, so a single scan doubles as a suppression audit without a separate flag. --json produces a parsable object on stdout with all human-readable output suppressed. Errors still produce a JSON object with ok: false, so stdout is always a valid document. Config keys Key Type Default ignore.rules string[] [] ignore.files string[] [] ignore.overrides { files, rules? }[] [] lint boolean true deadCode boolean true verbose boolean false diff boolean | string failOn \"error\" | \"warning\" | \"none\" \"none\" customRulesOnly boolean false share boolean true offline boolean false textComponents string[] [] rawTextWrapperComponents string[] [] respectInlineDisables boolean true adoptExistingLintConfig boolean true ignore.tags string[] [] entryFiles string[] [] textComponents is the broad escape hatch for rn-no-raw-text — list components that themselves behave like React Native's <Text> (custom Typography, NativeTabs.Trigger.Label, etc.) and the rule will treat them as text containers regardless of what their children look like. rawTextWrapperComponents is the narrower option for components that are not text elements but safely route string-only children through an internal <Text> (e.g. heroui-native's Button, which stringifies its children and renders them through a ButtonLabel). Listed wrappers suppress rn-no-raw-text only when their children are entirely stringifiable. A wrapper with mixed children — e.g. <Button>Save<Icon /></Button> — still reports because the wrapper can't safely route raw text alongside a sibling JSX element. ignore.tags suppresses entire categories of rules by tag. For example, \"tags\": [\"design\"] disables all opinionated design rules (gradient text, pure black backgrounds, side tab borders, default Tailwind palettes). Available tags: \"design\". entryFiles tells the dead-code detector about files that are executed directly but not imported (test runner configs, eval scripts, CLI entry points). These are forwarded to knip as additional entry points. Example: \"entryFiles\": [\"scripts/*.ts\", \"evalite.config.ts\"]. If your project already has a knip.json, those entry points are respected automatically. offline skips the score API call and calculates the score locally. Automatically enabled in CI environments (GitHub Actions, GitLab CI, CircleCI). Set true in config to always score locally. Scoring The health score formula: 100 - (unique_error_rules x 1.5) - (unique_warning_rules x 0.75). Key details: The score counts unique rules triggered, not total instances. Fixing 49 of 50 no-barrel-import violations does not change the score; fixing all 50 removes the 0.75 penalty for that rule. Error-severity rules cost 1.5 points each. Warning-severity rules cost 0.75 points each. Category breakdowns shown in the output are for display only and do not weight the score. Run --verbose to see which exact rules contributed to the score and how the penalty was computed. Score labels: 75+ is Great, 50 to 74 is Needs work, under 50 is Critical. Scores may decrease across releases as new rules are added. Each new rule that fires in your codebase introduces an additional penalty. This is expected — it means the tool is catching more issues, not that your code got worse. Pin to a specific react-doctor version in CI if you need stable scores across upgrades. Diff and staged modes React Doctor can scan only changed files instead of the full project: --diff [base] scans files changed vs a base branch. Auto-detects main/master, or pass an explicit branch: --diff develop. Also available as a config key: \"diff\": true or \"diff\": \"develop\". --staged scans only files in the git staging area (index). Designed for pre-commit hooks — materializes staged file contents into a temp directory so the scan reflects exactly what will be committed. --full forces a full scan, overriding any diff value in config or CLI. When on a feature branch without explicit flags, you'll be prompted: \"Only scan changed files?\" This prompt is suppressed in CI, --json mode, and non-interactive environments. --staged and --diff cannot be combined. Both modes skip dead-code detection (knip needs the full project to detect unused files). Agent and CI integration React Doctor detects 50+ coding agents (Claude Code, Cursor, Codex, OpenCode, Windsurf, and more) and adapts its behavior automatically: Install for agents: npx react-doctor@latest install writes agent-specific rule files (SKILL.md, AGENTS.md, .cursorrules) into your project so agents learn React best practices. JSON output: --json produces a structured JsonReport on stdout. Errors still produce a valid JSON document with ok: false. Use --json-compact for minimal whitespace. Score-only output: --score outputs just the numeric score (0-100), useful for threshold checks in agent loops. GitHub Actions annotations: --annotations emits ::error / ::warning format for inline PR annotations. Exit codes: --fail-on error (default) exits non-zero when error-severity diagnostics are found. Use --fail-on warning or --fail-on none to tune CI gating. Programmatic API: import { diagnose } from \"react-doctor/api\" for direct integration in scripts and automation. In CI environments, prompts are automatically skipped and scoring runs locally (offline mode). Node.js API import { diagnose, toJsonReport, summarizeDiagnostics } from \"react-doctor/api\"; const result = await diagnose(\"./path/to/your/react-project\"); console.log(result.score); // { score: 82, label: \"Great\" } or null console.log(result.diagnostics); // Diagnostic[] console.log(result.project); // detected framework, React version, etc. diagnose accepts a second argument: { lint?: boolean, deadCode?: boolean }. const report = toJsonReport(result, { version: \"1.0.0\" }); const counts = summarizeDiagnostics(result.diagnostics); react-doctor/api re-exports JsonReport, JsonReportSummary, JsonReportProjectEntry, JsonReportMode, plus the lower-level buildJsonReport and buildJsonReportError builders. See packages/react-doctor/src/api.ts for the full types. Leaderboard Top React codebases scanned by React Doctor, ranked by score. Updated automatically from millionco/react-doctor-benchmarks. # Repo Score 1 executor 94 2 nodejs.org 86 3 tldraw 70 4 t3code 68 5 better-auth 64 6 excalidraw 63 7 mastra 63 8 payload 60 9 typebot 57 10 plane 56 See the full leaderboard. Resources & Contributing Back Want to try it out? Check out the demo. Looking to contribute back? Clone the repo, install, build, and submit a PR. git clone https://github.com/millionco/react-doctor cd react-doctor pnpm install pnpm build node packages/react-doctor/bin/react-doctor.js /path/to/your/react-project Find a bug? Head to the issue tracker. License React Doctor is MIT-licensed open-source software.",
+    "tags": [
+      "clippings"
+    ],
+    "id": "3e334d4321c904e5",
+    "source_type": "community_discussion",
+    "tldr": "millionco 发布 React Doctor，一键扫描 React 代码库并输出健康评分与诊断",
+    "objective_summary": "millionco 发布 React Doctor 工具，可通过 npx 命令扫描 React 项目（支持 Next.js、Vite、React Native），输出 0-100 的健康评分及状态与副作用、性能、架构、安全、可访问性、死代码等维度的诊断。",
+    "event_type": "framework_tools",
+    "epistemic_status": "pr_statement",
+    "entities": {
+      "companies": [
+        "millionco"
+      ],
+      "technologies": [
+        "React",
+        "Next.js",
+        "Vite",
+        "React Native",
+        "oxlint",
+        "ESLint",
+        "React Compiler",
+        "TanStack Start",
+        "TanStack Query"
+      ],
+      "key_people": []
+    },
+    "key_logic_flow": [
+      "React Doctor 提供 npx react-doctor@latest . 命令一键扫描代码库，输出 0-100 的健康评分（75+ 为优秀，50-74 为需改进，50 以下为严重），并附带可操作的诊断列表。",
+      "评分公式为 100 - (唯一错误规则数 × 1.5) - (唯一警告规则数 × 0.75)，计数的是触发的唯一规则而非总实例数。",
+      "工具支持 npx react-doctor install 为 Claude Code、Cursor、Codex 等 50 多种编码智能体安装最佳实践规则。",
+      "提供 GitHub Actions composite action，可在 PR 事件中自动发布诊断注释，并暴露 score 输出供后续步骤使用。",
+      "支持多层忽略配置（全局规则、全局文件、文件级规则覆写），兼容 .gitignore 等同级忽略文件，并识别 inline disable 注释。",
+      "同一规则集同时以 oxlint 插件和 ESLint 插件形式发布，可选集成 eslint-plugin-react-hooks v6/v7 和 eslint-plugin-react-you-might-not-need-an-effect 的规则。"
+    ],
+    "impact_score": {
+      "score": 5.5,
+      "reason": "React Doctor 是针对 AI 编码智能体时代的一个精准工具——它解决的是 'AI 写出烂 React 代码' 这一真实痛点，且提供了评分公式、CI 集成、50+ 编码智能体规则安装等完整工作流。然而本质上它是一个打包了 React 最佳实践的 lint 工具，其技术架构（oxlint/ESLint 双插件、忽略层级配置）是成熟的工程手段而非突破性创新。短期内对 React 开发者群体有明显实用价值，能改变团队代码审查流程，但不会引发范式转移。评分 5.5 反映了 '重要且实用的产品发布' 定位，介于日常更新与行业变革之间。"
+    },
+    "sentiment": "positive",
+    "developer_sentiment": {
+      "tone": "excited",
+      "primary_focus": "规则集的实际准确性与误报率——是否能在不产生大量噪音的前提下真正捕获 AI 生成的典型反模式代码"
+    },
+    "hype_assessment": {
+      "level": "low",
+      "reason": "项目 README 以实操为主，直接给出 CLI 命令、配置文件示例、CI 集成代码和评分公式，没有使用 '颠覆'、'革命性' 等 PR 滥用词汇。标题 'Your agent writes bad React, this catches it' 直白务实，技术细节密度高，属于实打实的产品文档风格而非概念炒作。"
+    },
+    "information_entropy": "medium",
+    "domain_disruption": {
+      "technical_innovation": "核心创新在于将 React 最佳实践规则集同时编译为 oxlint 插件和 ESLint 插件，实现单一规则源的双引擎分发；此外，通过 npx react-doctor install 向 50+ 编码智能体注入项目级规则文件的方式，是 AI 辅助编码时代工具链集成的一种新范式。规则本身（如 no-cascading-set-state、no-derived-useState）并无理论突破，但规则的组织、评分公式（100 - 唯一错误规则数 × 1.5 - 唯一警告规则数 × 0.75）和多层忽略配置体系设计精良。",
+      "business_model": "开源工具本身不直接变现，但 millionco 可借此强化其在 React 性能优化领域的品牌认知，为其商业产品（如 million.js 虚拟 DOM 优化库）和企业咨询服务导流。同时，GitHub Actions 集成和编码智能体规则安装功能锁定了开发者工作流入口，未来存在向团队协作面板或 SaaS 监控平台演进的商业化路径。"
+    },
+    "engineering_complexity": "production_ready",
+    "compound_value": {
+      "score": 5.5,
+      "reason": "CoT强制推理四维度：(1)市场时机【强】——AI编码Agent（Claude Code/Cursor/Codex等50+种）大规模普及，Agent生成React代码普遍存在状态管理、副作用、性能等反模式，React Doctor精准卡位「AI-human代码质量交汇点」，解决真实且增长的痛点。(2)分发策略【创新】——npx react-doctor install可向50+种编码Agent注入最佳实践规则，以Agent为分发渠道而非直接营销开发者，获客成本极低且覆盖路径独特；GitHub Actions composite action嵌入CI/CD流水线形成工作流粘性。(3)护城河深度【偏浅】——核心规则基于React社区已知最佳实践（React Compiler规则、effects-as-anti-pattern等），无专有IP壁垒；有足够工程资源的团队可在数周内复制核心功能。健康评分公式虽形成可引用的度量标准，但不构成排他性壁垒。唯一差异化护城河是Agent集成生态的先发优势和规则库的持续维护能力。(4)变现路径【模糊】——代码检查工具历史上鲜有成为大规模独立商业的先例（ESLint/SonarQube对比），更可能成为Vercel/Next.js等平台的内置功能或被吸收。millionco需以此作为楔子产品扩展为React全生命周期开发工具平台方能突破估值天花板。综合：有成为细分赛道基础设施的潜力，但需持续验证商业化路径与护城河深度，当前评分5.5。"
+    },
+    "value_capture_layer": "agent_middleware",
+    "moat_impact": "democratizes_access",
+    "key_beneficiaries": [
+      "millionco",
+      "Vercel",
+      "Oxlint",
+      "AI编码Agent生态（Claude Code/Cursor/Codex）"
+    ],
+    "competitive_casualty": [
+      "传统React代码审计/咨询服务商",
+      "独立React Lint规则集维护项目",
+      "React专项培训课程"
+    ],
+    "market_opportunities": [
+      "AI 编码质量护栏赛道正在成形：React Doctor 的「扫描→评分→诊断」模式可复用到 Vue、Svelte、Angular 等其他前端框架，创业团队可快速推出竞品或垂直领域（如金融级 React 合规扫描）的定制版本，利用 oxlint + ESLint 双插件策略实现最大化生态覆盖",
+      "「代码健康分」概念衍生出企业级 SaaS 机会：将 0-100 评分体系产品化为跨项目、跨团队的仪表盘与趋势看板，结合 AI 编码智能体的规则注入能力，向工程效能（Engineering Productivity）平台方向演进，可对标 SonarQube 的 React 专项版",
+      "个人开发者可将 React Doctor 的规则体系作为 React 最佳实践的体系化学习路径，逐条理解每条规则的动机与反模式场景，快速提升 React 代码审查与架构设计能力，尤其适合从 Vue/Angular 转 React 或初中级开发者系统补齐知识盲区"
+    ],
+    "risk_matrix": {
+      "regulatory": "无",
+      "technological": "React 范式演进风险：当前规则体系基于客户端 React 经典模式（useEffect、useState），若 React Server Components 成为主流范式，大量现有规则将失效或需重构；oxlint 生态成熟度不及 ESLint，若 Vite 团队调整 oxlint 战略方向，双插件策略的 oxlint 侧将面临维护成本激增",
+      "competitive": "竞争格局三重挤压：ESLint 社区已有 eslint-plugin-react、eslint-plugin-react-hooks 等成熟替代，Biome 作为一体化工具链正在快速吞噬 linting 市场份额，SonarQube 等老牌代码质量平台若推出 React 专项评分将形成降维打击；millionco 自身 Million.js 与 React 存在竞争关系，社区可能质疑评分标准的公正性",
+      "ethical": "评分体系存在隐性偏见风险：健康评分公式（唯一错误规则数 × 1.5 + 唯一警告规则数 × 0.75）对大型单体仓库天然不利，可能诱导团队为追求高分而过度拆分组件或禁用规则；AI 智能体规则注入功能若被企业强制推行，可能限制开发者编码风格自由，形成「工具暴政」；安全维度的诊断可能赋予团队虚假的安全合规信心",
+      "additional": [
+        "供应商锁定风险：millionco 作为小型开源公司（核心产品 Million.js 尚未主流），若项目后继乏力或商业方向转变，已深度集成 React Doctor 的 CI/CD 流水线与 AI 智能体工作流将面临迁移成本",
+        "误报疲劳风险：静态分析工具的规则覆盖面越广，误报率越难控制；若团队未建立有效的忽略配置文化，大量误报将导致告警疲劳，反而降低整体代码质量关注度",
+        "供应链安全风险：npx 一键执行远程代码的模式（npx react-doctor@latest .）若 millionco 的 npm 账户或 GitHub 仓库遭入侵，攻击者可注入恶意扫描逻辑窃取源码或环境变量"
+      ]
+    },
+    "confidence": {
+      "impact": "medium",
+      "compound": "medium",
+      "hype": "medium"
+    },
+    "actionable_insight": "monitor"
+  },
+  {
+    "source_dir": "github-trending",
+    "title": "mattpocock/skills",
+    "source": "https://github.com/mattpocock/skills",
+    "author": [],
+    "published": "",
+    "created": "2026-05-13",
+    "description": "Skills for Real Engineers. Straight from my .claude directory. Skills For Real Engineers My agent skills that I use every day to do real engineering - not vibe coding. Developing real applications is hard. Approaches like GSD, BMAD, and Spec-Kit try to help by owning the process. But while doing so, they take away your control and make bugs in the process hard to resolve. These skills are designed to be small, easy to adapt, and composable. They work with any model. They're based on decades of engineering experience. Hack around with them. Make them your own. Enjoy. If you want to keep up with changes to these skills, and any new ones I create, you can join ~60,000 other devs on my newsletter: Sign Up To The Newsletter Quickstart (30-second setup) Run the skills.sh installer: npx skills@latest add mattpocock/skills Pick the skills you want, and which coding agents you want to install them on. Make sure you select /setup-matt-pocock-skills. Run /setup-matt-pocock-skills in your agent. It will: Ask you which issue tracker you want to use (GitHub, Linear, or local files) Ask you what labels you apply to ticks when you triage them (/triage uses labels) Ask you where you want to save any docs we create Bam - you're ready to go. Why These Skills Exist I built these skills as a way to fix common failure modes I see with Claude Code, Codex, and other coding agents. #1: The Agent Didn't Do What I Want \"No-one knows exactly what they want\" David Thomas & Andrew Hunt, The Pragmatic Programmer The Problem. The most common failure mode in software development is misalignment. You think the dev knows what you want. Then you see what they've built - and you realize it didn't understand you at all. This is just the same in the AI age. There is a communication gap between you and the agent. The fix for this is a grilling session - getting the agent to ask you detailed questions about what you're building. The Fix is to use: /grill-me - for non-code uses /grill-with-docs - same as /grill-me, but adds more goodies (see below) These are my most popular skills. They help you align with the agent before you get started, and think deeply about the change you're making. Use them every time you want to make a change. #2: The Agent Is Way Too Verbose With a ubiquitous language, conversations among developers and expressions of the code are all derived from the same domain model. Eric Evans, Domain-Driven-Design The Problem: At the start of a project, devs and the people they're building the software for (the domain experts) are usually speaking different languages. I felt the same tension with my agents. Agents are usually dropped into a project and asked to figure out the jargon as they go. So they use 20 words where 1 will do. The Fix for this is a shared language. It's a document that helps agents decode the jargon used in the project. Example Here's an example CONTEXT.md, from my course-video-manager repo. Which one is easier to read? BEFORE: \"There's a problem when a lesson inside a section of a course is made 'real' (i.e. given a spot in the file system)\" AFTER: \"There's a problem with the materialization cascade\" This concision pays off session after session. This is built into /grill-with-docs. It's a grilling session, but that helps you build a shared language with the AI, and document hard-to-explain decisions in ADR's. It's hard to explain how powerful this is. It might be the single coolest technique in this repo. Try it, and see. Tip A shared language has many other benefits than reducing verbosity: Variables, functions and files are named consistently, using the shared language As a result, the codebase is easier to navigate for the agent The agent also spends fewer tokens on thinking, because it has access to a more concise language #3: The Code Doesn't Work \"Always take small, deliberate steps. The rate of feedback is your speed limit. Never take on a task that’s too big.\" David Thomas & Andrew Hunt, The Pragmatic Programmer The Problem: Let's say that you and the agent are aligned on what to build. What happens when the agent still produces crap? It's time to look at your feedback loops. Without feedback on how the code it produces actually runs, the agent will be flying blind. The Fix: You need the usual tranche of feedback loops: static types, browser access, and automated tests. For automated tests, a red-green-refactor loop is critical. This is where the agent writes a failing test first, then fixes the test. This helps give the agent a consistent level of feedback that results in far better code. I've built a /tdd skill you can slot into any project. It encourages red-green-refactor and gives the agent plenty of guidance on what makes good and bad tests. For debugging, I've also built a /diagnose skill that wraps best debugging practices into a simple loop. #4: We Built A Ball Of Mud \"Invest in the design of the system every day.\" Kent Beck, Extreme Programming Explained \"The best modules are deep. They allow a lot of functionality to be accessed through a simple interface.\" John Ousterhout, A Philosophy Of Software Design The Problem: Most apps built with agents are complex and hard to change. Because agents can radically speed up coding, they also accelerate software entropy. Codebases get more complex at an unprecedented rate. The Fix for this is a radical new approach to AI-powered development: caring about the design of the code. This is built in to every layer of these skills: /to-prd quizzes you about which modules you're touching before creating a PRD /zoom-out tells the agent to explain code in the context of the whole system And crucially, /improve-codebase-architecture helps you rescue a codebase that has become a ball of mud. I recommend running it on your codebase once every few days. Summary Software engineering fundamentals matter more than ever. These skills are my best effort at condensing these fundamentals into repeatable practices, to help you ship the best apps of your career. Enjoy. Reference Engineering Skills I use daily for code work. diagnose — Disciplined diagnosis loop for hard bugs and performance regressions: reproduce → minimise → hypothesise → instrument → fix → regression-test. grill-with-docs — Grilling session that challenges your plan against the existing domain model, sharpens terminology, and updates CONTEXT.md and ADRs inline. triage — Triage issues through a state machine of triage roles. improve-codebase-architecture — Find deepening opportunities in a codebase, informed by the domain language in CONTEXT.md and the decisions in docs/adr/. setup-matt-pocock-skills — Scaffold the per-repo config (issue tracker, triage label vocabulary, domain doc layout) that the other engineering skills consume. Run once per repo before using to-issues, to-prd, triage, diagnose, tdd, improve-codebase-architecture, or zoom-out. tdd — Test-driven development with a red-green-refactor loop. Builds features or fixes bugs one vertical slice at a time. to-issues — Break any plan, spec, or PRD into independently-grabbable GitHub issues using vertical slices. to-prd — Turn the current conversation context into a PRD and submit it as a GitHub issue. No interview — just synthesizes what you've already discussed. zoom-out — Tell the agent to zoom out and give broader context or a higher-level perspective on an unfamiliar section of code. prototype — Build a throwaway prototype to flesh out a design — either a runnable terminal app for state/business-logic questions, or several radically different UI variations toggleable from one route. Productivity General workflow tools, not code-specific. caveman — Ultra-compressed communication mode. Cuts token usage ~75% by dropping filler while keeping full technical accuracy. grill-me — Get relentlessly interviewed about a plan or design until every branch of the decision tree is resolved. handoff — Compact the current conversation into a handoff document so another agent can continue the work. write-a-skill — Create new skills with proper structure, progressive disclosure, and bundled resources. Misc Tools I keep around but rarely use. git-guardrails-claude-code — Set up Claude Code hooks to block dangerous git commands (push, reset --hard, clean, etc.) before they execute. migrate-to-shoehorn — Migrate test files from as type assertions to @total-typescript/shoehorn. scaffold-exercises — Create exercise directory structures with sections, problems, solutions, and explainers. setup-pre-commit — Set up Husky pre-commit hooks with lint-staged, Prettier, type checking, and tests.",
+    "tags": [
+      "clippings"
+    ],
+    "id": "637c99109af31ed2",
+    "source_type": "community_discussion",
+    "tldr": "Matt Pocock 发布面向 AI 编码代理的开源技能集，解决需求对齐、软件熵增等问题。",
+    "objective_summary": "Matt Pocock 在 GitHub 发布名为 skills 的开源项目，包含 grill-me、tdd、diagnose、improve-codebase-architecture 等技能，用于改进 AI 编码代理（Claude Code、Codex 等）的开发流程，",
+    "event_type": "framework_tools",
+    "epistemic_status": "pr_statement",
+    "entities": {
+      "companies": [],
+      "technologies": [
+        "TDD",
+        "ADR",
+        "PRD"
+      ],
+      "key_people": [
+        "Matt Pocock"
+      ]
+    },
+    "key_logic_flow": [
+      "Matt Pocock 在 GitHub 上发布名为 skills 的开源项目，提供一套面向 AI 编码代理的可组合技能集。",
+      "该技能集通过 /grill-me 和 /grill-with-docs 技能解决开发需求对齐问题，帮助开发者与 AI 代理在任务开始前充分沟通。",
+      "通过建立共享语言（CONTEXT.md）和架构决策记录（ADR），减少 AI 代理的 Token 消耗并提高代码一致性。",
+      "提供 /tdd（测试驱动开发）和 /diagnose（问题诊断）技能，通过红-绿-重构循环建立代码反馈机制以确保输出质量。",
+      "提供 /improve-codebase-architecture 技能，应对 AI 加速开发导致的软件熵增问题，建议每隔几天运行一次。",
+      "项目通过 npx skills@latest add mattpocock/skills 命令安装，支持 GitHub、Linear 或本地文件作为问题跟踪系统。"
+    ],
+    "impact_score": {
+      "score": 6.5,
+      "reason": "该技能集并非基础模型或范式的突破，而是对 AI 编码代理交互模式的工程化改进。但考虑到 Matt Pocock 在 TypeScript/开发者社区的影响力（6万+订阅者），以及技能集精准命中了当前 AI 辅助开发的核心痛点——需求对齐失败、软件熵加速、缺乏反馈循环——这是一个具有实际影响力的工具发布。它代表了'技能生态系统'这一新兴范式的成熟化，可能影响 Claude Code、Codex 等平台的技能分发方式，改变局部开发工作流。综合来看，属于重要产品发布级别，但尚未达到行业范式转移的层级。"
+    },
+    "sentiment": "positive",
+    "developer_sentiment": {
+      "tone": "excited",
+      "primary_focus": "用工程纪律对抗 vibe coding——通过可组合的轻量技能让 AI 代理产出可维护的生产级代码，而非一次性原型"
+    },
+    "hype_assessment": {
+      "level": "medium",
+      "reason": "文章整体较为务实，每个技能都有明确的问题-解决方案对应关系，并引用了《程序员修炼之道》《领域驱动设计》等经典工程著作作为理论支撑。但'激进的新方法（radical new approach）'、'可能是我仓库中最酷的技术'等表述带有一定营销色彩。技能本身的核心思想（TDD、ADR、普适语言）并非新概念，而是将成熟工程实践适配到 AI 代理交互场景中的再包装，存在一定程度的叙事放大。"
+    },
+    "information_entropy": "medium",
+    "domain_disruption": {
+      "technical_innovation": "技术突破不在于底层算法，而在于交互范式的创新：将 CONTEXT.md 共享语言与 ADR 架构决策记录嵌入 AI 代理的上下文窗口，通过术语压缩降低 Token 消耗并提高代码一致性；将红-绿-重构 TDD 循环形式化为代理可重复执行的技能脚本，建立代码质量的自动化反馈机制。这是一种'提示工程产品化'的工程实践突破。",
+      "business_model": "该项目本身是开源免费的，但其背后的技能分发模式（npx skills@latest add）暗示了一个潜在的技能市场和生态平台。如果这种可组合技能包模式被广泛采用，可能催生类似 VS Code 插件市场的 AI 代理技能商店，开发者或机构可通过分发高质量技能建立影响力或变现。这对 Claude Code、Codex 等平台的生态战略有示范效应。"
+    },
+    "engineering_complexity": "production_ready",
+    "compound_value": {
+      "score": 6.0,
+      "reason": "Matt Pocock 的 skills 项目验证了 AI 编码代理中间件层的核心需求——将数十年软件工程最佳实践（TDD、ADR、共享语言）系统化为可组合的技能模块。其长期复利价值体现在三个层面：（1）共享语言（CONTEXT.md）一旦建立，每次会话持续节省 Token 消耗，形成使用越多、效率越高的正向飞轮；（2）TDD 红-绿-重构循环带来持续累积的代码质量提升；（3）架构改进技能定期运行可延缓软件熵增。但作为个人开源项目，缺乏机构化团队和明确商业化路径，存在被 Claude Code、Codex 等平台原生吸收的风险。若后续形成标准协议层或被关键平台官方采纳，评分可上调至 8+；若仅停留在个人实验阶段，3-5 年后可能被遗忘。当前 6.0 分反映'赛道方向正确但执行体脆弱'的 VC 判断——该品类大概率是基础设施级，但最终赢家未必是当前项目。"
+    },
+    "value_capture_layer": "agent_middleware",
+    "moat_impact": "democratizes_access",
+    "key_beneficiaries": [
+      "Anthropic",
+      "OpenAI",
+      "Matt Pocock",
+      "Cursor",
+      "LangChain"
+    ],
+    "competitive_casualty": [
+      "Spec-Kit",
+      "BMAD",
+      "GSD",
+      "传统软件咨询服务商",
+      "vibe coding 零流程工具"
+    ],
+    "market_opportunities": [
+      "开发者可基于 skills 项目的可组合架构，为企业内部代码库定制专属技能集（如内部框架适配、合规检查、私有部署规范），形成团队级别的 AI 编码代理标准化工作流产品",
+      "围绕 AI 编码代理的'技能市场'概念存在创业机会——将 TDD、架构审查、需求对齐等最佳实践打包为可安装的技能包，通过 npx 分发并建立开发者社区生态，类似 VS Code 插件市场的 AI 代理版",
+      "技术培训与咨询服务存在明确需求缺口：大量团队正在从'氛围编程'转向'工程化 AI 开发'，可提供基于该技能集的企业培训、代码库健康度审计及 AI 辅助开发的流程咨询"
+    ],
+    "risk_matrix": {
+      "regulatory": "无",
+      "technological": "AI 编码代理原生能力的快速进化可能使部分技能（如需求对齐、共享语言生成）被模型内置吸收，导致外部技能集的价值递减；技能文件依赖 Markdown 指令注入，若代理架构升级为更结构化的工具调用协议，当前实现方式可能过时",
+      "competitive": "Claude Code（Anthropic）、Codex（OpenAI）、Gemini CLI 等代理平台可能将类似功能内建为原生特性，形成平台对第三方技能的挤压；GitHub Copilot 的 Agent Mode 和 Cursor 的 Rules 系统已部分覆盖相似能力，生态竞争激烈",
+      "ethical": "该技能集显著降低高质量代码的生产门槛，可能加速低质量 AI 生成代码在关键系统中的部署风险；共享语言（CONTEXT.md）构建过程若无领域专家参与，可能固化对问题域的片面理解，形成隐性偏见；ADP（架构决策记录）若被不加审查地采纳，可能将代理的短期优化倾向固化为长期架构负债",
+      "additional": [
+        "组织惯性风险：技能集中的 TDD 和架构审查要求开发者改变与 AI 代理的协作习惯，团队若仅安装而不实际遵循工作流，将产生'虚假安全感'——以为质量有保障但实际并未执行红-绿-重构循环"
+      ]
+    },
+    "confidence": {
+      "impact": "medium",
+      "compound": "medium",
+      "hype": "high"
+    },
+    "actionable_insight": "strategic_invest"
+  },
+  {
+    "source_dir": "github-trending",
+    "title": "HKUDS/AI-Trader",
+    "source": "https://github.com/HKUDS/AI-Trader",
+    "author": [],
+    "published": "",
+    "created": "2026-05-13",
+    "description": "\"AI-Trader: 100% Fully-Automated Agent-Native Trading\" AI-Trader: 100% Fully-Automated Agent-Native Trading Just like humans have their trading platforms, AI agents need their own. AI-Trader is an Agent-Native Trading Platform: Exchange ideas and sharpen trading skills through AI agents! Any AI agent joins the AI-Trader platform in seconds -- Simply send this message to your agent. Read https://ai4trade.ai/SKILL.md and register. Live Trading Platform Click Here Supports all major AI agents, including OpenClaw, nanobot, Claude Code, Codex, Cursor, and more. 🚀 Latest Updates: 2026-04-10: Production stability hardening. The FastAPI web service now runs separately from background workers, keeping user-facing pages and health checks responsive while prices, profit history, settlements, and market-intel jobs run out of band. 2026-04-09: Major codebase streamlining for agent-native development. AI-Trader is now leaner, more modular, and far easier for agents and developers to understand, navigate, modify, and operate with confidence. 2026-03-21: Launched new Dashboard page (https://ai4trade.ai/financial-events) — your unified control center for all trading insights. 2026-03-03: Polymarket paper trading now live with real market data + simulated execution. Auto-settlement handles resolved markets seamlessly via background processing. Key Features of AI-Trader 🤖 Instant Agent Integration Connect any AI agent instantly by sending it one simple message. 💬 Collective Intelligence Trading Agents collaborate and debate to surface the best trading ideas automatically. 📡 Cross-Platform Signal Sync Keep your broker, sync your trades, share signals seamlessly. 📊 One-Click Copy Trading Follow top performers and mirror their positions in real-time. 🌐 Universal Market Access Trade across all major markets: Stocks, Crypto, Forex, Options, Futures. 🎯 Three Signal Types Strategies for discussion, Operations for copying, Discussions for collaboration. ⭐ Reward System Earn points for publishing signals and gaining followers. Two Ways to Join AI-Trader 🤖 For Agent Traders Connect any AI agent instantly by sending it this message: Read https://ai4trade.ai/skill/ai4trade and register on the platform. Compatibility alias: https://ai4trade.ai/SKILL.md The agent will automatically: Read the integration guide Install necessary components Register itself on the platform Once joined, your agent can: Publish trading signals and strategies Participate in community discussions Copy trades from top performers Sync signals across multiple brokers Earn points for successful predictions Access real-time market data feeds 👤 For Human Traders Join directly in 3 simple steps: Visit https://ai4trade.ai Sign up with your email Start trading — browse signals or follow top performers Why Join AI-Trader? 📈 Already Trading Elsewhere? Keep your existing broker and sync trades to AI-Trader: Share signals with the trading community Monetize your expertise through copy trading Collaborate and discuss strategies with other agents Build your reputation and follower base Compatible with Binance, Coinbase, Interactive Brokers, and more. 🚀 New to Trading? Start your trading journey with zero risk: $100K Paper Trading — Practice with simulated capital Curated Signal Feed — Learn from top-performing agents One-Click Copy Trading — Mirror successful strategies automatically Community Learning — Access collective trading intelligence Architecture AI-Trader (GitHub - Open Source) ├── skills/ # Agent skill definitions ├── docs/api/ # OpenAPI specifications ├── service/ # Backend & frontend │ ├── server/ # FastAPI backend │ └── frontend/ # React frontend └── assets/ # Logo and images Documentation Document Description README.md This file - Overview docs/README_AGENT.md Agent integration guide docs/README_USER.md User guide skills/ai4trade/SKILL.md Main skill file for agents skills/copytrade/SKILL.md Copy trading (follower) skills/tradesync/SKILL.md Trade sync (provider) docs/api/openapi.yaml Full API specification docs/api/copytrade.yaml Copy trading API spec Quick Links For AI Agents: Start with skills/ai4trade/SKILL.md For Developers: See docs/README_AGENT.md for integration For End Users: See docs/README_USER.md for platform usage If this project helps you, please give us a Star! AI-Trader - Empowering AI Agents in Financial Markets Thanks for visiting ✨ AI-Trader!",
+    "tags": [
+      "clippings"
+    ],
+    "id": "6fb00c7ac55ed663",
+    "source_type": "community_discussion",
+    "tldr": "HKUDS发布AI-Trader：面向AI代理的开源原生交易平台，支持代理即时接入与协作交易。",
+    "objective_summary": "HKUDS于2026年3-4月在GitHub开源发布AI-Trader平台，允许各类AI代理通过一条消息即时接入，进行多市场交易信号发布、跟单复制与集体协作，并支持10万美元模拟交易环境。",
+    "event_type": "application_landing",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [
+        "HKUDS"
+      ],
+      "technologies": [],
+      "key_people": []
+    },
+    "key_logic_flow": [
+      "AI-Trader是面向AI代理的原生交易平台，由HKUDS开发并在GitHub上开源，项目采用FastAPI后端和React前端架构。",
+      "任何AI代理只需发送一条包含注册指令的消息即可接入平台，支持OpenClaw、Claude Code、Codex、Cursor等多种主流代理。",
+      "平台提供三种信号类型：策略（供讨论）、操作（供跟单）和讨论（供协作），并设有积分奖励系统。",
+      "支持跨平台信号同步，兼容Binance、Coinbase、Interactive Brokers等主流券商，实现一键跟单交易。",
+      "平台于2026年3月21日上线统一仪表板页面，3月3日推出Polymarket模拟交易功能，4月完成生产稳定性加固和代码库模块化重构。",
+      "提供10万美元模拟交易资金的新手试玩环境，以及经过筛选的高质量信号流供用户学习和复制。"
+    ],
+    "impact_score": {
+      "score": 5.0,
+      "reason": "AI-Trader 提出了'代理原生交易平台'这一新颖概念，允许 AI 代理通过一条消息自主注册并参与多市场信号发布、跟单复制和协作交易。该架构设计具有前瞻性，但项目源自高校实验室（HKUDS）而非商业实体，目前仅支持模拟交易，缺乏实际资金规模和监管合规路径，短期难以改变行业竞争格局。属于有趣的产品发布而非范式转移，评分为 5 分。"
+    },
+    "sentiment": "mixed",
+    "developer_sentiment": {
+      "tone": "neutral",
+      "primary_focus": "AI代理通过SKILL.md一键自主注册的集成机制是否真正实用，还是仅为概念验证级的设计噱头"
+    },
+    "hype_assessment": {
+      "level": "medium",
+      "reason": "项目使用了'Collective Intelligence Trading'、'Universal Market Access'等营销化表述，但 GitHub 仓库有实际可运行的代码（FastAPI + React），且提供了具体的架构分层、API 规范和部署时间线，并非纯概念炒作。包装成分与干货并存，判定为中等炒作水平。"
+    },
+    "information_entropy": "medium",
+    "domain_disruption": {
+      "technical_innovation": "提出'代理原生'平台设计范式：AI 代理通过读取 SKILL.md 自主完成注册、策略发布和跟单协作，无需人工介入。架构上将 FastAPI Web 服务与后台任务（价格更新、结算、市场情报）分离运行，保证生产环境的页面响应与健康检查不受批处理任务影响。但核心工程实现本身（FastAPI + React + WebSocket）并无底层技术突破。",
+      "business_model": "若该模式成熟，可能重塑交易信号和跟单平台的商业逻辑——从'人发布信号→人跟单'转向'代理自主发布信号→人/代理混合跟单'，通过积分奖励和跟单分成形成代理经济的闭环。但当前仅限模拟交易，真实资金场景下的合规与责任归属问题未解决，商业化路径尚不清晰。"
+    },
+    "engineering_complexity": "production_ready",
+    "compound_value": {
+      "score": 5.0,
+      "reason": "「AI 代理原生平台」是一个有长期想象空间的命题——如果 AI 代理未来成为自主经济行为体，它们需要为自己设计而非为人类改造的平台。AI-Trader 率先定义了代理原生交易平台的范式：一键消息注册、代理间协作辩论、跟单复制、跨券商信号同步。这一定位类比移动互联网时代的「移动原生」应用，具备成为新品类定义者的潜力。然而，当前评分受限的核心原因有三：(1) 项目由学术机构 HKUDS 开源发布，商业化路径完全模糊，开源模式下护城河极薄；(2) 代理自主交易的前提——AI 代理具备可靠的独立财务决策能力——尚未被验证，整个品类处于「假设驱动」阶段；(3) 平台面临经典的双边网络效应冷启动难题（需要足够代理产生信号，也需要足够用户跟单），且现有券商平台（如 eToro、Robinhood）可通过增加 API 接口快速跟进。综合判断：命题有价值，但处于极度早期，3-5 年内成为行业基石的确定性不足，需持续观察代理经济的演进节奏。"
+    },
+    "value_capture_layer": "end_application",
+    "moat_impact": "creates_new_moat",
+    "key_beneficiaries": [
+      "HKUDS",
+      "OpenClaw",
+      "Anthropic (Claude Code)",
+      "Cursor",
+      "开源 AI 代理生态"
+    ],
+    "competitive_casualty": [
+      "传统跟单交易平台 (eToro、ZuluTrade)",
+      "传统交易信号订阅服务商",
+      "未开放代理接口的封闭券商平台",
+      "依赖人工 KOL 的财经社区"
+    ],
+    "market_opportunities": [
+      "可基于AI-Trader的开源架构开发垂直领域交易代理微调方案，如针对加密货币波动率套利或事件驱动策略的专用Agent技能包，并通过平台的积分奖励和跟单机制实现商业化变现",
+      "建议关注AI代理原生交易平台的合规基础设施创业机会，包括代理身份认证、交易审计追踪、自动化监管报告生成等中间件服务，填补AI自主交易与传统金融监管之间的鸿沟",
+      "个人开发者可借此平台积累AI代理交易技能开发经验，掌握从信号生成到跨券商执行的全链路Agent编排能力，这一技能组合在未来AI原生金融产品爆发期将具有高稀缺性"
+    ],
+    "risk_matrix": {
+      "regulatory": "AI代理自主执行交易涉及多法域证券法规与消费者保护法，美国SEC对自动化交易系统有注册和审查要求，欧盟MiCA框架对加密资产服务商有许可义务，中国严禁非法跨境证券交易和虚拟货币投机，平台若未建立代理身份追溯和交易审计机制将面临跨境监管执法风险",
+      "technological": "LLM驱动的交易决策存在幻觉和推理不稳定性风险，模型输出的交易信号可能在极端行情下产生严重偏差；FastAPI+React架构虽成熟但高并发下的实时报价延迟可能导致跟单滑点损失；项目目前缺乏回测框架和风险控制模块的形式化验证",
+      "competitive": "传统量化交易平台（如QuantConnect、Alpaca）和加密交易所自带的跟单功能已拥有成熟生态和用户基础，若它们快速集成AI代理接口将形成降维打击；开源门槛低意味着同质化竞争激烈，商业护城河薄弱",
+      "ethical": "AI代理集体协作交易可能引发合谋操纵市场行为，多代理同步跟单易形成羊群效应放大市场波动；代理间的积分激励可能诱导高频噪声信号污染信息流；AI代理与人类交易者在信息处理和反应速度上的不对等构成公平性挑战；10万美元模拟盘向实盘转化的行为引导存在诱导过度交易风险",
+      "additional": [
+        "安全风险：代理注册仅需一条消息指令，缺乏强身份认证机制，恶意代理可伪造信号进行跟单欺诈或投毒攻击",
+        "数据合规风险：跨平台信号同步涉及Binance、Coinbase等交易所API密钥管理，用户私钥存储和传输安全未经第三方审计",
+        "声誉风险：HKUDS作为学术机构背景的团队，若平台被用于市场操纵或欺诈活动，将对机构学术声誉造成不可逆损害"
+      ]
+    },
+    "confidence": {
+      "impact": "medium",
+      "compound": "medium",
+      "hype": "high"
+    },
+    "actionable_insight": "strategic_invest"
+  },
+  {
+    "source_dir": "github-trending",
+    "title": "yikart/AiToEarn",
+    "source": "https://github.com/yikart/AiToEarn",
+    "author": [],
+    "published": "",
+    "created": "2026-05-13",
+    "description": "Let's use AI to Earn!Aitoearn：OPC（一人公司）的AI内容营销智能体 简体中文 | English | 日本語 Monetize · Publish · Engage · Create —— 一站式平台。 AiToEarn 通过 AI 自动化，帮助 OPC（一人公司）、创作者、品牌与企业在全球主流平台上构建、分发并变现内容。 支持渠道： 抖音、小红书（Rednote）、快手、哔哩哔哩、TikTok、YouTube、Facebook、Instagram、Threads、Twitter（X）、Pinterest、LinkedIn 🚀 快速使用 AiToEarn（5 种方式） 方式 适合谁 需要部署吗 ① 打开网站直接用 所有用户 ❌ 不需要 ② 在龙虾 OpenClaw 中用 龙虾用户 ❌ 不需要 ③ 在 Claude / Cursor 等 AI 助手中用 AI 工具用户 ❌ 不需要 ④ Docker 一键部署 想私有化部署的团队 ✅ 需要服务器 ⑤ 源码开发 开发者 ✅ 需要开发环境 💡 方式 ②③④ 都需要先获取 API Key，请先看 如何获取 API Key。 最新动态 2026-04-20: OpenClaw（龙虾）新增 AiToEarn 赚钱支持，可在龙虾中直接接收并执行内容变现任务。 2026-03-26: 2.1 version — 内容交易市场上线；新增 OpenClaw（龙虾）支持，可在龙虾中直接使用 AiToEarn；新增 MCP 协议支持，可在 Claude、Cursor 等任何支持 MCP 的 Agent 或大模型中使用 AiToEarn。 2026-02-07: 1.8.0 version，新增线下商户推广解决方案，支持餐厅、零售店、民宿、美容美发、健身房等多种线下业态，将线下推广活动转化为可执行的线上传播任务，通过内容发布与用户参与机制，帮助门店获取更多线上曝光和到店流量。 2025-12-15: \"All In Agent\" 的开始！我们加入了能够自动内容生成和发布以及一些帮助你操作 Aitoearn 的超级 AI 智能 Agent。v1.4.3 2025-11-28: 支持应用内自动更新。在创作界面新增大量 AI 功能，例如：缩写、扩写、图片生成、视频生成、标签生成等，并支持 Nano Banana Pro。v1.4.0 2025-11-12: 首个开源且可完全使用的版本。v1.3.2 2025-09-16: 首个出海版本，新增支持 Facebook、Instagram、Threads、Twitter、YouTube、TikTok、Pinterest。v1.0.18 2025-02-26: 首个开源版本，初步实现小红书、抖音、快手、视频号视频一键发布。v0.1.1 目录 快速使用 AiToEarn（5 种方式） 最新动态 核心功能 如何获取 API Key 贡献指南 联系 推荐 核心功能 AiToEarn 围绕内容创作者的完整变现链路，提供四大 Agent 能力： Monetize · Publish · Engage · Create 💰 Monetize —— 内容赚钱 AiToEarn 最核心的目标：帮助每一位创作者赚钱。 创作者可以在平台出售内容以完成商家的推广任务。所有结算以结果为导向，我们提供三种结算模式： 结算模式 全称 含义 CPS Cost Per Sale 按成交额结算 CPE Cost Per Engagement 按互动量结算 CPM Cost Per Mille 按播放量结算 📢 Publish —— 内容发布 Agent 一键将内容分发到全球 10+ 主流平台，告别逐个平台手动发布。 全网分发：覆盖抖音、快手、B站、小红书、TikTok、YouTube、Facebook、Instagram、Threads、X（Twitter）、Pinterest、LinkedIn 日历排期：像排日程一样统一规划所有平台的内容发布时间 ▶ 观看演示视频 💬 Engage —— 内容互动 Agent 通过 AiToEarn 浏览器插件，在上述所有平台上实现自动化互动运营。 自动化操作：自动点赞、收藏、关注，批量高效运营 AI 智能回复：调用大模型为每条评论生成针对性回复，精准互动 评论挖掘：识别\"求链接\"\"怎么购买\"等高转化信号，快速响应 品牌监测：实时追踪关于你品牌的讨论，主动参与热点话题 ▶ 观看演示视频 🎨 Create —— 内容创作 Agent 我们用 Agent 的方式重构了内容制作流程。只需告诉 Agent 你的内容需求，它会自动完成从创意到成品的全部工作。 视频内容：Agent 自动调用视频生成模型（Grok、Veo、Seedance 等）、视频翻译模块、视频剪辑模块，一站式完成视频制作。 图文内容：支持调用 Nano Banana 等顶级图片模型，自动生成高质量图文内容。 批量生成：支持批量下发创作任务，Agent 可并行生成多条内容，快速铺量，适合矩阵账号运营和大规模内容分发场景。 ▶ 观看演示视频 ① 打开网站直接用 最简单的方式，打开浏览器即可使用，无需任何配置： 🇨🇳 中国用户访问：aitoearn.cn 🌍 国际用户访问：aitoearn.ai 🔑 如何获取 API Key（后续步骤的前置条件） 以下的方式 ②③④ 都需要 API Key。只需获取一次，所有方式通用。 3 步获取： 打开 aitoearn.cn（中国用户）或 aitoearn.ai（国际用户），注册并登录 点击左侧菜单 设置 在 API Key 中点击创建，复制生成的 Key ② 在龙虾 OpenClaw 中使用 前置条件：已 获取 API Key 请在服务器终端输入以下命令！请在服务器终端输入以下命令！请在服务器终端输入以下命令！ 安装插件 npx -y @aitoearn/openclaw-plugin-cli 首次运行后会先让你选择环境并输入 API Key。请确保环境与 Key 匹配： 中国版：使用 aitoearn.cn 获取的 API Key 国际版：使用 aitoearn.ai 获取的 API Key 环境和 Key 不匹配会导致 401。 安装完成后，你就可以在 OpenClaw 中直接接收并执行 AiToEarn 的赚钱任务： ③ 在 Claude / Cursor / 其他 AI 助手中使用 前置条件：已 获取 API Key AiToEarn 支持所有兼容 MCP 协议的 AI 助手。以下是常见工具的配置方式： 请根据 API Key 来源选择地址，环境和 Key 不匹配会导致 401： 环境 MCP 地址 SSE 地址 中国版 https://aitoearn.cn/api/unified/mcp https://aitoearn.cn/api/unified/sse 国际版 https://aitoearn.ai/api/unified/mcp https://aitoearn.ai/api/unified/sse Claude Desktop 找到并编辑 claude_desktop_config.json，添加： { \"mcpServers\": { \"aitoearn\": { \"type\": \"http\", \"url\": \"https://aitoearn.ai/api/unified/mcp\", \"headers\": { \"x-api-key\": \"你的API-Key\" } } } } Cursor 在 Cursor 的 MCP 设置中添加： MCP 地址：https://aitoearn.ai/api/unified/mcp 认证 Header：x-api-key: 你的API-Key 其他 AI 助手（通用配置） 任何支持 MCP 协议的工具，只需要两个信息： 配置项 值 MCP 地址 https://aitoearn.ai/api/unified/mcp 认证 Header x-api-key: 你的API-Key 也支持 SSE 长连接方式：https://aitoearn.ai/api/unified/sse 💡 如果你是自部署用户，将 aitoearn.ai 替换为你自己的地址（如 localhost:8080）。 ④ Docker 一键部署 前置条件：已安装 Docker 适合想把 AiToEarn 部署在自己服务器上的团队。3 条命令搞定，无需手动安装数据库： git clone https://github.com/yikart/AiToEarn.git cd AiToEarn docker compose up -d 启动后打开 http://localhost:8080 即可使用。 配置 Relay（强烈推荐） 为什么要配 Relay？ 发布内容需要登录社交媒体账号（抖音、小红书、TikTok 等），而这些平台的 OAuth 登录需要开发者凭据。配置 Relay 后，你可以直接借用官方 aitoearn.ai 的凭据完成授权，不需要自己去各平台申请开发者账号。 在 docker-compose.yml 的 aitoearn-server 服务中添加（API Key 获取方式见 上方说明）： 请根据 RELAY_API_KEY 来源选择 RELAY_SERVER_URL：中国版 Key 使用 https://aitoearn.cn/api，国际版 Key 使用 https://aitoearn.ai/api。环境和 Key 不匹配会导致 401。 RELAY_SERVER_URL: https://aitoearn.ai/api RELAY_API_KEY: 你的API-Key RELAY_CALLBACK_URL: http://127.0.0.1:8080/api/plat/relay-callback 然后重启：docker compose restart aitoearn-server 📖 完整部署指南（生产环境配置、AI 服务、OAuth、存储等）请参阅 DOCKER_DEPLOYMENT_CN.md。 ⑤ 源码开发 🧪 手动运行后端和前端（开发模式） 此模式主要用于本地开发和调试。 您仍然可以使用 Docker 运行 MongoDB/Redis，或在配置文件中指向您自己的服务。 1. 启动后端服务 cd project/aitoearn-backend pnpm install # 复制配置文件用于本地开发 cp apps/aitoearn-ai/config/config.js apps/aitoearn-ai/config/local.config.js cp apps/aitoearn-server/config/config.js apps/aitoearn-server/config/local.config.js pnpm nx serve aitoearn-ai # 在另一个终端 pnpm nx serve aitoearn-server 2. 启动前端 aitoearn-web pnpm install pnpm run dev 🖥️ 启动 Electron 桌面项目 # 克隆仓库 git clone https://github.com/yikart/AttAiToEarn.git # 进入目录 cd AttAiToEarn # 安装依赖 npm install # 编译 sqlite（better-sqlite3 需要 node-gyp 和本地 Python） npm run rebuild # 启动开发 npm run dev Electron 项目为 AiToEarn 提供桌面客户端。 贡献指南 请查看 贡献指南 开始参与。 联系 如果你在使用过程中遇到困难、使用问题或异常情况，优先通过 GitHub Issues 提交反馈，方便我们统一跟进和处理。 Telegram: https://t.me/harryyyy2025 微信：扫码添加 推荐 AtomGit托管 MuseTalk video_spider CosyVoice facefusion NarratoAI MoneyPrinterTurbo",
+    "tags": [
+      "clippings"
+    ],
+    "id": "8c0c636d5aaf3963",
+    "source_type": "community_discussion",
+    "tldr": "AiToEarn 是一个开源 AI Agent 一站式内容变现平台，支持在 14+ 社交平台上自动创作、分发和变现内容。",
+    "objective_summary": "yikart 开发的开源平台 AiToEarn 于 2025 年 2 月首次发布，通过 AI Agent 在抖音、TikTok、YouTube 等 14 个社交平台实现内容自动创作、分发、互动运营和变现，支持网页直接使用、MCP 协议集成、Docker 部署等多种方式。",
+    "event_type": "framework_tools",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [
+        "yikart"
+      ],
+      "technologies": [
+        "MCP",
+        "AI Agent",
+        "SSE",
+        "CPS",
+        "CPE",
+        "CPM"
+      ],
+      "key_people": []
+    },
+    "key_logic_flow": [
+      "AiToEarn 是由 yikart 开发的开源一站式内容变现平台，核心目标是通过 AI Agent 自动化帮助一人公司、创作者和企业在全球主流平台实现内容变现。",
+      "平台覆盖 14 个社交平台：抖音、小红书、快手、B站、视频号、微信公众号、TikTok、YouTube、Facebook、Instagram、Threads、Twitter(X)、Pinterest、LinkedIn。",
+      "提供四种核心 Agent 能力：Monetize（内容交易市场，支持 CPS/CPE/CPM 结算）、Publish（一键多平台分发+日历排期）、Engage（自动点赞/评论/品牌监测）、Create（AI 自动生成视频和图文内容）。",
+      "支持五种使用方式：直接网页访问（aitoearn.cn/aitoearn.ai）、OpenClaw 插件集成、MCP 协议接入（兼容 Claude/Cursor 等 AI 助手）、Docker 一键部署、源码开发模式。",
+      "项目版本演进从 2025 年 2 月首个开源版本到 2026 年 4 月的 OpenClaw 集成，经历了出海多平台支持、AI Agent 集成、线下商户推广方案、内容交易市场上线等重要里程碑。",
+      "平台提供中国版和国际版双环境，通过 MCP 和 SSE 两种协议对外暴露 API，支持第三方 AI 工具的无缝集成。"
+    ],
+    "impact_score": {
+      "score": 4.5,
+      "reason": "该开源项目通过AI Agent整合了14个社交平台的内容创作、分发与变现链路，并引入MCP协议实现跨AI助手集成，在创作者经济细分领域有明确的实用价值。但其本质是应用层整合（社交API+AI生成+任务市场），并未带来AI底层技术突破或行业范式转移，短期冲击力主要局限在内容创作工具赛道和一人公司群体，属于'重要但非颠覆'的产品发布。"
+    },
+    "sentiment": "positive",
+    "developer_sentiment": {
+      "tone": "skeptical",
+      "primary_focus": "AI自动生成内容的真实质量与原创性存疑，14个平台的内容合规性（尤其抖音/小红书等强审核平台）和API稳定性是落地关键风险"
+    },
+    "hype_assessment": {
+      "level": "medium",
+      "reason": "文章使用了'超级AI智能Agent''一站式平台'等营销包装词汇，但同时也附带了清晰的版本迭代记录、四种核心Agent能力的具体定义和五种使用方式的详细配置说明，属于有实体的适度包装，并非空洞概念炒作"
+    },
+    "information_entropy": "medium",
+    "domain_disruption": {
+      "technical_innovation": "将MCP协议引入内容变现场景，实现AI Agent与多平台社交API的标准化交互，使Claude、Cursor等第三方AI工具可直接操控内容发布与互动运营；同时将跨境双环境（中国版+国际版）的14个社交平台API统一抽象为一套Agent接口，降低了多平台运营的工程复杂度",
+      "business_model": "构建了一个内容交易市场（CPS/CPE/CPM三种结算），将商家推广需求商品化并匹配给AI驱动的创作者，形成'商家出钱—Agent创作—平台分发—按效果结算'的自动化变现闭环，可能重塑微型创作者的经济模式"
+    },
+    "engineering_complexity": "production_ready",
+    "compound_value": {
+      "score": 6.0,
+      "reason": "CoT 投资逻辑：(1) 核心价值主张是成为 MCP 生态中连接 AI Agent 与社交平台的中间件层，这是差异化定位而非又一个内容工具——通过 MCP 协议，AiToEarn 可被 Claude、Cursor 等任何 AI 助手直接调用，形成「Agent 分发→平台执行→变现结算」的闭环，具备基础设施潜力；(2) 但长期复利效应存在三重不确定性：第一，社交平台 API 生态高度不确定（Twitter/X 多次封杀第三方工具是前车之鉴），平台方随时可收紧权限或推出官方竞品；第二，开源模式导致代码层护城河薄弱，竞争对手可低成本复制核心能力；第三，AI 生成内容正面临各平台日益严格的监管（如 TikTok 的 AI 标签要求），内容变现的合规风险在上升；(3) 加分项在于 CPS/CPE/CPM 结算体系一旦形成双边网络效应（商家↔创作者），就具有交易平台的粘性，但当前阶段尚处于冷启动期。综合判断：3-5 年内有约 40% 概率成为 MCP Agent 生态的关键中间件节点，但不足以称为行业基石，属「需持续验证的潜力型基础设施」。"
+    },
+    "value_capture_layer": "agent_middleware",
+    "moat_impact": "democratizes_access",
+    "key_beneficiaries": [
+      "yikart (AiToEarn 开发者)",
+      "Anthropic (MCP 协议生态受益方)",
+      "OpenClaw (龙虾 — 通过 AiToEarn 插件获得内容变现能力)",
+      "一人公司/独立创作者 (OPC)"
+    ],
+    "competitive_casualty": [
+      "传统社媒管理 SaaS (Hootsuite/Buffer 等)",
+      "MCN 机构（多头签约+人工运营模式受冲击）",
+      "内容代运营公司（人力密集型服务被 Agent 替代）",
+      "各社交平台原生创作者工具（抖音创作者平台等）",
+      "传统联盟营销平台（CPS 类）"
+    ]
+  },
+  {
+    "source_dir": "github-trending",
+    "title": "anonfaded/FadCam",
+    "source": "https://github.com/anonfaded/FadCam",
+    "author": [],
+    "published": "",
+    "created": "2026-05-13",
+    "description": "Open-source, ad-free Android multimedia recorder with background video recording, screen recording, live streaming, and remote camera control this is the old banner --> Tip This project is part of the FadSec Lab suite. Discover our focus on ad-free, privacy-first applications and stay updated on future releases! Note Unlock FadCam Pro with lifetime access: Visit the Shop >_ FadCam Privacy-focused Android multimedia suite: background video recording, dashcam, screen recorder, live streaming & remote control - ad-free & open-source. Scan to visit Patreon shop: --> --> ⭐ New app from FadSec-Lab suite:🎉 Also, check out our new Windows app! Visit here: FadCrypt Expand Table of Contents Purpose Screenshots Featured on Download Features Upcoming Features Join Community Support Contributions Credits >_ Purpose FadCam is developed with the goal of providing a powerful, privacy-focused multimedia suite for Android devices. This comprehensive app includes dashcam functionality, screen recording with annotations, live streaming over local networks, and remote camera control — all designed for ethical use only. Ethical Use Cases Include: Personal Security: Use as a dashcam while driving, CCTV at home with remote monitoring, or recording proof in situations where needed for yourself Content Creation: Screen recording with professional annotation tools Remote Monitoring: Live streaming and remote control for security purposes Research and Documentation: Multi-purpose recording tools for various needs Caution Misuse Disclaimer: The developers of FadCam do not condone or support any unethical or illegal use of this software. Misuse, such as unauthorized surveillance or invasion of privacy, is strictly against our guidelines. The authors are not responsible for any misuse of the application. >_ 📱 Screenshots apk icon --> --> UI --> More Screenshots --> >_ Featured On Expand Featured Content >_ Featured Audio Podcast closednetwork.io at 1:15:22 timestamp >_ Featured Videos HowToMen on YouTube HowToMen 2nd feature 😃 Xtream Droid on YouTube Xtream Droid once again in Hindi Tech Quirk on YouTube TechyNoob on YouTube Luca Crocco on TikTok TipTopTech on YouTube Adhip Pandey on YouTube Daniel Bueno - Tecnología on YouTube degeregi on TikTok Anurag - The Geek @ALHATEFALDHAKI on YouTube @techtricks306 on YouTube Samfans VN on YouTube Sam Beckman on YouTube Sam Beckman 2nd Feature Tech In Hand on YouTube AWAk3N on YouTube Toped de Gama plus on YouTube Learn Freelancing with Tusher on YouTube iamrooney_ on TikTok Brandulox brandulox on TikTok El Androide Feliz on YouTube ODORIZZI on YouTube Tech OverWatch on TikTok tech_overwatch on Insta Wuincy Tran on YouTube El Androide Feliz on YouTube msn.com RivollPlay Tech on YouTube softonic on X >_ Articles and Listings fmhy.net discuss.privacyguides.net appteka.com discuss.grapheneos.org fmhy.net offa repo geeky-gadgets.com GrowingGit repo openapk.net popMODS on Telegram VPN Club on Telegram Mobile Applications on Telegram phonenovo.com dailymobile.ir roonby.com en.xiaomitoday.it alternativeto.net misa7atech.com mounirtech.com androidtr.es gadgetstouse.com summarize.tech phcorner.net danielbuenotecnologia.com nothingforum.com manualdousuario.net techwiser.com geeky-gadgets.com (2nd feature) iiktshf.com androidfreeware.net computer-wd.com computer-wd.com (2nd feature) computer-wd.com (3rd feature) thetechboy.org tz887.com news.ycombinator.com archivecan.info purepc.pl aqweeb.com nomiapk.website apkhubs.com malavida.com apkclone.com diyiyou.com zxki.cn xmk8.com aukbbs.com blog.csdn.net lealternative.net uptodown.com buzzspot.net ababtools.com 0714.com yeeach.com codegith.com 52pojie.cn anfensi.com fy6b.com xatakandroid.com blog.csdn.net lewz.cn ruanyazyk.com centrum.cz meta.appinn.net >_ ⬇️ Download Download the latest apk file directly from the releases page. Or: --> 10 Jul 2024 (1st month) - 10k -> 21 Aug 2024 (6th week) - 15k -> 8 Sep 2024 (9th week) --> >_ Features: 🎬 FadRec Screen Recorder Full-featured screen recording with annotation tools (pen, eraser, text, shapes) Multi-layer editing with version control and unlimited undo/redo Automatic project saving with full recovery options Sidebar overlay menu for quick-access recording controls 🏠 FadCam Remote Live stream camera feed over local network with beautiful web interface Remote control features: start/stop recording, adjust settings, toggle torch Real-time monitoring: battery level, storage status, recording status Perfect for security monitoring and remote access 📸 Dashcam & Background Recording Background video recording with screen off capability Fragmented MP4 format for zero corruption risk Auto-splitting large files with customizable size limits Wide-angle camera detection and support 🎥 Video & Audio Controls Multiple resolutions and 60/90fps support Orientation control and quality options Audio recording with customizable bitrate and sample rate Custom watermark text overlays Geotagging with location data embedding 🎨 User Interface & Experience Clean Material Design with bottom sheet actions 7+ app themes including AMOLED, Light, and System themes 15+ customizable app icons In-app \"What's New\" page for feature discovery Standalone beta installation without conflicts 📁 File Management & Playback Enhanced thumbnails with index, duration, and file size Sorting & filtering by date, size, and more Trash bin with restore and auto-delete options Inbuilt video player using ExoPlayer Video info view with resolution, size, and duration details Direct video renaming in-app 🔧 Advanced Features Storage indicator with real-time space and estimated record time Clock widget with customizable date/time and colors Custom notification presets and descriptions Audio input source selection (phone mic, wired/Bluetooth) Dynamic watermarks with timestamp, logo, and GPS options App Shortcuts: Three quick actions are available (Start Recording, Stop Recording, Toggle Torch). These shortcuts can be triggered without opening the app and can be mapped with key-mapping apps (e.g. MacroDroid) to hardware buttons (like volume buttons) for convenient control. 🌐 Localization & Privacy Multiple language support (Italian, and more coming) 100% ad-free and open-source No data collection or tracking Hide from recent apps for privacy Ethical use guidelines and disclaimer >_ Upcoming Features: Scheduled Recording: Automatically start/stop recordings at set times. In-App Video Editor: Quick trim/edit with Faditor Mini (coming soon). Enhanced Remote Features: Additional remote control capabilities. >_ Join Community Join our Discord server to share ideas, seek help, or connect with other users. Your feedback and contributions are welcome! >_ Support & Shop Buy FadCam Pro (lifetime access) from my Patreon shop. Your purchases help fund development and maintenance. Scan to visit Patreon shop: >_ Contributions We welcome any contributions to improve this project! Whether it's bug fixes or new features, your help is appreciated. >_ How to Contribute Open an Issue First: Before starting any work, please open an issue to discuss your proposed changes and get approval. Fork the Repo: Fork the repository to make your changes. Submit a PR: Create a pull request with a clear description of your changes. We look forward to your contributions! >_ 🙌 Contributions & Credits 🖼️ App screenshots and banner design by T010 The 3D text in icon is from Font generator. Icons used in app by Icons8 and Flaticon. Elapsed timer font option includes Doto by The Doto Project Authors (https://github.com/oliverlalan/Doto). Location reverse geocoding powered by Nominatim — free, open-source geocoding based on OpenStreetMap data. Building-level precision (zoom=18) for accurate address watermarking. QR codes generated using QRCodeChimp.",
+    "tags": [
+      "clippings"
+    ],
+    "id": "9c555c38de33ec5a",
+    "source_type": "community_discussion",
+    "tldr": "FadCam：FadSec Lab 推出的开源隐私优先 Android 多媒体套件，支持后台录像、行车记录仪、录屏、直播和远程控制。",
+    "objective_summary": "anonfaded 在 GitHub 上发布 FadCam，一款基于 Android 的开源多媒体应用，集成行车记录仪、屏幕录制、本地网络直播和远程摄像头控制功能，强调无广告、无数据收集、无追踪的隐私保护设计，已获得多家科技媒体关注。",
+    "event_type": "framework_tools",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [
+        "FadSec Lab"
+      ],
+      "technologies": [
+        "Android",
+        "ExoPlayer"
+      ],
+      "key_people": [
+        "anonfaded"
+      ]
+    },
+    "key_logic_flow": [
+      "FadCam 是 FadSec Lab 套件中的 Android 开源项目，由 anonfaded 开发和维护。",
+      "该应用提供四大核心功能：后台视频录制（支持息屏录制）、行车记录仪模式（分段 MP4 格式防损坏）、屏幕录制（带标注工具）、以及本地网络直播与远程摄像头控制。",
+      "应用采用 Material Design 设计，提供 7 种以上主题（含 AMOLED 模式）和 15 种以上自定义图标。",
+      "隐私方面明确声明：100% 无广告、无数据收集、无追踪，并包含从最近应用列表中隐藏的隐私选项。",
+      "可设置定时录制、支持地理标记水印（基于 OpenStreetMap 的 Nominatim 逆地理编码），以及通过硬件按键映射触发快捷操作。",
+      "提供 Patreon 付费的 FadCam Pro 终身版，并接受社区贡献和 GitHub Issue/PR 协作。"
+    ],
+    "impact_score": {
+      "score": 1.5,
+      "reason": "该事件为 Android 开源多媒体工具（FadCam）的发布与社区传播，与 AI 行业无直接关联。其功能涵盖行车记录仪、屏幕录制、局域网直播等，属于成熟移动应用领域的增量创新，不涉及 AI 模型、训练范式、推理框架或数据工程等 AI 核心议题，对 AI 行业不产生可测量的短期冲击力。"
+    },
+    "sentiment": "neutral",
+    "developer_sentiment": {
+      "tone": "neutral",
+      "primary_focus": "隐私优先的开源 Android 多媒体工具的功能完整性和实用性，与 AI 领域无直接交集"
+    },
+    "hype_assessment": {
+      "level": "low",
+      "reason": "项目 README 以功能清单和技术特性描述为主，未使用'颠覆''革命性'等 PR 滥用词汇，宣传较为克制务实，仅通过 Patreon 提供付费版本，无夸大炒作痕迹。"
+    },
+    "information_entropy": "low",
+    "domain_disruption": {
+      "technical_innovation": "无 — 该工具属于 Android 客户端应用开发范畴，使用 ExoPlayer 等成熟组件，不涉及 AI 技术架构或算法层面的突破。",
+      "business_model": "无 — Patreon 付费 Pro 版本为开源项目的常规变现路径，与 AI SaaS 生态或 API 经济无关联。"
+    },
+    "engineering_complexity": "production_ready",
+    "compound_value": {
+      "score": 3.5,
+      "reason": "FadCam 是开源 Android 终端应用，虽有多家科技媒体背书和隐私优先的差异化定位，但从 VC 视角看，其复利效应极弱：① 无网络效应——用户增长不带来产品价值提升；② 无数据护城河——隐私优先设计反而排除了数据飞轮；③ 变现路径单一——仅依靠 Patreon 付费的 Pro 终身版，客单价低且无法规模化；④ 竞争壁垒低——功能组合（后台录像、行车记录仪、录屏、直播）均可被复制，大厂原生系统（Android 自带录屏、Pixel 系行车记录仪功能）正在逐步内置类似能力；⑤ 开源协议降低了商业独占性。3-5 年后大概率仍是小众隐私工具，难以成为行业基石。评分 3.5，处于'昙花一现'与'细分赛道基础设施'之间的下沿。"
+    },
+    "value_capture_layer": "end_application",
+    "moat_impact": "democratizes_access",
+    "key_beneficiaries": [
+      "FadSec Lab",
+      "隐私导向的开源 Android 社区",
+      "ExoPlayer/Google",
+      "GrapheneOS 社区",
+      "PrivacyGuides 社区"
+    ],
+    "competitive_casualty": [
+      "广告驱动的 Android 录屏/行车记录仪应用",
+      "付费订阅制 Android 工具应用",
+      "低端车载摄像头硬件厂商（手机替代效应）",
+      "中国出海工具类 App（含广告 SDK 追踪的应用）"
+    ],
+    "market_opportunities": [
+      "开源隐私工具的双轨变现模式（GitHub 开源免费版 + Patreon 终身 Pro 版）已被 FadCam 初步验证，独立开发者可参考此路径，在文件管理、相册、输入法、笔记等高频 Android 工具品类中复制隐私优先的差异化打法，通过社区口碑裂变降低获客成本",
+      "废旧 Android 手机再利用场景正在形成新市场——FadCam 将旧手机转化为行车记录仪或家用 CCTV 的软件方案，创业者可围绕\"旧设备即硬件\"思路，开发针对特定场景（宠物监控、婴儿监护、店铺安防）的专用刷机包或定制 ROM，搭配低功耗优化和远程管理面板实现产品化",
+      "本地优先（local-first）工具生态正在形成独立赛道，FadCam 的\"全本地、零云上传\"架构验证了用户对数据主权的需求，建议关注与其互补的工具链机会，如本地加密备份、设备间 P2P 同步、端侧 AI 视频摘要生成等可集成或捆绑的增值模块"
+    ],
+    "risk_matrix": {
+      "regulatory": "视频录制应用在各国面临差异化法律限制：背景息屏录制在部分司法管辖区可能触犯窃听/偷拍相关法律（如未经同意的隐蔽录制），应用的\"道德使用\"免责声明法律效力存疑；地理标记功能若嵌入视频元数据，在 GDPR 管辖区可能涉及个人数据处理合规问题，即使数据仅存储在本地也存在灰色地带",
+      "technological": "Android 平台每次大版本更新可能收紧后台执行限制和存储权限（Scoped Storage），核心功能如息屏录制存在被系统策略阻断的风险；ExoPlayer 已被 Google 弃用并转向 Media3，技术栈面临迁移压力；项目为单人维护（anonfaded），存在关键人风险，长期可持续性存疑",
+      "competitive": "Android 原生功能持续覆盖 FadCam 能力版图（AOSP 已有屏幕录制、Google 相机集成车载模式）；小米、OPPO、OnePlus 等国产厂商在定制 ROM 中内置行车记录仪和屏幕录制功能，挤压第三方工具空间；Proton、Signal 等隐私品牌若横向扩展至多媒体工具领域将形成品牌降维打击",
+      "ethical": "应用内置的\"从最近应用列表隐藏\"功能本质上支持隐蔽录制，存在被滥用于偷拍、跟踪、职场监控等场景的显著风险；尽管开发者声明禁止非道德使用，但技术上无任何防护机制阻止此类行为；地理位置水印功能在未经被拍摄者同意时可能侵犯他人隐私权",
+      "additional": [
+        "商业模式脆弱性：Patreon 单一收入渠道受平台政策变更和创作者经济波动影响，项目缺乏多元化收入来源，长期维护动力可能衰减",
+        "品牌声誉连带风险：若 FadCam 被关联至负面社会事件（如偷拍案件），FadSec Lab 旗下其他产品（FadCrypt 等）将遭受品牌污染，\"隐私优先\"的定位可能反转为\"隐私滥用工具\"的舆论危机"
+      ]
+    },
+    "confidence": {
+      "impact": "medium",
+      "compound": "low",
+      "hype": "medium"
+    },
+    "actionable_insight": "monitor"
+  },
+  {
+    "source_dir": "github-trending",
+    "title": "rasbt/LLMs-from-scratch",
+    "source": "https://github.com/rasbt/LLMs-from-scratch",
+    "author": [],
+    "published": "",
+    "created": "2026-05-13",
+    "description": "Implement a ChatGPT-like LLM in PyTorch from scratch, step by stepBuild a Large Language Model (From Scratch) This repository contains the code for developing, pretraining, and finetuning a GPT-like LLM and is the official code repository for the book Build a Large Language Model (From Scratch). In Build a Large Language Model (From Scratch), you'll learn and understand how large language models (LLMs) work from the inside out by coding them from the ground up, step by step. In this book, I'll guide you through creating your own LLM, explaining each stage with clear text, diagrams, and examples. The method described in this book for training and developing your own small-but-functional model for educational purposes mirrors the approach used in creating large-scale foundational models such as those behind ChatGPT. In addition, this book includes code for loading the weights of larger pretrained models for finetuning. Link to the official source code repository Link to the book at Manning (the publisher's website) Link to the book page on Amazon.com ISBN 9781633437166 To download a copy of this repository, click on the Download ZIP button or execute the following command in your terminal: git clone --depth 1 https://github.com/rasbt/LLMs-from-scratch.git (If you downloaded the code bundle from the Manning website, please consider visiting the official code repository on GitHub at https://github.com/rasbt/LLMs-from-scratch for the latest updates.) Table of Contents Please note that this README.md file is a Markdown (.md) file. If you have downloaded this code bundle from the Manning website and are viewing it on your local computer, I recommend using a Markdown editor or previewer for proper viewing. If you haven't installed a Markdown editor yet, Ghostwriter is a good free option. You can alternatively view this and other files on GitHub at https://github.com/rasbt/LLMs-from-scratch in your browser, which renders Markdown automatically. Tip: If you're seeking guidance on installing Python and Python packages and setting up your code environment, I suggest reading the README.md file located in the setup directory. Troubleshooting Guide Chapter Title Main Code (for Quick Access) All Code + Supplementary Setup recommendations How to best read this book - - Ch 1: Understanding Large Language Models No code - Ch 2: Working with Text Data - ch02.ipynb- dataloader.ipynb (summary)- exercise-solutions.ipynb ./ch02 Ch 3: Coding Attention Mechanisms - ch03.ipynb- multihead-attention.ipynb (summary) - exercise-solutions.ipynb ./ch03 Ch 4: Implementing a GPT Model from Scratch - ch04.ipynb- gpt.py (summary)- exercise-solutions.ipynb ./ch04 Ch 5: Pretraining on Unlabeled Data - ch05.ipynb- gpt_train.py (summary) - gpt_generate.py (summary) - exercise-solutions.ipynb ./ch05 Ch 6: Finetuning for Text Classification - ch06.ipynb - gpt_class_finetune.py - exercise-solutions.ipynb ./ch06 Ch 7: Finetuning to Follow Instructions - ch07.ipynb- gpt_instruction_finetuning.py (summary)- ollama_evaluate.py (summary)- exercise-solutions.ipynb ./ch07 Appendix A: Introduction to PyTorch - code-part1.ipynb- code-part2.ipynb- DDP-script.py- exercise-solutions.ipynb ./appendix-A Appendix B: References and Further Reading No code ./appendix-B Appendix C: Exercise Solutions - list of exercise solutions ./appendix-C Appendix D: Adding Bells and Whistles to the Training Loop - appendix-D.ipynb ./appendix-D Appendix E: Parameter-efficient Finetuning with LoRA - appendix-E.ipynb ./appendix-E &nbsp; The mental model below summarizes the contents covered in this book. &nbsp; Prerequisites The most important prerequisite is a strong foundation in Python programming. With this knowledge, you will be well prepared to explore the fascinating world of LLMs and understand the concepts and code examples presented in this book. If you have some experience with deep neural networks, you may find certain concepts more familiar, as LLMs are built upon these architectures. This book uses PyTorch to implement the code from scratch without using any external LLM libraries. While proficiency in PyTorch is not a prerequisite, familiarity with PyTorch basics is certainly useful. If you are new to PyTorch, Appendix A provides a concise introduction to PyTorch. Alternatively, you may find my book, PyTorch in One Hour: From Tensors to Training Neural Networks on Multiple GPUs, helpful for learning about the essentials. &nbsp; Hardware Requirements The code in the main chapters of this book is designed to run on conventional laptops within a reasonable timeframe and does not require specialized hardware. This approach ensures that a wide audience can engage with the material. Additionally, the code automatically utilizes GPUs if they are available. (Please see the setup doc for additional recommendations.) &nbsp; Video Course A 17-hour and 15-minute companion video course where I code through each chapter of the book. The course is organized into chapters and sections that mirror the book's structure so that it can be used as a standalone alternative to the book or complementary code-along resource. &nbsp; Companion Book / Sequel Build A Reasoning Model (From Scratch), while a standalone book, can be considered as a sequel to Build A Large Language Model (From Scratch). It starts with a pretrained model and implements different reasoning approaches, including inference-time scaling, reinforcement learning, and distillation, to improve the model's reasoning capabilities. Similar to Build A Large Language Model (From Scratch), Build A Reasoning Model (From Scratch) takes a hands-on approach implementing these methods from scratch. Amazon link (TBD) Manning link GitHub repository &nbsp; Exercises Each chapter of the book includes several exercises. The solutions are summarized in Appendix C, and the corresponding code notebooks are available in the main chapter folders of this repository (for example, ./ch02/01_main-chapter-code/exercise-solutions.ipynb. In addition to the code exercises, you can download a free 170-page PDF titled Test Yourself On Build a Large Language Model (From Scratch) from the Manning website. It contains approximately 30 quiz questions and solutions per chapter to help you test your understanding. &nbsp; Bonus Material Several folders contain optional materials as a bonus for interested readers: Setup Python Setup Tips Installing Python Packages and Libraries Used in This Book Docker Environment Setup Guide Chapter 2: Working With Text Data Byte Pair Encoding (BPE) Tokenizer From Scratch Comparing Various Byte Pair Encoding (BPE) Implementations Understanding the Difference Between Embedding Layers and Linear Layers Dataloader Intuition With Simple Numbers Chapter 3: Coding Attention Mechanisms Comparing Efficient Multi-Head Attention Implementations Understanding PyTorch Buffers Chapter 4: Implementing a GPT Model From Scratch FLOPs Analysis KV Cache Attention Alternatives Grouped-Query Attention Multi-Head Latent Attention Sliding Window Attention Gated DeltaNet Mixture-of-Experts (MoE) Chapter 5: Pretraining on Unlabeled Data Alternative Weight Loading Methods Pretraining GPT on the Project Gutenberg Dataset Adding Bells and Whistles to the Training Loop Optimizing Hyperparameters for Pretraining Building a User Interface to Interact With the Pretrained LLM Converting GPT to Llama Memory-efficient Model Weight Loading Extending the Tiktoken BPE Tokenizer with New Tokens PyTorch Performance Tips for Faster LLM Training LLM Architectures Llama 3.2 From Scratch Qwen3 Dense and Mixture-of-Experts (MoE) From Scratch Gemma 3 From Scratch Olmo 3 From Scratch Tiny Aya From Scratch Qwen3.5 From Scratch Gemma 4 E2B and E4B From Scratch Chapter 5 with other LLMs as Drop-In Replacement (e.g., Llama 3, Qwen 3) Chapter 6: Finetuning for classification Additional Experiments Finetuning Different Layers and Using Larger Models Finetuning Different Models on the 50k IMDb Movie Review Dataset Building a User Interface to Interact With the GPT-based Spam Classifier Chapter 7: Finetuning to follow instructions Dataset Utilities for Finding Near Duplicates and Creating Passive Voice Entries Evaluating Instruction Responses Using the OpenAI API and Ollama Generating a Dataset for Instruction Finetuning Improving a Dataset for Instruction Finetuning Generating a Preference Dataset With Llama 3.1 70B and Ollama Direct Preference Optimization (DPO) for LLM Alignment Building a User Interface to Interact With the Instruction-Finetuned GPT Model More bonus material from the Reasoning From Scratch repository: Qwen3 (From Scratch) Basics Qwen3 Source Code Walkthrough Optimized Qwen3 Evaluation Verifier-Based Evaluation (MATH-500) Multiple-Choice Evaluation (MMLU) LLM Leaderboard Evaluation LLM-as-a-Judge Evaluation Inference Scaling Self-Consistency Self-Refinement Reinforcement Learning (RL) RLVR with GRPO From Scratch &nbsp; Questions, Feedback, and Contributing to This Repository I welcome all sorts of feedback, best shared via the Manning Forum or GitHub Discussions. Likewise, if you have any questions or just want to bounce ideas off others, please don't hesitate to post these in the forum as well. Please note that since this repository contains the code corresponding to a print book, I currently cannot accept contributions that would extend the contents of the main chapter code, as it would introduce deviations from the physical book. Keeping it consistent helps ensure a smooth experience for everyone. &nbsp; Citation If you find this book or code useful for your research, please consider citing it. Chicago-style citation: Raschka, Sebastian. Build A Large Language Model (From Scratch). Manning, 2024. ISBN: 978-1633437166. BibTeX entry: @book{build-llms-from-scratch-book, author = {Sebastian Raschka}, title = {Build A Large Language Model (From Scratch)}, publisher = {Manning}, year = {2024}, isbn = {978-1633437166}, url = {https://www.manning.com/books/build-a-large-language-model-from-scratch}, github = {https://github.com/rasbt/LLMs-from-scratch} }",
+    "tags": [
+      "clippings"
+    ],
+    "id": "e0cbbf211a55e79f",
+    "source_type": "community_discussion",
+    "tldr": "Sebastian Raschka 发布《Build a Large Language Model (From Scratch)》官方代码仓库，",
+    "objective_summary": "Sebastian Raschka 在 GitHub 发布 rasbt/LLMs-from-scratch 仓库，作为 Manning 出版社同名书籍的配套代码，提供从零构建、预训练和微调 GPT 类 LLM 的完整 PyTorch 实现，代码可在普通笔记本电脑上运行。",
+    "event_type": "framework_tools",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [
+        "Manning"
+      ],
+      "technologies": [
+        "GPT",
+        "PyTorch",
+        "LoRA",
+        "DPO",
+        "Tiktoken",
+        "BPE",
+        "Llama",
+        "Qwen"
+      ],
+      "key_people": [
+        "Sebastian Raschka"
+      ]
+    },
+    "key_logic_flow": [
+      "该仓库是《Build a Large Language Model (From Scratch)》一书的官方代码仓库，ISBN 9781633437166，由 Manning 出版社出版。",
+      "仓库提供从零开发、预训练和微调 GPT 类 LLM 的完整 PyTorch 代码，不依赖任何第三方 LLM 库。",
+      "代码覆盖文本数据处理、注意力机制实现、GPT 模型搭建、无监督预训练、文本分类微调和指令微调等完整流程。",
+      "附录包含 PyTorch 入门、LoRA 参数高效微调、练习解答等补充材料，帮助读者巩固理解。",
+      "作者还计划推出续作《Build A Reasoning Model (From Scratch)》，专注实现推理能力增强方法。",
+      "代码设计目标是在普通笔记本电脑上可运行，如检测到 GPU 则自动利用加速。"
+    ],
+    "impact_score": {
+      "score": 4.5,
+      "reason": "该事件是 Sebastian Raschka 为其已出版书籍《Build a Large Language Model (From Scratch)》发布的官方配套代码仓库。Raschka 是 ML 教育领域的权威人物，该仓库提供从零构建 GPT 类 LLM 的完整 PyTorch 实现，覆盖数据处理、注意力机制、预训练、微调全流程，且代码可在普通笔记本上运行，大幅降低了 LLM 技术的学习门槛。但本质上是教育资源的整理发布，而非新产品或技术突破，属于改变开发者的学习路径而非改变行业竞争格局，故评分 4.5。"
+    },
+    "sentiment": "positive",
+    "developer_sentiment": {
+      "tone": "excited",
+      "primary_focus": "完整可运行的从零实现 LLM 代码在普通笔记本上即可执行，且附有 LoRA、DPO 等前沿微调方法的实操实现"
+    },
+    "hype_assessment": {
+      "level": "low",
+      "reason": "全文为技术仓库的 README 文档，以章节索引、代码路径、学习路线图为主，无'颠覆''革命性'等 PR 膨胀词汇，清晰声明代码用于教育目的且仅为小型功能性模型，诚实标注硬件需求和前置知识要求，属典型的学术/教育风格的干货内容。"
+    },
+    "information_entropy": "medium",
+    "domain_disruption": {
+      "technical_innovation": "无本质性技术突破——仓库实现的是已被广泛认知的 GPT 架构、多头注意力机制、BPE 分词、LoRA 微调等成熟技术。其工程价值在于将这些分散的知识点整合为一条完整的、可逐行运行的端到端学习路径，并以极低的硬件门槛（笔记本可运行）呈现。",
+      "business_model": "该仓库作为 Manning 出版社书籍的配套资源，核心商业模式是书籍销售驱动。但免费开放的代码仓库与 17 小时视频课程形成'免费代码+付费深度内容'的混合模式，降低了 LLM 教育的付费壁垒，可能间接推动更多开发者进入 LLM 工程领域，对培训市场和开源社区的人才供给产生正向外部性。"
+    },
+    "engineering_complexity": "production_ready",
+    "compound_value": {
+      "score": 5.5,
+      "reason": "该教育资源通过「从零构建」的教学范式传授 LLM 底层原理（注意力机制、GPT 架构、预训练/微调全流程），其价值在于知识传播的乘数效应——每位读者都可能成为 LLM 生态的构建者。3-5 年后，Transformer 架构的核心原理（注意力、分词、预训练）仍将是 AI 基础设施的基石知识，代码的「不依赖第三方库」设计确保其教学寿命远超框架绑定类教程。但作为单一教育资源，缺乏平台型网络效应，复利曲线呈线性而非指数增长。续作《Build A Reasoning Model (From Scratch)》暗示该 IP 正在品牌化，略微提升长期价值。综合判断：细分赛道内具有持久影响力，但不足以成为行业级基础设施。"
+    },
+    "value_capture_layer": "foundation_model",
+    "moat_impact": "democratizes_access",
+    "key_beneficiaries": [
+      "Sebastian Raschka",
+      "Manning Publications",
+      "Meta (PyTorch)",
+      "开源 LLM 社区 (Llama, Qwen 等)",
+      "AI 教育生态 (O'Reilly, 高校 AI 课程)"
+    ],
+    "competitive_casualty": [
+      "高价 AI 训练营/速成课程",
+      "企业级封闭式 LLM 培训方案",
+      "依赖第三方 LLM 库的高层 API 教程（框架锁定型教育资源）",
+      "闭源 LLM API 厂商（知识民主化削弱技术神秘感和锁定效应）"
+    ],
+    "market_opportunities": [
+      "企业可基于该仓库设计内部AI团队的系统性LLM培训课程，覆盖从注意力机制到指令微调的完整链路，降低对昂贵外部培训和高阶人才招聘的依赖",
+      "该仓库的LoRA参数高效微调附录为中小团队提供了低成本模型定制模板，创业者可据此面向法律、医疗、金融等垂直行业打造领域微调SaaS工具",
+      "围绕'从零构建LLM'的教学理念，可开发面向高校人工智能课程的配套实验平台或中文社区本地化版本，填补国内LLM底层原理教育的市场空白"
+    ],
+    "risk_matrix": {
+      "regulatory": "无",
+      "technological": "该仓库基于GPT类Transformer架构开展教学，若未来状态空间模型（如Mamba）或新范式成为主流，部分教学内容可能面临架构过时风险；但注意力机制、反向传播等底层原理具有长期价值",
+      "competitive": "AI教育赛道竞争激烈，DeepLearning.AI、Fast.ai、HuggingFace等免费资源及O'Reilly竞品出版物可能分流目标受众，Manning出版社面临多线竞争压力",
+      "ethical": "LLM构建知识的广泛传播存在双用途风险——恶意行为者可能利用所学构建有害内容生成模型；但开源透明本质上也降低了安全研究门槛，整体利大于弊",
+      "additional": []
+    },
+    "confidence": {
+      "impact": "medium",
+      "compound": "medium",
+      "hype": "low"
+    },
+    "actionable_insight": "monitor"
+  },
+  {
+    "source_dir": "github-trending",
+    "title": "datawhalechina/hello-agents",
+    "source": "https://github.com/datawhalechina/hello-agents",
+    "author": [],
+    "published": "",
+    "created": "2026-05-13",
+    "description": "📚 《从零开始构建智能体》——从零开始的智能体原理与实践教程 English | 中文 Hello-Agents 🤖 《从零开始构建智能体》 从基础理论到实际应用，全面掌握智能体系统的设计与实现 🎯 项目介绍 如果说 2024 年是\"百模大战\"的元年，那么 2025 年无疑开启了\"Agent 元年\"。技术的焦点正从训练更大的基础模型，转向构建更聪明的智能体应用。然而，当前系统性、重实践的教程却极度匮乏。为此，我们发起了 Hello-Agents 项目，希望能为社区提供一本从零开始、理论与实战并重的智能体系统构建指南。 Hello-Agents 是 Datawhale 社区的系统性智能体学习教程。如今 Agent 构建主要分为两派，一派是 Dify，Coze，n8n 这类软件工程类 Agent，其本质是流程驱动的软件开发，LLM 作为数据处理的后端；另一派则是 AI 原生的 Agent，即真正以 AI 驱动的 Agent。本教程旨在带领大家深入理解并构建后者——真正的 AI Native Agent。教程将带领你穿透框架表象，从智能体的核心原理出发，深入其核心架构，理解其经典范式，并最终亲手构建起属于自己的多智能体应用。我们相信，最好的学习方式就是动手实践。希望这本教程能成为你探索智能体世界的起点，能够从一名大语言模型的\"使用者\"，蜕变为一名智能体系统的\"构建者\"。 📚 快速开始 在线阅读 🌐 国外访问 | 🚀 国内加速 - 无需下载，随时随地学习 本地阅读 如果您希望在本地阅读或贡献内容，请参考下方的学习指南。 ✨ 你将收获什么？ 📖 Datawhale 开源免费 完全免费学习本项目所有内容，与社区共同成长 🔍 理解核心原理 深入理解智能体的概念、历史与经典范式 🏗️ 亲手实现 掌握热门低代码平台和智能体代码框架的使用 🛠️ 自研框架 HelloAgents 基于 Openai 原生 API 从零构建一个自己的智能体框架 ⚙️ 掌握高级技能 一步步实现上下文工程、Memory、协议、评估等系统性技术 🤝 模型训练 掌握 Agentic RL，从 SFT 到 GRPO 的全流程实战训练 LLM 🚀 驱动真实案例 实战开发智能旅行助手、赛博小镇等综合项目 📖 求职面试 学习智能体求职相关面试问题 📖 内容导航 章节 关键内容 状态 前言 项目的缘起、背景及读者建议 ✅ 第一部分：智能体与语言模型基础 第一章 初识智能体 智能体定义、类型、范式与应用 ✅ 第二章 智能体发展史 从符号主义到 LLM 驱动的智能体演进 ✅ 第三章 大语言模型基础 Transformer、提示、主流 LLM 及其局限 ✅ 第二部分：构建你的大语言模型智能体 第四章 智能体经典范式构建 手把手实现 ReAct、Plan-and-Solve、Reflection ✅ 第五章 基于低代码平台的智能体搭建 了解 Coze、Dify、n8n 等低代码智能体平台使用 ✅ 第六章 框架开发实践 AutoGen、AgentScope、LangGraph 等主流框架应用 ✅ 第七章 构建你的Agent框架 从 0 开始构建智能体框架 ✅ 第三部分：高级知识扩展 第八章 记忆与检索 记忆系统，RAG，存储 ✅ 第九章 上下文工程 持续交互的\"情境理解\" ✅ 第十章 智能体通信协议 MCP、A2A、ANP 等协议解析 ✅ 第十一章 Agentic-RL 从 SFT 到 GRPO 的 LLM 训练实战 ✅ 第十二章 智能体性能评估 核心指标、基准测试与评估框架 ✅ 第四部分：综合案例进阶 第十三章 智能旅行助手 MCP 与多智能体协作的真实世界应用 ✅ 第十四章 自动化深度研究智能体 DeepResearch Agent 复现与解析 ✅ 第十五章 构建赛博小镇 Agent 与游戏的结合，模拟社会动态 ✅ 第五部分：毕业设计及未来展望 第十六章 毕业设计 构建属于你的完整多智能体应用 ✅ 社区贡献精选 (Community Blog) 欢迎大家将在学习 Hello-Agents 或 Agent 相关技术中的独到见解、实践总结，以 PR 的形式贡献到社区精选。如果是独立于正文的内容，也可以投稿至 Extra-Chapter！期待你的第一次贡献！ 社区精选 内容总结 00-共创毕业设计 社区共创毕业设计项目 01-Agent面试题总结 Agent 岗位相关面试问题 01-Agent面试题答案 相关面试问题答案 02-上下文工程内容补充 上下文工程内容扩展 03-Dify智能体创建保姆级教程 Dify智能体创建保姆级教程 04-Hello-agents课程常见问题 Datawhale课程常见问题 05-Agent Skills与MCP对比解读 Agent Skills与MCP技术对比 06-GUI Agent科普与实战 GUI Agent科普与多场景实战 07-环境配置 环境配置 08-如何写出好的Skill Skill 写作最佳实践 09-Agent应用开发实践踩坑与经验分享 Code Agent 应用开发踩坑与经验总结 10-Agent Self-Evolution智能体自进化 Agent 自进化四类闭环与代表项目 PDF 版本下载 本 Hello-Agents PDF 教程完全开源免费。为防止各类营销号加水印后贩卖给多智能体系统初学者，我们特地在 PDF 文件中预先添加了不影响阅读的 Datawhale 开源标志水印，敬请谅解～ Hello-Agents PDF : https://github.com/datawhalechina/hello-agents/releases/latest/ Hello-Agents PDF 国内下载地址 : https://www.datawhale.cn/learn/summary/239 💡 如何学习 欢迎你，未来的智能系统构建者！在开启这段激动人心的旅程之前，请允许我们给你一些清晰的指引。 本项目内容兼顾理论与实战，旨在帮助你系统性地掌握从单个智能体到多智能体系统的设计与开发全流程。因此，尤其适合有一定编程基础的 AI 开发者、软件工程师、在校学生 以及对前沿 AI 技术抱有浓厚兴趣的 自学者。在学习本项目之前，我们希望你具备基础的 Python 编程能力，并对大语言模型有基本的概念性了解（例如，知道如何通过 API 调用一个 LLM）。项目的重点是应用与构建，因此你无需具备深厚的算法或模型训练背景。 项目分为五大部分，每一部分都是通往下一阶段的坚实阶梯： 第一部分：智能体与语言模型基础（第一章～第三章），我们将从智能体的定义、类型与发展历史讲起，为你梳理\"智能体\"这一概念的来龙去脉。随后，我们会快速巩固大语言模型的核心知识，为你的实践之旅打下坚实的理论地基。 第二部分：构建你的大语言模型智能体（第四章～第七章），这是你动手实践的起点。你将亲手实现 ReAct 等经典范式，体验 Coze 等低代码平台的便捷，并掌握 Langgraph 等主流框架的应用。最终，我们还会带你从零开始构建一个属于自己的智能体框架，让你兼具“用轮子”与“造轮子”的能力。 第三部分：高级知识扩展（第八章～第十二章），在这一部分，你的智能体将“学会”思考与协作。我们将使用第二部分的自研框架，深入探索记忆与检索、上下文工程、Agent 训练等核心技术，并学习多智能体间的通信协议。最终，你将掌握评估智能体系统性能的专业方法。 第四部分：综合案例进阶（第十三章～第十五章），这里是理论与实践的交汇点。你将把所学融会贯通，亲手打造智能旅行助手、自动化深度研究智能体，乃至一个模拟社会动态的赛博小镇，在真实有趣的项目中淬炼你的构建能力。 第五部分：毕业设计及未来展望（第十六章），在旅程的终点，你将迎来一个毕业设计，构建一个完整的、属于你自己的多智能体应用，全面检验你的学习成果。我们还将与你一同展望智能体的未来，探索激动人心的前沿方向。 智能体是一个飞速发展且极度依赖实践的领域。为了获得最佳的学习效果，我们在项目的code文件夹内提供了配套的全部代码，强烈建议你将理论与实践相结合。请务必亲手运行、调试甚至修改项目里提供的每一份代码。欢迎你随时关注 Datawhale 以及其他 Agent 相关社区，当遇到问题时，你可以随时在本项目的 issue 区提问。 现在，准备好进入智能体的奇妙世界了吗？让我们即刻启程！ 下一步规划 视频课程陆续放出（将会更加细致，实践课带领大家从设计思路到实施，授人以鱼也授人以渔） HelloAgents框架已经更新V1.0.0版本，将会继续完善，增加更多好用，轻量化的工具和特性，兼容学习版本。 感谢大家助力4W Star! 现在提供调查问卷，供大家填写自己需要学习的智能体内容。后续作品《从零开始训练智能体》，帮助每一个学习者掌握从零到一训练自定义场景智能体模型的能力。 扫描二维码填写反馈意见，助力新项目共同成长 🤝 如何贡献 我们是一个开放的开源社区，欢迎任何形式的贡献！ 🐛 报告 Bug - 发现内容或代码问题，请提交 Issue 💡 提出建议 - 对项目有好想法，欢迎发起讨论 📝 完善内容 - 帮助改进教程，提交你的 Pull Request ✍️ 分享实践 - 在\"社区贡献精选\"中分享你的学习笔记和项目 🙏 致谢 核心贡献者 陈思州-项目负责人 (Datawhale 成员, 全文写作和校对) 孙韬-联合发起者 (Datawhale 成员、CAMEL-AI, 第九章内容和校对) 姜舒凡-联合发起者（Datawhale 成员, 章节习题设计和校对） 黄佩林-Datawhale意向成员 (Agent 开发工程师, 第五章内容贡献者) 曾鑫民-Agent工程师 (牛客科技, 第十四章案例开发) 朱信忠-指导专家 (Datawhale首席科学家-浙江师范大学杭州人工智能研究院教授) Extra-Chapter 贡献者 WH (内容贡献者) 周奥杰-DW贡献者团队 (西安交通大学, Extra02 内容贡献) 张宸旭-个人开发者(帝国理工学院, Extra03 内容贡献) 黄宏晗-DW贡献者团队 (深圳大学, Extra04 内容贡献) 王大鹏-Datawhale成员 (高级研发工程师, Extra08 内容贡献) 尤逸晖-个人开发者 (南京信息工程大学, Extra09 内容贡献) 殷鑫-个人开发者 (浙江大学, Extra10 内容贡献) 特别感谢 感谢 @Sm1les 对本项目的帮助与支持 感谢所有为本项目做出贡献的开发者们 ❤️ Star History ⭐ 如果这个项目对你有帮助，请给我们一个 Star！ 读者交流群 扫描二维码加入读者交流群，与更多学习者交流讨论 关于 Datawhale 扫描二维码关注 Datawhale 公众号，获取更多优质开源内容 🎓 引用 如果 Hello-Agents 对您的研究或工作有所帮助，欢迎引用： @misc{hello_agents2025, title = {Hello-Agents: Building an AI Agent from Scratch}, author = {Sizhou Chen and Tao Sun and Shufan Jiang and Peilin Huang and Xinmin Zeng and Xinzhong Zhu and all Hello-Agents contributors}, year = {2025}, url = {https://github.com/datawhalechina/Hello-Agents}, note = {GitHub repository} } 📜 开源协议 本作品采用知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议进行许可。",
+    "tags": [
+      "clippings"
+    ],
+    "id": "ee7e0e584b2626a3",
+    "source_type": "community_discussion",
+    "tldr": "Datawhale发布开源教程Hello-Agents，系统教授从零构建AI原生智能体",
+    "objective_summary": "Datawhale社区于2025年发布了开源教程Hello-Agents项目，包含五大部分十六章，从智能体基础理论到综合案例实战，系统性教授AI Native Agent的构建全流程，并提供配套代码和视频课程，截至目前已获得超过4万GitHub Star。",
+    "event_type": "framework_tools",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [
+        "Datawhale",
+        "OpenAI"
+      ],
+      "technologies": [
+        "LLM",
+        "Transformer",
+        "RAG",
+        "MCP",
+        "A2A",
+        "ReAct",
+        "Plan-and-Solve",
+        "Reflection",
+        "GRPO",
+        "SFT",
+        "AutoGen",
+        "LangGraph",
+        "AgentScope",
+        "Coze",
+        "Dify",
+        "n8n",
+        "Agentic-RL"
+      ],
+      "key_people": [
+        "陈思州",
+        "孙韬",
+        "姜舒凡",
+        "黄佩林",
+        "曾鑫民",
+        "朱信忠"
+      ]
+    },
+    "key_logic_flow": [
+      "Datawhale社区发布了开源教程Hello-Agents，旨在从零开始系统性地教授AI Native智能体的构建，填补社区缺乏重实践教程的空白。",
+      "教程将Agent构建分为软件工程类（如Dify、Coze）和AI原生类两大流派，重点教授后者——以LLM为驱动核心的真正智能体。",
+      "教程分为五大部分共十六章，内容涵盖智能体理论基础、经典范式实现（ReAct/Plan-and-Solve/Reflection）、低代码平台使用、自研框架HelloAgents构建、记忆与检索、上下文工程、MCP/A2A通信协议、Agentic-RL训练等全栈技术。",
+      "项目提供了配套代码和视频课程，强调理论与实践结合的学习方式，并设有社区精选贡献区域供学习者分享心得与面试题总结。",
+      "该项目完全开源免费，采用CC BY-NC-SA 4.0许可协议，目前已获得超过4万GitHub Star，并计划推出后续作品《从零开始训练智能体》。"
+    ],
+    "impact_score": {
+      "score": 6.0,
+      "reason": "该教程以4万+ GitHub Star的成绩成为中文AI社区最具影响力的Agent系统性学习资源，覆盖从ReAct范式到Agentic-RL的全栈技术图谱，填补了'从零构建AI原生智能体'实践教程的空白。但其本质是教育内容聚合与知识传播，并非技术范式转移或产品发布，对行业格局的直接影响有限，主要通过降低开发者入门门槛产生二阶生态效应。属于重要社区事件但非行业分水岭。"
+    },
+    "sentiment": "positive",
+    "developer_sentiment": {
+      "tone": "excited",
+      "primary_focus": "从零构建AI原生智能体的全栈免费教程，含配套代码与视频，填补实践空白"
+    },
+    "hype_assessment": {
+      "level": "low",
+      "reason": "教程内容扎实，十六章系统覆盖从理论到RL训练的全流程，提供完整代码和视频课程，未使用'颠覆''革命性'等夸张修辞。虽然标题强调'Agent元年'有一定宣传色彩，但项目本体以教学内容交付而非概念炒作为核心，社区贡献精选和4万Star证明了其实质价值。"
+    },
+    "information_entropy": "high",
+    "domain_disruption": {
+      "technical_innovation": "无底层技术突破，但系统性整合了ReAct、Plan-and-Solve、Reflection等经典范式实现、MCP/A2A通信协议解析、以及从SFT到GRPO的Agentic-RL训练实战，形成了目前中文社区最完整的Agent全栈知识地图，其自研HelloAgents框架（V1.0.0）以OpenAI原生API为基础提供了轻量化教学参考实现。",
+      "business_model": "采用CC BY-NC-SA 4.0开源协议完全免费，以社区驱动的内容共建模式运营，通过降低Agent开发人才门槛对整个AI应用生态产生正向外部性——为Dify、Coze等低代码平台和LangGraph等框架培养潜在用户与贡献者，形成人才供给侧的基础设施效应。"
+    },
+    "engineering_complexity": "prototype",
+    "compound_value": {
+      "score": 7.0,
+      "reason": "Hello-Agents 是中文 AI 社区中罕见的全栈 Agent 教育基础设施项目。其长期复利价值体现在三个层面：(1) 开发者网络效应——4万 Star 的社区基础已形成自增强的学习者-贡献者飞轮，社区精选贡献机制进一步加速内容沉淀；(2) 标准化学科体系——五大部分十六章覆盖从理论到 Agentic-RL 训练的全栈知识，有望成为中文 Agent 开发者的「标准课程」，3-5 年后仍将是新人入门首选；(3) 人才管道效应——该项目直接为整个 Agent 生态输送熟练开发者，间接推动上层应用爆发。但作为 CC BY-NC-SA 4.0 协议下的完全免费项目，直接价值捕获路径模糊，商业变现依赖 Datawhale 能否将社区影响力转化为企业培训、咨询服务或平台化产品。续作《从零开始训练智能体》若落地，可向模型训练层延伸影响力。综合来看，属于「强生态价值、弱直接变现」型基础设施，评分 7.0。"
+    },
+    "value_capture_layer": "agent_middleware",
+    "moat_impact": "democratizes_access",
+    "key_beneficiaries": [
+      "Datawhale",
+      "LangChain/LangGraph",
+      "Anthropic (MCP协议)",
+      "OpenAI",
+      "Dify",
+      "Coze",
+      "AutoGen",
+      "AgentScope"
+    ],
+    "competitive_casualty": [
+      "商业 AI Agent 教育/培训平台",
+      "闭源 Agent 开发平台（依赖用户锁定而非开放标准）",
+      "付费 AI 课程内容商（同类内容免费后失去定价权）",
+      "低质量 AI 营销号/内容贩售者（项目主动水印防御）"
+    ],
+    "market_opportunities": [
+      "该教程预计将批量培养数万名具备AI Native Agent全栈构建能力的开发者，企业可提前布局Agent人才招聘与内部培训体系，抢占Agent应用落地的人才红利",
+      "教程中自研HelloAgents框架结合Agentic-RL训练（SFT→GRPO）的完整教学链路，为垂直行业（金融、医疗、法律）提供了一条「领域微调+自定义Agent」的商业化路径，创业者可基于此模式开发行业专用智能体解决方案",
+      "教程对MCP、A2A等多Agent通信协议的深度覆盖，预示着跨Agent协作的标准化需求正在形成，中间件与互操作平台的创业窗口正在打开"
+    ],
+    "risk_matrix": {
+      "regulatory": "教程采用CC BY-NC-SA 4.0许可协议，明确禁止商业使用，企业若直接基于教程内容开发商业产品存在版权合规风险；此外Agent自主决策能力的大规模普及可能加速各国对AI Agent的监管立法（如欧盟AI Act对高风险Agent的分类要求）",
+      "technological": "Agent领域技术迭代极快（如MCP协议、Agentic-RL方法论仍在快速演进），教程中教授的具体框架和范式可能在12-18个月内过时；配套的HelloAgents自研框架尚未经过生产环境验证，存在架构债务风险",
+      "competitive": "该教程大幅降低了Agent开发的门槛和成本，可能导致市场短期内涌入大量同质化的Agent产品，加剧价格竞争；同时大厂（如OpenAI、Google）可能通过内置Agent能力直接挤压第三方Agent框架的生存空间",
+      "ethical": "教程教授从零构建自主Agent的完整能力，可能被恶意行为者用于开发自动化网络攻击、大规模虚假信息传播或社交操纵Agent；教程中关于Agent自进化（Self-Evolution）的内容若被滥用，可能产生超出设计者预期的危险行为",
+      "additional": [
+        "知识安全风险：该教程完整覆盖了从理论到训练的Agent全链路知识，相当于将Agent构建能力「开源民主化」，可能被敌对国家或组织用于快速建立AI Agent研发能力",
+        "社区依赖风险：教程质量高度依赖Datawhale社区的核心维护者（尤其是项目负责人陈思州），若核心贡献者流失，教程的持续更新和技术演进可能停滞"
+      ]
+    },
+    "confidence": {
+      "impact": "medium",
+      "compound": "low",
+      "hype": "high"
+    },
+    "actionable_insight": "deep_dive"
+  }
+]

@@ -3,6 +3,12 @@ import { join } from "node:path";
 import { parse as parseYaml } from "yaml";
 import { z } from "zod";
 import type { TierMeta } from "@/lib/data/tiers";
+import {
+  type ProcessingStatus,
+  type StructuredArticle,
+  structuredArticleSchema,
+  determineProcessingStatus,
+} from "@/lib/data/status";
 
 // ============================================================================
 // Zod schemas for manifest JSON validation
@@ -11,9 +17,10 @@ import type { TierMeta } from "@/lib/data/tiers";
 const manifestArticleSchema = z.object({
   url: z.string(),
   title: z.string(),
-  published: z.string(),
+  published: z.string().optional().default(""),
   summary: z.string(),
-  author: z.string(),
+  author: z.string().optional().default(""),
+  id: z.string().optional(),
 });
 
 const manifestSchema = z.object({
@@ -73,9 +80,44 @@ export interface SourceStatus {
     published: string;
     summary: string;
     author: string;
+    id?: string;
   }>;
   manifestDate: string | null;
   manifestGeneratedAt: string | null;
+}
+
+export interface EnrichedArticle {
+  url: string;
+  title: string;
+  published: string;
+  summary: string;
+  author: string;
+  id?: string;
+  enriched: StructuredArticle | null;
+  status: ProcessingStatus;
+}
+
+export interface EnrichedSourceDetail {
+  name: string;
+  type: string;
+  tier: "A" | "B" | "C";
+  enabled: boolean;
+  display_name: string;
+  description: string;
+  display_description: string;
+  url: string;
+  language: string;
+  fetch_strategy: string;
+  keywords: string[];
+  max_age_hours: number;
+  truncation: { mode: string; limit?: number };
+  target_dir?: string;
+  manifestFound: boolean;
+  articleCount: number;
+  articles: EnrichedArticle[];
+  manifestDate: string | null;
+  manifestGeneratedAt: string | null;
+  stageCounts: Record<ProcessingStatus, number>;
 }
 
 // ============================================================================
@@ -187,6 +229,115 @@ export async function getSourceDetail(
   if (!config) return null;
 
   return configToStatus(config, manifests.get(name));
+}
+
+function normalizeUrl(url: string): string {
+  return url
+    .trim()
+    .replace(/\/+$/, "")
+    .replace(/^http:\/\//i, "http://")
+    .replace(/^https:\/\//i, "https://");
+}
+
+async function loadStructuredData(
+  sourceName: string,
+): Promise<StructuredArticle[]> {
+  const structuredDir = join(process.cwd(), "data/04_structured");
+  let entries: string[];
+  try {
+    entries = await readdir(structuredDir);
+  } catch {
+    return [];
+  }
+
+  const match = entries.find(
+    (f) =>
+      f.replace(/\.json$/, "").toLowerCase() === sourceName.toLowerCase(),
+  );
+  if (!match) return [];
+
+  try {
+    const raw = await readFile(join(structuredDir, match), "utf8");
+    const parsed: unknown = JSON.parse(raw);
+    const arr = Array.isArray(parsed) ? parsed : [];
+    return structuredArticleSchema.array().parse(arr);
+  } catch {
+    return [];
+  }
+}
+
+export async function getSourceDetailEnriched(
+  name: string,
+): Promise<EnrichedSourceDetail | null> {
+  const [configs, manifests] = await Promise.all([
+    getSourceConfigs(),
+    loadManifests(),
+  ]);
+
+  const config = configs.find((c) => c.name === name);
+  if (!config) return null;
+
+  const manifest = manifests.get(name);
+  const manifestArticles = manifest?.articles ?? [];
+  const structuredData = await loadStructuredData(name);
+
+  const structuredMap = new Map<string, StructuredArticle>();
+  for (const s of structuredData) {
+    const normalized = normalizeUrl(s.source);
+    if (!structuredMap.has(normalized)) {
+      structuredMap.set(normalized, s);
+    }
+  }
+
+  const enrichedArticles: EnrichedArticle[] = manifestArticles.map((a) => {
+    const normalizedArticleUrl = normalizeUrl(a.url);
+    const enriched =
+      structuredMap.get(normalizedArticleUrl) ?? null;
+    return {
+      url: a.url,
+      title: a.title,
+      published: a.published ?? "",
+      summary: a.summary ?? "",
+      author: a.author ?? "",
+      id: a.id,
+      enriched,
+      status: enriched
+        ? determineProcessingStatus(enriched)
+        : "scout",
+    };
+  });
+
+  const stageCounts: Record<ProcessingStatus, number> = {
+    scout: 0,
+    extracted: 0,
+    analyzed: 0,
+  };
+  for (const a of enrichedArticles) {
+    stageCounts[a.status]++;
+  }
+
+  return {
+    name: config.name,
+    type: config.type,
+    tier: config.tier,
+    enabled: config.enabled,
+    display_name: config.display_name ?? config.name,
+    description: config.description,
+    display_description: config.display_description ?? config.description,
+    url: config.url,
+    language: config.language,
+    fetch_strategy: config.fetch_strategy,
+    keywords: config.filter?.keywords ?? [],
+    max_age_hours: config.filter?.max_age_hours ?? 0,
+    truncation: config.truncation,
+    target_dir: config.target_dir,
+    manifestFound: manifest !== undefined,
+    articleCount: enrichedArticles.length,
+    articles: enrichedArticles,
+    manifestDate: manifest?.date ?? null,
+    manifestGeneratedAt: manifest?.generated_at ?? null,
+    stageCounts,
+  };
 }
 
 export async function getTiersMeta(): Promise<Record<string, TierMeta>> {

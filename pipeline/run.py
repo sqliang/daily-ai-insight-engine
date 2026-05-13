@@ -7,9 +7,12 @@ pipeline/run.py — Daily AI Insight Engine 管道入口
 2. 加载 config/proxy.json 并注入代理环境变量
 
 子命令：
-    python pipeline/run.py backfill-ids  为已有文件补充 article.id
+    python pipeline/run.py scout          Stage 1a: 生成 URL 清单
+    python pipeline/run.py ingest         Stage 1b: 正文抓取与清洗
     python pipeline/run.py extract        Stage 2: 元信息与事实提取
-    (将来可扩展 scout、ingest 等子命令)
+    python pipeline/run.py analyze        Stage 3: 深度分析
+    python pipeline/run.py aggregate      Stage 4a: Frontmatter 聚合
+    python pipeline/run.py synthesize     Stage 4b: 日报合成
 """
 
 import argparse
@@ -112,16 +115,46 @@ if __name__ == "__main__":
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 示例:
-  python pipeline/run.py aggregate                  聚合 frontmatter (Stage 4a)
-  python pipeline/run.py synthesize                 日报合成 (Stage 4b)
-  python pipeline/run.py synthesize --dry-run       显示 prompt 预估
-  python pipeline/run.py extract                    处理所有文件 (Stage 2)
-  python pipeline/run.py analyze                    深度分析所有文件 (Stage 3)
-  python pipeline/run.py analyze --stage qualitative 只运行定性研判
-  python pipeline/run.py analyze --concurrency 2    限制并发文件数
+  python pipeline/run.py scout                       Stage 1a: URL 清单生成
+  python pipeline/run.py ingest                      Stage 1b: 正文抓取
+  python pipeline/run.py extract                     Stage 2: 事实提取
+  python pipeline/run.py analyze                     Stage 3: 深度分析
+  python pipeline/run.py aggregate                   Stage 4a: 聚合 frontmatter
+  python pipeline/run.py synthesize                  Stage 4b: 日报合成
+  python pipeline/run.py synthesize --dry-run        Stage 4b: 显示 prompt 预估
         """,
     )
     subparsers = parser.add_subparsers(dest="command", help="流水线阶段")
+
+    # ------- scout 子命令 -------
+    scout_parser = subparsers.add_parser(
+        "scout",
+        help="Stage 1a: 生成 URL 清单",
+        description="遍历启用的数据源，按 fetch_strategy 抓取 RSS/API/Scrape/Browser，生成 manifest JSON",
+    )
+    scout_parser.add_argument(
+        "--force",
+        action="store_true",
+        help="强制重新获取所有源 (忽略已存在的清单)",
+    )
+
+    # ------- ingest 子命令 -------
+    ingest_parser = subparsers.add_parser(
+        "ingest",
+        help="Stage 1b: 正文抓取与清洗",
+        description="读取 manifest 清单，逐篇下载 HTML、提取 Markdown 正文、截断处理、写入 .md 文件",
+    )
+    ingest_parser.add_argument(
+        "--manifest", "-m",
+        type=str,
+        default=None,
+        help="指定清单文件名 (不含路径，默认处理最新清单)",
+    )
+    ingest_parser.add_argument(
+        "--force",
+        action="store_true",
+        help="强制重新抓取，忽略去重状态",
+    )
 
     # ------- backfill-ids 子命令 -------
     # 为 data/01_raw/ 下已有的 .md 文件补充 article.id (SHA-256 of source URL)
@@ -305,7 +338,24 @@ if __name__ == "__main__":
         sys.exit(0)
 
     # 分发到对应子命令
-    if args.command == "backfill-ids":
+    if args.command == "scout":
+        from pipeline.ingestion.scout import run_scout
+
+        print("=== Stage 1 Scout: URL 清单生成 ===\n")
+        manifests = run_scout(force=args.force)
+        total = sum(len(v) for v in manifests.values())
+        print(f"\n总计: {len(manifests)} 个源, {total} 篇文章")
+        sys.exit(0)
+
+    elif args.command == "ingest":
+        from pipeline.ingestion.ingest import run_ingest
+
+        print("=== Stage 1 Ingest: 正文抓取与清洗 ===\n")
+        files = run_ingest(manifest_name=args.manifest, force=args.force)
+        print(f"\n处理完成: {len(files)} 个文件")
+        sys.exit(0)
+
+    elif args.command == "backfill-ids":
         from pipeline.core.id_utils import generate_id
         from pipeline.core.frontmatter_utils import read_frontmatter, write_frontmatter
         from pipeline.core.file_utils import get_project_root

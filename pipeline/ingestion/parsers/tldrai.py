@@ -32,6 +32,8 @@ def parse_tldrai(source: dict) -> List[dict]:
                 "url": article_url,
                 "title": clean_html_text(title),
                 "summary": "TLDR AI 每日头条",
+                "published": "",
+                "author": "",
             })
 
     # 板块 2: Engineering & Research (前 3 条)
@@ -45,6 +47,8 @@ def parse_tldrai(source: dict) -> List[dict]:
                 "url": article_url,
                 "title": clean_html_text(title),
                 "summary": "AI 工程与研究",
+                "published": "",
+                "author": "",
             })
 
     # 降级: 如果板块提取失败, 直接匹配所有文章链接
@@ -61,6 +65,8 @@ def parse_tldrai(source: dict) -> List[dict]:
                 "url": article_url,
                 "title": clean_html_text(title),
                 "summary": "TLDR AI 文章",
+                "published": "",
+                "author": "",
             })
 
     return results

@@ -1,9 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getSourceDetail } from "@/lib/data/sources";
+import { getSourceDetailEnriched } from "@/lib/data/sources";
 import { PageShell } from "@/components/layout/PageShell";
 import { ArticleCard } from "@/components/sources/ArticleCard";
+import {
+  TIER_SHORT_LABELS,
+  SOURCE_TYPE_LABELS,
+  LANGUAGE_LABELS,
+} from "@/lib/data/tiers";
 
 export const dynamic = "force-dynamic";
 
@@ -15,13 +20,6 @@ export async function generateMetadata({
   const { name } = await params;
   return { title: `${name} - 数据源详情` };
 }
-
-const sourceTypeLabel: Record<string, string> = {
-  academic_paper: "学术论文",
-  tech_blog: "技术博客",
-  news_media: "科技媒体",
-  community_discussion: "社区讨论",
-};
 
 function formatGeneratedAt(iso: string): string {
   const d = new Date(iso);
@@ -35,7 +33,7 @@ export default async function SourceDetailPage({
   params: Promise<{ name: string }>;
 }) {
   const { name } = await params;
-  const source = await getSourceDetail(name);
+  const source = await getSourceDetailEnriched(name);
   if (!source) notFound();
 
   const hasManifest = source.manifestFound && source.articleCount > 0;
@@ -98,7 +96,7 @@ export default async function SourceDetailPage({
           {/* Title row */}
           <div className="mt-4 flex flex-wrap items-center gap-3">
             <h1 className="text-2xl font-bold tracking-tight text-white md:text-3xl break-words min-w-0">
-              {source.name}
+              {source.display_name}
             </h1>
             {/* Live indicator */}
             {hasManifest && (
@@ -113,13 +111,13 @@ export default async function SourceDetailPage({
           <div className="mt-4 flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-medium text-white/70 backdrop-blur">
               <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-              Tier {source.tier}
+              {TIER_SHORT_LABELS[source.tier] ?? source.tier}
             </span>
             <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-medium text-white/70 backdrop-blur">
-              {sourceTypeLabel[source.type] ?? source.type}
+              {SOURCE_TYPE_LABELS[source.type] ?? source.type}
             </span>
             <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-medium text-white/70 backdrop-blur">
-              {source.language === "zh" ? "中文" : "EN"}
+              {LANGUAGE_LABELS[source.language] ?? source.language}
             </span>
             <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-medium text-white/50 backdrop-blur font-mono">
               {source.fetch_strategy}
@@ -135,12 +133,29 @@ export default async function SourceDetailPage({
             )}
           </div>
 
-          {/* Description — glass panel */}
-          {source.description && (
+          {/* Description + Keywords — glass panel */}
+          {source.display_description && (
             <div className="mt-5 rounded-xl border border-white/8 bg-white/[0.04] p-4 backdrop-blur md:p-5">
               <p className="text-sm leading-7 text-white/75 md:text-[15px] md:leading-8">
-                {source.description}
+                {source.display_description}
               </p>
+              {source.keywords.length > 0 && (
+                <div className="mt-3 flex flex-wrap gap-1">
+                  {source.keywords.slice(0, 5).map((kw) => (
+                    <span
+                      key={kw}
+                      className="rounded bg-white/8 px-1.5 py-0.5 text-[10px] font-mono text-white/40"
+                    >
+                      {kw}
+                    </span>
+                  ))}
+                  {source.keywords.length > 5 && (
+                    <span className="rounded bg-white/8 px-1.5 py-0.5 text-[10px] font-mono text-white/30">
+                      +{source.keywords.length - 5}
+                    </span>
+                  )}
+                </div>
+              )}
             </div>
           )}
 
@@ -162,10 +177,28 @@ export default async function SourceDetailPage({
           </a>
 
           {/* Stats bar */}
-          <div className="mt-5 flex flex-wrap items-center gap-3">
+          <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-[12px] font-semibold text-white/80 backdrop-blur">
               {source.articleCount} 篇文章
             </span>
+            {source.stageCounts.analyzed > 0 && (
+              <span className="inline-flex items-center gap-1.5 text-[11px] text-white/50">
+                <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: "var(--accent)" }} />
+                {source.stageCounts.analyzed} 篇深度分析
+              </span>
+            )}
+            {source.stageCounts.extracted > 0 && (
+              <span className="inline-flex items-center gap-1.5 text-[11px] text-white/50">
+                <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: "var(--warm)" }} />
+                {source.stageCounts.extracted} 篇已提取
+              </span>
+            )}
+            {source.stageCounts.scout > 0 && (
+              <span className="inline-flex items-center gap-1.5 text-[11px] text-white/50">
+                <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: "var(--muted)" }} />
+                {source.stageCounts.scout} 篇待处理
+              </span>
+            )}
             {source.manifestGeneratedAt && (
               <span className="text-[11px] text-white/35">
                 生成于 {formatGeneratedAt(source.manifestGeneratedAt)}
@@ -189,7 +222,7 @@ export default async function SourceDetailPage({
         </div>
 
         {hasManifest ? (
-          <div className="space-y-3">
+          <div className="space-y-5">
             {source.articles.map((article, i) => (
               <ArticleCard key={i} article={article} />
             ))}
