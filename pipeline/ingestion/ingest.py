@@ -2,7 +2,7 @@
 Step 2: 正文抓取与 Markdown 生成 (Ingest)
 
 读取 data/00_manifest/ 中的 JSON 清单 → 逐篇抓取网页正文并提取为干净 Markdown →
-写入 data/01_raw/{source}/*.md，附带标准 YAML frontmatter。
+写入 data/01_raw/{source}/{id}.md，附带标准 YAML frontmatter。
 
 特性：
 - URL 去重：通过 data/state.json 记录已抓取的文章 ID (SHA-256)，避免重复抓取
@@ -24,7 +24,6 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 from pipeline.core.config_loader import get_source_by_name
 from pipeline.core.file_utils import (
     ensure_dir,
-    get_next_sequence_number,
     get_project_root,
     read_json,
     resolve_data_dir,
@@ -115,9 +114,8 @@ def run_ingest(manifest_name: Optional[str] = None, force: bool = False) -> List
                     print(f"         失败: 无法提取正文")
                     continue
 
-                # 生成序号文件名
-                seq = get_next_sequence_number(target_dir)
-                output_path = target_dir / f"{seq:02d}.md"
+                # 使用预生成的文章 ID 作为文件名
+                output_path = target_dir / f"{article_id}.md"
 
                 # 构建 frontmatter + 正文
                 fm = build_ingestion_frontmatter(

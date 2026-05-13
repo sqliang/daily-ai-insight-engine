@@ -2,6 +2,7 @@ import { readFile, readdir } from "node:fs/promises";
 import { join } from "node:path";
 import { parse as parseYaml } from "yaml";
 import { z } from "zod";
+import type { TierMeta } from "@/lib/data/tiers";
 
 // ============================================================================
 // Zod schemas for manifest JSON validation
@@ -38,7 +39,9 @@ interface SourceConfig {
   type: string;
   tier: "A" | "B" | "C";
   enabled: boolean;
+  display_name?: string;
   description: string;
+  display_description?: string;
   url: string;
   language: string;
   fetch_strategy: string;
@@ -52,11 +55,14 @@ export interface SourceStatus {
   type: string;
   tier: "A" | "B" | "C";
   enabled: boolean;
+  display_name: string;
   description: string;
+  display_description: string;
   url: string;
   language: string;
   fetch_strategy: string;
-  filter: { keywords: string[]; max_age_hours: number };
+  keywords: string[];
+  max_age_hours: number;
   truncation: { mode: string; limit?: number };
   target_dir?: string;
   manifestFound: boolean;
@@ -121,6 +127,33 @@ async function loadManifests(): Promise<Map<string, z.infer<typeof manifestSchem
   return manifests;
 }
 
+function configToStatus(
+  cfg: SourceConfig,
+  manifest: z.infer<typeof manifestSchema> | undefined,
+): SourceStatus {
+  return {
+    name: cfg.name,
+    type: cfg.type,
+    tier: cfg.tier,
+    enabled: cfg.enabled,
+    display_name: cfg.display_name ?? cfg.name,
+    description: cfg.description,
+    display_description: cfg.display_description ?? cfg.description,
+    url: cfg.url,
+    language: cfg.language,
+    fetch_strategy: cfg.fetch_strategy,
+    keywords: cfg.filter?.keywords ?? [],
+    max_age_hours: cfg.filter?.max_age_hours ?? 0,
+    truncation: cfg.truncation,
+    target_dir: cfg.target_dir,
+    manifestFound: manifest !== undefined,
+    articleCount: manifest?.articles.length ?? 0,
+    articles: manifest?.articles ?? [],
+    manifestDate: manifest?.date ?? null,
+    manifestGeneratedAt: manifest?.generated_at ?? null,
+  };
+}
+
 export async function getSourceStatuses(): Promise<SourceStatus[]> {
   const [configs, manifests] = await Promise.all([
     getSourceConfigs(),
@@ -129,14 +162,7 @@ export async function getSourceStatuses(): Promise<SourceStatus[]> {
 
   const results: SourceStatus[] = configs.map((cfg) => {
     const manifest = manifests.get(cfg.name);
-    return {
-      ...cfg,
-      manifestFound: manifest !== undefined,
-      articleCount: manifest?.articles.length ?? 0,
-      articles: manifest?.articles ?? [],
-      manifestDate: manifest?.date ?? null,
-      manifestGeneratedAt: manifest?.generated_at ?? null,
-    };
+    return configToStatus(cfg, manifest);
   });
 
   // Sort by tier (A→B→C), then alphabetically by name
@@ -147,4 +173,55 @@ export async function getSourceStatuses(): Promise<SourceStatus[]> {
   });
 
   return results;
+}
+
+export async function getSourceDetail(
+  name: string,
+): Promise<SourceStatus | null> {
+  const [configs, manifests] = await Promise.all([
+    getSourceConfigs(),
+    loadManifests(),
+  ]);
+
+  const config = configs.find((c) => c.name === name);
+  if (!config) return null;
+
+  return configToStatus(config, manifests.get(name));
+}
+
+export async function getTiersMeta(): Promise<Record<string, TierMeta>> {
+  const raw = await readFile(CONFIG_PATH, "utf8");
+  const config = parseYaml(raw);
+  return (config?.tiers_meta ?? {}) as Record<string, TierMeta>;
+}
+
+export interface SourcesViewData {
+  tiersMeta: Record<string, TierMeta>;
+  sources: SourceStatus[];
+  totalSources: number;
+  totalArticles: number;
+  latestDate: string | null;
+}
+
+export async function getSourcesViewData(): Promise<SourcesViewData> {
+  const [sources, tiersMeta] = await Promise.all([
+    getSourceStatuses(),
+    getTiersMeta(),
+  ]);
+
+  const totalArticles = sources.reduce((sum, s) => sum + s.articleCount, 0);
+  const latestDate =
+    sources
+      .map((s) => s.manifestDate)
+      .filter((d): d is string => d !== null)
+      .sort()
+      .reverse()[0] ?? null;
+
+  return {
+    tiersMeta,
+    sources,
+    totalSources: sources.length,
+    totalArticles,
+    latestDate,
+  };
 }

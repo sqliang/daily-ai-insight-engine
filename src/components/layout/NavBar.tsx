@@ -5,7 +5,8 @@ import { usePathname } from "next/navigation";
 
 const links = [
   { href: "/", label: "Dashboard" },
-  { href: "/report", label: "Full Report" },
+  { href: "/sources", label: "数据源" },
+  { href: "/report", label: "报告" },
 ];
 
 export function NavBar() {

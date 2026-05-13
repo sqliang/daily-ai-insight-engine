@@ -19,6 +19,23 @@ pipeline:
     reports: "data/05_reports"
 
 # =============================================================================
+# 黄金三角分类元数据 (前端展示用, 流水线忽略)
+# =============================================================================
+tiers_meta:
+  A:
+    label: "技术与前沿"
+    subtitle: "学术论文 & 官方技术博客 — 代表技术最前沿与基础研究信号"
+    rationale: "最高信噪比的第一手技术信息。arXiv 提供未经修饰的学术前沿，顶级 AI 实验室（OpenAI、Anthropic、Google、NVIDIA、Hugging Face）的官方博客提供第一手产品发布和研究突破。这类源的共同特点是技术深度高、商业化包装少，是 AI 情报的「原材料」。"
+  B:
+    label: "产品与开发者"
+    subtitle: "社区讨论 & 开发者情绪 — 反映产品落地热度与开发者真实反馈"
+    rationale: "开发者社区的实时情绪温度计。Hacker News 和 GitHub Trending 反映一线开发者关注什么、在建造什么；Product Hunt 展示新产品的市场接受度；Ben's Bites 提供资深 AI 观察者的策展视角；知乎覆盖中文技术社区的讨论热点。开发者情绪通常领先资本动向 3–6 个月，是预判产业方向的先行指标。"
+  C:
+    label: "商业与资本"
+    subtitle: "科技媒体 & 行业报道 — 捕捉商业落地、资本动向与产业趋势"
+    rationale: "商业化进程的完整记录。西方科技媒体（TechCrunch、The Verge）追踪融资、收购和产品发布；TLDR AI 和 KDnuggets 提供行业聚合与技术教程；中文 AI 媒体（机器之心、量子位、36氪）覆盖中国 AI 产业动态。这类源回答「技术有什么用、谁在买单」的问题，构成情报三角的商业底座。"
+
+# =============================================================================
 # 数据源配置
 # =============================================================================
 # sourceType 枚举 (对齐 pipeline/schemas/base_info.py:SourceType):
@@ -38,7 +55,9 @@ sources:
     type: academic_paper
     tier: A
     enabled: true
+    display_name: "arXiv CS.AI"
     description: "arXiv 计算机科学 · AI 分类"
+    display_description: "arXiv 人工智能分类下的最新预印本，通过 RSS 实时获取。覆盖 LLM、Agent、多模态、对齐、推理等前沿研究方向，关键词过滤确保信噪比，仅保留高质量技术论文摘要。"
     url: "https://rss.arxiv.org/rss/cs.AI"
     language: en
     fetch_strategy: rss
@@ -65,7 +84,9 @@ sources:
     type: tech_blog
     tier: A
     enabled: true
+    display_name: "OpenAI Blog"
     description: "OpenAI 官方博客"
+    display_description: "OpenAI 官方博客，发布 GPT 系列模型、ChatGPT、API、安全对齐等领域的第一手技术公告和研究进展。作为全球最有影响力的 AI 公司之一，其官方信息源技术可信度最高。"
     url: "https://openai.com/blog/rss.xml"
     language: en
     fetch_strategy: rss
@@ -87,7 +108,9 @@ sources:
     type: tech_blog
     tier: A
     enabled: true
+    display_name: "Google AI Blog"
     description: "Google AI Blog (含 DeepMind)"
+    display_description: "Google 与 DeepMind 的官方 AI 研究博客，涵盖基础模型（Gemini 系列）、强化学习、多模态 AI、科学 AI（AlphaFold 等）方向的突破性研究成果，是追踪前沿研究的风向标。"
     url: "https://blog.google/technology/ai/rss/"
     language: en
     fetch_strategy: rss
@@ -102,7 +125,9 @@ sources:
     type: tech_blog
     tier: A
     enabled: true
+    display_name: "Anthropic Blog"
     description: "Anthropic 官方新闻 (sitemap 解析)"
+    display_description: "Anthropic 官方新闻与技术发布，聚焦 Claude 模型能力演进、AI 安全与对齐研究、企业级应用实践。通过 sitemap 解析获取完整更新，是追踪 AI 安全方向的重要窗口。"
     url: "https://www.anthropic.com/sitemap.xml"
     language: en
     fetch_strategy: scrape
@@ -124,7 +149,9 @@ sources:
     type: tech_blog
     tier: A
     enabled: true
+    display_name: "NVIDIA AI Blog"
     description: "NVIDIA AI 技术博客"
+    display_description: "NVIDIA 官方 AI 技术博客，覆盖 GPU 推理优化、训练基础设施、CUDA 生态演进、大模型部署与加速等硬件与工程前沿，是 AI 算力层最重要的信息源。"
     url: "https://blogs.nvidia.com/feed/"
     language: en
     fetch_strategy: rss
@@ -148,7 +175,9 @@ sources:
     type: tech_blog
     tier: A
     enabled: false
+    display_name: "Meta AI Blog"
     description: "Meta AI 官方博客 (无 RSS, 待实现 HTML 抓取)"
+    display_description: "Meta AI 官方博客，发布 Llama 系列开源模型、多模态 AI 与开放科学研究。当前暂未启用（无 RSS 源，HTML 抓取待实现）。"
     url: "https://ai.meta.com/blog/"
     language: en
     fetch_strategy: scrape
@@ -169,7 +198,9 @@ sources:
     type: tech_blog
     tier: A
     enabled: false
+    display_name: "Microsoft AI Blog"
     description: "Microsoft AI 官方博客 (RSS 已停更, 最新文章 2022 年)"
+    display_description: "Microsoft AI 官方博客，曾发布 Copilot、Azure AI 等产品技术内容。当前暂未启用（RSS 源已停更，最新文章停留在 2022 年）。"
     filter:
       keywords:
         - "AI"
@@ -188,7 +219,9 @@ sources:
     type: tech_blog
     tier: A
     enabled: true
+    display_name: "Hugging Face Blog"
     description: "Hugging Face 官方博客"
+    display_description: "Hugging Face 官方博客，发布开源模型、数据集、训练框架与推理优化等内容。作为开源 AI 社区的核心枢纽，其发布往往代表开源生态的技术方向。"
     url: "https://huggingface.co/blog/feed.xml"
     language: en
     fetch_strategy: rss
@@ -217,7 +250,9 @@ sources:
     type: community_discussion
     tier: B
     enabled: true
+    display_name: "Hacker News"
     description: "Hacker News (hnrss.org, points >= 100)"
+    display_description: "Hacker News 科技板块高质量讨论，通过 hnrss.org 预过滤 score ≥ 100 的热门话题。全球开发者社区的实时情绪风向标，技术采纳趋势的领先指标。"
     url: "https://hnrss.org/frontpage?points=100"
     language: en
     fetch_strategy: rss
@@ -231,7 +266,9 @@ sources:
     type: community_discussion
     tier: B
     enabled: true
+    display_name: "Product Hunt"
     description: "Product Hunt 热门产品"
+    display_description: "Product Hunt 热门产品榜单，通过关键词过滤 AI/LLM/Agent/Copilot 相关产品。发现新兴 AI 工具与 SaaS 产品，捕捉 AI 产品化的早期信号。"
     url: "https://www.producthunt.com/feed"
     language: en
     fetch_strategy: rss
@@ -251,7 +288,9 @@ sources:
     type: community_discussion
     tier: B
     enabled: true
+    display_name: "GitHub Trending"
     description: "GitHub Trending (每日热门仓库)"
+    display_description: "GitHub 每日热门开源仓库，过滤 AI/LLM/Agent/MCP 相关项目。追踪开发者社区关注的开源基础设施与框架变化，是技术选型的重要参考。"
     url: "https://mshibanami.github.io/GitHubTrendingRSS/daily/all.xml"
     language: en
     fetch_strategy: rss
@@ -275,7 +314,9 @@ sources:
     type: community_discussion
     tier: B
     enabled: true
+    display_name: "Ben's Bites"
     description: "Ben's Bites AI 日报 Newsletter"
+    display_description: "Ben's Bites — AI 领域知名日报 Newsletter，每日精选 AI 行业最重要的新闻、产品发布与研究成果。由资深 AI 观察者人工策展，信噪比高，覆盖范围广。"
     url: "https://www.bensbites.com/feed"
     language: en
     fetch_strategy: rss
@@ -291,7 +332,9 @@ sources:
     type: community_discussion
     tier: B
     enabled: true
+    display_name: "知乎"
     description: "知乎发现页热门 (浏览器渲染，通过关键字过滤 AI 内容)"
+    display_description: "知乎发现页 AI 相关内容，通过 Chrome 浏览器渲染获取动态加载内容。关键词过滤大模型、Agent、深度学习等热门话题，覆盖中文技术社区讨论热点与开发者情绪。"
     url: "https://www.zhihu.com/explore"
     language: zh
     fetch_strategy: browser
@@ -326,7 +369,9 @@ sources:
     type: news_media
     tier: C
     enabled: true
+    display_name: "TechCrunch"
     description: "TechCrunch 科技新闻"
+    display_description: "TechCrunch — 全球最具影响力的科技创投媒体之一。关注 AI 创业公司融资、收购、IPO 等商业事件，通过关键词过滤 AI/创业/融资/收购/上市相关报道。"
     url: "https://techcrunch.com/feed/"
     language: en
     fetch_strategy: rss
@@ -350,7 +395,9 @@ sources:
     type: news_media
     tier: C
     enabled: true
+    display_name: "The Verge"
     description: "The Verge AI 报道"
+    display_description: "The Verge AI 报道板块，关注大型科技公司（Google、Microsoft、Apple、Meta）的 AI 产品发布、战略动向与消费者影响，兼顾科技评论与行业分析视角。"
     url: "https://www.theverge.com/rss/index.xml"
     language: en
     fetch_strategy: rss
@@ -372,7 +419,9 @@ sources:
     type: news_media
     tier: C
     enabled: true
+    display_name: "KDnuggets"
     description: "KDnuggets 数据科学与 AI 教程/新闻"
+    display_description: "KDnuggets — 数据科学与 AI 领域知名技术媒体，涵盖机器学习、LLM、Python 工具链等技术教程与业界新闻。兼顾技术深度与实用工具推荐。"
     url: "https://www.kdnuggets.com/feed/"
     language: en
     fetch_strategy: rss
@@ -395,7 +444,9 @@ sources:
     type: news_media
     tier: C
     enabled: true
+    display_name: "TLDR AI"
     description: "TLDR AI 每日 AI 新闻聚合 (HTML 解析)"
+    display_description: "TLDR AI — 每日 AI 新闻聚合服务，精选 AI 行业最重要的 5–10 条新闻并附简要解析。通过 HTML 解析获取，覆盖广度大，适合快速扫描当日 AI 动态。"
     url: "https://tldr.tech/api/latest/ai"
     language: en
     fetch_strategy: scrape
@@ -411,7 +462,9 @@ sources:
     type: news_media
     tier: C
     enabled: true
+    display_name: "机器之心"
     description: "机器之心 - 中国 AI 产业媒体 (浏览器渲染)"
+    display_description: "机器之心（jiqizhixin.com）— 中国 AI 产业头部媒体。关注大模型、AI 芯片、融资、开源动态，通过浏览器渲染获取中文 AI 产业完整内容。"
     url: "https://www.jiqizhixin.com/"
     language: zh
     fetch_strategy: browser
@@ -436,7 +489,9 @@ sources:
     type: news_media
     tier: C
     enabled: true
+    display_name: "量子位"
     description: "量子位 - 中国 AI 前沿科技媒体"
+    display_description: "量子位（qbitai.com）— 中国 AI 前沿科技媒体。聚焦大模型技术进展、AI 芯片竞争、算力基建、行业应用落地，通过 RSS 获取中文 AI 产业前沿动态。"
     url: "https://www.qbitai.com/feed"
     language: zh
     fetch_strategy: rss
@@ -460,7 +515,9 @@ sources:
     type: news_media
     tier: C
     enabled: true
+    display_name: "36氪"
     description: "36氪 AI 产业创投报道"
+    display_description: "36氪 AI 产业创投报道，追踪中国 AI 创业公司融资事件、IPO 进展、AIGC 应用落地与 SaaS 行业动态，提供资本视角的中国 AI 产业全景。"
     url: "https://36kr.com/feed"
     language: zh
     fetch_strategy: rss

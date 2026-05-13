@@ -18,12 +18,19 @@ from typing import Any, Dict, List, Optional
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 from pipeline.core.config_loader import get_sources
-from pipeline.core.file_utils import resolve_data_dir, write_json
+from pipeline.core.file_utils import resolve_data_dir, write_json, read_json, atomic_write, list_files
 from pipeline.core.id_utils import generate_id
 from pipeline.core.web_utils import fetch_rss_items, fetch_url
 
 from pipeline.ingestion.filters import apply_filters
 from pipeline.ingestion.parsers import SCRAPE_PARSERS, BROWSER_PARSERS
+
+SOURCE_TYPE_LABEL: Dict[str, str] = {
+    "academic_paper": "学术论文",
+    "tech_blog": "技术博客",
+    "news_media": "科技媒体",
+    "community_discussion": "社区讨论",
+}
 
 
 def _ensure_browser_session():
@@ -108,6 +115,10 @@ def run_scout(force: bool = False) -> Dict[str, List[dict]]:
             write_json(manifest_path, manifest_data)
 
             all_manifests[name] = articles
+
+        # 生成汇总 Markdown 清单
+        _generate_markdown_manifest(all_manifests, manifest_dir, today_str, sources)
+
     finally:
         if browser_session:
             browser_session.__exit__(None, None, None)
@@ -233,6 +244,128 @@ def _scout_browser(source: dict, browser_session) -> List[dict]:
         print(f"         browser 策略暂未为此源实现解析器: {name}")
         return []
     return parser(source, browser_session)
+
+
+# ================================================================
+# Markdown 汇总清单生成
+# ================================================================
+
+def _generate_markdown_manifest(
+    all_manifests: Dict[str, List[dict]],
+    manifest_dir: Path,
+    today_str: str,
+    sources: List[dict],
+) -> None:
+    """
+    生成汇总 Markdown 文件到 data/00_manifest/。
+    合并刚抓取的文章 + 从已存在的 JSON 清单中读取被跳过的源。
+    """
+    merged: Dict[str, dict] = {}
+
+    for source in sources:
+        name = source.get("name", "")
+        if name in all_manifests and all_manifests[name]:
+            # 本次 run 新抓取的
+            merged[name] = {
+                "articles": all_manifests[name],
+                "source_type": source.get("type", ""),
+                "tier": source.get("tier", ""),
+                "language": source.get("language", "en"),
+            }
+        else:
+            # 源被跳过 — 尝试从已有 JSON 清单读回
+            manifest_path = manifest_dir / f"{name}_{today_str}.json"
+            data = read_json(manifest_path)
+            if data and data.get("articles"):
+                merged[name] = {
+                    "articles": data["articles"],
+                    "source_type": data.get("source_type", source.get("type", "")),
+                    "tier": data.get("tier", source.get("tier", "")),
+                    "language": source.get("language", "en"),
+                }
+            else:
+                print(f"  [Markdown] ⚠ {name} — 无清单数据，跳过")
+
+    if not merged:
+        print("  [Markdown] ⚠ 没有任何源有文章数据，跳过生成")
+        return
+
+    # 按 Tier (A→B→C) 再按 name 排序
+    tier_order = {"A": 0, "B": 1, "C": 2}
+    sorted_names = sorted(merged.keys(), key=lambda n: (tier_order.get(merged[n]["tier"], 99), n))
+
+    total_sources = len(sorted_names)
+    total_articles = sum(len(merged[n]["articles"]) for n in sorted_names)
+    iso_week = datetime.now().isocalendar()[1]
+    generated_at = datetime.now(timezone.utc).isoformat()
+
+    # Build markdown
+    lines: List[str] = []
+    lines.append("---")
+    lines.append(f'date: "{today_str}"')
+    lines.append(f"week: {iso_week}")
+    lines.append(f"total_sources: {total_sources}")
+    lines.append(f"total_articles: {total_articles}")
+    lines.append(f'generated_at: "{generated_at}"')
+    lines.append("---")
+    lines.append("")
+    lines.append("# Daily AI Insight — 数据源清单")
+    lines.append("")
+    lines.append(
+        f"**日期**: {today_str} | **第 {iso_week} 周** | "
+        f"**{total_sources}** 个源, **{total_articles}** 篇文章"
+    )
+    lines.append("")
+
+    for name in sorted_names:
+        info = merged[name]
+        articles: list = info["articles"]
+        src_type = info["source_type"]
+        tier = info["tier"]
+        lang = info["language"]
+        src_type_cn = SOURCE_TYPE_LABEL.get(src_type, src_type)
+        lang_display = "中文" if lang == "zh" else "EN"
+        count = len(articles)
+
+        lines.append("---")
+        lines.append("")
+        lines.append(f"## {name}")
+        lines.append("")
+        lines.append(f"> Tier {tier} · {src_type_cn} · {lang_display} · {count} 篇")
+        lines.append("")
+
+        for article in articles:
+            title = article.get("title", "无标题").strip() or "无标题"
+            url = article.get("url", "")
+            published = article.get("published", "")
+            author = article.get("author", "")
+            summary = article.get("summary", "").strip()
+
+            # 文章标题行 (带链接)
+            if url:
+                lines.append(f"- **[{title}]({url})**")
+            else:
+                lines.append(f"- **{title}**")
+
+            # 元信息行
+            meta_parts: List[str] = []
+            if published:
+                meta_parts.append(f"发布: {published}")
+            if author:
+                meta_parts.append(f"作者: {author}")
+            if meta_parts:
+                lines.append(f"  - {' | '.join(meta_parts)}")
+
+            # 摘要行
+            if summary:
+                lines.append(f"  - 摘要: {summary}")
+            lines.append("")
+
+    md_content = "\n".join(lines)
+    filename = f"{today_str}-manifest-第{iso_week}周.md"
+    filepath = manifest_dir / filename
+    atomic_write(filepath, md_content)
+    print(f"  [Markdown] ✅ 已生成汇总清单: {filename}")
 
 
 # ================================================================
