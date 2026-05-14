@@ -4,8 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const links = [
-  { href: "/", label: "Dashboard" },
-  { href: "/sources", label: "数据源" },
+  { href: "/", label: "数据源" },
+  { href: "/dashboard", label: "日报" },
 ];
 
 export function NavBar() {
@@ -37,7 +37,10 @@ export function NavBar() {
         {/* Nav links */}
         <div className="flex items-center">
           {links.map(({ href, label }) => {
-            const active = pathname === href;
+            const active =
+              href === "/"
+                ? pathname === "/" || pathname.startsWith("/sources/")
+                : pathname === href;
             return (
               <Link
                 key={href}
