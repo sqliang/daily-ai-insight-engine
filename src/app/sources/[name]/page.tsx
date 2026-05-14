@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getSourceDetailEnriched } from "@/lib/data/sources";
 import { PageShell } from "@/components/layout/PageShell";
-import { ArticleCard } from "@/components/sources/ArticleCard";
+import { ArticleList } from "@/components/sources/ArticleList";
 import {
   TIER_SHORT_LABELS,
   SOURCE_TYPE_LABELS,
@@ -208,35 +208,12 @@ export default async function SourceDetailPage({
         </div>
       </header>
 
-      {/* ====== Article list ====== */}
-      <section className="mt-10 min-w-0">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-[15px] font-semibold text-foreground/80">
-            文章列表
-          </h2>
-          {hasManifest && (
-            <span className="text-[12px] text-muted/40">
-              共 {source.articleCount} 篇
-            </span>
-          )}
-        </div>
-
-        {hasManifest ? (
-          <div className="space-y-5">
-            {source.articles.map((article, i) => (
-              <ArticleCard key={i} article={article} />
-            ))}
-          </div>
-        ) : (
-          <div className="rounded-xl border border-line bg-panel/50 px-5 py-16 text-center">
-            <p className="text-sm text-muted/35">
-              {source.manifestFound
-                ? "当前流水线运行无文章"
-                : "暂无清单数据 — 等待流水线运行"}
-            </p>
-          </div>
-        )}
-      </section>
+      <ArticleList
+        articles={source.articles}
+        hasManifest={hasManifest}
+        manifestFound={source.manifestFound}
+        articleCount={source.articleCount}
+      />
     </PageShell>
   );
 }
