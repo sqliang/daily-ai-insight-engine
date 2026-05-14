@@ -32,38 +32,39 @@ export function RiskSignals({ riskMatrix }: RiskSignalsProps) {
 
   return (
     <div>
-      <span className="text-[12px] font-semibold text-muted/35 uppercase tracking-wider">
+      <span className="text-[13px] font-semibold text-muted/40 uppercase tracking-wider">
         风险信号
       </span>
-      <div className="mt-2 space-y-2">
+      <div className="mt-3 space-y-2.5">
         {RISK_DIMENSIONS.map(({ key, label }) => {
           const text = riskMatrix[key];
           const hasRisk = text && text !== "无";
           return (
             <div
               key={key}
-              className="flex items-start gap-2.5 pl-2"
+              className="flex items-start gap-3 pl-3 py-1.5 rounded-lg"
               style={{
                 borderLeft: hasRisk
-                  ? "2px solid var(--negative) / 0.3"
-                  : "2px solid transparent",
+                  ? "3px solid var(--negative) / 0.4"
+                  : "3px solid transparent",
+                backgroundColor: hasRisk ? "var(--negative) / 0.02" : "transparent",
               }}
             >
               <span
-                className="inline-block h-2 w-2 rounded-full mt-1 shrink-0"
+                className="inline-block h-2.5 w-2.5 rounded-full mt-1 shrink-0"
                 style={{
                   backgroundColor: hasRisk ? "var(--negative)" : "var(--line)",
                 }}
               />
-              <span className="text-[12px] font-medium text-muted/40 w-8 shrink-0">
+              <span className="text-[13px] font-medium text-muted/50 w-10 shrink-0">
                 {label}
               </span>
               <span
-                className="text-[13px] leading-relaxed"
+                className="text-[14px] leading-relaxed"
                 style={{
                   color: hasRisk
                     ? "var(--foreground) / 0.7"
-                    : "var(--muted) / 0.3",
+                    : "var(--muted) / 0.35",
                 }}
               >
                 {text || "—"}
@@ -76,9 +77,9 @@ export function RiskSignals({ riskMatrix }: RiskSignalsProps) {
           riskMatrix.additional.map((r, i) => (
             <div
               key={`add-${i}`}
-              className="flex items-start gap-2 pl-[18px]"
+              className="flex items-start gap-2 pl-[22px]"
             >
-              <span className="text-[13px] leading-relaxed text-foreground/55">
+              <span className="text-[14px] leading-relaxed text-foreground/55">
                 · {r}
               </span>
             </div>

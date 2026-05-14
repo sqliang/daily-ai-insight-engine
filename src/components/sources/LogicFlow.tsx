@@ -7,26 +7,35 @@ type LogicFlowProps = {
 };
 
 export function LogicFlow({ steps }: LogicFlowProps) {
-  const [expanded, setExpanded] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
 
   if (steps.length === 0) return null;
 
-  if (!expanded) {
+  if (collapsed) {
     return (
       <button
         type="button"
-        onClick={() => setExpanded(true)}
-        className="group w-full text-left"
+        onClick={() => setCollapsed(false)}
+        className="w-full text-left group/btn"
       >
-        <div className="flex items-center gap-2">
-          <span className="text-[12px] font-semibold text-muted/35 uppercase tracking-wider">
-            逻辑链
-          </span>
-          <span className="text-[13px] text-foreground/65 line-clamp-1 flex-1 leading-relaxed">
+        <div className="flex items-center gap-3 py-2 px-3 rounded-lg transition-colors hover:bg-line/30">
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 16 16"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            className="text-muted/30 shrink-0"
+          >
+            <polyline points="4 10 8 6 12 10" />
+          </svg>
+          <span className="text-[13px] text-foreground/60 line-clamp-1 flex-1 leading-relaxed">
             {steps[0]}
           </span>
-          <span className="text-[12px] text-accent shrink-0 font-medium group-hover:underline">
-            展开全部 ({steps.length})
+          <span className="text-[12px] text-accent/60 shrink-0 font-medium group-hover/btn:text-accent">
+            +{steps.length - 1} 步
           </span>
         </div>
       </button>
@@ -37,35 +46,54 @@ export function LogicFlow({ steps }: LogicFlowProps) {
     <div>
       <button
         type="button"
-        onClick={() => setExpanded(false)}
-        className="mb-3 text-[12px] font-semibold text-muted/35 uppercase tracking-wider hover:text-accent transition-colors"
+        onClick={() => setCollapsed(true)}
+        className="flex items-center gap-2 mb-3 text-[12px] font-semibold text-muted/35 hover:text-accent transition-colors uppercase tracking-wider"
       >
-        收起逻辑链
+        <svg
+          width="12"
+          height="12"
+          viewBox="0 0 16 16"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+        >
+          <polyline points="4 6 8 10 12 6" />
+        </svg>
+        收起
       </button>
-      <ol className="relative space-y-2">
+      <ol className="relative">
         <div
-          className="absolute left-[8px] top-2 bottom-2 w-[1.5px]"
+          className="absolute left-[11px] top-3 bottom-3 w-[2px] rounded-full"
           style={{
             background:
-              "linear-gradient(to bottom, var(--line), var(--line) 80%, transparent)",
+              "linear-gradient(to bottom, var(--accent) / 0.25, var(--line) 90%, transparent)",
           }}
         />
-        {steps.map((step, i) => (
-          <li key={i} className="flex items-start gap-3 pl-0.5">
-            <span
-              className="relative z-10 flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full text-[10px] font-bold"
-              style={{
-                backgroundColor: "var(--accent-glow)",
-                color: "var(--accent)",
-              }}
+        {steps.map((step, i) => {
+          const isLast = i === steps.length - 1;
+          const isLastTwo = i >= steps.length - 2;
+          return (
+            <li
+              key={i}
+              className={`flex items-start gap-3.5 ${isLast ? "" : "mb-3"}`}
             >
-              {i + 1}
-            </span>
-            <span className="text-[13px] leading-[1.75] text-foreground/75">
-              {step}
-            </span>
-          </li>
-        ))}
+              <span
+                className="relative z-10 flex h-[24px] w-[24px] shrink-0 items-center justify-center rounded-full text-[11px] font-bold mt-0.5"
+                style={{
+                  backgroundColor: isLastTwo ? "var(--accent-glow)" : "var(--surface)",
+                  color: isLastTwo ? "var(--accent)" : "var(--muted) / 0.6",
+                  border: isLastTwo ? "none" : "1.5px solid var(--line)",
+                }}
+              >
+                {i + 1}
+              </span>
+              <span className={`text-[14px] leading-[1.75] pt-0.5 ${isLastTwo ? "text-foreground/80 font-medium" : "text-foreground/65"}`}>
+                {step}
+              </span>
+            </li>
+          );
+        })}
       </ol>
     </div>
   );

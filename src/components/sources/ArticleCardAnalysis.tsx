@@ -2,7 +2,6 @@ import {
   HYPE_LEVEL_LABELS,
   ACTIONABLE_INSIGHT_LABELS,
 } from "@/lib/data/status";
-import { ImpactScoreBar } from "./ImpactScoreBar";
 import { SentimentIndicator } from "./SentimentIndicator";
 import { RiskSignals } from "./RiskSignals";
 
@@ -27,6 +26,39 @@ type ArticleCardAnalysisProps = {
   marketOpportunities?: string[];
 };
 
+function DimensionCard({
+  label,
+  icon,
+  accentColor,
+  children,
+}: {
+  label: string;
+  icon: React.ReactNode;
+  accentColor: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      className="rounded-xl p-4"
+      style={{ backgroundColor: "var(--surface)" }}
+    >
+      <div className="flex items-center gap-2 mb-3">
+        <div
+          className="flex items-center justify-center w-5 h-5 rounded text-[11px]"
+          style={{
+            backgroundColor: `${accentColor} / 0.1`,
+            color: accentColor,
+          }}
+        >
+          {icon}
+        </div>
+        <span className="text-[13px] font-bold text-foreground/70">{label}</span>
+      </div>
+      {children}
+    </div>
+  );
+}
+
 function ConfidenceBar({
   label,
   level,
@@ -43,22 +75,78 @@ function ConfidenceBar({
         ? "var(--warm)"
         : "var(--muted)";
   return (
-    <div className="flex items-center gap-2">
-      <span className="text-[11px] font-medium text-muted/40 w-10 shrink-0">
+    <div className="flex items-center gap-3">
+      <span className="text-[13px] font-medium text-muted/50 w-12 shrink-0">
         {label}
       </span>
       <div
-        className="h-1.5 flex-1 rounded-full overflow-hidden"
+        className="h-2 flex-1 rounded-full overflow-hidden"
         style={{ backgroundColor: "var(--line)" }}
       >
         <div
-          className="h-full rounded-full"
+          className="h-full rounded-full transition-all"
           style={{ width: `${pct}%`, backgroundColor: color }}
         />
       </div>
-      <span className="text-[11px] font-mono font-medium tabular-nums shrink-0" style={{ color }}>
-        {level}
+      <span className="text-[12px] font-mono font-semibold tabular-nums shrink-0" style={{ color }}>
+        {level === "high" ? "高" : level === "medium" ? "中" : "低"}
       </span>
+    </div>
+  );
+}
+
+function ScoreHero({
+  score,
+  label,
+  reason,
+}: {
+  score: number;
+  label: string;
+  reason?: string;
+}) {
+  const color =
+    score >= 7 ? "var(--cool)" : score >= 4 ? "var(--warm)" : "var(--muted)";
+  const pct = Math.min(Math.max(score * 10, 4), 100);
+
+  return (
+    <div className="flex items-start gap-4">
+      <div
+        className="flex flex-col items-center justify-center w-16 h-16 rounded-xl shrink-0"
+        style={{
+          backgroundColor: `${color} / 0.06`,
+          border: `1.5px solid ${color} / 0.15`,
+        }}
+      >
+        <span
+          className="text-[22px] font-bold font-mono tabular-nums leading-none"
+          style={{ color }}
+        >
+          {score.toFixed(1)}
+        </span>
+        <span className="text-[10px] font-semibold mt-1" style={{ color: `${color} / 0.6` }}>
+          /10
+        </span>
+      </div>
+      <div className="flex-1 min-w-0 pt-1">
+        <div className="text-[13px] font-semibold text-foreground/60 mb-1.5">{label}</div>
+        <div
+          className="h-2.5 rounded-full overflow-hidden"
+          style={{ backgroundColor: "var(--line)" }}
+        >
+          <div
+            className="h-full rounded-full transition-all"
+            style={{
+              width: `${pct}%`,
+              backgroundImage: `linear-gradient(90deg, ${color}, ${color} / 0.6)`,
+            }}
+          />
+        </div>
+        {reason && (
+          <p className="mt-2 text-[13px] leading-[1.7] text-foreground/45 line-clamp-2">
+            {reason}
+          </p>
+        )}
+      </div>
     </div>
   );
 }
@@ -81,55 +169,47 @@ export function ArticleCardAnalysis({
   if (!hasAnalysis) return null;
 
   return (
-    <div
-      className="border-t pt-5 mt-3 space-y-5"
-      style={{ borderColor: "var(--line) / 0.4" }}
-    >
-      {/* ================================================================
-          Qualitative Assessment
-          ================================================================ */}
-      <div
-        className="rounded-xl p-4"
-        style={{ backgroundColor: "var(--surface)" }}
-      >
-        <div className="flex items-center gap-2 mb-3">
-          <div
-            className="w-1 h-4 rounded-full"
-            style={{ backgroundColor: "var(--accent)" }}
+    <div className="space-y-4">
+      {impactScore && (
+        <DimensionCard
+          label="影响力评估"
+          icon={
+            <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <path d="M8 1l2 5h5l-4 3 1.5 5L8 11 3.5 14 5 9 1 6h5z" />
+            </svg>
+          }
+          accentColor="var(--cool)"
+        >
+          <ScoreHero
+            score={impactScore.score}
+            label="影响力评分"
+            reason={impactScore.reason}
           />
-          <span className="text-[12px] font-bold text-muted/50 uppercase tracking-wider">
-            定性评估
-          </span>
-        </div>
+        </DimensionCard>
+      )}
 
+      <DimensionCard
+        label="情绪与 Hype"
+        icon={
+          <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+            <path d="M8 14s-5.5-3.5-5.5-7.5A3.5 3.5 0 018 3.5 3.5 3.5 0 0113.5 6.5C13.5 10.5 8 14 8 14z" />
+          </svg>
+        }
+        accentColor="var(--accent)"
+      >
         <div className="space-y-3">
-          {impactScore && (
-            <div>
-              <ImpactScoreBar
-                score={impactScore.score}
-                label="影响力"
-                reason={impactScore.reason}
-              />
-              {impactScore.reason && (
-                <p className="mt-1.5 ml-[56px] text-[12px] leading-relaxed text-foreground/40 line-clamp-2">
-                  {impactScore.reason}
-                </p>
-              )}
-            </div>
-          )}
-
-          <div className="flex flex-wrap items-center gap-2.5">
+          <div className="flex flex-wrap items-center gap-3">
             {sentiment && <SentimentIndicator sentiment={sentiment} />}
             {hypeAssessment && hypeAssessment.level in HYPE_LEVEL_LABELS && (
               <span
-                className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[12px] font-semibold"
+                className="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-[13px] font-semibold"
                 style={{
                   backgroundColor: `${HYPE_LEVEL_LABELS[hypeAssessment.level].color} / 0.08`,
                   color: HYPE_LEVEL_LABELS[hypeAssessment.level].color,
                 }}
                 title={hypeAssessment.reason}
               >
-                <span className="text-[14px] leading-none">
+                <span className="text-[15px] leading-none">
                   {hypeAssessment.level === "low"
                     ? "◉"
                     : hypeAssessment.level === "medium"
@@ -140,83 +220,74 @@ export function ArticleCardAnalysis({
               </span>
             )}
           </div>
-
-          {developerSentiment && (
-            <p
-              className="text-[13px] leading-relaxed text-foreground/55 pl-3"
-              style={{ borderLeft: "2px solid var(--warm) / 0.2" }}
-            >
-              <span className="font-semibold text-muted/40">
-                开发者情绪
-              </span>
-              <span className="mx-2 text-muted/15">|</span>
-              {developerSentiment.primary_focus}
+          {hypeAssessment?.reason && (
+            <p className="text-[13px] leading-[1.7] text-foreground/45">
+              {hypeAssessment.reason}
             </p>
           )}
-        </div>
-      </div>
-
-      {/* ================================================================
-          Value Network
-          ================================================================ */}
-      {(compoundValue || domainDisruption) && (
-        <div
-          className="rounded-xl p-4"
-          style={{ backgroundColor: "var(--surface)" }}
-        >
-          <div className="flex items-center gap-2 mb-3">
+          {developerSentiment && (
             <div
-              className="w-1 h-4 rounded-full"
-              style={{ backgroundColor: "var(--warm)" }}
-            />
-            <span className="text-[12px] font-bold text-muted/50 uppercase tracking-wider">
-              价值网络
-            </span>
-          </div>
+              className="pl-4 py-2.5 rounded-lg"
+              style={{
+                borderLeft: "3px solid var(--warm) / 0.3",
+                backgroundColor: "var(--warm) / 0.03",
+              }}
+            >
+              <span className="text-[13px] font-semibold text-muted/50">
+                开发者情绪
+              </span>
+              <span className="mx-2 text-muted/20">·</span>
+              <span className="text-[14px] text-foreground/60">
+                {developerSentiment.primary_focus}
+              </span>
+            </div>
+          )}
+        </div>
+      </DimensionCard>
 
-          <div className="space-y-3">
+      {(compoundValue || domainDisruption) && (
+        <DimensionCard
+          label="价值网络"
+          icon={
+            <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <circle cx="8" cy="8" r="6" />
+              <path d="M2 8h12M8 2a9 9 0 014 6 9 9 0 01-4 6 9 9 0 01-4-6 9 9 0 014-6z" />
+            </svg>
+          }
+          accentColor="var(--warm)"
+        >
+          <div className="space-y-4">
             {compoundValue && (
-              <div>
-                <ImpactScoreBar
-                  score={compoundValue.score}
-                  label="复合价值"
-                  reason={compoundValue.reason}
-                />
-                {compoundValue.reason && (
-                  <p className="mt-1.5 ml-[56px] text-[12px] leading-relaxed text-foreground/40 line-clamp-2">
-                    {compoundValue.reason}
-                  </p>
-                )}
-              </div>
+              <ScoreHero
+                score={compoundValue.score}
+                label="复合价值评分"
+                reason={compoundValue.reason}
+              />
             )}
 
             {domainDisruption && (
-              <div className="space-y-2">
-                <div className="flex items-start gap-2.5">
-                  <span
-                    className="inline-flex items-center rounded-md px-2 py-0.5 text-[11px] font-semibold shrink-0 mt-0.5"
-                    style={{
-                      backgroundColor: "var(--accent) / 0.08",
-                      color: "var(--accent)",
-                    }}
-                  >
-                    技术颠覆
-                  </span>
-                  <p className="text-[13px] leading-[1.75] text-foreground/60">
+              <div className="grid grid-cols-1 gap-3">
+                <div
+                  className="p-3 rounded-lg"
+                  style={{
+                    borderLeft: "3px solid var(--accent) / 0.4",
+                    backgroundColor: "var(--accent) / 0.02",
+                  }}
+                >
+                  <div className="text-[12px] font-bold text-accent/60 mb-1.5">技术颠覆</div>
+                  <p className="text-[14px] leading-[1.75] text-foreground/65">
                     {domainDisruption.technical_innovation}
                   </p>
                 </div>
-                <div className="flex items-start gap-2.5">
-                  <span
-                    className="inline-flex items-center rounded-md px-2 py-0.5 text-[11px] font-semibold shrink-0 mt-0.5"
-                    style={{
-                      backgroundColor: "var(--warm) / 0.08",
-                      color: "var(--warm)",
-                    }}
-                  >
-                    商业模式
-                  </span>
-                  <p className="text-[13px] leading-[1.75] text-foreground/60">
+                <div
+                  className="p-3 rounded-lg"
+                  style={{
+                    borderLeft: "3px solid var(--warm) / 0.4",
+                    backgroundColor: "var(--warm) / 0.02",
+                  }}
+                >
+                  <div className="text-[12px] font-bold text-warm/60 mb-1.5">商业模式</div>
+                  <p className="text-[14px] leading-[1.75] text-foreground/65">
                     {domainDisruption.business_model}
                   </p>
                 </div>
@@ -225,72 +296,84 @@ export function ArticleCardAnalysis({
 
             {(keyBeneficiaries && keyBeneficiaries.length > 0) ||
             (competitiveCasualty && competitiveCasualty.length > 0) ? (
-              <div className="flex flex-wrap gap-x-5 gap-y-1.5 pt-1">
+              <div className="grid grid-cols-2 gap-3">
                 {keyBeneficiaries && keyBeneficiaries.length > 0 && (
-                  <div className="flex items-start gap-1.5">
-                    <span className="text-[12px] font-semibold text-positive/60 shrink-0 mt-0.5">
-                      ▲ 受益
-                    </span>
-                    <span className="text-[13px] text-foreground/55 line-clamp-1 leading-relaxed">
-                      {keyBeneficiaries.slice(0, 3).join(" · ")}
-                      {keyBeneficiaries.length > 3 &&
-                        ` +${keyBeneficiaries.length - 3}`}
-                    </span>
+                  <div
+                    className="p-3 rounded-lg"
+                    style={{ backgroundColor: "var(--positive) / 0.03" }}
+                  >
+                    <div className="text-[12px] font-bold text-positive/60 mb-2 flex items-center gap-1.5">
+                      <span>▲</span> 受益方
+                    </div>
+                    <div className="space-y-1">
+                      {keyBeneficiaries.slice(0, 4).map((b, i) => (
+                        <div key={i} className="text-[13px] text-foreground/60 leading-relaxed">
+                          {b}
+                        </div>
+                      ))}
+                      {keyBeneficiaries.length > 4 && (
+                        <div className="text-[12px] text-muted/40">+{keyBeneficiaries.length - 4} 更多</div>
+                      )}
+                    </div>
                   </div>
                 )}
                 {competitiveCasualty && competitiveCasualty.length > 0 && (
-                  <div className="flex items-start gap-1.5">
-                    <span className="text-[12px] font-semibold text-negative/60 shrink-0 mt-0.5">
-                      ▼ 受损
-                    </span>
-                    <span className="text-[13px] text-foreground/55 line-clamp-1 leading-relaxed">
-                      {competitiveCasualty.slice(0, 3).join(" · ")}
-                      {competitiveCasualty.length > 3 &&
-                        ` +${competitiveCasualty.length - 3}`}
-                    </span>
+                  <div
+                    className="p-3 rounded-lg"
+                    style={{ backgroundColor: "var(--negative) / 0.03" }}
+                  >
+                    <div className="text-[12px] font-bold text-negative/60 mb-2 flex items-center gap-1.5">
+                      <span>▼</span> 受损方
+                    </div>
+                    <div className="space-y-1">
+                      {competitiveCasualty.slice(0, 4).map((c, i) => (
+                        <div key={i} className="text-[13px] text-foreground/60 leading-relaxed">
+                          {c}
+                        </div>
+                      ))}
+                      {competitiveCasualty.length > 4 && (
+                        <div className="text-[12px] text-muted/40">+{competitiveCasualty.length - 4} 更多</div>
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
             ) : null}
           </div>
-        </div>
+        </DimensionCard>
       )}
 
-      {/* ================================================================
-          Foresight
-          ================================================================ */}
       {(actionableInsight || riskMatrix || marketOpportunities) && (
-        <div
-          className="rounded-xl p-4"
-          style={{ backgroundColor: "var(--surface)" }}
+        <DimensionCard
+          label="前瞻研判"
+          icon={
+            <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <path d="M2 8l4 4L14 4" />
+            </svg>
+          }
+          accentColor="var(--cool)"
         >
-          <div className="flex items-center gap-2 mb-3">
-            <div
-              className="w-1 h-4 rounded-full"
-              style={{ backgroundColor: "var(--cool)" }}
-            />
-            <span className="text-[12px] font-bold text-muted/50 uppercase tracking-wider">
-              前瞻研判
-            </span>
-          </div>
-
-          <div className="space-y-3">
-            {/* Actionable insight — prominent verdict */}
+          <div className="space-y-4">
             {actionableInsight &&
               actionableInsight in ACTIONABLE_INSIGHT_LABELS && (
-                <div className="flex items-center gap-3">
+                <div
+                  className="flex items-center gap-3 p-3 rounded-lg"
+                  style={{
+                    backgroundColor: `${ACTIONABLE_INSIGHT_LABELS[actionableInsight].color} / 0.04`,
+                  }}
+                >
                   <span
-                    className="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-[13px] font-bold"
+                    className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-[14px] font-bold"
                     style={{
                       backgroundColor: `${ACTIONABLE_INSIGHT_LABELS[actionableInsight].color} / 0.1`,
                       color: ACTIONABLE_INSIGHT_LABELS[actionableInsight].color,
                     }}
                   >
-                    <span className="text-[16px] leading-none">◆</span>
+                    <span className="text-[17px] leading-none">◆</span>
                     {ACTIONABLE_INSIGHT_LABELS[actionableInsight].label}
                   </span>
                   {confidence && (
-                    <span className="text-[11px] text-muted/30 font-mono leading-snug">
+                    <span className="text-[12px] text-muted/35 font-mono leading-snug">
                       {(confidence.impact && `影响 ${confidence.impact}`) ?? ""}
                       {(confidence.compound && ` · 价值 ${confidence.compound}`) ?? ""}
                       {(confidence.hype && ` · hype ${confidence.hype}`) ?? ""}
@@ -299,33 +382,39 @@ export function ArticleCardAnalysis({
                 </div>
               )}
 
-            {/* Confidence bars */}
             {confidence && (
-              <div className="space-y-1.5 ml-1">
+              <div className="space-y-2 ml-1">
                 <ConfidenceBar label="影响" level={confidence.impact} />
                 <ConfidenceBar label="价值" level={confidence.compound} />
                 <ConfidenceBar label="Hype" level={confidence.hype} />
               </div>
             )}
 
-            {/* Market opportunities */}
             {marketOpportunities && marketOpportunities.length > 0 && (
               <div>
-                {marketOpportunities.map((opp, i) => (
-                  <p
-                    key={i}
-                    className="text-[13px] leading-[1.8] text-foreground/55 pl-3.5"
-                    style={{ textIndent: "-0.5rem" }}
-                  >
-                    <span className="text-muted/25 mr-1">→</span> {opp}
-                  </p>
-                ))}
+                <div className="text-[12px] font-bold text-muted/40 uppercase tracking-widest mb-2">
+                  市场机会
+                </div>
+                <div className="space-y-2">
+                  {marketOpportunities.map((opp, i) => (
+                    <div
+                      key={i}
+                      className="flex items-start gap-2.5 p-2.5 rounded-lg"
+                      style={{ backgroundColor: "var(--accent) / 0.02" }}
+                    >
+                      <span className="text-accent/50 mt-0.5 shrink-0">→</span>
+                      <span className="text-[14px] leading-[1.75] text-foreground/60">
+                        {opp}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
 
             <RiskSignals riskMatrix={riskMatrix} />
           </div>
-        </div>
+        </DimensionCard>
       )}
     </div>
   );

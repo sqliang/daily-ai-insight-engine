@@ -19,14 +19,14 @@ export function ImpactScoreBar({
 }: ImpactScoreBarProps) {
   const pct = Math.min(Math.max(score * 10, 4), 100);
   const color = getImpactColor(score);
-  const barH = compact ? "h-1.5" : "h-2.5";
-  const labelSize = compact ? "text-[11px]" : "text-[12px]";
-  const scoreSize = compact ? "text-[13px]" : "text-[14px]";
+  const barH = compact ? "h-2" : "h-3";
+  const labelSize = compact ? "text-[12px]" : "text-[13px]";
+  const scoreSize = compact ? "text-[15px]" : "text-[16px]";
 
   return (
-    <div className="flex items-center gap-2.5" title={reason}>
+    <div className="flex items-center gap-3" title={reason}>
       <span
-        className={`${labelSize} font-medium text-muted/45 w-12 shrink-0 tracking-wide`}
+        className={`${labelSize} font-semibold text-muted/55 w-14 shrink-0 tracking-wide`}
       >
         {label}
       </span>
@@ -34,14 +34,13 @@ export function ImpactScoreBar({
         className={`${barH} flex-1 rounded-full overflow-hidden`}
         style={{
           backgroundColor: "var(--line)",
-          boxShadow: "inset 0 1px 2px oklch(0.18 0.02 260 / 0.06)",
         }}
       >
         <div
-          className={`h-full rounded-full transition-all bg-gradient-to-r`}
+          className="h-full rounded-full transition-all"
           style={{
             width: `${pct}%`,
-            backgroundImage: `linear-gradient(90deg, ${color}, ${color} / 0.7)`,
+            backgroundImage: `linear-gradient(90deg, ${color}, ${color} / 0.65)`,
           }}
         />
       </div>

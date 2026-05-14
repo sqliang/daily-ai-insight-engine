@@ -30,56 +30,75 @@ export function ArticleCardExtraction({
   if (!hasExtraction) return null;
 
   return (
-    <div
-      className="border-t pt-5 mt-3"
-      style={{ borderColor: "var(--line) / 0.4" }}
-    >
-      {/* TL;DR with accent left line */}
+    <div className="space-y-5">
       {tldr && (
         <div
-          className="pl-3 mb-3"
-          style={{ borderLeft: "2px solid var(--accent) / 0.3" }}
+          className="pl-4 py-2 rounded-r-lg"
+          style={{
+            borderLeft: "3px solid var(--accent) / 0.5",
+            backgroundColor: "var(--accent) / 0.02",
+          }}
         >
-          <p className="text-[15px] font-semibold leading-snug text-foreground/85">
+          <div className="text-[11px] font-bold text-accent/50 uppercase tracking-widest mb-1">
+            TL;DR
+          </div>
+          <p className="text-[16px] font-semibold leading-[1.6] text-foreground/85">
             {tldr}
           </p>
         </div>
       )}
 
-      {/* Badges row */}
-      <div className="flex flex-wrap items-center gap-2 mb-3">
+      <div className="flex flex-wrap items-center gap-2.5">
         {eventType && eventType in EVENT_TYPE_LABELS && (
           <span
-            className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[12px] font-medium"
+            className="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-[13px] font-semibold"
             style={{
               backgroundColor: `${EVENT_TYPE_LABELS[eventType].color} / 0.08`,
               color: EVENT_TYPE_LABELS[eventType].color,
             }}
           >
             <span
-              className="h-1.5 w-1.5 rounded-full"
+              className="h-2 w-2 rounded-full"
               style={{ backgroundColor: EVENT_TYPE_LABELS[eventType].color }}
             />
             {EVENT_TYPE_LABELS[eventType].label}
           </span>
         )}
         {epistemicStatus && epistemicStatus in EPISTEMIC_STATUS_LABELS && (
-          <span className="inline-flex items-center rounded-full border border-line/40 px-3 py-1 text-[12px] font-medium text-muted/45">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-line/40 px-3.5 py-1.5 text-[13px] font-medium text-muted/50">
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              className="text-muted/30 shrink-0"
+            >
+              <circle cx="8" cy="8" r="6" />
+              <path d="M8 5v3l2 2" strokeLinecap="round" />
+            </svg>
             {EPISTEMIC_STATUS_LABELS[epistemicStatus]}
           </span>
         )}
       </div>
 
-      {/* Objective summary */}
       {objectiveSummary && (
-        <p className="text-[13px] leading-[1.8] text-foreground/60 mb-4 line-clamp-3">
-          {objectiveSummary}
-        </p>
+        <div className="p-4 rounded-xl" style={{ backgroundColor: "var(--surface)" }}>
+          <div className="text-[12px] font-bold text-muted/40 uppercase tracking-widest mb-2">
+            客观摘要
+          </div>
+          <p className="text-[14px] leading-[1.85] text-foreground/65">
+            {objectiveSummary}
+          </p>
+        </div>
       )}
 
-      {/* Entity chips */}
       {entities && (
-        <div className="mb-4">
+        <div className="p-4 rounded-xl" style={{ backgroundColor: "var(--surface)" }}>
+          <div className="text-[12px] font-bold text-muted/40 uppercase tracking-widest mb-3">
+            实体识别
+          </div>
           <EntityChips
             companies={entities.companies ?? []}
             technologies={entities.technologies ?? []}
@@ -88,9 +107,13 @@ export function ArticleCardExtraction({
         </div>
       )}
 
-      {/* Key logic flow */}
       {keyLogicFlow && keyLogicFlow.length > 0 && (
-        <LogicFlow steps={keyLogicFlow} />
+        <div className="p-4 rounded-xl" style={{ backgroundColor: "var(--surface)" }}>
+          <div className="text-[12px] font-bold text-muted/40 uppercase tracking-widest mb-3">
+            逻辑链
+          </div>
+          <LogicFlow steps={keyLogicFlow} />
+        </div>
       )}
     </div>
   );

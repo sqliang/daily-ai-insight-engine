@@ -7,6 +7,14 @@ type ArticleCardBasicProps = {
   id?: string;
 };
 
+function getDomain(url: string): string {
+  try {
+    return new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return url;
+  }
+}
+
 export function ArticleCardBasic({
   title,
   url,
@@ -17,44 +25,55 @@ export function ArticleCardBasic({
 }: ArticleCardBasicProps) {
   return (
     <div>
-      {/* Title */}
       <a
         href={url}
         target="_blank"
         rel="noopener noreferrer"
-        className="block"
+        className="block group/title"
       >
-        <h3
-          className="text-[18px] font-bold leading-tight text-foreground
-                     group-hover:text-accent transition-colors duration-200"
+        <h2
+          className="text-[20px] font-bold leading-[1.4] text-foreground
+                     group-hover/title:text-accent transition-colors duration-200"
         >
           {title || "无标题"}
-        </h3>
+        </h2>
       </a>
 
-      {/* URL */}
-      <a
-        href={url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="mt-2 block w-full break-all font-mono text-[13px] text-muted/50
-                   hover:text-accent transition-colors duration-200 leading-relaxed"
-      >
-        {url}
-      </a>
+      <div className="mt-2.5 flex items-center gap-2">
+        <a
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 font-mono text-[13px] text-muted/50
+                     hover:text-accent transition-colors duration-200 truncate max-w-[400px]"
+        >
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 16 16"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            className="shrink-0 text-muted/30"
+          >
+            <path d="M6 3H3a1 1 0 00-1 1v9a1 1 0 001 1h9a1 1 0 001-1V9" strokeLinecap="round" />
+            <path d="M8 8l6-6M14 2h-4M14 2v4" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          {getDomain(url)}
+        </a>
+      </div>
 
-      {/* Meta pills */}
-      <div className="mt-3.5 flex flex-wrap items-center gap-2">
+      <div className="mt-4 flex flex-wrap items-center gap-2.5">
         {published && (
-          <span className="inline-flex items-center gap-1 rounded-full border border-line/60 bg-surface px-3 py-1 text-[12px] font-medium text-muted">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-line/50 bg-surface px-3.5 py-1.5 text-[13px] font-medium text-muted/70">
             <svg
-              width="12"
-              height="12"
+              width="13"
+              height="13"
               viewBox="0 0 16 16"
               fill="none"
               stroke="currentColor"
               strokeWidth="1.5"
-              className="text-muted/40 shrink-0"
+              className="text-muted/35 shrink-0"
             >
               <rect x="2" y="3" width="12" height="11" rx="2" />
               <path d="M2 7h12M5 2v3m6-3v3" strokeLinecap="round" />
@@ -63,15 +82,15 @@ export function ArticleCardBasic({
           </span>
         )}
         {author && (
-          <span className="inline-flex items-center gap-1 rounded-full border border-line/60 bg-surface px-3 py-1 text-[12px] font-medium text-muted">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-line/50 bg-surface px-3.5 py-1.5 text-[13px] font-medium text-muted/70">
             <svg
-              width="12"
-              height="12"
+              width="13"
+              height="13"
               viewBox="0 0 16 16"
               fill="none"
               stroke="currentColor"
               strokeWidth="1.5"
-              className="text-muted/40 shrink-0"
+              className="text-muted/35 shrink-0"
             >
               <circle cx="6" cy="5" r="2.5" />
               <path
@@ -84,19 +103,18 @@ export function ArticleCardBasic({
           </span>
         )}
         {id && (
-          <span className="inline-flex items-center gap-1 rounded-full border border-line/40 bg-surface/50 px-3 py-1 text-[11px] font-mono text-muted/30">
+          <span className="inline-flex items-center gap-1 rounded-full border border-line/30 bg-surface/50 px-3 py-1.5 text-[12px] font-mono text-muted/30">
             #{id.slice(0, 12)}
           </span>
         )}
       </div>
 
-      {/* Summary */}
       {summary ? (
-        <p className="mt-4 text-[14px] leading-[1.8] text-foreground/72 line-clamp-3">
+        <p className="mt-5 text-[15px] leading-[1.85] text-foreground/70 line-clamp-4">
           {summary}
         </p>
       ) : (
-        <p className="mt-4 text-[14px] leading-relaxed text-muted/25 italic">
+        <p className="mt-5 text-[15px] leading-relaxed text-muted/25 italic">
           （无摘要）
         </p>
       )}

@@ -11,14 +11,14 @@ export function SentimentIndicator({ sentiment }: SentimentIndicatorProps) {
 
   return (
     <span
-      className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[12px] font-semibold border"
+      className="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-[13px] font-semibold border"
       style={{
         backgroundColor: `${cfg.color} / 0.08`,
         borderColor: `${cfg.color} / 0.2`,
         color: cfg.color,
       }}
     >
-      <span className="text-[14px] leading-none">{cfg.icon}</span>
+      <span className="text-[15px] leading-none">{cfg.icon}</span>
       {cfg.label}
     </span>
   );

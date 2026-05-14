@@ -15,18 +15,18 @@ function ChipGroup({
 }) {
   if (items.length === 0) return null;
   return (
-    <div className="flex items-start gap-2">
+    <div className="flex items-start gap-2.5">
       <span
-        className="text-[12px] font-semibold shrink-0 mt-0.5 tracking-wide"
-        style={{ color: `${color} / 0.55` }}
+        className="text-[13px] font-semibold shrink-0 mt-0.5 tracking-wide"
+        style={{ color: `${color} / 0.6` }}
       >
         {label}
       </span>
-      <div className="flex flex-wrap gap-1.5">
+      <div className="flex flex-wrap gap-2">
         {items.map((item, i) => (
           <span
             key={i}
-            className="inline-block rounded-full px-2.5 py-0.5 text-[11px] font-medium"
+            className="inline-block rounded-full px-3 py-1 text-[12px] font-medium"
             style={{
               backgroundColor: `${color} / 0.06`,
               color,
@@ -53,7 +53,7 @@ export function EntityChips({
     return null;
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-2.5">
       <ChipGroup label="公司" items={companies} color="var(--accent)" />
       <ChipGroup label="技术" items={technologies} color="var(--cool)" />
       <ChipGroup label="人物" items={key_people} color="var(--warm)" />
