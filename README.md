@@ -72,7 +72,8 @@ python pipeline/run.py synthesize     # Stage 4b: 日报合成
 
 ```bash
 pnpm dev
-# 打开 http://localhost:3000 查看日报看板
+# 打开 http://localhost:3000 查看数据源全景（首页）
+# 打开 http://localhost:3000/dashboard 查看日报看板
 # 打开 http://localhost:3000/report 查看完整报告
 ```
 
@@ -84,46 +85,61 @@ pnpm dev
 daily-ai-insight-engine/
 ├── pipeline/                          # Python 离线流水线
 │   ├── run.py                         #   统一 CLI 入口
-│   ├── config.yaml                    #   19 信源 + LLM 参数 + 配额配置
-│   ├── core/                          #   共享工具库 (Agent/文件/枚举/前端/Web)
-│   ├── schemas/                       #   Pydantic 数据模型 (5 个 Schema 文件)
+│   ├── config.yaml                    #   19 信源 + LLM 参数 + 配额 + UI 展示元数据
+│   ├── core/                          #   共享工具库 (Agent/文件/浏览器/Web/ID/代理)
+│   ├── schemas/                       #   Pydantic 数据模型 (4 个 Schema 文件)
 │   ├── ingestion/                     #   Stage 1: 信源采集
+│   │   └── parsers/                   #   专用解析器 (zhihu/tldrai/machine_heart/anthropic)
 │   ├── extraction/                    #   Stage 2: 事实提取
 │   ├── analysis/                      #   Stage 3: 多维深度分析
+│   │   └── prompts/                   #   三维度 System Prompt
 │   └── synthesis/                     #   Stage 4: 聚合 + Editor-in-Chief 合成
+│       └── prompts/                   #   System + User Prompt
 │
 ├── src/                               # Next.js 前端
 │   ├── app/                           #   App Router 页面
-│   │   ├── page.tsx                   #   仪表盘 (直接 readFile daily-report.json)
-│   │   ├── report/page.tsx            #   完整报告 (Markdown 渲染)
-│   │   └── sources/page.tsx           #   信源清单
+│   │   ├── layout.tsx                 #   根布局 (NavBar)
+│   │   ├── page.tsx                   #   数据源全景 (首页, 读取 config.yaml)
+│   │   ├── loading.tsx                #   首页骨架屏
+│   │   ├── dashboard/
+│   │   │   └── page.tsx               #   日报看板 (读取 daily-report.json)
+│   │   ├── report/
+│   │   │   └── page.tsx               #   完整报告 (Markdown 渲染)
+│   │   └── sources/
+│   │       ├── page.tsx               #   重定向到 /
+│   │       ├── loading.tsx            #   数据源页骨架屏
+│   │       └── [name]/
+│   │           └── page.tsx           #   数据源详情页
 │   ├── components/                    #   React 组件
-│   │   ├── dashboard/                 #   看板组件 (Header/KPI/Charts/Signals...)
+│   │   ├── layout/                    #   导航栏 + 页面容器
+│   │   ├── dashboard/                 #   看板组件 (KPI/图表/信号/深度研判/趋势)
 │   │   ├── charts/                    #   图表组件 (Donut/Bar/Radar)
-│   │   ├── report/                    #   Markdown 渲染器
-│   │   └── sources/                   #   信源卡片
+│   │   ├── sources/                   #   数据源组件 (Hero/Grid/Card/ArticleList 等 15 个)
+│   │   └── report/                    #   Markdown 渲染器
 │   └── lib/                           #   工具库
-│       ├── agent/                     #   Zod Schema + Agent 引擎
-│       ├── data/                      #   文件 I/O + 数据加载
-│       └── report/                    #   标签映射 + Markdown 生成
+│       ├── agent/                     #   Zod Schema + Agent 引擎 + 启发式规则
+│       ├── data/                      #   文件 I/O + 数据源加载 + 状态管理 + Tier 标签
+│       └── report/                    #   标签映射 + Markdown 动态生成
 │
 ├── data/                              # 数据产物 (gitignored)
 │   ├── 00_manifest/                   #   URL 清单
 │   ├── 01_raw/                        #   清洗后的纯文本
 │   ├── 02_extracted/                  #   事实提取层
 │   ├── 03_analyzed/                   #   深度分析层
-│   ├── 04_structured/                 #   Frontmatter JSON 聚合
+│   ├── 04_structured/                 #   Frontmatter JSON 聚合 (per-source + all_articles)
 │   └── 05_reports/                    #   最终日报 (daily-report.json + .md)
 │
 ├── docs/                              # 设计文档
 │   ├── 0_整体设计说明.md               #   架构总览
 │   ├── 1_数据源筛选与获取设计说明.md     #   Stage 1 详细设计
 │   ├── 2_Schema设计说明.md             #   Schema 契约设计
-│   └── 3_核心流程设计说明.md           #   Stage 4 核心流程设计
+│   ├── 3_核心流程设计说明.md           #   Stage 4 核心流程设计
+│   ├── 4-system-requirement.md        #   系统需求文档
+│   └── 5_UI设计说明.md                #   前端 UI 设计说明
 │
+├── rename-to-ids.py                   # 辅助脚本: 按 article ID 重命名文件
 └── scripts/                           # 辅助脚本
-    ├── validate-report.ts             #   数据完整性 Zod 校验
-    └── run-pipeline.ts                #   TypeScript 侧流水线脚本
+    └── validate-report.ts             #   数据完整性 Zod 校验
 ```
 
 ---
@@ -132,7 +148,7 @@ daily-ai-insight-engine/
 
 | Tier | 定位 | 信源 | 数量 |
 |------|------|------|------|
-| **A** | 学术 / 技术前沿 | arXiv CS.AI, OpenAI Blog, Google/DeepMind, Anthropic, NVIDIA, HuggingFace | 6 |
+| **A** | 学术 / 技术前沿 | arXiv CS.AI, OpenAI Blog, Google/DeepMind, Anthropic, NVIDIA, HuggingFace (2 个已禁用) | 6 (4 活跃) |
 | **B** | 产品 / 开发者情绪 | Hacker News, Product Hunt, GitHub Trending, Ben's Bites, 知乎 | 5 |
 | **C** | 商业 / 资本动向 | TechCrunch, The Verge, KDnuggets, TLDR AI, 机器之心, 量子位, 36氪 | 8 |
 
@@ -184,6 +200,8 @@ daily-ai-insight-engine/
 
 ![看板截图](./dashboard.png)
 
+![数据源页全貌](./sources-page-full.png)
+
 看板包含：
 - 执行摘要 + KPI 指标卡片（样本量/信源数/语言覆盖）
 - 事件类型 × 情绪分布双 Donut 饼图
@@ -193,6 +211,12 @@ daily-ai-insight-engine/
 - 3 篇深度研判（背景/影响/后续关注）
 - 风险信号 + 机会信号列表（含严重程度标签）
 
+数据源页包含：
+- 深色渐变 Hero Banner（三角顶点卡片 + 统计概览 + 筛选策略）
+- 三级分层 Grid（Tier A/B/C 独立区域，彩色竖条标识）
+- 信源详情卡片（标签/描述/关键词/文章计数）
+- 点击卡片进入详情页，查看该源全部文章
+
 ---
 
 ## 技术栈
@@ -200,11 +224,11 @@ daily-ai-insight-engine/
 | 层 | 技术 |
 |----|------|
 | 流水线语言 | Python 3.11+ (asyncio) |
-| LLM 调用 | `claude-agent-sdk` (Anthropic) — 流式响应 + 指数退避重试 |
+| LLM 调用 | `claude-agent-sdk` (Anthropic) — Sonnet (extract) / Opus (analyze, synthesize) |
 | 数据校验 | Pydantic v2 (Python) + Zod (TypeScript) |
 | 前端框架 | Next.js 16 App Router + Turbopack |
 | 图表 | Recharts + CSS 自定义 |
-| 样式 | Tailwind CSS 4 (深色主题) |
+| 样式 | Tailwind CSS 4 (深色主题, glass morphism) |
 | 抓取 | feedparser, trafilatura, readability-lxml, Playwright |
 | 包管理 | pnpm (前端), uv (Python) |
 
@@ -235,6 +259,8 @@ daily-ai-insight-engine/
 | [数据源筛选与获取设计说明](./docs/1_数据源筛选与获取设计说明.md) | Stage 1 详细设计：Scout/Ingest 流程、四种抓取策略、过滤管线 |
 | [Schema 设计说明](./docs/2_Schema设计说明.md) | Pydantic/Zod 双端 Schema 契约、12 种枚举类型、5 Block 架构 |
 | [核心流程设计说明](./docs/3_核心流程设计说明.md) | Stage 4 详细设计：Prompt 工程、JSON 解析、数据结构桥接 |
+| [系统需求文档](./docs/4-system-requirement.md) | 原始系统需求规格说明 |
+| [UI 设计说明](./docs/5_UI设计说明.md) | 前端组件架构、数据流、设计系统、响应式布局 |
 
 ---
 

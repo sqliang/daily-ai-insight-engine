@@ -50,8 +50,8 @@ flowchart TB
     end
 
     subgraph PageLayer["页面层 (src/app/)"]
-        P1["page.tsx · Dashboard<br/>async Server Component<br/>读 daily-report.json"]
-        P2["sources/page.tsx<br/>async Server Component<br/>getSourcesViewData()"]
+        P1["page.tsx · Sources 首页<br/>async Server Component<br/>getSourcesViewData()"]
+        P2["dashboard/page.tsx · Dashboard<br/>async Server Component<br/>读 daily-report.json"]
         P3["sources/[name]/page.tsx<br/>async Server Component<br/>getSourceDetail(name)"]
         P4["report/page.tsx<br/>async Server Component<br/>读 daily-report.md"]
     end
@@ -64,8 +64,8 @@ flowchart TB
 
     D1 & D2 --> S
     D3 --> F
-    S --> P2 & P3
-    F --> P1
+    S --> P1 & P3
+    F --> P2
     P1 & P2 & P3 & P4 --> ComponentLayer
 ```
 
@@ -270,7 +270,7 @@ rounded-full px-2.5 py-0.5 text-xs font-semibold
 
 ### 5.1 数据源列表页 (Sources Page)
 
-**路由**：`/sources` | **文件**：`src/app/sources/page.tsx`
+**路由**：`/` (首页) | **文件**：`src/app/page.tsx`
 
 #### 5.1.1 页面结构
 
@@ -371,12 +371,13 @@ PageShell
        ├── 描述玻璃面板
        ├── 源站 URL 外链
        └── 统计条: 文章数 + 生成时间
-  └── ArticleCard 列表 (space-y-3)
-       └── ArticleCard
-            ├── 标题 (链接, 新窗口打开)
-            ├── URL (mono)
-            ├── Meta 行: 日期 / 作者
-            └── 摘要段落
+  └── ArticleList (Client Component, "use client")
+       ├── 列表头部: 网格图标 + 文章计数 badge + impact score 排序切换按钮
+       │    └── 排序按钮: 默认排序 | Impact Score ↓ (active/inactive 状态切换)
+       └── ArticleCard 列表 (space-y-3)
+            ├── ArticleCardBasic — 文章标题/日期/作者/摘要
+            ├── ArticleCardExtraction — 事实提取 (event_type/entities/key_logic_flow)
+            └── ArticleCardAnalysis — 深度分析 (impact_score/sentiment/risk)
 ```
 
 #### 5.2.2 数据依赖
@@ -392,7 +393,7 @@ export async function getSourceDetail(name: string): Promise<SourceStatus | null
 
 ### 5.3 Dashboard 看板页
 
-**路由**：`/` | **文件**：`src/app/page.tsx`
+**路由**：`/dashboard` | **文件**：`src/app/dashboard/page.tsx`
 
 数据来源为 `data/05_reports/daily-report.json`（Stage 4b 产出），通过 `src/lib/data/files.ts` 读取并 Zod 校验。详细模块划分参见项目 README 及 `0_整体设计说明.md` 第 8 节。
 
@@ -417,12 +418,22 @@ src/components/
 │   └── PageShell.tsx       # 页面容器 (max-w-7xl, responsive padding)
 │
 ├── sources/
-│   ├── SourcesHero.tsx     # [新建] 数据源页 Banner: 标题 + 三角顶点 + 统计 + 筛选策略
+│   ├── SourcesHero.tsx     # 数据源页 Banner: 标题 + 三角顶点 + 统计 + 筛选策略
 │   ├── SourcesGrid.tsx     # 按 Tier 分组 → 委托 TierSection
-│   ├── TierSection.tsx     # [新建] 单 Tier 区域: 彩色竖条标题 + card grid
+│   ├── TierSection.tsx     # 单 Tier 区域: 彩色竖条标题 + card grid
 │   ├── SourceCard.tsx      # 单源卡片 (条件性 Link / div)
-│   ├── SourceCardSkeleton.tsx  # [新建] 卡片骨架屏 (精确匹配 SourceCard 布局)
-│   └── ArticleCard.tsx     # 单篇文章展示卡片
+│   ├── SourceCardSkeleton.tsx  # 卡片骨架屏 (精确匹配 SourceCard 布局)
+│   ├── ArticleList.tsx     # 文章列表 (Client Component, impact score 排序切换)
+│   ├── ArticleCard.tsx     # 单篇文章展示卡片 (组装 Basic/Extraction/Analysis)
+│   ├── ArticleCardBasic.tsx       # 基础信息子卡片
+│   ├── ArticleCardExtraction.tsx  # 事实提取子卡片
+│   ├── ArticleCardAnalysis.tsx    # 深度分析子卡片
+│   ├── EntityChips.tsx     # 实体标签 chips
+│   ├── ImpactScoreBar.tsx  # 影响力评分可视化条
+│   ├── LogicFlow.tsx       # 关键逻辑脉络展示
+│   ├── RiskSignals.tsx     # 风险信号 badges
+│   ├── SentimentIndicator.tsx  # 情绪指示器
+│   └── StatusBadge.tsx     # 处理状态 badge
 │
 ├── dashboard/
 │   ├── KPISection.tsx      # 4 个 KPI MetricCard
@@ -504,8 +515,9 @@ PageShell                       PageShell
 ### 7.3 Next.js 加载机制
 
 Next.js App Router 通过文件系统约定 `loading.tsx` 自动使用 `<Suspense>` 包裹页面：
-- 首次导航到 `/sources` → 显示 `loading.tsx` → 数据就绪后替换为 `page.tsx`
-- 两个组件结构相同 → 过渡无 layout shift
+- 首次导航到 `/` (首页) → 显示 `src/app/loading.tsx` → 数据就绪后替换为 `page.tsx`
+- 首次导航到 `/dashboard` → 显示 `src/app/dashboard/loading.tsx` → 数据就绪后替换为 `dashboard/page.tsx`
+- 骨架屏与真实页面结构一一对应 → 过渡无 layout shift
 
 ---
 
@@ -515,14 +527,20 @@ Next.js App Router 通过文件系统约定 `loading.tsx` 自动使用 `<Suspens
 
 ```
 src/app/                         # 页面 (Route Handler)
+  page.tsx                       # / — 数据源全景 (首页)
+  loading.tsx                    # 首页骨架屏
+  dashboard/
+    page.tsx                     # /dashboard — 日报看板
+    loading.tsx                  # Dashboard 页骨架屏
+  report/
+    page.tsx                     # /report — 完整 Markdown 报告
   sources/
-    page.tsx                     # /sources — 服务端组件
-    loading.tsx                  # Suspense fallback
+    page.tsx                     # /sources — 重定向到 /
     [name]/
-      page.tsx                   # /sources/[name] — 服务端组件
+      page.tsx                   # /sources/[name] — 数据源详情页
 
 src/components/                  # 可复用组件
-  sources/                       # 按页面域分组
+  sources/                       # 按页面域分组 (15 个组件)
   dashboard/
   charts/
   layout/
@@ -531,10 +549,18 @@ src/components/                  # 可复用组件
 src/lib/
   data/
     sources.ts                   # 数据源数据层 (读 config + manifest)
+    status.ts                    # 处理状态类型 + StructuredArticle schema
     tiers.ts                     # Tier/Type 标签和类型定义
     files.ts                     # 通用 JSON 文件读写 + Zod
-  agent/schema.ts                # Zod Schema (全数据契约)
-  report/labels.ts               # 报告中文标签映射
+    cleaner.ts                   # 文本清洗工具
+  agent/
+    schema.ts                    # Zod Schema (全数据契约)
+    prompts.ts                   # LLM prompt 模板
+    heuristics.ts                # 分析启发式规则
+    index.ts                     # Barrel export
+  report/
+    labels.ts                    # 报告中文标签映射
+    generate-markdown.ts         # JSON → Markdown 动态生成
 ```
 
 ### 8.2 标签映射的单点管理
@@ -601,6 +627,15 @@ export const LANGUAGE_LABELS: Record<string, string> = { ... };
 | `src/components/sources/SourceCard.tsx` | 数据源卡片 |
 | `src/components/sources/SourceCardSkeleton.tsx` | 卡片骨架屏 |
 | `src/components/sources/SourcesGrid.tsx` | Tier 分组 + 委托渲染 |
-| `src/app/sources/page.tsx` | Sources 页面入口 |
-| `src/app/sources/loading.tsx` | Sources 页面骨架屏 |
+| `src/components/sources/ArticleList.tsx` | 文章列表 (Client Component, 排序切换) |
+| `src/components/sources/ArticleCard.tsx` | 文章卡片 (组装子卡片) |
+| `src/components/sources/ImpactScoreBar.tsx` | 影响力评分可视化条 |
+| `src/components/sources/StatusBadge.tsx` | 处理状态 badge |
+| `src/app/page.tsx` | Sources 首页入口 |
+| `src/app/loading.tsx` | Sources 页面骨架屏 |
+| `src/app/dashboard/page.tsx` | Dashboard 看板入口 |
+| `src/app/dashboard/loading.tsx` | Dashboard 页面骨架屏 |
 | `src/app/sources/[name]/page.tsx` | Source 详情页 |
+| `src/lib/data/sources.ts` | 数据源数据层 |
+| `src/lib/data/status.ts` | 处理状态类型定义 |
+| `src/lib/data/tiers.ts` | Tier/Type 标签映射 |
