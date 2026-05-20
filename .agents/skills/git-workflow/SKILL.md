@@ -13,7 +13,7 @@ allowed-tools:
 license: MIT
 metadata:
   author: sqliang
-  version: "1.2.1"
+  version: "1.3.0"
 ---
 
 # Git Workflow
@@ -31,10 +31,40 @@ Invoke this skill whenever the user wants to:
 - Update code after a code review
 - Any git-related task not covered by another skill
 
+## 0. Pre-Action Safety Gate — READ THIS FIRST
+
+**Before ANY commit, push, or destructive operation, you MUST check the current branch:**
+
+```bash
+git branch --show-current
+```
+
+### If current branch is `main` or `master` and the user asks to commit:
+
+**STOP. Do NOT commit on main.** The user may not realize they're on main, or may be new to git. Committing on main pollutes the trunk and makes it impossible to create a clean PR later. Explain clearly:
+
+> "We're currently on `main`. Changes should go through a feature branch and PR to keep the trunk clean. Let me move everything to a new branch first."
+
+Then immediately follow the **Full Branch Creation Flow** (Section 1) to stash changes, create a branch, and pop the stash. Only after the branch is ready, proceed with the commit (Section 2).
+
+**User insists on committing to main after warning:** warn once more that this bypasses review, then follow their instruction. User intent overrides skill rules.
+
+### If current branch is `main` or `master` and the user asks to push:
+
+**REFUSE.** This is non-negotiable. Pushing directly to main skips code review, CI checks, and branch protection — it can break production for the entire team. Respond:
+
+> "I won't push directly to `main`. That branch is protected — all changes must go through pull requests. If you need to get changes onto main, let me create a PR from a feature branch."
+
+There is no exception. If commits were already made on main by mistake, follow the recovery flow (Section 8).
+
+### If already on a feature branch:
+
+Proceed normally. The safety gate is satisfied.
+
 ## Core Principles
 
-- **Clean Trunk**: Never work directly on the main branch. All changes go through feature branches.
-- **Feature Branches**: Each task gets its own branch.
+- **Clean Trunk**: Never work directly on the main branch. Changes always go through feature branches and PRs.
+- **Feature Branches**: Each task gets its own branch. No exceptions — even "small fixes" deserve a branch.
 - **Conventional Commits**: All commit messages follow the Conventional Commits specification.
 - **Linear History**: Use rebase, never merge commits. `git pull --rebase` is the default sync method.
 - **Push Safety**: Run local build and type-check before pushing. Never force-push to main.
@@ -157,10 +187,12 @@ Closes #1
 
 ### Pre-commit Validation
 
-Before committing, verify:
-1. Does the type match the actual changes?
-2. Is the description in imperative mood ("add" not "added", "fix" not "fixed")?
-3. Are only intended files staged? Check with `git diff --cached --stat`.
+Before committing, verify these in order. If any check fails, stop and fix before proceeding:
+
+1. **Branch check**: Run `git branch --show-current`. If the result is `main` or `master`, STOP — return to Section 0 and follow the branch creation flow. Never skip this check, even if the user says "just commit it quickly."
+2. **Staging check**: Are only intended files staged? Run `git diff --cached --stat` to verify. Never commit secrets (`.env`, credentials), large binaries, or unrelated changes.
+3. **Type check**: Does the commit type match the actual changes? (`feat` for features, `fix` for bugs, `chore` for maintenance, etc.)
+4. **Message check**: Is the description in imperative mood ("add" not "added", "fix" not "fixed")?
 
 If the project has commitlint hooks configured, they will auto-validate on commit.
 
@@ -194,10 +226,23 @@ If conflicts occur:
 
 ## 4. Push Safety Protocol
 
+### Mandatory Pre-Push Gate
+
+**Before any push, check the target branch:**
+
+1. Run `git branch --show-current` to see your current branch.
+2. If the result is `main` or `master`: **REFUSE TO PUSH.** The response is always:
+
+   > "I won't push directly to `main`. Pushing to main bypasses code review and can break production. Changes on main must go through a PR from a feature branch."
+
+   If commits were already made on main by mistake, follow Section 8 (Recovery) to migrate them to a feature branch, then push that branch instead.
+
+3. If on a feature branch: proceed with the checks below.
+
 ### Before Pushing
 1. Run the project's build and type-check commands (check CLAUDE.md for the exact commands — e.g., `pnpm typecheck && pnpm build`)
 2. Verify all checks pass
-3. Do a final `git status` to confirm the right changes are staged
+3. Do a final `git status` to confirm the right changes are committed
 
 ### First Push (new branch)
 ```bash
@@ -223,9 +268,6 @@ git push origin <current-branch-name>
 git push --force-with-lease origin <current-branch-name>
 ```
 `--force-with-lease` is the safe force-push: it will refuse if someone else pushed to the same branch. **Never use raw `--force`.**
-
-### Never Push To
-- `main` or `master` directly — always use a PR.
 
 ## 5. Post-Review Commit Hygiene
 
@@ -272,3 +314,49 @@ Use the PR body template from `references/pr-template.md`. Reference the issue w
 ## 7. Code Review Best Practices
 
 For code review guidelines, read `references/code-review.md`. This covers PR requirements, review process, and what to look for.
+
+## 8. Recovery: Fixing Main-Branch Mistakes
+
+If commits were accidentally made on `main` (either in this session or a previous one), do NOT push them. Recover with one of the following flows.
+
+### Case A: Commits on main, NOT pushed to remote
+
+Move the commits to a feature branch and rewind main:
+
+```bash
+# 1. Create a feature branch at the current position (captures the commits)
+git branch feature/recover-<description>
+
+# 2. Rewind main to match the remote (removes commits from main)
+git reset --hard origin/main
+
+# 3. Switch to the feature branch
+git checkout feature/recover-<description>
+
+# 4. Verify the commits are now on the feature branch
+git log --oneline -5
+
+# 5. Continue with normal workflow — commit more, push, create PR
+```
+
+### Case B: Commits on main, ALREADY pushed to remote
+
+This is more serious — the commits are visible to the team. Options in order of preference:
+
+**Option 1: Revert (safest for shared branches)**
+```bash
+git revert HEAD~<N>..HEAD --no-edit  # revert the last N commits
+git push origin main
+```
+Then create a feature branch and re-apply the changes properly.
+
+**Option 2: Force push (only if you're SURE no one else has pulled)**
+```bash
+git reset --hard HEAD~<N>             # remove the last N commits locally
+git push --force-with-lease origin main
+```
+**Warn the user about the risks before force-pushing to main.**
+
+### Prevention
+
+The safety gates in Section 0, Section 2, and Section 4 exist to prevent this situation entirely. If you're reading Section 8 because those gates failed, the gates need to be stronger — consider updating this skill.
