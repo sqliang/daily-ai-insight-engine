@@ -12,28 +12,17 @@ pipeline:
   version: "1.0.0"
 
   data_dirs:
+    manifest: "data/00_manifest"
     raw: "data/01_raw"
     processed: "data/02_processed"
     extracted: "data/02_extracted"
     structured: "data/03_structured"
+    analyzed: "data/03_analyzed"
+    synthesize_structured: "data/04_structured"
     reports: "data/05_reports"
 
-# =============================================================================
-# 黄金三角分类元数据 (前端展示用, 流水线忽略)
-# =============================================================================
-tiers_meta:
-  A:
-    label: "技术与前沿"
-    subtitle: "学术论文 & 官方技术博客 — 代表技术最前沿与基础研究信号"
-    rationale: "最高信噪比的第一手技术信息。arXiv 提供未经修饰的学术前沿，顶级 AI 实验室（OpenAI、Anthropic、Google、NVIDIA、Hugging Face）的官方博客提供第一手产品发布和研究突破。这类源的共同特点是技术深度高、商业化包装少，是 AI 情报的「原材料」。"
-  B:
-    label: "产品与开发者"
-    subtitle: "社区讨论 & 开发者情绪 — 反映产品落地热度与开发者真实反馈"
-    rationale: "开发者社区的实时情绪温度计。Hacker News 和 GitHub Trending 反映一线开发者关注什么、在建造什么；Product Hunt 展示新产品的市场接受度；Ben's Bites 提供资深 AI 观察者的策展视角；知乎覆盖中文技术社区的讨论热点。开发者情绪通常领先资本动向 3–6 个月，是预判产业方向的先行指标。"
-  C:
-    label: "商业与资本"
-    subtitle: "科技媒体 & 行业报道 — 捕捉商业落地、资本动向与产业趋势"
-    rationale: "商业化进程的完整记录。西方科技媒体（TechCrunch、The Verge）追踪融资、收购和产品发布；TLDR AI 和 KDnuggets 提供行业聚合与技术教程；中文 AI 媒体（机器之心、量子位、36氪）覆盖中国 AI 产业动态。这类源回答「技术有什么用、谁在买单」的问题，构成情报三角的商业底座。"
+  # 去重状态文件路径（相对项目根目录）
+  state_file: "data/state.json"
 
 # =============================================================================
 # 数据源配置
@@ -76,6 +65,7 @@ sources:
         - "fine-tuning"
         - "benchmark"
       max_age_hours: 48
+    limit: 15  # arxiv cs.AI 日均 400+ 篇, 关键词命中率近 100%, 必须限流
     truncation:
       mode: abstract_only
     target_dir: "arxiv"
@@ -132,15 +122,8 @@ sources:
     language: en
     fetch_strategy: scrape
     filter:
-      keywords:
-        - "Claude"
-        - "safety"
-        - "alignment"
-        - "constitutional"
-        - "agent"
-        - "enterprise"
-        - "API"
-      max_age_hours: 72
+      keywords: []  # Anthropic 官方博客内容均与 AI 强相关，不做关键词过滤
+      max_age_hours: 168  # Anthropic 发布频率低, 从 72h 放宽到 7 天
     truncation:
       mode: first_n_chars
       limit: 3000
@@ -334,7 +317,7 @@ sources:
     enabled: true
     display_name: "知乎"
     description: "知乎发现页热门 (浏览器渲染，通过关键字过滤 AI 内容)"
-    display_description: "知乎发现页 AI 相关内容，通过 Chrome 浏览器渲染获取动态加载内容。关键词过滤大模型、Agent、深度学习等热门话题，覆盖中文技术社区讨论热点与开发者情绪。"
+    display_description: "知乎热榜 AI 相关内容，通过 Chrome 浏览器渲染获取动态加载内容。关键词过滤大模型、Agent、深度学习等热门话题，覆盖中文技术社区讨论热点与开发者情绪。"
     url: "https://www.zhihu.com/explore"
     language: zh
     fetch_strategy: browser
@@ -458,29 +441,135 @@ sources:
       limit: 5000
     target_dir: "tldrai"
 
-  - name: "machine-heart"
-    type: news_media
-    tier: C
+  # machine-heart 已移除: jiqizhixin.com 网站改版为数据服务营销页，不再展示文章列表
+
+  - name: "importai"
+    type: newsletter_rss
+    tier: B
     enabled: true
-    display_name: "机器之心"
-    description: "机器之心 - 中国 AI 产业媒体 (浏览器渲染)"
-    display_description: "机器之心（jiqizhixin.com）— 中国 AI 产业头部媒体。关注大模型、AI 芯片、融资、开源动态，通过浏览器渲染获取中文 AI 产业完整内容。"
-    url: "https://www.jiqizhixin.com/"
-    language: zh
-    fetch_strategy: browser
-    wait_for: ".article-item"
+    display_name: "Import AI"
+    description: "Import AI (Jack Clark) — AI 行业周刊"
+    display_description: "Jack Clark（Anthropic 联合创始人）撰写的 AI 行业周刊，深度分析 AI 技术趋势、政策与产业动态。每周一期，内容精炼，视角独特。"
+    url: "https://importai.substack.com/feed"
+    language: en
+    fetch_strategy: rss
+    filter:
+      keywords: []  # 周刊内容精炼, 全部 AI 相关
+      max_age_hours: 168  # 周刊, 7 天窗口
+    limit: 3
+    truncation:
+      mode: first_n_chars
+      limit: 3000
+
+  - name: "nlp-elvis"
+    type: newsletter_rss
+    tier: B
+    enabled: true
+    display_name: "NLP Newsletter"
+    description: "NLP Newsletter (Elvis Saravia) — NLP 技术周报"
+    display_description: "Elvis Saravia 整理的 NLP 领域技术周报，涵盖大模型训练、推理优化、多语言 NLP、评测基准等前沿技术话题。"
+    url: "https://nlp.elvissaravia.com/feed"
+    language: en
+    fetch_strategy: rss
+    filter:
+      keywords: []  # NLP 技术内容全部相关
+      max_age_hours: 168
+    limit: 5
+    truncation:
+      mode: first_n_chars
+      limit: 3000
+
+  - name: "interconnects"
+    type: newsletter_rss
+    tier: A
+    enabled: true
+    display_name: "Interconnects"
+    description: "Interconnects (Nathan Lambert) — AI 政策与研究评论"
+    display_description: "Nathan Lambert（Allen Institute for AI）撰写的 AI 政策与研究深度评论，聚焦 RLHF、对齐、开源 AI 治理等前沿交叉话题。"
+    url: "https://www.interconnects.ai/feed"
+    language: en
+    fetch_strategy: rss
+    filter:
+      keywords: []
+      max_age_hours: 168
+    limit: 5
+    truncation:
+      mode: first_n_chars
+      limit: 3000
+
+  - name: "whytryai"
+    type: newsletter_rss
+    tier: B
+    enabled: true
+    display_name: "Why Try AI"
+    description: "Why Try AI — AI 工具与产品评测"
+    display_description: "Why Try AI 独立评测 AI 工具与产品，用实际案例展示新 AI 工具的用途与效果，帮助读者发现实用的 AI 应用。"
+    url: "https://www.whytryai.com/feed"
+    language: en
+    fetch_strategy: rss
     filter:
       keywords:
-        - "大模型"
         - "AI"
-        - "融资"
-        - "Agent"
-        - "开源"
-        - "芯片"
-        - "应用"
+        - "tool"
+        - "model"
         - "GPT"
-        - "Claude"
-      max_age_hours: 72
+        - "agent"
+      max_age_hours: 168
+    limit: 3
+    truncation:
+      mode: first_n_chars
+      limit: 3000
+
+  - name: "therundown"
+    type: newsletter_rss
+    tier: C
+    enabled: true
+    display_name: "The Rundown AI"
+    description: "The Rundown AI — AI 行业日报"
+    display_description: "全球订阅量最大的 AI 日报之一，每日精选 AI 领域最重要的新闻、工具发布和行业动态，通过 Beehiiv RSS 获取。"
+    url: "https://rss.beehiiv.com/feeds/2R3C6Bt5wj.xml"
+    language: en
+    fetch_strategy: rss
+    filter:
+      keywords: []
+      max_age_hours: 48
+    limit: 5
+    truncation:
+      mode: first_n_chars
+      limit: 3000
+
+  - name: "theneuron"
+    type: newsletter_rss
+    tier: C
+    enabled: true
+    display_name: "The Neuron Daily"
+    description: "The Neuron Daily — AI 新闻日刊"
+    display_description: "AI 新闻日刊，每日精选 AI 行业要闻与工具推荐，语言轻松但有深度，与 The Rundown 互补覆盖 AI 日报赛道。"
+    url: "https://rss.beehiiv.com/feeds/N4eCstxvgX.xml"
+    language: en
+    fetch_strategy: rss
+    filter:
+      keywords: []
+      max_age_hours: 48
+    limit: 5
+    truncation:
+      mode: first_n_chars
+      limit: 3000
+
+  - name: "oneusefulthing"
+    type: newsletter_rss
+    tier: A
+    enabled: true
+    display_name: "One Useful Thing"
+    description: "One Useful Thing (Ethan Mollick) — AI + 商业学术视角"
+    display_description: "沃顿商学院 Ethan Mollick 教授的 AI 专栏，从学术视角分析 AI 对商业、教育和工作的实际影响，以严谨研究为基础，写作通俗易懂。"
+    url: "https://www.oneusefulthing.org/feed"
+    language: en
+    fetch_strategy: rss
+    filter:
+      keywords: []
+      max_age_hours: 720  # Ethan Mollick 发布频率低 (月更), 需要 30 天窗口
+    limit: 5
     truncation:
       mode: first_n_chars
       limit: 3000

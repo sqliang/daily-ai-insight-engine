@@ -126,6 +126,7 @@ export interface EnrichedSourceDetail {
 
 const MANIFEST_DIR = join(process.cwd(), "data/00_manifest");
 const CONFIG_PATH = join(process.cwd(), "pipeline/config.yaml");
+const TIERS_PATH = join(process.cwd(), "pipeline/tiers.yaml");
 
 async function getSourceConfigs(): Promise<SourceConfig[]> {
   const raw = await readFile(CONFIG_PATH, "utf8");
@@ -341,9 +342,9 @@ export async function getSourceDetailEnriched(
 }
 
 export async function getTiersMeta(): Promise<Record<string, TierMeta>> {
-  const raw = await readFile(CONFIG_PATH, "utf8");
-  const config = parseYaml(raw);
-  return (config?.tiers_meta ?? {}) as Record<string, TierMeta>;
+  const raw = await readFile(TIERS_PATH, "utf8");
+  const tiers = parseYaml(raw);
+  return (tiers ?? {}) as Record<string, TierMeta>;
 }
 
 export interface SourcesViewData {

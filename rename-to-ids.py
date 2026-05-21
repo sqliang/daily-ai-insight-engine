@@ -1,9 +1,14 @@
-"""一次性脚本：将 data/01_raw, 02_extracted, 03_analyzed 下的序号 .md 文件重命名为 {id}.md"""
+"""
+一次性脚本：将 data/01_raw, 02_extracted, 03_analyzed 下的序号 .md 文件重命名为 {id}.md
+
+路径配置从 config.yaml 的 pipeline.data_dirs 读取。
+"""
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+from pipeline.core.file_utils import resolve_data_dir
 from pipeline.core.frontmatter_utils import read_frontmatter
 
 
@@ -30,14 +35,12 @@ def rename_dir(base: Path) -> int:
 
 
 def main():
-    project = Path(__file__).resolve().parent
-
-    for dir_name in ["01_raw", "02_extracted", "03_analyzed"]:
-        base = project / "data" / dir_name
+    for dir_key in ["raw", "extracted", "analyzed"]:
+        base = resolve_data_dir(dir_key)
         if not base.exists():
-            print(f"\n{dir_name}/ 不存在，跳过")
+            print(f"\n{dir_key}/ 不存在，跳过")
             continue
-        print(f"\n=== {dir_name}/ ===")
+        print(f"\n=== {dir_key}/ ===")
         n = rename_dir(base)
         print(f"共重命名 {n} 个文件")
 

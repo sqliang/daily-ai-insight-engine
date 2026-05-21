@@ -1,32 +1,27 @@
 """
-Step 2: 正文抓取与 Markdown 生成 (Ingest)
+pipeline/ingestion/ingest/orchestrator.py — Stage 1b 正文抓取业务逻辑
 
-读取 data/00_manifest/ 中的 JSON 清单 → 逐篇抓取网页正文并提取为干净 Markdown →
-写入 data/01_raw/{source}/{id}.md，附带标准 YAML frontmatter。
+负责从 manifest 清单读取文章 URL，逐篇抓取正文并写入 .md 文件。
+提供 run_ingest() 主编排函数，被 cli.py 消费。
 
-特性：
-- URL 去重：通过 data/state.json 记录已抓取的文章 ID (SHA-256)，避免重复抓取
-- 断点续传：已抓取的文章自动跳过
-- ID 贯穿：从 00_manifest 读取预生成的 id，写入 frontmatter 实现跨阶段追踪
-- 按源配置的 truncation 规则裁剪正文长度
-- 原子写入：每篇 .md 文件通过临时文件 + rename 写入
+设计理由:
+    将业务逻辑与 CLI 契约分离到不同文件，遵循 scout 包结构模式。
 """
 
-import argparse
 import sys
 from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set
 
 # 确保项目根目录在 sys.path 中，支持从任意目录运行
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent.parent))
 
 from pipeline.core.config_loader import get_source_by_name
 from pipeline.core.file_utils import (
     ensure_dir,
-    get_project_root,
     read_json,
     resolve_data_dir,
+    resolve_state_file,
     write_json,
 )
 from pipeline.core.frontmatter_utils import build_ingestion_frontmatter, write_frontmatter
@@ -35,6 +30,7 @@ from pipeline.core.web_utils import extract_article_content, extract_metadata, f
 
 
 def _ensure_browser_session():
+    """创建浏览器会话，仅在需要 browser fetch_strategy 时调用。"""
     from pipeline.core.browser_utils import BrowserSession
     return BrowserSession()
 
@@ -42,9 +38,13 @@ def _ensure_browser_session():
 def run_ingest(manifest_name: Optional[str] = None, force: bool = False) -> List[Path]:
     """
     主入口：读取清单文件，抓取正文，生成 .md 文件。
-    manifest_name: 指定清单文件名 (不含路径)，为 None 时处理今日所有清单。
-    force: 忽略去重状态，强制重新抓取。
-    返回生成的文件路径列表。
+
+    参数:
+        manifest_name: 指定清单文件名 (不含路径)，为 None 时处理今日所有清单。
+        force: 忽略去重状态，强制重新抓取。
+
+    返回:
+        生成的文件路径列表。
     """
     today_str = date.today().isoformat()
     manifest_dir = resolve_data_dir("manifest")
@@ -57,7 +57,7 @@ def run_ingest(manifest_name: Optional[str] = None, force: bool = False) -> List
         manifest_paths = sorted(manifest_dir.glob(f"*_{today_str}.json"))
 
     if not manifest_paths:
-        print("未找到清单文件，请先运行 scout.py")
+        print("未找到清单文件，请先运行 scout")
         return []
 
     # 加载去重状态
@@ -155,8 +155,11 @@ def run_ingest(manifest_name: Optional[str] = None, force: bool = False) -> List
 def _ingest_one(article: dict, source_config: dict, browser_session=None) -> Optional[dict]:
     """
     抓取单篇文章：获取 HTML → 提取元数据 → 提取正文。
+
     当 source 的 fetch_strategy 为 browser 时，使用 Playwright 获取渲染后 HTML。
-    返回 {"title", "author", "published", "description", "content"} 或 None。
+
+    返回:
+        {"title", "author", "published", "description", "content"} 或 None。
     """
     url = article.get("url", "")
     timeout = source_config.get("timeout", 30)
@@ -200,10 +203,11 @@ def _ingest_one(article: dict, source_config: dict, browser_session=None) -> Opt
 def _apply_truncation(body: str, source_config: dict) -> str:
     """
     按源配置的 truncation 规则裁剪正文长度。
+
     支持三种模式:
-    - first_n_chars: 保留前 N 个字符
-    - abstract_only: 仅保留摘要段 (以 '> Abstract' 开头的块引用)
-    - none: 不裁剪
+        - first_n_chars: 保留前 N 个字符
+        - abstract_only: 仅保留摘要段 (以 '> Abstract' 开头的块引用)
+        - none: 不裁剪
     """
     trunc = source_config.get("truncation", {})
     mode = trunc.get("mode", "first_n_chars")
@@ -245,8 +249,8 @@ def _apply_truncation(body: str, source_config: dict) -> str:
 # ================================================================
 
 def _get_state_path() -> Path:
-    """去重状态文件路径。"""
-    return get_project_root() / "data" / "state.json"
+    """去重状态文件路径（从 config.yaml 读取）。"""
+    return resolve_state_file()
 
 
 def _load_state() -> dict:
@@ -274,21 +278,3 @@ def _load_state() -> dict:
 def _save_state(state: dict) -> None:
     """持久化去重状态。"""
     write_json(_get_state_path(), state)
-
-
-# ================================================================
-# CLI 入口
-# ================================================================
-
-def main():
-    parser = argparse.ArgumentParser(description="Stage 1 Ingest: 正文抓取")
-    parser.add_argument("--manifest", type=str, default=None, help="指定清单文件名 (不含路径)")
-    parser.add_argument("--force", action="store_true", help="强制重新抓取，忽略去重状态")
-    args = parser.parse_args()
-
-    print("=== Stage 1 Ingest: 正文抓取与 Markdown 生成 ===\n")
-    run_ingest(manifest_name=args.manifest, force=args.force)
-
-
-if __name__ == "__main__":
-    main()

@@ -186,54 +186,5 @@ def aggregate_frontmatter(
     }
 
 
-# =============================================================================
-# CLI 入口
-# =============================================================================
 
 
-def main(argv: Optional[list[str]] = None) -> int:
-    """Stage 4a CLI 入口，由 pipeline/run.py 的 aggregate 子命令调用。"""
-    import argparse
-
-    parser = argparse.ArgumentParser(
-        description="Stage 4a: 提取 Frontmatter 并聚合为结构化 JSON",
-    )
-    parser.add_argument(
-        "--input", "-i", type=str, default=None,
-        help="输入目录 (默认: data/03_analyzed/)",
-    )
-    parser.add_argument(
-        "--output", "-o", type=str, default=None,
-        help="输出目录 (默认: data/04_structured/)",
-    )
-    parser.add_argument(
-        "--dry-run", action="store_true",
-        help="仅列出文件，不实际写入",
-    )
-
-    args = parser.parse_args(argv)
-
-    input_dir = Path(args.input) if args.input else None
-    output_dir = Path(args.output) if args.output else None
-
-    try:
-        result = aggregate_frontmatter(
-            input_dir=input_dir,
-            output_dir=output_dir,
-            dry_run=args.dry_run,
-        )
-
-        if args.dry_run:
-            return 0
-
-        print(f"\n=== 聚合完成 ===")
-        print(f"  总文章数: {result['total_articles']}")
-        for source, count in result["sources"].items():
-            print(f"    {source}: {count}")
-        if result["errors"]:
-            print(f"  跳过/错误: {result['errors']}")
-        return 0
-
-    except Exception as exc:
-        print(f"\n聚合失败: {exc}")
-        return 1

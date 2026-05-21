@@ -33,6 +33,16 @@ def get_pipeline_config() -> Dict[str, Any]:
     return load_config().get("pipeline", {})
 
 
+def get_data_dirs() -> Dict[str, str]:
+    """返回 pipeline.data_dirs 配置字典 (key → 相对路径字符串)。"""
+    return get_pipeline_config().get("data_dirs", {})
+
+
+def get_state_file_path() -> str:
+    """返回 state.json 文件的相对路径（自项目根目录）。"""
+    return get_pipeline_config().get("state_file", "data/state.json")
+
+
 def get_sources(tier: Optional[str] = None, enabled_only: bool = True) -> List[Dict[str, Any]]:
     """
     获取数据源列表。

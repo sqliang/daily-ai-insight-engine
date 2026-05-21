@@ -22,7 +22,7 @@ pipeline/
 │   ├── deep_analysis.py     #   Qualitative/Value/Foresight 三维评估模型
 │   └── daily_ai_insight.py  #   DailyAIInsight 顶层聚合模型
 ├── ingestion/               # Stage 1: 数据筛选与获取 ✅
-│   ├── scout.py             #   Step 1 — 生成 URL 清单 → data/00_manifest/
+│   ├── scout/                 #   Step 1 — 生成 URL 清单 → data/00_manifest/
 │   └── ingest.py            #   Step 2 — 抓取正文 → data/01_raw/{source}/*.md
 ├── extraction/              # Stage 2: 事实抽取 (待实现)
 ├── deep-analysis/           # Stage 3: 深度分析 (待实现)
@@ -101,7 +101,7 @@ python -m pipeline.ingestion.ingest --force
 config.yaml
     │
     ▼
-scout.py  ──RSS/API 抓取──▶  data/00_manifest/{source}_{date}.json
+scout/  ──RSS/API 抓取──▶  data/00_manifest/{source}_{date}.json
     │                            (轻量级 URL 清单，断点续传)
     ▼
 ingest.py ──正文抽取──────▶  data/01_raw/{source}/01.md

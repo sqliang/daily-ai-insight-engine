@@ -10,8 +10,10 @@ import os
 import shutil
 import tempfile
 from pathlib import Path
-from typing import Any, List, Optional
+from typing import Any, Dict, List, Optional
 
+# 缓存从 config.yaml 解析的数据目录映射，避免每次调用 resolve_data_dir 都重新加载
+_data_dir_mapping_cache: Optional[Dict[str, Path]] = None
 
 def get_project_root() -> Path:
     """从当前文件位置向上推导项目根目录 (daily-ai-insight-engine/)。"""
@@ -80,25 +82,94 @@ def get_next_sequence_number(target_dir: Path) -> int:
     return max_num + 1
 
 
+def _build_data_dir_mapping(project: Path) -> Dict[str, Path]:
+    """
+    构建 stage_key → Path 映射。
+
+    优先从 config.yaml 的 pipeline.data_dirs 读取路径配置，
+    缺失的键回退到硬编码默认值。使用延迟导入避免与 config_loader 的循环导入。
+
+    设计理由：
+        config_loader.py 模块级导入了本模块的 get_project_root，
+        因此本模块不能在模块级导入 config_loader，只能在函数体内延迟导入。
+    """
+    # 硬编码默认值 — 当 config.yaml 不可用时作为兜底
+    defaults: Dict[str, Path] = {
+        "manifest":               project / "data" / "00_manifest",
+        "raw":                    project / "data" / "01_raw",
+        "processed":              project / "data" / "02_processed",
+        "extracted":              project / "data" / "02_extracted",
+        "structured":             project / "data" / "03_structured",
+        "analyzed":               project / "data" / "03_analyzed",
+        "synthesize_structured":  project / "data" / "04_structured",
+        "reports":                project / "data" / "05_reports",
+    }
+
+    try:
+        from pipeline.core.config_loader import load_config
+
+        config = load_config()
+        data_dirs = config.get("pipeline", {}).get("data_dirs", {})
+        if not data_dirs:
+            return defaults
+
+        # 以 config 为准，config 中缺失的键用默认值补齐
+        merged: Dict[str, Path] = {}
+        for key in defaults:
+            cfg_path = data_dirs.get(key)
+            if cfg_path is not None:
+                merged[key] = project / cfg_path.strip("/")
+            else:
+                merged[key] = defaults[key]
+        return merged
+    except Exception:
+        # config.yaml 缺失或格式错误时，回退到硬编码默认值
+        return defaults
+
+
 def resolve_data_dir(stage_key: str) -> Path:
     """
-    解析数据目录路径。
+    解析数据目录路径（从 config.yaml 的 pipeline.data_dirs 读取）。
+
     stage_key 可选: manifest, raw, processed, extracted, structured,
                     analyzed, synthesize_structured, reports
+
+    返回的目录路径保证存在（不存在则自动创建）。
     """
+    global _data_dir_mapping_cache
     project = get_project_root()
-    key_to_path = {
-        "manifest": project / "data" / "00_manifest",
-        "raw": project / "data" / "01_raw",
-        "processed": project / "data" / "02_processed",
-        "extracted": project / "data" / "02_extracted",
-        "structured": project / "data" / "03_structured",
-        "analyzed": project / "data" / "03_analyzed",
-        "synthesize_structured": project / "data" / "04_structured",
-        "reports": project / "data" / "05_reports",
-    }
-    path = key_to_path.get(stage_key)
+
+    if _data_dir_mapping_cache is None:
+        _data_dir_mapping_cache = _build_data_dir_mapping(project)
+
+    path = _data_dir_mapping_cache.get(stage_key)
     if path is None:
-        raise ValueError(f"未知数据层: {stage_key}，可选值: {list(key_to_path.keys())}")
+        raise ValueError(
+            f"未知数据层: {stage_key}，可选值: {list(_data_dir_mapping_cache.keys())}"
+        )
     ensure_dir(path)
     return path
+
+
+def resolve_state_file() -> Path:
+    """
+    解析去重状态文件路径（从 config.yaml 的 pipeline.state_file 读取）。
+
+    返回的父目录路径保证存在（不存在则自动创建）。
+
+    设计理由：
+        独立于 resolve_data_dir() 是因为 state.json 是一个文件而非目录，
+        路径需要不同的处理逻辑（确保父目录存在而非目录本身）。
+    """
+    project = get_project_root()
+
+    try:
+        from pipeline.core.config_loader import load_config
+
+        config = load_config()
+        state_rel = config.get("pipeline", {}).get("state_file", "data/state.json")
+        path = project / state_rel.strip("/")
+        ensure_dir(path.parent)
+        return path
+    except Exception:
+        return project / "data" / "state.json"

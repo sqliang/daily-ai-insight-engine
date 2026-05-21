@@ -225,9 +225,12 @@ async def run_extraction(
     extracted_base_dir = resolve_data_dir("extracted")
 
     if input_path is None:
-        # 从 config 读取或使用默认
-        input_dir_str = stage_config.get("input_dir", "data/01_raw")
-        input_path = project_root / input_dir_str
+        # 优先从 per-stage config 读取，回退到 data_dirs.raw
+        input_dir_str = stage_config.get("input_dir")
+        if input_dir_str:
+            input_path = project_root / input_dir_str
+        else:
+            input_path = resolve_data_dir("raw")
 
     # --- 发现文件 ---
     file_paths, input_base_dir = discover_files(input_path)
@@ -314,123 +317,3 @@ async def run_extraction(
     return results
 
 
-# =============================================================================
-# 同步 CLI 入口
-# =============================================================================
-
-def main(argv: Optional[list[str]] = None) -> int:
-    """
-    Stage 2 Extraction 同步 CLI 入口。
-
-    通过 argparse 解析命令行参数，然后调用 asyncio.run(run_extraction(...))。
-    此函数被 pipeline/run.py 的 extract 子命令调用。
-
-    参数：
-        argv: 命令行参数列表（None 时使用 sys.argv[1:]）
-
-    返回：
-        0 表示成功，1 表示失败
-    """
-    import argparse
-
-    parser = argparse.ArgumentParser(
-        description="Stage 2 Extract: 元信息与事实提取",
-    )
-    parser.add_argument(
-        "--input", "-i",
-        type=str,
-        default=None,
-        help="输入 .md 文件或目录路径 (默认: data/01_raw/)",
-    )
-    parser.add_argument(
-        "--concurrency", "-c",
-        type=int,
-        default=None,
-        help="并发 Agent 调用数 (默认: 从 config.yaml 读取，5)",
-    )
-    parser.add_argument(
-        "--stage",
-        choices=["base_info", "fact_extraction", "all"],
-        default="all",
-        help="只运行指定子阶段 (默认: all)",
-    )
-    parser.add_argument(
-        "--skip-existing",
-        action="store_true",
-        default=True,
-        help="跳过已提取的文件 (默认: 启用)",
-    )
-    parser.add_argument(
-        "--force",
-        action="store_true",
-        help="强制重新提取所有字段 (忽略 skip-existing)",
-    )
-    parser.add_argument(
-        "--dry-run",
-        action="store_true",
-        help="只列出将处理的文件，不实际调用 LLM",
-    )
-    parser.add_argument(
-        "--model", "-m",
-        type=str,
-        default=None,
-        help="LLM 模型名称 (默认: 从 config.yaml 读取)",
-    )
-    parser.add_argument(
-        "--verbose", "-v",
-        action="store_true",
-        help="详细日志输出",
-    )
-
-    args = parser.parse_args(argv)
-
-    # --- 配置日志 ---
-    log_level = logging.DEBUG if args.verbose else logging.INFO
-    logging.basicConfig(
-        level=log_level,
-        format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-        datefmt="%H:%M:%S",
-    )
-
-    # --- 解析输入路径 ---
-    input_path: Optional[Path] = None
-    if args.input:
-        input_path = Path(args.input)
-        if not input_path.is_absolute():
-            # 相对路径相对于项目根目录
-            input_path = get_project_root() / input_path
-
-    # --- 执行 ---
-    try:
-        asyncio.run(
-            run_extraction(
-                input_path=input_path,
-                concurrency=args.concurrency,
-                stages=args.stage,
-                skip_existing=args.skip_existing,
-                force=args.force,
-                dry_run=args.dry_run,
-                model=args.model,
-            )
-        )
-        return 0
-    except FileNotFoundError as exc:
-        print(f"错误: {exc}", file=sys.stderr)
-        return 1
-    except KeyboardInterrupt:
-        print("\n中断", file=sys.stderr)
-        return 1
-    except Exception as exc:
-        print(f"错误: {exc}", file=sys.stderr)
-        if args.verbose:
-            import traceback
-            traceback.print_exc()
-        return 1
-
-
-# =============================================================================
-# 直接运行（调试用）
-# =============================================================================
-
-if __name__ == "__main__":
-    sys.exit(main())
