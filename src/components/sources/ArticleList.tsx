@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import type { EnrichedArticle } from "@/lib/data/sources";
+import type { EnrichedArticle, DateRange } from "@/lib/data/sources";
 import { ArticleCard } from "./ArticleCard";
 
 type SortMode = null | "impact";
@@ -11,6 +11,7 @@ type ArticleListProps = {
   hasManifest: boolean;
   manifestFound: boolean;
   articleCount: number;
+  dateRange?: DateRange | null;
 };
 
 function getImpactScore(article: EnrichedArticle): number {
@@ -26,6 +27,7 @@ export function ArticleList({
   hasManifest,
   manifestFound,
   articleCount,
+  dateRange,
 }: ArticleListProps) {
   const [sortMode, setSortMode] = useState<SortMode>(null);
 
@@ -70,6 +72,13 @@ export function ArticleList({
             >
               {articleCount} 篇
             </span>
+            {dateRange && (
+              <span className="text-[11px] text-muted/50 font-mono">
+                {dateRange.from === dateRange.to
+                  ? dateRange.from
+                  : `${dateRange.from ?? "..."} ~ ${dateRange.to ?? "..."}`}
+              </span>
+            )}
           </div>
 
           <button

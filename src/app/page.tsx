@@ -11,15 +11,12 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const { tiersMeta, sources, totalSources, totalArticles, latestDate } =
+  const { tiersMeta, sources, totalSources, latestDate } =
     await getSourcesViewData();
 
   const tierSourceCounts: Record<string, number> = {};
-  const tierArticleCounts: Record<string, number> = {};
   for (const s of sources) {
     tierSourceCounts[s.tier] = (tierSourceCounts[s.tier] ?? 0) + 1;
-    tierArticleCounts[s.tier] =
-      (tierArticleCounts[s.tier] ?? 0) + s.articleCount;
   }
 
   return (
@@ -27,10 +24,8 @@ export default async function HomePage() {
       <SourcesHero
         tiersMeta={tiersMeta}
         totalSources={totalSources}
-        totalArticles={totalArticles}
         latestDate={latestDate}
         tierSourceCounts={tierSourceCounts}
-        tierArticleCounts={tierArticleCounts}
       />
       <SourcesGrid sources={sources} tiersMeta={tiersMeta} />
     </PageShell>

@@ -4,19 +4,15 @@ import { TIER_COLORS } from "@/lib/data/tiers";
 type SourcesHeroProps = {
   tiersMeta: Record<string, TierMeta>;
   totalSources: number;
-  totalArticles: number;
   latestDate: string | null;
   tierSourceCounts: Record<string, number>;
-  tierArticleCounts: Record<string, number>;
 };
 
 export function SourcesHero({
   tiersMeta,
   totalSources,
-  totalArticles,
   latestDate,
   tierSourceCounts,
-  tierArticleCounts,
 }: SourcesHeroProps) {
   return (
     <header className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-foreground via-foreground to-accent-dark p-6 shadow-lg md:p-10">
@@ -66,9 +62,8 @@ export function SourcesHero({
         </h1>
 
         {/* Subtitle */}
-        <p className="mt-2.5 max-w-2xl text-sm leading-relaxed text-white/55 md:text-[15px]">
-          19 个精选 AI 数据源，按学术/技术 → 产品/开发者 → 商业/资本三层分类，
-          通过关键词过滤、时效窗口与配额控制，每日输出高信噪比的 AI 信息情报。
+        <p className="mt-2.5 max-w-full text-sm leading-relaxed text-white/55 md:text-[15px]">
+          {totalSources} 个精选 AI 数据源，按学术/技术 → 产品/开发者 → 商业/资本三层分类，通过关键词过滤、时效窗口与配额控制，每日输出高信噪比的 AI 信息情报。
         </p>
 
         {/* Stats pills */}
@@ -76,10 +71,6 @@ export function SourcesHero({
           <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-medium text-white/70 backdrop-blur">
             <span className="h-1.5 w-1.5 rounded-full bg-accent" />
             {totalSources} 个数据源
-          </span>
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-medium text-white/70 backdrop-blur">
-            <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: "var(--warm)" }} />
-            {totalArticles} 篇文章
           </span>
           {latestDate && (
             <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-medium text-white/50 backdrop-blur">
@@ -117,7 +108,7 @@ export function SourcesHero({
                       {meta?.label ?? `Tier ${tierLetter}`}
                     </p>
                     <p className="text-[11px] text-white/40">
-                      {(tierSourceCounts[tier] ?? 0)} 个源 · {(tierArticleCounts[tier] ?? 0)} 篇文章
+                      {(tierSourceCounts[tier] ?? 0)} 个源
                     </p>
                   </div>
                 </div>

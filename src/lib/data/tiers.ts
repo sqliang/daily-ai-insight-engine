@@ -32,6 +32,7 @@ export const SOURCE_TYPE_LABELS: Record<string, string> = {
   tech_blog: "技术博客",
   news_media: "科技媒体",
   community_discussion: "社区讨论",
+  newsletter_rss: "邮件通讯",
 };
 
 export const LANGUAGE_LABELS: Record<string, string> = {

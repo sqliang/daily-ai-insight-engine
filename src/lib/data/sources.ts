@@ -97,6 +97,11 @@ export interface EnrichedArticle {
   status: ProcessingStatus;
 }
 
+export interface DateRange {
+  from?: string;
+  to?: string;
+}
+
 export interface EnrichedSourceDetail {
   name: string;
   type: string;
@@ -118,6 +123,8 @@ export interface EnrichedSourceDetail {
   manifestDate: string | null;
   manifestGeneratedAt: string | null;
   stageCounts: Record<ProcessingStatus, number>;
+  availableDates: string[];
+  dateRange: DateRange | null;
 }
 
 // ============================================================================
@@ -168,6 +175,74 @@ async function loadManifests(): Promise<Map<string, z.infer<typeof manifestSchem
     }
   }
   return manifests;
+}
+
+async function loadManifestsForSource(
+  sourceName: string,
+): Promise<z.infer<typeof manifestSchema>[]> {
+  const manifests: z.infer<typeof manifestSchema>[] = [];
+  let entries: string[];
+  try {
+    entries = await readdir(MANIFEST_DIR);
+  } catch {
+    return manifests;
+  }
+
+  const prefix = `${sourceName}_`;
+  for (const filename of entries) {
+    if (!filename.startsWith(prefix) || !filename.endsWith(".json")) continue;
+    try {
+      const raw = await readFile(join(MANIFEST_DIR, filename), "utf8");
+      const data = manifestSchema.parse(JSON.parse(raw));
+      manifests.push(data);
+    } catch {
+      // Skip malformed manifest files silently
+    }
+  }
+
+  manifests.sort(
+    (a, b) => b.generated_at.localeCompare(a.generated_at),
+  );
+  return manifests;
+}
+
+function mergeArticlesFromManifests(
+  manifests: z.infer<typeof manifestSchema>[],
+): Array<{
+  url: string;
+  title: string;
+  published: string;
+  summary: string;
+  author: string;
+  id?: string;
+}> {
+  const seen = new Set<string>();
+  const merged: Array<{
+    url: string;
+    title: string;
+    published: string;
+    summary: string;
+    author: string;
+    id?: string;
+  }> = [];
+
+  for (const manifest of manifests) {
+    for (const article of manifest.articles) {
+      const key = normalizeUrl(article.url);
+      if (seen.has(key)) continue;
+      seen.add(key);
+      merged.push({
+        url: article.url,
+        title: article.title,
+        published: article.published ?? "",
+        summary: article.summary ?? "",
+        author: article.author ?? "",
+        id: article.id,
+      });
+    }
+  }
+
+  return merged;
 }
 
 function configToStatus(
@@ -269,8 +344,9 @@ async function loadStructuredData(
 
 export async function getSourceDetailEnriched(
   name: string,
+  dateRange?: DateRange,
 ): Promise<EnrichedSourceDetail | null> {
-  const [configs, manifests] = await Promise.all([
+  const [configs, latestManifests] = await Promise.all([
     getSourceConfigs(),
     loadManifests(),
   ]);
@@ -278,8 +354,7 @@ export async function getSourceDetailEnriched(
   const config = configs.find((c) => c.name === name);
   if (!config) return null;
 
-  const manifest = manifests.get(name);
-  const manifestArticles = manifest?.articles ?? [];
+  const latestManifest = latestManifests.get(name);
   const structuredData = await loadStructuredData(name);
 
   const structuredMap = new Map<string, StructuredArticle>();
@@ -289,6 +364,45 @@ export async function getSourceDetailEnriched(
       structuredMap.set(normalized, s);
     }
   }
+
+  // 确定使用哪些文章：指定 dateRange 时合并全部 manifest 并过滤，否则用最新 manifest
+  let manifestArticles: Array<{
+    url: string; title: string; published: string;
+    summary: string; author: string; id?: string;
+  }> = [];
+  let allManifests: z.infer<typeof manifestSchema>[] = [];
+  let manifestDate: string | null = null;
+  let manifestGeneratedAt: string | null = null;
+
+  if (dateRange?.from || dateRange?.to) {
+    allManifests = await loadManifestsForSource(name);
+    // 按 manifest.date（抓取日期）筛选，而非 article.published（发布日期）
+    if (dateRange.from) {
+      allManifests = allManifests.filter(
+        (m) => m.date >= dateRange.from!,
+      );
+    }
+    if (dateRange.to) {
+      allManifests = allManifests.filter(
+        (m) => m.date <= dateRange.to!,
+      );
+    }
+    manifestArticles = mergeArticlesFromManifests(allManifests);
+    manifestDate = allManifests[0]?.date ?? null;
+    manifestGeneratedAt = allManifests[0]?.generated_at ?? null;
+  } else {
+    manifestArticles = latestManifest?.articles ?? [];
+    manifestDate = latestManifest?.date ?? null;
+    manifestGeneratedAt = latestManifest?.generated_at ?? null;
+    if (latestManifest) {
+      allManifests = [latestManifest];
+    }
+  }
+
+  // 收集该源所有 manifest 的 date，供日期选择器使用
+  const availableDates = allManifests
+    .map((m) => m.date)
+    .filter((d): d is string => d !== null && d !== undefined);
 
   const enrichedArticles: EnrichedArticle[] = manifestArticles.map((a) => {
     const normalizedArticleUrl = normalizeUrl(a.url);
@@ -332,12 +446,14 @@ export async function getSourceDetailEnriched(
     max_age_hours: config.filter?.max_age_hours ?? 0,
     truncation: config.truncation,
     target_dir: config.target_dir,
-    manifestFound: manifest !== undefined,
+    manifestFound: manifestArticles.length > 0,
     articleCount: enrichedArticles.length,
     articles: enrichedArticles,
-    manifestDate: manifest?.date ?? null,
-    manifestGeneratedAt: manifest?.generated_at ?? null,
+    manifestDate,
+    manifestGeneratedAt,
     stageCounts,
+    availableDates,
+    dateRange: dateRange ?? null,
   };
 }
 
@@ -351,7 +467,6 @@ export interface SourcesViewData {
   tiersMeta: Record<string, TierMeta>;
   sources: SourceStatus[];
   totalSources: number;
-  totalArticles: number;
   latestDate: string | null;
 }
 
@@ -361,7 +476,6 @@ export async function getSourcesViewData(): Promise<SourcesViewData> {
     getTiersMeta(),
   ]);
 
-  const totalArticles = sources.reduce((sum, s) => sum + s.articleCount, 0);
   const latestDate =
     sources
       .map((s) => s.manifestDate)
@@ -373,7 +487,6 @@ export async function getSourcesViewData(): Promise<SourcesViewData> {
     tiersMeta,
     sources,
     totalSources: sources.length,
-    totalArticles,
     latestDate,
   };
 }
