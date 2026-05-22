@@ -11,7 +11,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
-from ..core.file_utils import ensure_dir
+from pipeline.utils.file_utils import ensure_dir
 
 # =============================================================================
 # 标签映射（与前端 src/lib/report/labels.ts 保持一致）

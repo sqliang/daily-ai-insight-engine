@@ -24,7 +24,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent.parent))
 
 from pipeline.core.concurrency.state import IngestState
 from pipeline.core.config_loader import get_source_by_name
-from pipeline.core.file_utils import ensure_dir, read_json, resolve_data_dir
+from pipeline.core.config_loader import resolve_data_dir
+from pipeline.utils.file_utils import ensure_dir, read_json
 from pipeline.ingestion.ingest.worker import ingest_article, ingest_browser_article
 
 
@@ -35,7 +36,7 @@ def _needs_ingest(article: Dict[str, Any], target_dir: Path, state: IngestState)
     仅靠 state.is_seen() 会因 state 与磁盘不一致而永久跳过文章，
     需要文件存在性作为二级验证。
     """
-    from pipeline.core.id_utils import generate_id
+    from pipeline.utils.id_utils import generate_id
 
     article_id = article.get("id") or generate_id(article.get("url", ""))
     if not state.is_seen(article_id):
@@ -192,7 +193,7 @@ def run_ingest(
     # ------------------------------------------------------------------
     # 7. 统计提取状态分布（success / partial / failed）
     # ------------------------------------------------------------------
-    from pipeline.core.frontmatter_utils import read_frontmatter
+    from pipeline.utils.frontmatter import read_frontmatter
 
     status_counts = {"success": 0, "partial": 0, "failed": 0}
     for f in output_files:

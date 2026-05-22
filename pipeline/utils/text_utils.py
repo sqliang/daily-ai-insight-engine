@@ -1,5 +1,5 @@
 """
-pipeline/core/text_utils.py — 通用文本处理工具
+pipeline/utils/text_utils.py — 通用文本处理工具
 
 提供中英文文本的自然断句截断功能，被 extraction 和 analysis 两个 stage 共用。
 """

@@ -20,7 +20,7 @@ from typing import Optional
 
 import asyncio
 
-from ...core.frontmatter_utils import read_frontmatter, write_frontmatter
+from pipeline.utils.frontmatter import read_frontmatter, write_frontmatter
 from ...schemas.fact_extraction import (
     FactExtraction,
     EventType,
@@ -33,8 +33,8 @@ from ...core.agent import (
     call_agent_with_retry,
     parse_json_response,
 )
-from ...core.text_utils import truncate_at_natural_break
-from ...core.enum_utils import fuzzy_match_enum
+from pipeline.utils.text_utils import truncate_at_natural_break
+from pipeline.utils.enum_utils import fuzzy_match_enum
 from .prompts.fact_extraction import (
     get_fact_extraction_system_prompt,
     build_fact_extraction_user_prompt,
