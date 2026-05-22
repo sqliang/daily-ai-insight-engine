@@ -1,5 +1,5 @@
 """
-pipeline/core/id_utils.py — 共享文章 ID 生成工具
+pipeline/utils/id_utils.py — 共享文章 ID 生成工具
 
 设计目的：
     - 为所有流水线阶段提供统一的 ID 生成函数（单一数据源）

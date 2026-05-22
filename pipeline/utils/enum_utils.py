@@ -1,5 +1,5 @@
 """
-pipeline/core/enum_utils.py — 枚举值模糊匹配工具
+pipeline/utils/enum_utils.py — 枚举值模糊匹配工具
 
 共享的模糊枚举匹配逻辑，被 extraction (fact_extraction_agent) 和
 analysis (deep_analysis_agent) 共用，处理 Agent LLM 返回的非标准枚举值。

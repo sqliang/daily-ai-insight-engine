@@ -32,8 +32,8 @@ from typing import Optional
 
 import asyncio
 
-from ..core.file_utils import get_project_root, resolve_data_dir, ensure_dir, list_files
-from ..core.config_loader import get_llm_config, get_stage_config
+from pipeline.utils.file_utils import get_project_root, ensure_dir, list_files
+from ..core.config_loader import get_llm_config, get_stage_config, resolve_data_dir
 from .agent.base_info_agent import run_base_info_stage
 from .agent.fact_extraction_agent import run_fact_extraction_stage
 from ..core.agent import StageResult
@@ -198,7 +198,7 @@ def _check_stage_2b_prerequisites(
             existing.append(p)
             # 检查是否有 pipeline_stage 标记表明经过了 Stage 2a
             try:
-                from ..core.frontmatter_utils import read_frontmatter
+                from pipeline.utils.frontmatter import read_frontmatter
                 fm, _ = read_frontmatter(p)
                 stage = fm.get("pipeline_stage", "")
                 if stage not in ("base_info_extracted", "fact_extracted"):

@@ -22,7 +22,8 @@ from typing import Optional
 
 from .editor_in_chief_agent import run_editor_in_chief_sync
 from .report_generator import validate_report, write_report_files
-from ..core.file_utils import resolve_data_dir, read_json, ensure_dir
+from ..core.config_loader import resolve_data_dir
+from pipeline.utils.file_utils import read_json, ensure_dir
 
 logger = logging.getLogger(__name__)
 

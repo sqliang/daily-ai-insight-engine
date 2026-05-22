@@ -7,7 +7,7 @@ Stage 3 Deep Analysis — User 提示词构建器
 每个 builder 接收 Stage 2 提取的结构化事实 + 原始正文，生成完整的 user prompt。
 """
 
-from pipeline.core.text_utils import truncate_at_natural_break
+from pipeline.utils.text_utils import truncate_at_natural_break
 
 # 深度分析阶段正文截断长度（比 Stage 2b 的 12000 更短，因为有 Stage 2 事实摘要）
 DEEP_ANALYSIS_BODY_MAX_CHARS = 6000

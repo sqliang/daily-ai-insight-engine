@@ -14,9 +14,10 @@ pipeline/ingestion/backfill_ids/cli.py — ID 回填工具 CLI 契约
 import sys
 from pathlib import Path
 
-from pipeline.core.file_utils import get_project_root, resolve_data_dir
-from pipeline.core.frontmatter_utils import read_frontmatter, write_frontmatter
-from pipeline.core.id_utils import generate_id
+from pipeline.core.config_loader import resolve_data_dir
+from pipeline.utils.file_utils import get_project_root
+from pipeline.utils.frontmatter import read_frontmatter, write_frontmatter
+from pipeline.utils.id_utils import generate_id
 
 
 # ---------------------------------------------------------------------------

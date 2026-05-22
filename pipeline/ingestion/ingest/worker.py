@@ -43,8 +43,9 @@ def ingest_article(
     """
     # 延迟导入避免循环依赖
     from pipeline.core.config_loader import get_source_by_name
-    from pipeline.core.frontmatter_utils import build_ingestion_frontmatter, write_frontmatter
-    from pipeline.core.id_utils import generate_id
+    from pipeline.core.frontmatter_utils import build_ingestion_frontmatter
+    from pipeline.utils.frontmatter import write_frontmatter
+    from pipeline.utils.id_utils import generate_id
     from pipeline.core.web_utils import extract_article_content, extract_metadata, fetch_url
 
     url = article.get("url", "")
@@ -133,8 +134,9 @@ def ingest_browser_article(
         写入的 .md 文件路径，仅 URL 为空时返回 None
     """
     from pipeline.core.config_loader import get_source_by_name
-    from pipeline.core.frontmatter_utils import build_ingestion_frontmatter, write_frontmatter
-    from pipeline.core.id_utils import generate_id
+    from pipeline.core.frontmatter_utils import build_ingestion_frontmatter
+    from pipeline.utils.frontmatter import write_frontmatter
+    from pipeline.utils.id_utils import generate_id
     from pipeline.core.web_utils import extract_article_content, extract_metadata
 
     url = article.get("url", "")

@@ -9,7 +9,7 @@ from typing import Any, Dict, List, Optional
 
 import yaml
 
-from .file_utils import get_project_root
+from pipeline.utils.file_utils import ensure_dir, get_project_root
 
 
 # 缓存已加载的配置，避免重复 I/O
@@ -87,3 +87,94 @@ def get_quotas() -> Dict[str, int]:
 def reload_config() -> Dict[str, Any]:
     """强制重新加载配置，清除缓存。"""
     return load_config(force_reload=True)
+
+
+# ---------------------------------------------------------------------------
+# 数据目录解析 — 依赖 config.yaml 的 pipeline.data_dirs
+# ---------------------------------------------------------------------------
+
+# 缓存从 config.yaml 解析的数据目录映射，避免每次调用 resolve_data_dir 都重新加载
+_data_dir_mapping_cache: Optional[Dict[str, Path]] = None
+
+
+def _build_data_dir_mapping(project: Path) -> Dict[str, Path]:
+    """
+    构建 stage_key → Path 映射。
+
+    优先从 config.yaml 的 pipeline.data_dirs 读取路径配置，
+    缺失的键回退到硬编码默认值。
+    """
+    # 硬编码默认值 — 当 config.yaml 不可用时作为兜底
+    defaults: Dict[str, Path] = {
+        "manifest":               project / "data" / "00_manifest",
+        "raw":                    project / "data" / "01_raw",
+        "processed":              project / "data" / "02_processed",
+        "extracted":              project / "data" / "02_extracted",
+        "structured":             project / "data" / "03_structured",
+        "analyzed":               project / "data" / "03_analyzed",
+        "synthesize_structured":  project / "data" / "04_structured",
+        "reports":                project / "data" / "05_reports",
+    }
+
+    try:
+        data_dirs = load_config().get("pipeline", {}).get("data_dirs", {})
+        if not data_dirs:
+            return defaults
+
+        # 以 config 为准，config 中缺失的键用默认值补齐
+        merged: Dict[str, Path] = {}
+        for key in defaults:
+            cfg_path = data_dirs.get(key)
+            if cfg_path is not None:
+                merged[key] = project / cfg_path.strip("/")
+            else:
+                merged[key] = defaults[key]
+        return merged
+    except Exception:
+        # config.yaml 缺失或格式错误时，回退到硬编码默认值
+        return defaults
+
+
+def resolve_data_dir(stage_key: str) -> Path:
+    """
+    解析数据目录路径（从 config.yaml 的 pipeline.data_dirs 读取）。
+
+    stage_key 可选: manifest, raw, processed, extracted, structured,
+                    analyzed, synthesize_structured, reports
+
+    返回的目录路径保证存在（不存在则自动创建）。
+    """
+    global _data_dir_mapping_cache
+    project = get_project_root()
+
+    if _data_dir_mapping_cache is None:
+        _data_dir_mapping_cache = _build_data_dir_mapping(project)
+
+    path = _data_dir_mapping_cache.get(stage_key)
+    if path is None:
+        raise ValueError(
+            f"未知数据层: {stage_key}，可选值: {list(_data_dir_mapping_cache.keys())}"
+        )
+    ensure_dir(path)
+    return path
+
+
+def resolve_state_file() -> Path:
+    """
+    解析去重状态文件路径（从 config.yaml 的 pipeline.state_file 读取）。
+
+    返回的父目录路径保证存在（不存在则自动创建）。
+
+    设计理由：
+        独立于 resolve_data_dir() 是因为 state.json 是一个文件而非目录，
+        路径需要不同的处理逻辑（确保父目录存在而非目录本身）。
+    """
+    project = get_project_root()
+
+    try:
+        state_rel = load_config().get("pipeline", {}).get("state_file", "data/state.json")
+        path = project / state_rel.strip("/")
+        ensure_dir(path.parent)
+        return path
+    except Exception:
+        return project / "data" / "state.json"

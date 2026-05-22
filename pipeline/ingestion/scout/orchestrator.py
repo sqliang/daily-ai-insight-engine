@@ -16,8 +16,9 @@ from pathlib import Path
 from typing import Any, Dict, List
 
 from pipeline.core.config_loader import get_sources
-from pipeline.core.file_utils import resolve_data_dir, write_json
-from pipeline.core.id_utils import generate_id
+from pipeline.core.config_loader import resolve_data_dir
+from pipeline.utils.file_utils import write_json
+from pipeline.utils.id_utils import generate_id
 from pipeline.ingestion.filters import apply_filters
 from pipeline.ingestion.scout.strategies import (
     _ensure_browser_session,

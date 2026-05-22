@@ -21,14 +21,14 @@ import logging
 from pathlib import Path
 from typing import Optional
 
-from ..core.frontmatter_utils import read_frontmatter, write_frontmatter
+from pipeline.utils.frontmatter import read_frontmatter, write_frontmatter
 from ..core.agent import (
     AgentCallError,
     StageResult,
     call_agent_with_retry,
     parse_json_response,
 )
-from ..core.enum_utils import fuzzy_match_enum
+from pipeline.utils.enum_utils import fuzzy_match_enum
 from ..schemas.deep_analysis import (
     QualitativeAssessment,
     ValueAssessment,

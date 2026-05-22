@@ -15,7 +15,8 @@ import threading
 from datetime import datetime, timezone
 from typing import Set
 
-from pipeline.core.file_utils import read_json, resolve_state_file, write_json
+from pipeline.core.config_loader import resolve_state_file
+from pipeline.utils.file_utils import read_json, write_json
 
 
 class IngestState:

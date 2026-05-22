@@ -14,7 +14,7 @@ import sys
 from pathlib import Path
 from typing import Optional
 
-from ..core.file_utils import get_project_root
+from pipeline.utils.file_utils import get_project_root
 
 
 # ---------------------------------------------------------------------------

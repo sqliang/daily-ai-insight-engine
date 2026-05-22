@@ -8,8 +8,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from pipeline.core.file_utils import resolve_data_dir
-from pipeline.core.frontmatter_utils import read_frontmatter
+from pipeline.core.config_loader import resolve_data_dir
+from pipeline.utils.frontmatter import read_frontmatter
 
 
 def rename_dir(base: Path) -> int:

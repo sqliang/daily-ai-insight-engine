@@ -15,8 +15,8 @@ import sys
 from pathlib import Path
 from typing import Optional
 
-from ..core.config_loader import get_llm_config, get_stage_config
-from ..core.file_utils import ensure_dir, resolve_data_dir
+from ..core.config_loader import get_llm_config, get_stage_config, resolve_data_dir
+from pipeline.utils.file_utils import ensure_dir
 
 # ---------------------------------------------------------------------------
 # 日志
@@ -148,7 +148,7 @@ async def run_analysis(
     if input_path is None:
         input_path = resolve_data_dir("extracted")
     elif not input_path.is_absolute():
-        from ..core.file_utils import get_project_root
+        from pipeline.utils.file_utils import get_project_root
         input_path = get_project_root() / input_path
 
     output_base_dir = resolve_data_dir("analyzed")

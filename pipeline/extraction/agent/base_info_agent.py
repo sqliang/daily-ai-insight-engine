@@ -2,7 +2,7 @@
 pipeline/extraction/agent/base_info_agent.py — Stage 2a: 基础元信息提取
 
 功能：
-    - generate_id(): 已在 pipeline.core.id_utils 中统一实现，此处不再重复
+    - generate_id(): 已在 pipeline.utils.id_utils 中统一实现，此处不再重复
     - determine_missing_fields(): 对比已有 frontmatter 与 BaseInfo schema，找出缺失字段
     - _infer_source_type_from_dir(): 从文件路径的父目录名反推 config.yaml 中的 source_type
     - extract_base_info(): 单文件处理——读取、判断、调用 Agent、合并、写入
@@ -22,8 +22,8 @@ from typing import Optional
 
 import asyncio
 
-from ...core.frontmatter_utils import read_frontmatter, write_frontmatter
-from ...core.id_utils import generate_id
+from pipeline.utils.frontmatter import read_frontmatter, write_frontmatter
+from pipeline.utils.id_utils import generate_id
 from ...schemas.base_info import BaseInfo
 from ...core.agent import (
     AgentCallError,

@@ -20,7 +20,7 @@ from pathlib import Path
 from typing import Optional
 
 from ..core.agent import call_agent_with_retry, parse_json_response
-from ..core.file_utils import read_json, ensure_dir
+from pipeline.utils.file_utils import read_json, ensure_dir
 from .prompts.system_prompt import EDITOR_IN_CHIEF_SYSTEM_PROMPT
 from .prompts.user_prompt import build_user_prompt
 from .report_generator import validate_report
