@@ -8,8 +8,8 @@ pipeline/extraction/__init__.py — Stage 2 提取阶段包
 """
 
 from .run_extraction import run_extraction
-from .base_info_agent import extract_base_info
-from .fact_extraction_agent import extract_fact_extraction
+from .agent.base_info_agent import extract_base_info
+from .agent.fact_extraction_agent import extract_fact_extraction
 
 __all__ = [
     "run_extraction",

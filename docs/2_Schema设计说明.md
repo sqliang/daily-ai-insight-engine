@@ -114,7 +114,7 @@ def _infer_source_type_from_dir(file_path: Path) -> Optional[str]:
     return _SOURCE_TYPE_FROM_DIR.get(parent_dir)
 ```
 
-这一设计决策的合理性在于：`config.yaml` 中已经为每个数据源显式声明了 `type` 字段，而文件目录名（如 `arxiv/`、`techcrunch/`）与数据源 `target_dir` 一一对应。因此 source_type 是一个**可配置推导的静态属性**，不依赖 LLM 的语义理解能力。
+这一设计决策的合理性在于：`config.yaml` 中已经为每个数据源显式声明了 `type` 字段，而文件目录名就是数据源的 `name`（如 `arxiv-cs-ai/`、`techcrunch/`），与配置一一对应。因此 source_type 是一个**可配置推导的静态属性**，不依赖 LLM 的语义理解能力。
 
 **LLM 仅作为兜底机制**：当目录名无法在映射表中找到时（如用户手工导入的外部文件），才构造 prompt 调用 LLM 判断 `source_type`。
 

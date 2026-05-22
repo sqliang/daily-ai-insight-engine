@@ -87,6 +87,9 @@ def build_ingestion_frontmatter(
         - "success": trafilatura 成功提取正文
         - "partial": HTML 获取成功但 trafilatura 未能提取正文，body 为 manifest summary 兜底
         - "failed":  HTML 获取失败，body 为错误说明 + manifest summary
+
+    pipeline_stage: 标记文件已完成 Stage 1 处理，供下游阶段做前置检查。
+        下游 Stage 2b 会检查此字段确认 Stage 2a 已执行。
     """
     authors = []
     if author:
@@ -102,6 +105,7 @@ def build_ingestion_frontmatter(
         "description": description,
         "tags": ["clippings"],
         "extraction_status": extraction_status,
+        "pipeline_stage": "ingested",
     }
 
     # 将预生成的文章 ID 置入 frontmatter，成为该文件在流水线中的"身份证"

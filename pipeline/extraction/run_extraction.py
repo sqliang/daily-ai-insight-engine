@@ -34,8 +34,8 @@ import asyncio
 
 from ..core.file_utils import get_project_root, resolve_data_dir, ensure_dir, list_files
 from ..core.config_loader import get_llm_config, get_stage_config
-from .base_info_agent import run_base_info_stage
-from .fact_extraction_agent import run_fact_extraction_stage
+from .agent.base_info_agent import run_base_info_stage
+from .agent.fact_extraction_agent import run_fact_extraction_stage
 from ..core.agent import StageResult
 
 # ---------------------------------------------------------------------------
@@ -164,6 +164,76 @@ def print_stage_summary(stage_name: str, results: list[StageResult]) -> None:
     if success:
         total_fields = sum(len(r.fields_extracted) for r in success)
         print(f"  共提取 {total_fields} 个字段")
+
+
+# =============================================================================
+# Stage 2b 前置检查
+# =============================================================================
+
+def _check_stage_2b_prerequisites(
+    stage_2b_inputs: list[Path],
+    output_base_dir: Path,
+) -> list[Path]:
+    """
+    检查 Stage 2b 的输入文件是否存在，过滤出可处理的文件。
+
+    检查逻辑：
+        - 全部缺失 → 打印错误并返回空列表（调用方应提前返回）
+        - 部分缺失 → 打印警告，过滤出存在的文件
+        - 全部存在 → 检查 pipeline_stage 标记，无标记的文件打印提醒
+
+    参数：
+        stage_2b_inputs: Stage 2b 预期输入文件路径列表
+        output_base_dir: 输出基准目录（用于错误消息）
+
+    返回：
+        实际存在的文件路径列表（仅保留存在且可读取的）
+    """
+    existing: list[Path] = []
+    missing: list[Path] = []
+    missing_stage_marker: list[Path] = []
+
+    for p in stage_2b_inputs:
+        if p.exists():
+            existing.append(p)
+            # 检查是否有 pipeline_stage 标记表明经过了 Stage 2a
+            try:
+                from ..core.frontmatter_utils import read_frontmatter
+                fm, _ = read_frontmatter(p)
+                stage = fm.get("pipeline_stage", "")
+                if stage not in ("base_info_extracted", "fact_extracted"):
+                    missing_stage_marker.append(p)
+            except Exception:
+                missing_stage_marker.append(p)
+        else:
+            missing.append(p)
+
+    total = len(stage_2b_inputs)
+
+    # 全部缺失 — 致命错误
+    if not existing:
+        logger.error(
+            "Stage 2b 需要 Stage 2a 的输出文件，但 %s 下未找到任何匹配文件。"
+            "请先运行 extract --stage base_info 或 extract --stage all",
+            output_base_dir,
+        )
+        return []
+
+    # 部分缺失 — 警告
+    if missing:
+        logger.warning(
+            "Stage 2b: %d/%d 个文件缺失（Stage 2a 可能尚未运行或部分失败），将仅处理存在的 %d 个文件",
+            len(missing), total, len(existing),
+        )
+
+    # pipeline_stage 标记缺失 — 提醒（旧文件兼容）
+    if missing_stage_marker:
+        logger.warning(
+            "Stage 2b: %d 个文件缺少 pipeline_stage 标记（可能是旧格式文件），将继续处理",
+            len(missing_stage_marker),
+        )
+
+    return existing
 
 
 # =============================================================================
@@ -297,6 +367,12 @@ async def run_extraction(
 
     # ===== Stage 2b: FactExtraction =====
     if run_2b:
+        # 前置检查：验证 Stage 2a 输出文件是否存在
+        stage_2b_inputs = _check_stage_2b_prerequisites(stage_2b_inputs, output_base_dir)
+        if not stage_2b_inputs:
+            print("\n⚠️  跳过 Stage 2b：未找到可处理的文件")
+            return results
+
         print(f"\n⏳ Stage 2b (FactExtraction): 处理 {len(stage_2b_inputs)} 个文件...")
         results_2b = await run_fact_extraction_stage(
             file_paths=stage_2b_inputs,
@@ -308,6 +384,19 @@ async def run_extraction(
         )
         results["fact_extraction"] = results_2b
         print_stage_summary("2b (FactExtraction)", results_2b)
+
+    # --- 自动聚合到 04_structured（前端渐进增强） ---
+    if not dry_run and results:
+        from ..synthesis.aggregate_frontmatter import aggregate_frontmatter
+        synthesize_dir = resolve_data_dir("synthesize_structured")
+        print(f"\n{'=' * 60}")
+        print("  自动聚合: 02_extracted → 04_structured")
+        print(f"{'=' * 60}")
+        aggregate_frontmatter(
+            input_dir=extracted_base_dir,
+            output_dir=synthesize_dir,
+            dry_run=False,
+        )
 
     # --- 最终汇总 ---
     print(f"\n{'=' * 60}")

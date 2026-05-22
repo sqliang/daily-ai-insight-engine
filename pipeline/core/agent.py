@@ -332,6 +332,62 @@ def _try_recover_truncated_json(text: str) -> Optional[dict]:
     return None
 
 
+def _fix_unescaped_quotes(text: str) -> str:
+    """
+    修复 JSON 字符串值中未转义的双引号。
+
+    策略：
+        用状态机遍历文本，跟踪是否处于字符串内部。
+        遇到可能结束字符串的 '"' 时，检查其后第一个非空白字符：
+        - 若是 ',' '}' ']' ':' 或 EOF → 合法的字符串结束
+        - 否则 → 字符串值中的裸引号，在前面补 '\\' 转义
+
+    参数：
+        text: 包含未转义引号的 JSON 文本
+
+    返回：
+        修复后的 JSON 文本（如果无需修复则返回原文本）
+    """
+    result: list[str] = []
+    i = 0
+    in_string = False
+    n = len(text)
+
+    while i < n:
+        ch = text[i]
+
+        if ch == "\\" and in_string:
+            # 保持已有转义序列不变
+            result.append(ch)
+            i += 1
+            if i < n:
+                result.append(text[i])
+            i += 1
+            continue
+
+        if ch == '"' and not in_string:
+            in_string = True
+            result.append(ch)
+        elif ch == '"' and in_string:
+            # 检查下一个非空白字符，判断是否合法字符串结束
+            j = i + 1
+            while j < n and text[j] in " \t\n\r":
+                j += 1
+            next_ch = text[j] if j < n else ","
+            if next_ch in (",", "}", "]", ":"):
+                in_string = False
+                result.append(ch)
+            else:
+                # 字符串值内的未转义引号
+                result.append('\\"')
+        else:
+            result.append(ch)
+
+        i += 1
+
+    return "".join(result)
+
+
 def parse_json_response(text: str) -> dict:
     """
     从 Agent 响应文本中提取 JSON 对象。
@@ -373,12 +429,13 @@ def parse_json_response(text: str) -> dict:
             continue
 
     # 策略 3: 查找第一个 { 和最后一个 }
+    brace_candidate: str = ""
     start = cleaned.find("{")
     end = cleaned.rfind("}")
     if start != -1 and end != -1 and end > start:
-        candidate = cleaned[start : end + 1]
+        brace_candidate = cleaned[start : end + 1]
         try:
-            return json.loads(candidate)
+            return json.loads(brace_candidate)
         except json.JSONDecodeError:
             pass
 
@@ -392,7 +449,33 @@ def parse_json_response(text: str) -> dict:
         except json.JSONDecodeError:
             pass
 
-    # 策略 5: 截断 JSON 恢复
+    # 收集用于后续修复策略的候选 JSON 文本
+    # 按优先级排列：fence 提取 > brace 提取 > 行级处理 > 原始文本
+    candidates_for_quote_fix: list[str] = []
+    for m in fence_matches:
+        s = m.strip()
+        if s:
+            candidates_for_quote_fix.append(s)
+    if brace_candidate:
+        candidates_for_quote_fix.append(brace_candidate)
+    if plain_text != cleaned and plain_text:
+        candidates_for_quote_fix.append(plain_text)
+    candidates_for_quote_fix.append(cleaned)
+
+    # 策略 5: 修复未转义的双引号（Agent 可能在 JSON 字符串值中输出裸引号）
+    # 如 "AI"slop"" → "AI\"slop\""
+    # 必须在截断恢复之前执行——截断恢复可能产出不完整数据
+    for candidate_text in candidates_for_quote_fix:
+        try:
+            fixed = _fix_unescaped_quotes(candidate_text)
+            if fixed != candidate_text:
+                result = json.loads(fixed)
+                logger.info("JSON 修复成功（转义字符串内未转义引号）")
+                return result
+        except (json.JSONDecodeError, Exception):
+            continue
+
+    # 策略 6: 截断 JSON 恢复
     try:
         recovered = _try_recover_truncated_json(cleaned)
         if recovered is not None:
@@ -400,6 +483,18 @@ def parse_json_response(text: str) -> dict:
             return recovered
     except Exception:
         pass
+
+    # 也尝试对候选文本做截断恢复
+    for candidate_text in candidates_for_quote_fix:
+        if candidate_text == cleaned:
+            continue  # 已尝试
+        try:
+            recovered = _try_recover_truncated_json(candidate_text)
+            if recovered is not None:
+                logger.warning("从截断 JSON 中恢复了解析结果（候选文本）")
+                return recovered
+        except Exception:
+            continue
 
     preview = text[:500] + "..." if len(text) > 500 else text
     raise ValueError(f"无法从 Agent 响应中提取有效 JSON。响应预览:\n{preview}")
