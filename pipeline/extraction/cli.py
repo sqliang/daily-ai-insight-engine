@@ -2,7 +2,7 @@
 pipeline/extraction/cli.py — Stage 2 Extraction CLI 契约
 
 提供 register_subparser / execute 供 pipeline/run.py 组装，
-同时提供 main() 供 python pipeline/extraction/cli.py 独立调用。
+同时提供 main() 供 uv run python pipeline/extraction/cli.py 独立调用。
 
 设计理由：
     将 CLI 定义与编排逻辑（run_extraction.py）分离到不同文件。

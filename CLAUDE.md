@@ -134,18 +134,18 @@ pnpm build               # Production build (standalone output)
 pnpm lint                # ESLint (flat config)
 pnpm typecheck           # tsc --noEmit
 
-# Pipeline (Python — run from repo root)
-python pipeline/run.py scout              # Stage 1a: generate URL manifests
-python pipeline/run.py ingest             # Stage 1b: download + clean articles
-python pipeline/run.py extract            # Stage 2: BaseInfo + FactExtraction via Claude
-python pipeline/run.py analyze            # Stage 3: 3-dimension deep analysis
-python pipeline/run.py aggregate          # Stage 4a: extract frontmatter → all_articles.json
-python pipeline/run.py synthesize         # Stage 4b: Editor-in-Chief daily report generation
+# Pipeline (Python — run from repo root with uv)
+uv run python pipeline/run.py scout              # Stage 1a: generate URL manifests
+uv run python pipeline/run.py ingest             # Stage 1b: download + clean articles
+uv run python pipeline/run.py extract            # Stage 2: BaseInfo + FactExtraction via Claude
+uv run python pipeline/run.py analyze            # Stage 3: 3-dimension deep analysis
+uv run python pipeline/run.py aggregate          # Stage 4a: extract frontmatter → all_articles.json
+uv run python pipeline/run.py synthesize         # Stage 4b: Editor-in-Chief daily report generation
 
 # Pipeline variants
-python pipeline/run.py synthesize --dry-run     # Estimate token usage, no LLM call
-python pipeline/run.py analyze --stage qualitative  # Run only one analysis dimension
-python pipeline/run.py extract --force          # Reprocess all, ignoring skip-existing
+uv run python pipeline/run.py synthesize --dry-run     # Estimate token usage, no LLM call
+uv run python pipeline/run.py analyze --stage qualitative  # Run only one analysis dimension
+uv run python pipeline/run.py extract --force          # Reprocess all, ignoring skip-existing
 
 # Validation
 pnpm validate            # Zod validation of data files (scripts/validate-report.ts)
@@ -153,9 +153,10 @@ pnpm validate            # Zod validation of data files (scripts/validate-report
 
 ## Python environment
 
-Python dependencies are managed with `uv`. Install: `cd pipeline && uv pip install -r requirements.txt`.
-The `run.py` entry point auto-loads `.env` (via `python-dotenv`) and auto-configures proxy from `pipeline/config/proxy.json`.
-All Python imports use `pipeline.` prefix with the repo root on `sys.path`.
+Python 依赖通过 `uv` 管理（已安装，无需重复安装）。如需重新安装：`uv pip install -r pipeline/requirements.txt`。
+`run.py` 入口自动加载 `.env`（通过 `python-dotenv`）并注入 `pipeline/config/proxy.json` 的代理配置。
+所有 Python 命令必须通过 `uv run python` 执行，保证使用 uv 环境中的依赖。
+所有 Python 导入使用 `pipeline.` 前缀，项目根目录在 `sys.path` 上。
 
 ## Key project structure
 

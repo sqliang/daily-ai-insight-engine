@@ -3,7 +3,7 @@ pipeline/synthesis/cli.py — Stage 4 Synthesis CLI 契约
 
 统一管理 aggregate (Stage 4a) 和 synthesize (Stage 4b) 两个子命令的 CLI 契约。
 提供 register_*_subparser / execute_* 供 pipeline/run.py 组装，
-同时提供 main() 供 python -m pipeline.synthesis 独立调用。
+同时提供 main() 供 uv run python -m pipeline.synthesis 独立调用。
 
 设计理由：
     两个子命令共享同一个 synthesis 包，统一在 cli.py 中管理 CLI 定义，
@@ -166,12 +166,12 @@ def execute_synthesize(args) -> int:
 
 
 # ===========================================================================
-# 独立 CLI 入口 (python -m pipeline.synthesis)
+# 独立 CLI 入口 (uv run python -m pipeline.synthesis)
 # ===========================================================================
 
 def main(argv: Optional[list[str]] = None) -> int:
     """
-    Synthesis 独立 CLI 入口：python -m pipeline.synthesis <aggregate|synthesize> [...]
+    Synthesis 独立 CLI 入口：uv run python -m pipeline.synthesis <aggregate|synthesize> [...]
 
     通过 argparse 子命令机制自动派发到 execute_aggregate 或 execute_synthesize。
     """
@@ -182,10 +182,10 @@ def main(argv: Optional[list[str]] = None) -> int:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 示例:
-  python -m pipeline.synthesis aggregate                 Stage 4a: 聚合 frontmatter
-  python -m pipeline.synthesis aggregate --dry-run       Stage 4a: 仅列出文件
-  python -m pipeline.synthesis synthesize                Stage 4b: 日报合成
-  python -m pipeline.synthesis synthesize --dry-run      Stage 4b: 显示 prompt 预估
+  uv run python -m pipeline.synthesis aggregate                 Stage 4a: 聚合 frontmatter
+  uv run python -m pipeline.synthesis aggregate --dry-run       Stage 4a: 仅列出文件
+  uv run python -m pipeline.synthesis synthesize                Stage 4b: 日报合成
+  uv run python -m pipeline.synthesis synthesize --dry-run      Stage 4b: 显示 prompt 预估
         """,
     )
     subparsers = parser.add_subparsers(dest="command", help="合成阶段")

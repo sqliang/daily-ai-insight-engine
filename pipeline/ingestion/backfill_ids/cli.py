@@ -123,7 +123,7 @@ def execute(args) -> int:
 
 
 def main() -> int:
-    """独立 CLI 入口：python pipeline/backfill_ids.py [--input ...] [--dry-run]"""
+    """独立 CLI 入口：uv run python pipeline/backfill_ids.py [--input ...] [--dry-run]"""
     import argparse
     parser = argparse.ArgumentParser(description="ID 回填工具")
     _add_arguments(parser)

@@ -13,16 +13,16 @@ pipeline/extraction/run_extraction.py — Stage 2 编排入口
 
 用法示例：
     # 处理所有文件
-    python pipeline/run.py extract
+    uv run python pipeline/run.py extract
 
     # 处理单个文件
-    python pipeline/run.py extract --input data/01_raw/arxiv/01.md
+    uv run python pipeline/run.py extract --input data/01_raw/arxiv/01.md
 
     # 只运行 BaseInfo
-    python pipeline/run.py extract --stage base_info
+    uv run python pipeline/run.py extract --stage base_info
 
     # 干跑（列出文件，不调用 LLM）
-    python pipeline/run.py extract --dry-run
+    uv run python pipeline/run.py extract --dry-run
 """
 
 import logging

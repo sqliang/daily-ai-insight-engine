@@ -7,12 +7,12 @@ pipeline/run.py — Daily AI Insight Engine 管道入口
 2. 加载 config/proxy.json 并注入代理环境变量
 
 子命令：
-    python pipeline/run.py scout          Stage 1a: 生成 URL 清单
-    python pipeline/run.py ingest         Stage 1b: 正文抓取与清洗
-    python pipeline/run.py extract        Stage 2: 元信息与事实提取
-    python pipeline/run.py analyze        Stage 3: 深度分析
-    python pipeline/run.py aggregate      Stage 4a: Frontmatter 聚合
-    python pipeline/run.py synthesize     Stage 4b: 日报合成
+    uv run python pipeline/run.py scout          Stage 1a: 生成 URL 清单
+    uv run python pipeline/run.py ingest         Stage 1b: 正文抓取与清洗
+    uv run python pipeline/run.py extract        Stage 2: 元信息与事实提取
+    uv run python pipeline/run.py analyze        Stage 3: 深度分析
+    uv run python pipeline/run.py aggregate      Stage 4a: Frontmatter 聚合
+    uv run python pipeline/run.py synthesize     Stage 4b: 日报合成
 """
 
 import argparse
@@ -27,7 +27,7 @@ from pathlib import Path
 _PROJECT_ROOT = Path(__file__).parent.parent
 
 # 将项目根目录加入 sys.path，使 pipeline 可被作为模块导入
-# 这样无论从哪个目录运行 python pipeline/run.py 都能正确导入 pipeline.xxx 模块
+# 这样无论从哪个目录运行 uv run python pipeline/run.py 都能正确导入 pipeline.xxx 模块
 _sys_path_root = str(_PROJECT_ROOT)
 if _sys_path_root not in sys.path:
     sys.path.insert(0, _sys_path_root)
@@ -47,7 +47,7 @@ try:
     else:
         print("⚠️  未找到 .env 文件，将使用系统环境变量", file=sys.stderr)
 except ImportError:
-    print("⚠️  python-dotenv 未安装，无法加载 .env (pip install python-dotenv)", file=sys.stderr)
+    print("⚠️  python-dotenv 未安装，无法加载 .env (uv pip install python-dotenv)", file=sys.stderr)
 
 
 # ---------------------------------------------------------------------------
@@ -70,13 +70,13 @@ if __name__ == "__main__":
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 示例:
-  python pipeline/run.py scout                       Stage 1a: URL 清单生成
-  python pipeline/run.py ingest                      Stage 1b: 正文抓取
-  python pipeline/run.py extract                     Stage 2: 事实提取
-  python pipeline/run.py analyze                     Stage 3: 深度分析
-  python pipeline/run.py aggregate                   Stage 4a: 聚合 frontmatter
-  python pipeline/run.py synthesize                  Stage 4b: 日报合成
-  python pipeline/run.py synthesize --dry-run        Stage 4b: 显示 prompt 预估
+  uv run python pipeline/run.py scout                       Stage 1a: URL 清单生成
+  uv run python pipeline/run.py ingest                      Stage 1b: 正文抓取
+  uv run python pipeline/run.py extract                     Stage 2: 事实提取
+  uv run python pipeline/run.py analyze                     Stage 3: 深度分析
+  uv run python pipeline/run.py aggregate                   Stage 4a: 聚合 frontmatter
+  uv run python pipeline/run.py synthesize                  Stage 4b: 日报合成
+  uv run python pipeline/run.py synthesize --dry-run        Stage 4b: 显示 prompt 预估
         """,
     )
     subparsers = parser.add_subparsers(dest="command", help="流水线阶段")

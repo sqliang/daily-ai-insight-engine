@@ -314,11 +314,11 @@ sources:
   - name: "zhihu"
     type: community_discussion
     tier: B
-    enabled: true
+    enabled: false
     display_name: "知乎"
-    description: "知乎发现页热门 (浏览器渲染，通过关键字过滤 AI 内容)"
-    display_description: "知乎热榜 AI 相关内容，通过 Chrome 浏览器渲染获取动态加载内容。关键词过滤大模型、Agent、深度学习等热门话题，覆盖中文技术社区讨论热点与开发者情绪。"
-    url: "https://www.zhihu.com/explore"
+    description: "知乎主页推荐"
+    display_description: "知乎主页推荐 AI 相关内容，通过 Chrome 浏览器渲染获取动态加载内容，暂不用关键词过滤。"
+    url: "https://www.zhihu.com"
     language: zh
     fetch_strategy: browser
     wait_for: "a[href*='/question/']"
@@ -660,6 +660,7 @@ llm:
 stages:
 
   ingest:
+    concurrency: 5           # 线程池并发抓取线程数
     time_window_hours: 48
     max_articles_per_source: 5
     hard_filters:

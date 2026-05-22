@@ -1,11 +1,11 @@
 """
-python -m pipeline.synthesis CLI 入口
+uv run python -m pipeline.synthesis CLI 入口
 
 用法：
-    python -m pipeline.synthesis aggregate                 Stage 4a: 聚合 frontmatter
-    python -m pipeline.synthesis aggregate --dry-run       Stage 4a: 仅列出文件
-    python -m pipeline.synthesis synthesize                Stage 4b: 日报合成
-    python -m pipeline.synthesis synthesize --dry-run      Stage 4b: 显示 prompt 预估
+    uv run python -m pipeline.synthesis aggregate                 Stage 4a: 聚合 frontmatter
+    uv run python -m pipeline.synthesis aggregate --dry-run       Stage 4a: 仅列出文件
+    uv run python -m pipeline.synthesis synthesize                Stage 4b: 日报合成
+    uv run python -m pipeline.synthesis synthesize --dry-run      Stage 4b: 显示 prompt 预估
 """
 
 import sys

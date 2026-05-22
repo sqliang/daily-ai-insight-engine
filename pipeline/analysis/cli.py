@@ -132,12 +132,12 @@ def main(argv: Optional[list[str]] = None) -> int:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 示例:
-  python pipeline/run.py analyze                    处理所有文件
-  python pipeline/run.py analyze --input data/02_extracted/arxiv/01.md
-  python pipeline/run.py analyze --stage qualitative  只运行定性研判
-  python pipeline/run.py analyze --dry-run           列出将处理的文件
-  python pipeline/run.py analyze --concurrency 2     限制并发文件数
-  python pipeline/run.py analyze --force             强制重新分析
+  uv run python pipeline/run.py analyze                    处理所有文件
+  uv run python pipeline/run.py analyze --input data/02_extracted/arxiv/01.md
+  uv run python pipeline/run.py analyze --stage qualitative  只运行定性研判
+  uv run python pipeline/run.py analyze --dry-run           列出将处理的文件
+  uv run python pipeline/run.py analyze --concurrency 2     限制并发文件数
+  uv run python pipeline/run.py analyze --force             强制重新分析
         """,
     )
     _add_arguments(parser)

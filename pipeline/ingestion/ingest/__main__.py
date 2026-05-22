@@ -1,10 +1,10 @@
 """
-python -m pipeline.ingestion.ingest CLI 入口
+uv run python -m pipeline.ingestion.ingest CLI 入口
 
 用法：
-    python -m pipeline.ingestion.ingest                  # 处理今日所有清单
-    python -m pipeline.ingestion.ingest --force          # 强制重新抓取
-    python -m pipeline.ingestion.ingest --manifest xxx   # 处理指定清单
+    uv run python -m pipeline.ingestion.ingest                  # 处理今日所有清单
+    uv run python -m pipeline.ingestion.ingest --force          # 强制重新抓取
+    uv run python -m pipeline.ingestion.ingest --manifest xxx   # 处理指定清单
 """
 
 import sys

@@ -2,7 +2,7 @@
 pipeline/ingestion/scout/cli.py — Scout CLI 契约
 
 提供 register_subparser / execute 供 pipeline/run.py 组装，
-同时提供 main() 供 python -m pipeline.ingestion.scout 独立调用。
+同时提供 main() 供 uv run python -m pipeline.ingestion.scout 独立调用。
 
 设计理由：
     将 CLI 定义（参数声明）与执行逻辑分离到本模块，
@@ -55,7 +55,7 @@ def execute(args) -> int:
 
 
 def main() -> int:
-    """独立 CLI 入口：python -m pipeline.ingestion.scout [--force]"""
+    """独立 CLI 入口：uv run python -m pipeline.ingestion.scout [--force]"""
     import argparse
     parser = argparse.ArgumentParser(description="Stage 1 Scout: 生成 URL 清单")
     _add_arguments(parser)

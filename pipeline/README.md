@@ -36,8 +36,7 @@ pipeline/
 需要 Python >= 3.10。
 
 ```bash
-cd pipeline
-pip install -r requirements.txt
+uv pip install -r pipeline/requirements.txt
 ```
 
 ### 2. 配置代理 (可选)
@@ -71,7 +70,7 @@ pip install -r requirements.txt
 
 ```bash
 # 在项目根目录下执行
-python pipeline/run.py
+uv run python pipeline/run.py
 ```
 
 `run.py` 启动时自动执行：
@@ -83,16 +82,16 @@ python pipeline/run.py
 
 ```bash
 # Step 1: 生成 URL 清单 → data/00_manifest/
-python -m pipeline.ingestion.scout
+uv run python -m pipeline.ingestion.scout
 
 # 强制重新获取 (忽略已有清单)
-python -m pipeline.ingestion.scout --force
+uv run python -m pipeline.ingestion.scout --force
 
 # Step 2: 抓取正文 → data/01_raw/
-python -m pipeline.ingestion.ingest
+uv run python -m pipeline.ingestion.ingest
 
 # 强制重新抓取 (忽略去重记录)
-python -m pipeline.ingestion.ingest --force
+uv run python -m pipeline.ingestion.ingest --force
 ```
 
 ## 数据流向
@@ -114,24 +113,24 @@ ingest.py ──正文抽取──────▶  data/01_raw/{source}/01.md
 
 ```bash
 # 单元测试
-python -m pytest pipeline/tests/ -v
+uv run python -m pytest pipeline/tests/ -v
 
 # 验证配置加载
-python -c "
+uv run python -c "
 from pipeline.core.config_loader import load_config
 cfg = load_config()
 print(f'{len(cfg[\"sources\"])} sources loaded')
 "
 
 # 验证 RSS 抓取
-python -c "
+uv run python -c "
 from pipeline.core.web_utils import fetch_rss_items
 items = fetch_rss_items('https://rss.arxiv.org/rss/cs.AI')
 print(f'{len(items)} items from arxiv RSS')
 "
 
 # 验证 Frontmatter 读写
-python -c "
+uv run python -c "
 from pipeline.core.frontmatter_utils import build_ingestion_frontmatter, write_frontmatter, read_frontmatter
 from pathlib import Path
 import tempfile, shutil

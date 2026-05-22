@@ -1,9 +1,9 @@
 """
-python -m pipeline.ingestion.scout CLI 入口
+uv run python -m pipeline.ingestion.scout CLI 入口
 
 用法：
-    python -m pipeline.ingestion.scout          # 增量抓取（跳过已有清单）
-    python -m pipeline.ingestion.scout --force  # 强制重新抓取所有源
+    uv run python -m pipeline.ingestion.scout          # 增量抓取（跳过已有清单）
+    uv run python -m pipeline.ingestion.scout --force  # 强制重新抓取所有源
 """
 
 import sys

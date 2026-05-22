@@ -73,6 +73,7 @@ def build_ingestion_frontmatter(
     description: str = "",
     source_name: str = "",
     article_id: str = "",
+    extraction_status: str = "success",
 ) -> Dict[str, Any]:
     """
     构建 Stage 1 产出的标准 Frontmatter 字段。
@@ -81,6 +82,11 @@ def build_ingestion_frontmatter(
     article_id: 由 00_manifest 阶段预生成的 SHA-256 文章 ID。
                 如果提供，将写入 frontmatter 作为该文章在流水线中的唯一标识。
                 后续所有阶段都基于此 ID 进行去重和关联。
+
+    extraction_status: 正文提取状态，供下游阶段和人类读者判断内容质量。
+        - "success": trafilatura 成功提取正文
+        - "partial": HTML 获取成功但 trafilatura 未能提取正文，body 为 manifest summary 兜底
+        - "failed":  HTML 获取失败，body 为错误说明 + manifest summary
     """
     authors = []
     if author:
@@ -95,6 +101,7 @@ def build_ingestion_frontmatter(
         "created": date.today().isoformat(),
         "description": description,
         "tags": ["clippings"],
+        "extraction_status": extraction_status,
     }
 
     # 将预生成的文章 ID 置入 frontmatter，成为该文件在流水线中的"身份证"

@@ -1,10 +1,10 @@
 """
-python -m pipeline.ingestion.backfill_ids CLI 入口
+uv run python -m pipeline.ingestion.backfill_ids CLI 入口
 
 用法：
-    python -m pipeline.ingestion.backfill_ids              # 处理 data/01_raw/ 下所有文件
-    python -m pipeline.ingestion.backfill_ids --dry-run    # 仅列出文件
-    python -m pipeline.ingestion.backfill_ids -i path/to/file.md
+    uv run python -m pipeline.ingestion.backfill_ids              # 处理 data/01_raw/ 下所有文件
+    uv run python -m pipeline.ingestion.backfill_ids --dry-run    # 仅列出文件
+    uv run python -m pipeline.ingestion.backfill_ids -i path/to/file.md
 """
 
 import sys

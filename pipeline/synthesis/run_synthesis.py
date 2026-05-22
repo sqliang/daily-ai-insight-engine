@@ -2,10 +2,10 @@
 pipeline/synthesis/run_synthesis.py — Stage 4b CLI 入口
 
 用法:
-    python pipeline/run.py synthesize                    运行完整合成流程
-    python pipeline/run.py synthesize --dry-run          显示 prompt 预估信息
-    python pipeline/run.py synthesize --model claude-opus-4-7  指定模型
-    python pipeline/run.py synthesize --max-detail 20    限制详细展示文章数
+    uv run python pipeline/run.py synthesize                    运行完整合成流程
+    uv run python pipeline/run.py synthesize --dry-run          显示 prompt 预估信息
+    uv run python pipeline/run.py synthesize --model claude-opus-4-7  指定模型
+    uv run python pipeline/run.py synthesize --max-detail 20    限制详细展示文章数
 
 流程:
     1. 读取 data/04_structured/all_articles.json
@@ -57,7 +57,7 @@ def synthesize_report(
 
     if not input_path.exists():
         print(f"错误: 输入文件不存在: {input_path}")
-        print("请先运行 'python pipeline/run.py aggregate' 生成 all_articles.json")
+        print("请先运行 'uv run python pipeline/run.py aggregate' 生成 all_articles.json")
         sys.exit(1)
 
     # 预读数据
