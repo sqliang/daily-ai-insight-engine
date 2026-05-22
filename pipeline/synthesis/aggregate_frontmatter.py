@@ -29,15 +29,20 @@ logger = logging.getLogger(__name__)
 
 
 def _serialize_value(obj):
-    """将 Python 对象递归转换为 JSON 可序列化格式。"""
+    """将 Python 对象递归转换为 JSON 可序列化格式，过滤 None 值。"""
     if obj is None:
         return None
     if isinstance(obj, (str, int, float, bool)):
         return obj
     if isinstance(obj, list):
-        return [_serialize_value(v) for v in obj]
+        return [v for v in (_serialize_value(x) for x in obj) if v is not None]
     if isinstance(obj, dict):
-        return {k: _serialize_value(v) for k, v in obj.items()}
+        result = {}
+        for k, v in obj.items():
+            sv = _serialize_value(v)
+            if sv is not None:
+                result[k] = sv
+        return result
     if isinstance(obj, datetime):
         return obj.isoformat()
     return str(obj)

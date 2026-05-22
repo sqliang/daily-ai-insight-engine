@@ -30,6 +30,7 @@ const manifestSchema = z.object({
     "tech_blog",
     "news_media",
     "community_discussion",
+    "newsletter_rss",
   ]),
   tier: z.enum(["A", "B", "C"]),
   generated_at: z.string(),
