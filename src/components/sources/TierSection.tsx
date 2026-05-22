@@ -11,7 +11,6 @@ type TierSectionProps = {
 
 export function TierSection({ tier, meta, sources }: TierSectionProps) {
   const color = TIER_COLORS[tier] ?? "var(--line)";
-  const totalArticles = sources.reduce((sum, s) => sum + s.articleCount, 0);
 
   return (
     <section className="animate-fade-up">
@@ -38,7 +37,7 @@ export function TierSection({ tier, meta, sources }: TierSectionProps) {
           style={{ backgroundColor: `${color}14`, color }}
         >
           <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: color }} />
-          {sources.length} 个源 · {totalArticles} 篇文章
+          {sources.length} 个源
         </span>
       </div>
 

@@ -79,19 +79,28 @@ class BrowserSession:
         wait_for: Optional[str] = None,
         wait_ms: int = 2000,
         timeout: int = 30000,
+        wait_until: str = "domcontentloaded",
+        wait_for_fn: Optional[str] = None,
     ) -> Optional[str]:
         """
         导航到 URL，等待 JS 渲染完成后返回 page.content()。
 
-        wait_for: CSS 选择器，等待该元素出现后再返回 HTML
-        wait_ms:  当 wait_for 未指定时，固定等待毫秒数
-        timeout:  导航超时 (毫秒)
+        wait_for:    CSS 选择器，等待该元素出现后再返回 HTML
+        wait_ms:     当 wait_for/wait_for_fn 均未指定时，固定等待毫秒数
+        timeout:     导航超时 (毫秒)
+        wait_until:  导航等待策略，默认 domcontentloaded，
+                     可设为 networkidle 等待网络空闲（用于 Cloudflare 等 JS 重定向页面）
+        wait_for_fn: JavaScript 表达式，轮询直到其返回 truthy 值再返回 HTML。
+                     用于等待 Cloudflare 验证通过后页面内容出现，
+                     如 "document.body.innerText.length > 200"
         """
         page = self.new_page()
         try:
-            page.goto(url, timeout=timeout, wait_until="domcontentloaded")
+            page.goto(url, timeout=timeout, wait_until=wait_until)
             if wait_for:
                 page.wait_for_selector(wait_for, timeout=timeout)
+            elif wait_for_fn:
+                page.wait_for_function(wait_for_fn, timeout=timeout)
             else:
                 page.wait_for_timeout(wait_ms)
             return page.content()
@@ -150,6 +159,8 @@ def fetch_rendered_html(
     wait_ms: int = 2000,
     timeout: int = 30000,
     headless: bool = True,
+    wait_until: str = "domcontentloaded",
+    wait_for_fn: Optional[str] = None,
 ) -> Optional[str]:
     """
     一次性获取 JS 渲染后的页面 HTML。
@@ -157,5 +168,7 @@ def fetch_rendered_html(
     """
     with BrowserSession(headless=headless) as session:
         return session.fetch_page_html(
-            url, wait_for=wait_for, wait_ms=wait_ms, timeout=timeout
+            url, wait_for=wait_for, wait_ms=wait_ms,
+            timeout=timeout, wait_until=wait_until,
+            wait_for_fn=wait_for_fn,
         )

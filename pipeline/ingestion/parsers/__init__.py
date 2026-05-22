@@ -8,6 +8,7 @@
 from .tldrai import parse_tldrai
 from .anthropic import parse_anthropic
 from .zhihu import parse_zhihu_browser
+from .openai import parse_openai_browser
 
 # curl-based scrape 策略解析器
 SCRAPE_PARSERS = {
@@ -19,5 +20,6 @@ SCRAPE_PARSERS = {
 # Playwright browser 策略解析器
 BROWSER_PARSERS = {
     "zhihu": parse_zhihu_browser,
+    "openai-blog": parse_openai_browser,
     # machine-heart 已移除: 同上原因
 }

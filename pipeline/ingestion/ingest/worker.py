@@ -150,10 +150,15 @@ def ingest_browser_article(
     source_config = get_source_by_name(source_name) or {}
     timeout = source_config.get("timeout", 30)
     wait_for = source_config.get("wait_for")
+    wait_ms = source_config.get("wait_ms", 2000)
+    wait_until = source_config.get("wait_until", "domcontentloaded")
+    wait_for_fn = source_config.get("wait_for_fn")
 
     # Playwright 渲染获取 HTML
     html = session.fetch_page_html(
-        url, wait_for=wait_for, timeout=timeout * 1000
+        url, wait_for=wait_for, wait_ms=wait_ms,
+        timeout=timeout * 1000, wait_until=wait_until,
+        wait_for_fn=wait_for_fn,
     )
 
     if html:

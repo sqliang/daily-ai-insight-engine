@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getSourceDetailEnriched } from "@/lib/data/sources";
+import { Suspense } from "react";
+import { getSourceDetailEnriched, type DateRange } from "@/lib/data/sources";
 import { PageShell } from "@/components/layout/PageShell";
 import { ArticleList } from "@/components/sources/ArticleList";
+import { DateFilterBar } from "@/components/sources/DateFilterBar";
 import {
   TIER_SHORT_LABELS,
   SOURCE_TYPE_LABELS,
@@ -29,11 +31,18 @@ function formatGeneratedAt(iso: string): string {
 
 export default async function SourceDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ name: string }>;
+  searchParams: Promise<{ from?: string; to?: string }>;
 }) {
   const { name } = await params;
-  const source = await getSourceDetailEnriched(name);
+  const sp = await searchParams;
+
+  const dateRange: DateRange | undefined =
+    sp.from || sp.to ? { from: sp.from, to: sp.to } : undefined;
+
+  const source = await getSourceDetailEnriched(name, dateRange);
   if (!source) notFound();
 
   const hasManifest = source.manifestFound && source.articleCount > 0;
@@ -208,12 +217,18 @@ export default async function SourceDetailPage({
         </div>
       </header>
 
-      <ArticleList
-        articles={source.articles}
-        hasManifest={hasManifest}
-        manifestFound={source.manifestFound}
-        articleCount={source.articleCount}
-      />
+      <div className="mt-10">
+        <Suspense fallback={null}>
+          <DateFilterBar />
+        </Suspense>
+        <ArticleList
+          articles={source.articles}
+          hasManifest={hasManifest}
+          manifestFound={source.manifestFound}
+          articleCount={source.articleCount}
+          dateRange={source.dateRange}
+        />
+      </div>
     </PageShell>
   );
 }
