@@ -1,5 +1,5 @@
 """
-pipeline/extraction/fact_extraction_agent.py — Stage 2b: 事实提取与浓缩
+pipeline/extraction/agent/fact_extraction_agent.py — Stage 2b: 事实提取与浓缩
 
 功能：
     - extract_fact_extraction(): 单文件处理——读取、调用 Agent、校验、合并、写入
@@ -20,22 +20,22 @@ from typing import Optional
 
 import asyncio
 
-from ..core.frontmatter_utils import read_frontmatter, write_frontmatter
-from ..schemas.fact_extraction import (
+from ...core.frontmatter_utils import read_frontmatter, write_frontmatter
+from ...schemas.fact_extraction import (
     FactExtraction,
     EventType,
     EpistemicStatus,
     Entities,
 )
-from ..core.agent import (
+from ...core.agent import (
     AgentCallError,
     StageResult,
     call_agent_with_retry,
     parse_json_response,
 )
-from ..core.text_utils import truncate_at_natural_break
-from ..core.enum_utils import fuzzy_match_enum
-from .prompts import (
+from ...core.text_utils import truncate_at_natural_break
+from ...core.enum_utils import fuzzy_match_enum
+from .prompts.fact_extraction import (
     get_fact_extraction_system_prompt,
     build_fact_extraction_user_prompt,
 )
@@ -138,7 +138,7 @@ def _validate_fact_extraction(data: dict) -> FactExtraction:
         ValueError: 模糊匹配也失败时抛出，包含详细错误信息
     """
     from pydantic import ValidationError
-    from ..schemas.fact_extraction import FactExtraction
+    from ...schemas.fact_extraction import FactExtraction
 
     # --- 尝试严格校验 ---
     try:
@@ -301,6 +301,23 @@ def _validate_fact_extraction(data: dict) -> FactExtraction:
 
 
 # =============================================================================
+# 空 body 日志辅助
+# =============================================================================
+
+def _log_empty_body_skip_fact(file_path: str, fm: dict) -> None:
+    """
+    根据 extraction_status 输出有意义的跳过原因日志（FactExtraction 版本）。
+    """
+    status = fm.get("extraction_status", "")
+    if status == "failed":
+        logger.warning("正文为空（Stage 1 抓取失败），跳过 FactExtraction: %s", file_path)
+    elif status == "partial":
+        logger.warning("正文为空（Stage 1 仅获取摘要），跳过 FactExtraction: %s", file_path)
+    else:
+        logger.warning("正文为空，跳过 FactExtraction: %s", file_path)
+
+
+# =============================================================================
 # 单文件处理
 # =============================================================================
 
@@ -366,7 +383,22 @@ async def extract_fact_extraction(
 
     # --- 空 body 处理 ---
     if not body.strip():
-        logger.warning("正文为空，跳过 FactExtraction: %s", input_str)
+        _log_empty_body_skip_fact(input_str, existing_fm)
+        return StageResult(
+            input_path=input_str,
+            output_path=output_str,
+            success=True,
+            fields_extracted=[],
+            skipped=True,
+        )
+
+    # --- extraction_status == "failed" → 跳过 Agent 调用 ---
+    # body 仅为警告信息 + manifest 摘要，不值得调用 LLM
+    extraction_status = existing_fm.get("extraction_status", "success")
+    if extraction_status == "failed":
+        logger.warning(
+            "跳过 FactExtraction（Stage 1 抓取失败，正文仅为错误信息）: %s", input_str,
+        )
         return StageResult(
             input_path=input_str,
             output_path=output_str,
@@ -379,7 +411,10 @@ async def extract_fact_extraction(
     title = existing_fm.get("title", "")
     source = existing_fm.get("source", "")
 
-    logger.info("提取 FactExtraction: %s", input_str)
+    status_note = ""
+    if extraction_status == "partial":
+        status_note = "（Stage 1 仅获取摘要，正文不完整）"
+    logger.info("提取 FactExtraction: %s%s", input_str, status_note)
 
     try:
         # 构建提示词
@@ -431,6 +466,10 @@ async def extract_fact_extraction(
     for field_name, value in fe_dict.items():
         existing_fm[field_name] = value
         fields_written.append(field_name)
+
+    # 标记管道阶段（供下游阶段做前置检查）
+    existing_fm["pipeline_stage"] = "fact_extracted"
+    fields_written.append("pipeline_stage")
 
     # --- 写入输出文件 ---
     try:

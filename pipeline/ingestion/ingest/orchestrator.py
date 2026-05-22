@@ -96,8 +96,7 @@ def run_ingest(
 
         source_name = manifest.get("source", "")
         source_config = get_source_by_name(source_name) or {}
-        target_dir_name = source_config.get("target_dir", source_name)
-        target_dir = raw_dir / target_dir_name
+        target_dir = raw_dir / source_name
         ensure_dir(target_dir)
 
         strategy = source_config.get("fetch_strategy", "rss")

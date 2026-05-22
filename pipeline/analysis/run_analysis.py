@@ -189,6 +189,19 @@ async def run_analysis(
         stages=stages,
     )
 
+    # --- 自动聚合到 04_structured（前端渐进增强） ---
+    if not dry_run and results:
+        from ..synthesis.aggregate_frontmatter import aggregate_frontmatter
+        synthesize_dir = resolve_data_dir("synthesize_structured")
+        print(f"\n{'=' * 60}")
+        print("  自动聚合: 03_analyzed → 04_structured")
+        print(f"{'=' * 60}")
+        aggregate_frontmatter(
+            input_dir=output_base_dir,
+            output_dir=synthesize_dir,
+            dry_run=False,
+        )
+
     # --- 汇总 ---
     _print_summary(results, stages)
     return results

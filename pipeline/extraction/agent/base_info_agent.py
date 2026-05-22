@@ -1,5 +1,5 @@
 """
-pipeline/extraction/base_info_agent.py — Stage 2a: 基础元信息提取
+pipeline/extraction/agent/base_info_agent.py — Stage 2a: 基础元信息提取
 
 功能：
     - generate_id(): 已在 pipeline.core.id_utils 中统一实现，此处不再重复
@@ -22,16 +22,16 @@ from typing import Optional
 
 import asyncio
 
-from ..core.frontmatter_utils import read_frontmatter, write_frontmatter
-from ..core.id_utils import generate_id
-from ..schemas.base_info import BaseInfo
-from ..core.agent import (
+from ...core.frontmatter_utils import read_frontmatter, write_frontmatter
+from ...core.id_utils import generate_id
+from ...schemas.base_info import BaseInfo
+from ...core.agent import (
     AgentCallError,
     StageResult,
     call_agent_with_retry,
     parse_json_response,
 )
-from .prompts import get_base_info_system_prompt, build_base_info_user_prompt
+from .prompts.base_info import get_base_info_system_prompt, build_base_info_user_prompt
 
 # ---------------------------------------------------------------------------
 # 日志
@@ -103,21 +103,21 @@ _SOURCE_TYPE_FROM_DIR: dict[str, str] = {}
 
 def _build_source_type_map() -> None:
     """
-    从 config.yaml 的数据源配置中提取 target_dir → source.type 映射。
+    从 config.yaml 的数据源配置中提取 name → source.type 映射。
 
-    以文件所在目录名（如 arxiv、bensbites、techcrunch）为索引，
-    反查配置中对应数据源的 type 字段（与 BaseInfo.source_type 枚举值一致）。
+    以文件所在目录名（即 source name）为索引，反查配置中对应数据源的
+    type 字段（与 BaseInfo.source_type 枚举值一致）。
 
     此映射允许 BaseInfo 提取阶段完全跳过 Agent 调用：
     所有 source_type 都可以从文件路径的父目录名推断，零成本、零延迟。
     """
-    from ..core.config_loader import get_sources
+    from ...core.config_loader import get_sources
 
     for src in get_sources(enabled_only=False):
-        target = src.get("target_dir") or src.get("name", "")
+        name = src.get("name", "")
         src_type = src.get("type", "")
-        if target and src_type:
-            _SOURCE_TYPE_FROM_DIR[target] = src_type
+        if name and src_type:
+            _SOURCE_TYPE_FROM_DIR[name] = src_type
 
 
 # 模块加载时构建一次，后续所有调用复用
@@ -141,6 +141,27 @@ def _infer_source_type_from_dir(file_path: Path) -> Optional[str]:
     """
     parent_dir = file_path.parent.name
     return _SOURCE_TYPE_FROM_DIR.get(parent_dir)
+
+
+# =============================================================================
+# 空 body 日志辅助
+# =============================================================================
+
+def _log_empty_body_skip(file_path: str, fm: dict) -> None:
+    """
+    根据 extraction_status 输出有意义的跳过原因日志。
+
+    参数：
+        file_path: 文件路径（用于日志）
+        fm: frontmatter 字典
+    """
+    status = fm.get("extraction_status", "")
+    if status == "failed":
+        logger.warning("正文为空（Stage 1 抓取失败），跳过 Agent 调用: %s", file_path)
+    elif status == "partial":
+        logger.warning("正文为空（Stage 1 仅获取摘要），跳过 Agent 调用: %s", file_path)
+    else:
+        logger.warning("正文为空，跳过 Agent 调用: %s", file_path)
 
 
 # =============================================================================
@@ -223,7 +244,7 @@ async def extract_base_info(
 
     # --- 空 body 处理 ---
     if not body.strip():
-        logger.warning("正文为空，跳过 Agent 调用: %s", input_str)
+        _log_empty_body_skip(input_str, existing_fm)
         if article_id:
             existing_fm["id"] = article_id
         try:
@@ -251,7 +272,7 @@ async def extract_base_info(
 
     # --- 尝试从目录名推断 source_type（零 Agent 调用） ---
     # 对于绝大多数数据源，source_type 在 config.yaml 中已有明确配置，
-    # 而文件目录名（如 arxiv、techcrunch）与数据源 target_dir 一一对应，
+    # 而文件目录名就是 source name（如 arxiv-cs-ai、techcrunch），
     # 因此可以直接推断，无需浪费 Agent 调用
     if "source_type" in missing_fields:
         inferred_type = _infer_source_type_from_dir(input_path)
@@ -286,7 +307,16 @@ async def extract_base_info(
         )
 
     # --- 调用 Agent 提取缺失字段 ---
-    logger.info("提取 BaseInfo: %s (缺失字段: %s)", input_str, ", ".join(missing_fields))
+    extraction_status = existing_fm.get("extraction_status", "success")
+    status_note = ""
+    if extraction_status == "failed":
+        status_note = "（Stage 1 抓取失败，正文质量低）"
+    elif extraction_status == "partial":
+        status_note = "（Stage 1 仅获取摘要，正文不完整）"
+    logger.info(
+        "提取 BaseInfo: %s (缺失字段: %s)%s",
+        input_str, ", ".join(missing_fields), status_note,
+    )
 
     try:
         # 构建提示词
@@ -338,6 +368,10 @@ async def extract_base_info(
         if field_name in missing_fields:
             existing_fm[field_name] = value
             fields_written.append(field_name)
+
+    # 标记管道阶段（供下游阶段做前置检查）
+    existing_fm["pipeline_stage"] = "base_info_extracted"
+    fields_written.append("pipeline_stage")
 
     # --- 写入输出文件 ---
     try:

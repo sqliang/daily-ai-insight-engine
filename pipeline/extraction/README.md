@@ -83,13 +83,13 @@ Stage 2a (BaseInfo) 和 Stage 2b (FactExtraction) **严格串行**执行——St
 
 ### source_type 目录名推断（零 Agent 调用）
 
-BaseInfo 的核心任务是判断 `source_type`。对于绝大多数数据源，这个信息在 `config.yaml` 中已经明确配置（`type` 字段），而文件目录名（如 `arxiv`、`techcrunch`）与数据源的 `target_dir` 一一对应。
+BaseInfo 的核心任务是判断 `source_type`。对于绝大多数数据源，这个信息在 `config.yaml` 中已经明确配置（`type` 字段），而文件目录名就是 source 的 `name`（如 `arxiv-cs-ai`、`techcrunch`），与配置一一对应。
 
 系统在模块加载时构建 `目录名 → source.type` 映射表，处理文件时优先从路径推断，只有推断失败（如文件目录名在配置中找不到对应源）时才调用 Agent。这消除了绝大多数情况下的 Agent 调用开销。
 
 ```python
-# 推断逻辑：data/01_raw/arxiv/01.md → arxiv → academic_paper
-_SOURCE_TYPE_FROM_DIR = {"arxiv": "academic_paper", "techcrunch": "news_media", ...}
+# 推断逻辑：data/01_raw/arxiv-cs-ai/01.md → arxiv-cs-ai → academic_paper
+_SOURCE_TYPE_FROM_DIR = {"arxiv-cs-ai": "academic_paper", "techcrunch": "news_media", ...}
 ```
 
 ### 存量字段保护（merge 策略）
@@ -188,7 +188,7 @@ run_extraction(concurrency, stages, skip_existing, force, model)
 │     │  ├─ 5c. skip_existing 检查
 │     │  │     输出文件已存在 + id 存在 + 所有 BaseInfo 字段完整 → 跳过
 │     │  │
-│     │  ├─ 5d. 空 body 检查 → 仅写入 id，跳过 Agent 调用
+│     │  ├─ 5d. 空 body 检查 → 读 extraction_status 输出原因，跳过 Agent 调用
 │     │  │
 │     │  ├─ 5e. determine_missing_fields(existing_fm)
 │     │  │     对比 frontmatter 与 BaseInfo schema，找出缺失字段
@@ -223,25 +223,27 @@ run_extraction(concurrency, stages, skip_existing, force, model)
 │     │  ├─ 6b. skip_existing 检查
 │     │  │     id 存在 + 所有 FactExtraction 字段完整 → 跳过
 │     │  │
-│     │  ├─ 6c. 空 body 检查 → 跳过 Agent 调用
+│     │  ├─ 6c. 空 body 检查 → 读 extraction_status 输出原因，跳过 Agent 调用
 │     │  │
-│     │  ├─ 6d. 读取 title / source（来自 Stage 2a 已写入的 frontmatter）
+│     │  ├─ 6d. extraction_status == "failed" → 跳过（正文仅为错误信息）
 │     │  │
-│     │  ├─ 6e. 调用 Agent 提取
+│     │  ├─ 6e. 读取 title / source（来自 Stage 2a 已写入的 frontmatter）
+│     │  │
+│     │  ├─ 6f. 调用 Agent 提取
 │     │  │     build_fact_extraction_user_prompt(title, source, body[:12000])
 │     │  │     → call_agent_with_retry(max_turns=3)
 │     │  │     → parse_json_response(text)
 │     │  │
-│     │  ├─ 6f. _validate_fact_extraction(data) — 5 级容错校验
+│     │  ├─ 6g. _validate_fact_extraction(data) — 5 级容错校验
 │     │  │     ├─ Pydantic 严格校验
 │     │  │     ├─ 枚举值模糊匹配（infra → infrastructure_update）
 │     │  │     ├─ 枚举交叉互换修复（eventType ↔ epistemicStatus swap）
 │     │  │     ├─ 单向枚举修复 + 默认值回退
 │     │  │     └─ 超长文本自然边界截断
 │     │  │
-│     │  ├─ 6g. model_dump(mode="json") + merge 到 existing_fm
+│     │  ├─ 6h. model_dump(mode="json") + merge 到 existing_fm + 写入 pipeline_stage
 │     │  │
-│     │  └─ 6h. write_frontmatter(output_path, merged_fm, body)
+│     │  └─ 6i. write_frontmatter(output_path, merged_fm, body)
 │     │         Stage 2b 的输出与输入路径相同（原位更新）
 │     │
 │     └─ print_stage_summary("2b (FactExtraction)", results_2b)
@@ -276,27 +278,26 @@ title: "Interference-Aware Multi-Task Unlearning"
 source: "https://arxiv.org/abs/2605.19042"
 published: "2026-05-20"
 created: "2026-05-21T08:30:00Z"
+extraction_status: "success"       # Stage 1 正文抓取质量（success/partial/failed）
+pipeline_stage: "ingested"         # 标记已完成 Stage 1
 ---
 正文内容...
 ```
 
-**Stage 2a 后**（新增 source_type）：
+**Stage 2a 后**（新增 source_type + 更新 pipeline_stage）：
 
 ```yaml
-id: "098b39fb4bd5fbf2"
-title: "Interference-Aware Multi-Task Unlearning"
-source: "https://arxiv.org/abs/2605.19042"
-published: "2026-05-20"
-created: "2026-05-21T08:30:00Z"
-sourceType: "academic_paper"    # ← Stage 2a 新增（或从目录名推断）
+# ... Stage 1 字段保持不变 ...
+sourceType: "academic_paper"       # ← Stage 2a 新增（或从目录名推断）
+pipeline_stage: "base_info_extracted"  # ← Stage 2a 更新
 ---
 正文内容...
 ```
 
-**Stage 2b 后**（新增 6 个 FactExtraction 字段）：
+**Stage 2b 后**（新增 6 个 FactExtraction 字段 + 更新 pipeline_stage）：
 
 ```yaml
-# ... 上述字段保持不变 ...
+# ... Stage 1 + Stage 2a 字段保持不变 ...
 tldr: "提出干扰感知的多任务遗忘方法，在移除特定知识的同时保持模型整体性能"
 objectiveSummary: "研究者提出一种新的机器遗忘学习方法..."
 eventType: "framework_tools"
@@ -308,6 +309,7 @@ entities:
 keyLogicFlow:
   - "传统遗忘学习方法在单任务上有效，但在多任务场景下会产生任务间干扰"
   - "提出 Interference-Aware 方法识别任务间梯度冲突..."
+pipeline_stage: "fact_extracted"     # ← Stage 2b 更新
 ---
 正文内容...
 ```
@@ -334,7 +336,6 @@ stages:
 sources:
   arxiv-cs-ai:
     type: academic_paper          # 对应 BaseInfo.source_type 枚举值
-    target_dir: arxiv             # 文件所在的子目录名
 ```
 
 ## 错误处理
@@ -343,7 +344,11 @@ sources:
 |------|------|
 | 文件读取失败 | 返回 `StageResult(success=False)`，**不影响其他文件** |
 | 输出文件损坏 | `try/except` 捕获，回退到重新处理 |
-| 正文为空 | 跳过 Agent 调用，仅确保 id 已写入 |
+| 正文为空 | 跳过 Agent 调用，根据 `extraction_status` 输出具体原因（抓取失败/仅摘要/未知） |
+| Stage 1 抓取失败（`extraction_status=failed`） | Stage 2a 仍可推断 source_type；Stage 2b **直接跳过**（正文仅为错误信息，不值得调用 LLM） |
+| Stage 1 仅获摘要（`extraction_status=partial`） | Stage 2a/2b 仍提取，日志标注"正文不完整" |
+| Stage 2b 输入文件全部缺失 | 打印明确错误："需要 Stage 2a 的输出文件，请先运行 extract --stage base_info"，**直接退出** |
+| Stage 2b 输入文件部分缺失 | 打印警告（缺失数/总数），过滤出存在的文件继续处理 |
 | Agent 调用失败（3 次重试耗尽） | 返回 `StageResult(success=False)`，打印错误 |
 | JSON 解析失败 | 返回 `StageResult(success=False)`（5 级 JSON 恢复 parser 也无法挽救时） |
 | Pydantic 校验失败 | 依次尝试模糊匹配 → 交叉互换 → 单向修复 → 默认回退，最终仍失败才报错 |
