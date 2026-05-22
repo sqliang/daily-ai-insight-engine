@@ -26,12 +26,14 @@ class SourceType(str, Enum):
         - tech_blog: 技术博客/官方发布，权威但可能有商业目的
         - news_media: 科技媒体/公关稿，商业意图强但存在技术水分
         - community_discussion: 社区讨论/社交媒体，代表最真实的开发者情绪
+        - newsletter_rss: 邮件通讯/RSS 摘要，精选聚合但缺乏深度分析
     """
 
     ACADEMIC_PAPER = "academic_paper"
     TECH_BLOG = "tech_blog"
     NEWS_MEDIA = "news_media"
     COMMUNITY_DISCUSSION = "community_discussion"
+    NEWSLETTER_RSS = "newsletter_rss"
 
 
 class BaseInfo(BaseModel):

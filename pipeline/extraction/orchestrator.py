@@ -1,5 +1,5 @@
 """
-pipeline/extraction/run_extraction.py — Stage 2 编排入口
+pipeline/extraction/orchestrator.py — Stage 2 编排入口
 
 职责：
     - 文件发现：识别 .md 文件或目录下的所有 .md 文件
@@ -34,8 +34,8 @@ import asyncio
 
 from pipeline.utils.file_utils import get_project_root, ensure_dir, list_files
 from ..core.config_loader import get_llm_config, get_stage_config, resolve_data_dir
-from .agent.base_info_agent import run_base_info_stage
-from .agent.fact_extraction_agent import run_fact_extraction_stage
+from .base_info.runner import run_base_info_stage
+from .fact_extraction.runner import run_fact_extraction_stage
 from ..core.agent import StageResult
 
 # ---------------------------------------------------------------------------

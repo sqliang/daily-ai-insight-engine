@@ -5,7 +5,7 @@ pipeline/extraction/cli.py — Stage 2 Extraction CLI 契约
 同时提供 main() 供 uv run python pipeline/extraction/cli.py 独立调用。
 
 设计理由：
-    将 CLI 定义与编排逻辑（run_extraction.py）分离到不同文件。
+    将 CLI 定义与编排逻辑（orchestrator.py）分离到不同文件。
 """
 
 import asyncio
@@ -96,7 +96,7 @@ def execute(args) -> int:
             input_path = get_project_root() / input_path
 
     try:
-        from .run_extraction import run_extraction
+        from .orchestrator import run_extraction
 
         asyncio.run(
             run_extraction(
