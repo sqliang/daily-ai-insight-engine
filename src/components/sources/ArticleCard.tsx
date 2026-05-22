@@ -301,6 +301,7 @@ export function ArticleCard({ article }: ArticleCardProps) {
                           tldr={enriched!.tldr}
                           objectiveSummary={enriched!.objective_summary}
                           eventType={enriched!.event_type}
+                          sourceType={enriched!.source_type}
                           entities={enriched!.entities}
                           keyLogicFlow={enriched!.key_logic_flow}
                           epistemicStatus={enriched!.epistemic_status}

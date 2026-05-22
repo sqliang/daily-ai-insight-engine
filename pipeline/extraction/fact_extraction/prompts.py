@@ -1,5 +1,5 @@
 """
-pipeline/extraction/agent/prompts/fact_extraction.py — Stage 2b (FactExtraction) Agent 提示词模板
+pipeline/extraction/fact_extraction/prompts.py — Stage 2b (FactExtraction) Agent 提示词模板
 
 为 FactExtraction Agent 生成 system_prompt 和 user_prompt。
 
@@ -8,24 +8,13 @@ pipeline/extraction/agent/prompts/fact_extraction.py — Stage 2b (FactExtractio
     - user_prompt: 提供具体文章数据和提取要求（可变部分）
     - 两者分离便于独立调试和版本管理
 
-提示词语言：中文（与项目文档语言一致）
-模型默认使用 claude-sonnet-4-6（来自 config.yaml llm.models.extract）
-
-截断策略：
-    - FactExtraction 提取：正文截断至 12000 字符（事实提取需要更多上下文）
+提示词语言：中文
+截断策略：正文截断至 12000 字符（事实提取需要更多上下文）
 """
-
-# ---------------------------------------------------------------------------
-# 常量
-# ---------------------------------------------------------------------------
 
 # 正文截断长度
 FACT_EXTRACTION_BODY_MAX_CHARS = 12000
 
-
-# =============================================================================
-# Stage 2b: FactExtraction 提示词
-# =============================================================================
 
 def get_fact_extraction_system_prompt() -> str:
     """
@@ -111,7 +100,6 @@ def build_fact_extraction_user_prompt(title: str, source: str, body: str) -> str
     返回：
         格式化的用户提示词字符串
     """
-    # 截断正文以控制 token 消耗
     truncated_body = body[:FACT_EXTRACTION_BODY_MAX_CHARS]
     if len(body) > FACT_EXTRACTION_BODY_MAX_CHARS:
         truncated_body += "\n\n[... 正文已截断，后续内容省略 ...]"
