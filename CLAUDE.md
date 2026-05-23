@@ -146,9 +146,6 @@ uv run python pipeline/run.py synthesize         # Stage 4b: Editor-in-Chief dai
 uv run python pipeline/run.py synthesize --dry-run     # Estimate token usage, no LLM call
 uv run python pipeline/run.py analyze --stage qualitative  # Run only one analysis dimension
 uv run python pipeline/run.py extract --force          # Reprocess all, ignoring skip-existing
-
-# Validation
-pnpm validate            # Zod validation of data files (scripts/validate-report.ts)
 ```
 
 ## Python environment

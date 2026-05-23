@@ -138,8 +138,6 @@ daily-ai-insight-engine/
 │   └── 5_UI设计说明.md                #   前端 UI 设计说明
 │
 ├── rename-to-ids.py                   # 辅助脚本: 按 article ID 重命名文件
-└── scripts/                           # 辅助脚本
-    └── validate-report.ts             #   数据完整性 Zod 校验
 ```
 
 ---
