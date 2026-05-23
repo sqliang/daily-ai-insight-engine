@@ -49,14 +49,18 @@ async function main() {
   const engine = new AIInsightEngine();
   const insights = [];
 
-  // 3. Map extraction: 每篇文章独立处理，单篇失败不会丢失整日报。
-  for (const [index, article] of articles.entries()) {
-    try {
+  // 3. Map extraction: 文章彼此独立，并行处理以降低总耗时。单篇失败不影响其他文章。
+  const results = await Promise.allSettled(
+    articles.map(async (article, index) => {
       console.log(`[map ${index + 1}/${articles.length}] extracting: ${article.title}`);
-      const insight = await engine.extractArticle(article);
-      insights.push(insight);
-    } catch (error) {
-      console.error(`[map failed] ${article.id}`, error);
+      return engine.extractArticle(article);
+    }),
+  );
+  for (const [index, result] of results.entries()) {
+    if (result.status === "fulfilled") {
+      insights.push(result.value);
+    } else {
+      console.error(`[map failed] ${articles[index].id}`, result.reason);
     }
   }
 
