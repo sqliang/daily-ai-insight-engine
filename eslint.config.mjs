@@ -1,5 +1,6 @@
 import js from "@eslint/js";
 import tseslint from "typescript-eslint";
+import reactHooks from "eslint-plugin-react-hooks";
 
 // ============================================================================
 // eslint.config.mjs — ESLint flat config
@@ -15,12 +16,15 @@ export default [
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
-    ignores: [".next/**", "node_modules/**", "out/**"],
+    ignores: [".next/**", "node_modules/**", "out/**", ".claude/**", ".venv/**"],
   },
   {
     files: ["**/*.{ts,tsx}"],
+    plugins: { "react-hooks": reactHooks },
     rules: {
       "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn",
     },
   },
 ];

@@ -370,10 +370,10 @@ export async function getSourceDetailEnriched(
   let manifestArticles: Array<{
     url: string; title: string; published: string;
     summary: string; author: string; id?: string;
-  }> = [];
+  }>;
   let allManifests: z.infer<typeof manifestSchema>[] = [];
-  let manifestDate: string | null = null;
-  let manifestGeneratedAt: string | null = null;
+  let manifestDate: string | null;
+  let manifestGeneratedAt: string | null;
 
   if (dateRange?.from || dateRange?.to) {
     allManifests = await loadManifestsForSource(name);
