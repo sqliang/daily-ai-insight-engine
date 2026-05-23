@@ -12,7 +12,7 @@ export function ChartContainer({ children, minHeight = 260 }: ChartContainerProp
   return (
     <div style={{ width: "100%", minHeight }}>
       <ResponsiveContainer width="100%" height={minHeight}>
-        {children as any}
+        {children}
       </ResponsiveContainer>
     </div>
   );
