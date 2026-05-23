@@ -15,12 +15,8 @@ type MetricCardProps = {
 export function MetricCard({ label, value, helper, icon, accent = "accent", href }: MetricCardProps) {
   const [displayValue, setDisplayValue] = useState<string>("0");
   const ref = useRef<HTMLDivElement>(null);
-  const animated = useRef(false);
 
   useEffect(() => {
-    if (animated.current) return;
-    animated.current = true;
-
     const numValue = typeof value === "number" ? value : parseInt(String(value), 10);
     if (isNaN(numValue)) {
       setDisplayValue(String(value));
@@ -28,15 +24,18 @@ export function MetricCard({ label, value, helper, icon, accent = "accent", href
     }
 
     let start: number | null = null;
+    let rafId: number;
     const duration = 800;
     const animate = (timestamp: number) => {
       if (!start) start = timestamp;
       const progress = Math.min((timestamp - start) / duration, 1);
       const eased = 1 - Math.pow(1 - progress, 3);
       setDisplayValue(Math.round(eased * numValue).toString());
-      if (progress < 1) requestAnimationFrame(animate);
+      if (progress < 1) rafId = requestAnimationFrame(animate);
     };
-    requestAnimationFrame(animate);
+    rafId = requestAnimationFrame(animate);
+
+    return () => cancelAnimationFrame(rafId);
   }, [value]);
 
   const accentColor: Record<string, string> = {
