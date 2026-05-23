@@ -100,7 +100,7 @@ export function generateMarkdown(report: DailyReport): string {
   // Opportunity Signals
   lines.push("## 机会提示");
   lines.push("");
-  lines.push("| 严重程度 | 信号 | 判断依据 |");
+  lines.push("| 重要程度 | 信号 | 判断依据 |");
   lines.push("|----------|------|----------|");
   report.opportunitySignals.forEach((s) => {
     lines.push(`| ${severityLabels[s.severity]} | ${s.signal} | ${s.rationale} |`);
