@@ -71,6 +71,14 @@ const technologyNames = [
   "安全",
 ];
 
+// 模块级预编译：将 companyNames 转换为 [name, RegExp] 对，避免 findMatches 重复 new RegExp
+function precompileDict(dictionary: string[]): [string, RegExp][] {
+  return dictionary.map((item) => [item, new RegExp(escapeRegExp(item), "i")]);
+}
+
+const COMPANY_PATTERNS = precompileDict(companyNames);
+const TECHNOLOGY_PATTERNS = precompileDict(technologyNames);
+
 // 事件类型信号匹配表：按优先级排序的正则对，第一个命中即为事件类型
 // 每个事件类型都配有多语言信号词，确保中英文信源都被覆盖
 const eventSignals: Array<[EventType, RegExp]> = [
@@ -89,8 +97,8 @@ export function heuristicExtract(article: RawArticle): StructuredInsight {
   const text = `${article.title} ${article.summary} ${article.content}`;
   const eventType = detectEventType(text);
   const entities = {
-    companies: findMatches(text, companyNames),
-    technologies: findMatches(text, technologyNames),
+    companies: findMatches(text, COMPANY_PATTERNS),
+    technologies: findMatches(text, TECHNOLOGY_PATTERNS),
     people: findPeople(text),
     products: findProducts(text),
     regions: findRegions(text),
@@ -220,25 +228,29 @@ function scoreUrgency(text: string, eventType: EventType): number {
   return Math.min(10, score);
 }
 
-// 基于词典的实体匹配：正则全文中搜索，去重后最多返回 8 个
-function findMatches(text: string, dictionary: string[]): string[] {
+const PEOPLE_PATTERNS = precompileDict(["Sam Altman", "Dario Amodei", "Sundar Pichai", "Jensen Huang", "Yann LeCun", "李彦宏", "周鸿祎"]);
+const PRODUCT_PATTERNS = precompileDict(["ChatGPT", "Claude", "Gemini", "Copilot", "Llama", "Sora", "Grok", "DeepSeek", "Kimi"]);
+const REGION_PATTERNS = precompileDict(["US", "EU", "China", "中国", "Europe", "美国", "欧盟", "Asia"]);
+
+// 基于预编译正则的实体匹配：去重后最多返回 8 个
+function findMatches(text: string, patterns: [string, RegExp][]): string[] {
   const normalized = new Set<string>();
-  for (const item of dictionary) {
-    if (new RegExp(escapeRegExp(item), "i").test(text)) normalized.add(item);
+  for (const [item, regex] of patterns) {
+    if (regex.test(text)) normalized.add(item);
   }
   return [...normalized].slice(0, 8);
 }
 
 function findPeople(text: string): string[] {
-  return findMatches(text, ["Sam Altman", "Dario Amodei", "Sundar Pichai", "Jensen Huang", "Yann LeCun", "李彦宏", "周鸿祎"]);
+  return findMatches(text, PEOPLE_PATTERNS);
 }
 
 function findProducts(text: string): string[] {
-  return findMatches(text, ["ChatGPT", "Claude", "Gemini", "Copilot", "Llama", "Sora", "Grok", "DeepSeek", "Kimi"]);
+  return findMatches(text, PRODUCT_PATTERNS);
 }
 
 function findRegions(text: string): string[] {
-  return findMatches(text, ["US", "EU", "China", "中国", "Europe", "美国", "欧盟", "Asia"]);
+  return findMatches(text, REGION_PATTERNS);
 }
 
 // 话题标签 = 事件类型中文名 + 语言标识 + 技术实体（最多 8 个）
