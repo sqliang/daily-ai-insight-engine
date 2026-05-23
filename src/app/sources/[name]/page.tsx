@@ -11,6 +11,7 @@ import {
   SOURCE_TYPE_LABELS,
   LANGUAGE_LABELS,
 } from "@/lib/data/tiers";
+import { formatGeneratedAt } from "@/lib/utils/date";
 
 export const dynamic = "force-dynamic";
 
@@ -21,12 +22,6 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { name } = await params;
   return { title: `${name} - 数据源详情` };
-}
-
-function formatGeneratedAt(iso: string): string {
-  const d = new Date(iso);
-  const pad = (n: number) => String(n).padStart(2, "0");
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
 export default async function SourceDetailPage({
