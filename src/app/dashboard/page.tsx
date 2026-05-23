@@ -10,6 +10,7 @@ import { ReportHeader } from "@/components/dashboard/ReportHeader";
 import { SignalList } from "@/components/dashboard/SignalList";
 import { TopEventsSection } from "@/components/dashboard/TopEventsSection";
 import { TrendInsightsSection } from "@/components/dashboard/TrendInsightsSection";
+import { ErrorBoundary } from "@/components/charts/ErrorBoundary";
 import { PageShell } from "@/components/layout/PageShell";
 import { dailyReportSchema } from "@/lib/agent/schema";
 
@@ -67,22 +68,36 @@ export default async function DashboardPage() {
       <KPISection dataSourceSummary={report.dataSourceSummary} />
 
       <section className="mt-6">
-        <DistributionSection visualizationData={report.visualizationData} />
+        <ErrorBoundary sectionName="分布图">
+          <DistributionSection visualizationData={report.visualizationData} />
+        </ErrorBoundary>
       </section>
 
       <section className="mt-6">
-        <TopEventsSection topEvents={report.topEvents} />
+        <ErrorBoundary sectionName="热门事件">
+          <TopEventsSection topEvents={report.topEvents} />
+        </ErrorBoundary>
       </section>
 
-      <RankingsSection visualizationData={report.visualizationData} />
+      <ErrorBoundary sectionName="排名">
+        <RankingsSection visualizationData={report.visualizationData} />
+      </ErrorBoundary>
 
-      <TrendInsightsSection trendInsights={report.trendInsights} />
+      <ErrorBoundary sectionName="趋势洞察">
+        <TrendInsightsSection trendInsights={report.trendInsights} />
+      </ErrorBoundary>
 
-      <DeepDivesSection deepDives={report.deepDives} />
+      <ErrorBoundary sectionName="深度分析">
+        <DeepDivesSection deepDives={report.deepDives} />
+      </ErrorBoundary>
 
       <section className="mt-6 grid gap-5 lg:grid-cols-2">
-        <SignalList title="风险提示" items={report.riskSignals} />
-        <SignalList title="机会提示" items={report.opportunitySignals} />
+        <ErrorBoundary sectionName="风险提示">
+          <SignalList title="风险提示" items={report.riskSignals} />
+        </ErrorBoundary>
+        <ErrorBoundary sectionName="机会提示">
+          <SignalList title="机会提示" items={report.opportunitySignals} />
+        </ErrorBoundary>
       </section>
 
       <ReportFooter selectionRationale={report.dataSourceSummary.selectionRationale} />
