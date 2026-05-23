@@ -1,5 +1,5 @@
 import type { DailyReport } from "@/lib/agent/schema";
-import { eventTypeLabels, sentimentLabels, severityLabels } from "@/lib/report/labels";
+import { eventTypeLabels, severityLabels } from "@/lib/report/labels";
 
 const dimensionLabels: Record<string, string> = {
   technology: "技术",
