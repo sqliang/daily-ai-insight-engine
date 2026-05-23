@@ -4,6 +4,12 @@ type StatusBadgeProps = {
   status: ProcessingStatus;
 };
 
+/**
+ * 处理状态徽章，以彩色圆点 + 中英双语展示管道处理进度。
+ *
+ * 颜色由 STATUS_CONFIG 根据状态动态派生（ready → blue, processing → amber 等）。
+ * 用于 SourceCard 和其他需要展示处理状态的场景。
+ */
 export function StatusBadge({ status }: StatusBadgeProps) {
   const cfg = STATUS_CONFIG[status];
   return (

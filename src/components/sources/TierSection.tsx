@@ -9,6 +9,12 @@ type TierSectionProps = {
   sources: SourceStatus[];
 };
 
+/**
+ * 单层 Tier 数据源分组展示区块，包含标题栏和响应式卡片网格。
+ *
+ * 用于 SourcesGrid 中每个 Tier 分组。标题栏以彩色竖条 + Tier 标签 + 源数量徽章标识，
+ * 内容区以 1/2/3 列响应式网格排列 SourceCard。
+ */
 export function TierSection({ tier, meta, sources }: TierSectionProps) {
   const color = TIER_COLORS[tier] ?? "var(--line)";
 

@@ -8,6 +8,12 @@ type SourcesHeroProps = {
   tierSourceCounts: Record<string, number>;
 };
 
+/**
+ * Sources 页面顶部 Hero 横幅，展示数据源全景概览。
+ *
+ * 包含总数据源数量、最近更新日期、三层 Tier 概览卡片（学术/产品/商业）
+ * 以及数据筛选策略说明（关键词过滤+时效窗口+配额去重）。
+ */
 export function SourcesHero({
   tiersMeta,
   totalSources,

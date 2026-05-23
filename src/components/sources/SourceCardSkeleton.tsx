@@ -1,3 +1,9 @@
+/**
+ * SourceCard 的骨架屏加载占位。
+ *
+ * 在 Sources 页面数据加载期间展示，模拟卡片标题、标签行、描述区、
+ * 关键词和页脚的视觉结构，保持与真实卡片一致的网格占用。
+ */
 export function SourceCardSkeleton() {
   return (
     <div

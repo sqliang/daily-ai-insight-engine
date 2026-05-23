@@ -11,6 +11,12 @@ function getImpactColor(score: number): string {
   return "var(--muted)";
 }
 
+/**
+ * 影响力评分条，以水平进度条展示 0-10 的影响力评分。
+ *
+ * 颜色分段：≥7 cool（高）、4-6 warm（中）、<4 muted（低）。
+ * 支持 compact 模式用于卡片内嵌，支持 reason 在 title 中展示评分理由。
+ */
 export function ImpactScoreBar({
   score,
   label = "影响力",

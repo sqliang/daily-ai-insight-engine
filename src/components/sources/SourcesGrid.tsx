@@ -10,6 +10,11 @@ type SourcesGridProps = {
   tiersMeta: Record<string, TierMeta>;
 };
 
+/**
+ * 数据源网格布局，按 Tier（A/B/C）分组后委托 TierSection 渲染各组。
+ *
+ * Sources 页面的主内容区。使用 useMemo 按 tier 分组，空分组自动跳过。
+ */
 export function SourcesGrid({ sources, tiersMeta }: SourcesGridProps) {
   const grouped = useMemo(() => {
     const map = new Map<string, SourceStatus[]>();
