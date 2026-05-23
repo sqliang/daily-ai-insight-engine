@@ -1,3 +1,10 @@
+// ============================================================================
+// TierSection.tsx — 单层 Tier 数据源分组区块
+//
+// 渲染标题栏（彩色竖条 + Tier 标签 + 源数量徽章）和响应式 SourceCard 卡片网格。
+// 被 SourcesGrid 按 tier（A/B/C）分组委托渲染。
+// ============================================================================
+
 import type { SourceStatus } from "@/lib/data/sources";
 import type { TierMeta } from "@/lib/data/tiers";
 import { TIER_COLORS } from "@/lib/data/tiers";

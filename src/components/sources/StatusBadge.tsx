@@ -1,3 +1,10 @@
+// ============================================================================
+// StatusBadge.tsx — 处理状态徽章
+//
+// 以彩色圆点 + 中英双语标签展示管道处理进度，颜色由 STATUS_CONFIG 根据状态动态派生。
+// 被 ArticleCard 消费，用于展示每个数据源的处理状态。
+// ============================================================================
+
 import { type ProcessingStatus, STATUS_CONFIG } from "@/lib/data/status";
 
 type StatusBadgeProps = {

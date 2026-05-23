@@ -1,3 +1,10 @@
+// ============================================================================
+// SentimentIndicator.tsx — 情绪倾向指示器
+//
+// 以色块图标 + 中文标签展示分析结果的情绪分类（正面/中性/负面），无法识别时返回 null。
+// 被 ArticleCard 和 ArticleCardAnalysis 消费，与 RiskSignals、ImpactScoreBar 并列展示。
+// ============================================================================
+
 import { SENTIMENT_LABELS } from "@/lib/data/status";
 
 type SentimentIndicatorProps = {
