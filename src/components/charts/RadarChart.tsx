@@ -5,6 +5,7 @@ import {
   PolarGrid,
   PolarAngleAxis,
   Radar,
+  PolarRadiusAxis,
   ResponsiveContainer,
 } from "recharts";
 
@@ -34,6 +35,7 @@ export function RadarChart({ data, height = 300 }: RadarChartProps) {
             tick={{ fontSize: 12, fill: "oklch(0.48 0.02 255)", fontWeight: 500 }}
             tickLine={false}
           />
+          <PolarRadiusAxis domain={[0, 5]} />
           <Radar
             name="信号强度"
             dataKey="value"
