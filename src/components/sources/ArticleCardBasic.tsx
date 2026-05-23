@@ -1,3 +1,10 @@
+// ============================================================================
+// ArticleCardBasic.tsx — 文章基础信息卡片
+//
+// 展示文章标题（外链）、域名、发布日期、作者、ID 摘要和正文摘要。
+// 被 ArticleCard 消费，最终渲染在 SourceDetailPage（src/app/sources/[name]/page.tsx）。
+// ============================================================================
+
 type ArticleCardBasicProps = {
   title: string;
   url: string;

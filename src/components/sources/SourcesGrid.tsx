@@ -1,5 +1,12 @@
 "use client";
 
+// ============================================================================
+// SourcesGrid.tsx — 数据源按 Tier 分组的网格布局
+//
+// 被 Sources 页面（src/app/page.tsx）消费。按 tier 字段将 SourceStatus[]
+// 分组后委托 TierSection 渲染各组，使用 useMemo 优化分组计算，空分组自动跳过。
+// ============================================================================
+
 import { useMemo } from "react";
 import type { SourceStatus } from "@/lib/data/sources";
 import type { TierMeta } from "@/lib/data/tiers";
