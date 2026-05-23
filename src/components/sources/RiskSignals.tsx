@@ -18,6 +18,12 @@ const RISK_DIMENSIONS: Array<{
   { key: "ethical", label: "伦理" },
 ];
 
+/**
+ * 风险信号矩阵组件，展示四维风险评估结果及附加风险项。
+ *
+ * 用于 ArticleCard 的分析子卡片中。四维度：监管、技术、竞争、伦理，
+ * 有风险项以红色左边框 + 浅红底高亮，无风险项以低对比度展示。
+ */
 export function RiskSignals({ riskMatrix }: RiskSignalsProps) {
   if (!riskMatrix) return null;
 

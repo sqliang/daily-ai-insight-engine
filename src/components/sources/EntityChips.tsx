@@ -40,6 +40,12 @@ function ChipGroup({
   );
 }
 
+/**
+ * 实体识别结果展示组件，以分组色块形式列出公司、技术和关键人物。
+ *
+ * 用于 ArticleCardExtraction 的实体识别区块，三类实体分别以
+ * accent / cool / warm 色系区分，空分组自动隐藏。
+ */
 export function EntityChips({
   companies,
   technologies,

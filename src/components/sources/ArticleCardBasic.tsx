@@ -15,6 +15,12 @@ function getDomain(url: string): string {
   }
 }
 
+/**
+ * 文章基础信息卡片，在 SourceDetailPage 的 ArticleList 中渲染每篇文章。
+ *
+ * 展示文章标题（外链）、域名、发布日期、作者、文章 ID 摘要以及正文前几行。
+ * 无摘要时显示"（无摘要）"占位提示。
+ */
 export function ArticleCardBasic({
   title,
   url,

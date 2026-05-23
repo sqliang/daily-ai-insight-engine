@@ -6,6 +6,12 @@ type LogicFlowProps = {
   steps: string[];
 };
 
+/**
+ * 逻辑链步骤展示组件，以编号步骤列表呈现因果推理过程。
+ *
+ * 用于 ArticleCardExtraction 的逻辑链区块。支持折叠/展开切换：
+ * 折叠态仅显示第一步 + 剩余步骤数，展开态显示完整编号链。
+ */
 export function LogicFlow({ steps }: LogicFlowProps) {
   const [collapsed, setCollapsed] = useState(false);
 
