@@ -31,8 +31,8 @@ tags:
 extraction_status: success
 id: 8e9dc20c5ca66bfe
 source_type: academic_paper
-tldr: 提出LBW-Guard，一种在AdamW之上的有界自主训练控制层，将Qwen2.5-7B困惑度从13.21降至10.74。
-objective_summary: 该论文提出Learn-by-Wire Guard（LBW-Guard），一种运行在AdamW优化器之上的有界自主训练控制治理层，通过监测训练遥测数据在不稳定时施加控制。在Qwen2.5-7B和WikiText-103上的实验显示，最终困惑度从13.21降至10.74（提升18.
+tldr: LBW-Guard在AdamW之上实现有界自主训练控制，Qwen2.5-7B困惑度降18.7%且提速1.10倍，高学习率下保持可训练性。
+objective_summary: 2026年，一篇arXiv论文提出LBW-Guard（Learn-by-Wire Guard），一种位于AdamW优化器之上的有界自主训练控制治理层。该层观测训练遥测数据、识别不稳定区域并施加有界控制，不替换优化器更新规则。在Qwen2.5系列模型（3B/7B/14B）和TinyLlama-1B上使
 event_type: framework_tools
 epistemic_status: theoretical_claim
 entities:
@@ -40,16 +40,21 @@ entities:
   technologies:
   - LBW-Guard
   - AdamW
+  - LoRA
+  - Gradient Clipping
   - WikiText-103
-  - Qwen2.5
-  - TinyLlama
+  - Qwen2.5-7B
+  - Qwen2.5-3B
+  - Qwen2.5-14B
+  - TinyLlama-1B
   key_people: []
 key_logic_flow:
-- LBW-Guard是一个位于AdamW优化器之上的有界自主训练控制治理层，不替换优化器，而是通过观测训练遥测数据在不稳定敏感区间施加有界控制。
-- 在Qwen2.5-7B参考设置下，LBW-Guard将最终困惑度从13.21降至10.74（提升18.7%），端到端训练时间从392.54秒缩短至357.02秒（加速1.10倍）。
-- 在高学习率压力测试中（LR=3e-3），AdamW退化至困惑度1885.24，而LBW-Guard保持可训练状态，困惑度仅为11.57。
-- 梯度裁剪基线方法无法复现LBW-Guard的稳定性提升效果，表明其机制与局部梯度抑制不同。
-- 实验覆盖了Qwen2.5-3B、Qwen2.5-7B、Qwen2.5-14B的模型规模对比以及TinyLlama-1B全参数训练验证。
+- 现代语言模型训练在高学习率、大规模和运行压力条件下，面临日益加剧的不稳定性、运行退化和算力浪费问题
+- LBW-Guard被设计为AdamW优化器之上的一个有界自主训练控制治理层，通过观测训练遥测数据、识别不稳定敏感区域并施加有界控制来工作，而非替换优化器更新规则
+- 在Qwen2.5-7B基准设置中，LBW-Guard将最终困惑度从13.21降至10.74（降低18.7%），同时将端到端训练时间从392.54秒缩短至357.02秒，实现1.10倍加速
+- 在更强的学习率压力下（LR=3e-3），AdamW的最终困惑度退化至1885.24，LR=1e-3时退化至659.76，而LBW-Guard分别保持在11.57和10.33的可训练水平
+- 梯度裁剪基线方法无法复现LBW-Guard的效果，证明其机制不同于简单的局部梯度抑制
+- 作者得出有限系统结论：稳定性敏感的LLM训练可以从优化器之上的治理平面中受益，有界运行时控制可在压力下保持有效算力利用
 pipeline_stage: fact_extracted
 ---
 

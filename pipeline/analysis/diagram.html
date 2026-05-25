@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stage 3 Deep Analysis — Architecture Diagram</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" integrity="sha384-ZZ1pncU3bQe8y31yfZdMFdSpttDoPmOZg2wguVK9almUodir1PghgT0eY7Mrty8H" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js" integrity="sha384-en/ztfPSRkGfME4KIm05joYXynqzUgbsG5nMrj/xEFAHXkeZfO3yMK8QQ+mP7p1/" crossorigin="anonymous"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'JetBrains Mono', monospace;
+      background: #020617;
+      min-height: 100vh;
+      padding: 2rem;
+      color: white;
+    }
+    .container { max-width: 1300px; margin: 0 auto; }
+    .header { margin-bottom: 2rem; }
+    .header-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem; }
+    .pulse-dot { width: 12px; height: 12px; background: #34d399; border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.025em; }
+    .subtitle { color: #94a3b8; font-size: 0.875rem; margin-left: 1.75rem; }
+    .diagram-container {
+      background: rgba(15, 23, 42, 0.5);
+      border-radius: 1rem;
+      border: 1px solid #1e293b;
+      padding: 1.5rem;
+      overflow-x: auto;
+    }
+    svg { width: 100%; min-width: 1050px; display: block; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1rem; margin-top: 2rem; }
+    .card { background: rgba(15, 23, 42, 0.5); border-radius: 0.75rem; border: 1px solid #1e293b; padding: 1.25rem; }
+    .card-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; }
+    .card-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .card-dot.cyan { background: #22d3ee; }
+    .card-dot.emerald { background: #34d399; }
+    .card-dot.violet { background: #a78bfa; }
+    .card h3 { font-size: 0.875rem; font-weight: 600; }
+    .card ul { list-style: none; color: #94a3b8; font-size: 0.75rem; }
+    .card li { margin-bottom: 0.375rem; }
+    .footer { text-align: center; margin-top: 1.5rem; color: #475569; font-size: 0.75rem; }
+    .toolbar { display: flex; gap: 0.5rem; margin-left: auto; flex-shrink: 0; align-items: center; }
+    .toolbar-toggle {
+      background: transparent; border: none; color: #475569; cursor: pointer;
+      font-size: 1.25rem; line-height: 1; padding: 0.25rem 0.5rem;
+      border-radius: 0.375rem; transition: color 0.2s, background 0.2s;
+    }
+    .toolbar-toggle:hover { color: #94a3b8; background: rgba(30, 41, 59, 0.5); }
+    .toolbar-actions { display: none; gap: 0.5rem; }
+    .toolbar.expanded .toolbar-actions { display: flex; }
+    .toolbar-actions button {
+      background: rgba(30, 41, 59, 0.8); border: 1px solid #334155; color: #94a3b8;
+      padding: 0.375rem 0.75rem; border-radius: 0.375rem; font-family: inherit;
+      font-size: 0.75rem; cursor: pointer; transition: all 0.2s; white-space: nowrap;
+    }
+    .toolbar-actions button:hover { background: rgba(51, 65, 85, 0.8); color: white; border-color: #475569; }
+    @media print { body { background: #020617; padding: 1rem; } .toolbar { display: none !important; } }
+  </style>
+</head>
+<body>
+  <div class="container" id="report-container">
+    <div class="header">
+      <div class="header-row">
+        <div class="pulse-dot"></div>
+        <h1>Stage 3 Deep Analysis — Two-Layer Parallelism</h1>
+        <div class="toolbar">
+          <div class="toolbar-actions">
+            <button onclick="copyAsImage(this)">📋 Copy</button>
+            <button onclick="downloadPNG(this)">🖼️ PNG</button>
+            <button onclick="downloadPDF(this)">📄 PDF</button>
+          </div>
+          <button class="toolbar-toggle" onclick="this.parentElement.classList.toggle('expanded')" title="Export options" aria-label="Export options">⋯</button>
+        </div>
+      </div>
+      <p class="subtitle">pipeline/analysis/ — Outer: Semaphore(concurrency=3) × Inner: asyncio.gather(3 Agents) = 9 concurrent LLM calls</p>
+    </div>
+
+    <div class="diagram-container">
+      <svg viewBox="0 0 1100 820">
+        <defs>
+          <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#64748b" />
+          </marker>
+          <marker id="arrowhead-cyan" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#22d3ee" />
+          </marker>
+          <marker id="arrowhead-emerald" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#34d399" />
+          </marker>
+          <marker id="arrowhead-violet" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#a78bfa" />
+          </marker>
+          <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.5"/>
+          </pattern>
+        </defs>
+
+        <!-- Background Grid -->
+        <rect width="100%" height="100%" fill="url(#grid)" />
+
+        <!-- =================================================================
+             REGION: Two-Layer Parallelism Boundary
+             ================================================================= -->
+        <rect x="20" y="175" width="1060" height="420" rx="12" fill="rgba(52, 211, 153, 0.04)" stroke="#34d399" stroke-width="1" stroke-dasharray="8,4"/>
+        <text x="34" y="195" fill="#34d399" font-size="10" font-weight="600">Two-Layer Parallelism Region (asyncio)</text>
+
+        <!-- =================================================================
+             TOP: Orchestrator Entry
+             ================================================================= -->
+        <!-- Stage 2 Input (data/02_extracted/) -->
+        <rect x="30" y="50" width="160" height="55" rx="6" fill="rgba(76, 29, 149, 0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+        <rect x="30" y="50" width="160" height="55" rx="6" fill="#0f172a"/>
+        <rect x="30" y="50" width="160" height="55" rx="6" fill="rgba(76, 29, 149, 0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+        <text x="110" y="72" fill="white" font-size="11" font-weight="600" text-anchor="middle">data/02_extracted/</text>
+        <text x="110" y="90" fill="#94a3b8" font-size="8" text-anchor="middle">Stage 2 .md files</text>
+
+        <!-- run_analysis() orchestrator -->
+        <rect x="250" y="50" width="180" height="55" rx="6" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+        <rect x="250" y="50" width="180" height="55" rx="6" fill="#0f172a"/>
+        <rect x="250" y="50" width="180" height="55" rx="6" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+        <text x="340" y="72" fill="white" font-size="11" font-weight="600" text-anchor="middle">run_analysis()</text>
+        <text x="340" y="90" fill="#94a3b8" font-size="8" text-anchor="middle">主编排入口 · run_analysis.py</text>
+
+        <!-- discover_files -->
+        <rect x="490" y="50" width="150" height="55" rx="6" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+        <rect x="490" y="50" width="150" height="55" rx="6" fill="#0f172a"/>
+        <rect x="490" y="50" width="150" height="55" rx="6" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+        <text x="565" y="72" fill="white" font-size="11" font-weight="600" text-anchor="middle">discover_files()</text>
+        <text x="565" y="90" fill="#94a3b8" font-size="8" text-anchor="middle">rglob(*.md) → [Path]</text>
+
+        <!-- Semaphore -->
+        <rect x="700" y="45" width="160" height="65" rx="6" fill="rgba(251, 191, 36, 0.15)" stroke="#fbbf24" stroke-width="1.5"/>
+        <rect x="700" y="45" width="160" height="65" rx="6" fill="#0f172a"/>
+        <rect x="700" y="45" width="160" height="65" rx="6" fill="rgba(251, 191, 36, 0.15)" stroke="#fbbf24" stroke-width="1.5"/>
+        <text x="780" y="67" fill="#fbbf24" font-size="11" font-weight="600" text-anchor="middle">asyncio.Semaphore(3)</text>
+        <text x="780" y="84" fill="#94a3b8" font-size="8" text-anchor="middle">外层：最多 3 文件</text>
+        <text x="780" y="98" fill="#94a3b8" font-size="7" text-anchor="middle">同时处理</text>
+
+        <!-- Output (data/03_analyzed/) -->
+        <rect x="920" y="50" width="150" height="55" rx="6" fill="rgba(76, 29, 149, 0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+        <rect x="920" y="50" width="150" height="55" rx="6" fill="#0f172a"/>
+        <rect x="920" y="50" width="150" height="55" rx="6" fill="rgba(76, 29, 149, 0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+        <text x="995" y="72" fill="white" font-size="11" font-weight="600" text-anchor="middle">data/03_analyzed/</text>
+        <text x="995" y="90" fill="#94a3b8" font-size="8" text-anchor="middle">Stage 3 .md files</text>
+
+        <!-- Arrows: input → orchestrator → discover → semaphore → output -->
+        <line x1="190" y1="77" x2="248" y2="77" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#arrowhead-violet)"/>
+        <line x1="430" y1="77" x2="488" y2="77" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrowhead-emerald)"/>
+        <line x1="640" y1="77" x2="698" y2="77" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrowhead-emerald)"/>
+
+        <!-- =================================================================
+             MIDDLE: Batch Dispatch (run_deep_analysis_stage)
+             ================================================================= -->
+        <!-- run_deep_analysis_stage -->
+        <rect x="30" y="200" width="220" height="45" rx="6" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+        <rect x="30" y="200" width="220" height="45" rx="6" fill="#0f172a"/>
+        <rect x="30" y="200" width="220" height="45" rx="6" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+        <text x="140" y="220" fill="white" font-size="10" font-weight="600" text-anchor="middle">run_deep_analysis_stage()</text>
+        <text x="140" y="236" fill="#94a3b8" font-size="7" text-anchor="middle">asyncio.gather(*tasks) 容错</text>
+
+        <line x1="780" y1="110" x2="780" y2="135" stroke="#fbbf24" stroke-width="1.5"/>
+        <line x1="780" y1="135" x2="140" y2="135" stroke="#fbbf24" stroke-width="1.5"/>
+        <line x1="140" y1="135" x2="140" y2="198" stroke="#fbbf24" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+
+        <!-- 3 process_one() boxes (parallel files) -->
+        <!-- File A -->
+        <rect x="40" y="280" width="170" height="65" rx="6" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+        <rect x="40" y="280" width="170" height="65" rx="6" fill="#0f172a"/>
+        <rect x="40" y="280" width="170" height="65" rx="6" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+        <text x="125" y="304" fill="white" font-size="10" font-weight="600" text-anchor="middle">process_one(A)</text>
+        <text x="125" y="320" fill="#94a3b8" font-size="7" text-anchor="middle">analyze_one_file(A)</text>
+        <text x="125" y="334" fill="#22d3ee" font-size="7" text-anchor="middle">⒈ async with semaphore</text>
+
+        <!-- File B -->
+        <rect x="250" y="280" width="170" height="65" rx="6" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+        <rect x="250" y="280" width="170" height="65" rx="6" fill="#0f172a"/>
+        <rect x="250" y="280" width="170" height="65" rx="6" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+        <text x="335" y="304" fill="white" font-size="10" font-weight="600" text-anchor="middle">process_one(B)</text>
+        <text x="335" y="320" fill="#94a3b8" font-size="7" text-anchor="middle">analyze_one_file(B)</text>
+        <text x="335" y="334" fill="#22d3ee" font-size="7" text-anchor="middle">⒈ async with semaphore</text>
+
+        <!-- File C -->
+        <rect x="460" y="280" width="170" height="65" rx="6" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+        <rect x="460" y="280" width="170" height="65" rx="6" fill="#0f172a"/>
+        <rect x="460" y="280" width="170" height="65" rx="6" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+        <text x="545" y="304" fill="white" font-size="10" font-weight="600" text-anchor="middle">process_one(C)</text>
+        <text x="545" y="320" fill="#94a3b8" font-size="7" text-anchor="middle">analyze_one_file(C)</text>
+        <text x="545" y="334" fill="#22d3ee" font-size="7" text-anchor="middle">⒈ async with semaphore</text>
+
+        <!-- ... More waiting -->
+        <rect x="670" y="280" width="130" height="65" rx="6" fill="rgba(30, 41, 59, 0.5)" stroke="#475569" stroke-width="1"/>
+        <rect x="670" y="280" width="130" height="65" rx="6" fill="#0f172a"/>
+        <rect x="670" y="280" width="130" height="65" rx="6" fill="rgba(30, 41, 59, 0.5)" stroke="#475569" stroke-width="1"/>
+        <text x="735" y="304" fill="#64748b" font-size="10" font-weight="600" text-anchor="middle">process_one(D)</text>
+        <text x="735" y="320" fill="#64748b" font-size="7" text-anchor="middle">等待 Semaphore</text>
+        <text x="735" y="334" fill="#64748b" font-size="7" text-anchor="middle">释放...</text>
+
+        <rect x="830" y="280" width="130" height="65" rx="6" fill="rgba(30, 41, 59, 0.5)" stroke="#475569" stroke-width="1"/>
+        <rect x="830" y="280" width="130" height="65" rx="6" fill="#0f172a"/>
+        <rect x="830" y="280" width="130" height="65" rx="6" fill="rgba(30, 41, 59, 0.5)" stroke="#475569" stroke-width="1"/>
+        <text x="895" y="304" fill="#64748b" font-size="10" font-weight="600" text-anchor="middle">process_one(E)</text>
+        <text x="895" y="320" fill="#64748b" font-size="7" text-anchor="middle">等待 Semaphore</text>
+        <text x="895" y="334" fill="#64748b" font-size="7" text-anchor="middle">释放...</text>
+
+        <!-- Arrow from orchestrator to files -->
+        <line x1="140" y1="245" x2="125" y2="278" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrowhead-emerald)"/>
+        <line x1="140" y1="245" x2="335" y2="278" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrowhead-emerald)"/>
+        <line x1="140" y1="245" x2="545" y2="278" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrowhead-emerald)"/>
+
+        <!-- =================================================================
+             MIDDLE-BOTTOM: analyze_one_file() Single File Pipeline (expanded)
+             ================================================================= -->
+        <!-- analyze_one_file detail box -->
+        <rect x="40" y="395" width="640" height="185" rx="8" fill="rgba(6, 78, 59, 0.08)" stroke="#34d399" stroke-width="1" stroke-dasharray="4,4"/>
+        <text x="52" y="412" fill="#34d399" font-size="9" font-weight="600">analyze_one_file(input_path, output_path) — deep_analysis_agent.py</text>
+
+        <!-- Step 1: read frontmatter -->
+        <rect x="55" y="425" width="120" height="45" rx="5" fill="rgba(76, 29, 149, 0.3)" stroke="#a78bfa" stroke-width="1"/>
+        <rect x="55" y="425" width="120" height="45" rx="5" fill="#0f172a"/>
+        <rect x="55" y="425" width="120" height="45" rx="5" fill="rgba(76, 29, 149, 0.3)" stroke="#a78bfa" stroke-width="1"/>
+        <text x="115" y="445" fill="white" font-size="8" font-weight="600" text-anchor="middle">read_frontmatter</text>
+        <text x="115" y="460" fill="#94a3b8" font-size="7" text-anchor="middle">(fm, body) 含</text>
+        <text x="115" y="470" fill="#94a3b8" font-size="7" text-anchor="middle">Stage 2 全部字段</text>
+
+        <!-- Step 2: skip check -->
+        <rect x="200" y="425" width="100" height="45" rx="5" fill="rgba(30, 41, 59, 0.5)" stroke="#64748b" stroke-width="1"/>
+        <rect x="200" y="425" width="100" height="45" rx="5" fill="#0f172a"/>
+        <rect x="200" y="425" width="100" height="45" rx="5" fill="rgba(30, 41, 59, 0.5)" stroke="#64748b" stroke-width="1"/>
+        <text x="250" y="445" fill="white" font-size="8" font-weight="600" text-anchor="middle">skip check</text>
+        <text x="250" y="460" fill="#94a3b8" font-size="7" text-anchor="middle">按维度粒度</text>
+
+        <!-- Step 3: extract context -->
+        <rect x="325" y="425" width="120" height="45" rx="5" fill="rgba(30, 41, 59, 0.5)" stroke="#64748b" stroke-width="1"/>
+        <rect x="325" y="425" width="120" height="45" rx="5" fill="#0f172a"/>
+        <rect x="325" y="425" width="120" height="45" rx="5" fill="rgba(30, 41, 59, 0.5)" stroke="#64748b" stroke-width="1"/>
+        <text x="385" y="445" fill="white" font-size="8" font-weight="600" text-anchor="middle">extract context</text>
+        <text x="385" y="460" fill="#94a3b8" font-size="7" text-anchor="middle">title/tldr/entities</text>
+        <text x="385" y="470" fill="#94a3b8" font-size="7" text-anchor="middle">keyLogicFlow...</text>
+
+        <!-- Arrows between steps -->
+        <line x1="175" y1="447" x2="198" y2="447" stroke="#64748b" stroke-width="1" marker-end="url(#arrowhead)"/>
+        <line x1="300" y1="447" x2="323" y2="447" stroke="#64748b" stroke-width="1" marker-end="url(#arrowhead)"/>
+
+        <!-- Step 4: 3 parallel _run_assessment -->
+        <rect x="55" y="495" width="120" height="55" rx="5" fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee" stroke-width="1.5"/>
+        <rect x="55" y="495" width="120" height="55" rx="5" fill="#0f172a"/>
+        <rect x="55" y="495" width="120" height="55" rx="5" fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee" stroke-width="1.5"/>
+        <text x="115" y="514" fill="white" font-size="9" font-weight="600" text-anchor="middle">_run_assessment</text>
+        <text x="115" y="528" fill="#22d3ee" font-size="7" text-anchor="middle">"qualitative"</text>
+        <text x="115" y="542" fill="#94a3b8" font-size="7" text-anchor="middle">技术架构师</text>
+
+        <rect x="200" y="495" width="120" height="55" rx="5" fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee" stroke-width="1.5"/>
+        <rect x="200" y="495" width="120" height="55" rx="5" fill="#0f172a"/>
+        <rect x="200" y="495" width="120" height="55" rx="5" fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee" stroke-width="1.5"/>
+        <text x="260" y="514" fill="white" font-size="9" font-weight="600" text-anchor="middle">_run_assessment</text>
+        <text x="260" y="528" fill="#22d3ee" font-size="7" text-anchor="middle">"value"</text>
+        <text x="260" y="542" fill="#94a3b8" font-size="7" text-anchor="middle">VC 资本分析师</text>
+
+        <rect x="345" y="495" width="120" height="55" rx="5" fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee" stroke-width="1.5"/>
+        <rect x="345" y="495" width="120" height="55" rx="5" fill="#0f172a"/>
+        <rect x="345" y="495" width="120" height="55" rx="5" fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee" stroke-width="1.5"/>
+        <text x="405" y="514" fill="white" font-size="9" font-weight="600" text-anchor="middle">_run_assessment</text>
+        <text x="405" y="528" fill="#22d3ee" font-size="7" text-anchor="middle">"foresight"</text>
+        <text x="405" y="542" fill="#94a3b8" font-size="7" text-anchor="middle">风控专家</text>
+
+        <!-- asyncio.gather label -->
+        <text x="500" y="525" fill="#22d3ee" font-size="8" font-weight="600">asyncio.gather()</text>
+
+        <!-- Arrow from context to _run_assessment -->
+        <line x1="385" y1="470" x2="115" y2="493" stroke="#22d3ee" stroke-width="1"/>
+        <line x1="385" y1="470" x2="260" y2="493" stroke="#22d3ee" stroke-width="1"/>
+        <line x1="385" y1="470" x2="405" y2="493" stroke="#22d3ee" stroke-width="1"/>
+
+        <!-- Step 5: merge + write -->
+        <rect x="560" y="495" width="110" height="55" rx="5" fill="rgba(76, 29, 149, 0.3)" stroke="#a78bfa" stroke-width="1"/>
+        <rect x="560" y="495" width="110" height="55" rx="5" fill="#0f172a"/>
+        <rect x="560" y="495" width="110" height="55" rx="5" fill="rgba(76, 29, 149, 0.3)" stroke="#a78bfa" stroke-width="1"/>
+        <text x="615" y="514" fill="white" font-size="8" font-weight="600" text-anchor="middle">merge →</text>
+        <text x="615" y="528" fill="white" font-size="8" font-weight="600" text-anchor="middle">write_frontmatter</text>
+        <text x="615" y="542" fill="#94a3b8" font-size="7" text-anchor="middle">model_dump(json)</text>
+
+        <!-- =================================================================
+             BOTTOM-LEFT: Validation Pipeline (per dimension)
+             ================================================================= -->
+        <rect x="40" y="625" width="365" height="155" rx="8" fill="rgba(251, 113, 133, 0.05)" stroke="#fb7185" stroke-width="1" stroke-dasharray="4,4"/>
+        <text x="52" y="642" fill="#fb7185" font-size="9" font-weight="600">_run_assessment() 内部校验流水线 (validators.py)</text>
+
+        <rect x="55" y="655" width="100" height="38" rx="4" fill="rgba(6, 78, 59, 0.3)" stroke="#34d399" stroke-width="1"/>
+        <rect x="55" y="655" width="100" height="38" rx="4" fill="#0f172a"/>
+        <rect x="55" y="655" width="100" height="38" rx="4" fill="rgba(6, 78, 59, 0.3)" stroke="#34d399" stroke-width="1"/>
+        <text x="105" y="672" fill="white" font-size="8" font-weight="600" text-anchor="middle">call_agent</text>
+        <text x="105" y="686" fill="#94a3b8" font-size="7" text-anchor="middle">max_turns=3</text>
+
+        <rect x="175" y="655" width="100" height="38" rx="4" fill="rgba(6, 78, 59, 0.3)" stroke="#34d399" stroke-width="1"/>
+        <rect x="175" y="655" width="100" height="38" rx="4" fill="#0f172a"/>
+        <rect x="175" y="655" width="100" height="38" rx="4" fill="rgba(6, 78, 59, 0.3)" stroke="#34d399" stroke-width="1"/>
+        <text x="225" y="672" fill="white" font-size="8" font-weight="600" text-anchor="middle">parse_json</text>
+        <text x="225" y="686" fill="#94a3b8" font-size="7" text-anchor="middle">5级恢复parser</text>
+
+        <rect x="295" y="655" width="95" height="38" rx="4" fill="rgba(136, 19, 55, 0.3)" stroke="#fb7185" stroke-width="1"/>
+        <rect x="295" y="655" width="95" height="38" rx="4" fill="#0f172a"/>
+        <rect x="295" y="655" width="95" height="38" rx="4" fill="rgba(136, 19, 55, 0.3)" stroke="#fb7185" stroke-width="1"/>
+        <text x="342" y="672" fill="white" font-size="8" font-weight="600" text-anchor="middle">validate_fn()</text>
+        <text x="342" y="686" fill="#fb7185" font-size="7" text-anchor="middle">校验+修复</text>
+
+        <line x1="155" y1="674" x2="173" y2="674" stroke="#34d399" stroke-width="1" marker-end="url(#arrowhead-emerald)"/>
+        <line x1="275" y1="674" x2="293" y2="674" stroke="#34d399" stroke-width="1" marker-end="url(#arrowhead-emerald)"/>
+
+        <!-- Validation detail -->
+        <rect x="55" y="705" width="335" height="63" rx="4" fill="rgba(136, 19, 55, 0.08)" stroke="#fb7185" stroke-width="0.5" stroke-dasharray="2,2"/>
+        <text x="222" y="720" fill="#fb7185" font-size="7" font-weight="600" text-anchor="middle">validate_qualitative / validate_value / validate_foresight</text>
+        <text x="65" y="736" fill="#94a3b8" font-size="7">① 自动包装标量 → {score, reason} / {level, reason}</text>
+        <text x="65" y="750" fill="#94a3b8" font-size="7">② Pydantic 严格校验 → 通过即返回</text>
+        <text x="65" y="764" fill="#94a3b8" font-size="7">③ 失败 → fuzzy_maps.py 8 张映射表模糊修正枚举 → 补全默认值 → 重试</text>
+
+        <!-- =================================================================
+             BOTTOM-RIGHT: Fuzzy Maps + Aggregate
+             ================================================================= -->
+        <!-- Fuzzy Maps reference -->
+        <rect x="440" y="625" width="260" height="70" rx="6" fill="rgba(251, 146, 60, 0.08)" stroke="#fb923c" stroke-width="1"/>
+        <rect x="440" y="625" width="260" height="70" rx="6" fill="#0f172a"/>
+        <rect x="440" y="625" width="260" height="70" rx="6" fill="rgba(251, 146, 60, 0.08)" stroke="#fb923c" stroke-width="1"/>
+        <text x="570" y="645" fill="#fb923c" font-size="9" font-weight="600" text-anchor="middle">fuzzy_maps.py (纯数据)</text>
+        <text x="460" y="662" fill="#94a3b8" font-size="7">• SENTIMENT_FUZZY (positive/bullish→positive)</text>
+        <text x="460" y="674" fill="#94a3b8" font-size="7">• HYPE_LEVEL_FUZZY / ENTROPY_FUZZY</text>
+        <text x="460" y="686" fill="#94a3b8" font-size="7">• VALUE_CAPTURE_FUZZY / MOAT_IMPACT_FUZZY ...</text>
+
+        <!-- Auto aggregate -->
+        <rect x="440" y="715" width="260" height="55" rx="6" fill="rgba(76, 29, 149, 0.3)" stroke="#a78bfa" stroke-width="1.5"/>
+        <rect x="440" y="715" width="260" height="55" rx="6" fill="#0f172a"/>
+        <rect x="440" y="715" width="260" height="55" rx="6" fill="rgba(76, 29, 149, 0.3)" stroke="#a78bfa" stroke-width="1.5"/>
+        <text x="570" y="738" fill="white" font-size="9" font-weight="600" text-anchor="middle">auto aggregate_frontmatter()</text>
+        <text x="570" y="754" fill="#94a3b8" font-size="7" text-anchor="middle">03_analyzed → 04_structured JSON</text>
+        <text x="570" y="766" fill="#a78bfa" font-size="7" text-anchor="middle">零 LLM 调用，纯机械操作</text>
+
+        <!-- Arrow from validation to fuzzy maps -->
+        <line x1="390" y1="660" x2="438" y2="658" stroke="#fb923c" stroke-width="1" stroke-dasharray="3,3"/>
+
+        <!-- =================================================================
+             TOP-RIGHT: Concurrency summary
+             ================================================================= -->
+        <rect x="920" y="200" width="155" height="85" rx="6" fill="rgba(251, 191, 36, 0.08)" stroke="#fbbf24" stroke-width="1"/>
+        <text x="997" y="220" fill="#fbbf24" font-size="9" font-weight="600" text-anchor="middle">并发模型</text>
+        <text x="935" y="240" fill="#94a3b8" font-size="7">外层 Semaphore(3)</text>
+        <text x="935" y="254" fill="#94a3b8" font-size="7"> × 内层 3 Agents</text>
+        <text x="935" y="272" fill="#22d3ee" font-size="8" font-weight="600">= 最多 9 并发</text>
+
+        <!-- Arrows for output flow -->
+        <line x1="615" y1="550" x2="615" y2="590" stroke="#a78bfa" stroke-width="1.5"/>
+        <line x1="615" y1="590" x2="570" y2="590" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#arrowhead-violet)"/>
+        <line x1="570" y1="590" x2="570" y2="713" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#arrowhead-violet)"/>
+
+        <!-- Arrow to semaphore from input -->
+        <line x1="780" y1="245" x2="920" y2="245" stroke="#fbbf24" stroke-width="0.5" stroke-dasharray="2,2"/>
+        <line x1="920" y1="245" x2="920" y2="198" stroke="#fbbf24" stroke-width="1" marker-end="url(#arrowhead)"/>
+
+        <!-- =================================================================
+             LEGEND
+             ================================================================= -->
+        <text x="760" y="640" fill="white" font-size="9" font-weight="600">Legend</text>
+
+        <rect x="760" y="652" width="14" height="9" rx="2" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1"/>
+        <text x="780" y="660" fill="#94a3b8" font-size="7">Orchestration / Backend</text>
+
+        <rect x="760" y="667" width="14" height="9" rx="2" fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee" stroke-width="1"/>
+        <text x="780" y="675" fill="#94a3b8" font-size="7">Agent / LLM Call</text>
+
+        <rect x="760" y="682" width="14" height="9" rx="2" fill="rgba(76, 29, 149, 0.4)" stroke="#a78bfa" stroke-width="1"/>
+        <text x="780" y="690" fill="#94a3b8" font-size="7">Data I/O (YAML / JSON)</text>
+
+        <rect x="760" y="697" width="14" height="9" rx="2" fill="rgba(136, 19, 55, 0.4)" stroke="#fb7185" stroke-width="1"/>
+        <text x="780" y="705" fill="#94a3b8" font-size="7">Validation / Error Repair</text>
+
+        <rect x="760" y="712" width="14" height="9" rx="2" fill="rgba(251, 191, 36, 0.15)" stroke="#fbbf24" stroke-width="1"/>
+        <text x="780" y="720" fill="#94a3b8" font-size="7">Concurrency Control</text>
+
+        <rect x="760" y="727" width="14" height="9" rx="2" fill="rgba(251, 146, 60, 0.15)" stroke="#fb923c" stroke-width="1"/>
+        <text x="780" y="735" fill="#94a3b8" font-size="7">Fuzzy Enum Maps (Data)</text>
+
+        <rect x="760" y="742" width="14" height="9" rx="2" fill="rgba(30, 41, 59, 0.5)" stroke="#475569" stroke-width="1"/>
+        <text x="780" y="750" fill="#94a3b8" font-size="7">Waiting / Skipped</text>
+
+        <line x1="762" y1="762" x2="774" y2="762" stroke="#fb7185" stroke-width="1" stroke-dasharray="4,4"/>
+        <text x="780" y="765" fill="#94a3b8" font-size="7">Boundary / Group</text>
+
+        <line x1="762" y1="777" x2="774" y2="777" stroke="#34d399" stroke-width="1" stroke-dasharray="8,4"/>
+        <text x="780" y="780" fill="#94a3b8" font-size="7">Region (Parallelism)</text>
+      </svg>
+    </div>
+
+    <!-- Info Cards -->
+    <div class="cards">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-dot emerald"></div>
+          <h3>Two-Layer Parallelism</h3>
+        </div>
+        <ul>
+          <li>• Outer: asyncio.Semaphore(3) — up to 3 files concurrently</li>
+          <li>• Inner: asyncio.gather() — 3 Agent calls per file</li>
+          <li>• Max: 3 files × 3 dimensions = 9 concurrent LLM calls</li>
+          <li>• Single dimension mode reduces to 3 concurrent calls</li>
+          <li>• return_exceptions=True ensures fail-per-article</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-dot cyan"></div>
+          <h3>3 Assessment Dimensions</h3>
+        </div>
+        <ul>
+          <li>• QualitativeAssessment — tech architect: sentiment, hype, complexity</li>
+          <li>• ValueAssessment — VC analyst: value capture, moat impact</li>
+          <li>• ForesightAndActionability — risk assessor: opportunities, risks</li>
+          <li>• Each has independent system prompt, validator, and fuzzy maps</li>
+          <li>• Partial success: 2/3 pass → write successful, retry failures</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-dot violet"></div>
+          <h3>Fault-Tolerant Validation</h3>
+        </div>
+        <ul>
+          <li>• Auto-wrap scalar fields (e.g. "high" → {level, reason})</li>
+          <li>• Pydantic strict validation → pass or fuzzy repair</li>
+          <li>• 8 fuzzy enum maps: SENTIMENT, HYPE, ENTROPY, etc.</li>
+          <li>• Fill missing defaults + re-validate → raise on final failure</li>
+          <li>• Per-dimension skip_existing: only re-run incomplete dims</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="footer">
+      pipeline/analysis/ — Stage 3 Deep Analysis &middot; Daily AI Insight Engine
+    </p>
+  </div>
+
+  <script>
+    async function copyAsImage(btn) {
+      const orig = btn.textContent;
+      try {
+        const el = document.getElementById('report-container');
+        const r = el.getBoundingClientRect();
+        const pad = 32;
+        const canvas = await html2canvas(document.body, { backgroundColor: '#020617', scale: 2, useCORS: true, ignoreElements: (e) => e.classList && e.classList.contains('toolbar'), x: r.left + window.scrollX - pad, y: r.top + window.scrollY - pad, width: r.width + pad * 2, height: r.height + pad * 2 });
+        const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
+        await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+        btn.textContent = '✓ Copied!';
+      } catch (e) {
+        btn.textContent = '✗ Failed';
+      }
+      setTimeout(() => btn.textContent = orig, 2000);
+    }
+    async function downloadPNG(btn) {
+      const orig = btn.textContent;
+      btn.textContent = '⏳ ...';
+      try {
+        const el = document.getElementById('report-container');
+        const r = el.getBoundingClientRect();
+        const pad = 32;
+        const canvas = await html2canvas(document.body, { backgroundColor: '#020617', scale: 2, useCORS: true, ignoreElements: (e) => e.classList && e.classList.contains('toolbar'), x: r.left + window.scrollX - pad, y: r.top + window.scrollY - pad, width: r.width + pad * 2, height: r.height + pad * 2 });
+        const link = document.createElement('a');
+        link.download = 'stage3-deep-analysis.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        btn.textContent = '✓ Done!';
+      } catch (e) { btn.textContent = '✗ Failed'; }
+      setTimeout(() => btn.textContent = orig, 2000);
+    }
+    async function downloadPDF(btn) {
+      const orig = btn.textContent;
+      btn.textContent = '⏳ ...';
+      try {
+        const el = document.getElementById('report-container');
+        const r = el.getBoundingClientRect();
+        const pad = 32;
+        const canvas = await html2canvas(document.body, { backgroundColor: '#020617', scale: 2, useCORS: true, ignoreElements: (e) => e.classList && e.classList.contains('toolbar'), x: r.left + window.scrollX - pad, y: r.top + window.scrollY - pad, width: r.width + pad * 2, height: r.height + pad * 2 });
+        const imgData = canvas.toDataURL('image/png');
+        const { jsPDF } = window.jspdf;
+        const orientation = canvas.width > canvas.height ? 'landscape' : 'portrait';
+        const pdf = new jsPDF({ orientation, unit: 'px', format: [canvas.width, canvas.height], hotfixes: ['px_scaling'] });
+        pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+        pdf.save('stage3-deep-analysis.pdf');
+        btn.textContent = '✓ Done!';
+      } catch (e) { btn.textContent = '✗ Failed'; }
+      setTimeout(() => btn.textContent = orig, 2000);
+    }
+  </script>
+</body>
+</html>

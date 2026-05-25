@@ -9,9 +9,9 @@ tags:
 - clippings
 id: 373a2fdebbb0bc0c
 source_type: news_media
-tldr: ProgramBench基准测试：主流AI模型从二进制文件重建完整程序的解决率均为0%。
-objective_summary: ProgramBench发布一项评估AI智能体从编译后二进制和文档重建程序能力的基准测试，包含200个任务和24.8万项行为测试。Claude
-  Opus 4.7、GPT 5.4、Gemini 3.1 Pro等模型完全解决率均为0%。
+tldr: ProgramBench 基准测试发布：所有顶级模型在仅凭二进制和文档重写完整程序的任务中，完全解决率均为 0%
+objective_summary: 2026年5月，ProgramBench 发布了一项包含 200 个程序重构任务的基准测试，要求 AI 智能体仅凭可执行二进制和文档重写完整代码库。测试覆盖从
+  jq、ripgrep 到 SQLite、FFmpeg 的复杂项目，包含超 24.8 万行为测试。所有主流模型（Claude Opus 4.
 event_type: framework_tools
 epistemic_status: verified_fact
 entities:
@@ -20,15 +20,17 @@ entities:
   - OpenAI
   - Google
   technologies:
+  - mini-SWE-agent
   - ProgramBench
+  - agent-driven fuzzing
   key_people: []
 key_logic_flow:
-- ProgramBench 是一个评估 AI 智能体从编译后二进制文件及其文档重建完整程序能力的基准测试。
-- 该基准包含200个任务，覆盖从小型终端工具（jq、ripgrep）到大型项目（PHP编译器、FFmpeg、SQLite）的多种复杂度。
-- 测试套件通过智能体驱动的模糊测试生成，共计超过24.8万项行为测试。
-- 在多款主流模型使用 mini-SWE-agent 评估中，完全解决率均为 0%，最高部分解决率仅 3.0%（Claude Opus 4.7）。
-- ProgramBench 采用沙箱隔离、无网络访问、禁止反编译等严格防作弊措施，且不使用任务特调脚手架。
-- 智能体需自行选择编程语言、设计架构、编写全部源代码并生成构建脚本，不获得任何提示或结构指导。
+- ProgramBench 包含 200 个程序重构任务，覆盖从小型命令行工具（jq、ripgrep）到大型软件项目（PHP 编译器、FFmpeg、SQLite）的复杂度跨度
+- 智能体仅获得可执行二进制文件和文档，无法访问源码、不可反编译、不可联网，必须在沙箱容器中独立完成架构设计、语言选择、代码编写和构建脚本
+- 测试套件通过智能体驱动的模糊测试生成，总计超过 248,000 个行为测试用例
+- 所有 9 个受测模型在完全解决率（Resolved）上均为 0%，最高几乎解决率（Almost Resolved）仅为 Claude Opus 4.7 的 3.0%
+- 基准使用 mini-SWE-agent 作为统一脚手架，避免针对特定任务调优工具链，确保模型能力的公平对比
+- 智能体在多项任务上取得了部分进展，但完全通过所有行为测试仍超出当前所有模型的能力边界
 pipeline_stage: fact_extracted
 ---
 

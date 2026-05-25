@@ -13,9 +13,8 @@ tags:
 extraction_status: success
 id: 8ecb5ce2dd40da80
 source_type: community_discussion
-tldr: Waymo 因无人出租车反复驶入积水路段，暂停亚特兰大等四城服务
-objective_summary: 2026年5月，Waymo 无人驾驶出租车在亚特兰大驶入积水街道并被困约一小时，公司随后暂停亚特兰大、达拉斯、休斯顿和圣安东尼奥四城服务。此前
-  Waymo 已因积水问题发布软件召回，但尚未完成最终修复方案。NHTSA 和 NTSB 正就此及校车违规、1月撞伤儿童等多起事件展开调查。
+tldr: Waymo因robotaxi无法应对暴雨洪水，已在亚特兰大等四座城市暂停服务，NHTSA正密切关注此事。
+objective_summary: 2026年5月21日前后，Waymo因robotaxi在暴雨中驶入被淹道路，相继暂停亚特兰大、圣安东尼奥、达拉斯和休斯顿四城的自动驾驶服务。公司上周已针对洪水风险发起软件召回，但未完成最终修复方案，NHTSA表示已介入调查。
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
@@ -23,20 +22,20 @@ entities:
   - Waymo
   - NHTSA
   - NTSB
-  - Bloomberg News
-  - TechCrunch
   - National Weather Service
+  - Bloomberg News
   technologies:
-  - 自动驾驶
-  - Robotaxi
+  - autonomous driving
+  - robotaxi
+  - software recall
   key_people: []
 key_logic_flow:
-- Waymo 一辆无人出租车5月20日在亚特兰大驶入积水道路并被困约一小时，车辆后被拖离现场。
-- Waymo 因积水问题暂停亚特兰大、达拉斯、休斯顿和圣安东尼奥四个城市的服务。
-- Waymo 上周已发布软件召回，但承认尚未开发出避免积水区域的最终修复方案，仅部署了针对高风险时段和路段的限制措施。
-- 亚特兰大暴雨积水在 National Weather Service 发布警报之前就已形成，超出 Waymo 当前预警体系的覆盖范围。
-- NHTSA 正就此事件与 Waymo 沟通，并已于5月15日向 Waymo 发出第二份文件请求，认为其初步回应仍需补充数据。
-- 除积水问题外，Waymo 还面临校车违规（去年未完全修复）和1月23日圣莫尼卡撞伤儿童等多起事件的 NHTSA 和 NTSB 双线调查。
+- Waymo的robotaxi在亚特兰大暴雨中驶入被淹街道并被困约一小时，随后被拖离现场。
+- Waymo已因同一洪水问题在圣安东尼奥、达拉斯和休斯顿暂停服务，累计四座城市停运。
+- Waymo上周已向NHTSA发起软件召回，但承认尚未完成避免洪水区域的"最终修复方案"，仅推送了限制性措施。
+- 亚特兰大暴雨来势迅猛，在国家气象局发布山洪预警之前就已发生洪水，Waymo依赖的预警信号未能及时触发。
+- NHTSA表示已知悉此次事件，正与Waymo沟通，如有必要将采取进一步行动。
+- 这不是Waymo首次召回后问题复发——去年robotaxi非法超越校车的问题经修复后仍持续出现，NHTSA和NTSB正对此进行双重调查。
 pipeline_stage: fact_extracted
 ---
 

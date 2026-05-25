@@ -49,32 +49,40 @@ tags:
 extraction_status: success
 id: 5cf3a28e1bfde5ac
 source_type: community_discussion
-tldr: .NET 团队发布官方编码代理技能集，包含 12 个插件覆盖 .NET 全栈开发场景。
-objective_summary: Microsoft .NET 团队在 GitHub 发布 dotnet/skills 仓库，提供 12 个面向编码代理（如 Copilot
-  CLI、Claude Code、Cursor）的核心技能插件，涵盖 .NET 开发、数据访问、调试、构建、包管理、升级、MAUI、AI
+tldr: 微软 .NET 团队发布 dotnet/skills 开源仓库，提供 12 个面向 AI 编码智能体的技能插件，兼容多平台。
+objective_summary: 微软 .NET 团队在 GitHub 发布了 dotnet/skills 仓库，这是一套面向 AI 编码智能体的精选核心技能与自定义智能体集合，遵循
+  agentskills.io 开放标准。仓库包含 12 个插件，覆盖 .NET 核心开发、数据访问、诊断调试、MSBuild、NuGet、项目升级、M
 event_type: framework_tools
 epistemic_status: verified_fact
 entities:
   companies:
   - Microsoft
+  - dotnet
   technologies:
+  - Agent Skills
+  - Copilot CLI
+  - Claude Code
+  - Cursor
+  - OpenAI Codex
   - .NET
+  - Entity Framework
   - MSBuild
   - NuGet
   - MAUI
-  - ASP.NET Core
-  - Entity Framework
   - ML.NET
-  - MCP
-  - RAG
-  - LLM
+  - ASP.NET Core
+  - MSTest
+  - .NET 11
   key_people: []
 key_logic_flow:
-- .NET 团队发布 dotnet/skills 仓库，包含一组面向编码代理的官方核心技能和自定义代理。
-- 该仓库包含 12 个插件：dotnet、dotnet-data、dotnet-diag、dotnet-msbuild、dotnet-nuget、dotnet-upgrade、dotnet-maui、dotnet-ai、dotnet-template-engine、dotnet-test、dotnet-aspnet、dotnet11。
-- 这些技能遵循 agentskills.io 开放标准，兼容 Copilot CLI、Claude Code、Cursor 和 OpenAI Codex。
-- 提供在线仪表盘（dotnet.github.io/skills/）跟踪各插件的准确性和效率评分趋势。
-- 安装方式包括 VS Code 插件市场、Cursor 市场、skill-installer CLI 以及本地开发模式。
+- 微软 .NET 团队在 GitHub 上以 dotnet/skills 名义发布了一个开源技能仓库，作为 AI 编码智能体的插件市场
+- 该仓库遵循 agentskills.io 开放标准，确保技能在不同 AI 编码平台间具有互操作性
+- 仓库共包含 12 个插件，分别覆盖 .NET 核心开发、数据访问（EF）、性能诊断、MSBuild 构建、NuGet 包管理、项目升级迁移、MAUI 跨平台开发、AI/ML
+  集成、模板引擎、测试、ASP.NET Core 及 .NET 11 新 API 等领域
+- 用户可在 Copilot CLI、Claude Code 中通过 /plugin marketplace add 命令添加市场并安装插件，也可在 VS Code
+  Copilot Chat 中启用插件预览功能
+- 该仓库同时也是 Cursor 插件市场，用户可在 Cursor 内直接搜索安装；对于 OpenAI Codex，可通过 skill-installer CLI
+  按 GitHub URL 安装单个技能
 pipeline_stage: fact_extracted
 ---
 

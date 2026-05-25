@@ -10,39 +10,49 @@ tags:
 extraction_status: success
 id: b60eabf0d9170bba
 source_type: community_discussion
-tldr: Google I/O 发布 Gemini 多模态模型和 Gemini Spark 智能体；Andrej Karpathy 加入 Anthropic，
-objective_summary: Google I/O 发布 Gemini Omni Flash（视频生成）和 Gemini 3.5 Flash 模型及 Gemini
-  Spark 24/7 个人智能体。Andrej Karpathy 加入 Anthropic 预训练团队。SpaceX IPO 文件披露 Anthropic 每月支付
-event_type: application_landing
+tldr: Google I/O 发布多款模型对标 OpenClaw，同期 Anthropic 因 Karpathy 加盟与 12.
+objective_summary: Google 在 I/O 大会发布 Gemini Omni Flash（视频生成编辑模型）、Gemini 3.5 Flash、编程智能体
+  Antigravity 及 24/7 个人助理 Gemini Spark，对标 Anthropic 的 OpenClaw。
+event_type: capital_movement
 epistemic_status: verified_fact
 entities:
   companies:
   - Google
   - Anthropic
-  - SpaceX
   - OpenAI
+  - SpaceX
   - Figma
-  - Cohere
   - GitHub
+  - Cohere
   - Datadog
   - Neimo
-  - Meta
+  - Factory
+  - Parallel Web Systems
   technologies:
-  - MCP
-  - SynthID
+  - Gemini Omni Flash
+  - Gemini 3.5 Flash
+  - Gemini Spark
+  - Antigravity
+  - OpenClaw
   - C2PA
-  - VLA
+  - SynthID
+  - MCP
+  - Command A+
+  - Codex
+  - Claude Code
   key_people:
   - Andrej Karpathy
   - Nick Joseph
 key_logic_flow:
-- Andrej Karpathy 加入 Anthropic 预训练团队，在 Nick Joseph 领导下组建新团队，利用 Claude 加速预训练研究。
-- SpaceX IPO 文件披露 Anthropic 每月将支付 12.5 亿美元用于算力。
-- Anthropic 预计 2025 年 6 月季度营收达 109 亿美元并首次实现运营利润。
-- Google I/O 发布 Gemini Omni Flash（首个支持视频生成的多模态模型）、Gemini 3.5 Flash 以及 24/7 个人智能体 Gemini
-  Spark。
-- OpenAI 声称其模型解决了一个著名数学难题，且有外部数学家验证了该证明。
-- Cohere 发布开源企业模型 Command A+，支持文本/图像/工具调用，量化后可在单台 B200 上运行。
+- Google 在 I/O 大会发布 Gemini Omni Flash（支持视频生成与编辑）、Gemini 3.5 Flash、编程工具 Antigravity，并预告
+  24/7 个人助理 Gemini Spark，整套产品线被视为对 Anthropic OpenClaw 的回应。
+- Andrej Karpathy 加入 Anthropic 预训练团队，在 Nick Joseph 领导下组建新小组，目标是用 Claude 模型加速 Claude
+  自身的预训练研究。
+- SpaceX 的 IPO 申请文件披露 Anthropic 每月向 SpaceX 支付 12.5 亿美元的算力费用，显露其大规模基础设施投入。
+- Anthropic 预计 2026 年 6 月季度营收达 109 亿美元并首次实现运营利润，估值可能超越 OpenAI；而 OpenAI 据传即将提交 IPO
+  申请。
+- OpenAI 宣称其模型解决了一道著名数学难题并获外部数学家独立验证，同时推出基于 C2PA 和 SynthID 水印的公开图像真伪验证工具。
+- GitHub 一名员工因安装被投毒的第三方 VS Code 扩展导致设备被入侵，约 3800 个内部代码仓库遭泄露。
 pipeline_stage: fact_extracted
 ---
 

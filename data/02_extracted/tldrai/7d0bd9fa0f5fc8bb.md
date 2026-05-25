@@ -10,32 +10,38 @@ tags:
 extraction_status: success
 id: 7d0bd9fa0f5fc8bb
 source_type: news_media
-tldr: NVlabs 发布 LongLive 2.0，支持 NVFP4 的实时长视频生成框架
-objective_summary: NVlabs 于 2026 年 5 月 13 日发布 LongLive 2.0，引入 NVFP4 并行基础设施，支持 W4A4
-  量化和序列并行推理，在 2 步推理下达到 45.7 FPS 的实时长视频生成速度。该项目已于 2026 年 1 月被 ICLR-2026 接收。
-event_type: infrastructure_update
+tldr: NVIDIA发布LongLive 2.0，基于NVFP4实现45.7 FPS实时长视频生成，论文被ICLR-2026接收。
+objective_summary: NVIDIA NVlabs于2025年9月发布LongLive 1.0实时交互式长视频生成系统，2026年5月发布2.0版本。2.0引入NVFP4量化基础设施，支持多镜头AR训练、DMD少步蒸馏和序列并行推理，在5B参数模型上达45.7
+  FPS。
+event_type: framework_tools
 epistemic_status: verified_fact
 entities:
   companies:
+  - NVIDIA
   - NVlabs
   technologies:
+  - LongLive
   - NVFP4
+  - KV Cache
   - TriAttention
-  - AR
+  - Causal Diffusion
   - DMD
   - RoPE
   - SANA-Video
-  - KV Cache
-  - BF16
+  - Attention Sink
+  - Sequence Parallel
+  - VBench
   key_people: []
 key_logic_flow:
-- NVlabs 于 2026 年 5 月 13 日发布 LongLive 2.0，引入 NVFP4 并行基础设施，支持序列并行训练与推理、多镜头视频 AR 训练、W4A4
-  量化及 NVFP4 KV Cache，在 2 步蒸馏推理下达到 45.7 FPS。
-- LongLive 1.0 通过注意力汇聚（attention sink）、KV 重缓存（KV-recache）和流式长序列微调（streaming long tuning）实现实时交互式长视频生成，支持用户连续输入
-  prompt 并实时生成对应视频。
-- LongLive 支持 TriAttention KV 缓存压缩技术，可在无质量损失的情况下减少 50% KV 缓存占用。
-- LongLive 1.0 已适配 KV-cache 相对 RoPE，支持无限长视频生成，并在线性注意力模型 SANA-Video 上实现 60 秒实时交互视频生成。
-- LongLive 于 2026 年 1 月 27 日被 ICLR-2026 接收为会议论文。
+- LongLive 1.0 提出 attention sink、KV-recache 和 streaming long tuning 三项核心技术，实现用户通过连续
+  prompt 交互的实时长视频生成
+- LongLive 2.0 构建在 NVFP4 并行基础设施之上，支持 W4A4 量化的训练（AR 训练 + DMD 少步蒸馏）和推理
+- 训练层面支持平衡序列并行 AR 训练（teacher-forcing）、多镜头/单镜头视频训练，以及 NVFP4 或 BF16 精度选项
+- 推理层面支持 NVFP4 推理（W4A4）、NVFP4 KV Cache、多镜头 attention sink、序列并行推理和异步解码
+- 通过 DMD 少步蒸馏，2-Step 模型达到 45.7 FPS，4-Step 模型达到 29.7 FPS，均显著优于 1.0 版本 1.3B 模型的 20.7
+  FPS
+- 项目集成 TriAttention KV 缓存压缩（50% KV 缩减无损质量）和 KV-cache 相对 RoPE 适配（支持无限长视频生成），并在 SANA-Video
+  线性注意力模型上实现 60 秒实时交互视频生成
 pipeline_stage: fact_extracted
 ---
 

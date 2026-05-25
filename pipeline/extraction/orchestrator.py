@@ -43,6 +43,13 @@ from ..core.agent import StageResult
 # ---------------------------------------------------------------------------
 logger = logging.getLogger(__name__)
 
+# ---------------------------------------------------------------------------
+# 默认模型的常量定义
+# ---------------------------------------------------------------------------
+# Stage 2 回退模型（在 config.yaml 和 CLI 参数均未指定时使用）
+DEFAULT_MODEL = "deepseek-v4-flash"
+
+
 
 # =============================================================================
 # 文件发现
@@ -248,6 +255,7 @@ async def run_extraction(
     skip_existing: bool = True,
     force: bool = False,
     dry_run: bool = False,
+    # 支持自定义模型
     model: Optional[str] = None,
 ) -> dict:
     """
@@ -279,8 +287,8 @@ async def run_extraction(
     llm_config = get_llm_config("extract")
     stage_config = get_stage_config("extract")
 
-    # 模型
-    effective_model = model or llm_config.get("name", "claude-sonnet-4-6")
+    # 模型选择：CLI args > config > 默认
+    effective_model = model or llm_config.get("name", DEFAULT_MODEL)
 
     # 并发数优先级: CLI args > config > 默认 5
     if concurrency is None:

@@ -23,6 +23,10 @@ from pipeline.utils.file_utils import ensure_dir
 # ---------------------------------------------------------------------------
 logger = logging.getLogger(__name__)
 
+# Stage 3 回退模型（在 config.yaml 和 CLI 参数均未指定时使用）
+DEFAULT_MODEL = "deepseek-v4-pro"
+
+
 
 def _setup_logging(verbose: bool = False) -> None:
     """配置日志格式与级别。verbose=True 时显示 DEBUG 日志。"""
@@ -138,7 +142,7 @@ async def run_analysis(
     llm_config = get_llm_config("analyze") or {}
 
     if model is None:
-        model = llm_config.get("name", "claude-opus-4-7")
+        model = llm_config.get("name", DEFAULT_MODEL)
     if concurrency is None:
         concurrency = analyze_config.get("concurrency", 3)
     if force:

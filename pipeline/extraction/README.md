@@ -27,28 +27,6 @@ Stage 2a (BaseInfo)                              Stage 2b (FactExtraction)
 
 ## 快速开始
 
-### 基本用法
-
-```bash
-# 处理所有 data/01_raw/ 下的文件（两个子阶段都执行）
-uv run python pipeline/run.py extract
-
-# 只运行 BaseInfo
-uv run python pipeline/run.py extract --stage base_info
-
-# 只运行 FactExtraction（需要 data/02_extracted/ 已有 BaseInfo 输出）
-uv run python pipeline/run.py extract --stage fact_extraction
-
-# 强制重新提取（忽略 skip-existing）
-uv run python pipeline/run.py extract --force
-
-# 干跑（列出文件，不调用 LLM）
-uv run python pipeline/run.py extract --dry-run
-
-# 处理单个文件
-uv run python pipeline/run.py extract --input data/01_raw/arxiv-cs-ai/01.md
-```
-
 ### 参数说明
 
 | 参数 | 默认值 | 说明 |
@@ -62,18 +40,91 @@ uv run python pipeline/run.py extract --input data/01_raw/arxiv-cs-ai/01.md
 | `--model` / `-m` | `config.yaml` 中 `llm.models.extract.name` | LLM 模型名称 |
 | `--verbose` / `-v` | `false` | 详细日志输出 |
 
-### 作为 Python 模块调用
+### 基本用法
+
+```bash
+# 处理所有文章（两个子阶段都执行，最常用）
+uv run python pipeline/run.py extract
+
+# 只运行 Stage 2a：BaseInfo 元信息补全（source_type 目录名推断，零 Agent）
+uv run python pipeline/run.py extract --stage base_info
+
+# 只运行 Stage 2b：FactExtraction（需要 data/02_extracted/ 已有 BaseInfo 输出）
+uv run python pipeline/run.py extract --stage fact_extraction
+
+# 处理单个文件
+uv run python pipeline/run.py extract --input data/01_raw/arxiv-cs-ai/098b39fb4bd5fbf2.md
+
+# 处理某个数据源的全部文章
+uv run python pipeline/run.py extract --input data/01_raw/arxiv-cs-ai/
+
+# 单文件 + 单阶段（最精细的调试粒度）
+uv run python pipeline/run.py extract -i data/01_raw/openai-blog/01.md --stage base_info
+```
+
+> **注意**：FactExtraction 的输入路径应指向 `data/02_extracted/`（Stage 2a 的输出目录），因为 `source_type` 字段由 Stage 2a 写入。
+
+强制重新提取与调参：
+
+```bash
+# 强制重新提取所有字段（忽略 skip-existing）
+uv run python pipeline/run.py extract --force
+
+# 强制重新提取指定子阶段（如提示词更新后）
+uv run python pipeline/run.py extract --force --stage fact_extraction
+
+# 强制重新提取单文件
+uv run python pipeline/run.py extract --force --input data/01_raw/arxiv-cs-ai/01.md
+
+# 指定模型 + 单线程（对比不同模型效果）
+uv run python pipeline/run.py extract --model claude-sonnet-4-6 --concurrency 1 --verbose
+```
+
+预览与调试：
+
+```bash
+# 干跑（只列出文件，不调用 LLM）
+uv run python pipeline/run.py extract --dry-run
+
+# 按源查看待处理文件数
+uv run python pipeline/run.py extract --dry-run --input data/01_raw/arxiv-cs-ai/
+
+# 详细日志（查看每个文件的处理细节和 Agent 调用耗时）
+uv run python pipeline/run.py extract --verbose
+
+# 单文件 + 详细日志（定位特定文章的提取问题）
+uv run python pipeline/run.py extract --verbose --input data/01_raw/arxiv-cs-ai/01.md
+```
+
+与上下游串联：
+
+```bash
+# ingest → extract → analyze 连续执行
+uv run python pipeline/run.py ingest && \
+  uv run python pipeline/run.py extract && \
+  uv run python pipeline/run.py analyze
+
+# 单文件端到端调试
+uv run python pipeline/run.py extract -i data/01_raw/arxiv-cs-ai/01.md && \
+  uv run python pipeline/run.py analyze -i data/02_extracted/arxiv-cs-ai/01.md
+```
+
+作为 Python 模块调用：
 
 ```python
 from pipeline.extraction import run_extraction
 import asyncio
 
+# 正常提取（两个子阶段），返回 {stage_name: [StageResult, ...]}
+results = asyncio.run(run_extraction(concurrency=5, stages="all", force=False))
+
+# 只运行 FactExtraction
+results = asyncio.run(run_extraction(stages="fact_extraction", force=True))
+
+# 处理单个文件
 results = asyncio.run(run_extraction(
-    concurrency=5,
-    stages="all",
-    force=False,
+    input_path=Path("data/01_raw/arxiv-cs-ai/01.md"), stages="all",
 ))
-# → {"base_info": [StageResult, ...], "fact_extraction": [StageResult, ...]}
 ```
 
 ## 模块结构

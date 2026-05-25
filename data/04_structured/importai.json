@@ -15,24 +15,31 @@
     "extraction_status": "success",
     "id": "42dbb220f4488665",
     "source_type": "newsletter_rss",
-    "tldr": "SentinelOne发现20年前病毒fast16.sys，通过篡改高精度计算结果可能用于破坏核武研发。",
-    "objective_summary": "SentinelOne研究人员分析了一个20多年前的病毒fast16.sys，该病毒通过篡改内存中的浮点运算指令，针对性破坏LS-DYNA 970、PKPM和MOHID等高精度工程仿真软件的计算结果，可能旨在破坏伊朗核武器开发项目。",
+    "tldr": "安全公司SentinelOne披露了一个约20年历史的病毒fast16.sys，其通过篡改浮点运算精度来暗中破坏工程与物理仿真软件的计算结果。",
+    "objective_summary": "安全公司SentinelOne对约20年历史的计算机病毒fast16.sys进行了逆向分析，发现该病毒通过内存补丁方式选择性攻击高精度计算软件，注入浮点运算指令以篡改数值结果，并通过自传播机制在整个设施中制造一致性的计算误差。受影响软件包括LS-DYNA 970、PKPM和MOHID等工程与物理仿真",
     "event_type": "policy_and_safety",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
         "SentinelOne"
       ],
-      "technologies": [],
+      "technologies": [
+        "fast16.sys",
+        "LS-DYNA 970",
+        "PKPM",
+        "MOHID",
+        "x86",
+        "Floating Point Unit"
+      ],
       "key_people": []
     },
     "key_logic_flow": [
-      "SentinelOne研究人员对20多年前的计算机病毒fast16.sys进行了技术拆解分析。",
-      "该病毒专门针对高精度计算软件，通过修改内存中的x86代码和浮点运算指令来篡改计算结果。",
-      "病毒注入了一段独立的浮点运算函数，专门用于干扰内部数组的精度运算和缩放计算。",
-      "YARA签名扫描发现该病毒只感染了极少数文件，均为土木工程、物理和物理过程模拟领域的高精度计算工具。",
-      "被锁定的三个主要软件是LS-DYNA 970（核武器模拟）、PKPM（结构分析）和MOHID（环境建模），其中LS-DYNA曾被报道用于伊朗核武器研发。",
-      "该病毒框架通过引入系统性微小计算误差，可达到破坏科学研究、降低工程系统可靠性乃至引发灾难性后果的目的。"
+      "SentinelOne研究人员对一个约20年历史的病毒fast16.sys进行了逆向工程分析",
+      "该病毒通过内存补丁方式选择性地攻击高精度计算软件，而非执行典型的恶意代码注入",
+      "病毒注入了一段复杂的浮点运算单元指令序列，专门用于精度算术和数组缩放，这与常规代码劫持行为完全不同",
+      "通过YARA签名匹配发现，受影响文件高度集中在LS-DYNA 970、PKPM和MOHID等工程物理仿真软件上",
+      "LS-DYNA曾在关于伊朗核武器开发计算机建模的公开报道中被提及，暗示该病毒可能用于破坏武器研发相关的高精度仿真",
+      "该攻击框架通过引入微小但系统性的计算误差，可能长期削弱科学研究项目、导致工程系统退化甚至引发灾难性损坏"
     ],
     "pipeline_stage": "fact_extracted"
   }

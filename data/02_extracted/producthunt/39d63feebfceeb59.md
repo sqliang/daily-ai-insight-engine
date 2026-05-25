@@ -11,20 +11,22 @@ tags:
 extraction_status: partial
 id: 39d63feebfceeb59
 source_type: community_discussion
-tldr: AlliHat 是一款将 Claude AI 集成到 Safari 侧边栏的浏览器扩展工具。
-objective_summary: AlliHat 在 Product Hunt 上发布，定位为将 Claude AI 集成到 Safari 浏览器侧边栏的产品，旨在让用户在浏览网页时便捷调用
-  AI 助手。
+tldr: AlliHat 在 ProductHunt 上架，将 Claude AI 集成至 Safari 侧边栏
+objective_summary: 产品 AlliHat 于 ProductHunt 平台发布，功能为在 Safari 浏览器侧边栏中嵌入 Claude AI 助手，支持讨论与链接访问。正文提取不完整，仅获取到产品摘要信息。
 event_type: application_landing
 epistemic_status: pr_statement
 entities:
-  companies: []
+  companies:
+  - Anthropic
   technologies:
   - Claude AI
+  - Safari
   key_people: []
 key_logic_flow:
-- AlliHat 是一款浏览器扩展类产品，将 Claude AI 嵌入 Safari 侧边栏。
-- 该产品于 Product Hunt 平台发布，属于产品公开展示与推广。
-- 核心功能是让用户在不离开当前网页的情况下，通过 Safari 侧边栏直接与 Claude AI 交互。
+- AlliHat 是一款 Safari 浏览器扩展类产品，在 ProductHunt 平台上架展示
+- 该产品将 Anthropic 的 Claude AI 嵌入 Safari 侧边栏，用户可在浏览网页时直接调用 AI 助手
+- 产品页面提供讨论区和外部链接入口
+- 原文抓取不完整，仅获得摘要级信息，缺少详细功能描述、定价、开发者等关键事实
 pipeline_stage: fact_extracted
 ---
 

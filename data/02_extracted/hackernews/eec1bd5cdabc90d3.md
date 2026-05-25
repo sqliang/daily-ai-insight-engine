@@ -13,9 +13,9 @@ tags:
 extraction_status: success
 id: eec1bd5cdabc90d3
 source_type: community_discussion
-tldr: 博主将运行10年的Ubuntu 16.04服务器从DigitalOcean迁移至Hetzner并改用FreeBSD系统
-objective_summary: 作者将其运行超过10年的DigitalOcean VPS（Ubuntu 16.04 LTS，纽约机房，$13/月）迁移至Hetzner
-  VPS（FreeBSD 14.3，德国机房，€5.99/月），旧服务器曾持续运行1491天未中断。新架构使用FreeBSD Jails配合Bastille管理实现站
+tldr: 一位开发者将其运行10年的博客从Digital Ocean的Ubuntu 16.04 VPS迁移至Hetzner的FreeBSD 14.
+objective_summary: 作者于2026年将运行在Digital Ocean纽约节点上已达1491天uptime的Ubuntu 16.04 VPS（$13/月），迁移至Hetzner德国节点的FreeBSD
+  14.3虚拟机（约€6/月）。迁移中采用FreeBSD Jails+Bastille实现每站点独立隔离，
 event_type: infrastructure_update
 epistemic_status: verified_fact
 entities:
@@ -24,24 +24,22 @@ entities:
   - Hetzner
   technologies:
   - FreeBSD
-  - Ubuntu 16.04 LTS
-  - nginx
-  - Caddy
-  - Hugo
   - FreeBSD Jails
   - Bastille
   - ZFS
+  - Caddy
+  - nginx
+  - Hugo
+  - PF
   - Btrfs
-  - PF (Packet Filter)
-  - LaTeX
   key_people: []
 key_logic_flow:
-- 作者的个人博客在DigitalOcean的Ubuntu 16.04 LTS VPS上运行了超过10年，该系统已停止安全支持至少5年。
-- 作者将服务器迁移至Hetzner的德国机房VPS，配置更高（4GB内存、2 vCPU、40GB磁盘）但价格更低（€5.99/月 vs $13/月）。
-- 新系统选择FreeBSD 14.3，核心设计理念是利用FreeBSD Jails实现各站点的安全隔离，每个站点运行在独立的Jail中。
-- 使用Bastille工具管理Jails的生命周期（创建、启动、控制台访问等），替代手动创建Jail的复杂步骤。
-- 网络架构中，Caddy运行在一个独立Jail中作为反向代理网关，处理所有HTTP/HTTPS流量并自动管理SSL证书，再将请求转发至各站点Jail。
-- 通过PF（Packet Filter）配置NAT和端口转发规则，设置虚拟网络接口bastille0供Jails使用，实现内部网络隔离与外部访问。
+- 旧服务器为Digital Ocean纽约节点VPS，运行Ubuntu 16.04 LTS超10年，已停止安全更新支持至少5年，存在安全隐患
+- 新服务器选用Hetzner德国节点虚拟机，配置为旧机两倍内存和CPU，月费仅为旧机一半以下（从$13降至约€6）
+- 迁移动机之一是学习FreeBSD，尤其是其Jails容器化技术和成熟的ZFS文件系统的快照功能
+- 通过Bastille工具管理Jails，为Caddy反向代理和每个站点分别创建独立Jail，实现网络隔离
+- 使用PF防火墙配置NAT出站规则和HTTP/HTTPS端口重定向，将外部流量引导至Caddy Jail
+- 用Caddy替代nginx作为Web服务器，主要原因是Caddy可自动处理SSL证书的申请和续期，避免手动运行certbot
 pipeline_stage: fact_extracted
 ---
 

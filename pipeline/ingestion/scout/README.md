@@ -15,30 +15,63 @@ scout (1a)  →  ingest (1b)  →  extract (2)  →  analyze (3)  →  aggregate
 
 ## 快速开始
 
-### 基本用法
-
-```bash
-# 抓取所有启用数据源的最新文章列表（最常用）
-uv run python pipeline/run.py scout
-
-# 强制重新抓取（忽略已存在的今日清单）
-uv run python pipeline/run.py scout --force
-```
-
 ### 参数说明
 
 | 参数 | 默认值 | 说明 |
 |------|--------|------|
-| `--force` | `false` | 忽略已存在的当日清单，全部重新抓取 |
+| `--force` | `false` | 忽略已存在的当日清单，全部重新抓取（即使清单文件已存在） |
 
-### 作为 Python 模块调用
+### 基本用法
+
+```bash
+# 抓取所有已启用数据源的最新文章列表（最常用）
+uv run python pipeline/run.py scout
+
+# 强制重新抓取（忽略已存在的今日清单，全部重新获取）
+uv run python pipeline/run.py scout --force
+```
+
+日常首次运行会为每个启用的数据源生成 `data/00_manifest/{source}_{today}.json`；已存在当日清单的源自动跳过（幂等）。预期输出示例：
+
+```
+=== Stage 1 Scout: URL 清单生成 ===
+[arxiv-cs-ai] rss: 15 篇文章
+[openai-blog] rss: 3 篇文章
+...
+总计: 19 个源, 87 篇文章
+```
+
+查看抓取结果：
+
+```bash
+# 列出今日生成的所有清单文件
+ls data/00_manifest/*_$(date +%Y-%m-%d).json
+
+# 查看某个源的清单内容（含文章标题、URL、SHA-256 ID）
+cat data/00_manifest/arxiv-cs-ai_$(date +%Y-%m-%d).json | python -m json.tool | head -40
+
+# 查看人类可读的 Markdown 汇总清单
+cat data/00_manifest/$(date +%Y-%m-%d)-manifest-*.md
+```
+
+与下游 ingest 串联运行：
+
+```bash
+# 先 scout 生成清单，再 ingest 抓取正文
+uv run python pipeline/run.py scout && uv run python pipeline/run.py ingest
+```
+
+作为 Python 模块调用：
 
 ```python
 from pipeline.ingestion.scout import run_scout
 
+# 正常抓取，返回 {source_name: [articles]} 字典
 manifests = run_scout(force=False)
-# → {"arxiv-cs-ai": [15 articles], "openai-blog": [3 articles], ...}
 print(f"{len(manifests)} 个源, {sum(len(v) for v in manifests.values())} 篇文章")
+
+# 强制重新抓取
+manifests = run_scout(force=True)
 ```
 
 ## 设计思路

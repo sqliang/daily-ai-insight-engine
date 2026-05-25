@@ -31,9 +31,8 @@ tags:
 extraction_status: success
 id: 6dd8aa396fd1fab6
 source_type: academic_paper
-tldr: DecisionBench 提出评估多智能体长期委托协作能力的标准化基准框架
-objective_summary: 研究者在 arXiv 发布 DecisionBench 基准，用于评估长周期智能体工作流中的委托协作能力。该基准包含 GAIA、tau-bench、BFCL
-  multi-turn 三个任务套件、11 个模型（来自 7 个供应商家族）和多项评估指标，在 23,375 个实例上完成参考扫描。
+tldr: DecisionBench发布：用于评估长周期Agent工作流中涌现式委托行为的基准测试平台，覆盖11模型×3任务套件×23375实例。
+objective_summary: 学术团队在arXiv发布DecisionBench基准测试平台，整合GAIA、tau-bench、BFCL三个任务套件与11个模型的委托评估框架。在23375个任务实例上进行五条件参考扫描，发现质量指标无法区分委托策略优劣，路由保真度仅7.5%-29.5%，完美委托上限比实测高15-31个百分点。
 event_type: framework_tools
 epistemic_status: verified_fact
 entities:
@@ -42,16 +41,18 @@ entities:
   - DecisionBench
   - GAIA
   - tau-bench
-  - BFCL multi-turn
+  - BFCL
+  - emergent delegation
+  - agentic workflow
+  - model routing
   key_people: []
 key_logic_flow:
-- DecisionBench 是一个标准化基准框架，专门用于评估长周期智能体工作流中的委托协作能力，包含任务套件、模型池、委托接口、技能标注层和多维度评估指标。
-- 框架包含三个任务套件（GAIA、tau-bench、BFCL multi-turn），11 个模型组成同伴模型池（来自 7 个供应商家族），委托接口为 call_model
-  加可选 read_profile 通道。
-- 研究者在全部模型池上执行了五个条件的参考扫描，累计 23,375 个任务实例。
-- 四种感知条件下的平均任务质量无统计学显著差异（|beta| <= 0.010, p >= 0.21），说明仅凭质量指标会遗漏委托编排信号。
-- Top-1 路由保真度在不同条件间从 7.5% 到 29.5% 不等，且交付通道（按需工具 vs. 预加载描述）对结果的影响远大于描述内容本身。
-- 反事实天花板分析表明，完美委托相比当前实测性能还有 15 到 31 个百分点的未实现提升空间，表明未来的编排方法仍有很大潜力。
+- DecisionBench是一个用于评估长周期Agent工作流中涌现式委托行为的基准测试平台，固定了任务套件、模型池、委托接口和指标体系四个核心要素
+- 平台使用3个任务套件（GAIA、tau-bench、BFCL多轮）和11个模型（来自7个供应商家族），通过call_model接口和可选的read_profile通道实现委托
+- 评估指标涵盖质量、成本、延迟、委托率、路由保真度@k、供应商自偏好以及反事实委托上限共七个维度
+- 在23375个任务实例上的五条件参考扫描发现：四种awareness条件下端任务质量在统计上无显著差异（|beta|≤0.010, p≥0.21），仅靠质量评估会遗漏编排信号
+- 路由保真度@1在不同条件下仅为7.5%-29.5%，交付通道（按需工具vs预加载描述）的影响远大于描述内容本身
+- 反事实上限分析表明，完美委托比当前实测性能高出15-31个百分点，揭示了未来编排方法的巨大提升空间
 pipeline_stage: fact_extracted
 ---
 

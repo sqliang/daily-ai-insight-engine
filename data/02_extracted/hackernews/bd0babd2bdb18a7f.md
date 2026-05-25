@@ -13,24 +13,24 @@ tags:
 extraction_status: success
 id: bd0babd2bdb18a7f
 source_type: community_discussion
-tldr: Google在I/O大会宣布搜索全面转向AI生成答案，削弱链接呈现，被批为对开放网络的宣战。
-objective_summary: Google在2026年5月20日的I/O主题演讲中宣布进一步推动搜索向AI直接生成答案的方向演进，减少对网页链接的呈现。作者认为此举意味着Google在传统网页之上建立了一个由自己控制的抽象层，将网站内容视为免费的原材料，实际上垄断了信息访问入口。
+tldr: Google在IO大会上宣布搜索将全面转向AI生成答案，减少来源链接，被作者视为对开放Web的宣战。
+objective_summary: 2026年5月20日，Google在IO大会上宣布搜索产品将深化AI Overviews方向，以AI生成的答案替代传统的链接索引范式。作者分析此举意在建立一个由Google控制的Web抽象层，将网站内容降格为训练AI的免费原材料，从而垄断信息获取渠道，颠覆参与式开放Web。
 event_type: application_landing
-epistemic_status: theoretical_claim
+epistemic_status: verified_fact
 entities:
   companies:
   - Google
   technologies:
   - AI Overviews
-  key_people:
-  - Mark Zuckerberg
+  - LLM
+  key_people: []
 key_logic_flow:
-- Google在2026年I/O主题演讲中宣布搜索将进一步转向AI直接生成答案的模式，延续了AI Overviews的方向。
-- 该模式大幅减少对原始网页链接的呈现，用户获取信息不再通过访问来源网站。
-- 作者认为Google正在网页之上建立一个由其控制的抽象层，像围墙花园一样垄断信息访问。
-- 网站创作者的劳动被降级为AI系统的免费训练原料，其作品不再作为独立的文化产物被分享和访问。
-- 作者预测Google或类似公司未来会创造贬义标签来污名化开放网页，将其AI抽象层包装为所谓的安全网络。
-- 作者呼吁用户去Google化，使用其他搜索引擎和浏览器，避免信息获取被单一公司控制。
+- Google在2026年IO大会上宣布搜索产品将全面转向AI生成的答案摘要，减少甚至放弃传统的来源链接范式。
+- 此举意味着Google试图在开放Web之上建立一个由其完全控制的新抽象层，将Web内容降格为训练AI的免费原材料。
+- 网站、创作者和艺术家的工作不再被视为独立的文化产物，而仅是Google合成文本机器的无偿输入。
+- 这本质上是对参与式Web的颠覆，目标是垄断信息获取渠道，使公众只能通过Google控制的界面接触信息。
+- 作者预测Google及其同类企业下一步将制造贬低开放Web的话术（类似暗网），将自身抽象层包装为安全Web。
+- 作者呼吁用户通过更换默认搜索引擎和停止使用Chrome浏览器来抵制这一趋势。
 pipeline_stage: fact_extracted
 ---
 

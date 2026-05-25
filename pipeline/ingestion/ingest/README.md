@@ -15,38 +15,89 @@ scout (1a)  →  ingest (1b)  →  extract (2)  →  analyze (3)  →  aggregate
 
 ## 快速开始
 
-### 基本用法
-
-```bash
-# 处理今日所有清单文件（最常用）
-uv run python pipeline/run.py ingest
-
-# 强制重新抓取（忽略去重状态）
-uv run python pipeline/run.py ingest --force
-
-# 指定并发数
-uv run python pipeline/run.py ingest --concurrency 10
-
-# 处理指定清单文件
-uv run python pipeline/run.py ingest --manifest arxiv-cs-ai_2026-05-22.json
-```
-
 ### 参数说明
 
 | 参数 | 默认值 | 说明 |
 |------|--------|------|
-| `--manifest` / `-m` | 今日所有 `*_{today}.json` | 指定清单文件名（不含路径） |
+| `--manifest` / `-m` | 今日所有 `*_{today}.json` | 指定清单文件名（不含路径），用于单独处理某个源 |
 | `--force` | `false` | 忽略去重状态，强制重新抓取所有文章 |
-| `--concurrency` / `-c` | `config.yaml` 中 `stages.ingest.concurrency`（默认 5） | 线程池并发数 |
+| `--concurrency` / `-c` | `config.yaml` 中 `stages.ingest.concurrency`（默认 5） | 线程池并发数，控制同时抓取的文章数 |
 
-### 作为 Python 模块调用
+### 基本用法
+
+```bash
+# 处理今日所有清单文件，逐篇下载 HTML、提取 Markdown 正文（最常用）
+uv run python pipeline/run.py ingest
+
+# 只抓取某个源的清单（文件名格式：{source}_{date}.json）
+uv run python pipeline/run.py ingest --manifest arxiv-cs-ai_2026-05-25.json
+uv run python pipeline/run.py ingest -m openai-blog_2026-05-25.json
+
+# 高并发加速（网络条件好时）
+uv run python pipeline/run.py ingest --concurrency 10
+
+# 低并发保守（目标站点有速率限制时）
+uv run python pipeline/run.py ingest --concurrency 2
+
+# 单线程逐篇调试
+uv run python pipeline/run.py ingest -c 1
+
+# 强制重新抓取（忽略 data/state.json 去重记录）
+uv run python pipeline/run.py ingest --force
+
+# 强制 + 高并发 + 指定清单（组合使用）
+uv run python pipeline/run.py ingest --manifest arxiv-cs-ai_2026-05-25.json --force --concurrency 10
+```
+
+根据场景选择合适的并发数：
+
+| 并发数 | 适用场景 |
+|--------|----------|
+| `1` | 调试单个源、逐篇排查 trafilatura 提取问题 |
+| `3` | 保守策略，目标站点可能有速率限制 |
+| `5` | 默认值，平衡速度与稳定性 |
+| `10` | 网络条件好、目标站点无严格速率限制 |
+
+检查抓取质量：
+
+```bash
+# 查看正文提取状态分布（success / partial / failed）
+grep -r "extraction_status" data/01_raw/ --include="*.md" | sort | uniq -c
+
+# 找出所有抓取失败的文件
+grep -rl "extraction_status: failed" data/01_raw/ --include="*.md"
+
+# 找出仅获得摘要的文件
+grep -rl "extraction_status: partial" data/01_raw/ --include="*.md"
+
+# 查看某个失败文件的详情
+cat data/01_raw/arxiv-cs-ai/098b39fb4bd5fbf2.md
+```
+
+与上下游串联：
+
+```bash
+# 完整 Stage 1：先 scout 生成清单，再 ingest 抓取正文
+uv run python pipeline/run.py scout && uv run python pipeline/run.py ingest
+
+# Stage 1 → Stage 2：抓取正文后立即提取事实
+uv run python pipeline/run.py ingest && uv run python pipeline/run.py extract
+```
+
+作为 Python 模块调用：
 
 ```python
 from pipeline.ingestion.ingest import run_ingest
 
+# 处理今日所有清单，返回生成的 .md 文件路径列表
 files = run_ingest(force=False, concurrency=5)
-# → [Path("data/01_raw/arxiv/098b39fb.md"), ...]
 print(f"生成 {len(files)} 个 .md 文件")
+
+# 只处理指定清单
+files = run_ingest(manifest_name="arxiv-cs-ai_2026-05-25.json", force=False, concurrency=3)
+
+# 强制重新抓取 + 高并发
+files = run_ingest(force=True, concurrency=10)
 ```
 
 ## 设计思路

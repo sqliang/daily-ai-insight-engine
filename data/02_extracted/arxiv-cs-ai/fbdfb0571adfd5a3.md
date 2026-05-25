@@ -34,8 +34,8 @@ tags:
 extraction_status: success
 id: fbdfb0571adfd5a3
 source_type: academic_paper
-tldr: 研究提出VBFDD-Agent，将电池数字信号转为描述性文本，结合LLM推理实现故障检测与诊断。
-objective_summary: 该研究提出VBFDD-Agent框架，将电池监测信号、统计特征等转换为结构化自然语言描述，结合历史案例检索、维修手册和LLM推理，生成诊断结果与维护建议。实验表明该框架能准确进行异常监测，专家评估确认了生成建议的实用价值。
+tldr: 提出VBFDD-Agent，将电池信号转化为自然语言描述并结合LLM推理，实现电动车电池故障检测与可解释维修决策支持
+objective_summary: 一篇arXiv论文提出VBFDD-Agent框架，将电动汽车锂离子电池的监测信号、统计特征和异常记录转化为结构化自然语言描述，形成诊断语料库，再结合历史案例检索、维修手册与大语言模型推理，生成结构化诊断结果和维修建议。实验与专家评估验证了其准确性和实用价值。
 event_type: framework_tools
 epistemic_status: theoretical_claim
 entities:
@@ -43,15 +43,16 @@ entities:
   technologies:
   - VBFDD-Agent
   - LLM
-  - lithium-ion battery
+  - Descriptive Text Modeling
+  - Lithium-ion Battery
+  - Battery Digital Signals
   key_people: []
 key_logic_flow:
-- 电动汽车锂离子电池系统日益复杂，传统故障诊断方法在跨域适应性和人机协作方面存在局限。
-- 研究提出描述性文本建模方法，将电池监测信号、统计特征、异常记录和状态评估结果转换为结构化自然语言描述，形成电池健康诊断语料库。
-- 基于该语料库，研究提出VBFDD-Agent框架，整合电池状态文本、历史案例检索、本地维修手册和LLM推理能力。
-- VBFDD-Agent能生成结构化的诊断结果和可操作的维护建议。
-- 实验证明该框架能基于描述性文本表示准确进行异常监测，并提供灵活高效的维护建议。
-- 专家评估确认了生成建议的实用价值，该框架将传统电池诊断从标签预测扩展到可解释的、面向维护的决策支持。
+- 电动汽车锂离子电池系统日趋复杂，传统故障检测方法针对特定场景设计，缺乏跨领域适应性和人机协作能力，且缺少开源的电池故障报告语料库和统一的维修知识表示
+- 提出描述性文本建模方法，将电池监测信号、统计特征、异常记录和状态评估结果转化为结构化可读的自然语言描述，构建电池健康诊断与维修语料库
+- 基于该语料库构建VBFDD-Agent，整合描述性电池状态文本、历史案例检索、本地维修手册和大语言模型推理四个模块
+- 实验表明VBFDD-Agent能准确进行基于描述性文本表示的异常监测，并提供灵活、高效、可操作的维修建议
+- 专家评估证实了生成维修建议的实用价值，该方法将传统电池诊断从标签预测扩展到可解释的、面向维修的决策支持
 pipeline_stage: fact_extracted
 ---
 

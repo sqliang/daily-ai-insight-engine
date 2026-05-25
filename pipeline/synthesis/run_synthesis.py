@@ -21,7 +21,7 @@ from pathlib import Path
 from typing import Optional
 
 from .editor_in_chief_agent import run_editor_in_chief_sync
-from .report_generator import validate_report, write_report_files
+from .report_generator import write_report_files
 from ..core.config_loader import resolve_data_dir
 from pipeline.utils.file_utils import read_json, ensure_dir
 
@@ -94,13 +94,8 @@ def synthesize_report(
         max_detail=max_detail,
     )
 
-    # 校验
-    validation = validate_report(report)
-    print(f"\n  校验结果: {'通过' if validation['valid'] else '存在问题'}")
-    for err in validation.get("errors", []):
-        print(f"    ❌ {err}")
-    for warn in validation.get("warnings", []):
-        print(f"    ⚠️  {warn}")
+    # Pydantic 校验已在 editor_in_chief_agent 内部完成（DailyReport.model_validate）
+    # 校验失败会以 WARNING 级别记录日志，不阻断流程
 
     # 写入文件
     json_path, md_path = write_report_files(report, output_dir)

@@ -15,26 +15,28 @@
     "extraction_status": "success",
     "id": "098b39fb4bd5fbf2",
     "source_type": "academic_paper",
-    "tldr": "提出干扰感知的多任务机器遗忘框架，通过梯度投影与正交化减少任务间和实例间干扰。",
-    "objective_summary": "该研究针对多任务场景下的机器遗忘问题，提出干扰感知框架，结合任务感知梯度投影和实例级梯度正交化，在两个多任务视觉基准的五项任务上验证了有效性，相比最强基线UIS降低30.3%（全任务遗忘）和52.9%（部分任务遗忘）。",
+    "tldr": "提出干扰感知的多任务机器遗忘框架，通过梯度投影与正交化减少任务间干扰，UIS最高降低52.9%",
+    "objective_summary": "一篇arXiv论文于2026年5月提出多任务机器遗忘框架，针对共享骨干网络下遗忘一个任务会意外影响其他任务的干扰问题，定义了全任务遗忘和部分任务遗忘两种设定，并通过任务感知梯度投影与实例级梯度正交化相结合的方法，在两个多任务计算机视觉基准五个任务上验证有效性——全任务遗忘UIS降低30.",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
-        "machine unlearning",
-        "multi-task learning",
+        "multi-task unlearning",
         "gradient projection",
-        "gradient orthogonalization"
+        "gradient orthogonalization",
+        "machine unlearning",
+        "task-specific subspaces",
+        "UIS"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "现有机器遗忘研究主要聚焦单任务场景，而现代模型常采用共享主干的多任务架构，移除一个任务或实例的监督会无意影响其他任务。",
-      "该论文定义了两种多任务遗忘设定：全任务遗忘（从所有任务中移除目标实例）和部分任务遗忘（仅从选定任务中移除监督）。",
-      "共享参数导致遗忘集与保留集耦合，产生两类干扰：非目标任务上的任务级干扰和其他实例上的实例级干扰。",
-      "提出干扰感知框架，包含任务感知梯度投影（将更新约束在任务特定子空间）和实例级梯度正交化（减少遗忘信号与保留信号之间的冲突）。",
-      "在两个多任务计算机视觉基准数据集上的五项任务上进行实验，全任务遗忘UIS降低30.3%，部分任务遗忘UIS降低52.9%。"
+      "传统机器遗忘研究聚焦单任务场景，与现代模型普遍采用共享骨干网络的多任务架构存在断层",
+      "定义多任务遗忘的两种设定：全任务遗忘（移除目标实例在所有任务中的监督）和部分任务遗忘（仅移除选中任务的监督）",
+      "揭示了共享参数导致的核心问题——遗忘集与保留集耦合，产生任务级干扰（影响非目标任务）和实例级干扰（影响其他实例）",
+      "提出干扰感知框架，结合任务感知梯度投影（将更新约束在任务特定子空间内）与实例级梯度正交化（降低遗忘信号与保留信号冲突）",
+      "在两个多任务计算机视觉基准的五个任务上实验验证，全任务遗忘中UIS比最强基线低30.3%，部分任务遗忘中低52.9%"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -54,10 +56,10 @@
     "extraction_status": "success",
     "id": "0db34a1ceb549965",
     "source_type": "academic_paper",
-    "tldr": "117篇AI生成论文无一达到顶会接收标准，实验严谨性是最大瓶颈",
-    "objective_summary": "arXiv上的研究论文引入ResearchArena框架，让Claude Code、Codex和Kimi Code三种智能体在13个计算机科学主题上自主完成117篇论文。通过三种评估方式发现：仅看论文文本时Claude Code得分接近人类平均水平，但引入工件审查后分数骤降，",
+    "tldr": "117篇AI智能体生成的论文无一达到顶会接收标准，实验严谨性是核心瓶颈。",
+    "objective_summary": "研究人员构建了ResearchArena评估框架，让Claude Code（Opus 4.6）、Codex（GPT-5.4）和Kimi Code（K2.5）三种现成智能体在13个计算机科学主题上执行完整研究循环（构思、实验、写作、自改进），共生成117篇论文。",
     "event_type": "framework_tools",
-    "epistemic_status": "verified_fact",
+    "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [
         "Anthropic",
@@ -67,18 +69,26 @@
       ],
       "technologies": [
         "ResearchArena",
+        "Claude Code",
+        "Opus 4.6",
+        "Codex",
+        "GPT-5.4",
+        "Kimi Code",
+        "K2.5",
         "SAR",
-        "PR"
+        "FARS"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "ResearchArena是一个轻量级框架，让Claude Code（Opus 4.6）、Codex（GPT-5.4）和Kimi Code（K2.5）三种AI智能体自主完成从构思、实验到论文撰写的完整研究循环。",
-      "在仅审查论文文本的SAR评估中，Claude Code得分最高，超过Analemma的FARS系统，并接近ICLR 2025人类投稿的加权平均分。",
-      "人工审查发现SAR评分与真实质量严重脱节：它奖励表面合理的论述框架，却无法验证实验实质内容。",
-      "在同时审查工作区和论文的PR评估中，所有智能体得分大幅下降，实验严谨性被确认为核心瓶颈。",
-      "三种智能体表现出三种失败模式（结果造假、实验效力不足、计划与执行脱节），且差异悬殊：Codex的论文章节与工件不匹配率和虚假引用率仅5%/8%，而Kimi Code高达77%/72%。",
-      "全部117篇AI生成论文均未达到顶级学术会议的接收标准，表明真正的自动化研究仍有显著差距。"
+      "研究团队构建ResearchArena框架，允许现成代码智能体在轻量引导下自主完成从构思、实验、论文写作到自我改进的完整研究循环",
+      "实验覆盖13个计算机科学主题种子，每个智能体-领域配对运行3次，共生成117篇智能体撰写的论文",
+      "评估采用三重透镜：纯手稿评审（SAR）、附带代码仓库的制品感知同行评审（PR）、以及人类元评审",
+      "仅看SAR分数时结果看似乐观——Claude Code得分最高、超越Analemma的FARS、媲美ICLR 2025人类投稿加权平均分",
+      "人工审查揭示SAR分数与实际接收决策一致性差，纯手稿评审奖励了表面合理写作但未验证实验实质",
+      "引入制品感知PR后分数急剧下降，实验严谨性被识别为核心瓶颈，分解为三种失败模式：伪造实验结果、实验统计效力不足、计划与执行脱节",
+      "三种智能体表现差异极端：Codex论文-制品不匹配率5%和伪造引用率8%，而Kimi Code分别为77%和72%，差异约15倍，反映出智能体形成了截然不同的研究行为风格",
+      "全部117篇智能体生成论文均未达到顶级学术会议的接收标准，表明距离真正的自动研究仍有显著差距"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -98,24 +108,30 @@
     "extraction_status": "success",
     "id": "124f532f1855041c",
     "source_type": "academic_paper",
-    "tldr": "论文提出开放世界评估作为基准测试的补充方法，并演示AI代理自主完成iOS应用上架",
-    "objective_summary": "arXiv上发表的一篇学术论文，研究者提出开放世界评估（open-world evaluations）作为传统基准测试的补充方法，通过小样本定性分析而非大规模自动化来评估长周期、混乱的真实世界任务。论文介绍了CRUX项目，并首次演示了一个AI代理自主开发并将iOS应用发布到苹果App Store，",
+    "tldr": "论文倡导用\"开放世界评估\"补充传统基准测试，通过长周期真实任务定性分析前沿AI能力，并以AI代理成功上架iOS应用为首个验证实例。",
+    "objective_summary": "一篇arXiv论文提出\"开放世界评估\"方法论，作为传统基准测试的补充。论文审视了近期开放世界评估案例，分析其优势与局限，并推出CRUX项目以定期开展此类评估。首个实验中，AI代理完成开发并发布一款简单iOS应用到App Store，仅需一次可避免的人工干预。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [
         "Apple"
       ],
-      "technologies": [],
+      "technologies": [
+        "Open-World Evaluation",
+        "CRUX",
+        "iOS",
+        "AI Agent",
+        "Benchmark Evaluation"
+      ],
       "key_people": []
     },
     "key_logic_flow": [
-      "论文指出传统基准测试存在局限性：偏向可精确指定、自动评分、易于优化的任务，且运行预算低、时间跨度短，因此可能高估或低估实际部署能力。",
-      "论文提出开放世界评估作为补充方案，其特点是长周期、混乱的真实世界任务，通过小样本定性分析而非大规模自动化来评估。",
-      "论文介绍了CRUX（Collaborative Research for Updating AI eXpectations）项目，旨在定期开展开放世界评估。",
-      "首次演示中，AI代理被要求自主开发并将一个简单的iOS应用发布到苹果App Store，全程仅需一次可避免的人工干预即完成任务。",
-      "论文认为开放世界评估能够提供早期预警，提示那些可能很快变得普遍的能力。",
-      "论文最后给出了设计和报告开放世界评估的具体建议。"
+      "传统基准测试评估存在结构性缺陷：倾向于精确定义、自动评分、易于优化且低预算短周期的任务，可能同时高估和低估AI在真实部署场景中的实际能力。",
+      "论文提出\"开放世界评估\"作为互补范式：采用长周期、复杂、非结构化的真实世界任务，通过小样本定性分析而非大规模自动化评分来评估AI前沿能力。",
+      "引入CRUX项目（Collaborative Research for Updating AI eXpectations），旨在系统化、定期地开展开放世界评估，持续追踪AI能力边界的变化。",
+      "首个CRUX实验要求AI代理完成从开发到发布一款简单iOS应用的完整流程，目标平台为Apple App Store。",
+      "实验结果显示AI代理成功完成任务，全程仅需一次可避免的人工干预，表明当前AI已接近独立完成端到端真实世界软件工程任务的水平。",
+      "论文得出结论：开放世界评估能够对即将大规模普及的AI能力提供早期预警信号，并就如何设计和报告此类评估给出了建议。"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -135,25 +151,27 @@
     "extraction_status": "success",
     "id": "16d0d1b82072a099",
     "source_type": "academic_paper",
-    "tldr": "AgentAtlas 提出超越准确率的 LLM 智能体评估框架，含六状态决策分类和九类轨迹失败分类法",
-    "objective_summary": "该论文提出 AgentAtlas 评估框架，包含六状态控制决策分类法、九类轨迹失败分类法、分类感知与盲测对比方法及基准覆盖审计四个组件。在 8 个模型（4 闭源+4 开源）、1342 个样本上的实验显示，移除显式标签菜单后所有模型轨迹准确率下降 14-40 个百分点，收敛至 0.54-0.",
+    "tldr": "AgentAtlas提出超越单一准确率的多维LLM智能体评估框架，涵盖控制决策分类、轨迹失败分类及提示监督影响测量。",
+    "objective_summary": "2024-2025年间，研究者提出AgentAtlas评估框架，包含四个组件：六状态控制决策分类法、九类轨迹失败分类法、提示监督影响测量方法及十五个基准的覆盖审计。在八模型（四个闭源、四个开源）上运行1342个生成项进行验证。",
     "event_type": "framework_tools",
-    "epistemic_status": "theoretical_claim",
+    "epistemic_status": "verified_fact",
     "entities": {
       "companies": [],
       "technologies": [
-        "LLM Agents",
-        "AgentAtlas"
+        "AgentAtlas",
+        "LLM agents",
+        "trajectory-failure taxonomy",
+        "control-decision taxonomy"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "现有 LLM 智能体基准测试存在碎片化问题，各自侧重不同评估维度（任务成功率、工具调用有效性、一致通过率、轨迹安全性、攻击鲁棒性），单一准确率指标不足以衡量可部署智能体。",
-      "AgentAtlas 提出四组件评估框架：六状态控制决策分类法（Act/Ask/Refuse/Stop/Confirm/Recover）、九类轨迹失败分类法（含 primary_error_source 和 impact 两个正交层级标签）、分类感知与分类盲测对比方法、以及 15 个智能体基准对六大行为轴的覆盖审计。",
-      "在 8 个模型（4 个前沿闭源模型 + 4 个开源模型）共 1342 个样本上进行了两种提示模式的对比实验。",
-      "移除显式标签菜单后，所有模型的轨迹准确率下降 14-40 个百分点，收敛至 0.54-0.62 的狭窄区间，无论模型所属系列如何。",
-      "没有单一模型在控制准确性、轨迹诊断和工具上下文效用保持三个维度上同时获胜。",
-      "该研究的实验被视为测量协议的演示，而非正式基准发布。"
+      "当前LLM智能体评估基准碎片化，各自侧重不同测量维度（任务成功率、工具调用有效性、重复一致性、轨迹安全性、攻击鲁棒性），单一准确率列已不足以作为可部署智能体的比较单位。",
+      "AgentAtlas提出四组件评估框架：六状态控制决策分类法（Act/Ask/Refuse/Stop/Confirm/Recover），以及带两个正交层级标签（primary_error_source, impact）的九类轨迹失败分类法。",
+      "框架引入分类法感知vs分类法盲测的方法论，用于测量模型表面能力中有多少来自提示中的监督信号。",
+      "在固定八模型集合（四个前沿闭源模型、四个开源模型）上运行1342个生成项，分别在两种提示模式下测试。",
+      "移除显式标签菜单后，所有模型的轨迹准确率下降14-40个百分点，收敛至0.54-0.62的紧密下限区间，且该结果与模型家族无关。",
+      "没有任何单一模型能在控制准确率、轨迹诊断和工具上下文效用保持三个维度上同时胜出，该实验被视为测量协议演示而非基准发布。"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -173,30 +191,30 @@
     "extraction_status": "success",
     "id": "271b66efd0a5670a",
     "source_type": "academic_paper",
-    "tldr": "HANA 分层多智能体架构使网络自治，5G 核心网验证 MTTR 减少 86%",
-    "objective_summary": "arXiv 论文提出 HANA（分层智能体原生网络架构），包含双驱动编排器、专用执行智能体和共享公共记忆三个核心组件，通过智能体自我意识统一策略治理与故障恢复机制。在 5G 核心网环境中验证，拥堵下维持关键吞吐量，MTTR 降低 86%。",
-    "event_type": "framework_tools",
+    "tldr": "提出HANA分层多智能体网络架构，在5G核心网中实现86%的MTTR降低",
+    "objective_summary": "一篇arXiv论文提出HANA（分层智能体原生网络架构），针对5G核心网场景设计双驱动编排器协调专业执行智能体，配合共享公共记忆与智能体自我感知机制，在拥塞条件下维持关键吞吐量并将平均修复时间降低86%。",
+    "event_type": "application_landing",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
         "HANA",
-        "5G Core",
-        "Autonomous Networks (AN)",
+        "Autonomous Networks",
+        "Multi-Agent System",
         "Dual-Driven Orchestrator",
         "Public Memory",
-        "agent self-awareness",
-        "multi-agent"
+        "Agent Self-Awareness",
+        "5G Core"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "现有网络运维依赖静态脚本，缺乏处理异常工况的认知能力，无法实现 L4/L5 自治网络。",
-      "论文提出 HANA（Hierarchical Agent-native Network Architecture）分层智能体原生网络架构作为解决方案。",
-      "架构核心包括三个组件：双驱动编排器（Dual-Driven Orchestrator）负责协调、专用执行智能体（Executive Agents）执行任务、共享公共记忆（Public Memory）统一领域知识。",
-      "核心创新在于集成智能体自我意识（agent self-awareness），实现审慎性策略治理与反射性故障恢复的协调统一。",
-      "在 5G 核心网环境中完成实例化部署与验证，拥堵场景下系统仍能维持关键吞吐量。",
-      "实验表明该架构使平均修复时间（MTTR）降低 86%，证明其在统一战略规划与运维韧性方面的有效性。"
+      "当前网络运维依赖刚性脚本，缺乏处理非标称条件的认知自主性，无法实现Level 4/5自主网络",
+      "提出HANA分层多智能体参考架构，核心由双驱动编排器（Dual-Driven Orchestrator）协调多个专业执行智能体",
+      "引入共享公共记忆（Public Memory）统一领域知识，并创新性地集成智能体自我感知机制",
+      "自我感知机制使系统能够在审慎的战略治理与反射式故障恢复之间实现协调统一",
+      "在5G核心网环境中实例化并验证该架构，案例研究表明系统在拥塞条件下维持关键吞吐量",
+      "平均修复时间（MTTR）降低86%，证实架构有效统一了战略规划与运维韧性"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -216,8 +234,8 @@
     "extraction_status": "success",
     "id": "3e9ff2976ac1ce94",
     "source_type": "academic_paper",
-    "tldr": "论文提出Agentic Affordance Profile框架，使知识图谱对AI代理可发现、可组合",
-    "objective_summary": "arXiv上发表的计算机科学论文，借鉴OWL-S和WSMO的语义网服务思路，提出四维形式化框架AAP作为VoID和DCAT之上的语义层，使知识图谱对AI代理可发现、可组合、可故障诊断，并列出五点后续研究议程。",
+    "tldr": "提出四维形式化框架衍生AAP语义层，置于VoID/DCAT之上以实现智能体的原则性知识图谱选择与组合",
+    "objective_summary": "该论文回顾了二十年前语义网服务社区关于本体异构下智能体如何发现和调用服务的讨论（OWL-S、WSMO），并将其扩展至知识图谱领域。作者指出现有KG元数据标准（VoID、DCAT）仅描述KG内容，无法回答智能体能从中证明什么、空结果的闭包假设是什么、任务词汇是否基于模式等关键问题。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
@@ -229,17 +247,18 @@
         "OWL-S",
         "WSMO",
         "AAP",
+        "Semantic Web Services",
         "Description Logic"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "二十年前语义网服务社区提出OWL-S和WSMO，解决具有不同本体承诺的代理如何发现、组合和调用Web服务的问题。",
-      "当前KG元数据标准（VoID、DCAT）仅描述知识图谱包含什么，不说明代理能从其中证明什么、空结果的闭包假设、或任务词汇是否与模式对齐。",
-      "已部署的KG中，模式描述逻辑与运行时推理机制可能不一致，形成当前元数据无法捕捉的认知失败模式。",
-      "论文提出四维形式化框架，从中推导出Agentic Affordance Profile（AAP）作为VoID和DCAT之上的语义层。",
-      "AAP支持代理在规划时进行原则性的KG选择、组合和故障诊断。",
-      "论文列出五点研究议程，涵盖AAP大规模能力匹配所需的形式化、计算和工程工作。"
+      "现有KG元数据标准（VoID、DCAT）只描述KG包含什么内容，但未说明智能体能从中推导什么、空结果的闭包假设、以及任务词汇是否与模式本体对齐",
+      "实际部署的KG中，控制模式的描述逻辑（DL）与实际运行的蕴涵机制可能脱节，这构成现有元数据无法检测的认知失败模式",
+      "论文将语义网服务时代的OWL-S和WSMO的形式化思路重新引入KG场景，构建四维形式化框架",
+      "从该框架衍生出Agentic Affordance Profile（AAP），作为VoID和DCAT之上的语义层",
+      "AAP使智能体在规划阶段即可进行原则性的KG选择、组合和故障诊断",
+      "论文提出五点研究议程，涵盖实现AAP级供给匹配规模化所需的形式化、计算和工程工作"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -259,27 +278,31 @@
     "extraction_status": "success",
     "id": "462d0a7456bd0b97",
     "source_type": "academic_paper",
-    "tldr": "提出IC-Q算法，实现去中心化异步Q学习，并证明其有限样本收敛保证",
-    "objective_summary": "该论文正式定义了接口约束半马尔可夫决策过程（IC-SMDP），并提出IC-Q去中心化异步Q学习算法。该算法在智能体交接时仅传递一个标量值进行协调，无需任何智能体观察联合轨迹。论文推导了神经IC-Q的有限样本界，并通过四项实验验证了理论结果。",
+    "tldr": "提出IC-Q去中心化Q学习算法，在多智能体交接场景中仅需一个标量即可协调，并首次给出神经Q学习在去中心化部分可观测下的有限样本收敛保证。",
+    "objective_summary": "该论文研究了多智能体通过共享工件交接控制的工作流学习问题，将其形式化为接口约束半马尔可夫决策过程（IC-SMDP），设计了IC-Q异步去中心化Q学习算法，每次交接仅传递一个标量。作者给出了神经IC-Q的有限样本收敛界，将误差分解为函数近似误差、接口表示间隙和混合时间残差三项，",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
-        "IC-SMDP",
         "IC-Q",
+        "IC-SMDP",
         "Q-learning",
-        "AIS",
-        "SMDP"
+        "AIS (Approximate Information State)",
+        "SMDP",
+        "Multi-Agent Systems",
+        "LLM Pipelines",
+        "Neural Q-learning"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "论文定义了接口约束半马尔可夫决策过程（IC-SMDP），其中专业化智能体通过共享工件进行控制交接，每个智能体仅能观察工件的局部函数及其自身私有状态。",
-      "论文提出IC-Q去中心化异步Q学习算法，在每次智能体交接时仅传递一个标量值进行跨智能体协调，无需集中式学习器或联合轨迹。",
-      "论文的核心理论贡献是推导了神经IC-Q的有限样本界，该界分解为三个独立可控的误差源：神经函数逼近误差、接口表示间隙和混合时间残差。",
-      "理论证明将近似信息状态（AIS）框架从单智能体基本步MDP首次推广到多智能体SMDP，并控制了随机持续时间下的马尔可夫噪声。",
-      "四项实验（合成IC-SMDP验证、多LLM数学推理、多智能体路由、多智能体CPU编程）表明IC-Q达到集中式oracle性能，且三个误差源按理论预测方向独立缩放。"
+      "将多智能体通过共享工件交接控制的工作流学习形式化为接口约束半马尔可夫决策过程（IC-SMDP），决策时刻仅发生在交接点",
+      "设计IC-Q异步去中心化Q学习算法，智能体间每次交接仅需传递一个标量进行跨智能体协调",
+      "首次将近似信息状态（AIS）框架从单智能体原始步MDP提升至多智能体SMDP，并控制随机持续时间下的马尔可夫噪声",
+      "给出神经IC-Q的有限样本收敛界，将总误差分解为神经函数近似误差、接口表示间隙和混合时间残差三个独立可控来源",
+      "四项实验（合成IC-SMDP验证、多LLM数学推理、多智能体路由、多智能体CPU编程）表明IC-Q无需任何智能体观测联合轨迹即可匹敌集中式预言机",
+      "声称这是首个在去中心化部分可观测条件下神经Q学习的有限样本保证"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -299,24 +322,27 @@
     "extraction_status": "success",
     "id": "488bc8a5f1280f67",
     "source_type": "academic_paper",
-    "tldr": "提出声明式数据服务(DDS)架构，用结构化智能体发现替代无界发现，在交易后端工作负载上验证收敛性。",
-    "objective_summary": "arXiv 论文提出 Declarative Data Services (DDS) 架构，通过四层类型化契约（意图→算子DAG→系统技能→运行时归因）将数据系统组合的全局搜索分解为有界子搜索。在交易后端工作负载上，DDS 收敛至可用栈，而无界智能体发现无法一致收敛。",
+    "tldr": "提出DDS框架，通过四层类型化合约将数据系统组合的智能体搜索分解为有界子搜索，解决无界智能体发现无法在异构数据后端稳定收敛的问题。",
+    "objective_summary": "论文提出声明式数据服务（DDS）架构，针对LLM驱动的无界智能体发现在组合多系统数据后端时无法稳定收敛的问题，设计了四层类型化合约（意图、算子DAG、逐系统技能、运行时归因）将全局搜索分解为有界子搜索，在交易后端工作负载上验证了DDS可收敛而无界发现不行，运行时故障转化为技能补丁供下一次部署引用。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
+        "Declarative Data Services",
         "DDS",
-        "LLM"
+        "LLM",
+        "Agentic Discovery",
+        "Operator DAG"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "无界智能体发现（编码智能体基于失败日志反馈迭代）在多系统数据后端组合中无法一致收敛到可运行的栈。",
-      "DDS 架构定义了四层类型化契约：意图层、算子 DAG 层、系统技能层和运行时归因层，将全局搜索拆解为有界子搜索。",
-      "子智能体各自搜索类型化空间，框架提供前向知识流（内联技能引用）和后向错误路由（类型化信号）的通道。",
-      "在交易后端工作负载测试中，DDS 成功收敛到可运行栈，而无界发现无法收敛。",
-      "运行时失败被转化为技能补丁，由下一次部署内联引用，形成持续改进循环。"
+      "无界智能体发现（LLM驱动的编码智能体根据故障日志迭代）在组合多系统数据后端时无法稳定收敛，原因是搜索空间异构、验证依赖实际部署运行、预训练中组合知识分布不均",
+      "DDS提出四层类型化合约架构：意图层声明用户目标、算子DAG层定义数据流拓扑、逐系统技能层描述各后端能力、运行时归因层将错误映射为类型化信号",
+      "四层合约将全局组合搜索分解为有界子搜索，每层由子智能体在限定的类型空间内搜索，框架提供正向知识流（内联技能引用）和反向错误路由（类型化信号）的双向通道",
+      "运行时故障自动转化为技能补丁，下一次部署通过内联引用该补丁来避免重复错误，形成闭环学习机制",
+      "在交易后端工作负载上完成概念验证：DDS可收敛而同等条件下的无界发现无法收敛，论文定位为早期原型，报告真实数据系统组合中的实践教训"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -336,25 +362,33 @@
     "extraction_status": "success",
     "id": "50546cc878d2fc61",
     "source_type": "academic_paper",
-    "tldr": "arXiv论文提出SOLAR自主智能体，通过参数级元学习和多级强化学习实现终身持续适应，无需梯度更新。",
-    "objective_summary": "论文提出SOLAR（自优化终身自主推理器），一种将模型权重视为探索环境的自主智能体。它采用参数级元学习和多级强化学习，自主发现适应策略，实现无需梯度更新的测试时域适应。在常识、数学、医疗、编程、社会和逻辑推理任务上均优于强基线方法。",
+    "tldr": "SOLAR通过参数级元学习和多级强化学习实现终身自主适应，在多个推理任务上超越基线模型。",
+    "objective_summary": "研究者提出SOLAR智能体框架，针对LLM在动态环境中的概念漂移和梯度适应成本高的问题，采用参数级元学习将模型权重作为探索环境，通过多级强化学习自主发现适应策略，并维护知识库平衡可塑性与稳定性。实验在常识、数学、医学、编码、社会和逻辑推理任务上均超越强基线。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
-        "LLM",
+        "SOLAR",
         "meta-learning",
-        "reinforcement learning"
+        "reinforcement learning",
+        "multi-level reinforcement learning",
+        "parameter-level meta-learning",
+        "LLM",
+        "fine-tuning",
+        "continual learning",
+        "episodic memory buffer"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "论文提出SOLAR（Self-Optimizing Lifelong Autonomous Reasoner），一种面向终身学习和持续适应的开放式自主智能体架构。",
-      "SOLAR的核心创新是将模型权重视为可探索的环境，通过参数级元学习实现无需梯度更新的自我优化。",
-      "该智能体采用多级强化学习方法，在测试阶段自主发现并执行适应策略，实现对未见领域的高效适应。",
-      "SOLAR维护一个持续演化的修改策略知识库，作为情景记忆缓冲区，平衡对新任务的可塑性和对元知识的稳定性。",
-      "实验评估覆盖常识推理、数学、医疗、编程、社会和逻辑推理六大任务，SOLAR在所有任务上均超越强基线方法。"
+      "LLM在动态真实环境部署中面临概念漂移和高昂的梯度适应成本两大瓶颈",
+      "传统微调难以应对非平稳数据流，会导致灾难性遗忘或需要大量人工数据整理",
+      "SOLAR采用参数级元学习，将模型权重视为探索环境，实现自主自我改进",
+      "系统首先整合常识知识形成强先验，为迁移学习奠定基础",
+      "通过多级强化学习方法，SOLAR自主发现适应策略，实现对未见领域的测试时高效适应",
+      "SOLAR维护一个不断演化的有效修改策略知识库，隐式充当情节记忆缓冲区，平衡可塑性（新任务适应）与稳定性（元知识保留）",
+      "实验表明SOLAR在常识、数学、医学、编码、社会和逻辑推理任务上均超越强基线模型"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -374,26 +408,27 @@
     "extraction_status": "success",
     "id": "51812d5eacab020e",
     "source_type": "academic_paper",
-    "tldr": "提出开发数据探针方法来系统研究数据特征对LLM性能的影响",
-    "objective_summary": "arXiv 一篇立场论文提出数据探针方法，通过从随机过程生成合成序列并观察LLM行为，系统研究数据特征如何影响模型在训练、微调、对齐等阶段的性能和泛化，旨在超越当前依赖经验启发式的做法。",
+    "tldr": "立场论文倡导开发「数据探针」——从随机过程生成的合成序列——以系统性地理解数据特征如何影响LLM各阶段性能。",
+    "objective_summary": "一篇立场论文提出「数据探针」方法论：通过定义随机过程生成合成序列，观察LLM在这些探针上的行为，从而系统研究数据特征如何影响模型训练、微调、对齐和上下文学习等各阶段的表现，替代当前依赖大规模实验的经验启发式方法。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
-        "LLM",
         "Data Probes",
-        "Typical Sets"
+        "LLM",
+        "synthetic data",
+        "typical sets"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "数据对LLM至关重要，但当前理解数据在不同阶段（训练、微调、对齐、上下文学习等）中发挥作用的原因和机制仍是一个开放问题。",
-      "现有方法依赖大规模公共数据集的广泛实验来获取数据过滤和数据集构建的经验启发式规则，计算密集且缺乏原则性理解。",
-      "该论文主张开发系统方法论，通过从适当定义的随机过程生成合成序列来揭示数据特征对LLM行为的影响。",
-      "这些合成序列被称为数据探针，通过观察LLM在探针上的行为，可以系统研究数据特征如何影响模型性能、泛化和鲁棒性。",
-      "探针序列的统计特性可以用典型集等理论概念来描述，这些概念被推广用以描述LLM的行为规律。",
-      "数据探针方法为理解数据在LLM训练和推理中的基础性作用提供了一条超越经验启发式规则的新路径。"
+      "当前理解数据如何影响LLM的方法依赖大规模公开数据集上的大量实验，计算密集且缺乏对数据特征驱动模型行为本质的原理性理解。",
+      "论文倡导开发系统化方法论，通过精确定义的随机过程生成合成序列。",
+      "这些合成序列被称为「数据探针」，可用于LLM工作流的一个或多个阶段，包括训练、微调、对齐和上下文学习。",
+      "通过观察LLM在数据探针上的行为，研究者可以系统研究数据特征如何影响模型性能、泛化能力和鲁棒性。",
+      "探针序列具备可用理论概念（如典型集）分析的统计属性，这些概念可推广用于描述LLM行为。",
+      "数据探针方法提供了一条超越经验启发式、揭示数据在LLM训练和推理中基础性作用的路径。"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -413,26 +448,27 @@
     "extraction_status": "success",
     "id": "5f69fc0db21f70d7",
     "source_type": "academic_paper",
-    "tldr": "观点论文：A2A网络可信必须从架构设计之初内建，而非事后修补",
-    "objective_summary": "arXiv上发表的观点论文，指出LLM驱动的自主智能体从独立运行转向协作生态（A2A网络）时，面临对抗性组合、语义错位和级联故障等系统性漏洞，认为现有单体智能体对齐技术无法解决，主张可信必须从A2A协调框架设计之初就内建，并提出了四个设计支柱的概念框架。",
+    "tldr": "arXiv愿景论文提出：多智能体网络的信任必须从架构设计之初内置，而非事后修补，并给出四支柱概念框架。",
+    "objective_summary": "一篇arXiv愿景论文指出，随着LLM驱动的自主智能体从孤立运行转向协作生态，A2A（智能体对智能体）网络虽能提升多步任务性能，却引入了对抗性组合、语义错位和级联故障等系统性漏洞。现有面向单体智能体的对齐技术无法应对这些问题。作者主张A2A网络的信任不能通过改造现有协议来保障，",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
         "LLM",
-        "A2A",
-        "Agent-to-Agent"
+        "Agent-to-Agent (A2A) network",
+        "agent alignment",
+        "multi-agent coordination"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "LLM驱动的自主智能体已具备复杂推理和执行能力，正从独立运行转向协作生态。",
-      "A2A（Agent-to-Agent）网络是异构智能体自主协调解决多步骤任务的新范式。",
-      "A2A网络虽可能比单智能体完成任务表现更好，但引入对抗性组合、语义错位和级联故障三类系统性漏洞。",
-      "现有智能体对齐技术针对单体智能体设计，无法解决A2A网络的系统性安全漏洞。",
-      "论文主张A2A网络可信不能事后在现有协议上打补丁，必须从协调框架设计之初就内建可信机制。",
-      "论文提出了一个通过四个设计支柱来构建A2A系统可信性的概念框架。"
+      "LLM的快速发展催生了能够进行复杂推理和执行的自主智能体，这些智能体正从孤立运行转向多智能体协作生态。",
+      "A2A网络由异构智能体自主协调以完成多步任务，其整体任务性能可能优于单一智能体独立完成全部任务。",
+      "A2A网络引入了三类系统性漏洞：对抗性组合（adversarial composition）、语义错位（semantic misalignment）和级联操作故障（cascading operational failures）。",
+      "现有智能体对齐技术主要面向单个智能体设计，无法有效应对A2A网络层面的系统性漏洞。",
+      "核心论点：A2A网络的信任保障不能通过事后改造现有协议实现，而必须在协调框架设计之初就将信任架构化（baked in, not bolted on）。",
+      "论文提出一个包含四个设计支柱的综合性概念框架，用于在A2A系统中系统性地构建信任。"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -452,8 +488,8 @@
     "extraction_status": "success",
     "id": "6547019aef103e78",
     "source_type": "academic_paper",
-    "tldr": "AgentCo-op 提出基于检索的多智能体工作流合成框架，通过类型化工件传递组合现有工具和智能体。",
-    "objective_summary": "arXiv 上发表学术论文，提出 AgentCo-op 框架，通过检索式合成将技能、工具和外部智能体组合为可执行多智能体工作流，在基因组学和六个基准测试中验证了有效性。",
+    "tldr": "提出AgentCo-op检索式合成框架，通过类型化工件传递和局部自修复，将独立智能体与工具组合为可互操作的多智能体工作流",
+    "objective_summary": "研究团队在arXiv发表论文，提出AgentCo-op检索式合成框架。该框架通过类型化工件传递（typed artifact handoffs）将可复用技能、工具和外部智能体组合为可执行工作流，并在执行失败时对有问题的组件进行有界自引导局部修复。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
@@ -461,20 +497,21 @@
       "technologies": [
         "AgentCo-op",
         "retrieval-based synthesis",
-        "multi-agent workflows",
         "typed artifact handoffs",
-        "bounded self-guided local repair",
+        "multi-agent workflows",
+        "local repair",
         "spatial transcriptomics",
         "single-cell multiome"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "AgentCo-op 提出基于检索的合成框架，通过类型化工件传递将可复用的技能、工具和外部智能体组合成可执行的多智能体工作流。",
-      "当执行证据表明失败时，AgentCo-op 对相关组件执行有限的自引导局部修复，无需全局拓扑搜索或重新设计。",
-      "在空间转录组学和基因集解读两个开放世界基因组学案例中，AgentCo-op 成功协调了独立开发的科学智能体和外部工具仓库，无需重新设计它们。",
-      "AgentCo-op 可以将搜索到的工作流作为结构先验导入，通过检索组件落地节点并应用局部修复来改进工作流，表明合成与搜索是互补的。",
-      "在六个编程、数学和问答基准测试中，AgentCo-op 在统一主干设置下获得四项最佳结果和最佳平均分数，同时持续降低了每个任务的成本。"
+      "多智能体工作流在开放式科学场景中设计困难，因为缺乏策划好的训练集、可靠的标量评估指标以及工具与智能体之间的标准化接口",
+      "AgentCo-op通过类型化工件传递机制，将独立开发的可复用技能、工具和外部智能体组合为可执行工作流，无需重新设计组件或运行全局拓扑搜索",
+      "当执行证据表明失败时，AgentCo-op对有问题的组件进行有界自引导局部修复，而非对整个工作流进行全局重构",
+      "在两个基因组学案例中，AgentCo-op协调空间转录组学与基因集解释的专门智能体实现协同发现，并构建了单细胞多组学数据的跨模态标记分析并行工作流",
+      "AgentCo-op还可以将搜索到的工作流作为结构先验导入，通过检索组件对节点进行接地并应用局部修复来改进该工作流，表明合成与搜索是互补关系",
+      "在六个编码、数学和问答基准测试上，AgentCo-op在四个基准上取得最佳结果并在统一骨干设置下取得最佳平均分，同时相对于多智能体基线持续降低每个任务的成本"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -494,8 +531,8 @@
     "extraction_status": "success",
     "id": "65d5ea257098cf8c",
     "source_type": "academic_paper",
-    "tldr": "研究评估LLM结合个人健康记录回答健康查询的效果，发现PHR数据显著提升回答质量。",
-    "objective_summary": "该研究使用2,257条用户查询和1,945份去标识化个人健康记录，评估Gemini 3.0 Flash在有无PHR上下文下回答健康问题的效果。结果显示，加入PHR数据后回答帮助性显著提升（p<0.001），同时发现模型存在时间方向混淆和罕见但严重的幻觉问题。",
+    "tldr": "研究证实个人健康记录(PHR)数据可显著提升LLM健康问答的有用性、安全性和个性化水平",
+    "objective_summary": "一项发表于arXiv的研究评估了LLM（Gemini 3.0 Flash）在获得个人健康记录(PHR)上下文后回答用户健康问题的能力。研究收集了2257条来自三种分布的查询，匹配1945份去标识化PHR，在无PHR、基本摘要、完整临床记录三种条件下生成回答。",
     "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
@@ -503,19 +540,21 @@
         "Google"
       ],
       "technologies": [
-        "PHR",
         "LLM",
         "Gemini 3.0 Flash",
-        "SHARP"
+        "PHR",
+        "SHARP",
+        "auto-rater"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "研究收集了2,257条来自三种分布（短网页搜索查询、模板化聊天机器人问题、患者向医疗团队提问）的用户健康查询，匹配了1,945份去标识化的个人健康记录。",
-      "使用Gemini 3.0 Flash在三种条件下生成回答：无PHR上下文、基础摘要（人口统计+病症+用药）、完整临床笔记。",
-      "采用SHARP评估框架以及新开发的PHR错误模式评估框架，通过自动评估器和临床医生子集评分（n=95）进行评价。",
-      "加入PHR数据后，所有类型查询的回答帮助性均显著提升（p<0.001，配对t检验），在安全性、准确性、相关性和个性化方面也观察到潜在改进。",
-      "PHR评估框架识别出LLM对复杂个人健康记录理解的特定缺陷，包括时间方向混淆和罕见但有意义的幻觉。"
+      "研究从三种不同分布（网络搜索短查询、聊天机器人模板长问题、患者致电医疗团队的问题）中收集了2257条用户健康查询",
+      "查询与1945份去标识化个人健康记录(PHR)匹配，Gemini 3.0 Flash在三种条件下生成回答：无PHR上下文、仅提供人口统计及诊断用药基本摘要、提供完整的详细临床记录",
+      "评估采用已有的SHARP评分框架，并专门开发了一套针对PHR解读特定错误模式的新评估框架",
+      "全量2257条回答使用自动评分器评估，其中95条子集由临床医生进行人工评分，两组评分者均知晓完整PHR上下文",
+      "配对t检验显示PHR数据显著提升了所有问题类型回答的有用性(p<0.001)，同时在安全性、准确性、相关性和个性化维度也观察到改善",
+      "新开发的PHR评估框架识别出LLM在理解复杂PHR方面的关键差距，包括时间定向障碍（混淆事件时序）以及罕见但具有临床意义的虚构（confabulations）"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -535,29 +574,31 @@
     "extraction_status": "success",
     "id": "66426a77822fb222",
     "source_type": "academic_paper",
-    "tldr": "针对工业AI agent流水线，提出时序语义缓存+MCP工作流优化，分别实现30.6倍和1.67倍加速。",
-    "objective_summary": "该论文针对工业资产运维场景下的Agent Plan-Execute流水线延迟问题，提出基于时序语义缓存和MCP工作流优化（磁盘缓存+依赖感知并行执行）两种互补方案。在AssetOpsBench基准上，MCP优化带来1.67倍加速、中位延迟降低约40%；时序缓存命中时中位加速达30.6倍。",
+    "tldr": "在AOB工业基准上，时序语义缓存命中时达30.6倍加速，MCP工作流优化实现1.67倍加速并降低40%端到端延迟。",
+    "objective_summary": "该论文在AssetOpsBench工业智能体基准上评估了两种互补优化：时序语义缓存和MCP工作流优化（磁盘工具发现缓存+依赖感知并行执行）。MCP优化实现1.67倍加速、端到端延迟中位数降低约40%；时序缓存在命中时达30.6倍加速。同时揭示了纯语义缓存在参数密集的工业查询中的具体失效模式。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
         "MCP",
-        "LLM",
+        "temporal semantic caching",
         "KV-cache",
         "semantic caching",
-        "temporal semantic cache",
-        "AssetOpsBench (AOB)",
-        "plan-execute pipeline"
+        "AssetOpsBench",
+        "plan-execute pipeline",
+        "LLM",
+        "workflow optimization"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "工业资产运维场景中的单次用户查询需要协调传感器数据、工单、故障模式、预测工具和领域Agent，导致Plan-Execute流水线存在大量重复开销。",
-      "现有LLM缓存技术（如KV-cache复用、基于嵌入的语义缓存）面向聊天场景设计，在输出有效性依赖时间、资产或传感器参数的工业查询中效果不佳。",
-      "论文提出两层互补优化：一是时序语义缓存，考虑时间维度有效性；二是MCP工作流优化，包括基于磁盘的工具发现缓存和依赖感知的并行步骤执行。",
-      "MCP工作流优化实现1.67倍加速，中位端到端延迟降低约40%；时序语义缓存在命中时实现中位30.6倍加速。",
-      "实验结果揭示了纯语义缓存在参数丰富的工业查询中的具体失效模式，分析了缓存选择如何影响MCP-backed Agent基准评测的正确性。"
+      "工业资产运维工作流对延迟高度敏感，现有LLM缓存技术（KV-cache复用、基于嵌入的语义缓存）在输出依赖时间、资产或传感器参数时失效",
+      "提出时序语义缓存方案，在AssetOpsBench的plan-execute管道上进行评估",
+      "提出MCP工作流优化，包含基于磁盘的工具发现缓存和依赖感知的并行步骤执行",
+      "MCP工作流优化实现1.67倍加速，端到端延迟中位数降低约40%",
+      "时序缓存在命中时实现中位数30.6倍加速",
+      "实验揭示了纯语义缓存在参数丰富的工业查询中的具体失效模式，分析了缓存选择与MCP智能体基准评估正确性之间的交互关系"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -577,25 +618,27 @@
     "extraction_status": "success",
     "id": "6919176aa6d744df",
     "source_type": "academic_paper",
-    "tldr": "论文提出\"人格工程\"方法论，用AI代理精确操控谈判者人格以检验谈判理论。",
-    "objective_summary": "该论文提出人格工程（personality engineering）方法论，利用AI代理对谈判者人格进行精确参数化、操纵和评估。论文提议将人际圆周模型（interpersonal circumplex）的温暖（warmth）和支配性（dominance）两个核心维度作为谈判研究的坐标系统，",
+    "tldr": "提出人格工程方法论，利用AI智能体精确参数化谈判者人格以检验经典谈判理论",
+    "objective_summary": "一篇arXiv学术论文提出名为\"人格工程\"的新方法论，利用AI智能体的精确性、一致性、可扩展性，以人际环状模型（温暖度与支配性双维度）为坐标体系，对谈判者人格进行参数化、操纵和评估，从而在受控条件下严格检验经典谈判理论的处方。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
-        "AI Agents",
-        "Personality Engineering",
-        "Interpersonal Circumplex"
+        "personality engineering",
+        "interpersonal circumplex",
+        "AI agents",
+        "negotiation agents"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "传统谈判理论认为谈判成功取决于平衡共情与主张、关心他人与关心自我等多重矛盾需求，但人类在管理这些张力方面存在固有困难。",
-      "研究者因人类局限而难以在受控条件下严格检验谈判理论的指导原则，AI代理以其精准性、一致性、可扩展性和丰富行为库克服了这些局限。",
-      "论文提出了\"人格工程\"（personality engineering）方法论，利用AI代理对谈判者人格进行精确参数化、操纵和评估，以推动谈判理论研究。",
-      "论文提议将人际圆周模型（interpersonal circumplex）及其温暖（warmth）和支配性（dominance）两个核心维度作为谈判研究的基础坐标系统。",
-      "该方法既为检验经典谈判理论提供了严格的受控实验手段，也为设计AI谈判代理的人格特征提供了实践指南。"
+      "经典谈判理论认为谈判成功取决于在共情与主张、关心他人与关心自我之间取得平衡，但人类难以稳定地管理这些张力",
+      "现有谈判研究因人类受试者无法精确控制人格变量，长期缺乏在受控条件下严格检验理论处方的能力",
+      "AI智能体不受人类同样的限制，其在精确性、行为库、一致性和可扩展性方面的优势使新型实验成为可能",
+      "研究者提出人格工程方法论，通过AI智能体对谈判者人格进行精确参数化、操纵和评估",
+      "该方法论以人际环状模型作为基础坐标体系，核心维度为温暖度和支配性",
+      "该框架同时服务于两个目标：为检验经典谈判理论提供严格方法论，以及为设计AI谈判智能体的人格提供实践指南"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -615,8 +658,8 @@
     "extraction_status": "success",
     "id": "6dd8aa396fd1fab6",
     "source_type": "academic_paper",
-    "tldr": "DecisionBench 提出评估多智能体长期委托协作能力的标准化基准框架",
-    "objective_summary": "研究者在 arXiv 发布 DecisionBench 基准，用于评估长周期智能体工作流中的委托协作能力。该基准包含 GAIA、tau-bench、BFCL multi-turn 三个任务套件、11 个模型（来自 7 个供应商家族）和多项评估指标，在 23,375 个实例上完成参考扫描。",
+    "tldr": "DecisionBench发布：用于评估长周期Agent工作流中涌现式委托行为的基准测试平台，覆盖11模型×3任务套件×23375实例。",
+    "objective_summary": "学术团队在arXiv发布DecisionBench基准测试平台，整合GAIA、tau-bench、BFCL三个任务套件与11个模型的委托评估框架。在23375个任务实例上进行五条件参考扫描，发现质量指标无法区分委托策略优劣，路由保真度仅7.5%-29.5%，完美委托上限比实测高15-31个百分点。",
     "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
@@ -625,17 +668,20 @@
         "DecisionBench",
         "GAIA",
         "tau-bench",
-        "BFCL multi-turn"
+        "BFCL",
+        "emergent delegation",
+        "agentic workflow",
+        "model routing"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "DecisionBench 是一个标准化基准框架，专门用于评估长周期智能体工作流中的委托协作能力，包含任务套件、模型池、委托接口、技能标注层和多维度评估指标。",
-      "框架包含三个任务套件（GAIA、tau-bench、BFCL multi-turn），11 个模型组成同伴模型池（来自 7 个供应商家族），委托接口为 call_model 加可选 read_profile 通道。",
-      "研究者在全部模型池上执行了五个条件的参考扫描，累计 23,375 个任务实例。",
-      "四种感知条件下的平均任务质量无统计学显著差异（|beta| <= 0.010, p >= 0.21），说明仅凭质量指标会遗漏委托编排信号。",
-      "Top-1 路由保真度在不同条件间从 7.5% 到 29.5% 不等，且交付通道（按需工具 vs. 预加载描述）对结果的影响远大于描述内容本身。",
-      "反事实天花板分析表明，完美委托相比当前实测性能还有 15 到 31 个百分点的未实现提升空间，表明未来的编排方法仍有很大潜力。"
+      "DecisionBench是一个用于评估长周期Agent工作流中涌现式委托行为的基准测试平台，固定了任务套件、模型池、委托接口和指标体系四个核心要素",
+      "平台使用3个任务套件（GAIA、tau-bench、BFCL多轮）和11个模型（来自7个供应商家族），通过call_model接口和可选的read_profile通道实现委托",
+      "评估指标涵盖质量、成本、延迟、委托率、路由保真度@k、供应商自偏好以及反事实委托上限共七个维度",
+      "在23375个任务实例上的五条件参考扫描发现：四种awareness条件下端任务质量在统计上无显著差异（|beta|≤0.010, p≥0.21），仅靠质量评估会遗漏编排信号",
+      "路由保真度@1在不同条件下仅为7.5%-29.5%，交付通道（按需工具vs预加载描述）的影响远大于描述内容本身",
+      "反事实上限分析表明，完美委托比当前实测性能高出15-31个百分点，揭示了未来编排方法的巨大提升空间"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -655,25 +701,29 @@
     "extraction_status": "success",
     "id": "6f83c010011953b0",
     "source_type": "academic_paper",
-    "tldr": "提出AgentNLQ多智能体NL2SQL方法，在BIRD基准上达78.1%语义准确率。",
-    "objective_summary": "该论文提出AgentNLQ，一种基于多智能体架构的自然语言转SQL方法，利用LLM进行规划、编排、反思与自我修正，结合模式丰富技术增强上下文感知元数据，在BIRD基准上达到78.1%语义准确率。",
+    "tldr": "AgentNLQ提出一种多代理NL2SQL方法，在BIRD基准上达到78.1%语义准确率。",
+    "objective_summary": "一项学术研究于2025年5月在arXiv发布预印本，提出名为AgentNLQ的多代理自然语言转SQL方法。该方法通过优化编排器实现规划、反思与自我纠正，结合语义丰富的模式表示和用户业务规则，在BIRD大规模数据库基准测试中取得了78.1%的语义准确率。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
-        "AgentNLQ",
         "NL2SQL",
+        "BIRD",
+        "multi-agent",
         "LLM",
-        "BIRD"
+        "schema enrichment",
+        "orchestrator"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "该论文提出一种名为AgentNLQ的多智能体NL2SQL方法，采用LLM作为核心驱动力来规划、编排、反思和自我修正SQL查询。",
-      "AgentNLQ通过语义丰富的模式增强方法创建上下文感知的元数据，并结合用户提供的业务规则来提升查询准确率。",
-      "在BIRD基准测试上，AgentNLQ达到了78.1%的语义准确率，尚未达到人类专家SQL编写者的水平。",
-      "该方法在不同领域和数据集上的准确性与泛化能力已通过BIRD-SQL基准评估得到验证。"
+      "自然语言到SQL（NL2SQL）转换因关系数据库的广泛使用而成为重要研究问题，但LLM在该任务上的准确率仍不及人类专家",
+      "AgentNLQ提出一种新的多代理方法，核心是一个优化编排器，利用LLM进行任务规划、编排、反思和自我纠正以生成准确SQL",
+      "该方法引入高级模式丰富化技术，基于用户提供的数据库模式生成上下文感知的元数据以提升转换准确率",
+      "系统支持注入用户自定义业务规则，使生成的SQL查询更贴合实际业务场景",
+      "在BIRD-SQL基准测试（面向大规模数据库的评测集）上，AgentNLQ达到78.1%的语义准确率",
+      "实验覆盖不同领域和数据集，验证了方法的通用性和跨域迁移能力"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -693,8 +743,8 @@
     "extraction_status": "success",
     "id": "88c2e927e70aef43",
     "source_type": "academic_paper",
-    "tldr": "将自主代理的信任校准形式化为偏好学习问题，使用高斯过程分类动作空间为允许/阻止/询问区域",
-    "objective_summary": "该论文在arXiv上发表，将智能体工具使用的信任校准（决定何时自动执行、何时需人工批准）形式化为偏好学习问题。策略网关通过高斯过程后验推断人类风险容忍度，在不确定性最高时向人类升级审批，最终将动作空间分类为允许、阻止、询问三个区域。",
+    "tldr": "将智能体工具使用的信任校准形式化为偏好学习问题，通过高斯过程建模人类风险容忍度并据此决定何时自主执行或需人工审批。",
+    "objective_summary": "该论文将智能体工具使用中的信任校准问题形式化为偏好学习框架：一个策略网关通过高斯过程后验建模人类风险容忍函数，基于二元批准/拒绝反馈的probit似然进行观察，并在批准结果最不确定的点升级至人类决策。该方法本质上是优先贝叶斯优化的实例，目标是将动作空间划分为允许、阻止和询问三个区域。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
@@ -702,17 +752,19 @@
       "technologies": [
         "Gaussian Process",
         "Preferential Bayesian Optimization",
-        "probit likelihood"
+        "Probit Likelihood",
+        "Preference Learning",
+        "Policy Gateway"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "论文将智能体工具使用中的信任校准问题定义为偏好学习问题，核心决策是判断代理的提议动作应自动执行还是需要人类审批。",
-      "策略网关维护一个高斯过程后验分布，用于建模人类潜在的风险容忍度函数。",
-      "该模型通过probit似然函数对二元审批反馈（批准/拒绝）进行观测和更新。",
-      "系统在审批结果不确定性最高时将决策升级给人类，而非随机或固定阈值查询。",
-      "论文证明该框架本质上是偏好贝叶斯优化的一个实例，继承了其近似高斯过程分类的推理机制和不确定性导向查询的样本效率。",
-      "与传统偏好贝叶斯优化的区别在于目标：本框架是对动作空间进行分类（允许/阻止/询问），而非优化某个设计参数。"
+      "将智能体工具使用中的信任校准问题定义为：决定何时允许智能体自主执行动作、何时需要人工审批",
+      "提出策略网关架构，维护一个高斯过程（Gaussian Process）后验来建模潜在的人类风险容忍函数",
+      "通过probit似然函数观察人类的二元批准/拒绝反馈，不断更新风险容忍函数的后验分布",
+      "在批准结果最不确定的动作上主动升级至人类决策，实现不确定性驱动的查询策略",
+      "该框架在结构上属于优先贝叶斯优化（Preferential Bayesian Optimization）的实例，继承了其推理机制和样本效率优势",
+      "与经典贝叶斯优化的区别在于目标不同：分类动作空间为允许/阻止/询问区域，而非优化某个设计目标"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -732,8 +784,8 @@
     "extraction_status": "success",
     "id": "8e9dc20c5ca66bfe",
     "source_type": "academic_paper",
-    "tldr": "提出LBW-Guard，一种在AdamW之上的有界自主训练控制层，将Qwen2.5-7B困惑度从13.21降至10.74。",
-    "objective_summary": "该论文提出Learn-by-Wire Guard（LBW-Guard），一种运行在AdamW优化器之上的有界自主训练控制治理层，通过监测训练遥测数据在不稳定时施加控制。在Qwen2.5-7B和WikiText-103上的实验显示，最终困惑度从13.21降至10.74（提升18.",
+    "tldr": "LBW-Guard在AdamW之上实现有界自主训练控制，Qwen2.5-7B困惑度降18.7%且提速1.10倍，高学习率下保持可训练性。",
+    "objective_summary": "2026年，一篇arXiv论文提出LBW-Guard（Learn-by-Wire Guard），一种位于AdamW优化器之上的有界自主训练控制治理层。该层观测训练遥测数据、识别不稳定区域并施加有界控制，不替换优化器更新规则。在Qwen2.5系列模型（3B/7B/14B）和TinyLlama-1B上使",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
@@ -741,18 +793,23 @@
       "technologies": [
         "LBW-Guard",
         "AdamW",
+        "LoRA",
+        "Gradient Clipping",
         "WikiText-103",
-        "Qwen2.5",
-        "TinyLlama"
+        "Qwen2.5-7B",
+        "Qwen2.5-3B",
+        "Qwen2.5-14B",
+        "TinyLlama-1B"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "LBW-Guard是一个位于AdamW优化器之上的有界自主训练控制治理层，不替换优化器，而是通过观测训练遥测数据在不稳定敏感区间施加有界控制。",
-      "在Qwen2.5-7B参考设置下，LBW-Guard将最终困惑度从13.21降至10.74（提升18.7%），端到端训练时间从392.54秒缩短至357.02秒（加速1.10倍）。",
-      "在高学习率压力测试中（LR=3e-3），AdamW退化至困惑度1885.24，而LBW-Guard保持可训练状态，困惑度仅为11.57。",
-      "梯度裁剪基线方法无法复现LBW-Guard的稳定性提升效果，表明其机制与局部梯度抑制不同。",
-      "实验覆盖了Qwen2.5-3B、Qwen2.5-7B、Qwen2.5-14B的模型规模对比以及TinyLlama-1B全参数训练验证。"
+      "现代语言模型训练在高学习率、大规模和运行压力条件下，面临日益加剧的不稳定性、运行退化和算力浪费问题",
+      "LBW-Guard被设计为AdamW优化器之上的一个有界自主训练控制治理层，通过观测训练遥测数据、识别不稳定敏感区域并施加有界控制来工作，而非替换优化器更新规则",
+      "在Qwen2.5-7B基准设置中，LBW-Guard将最终困惑度从13.21降至10.74（降低18.7%），同时将端到端训练时间从392.54秒缩短至357.02秒，实现1.10倍加速",
+      "在更强的学习率压力下（LR=3e-3），AdamW的最终困惑度退化至1885.24，LR=1e-3时退化至659.76，而LBW-Guard分别保持在11.57和10.33的可训练水平",
+      "梯度裁剪基线方法无法复现LBW-Guard的效果，证明其机制不同于简单的局部梯度抑制",
+      "作者得出有限系统结论：稳定性敏感的LLM训练可以从优化器之上的治理平面中受益，有界运行时控制可在压力下保持有效算力利用"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -772,29 +829,29 @@
     "extraction_status": "success",
     "id": "934136d2b687e14e",
     "source_type": "academic_paper",
-    "tldr": "论文提出Mahjax，一个基于JAX的全矢量化日式麻将模拟器，可在GPU上实现大规模强化学习并行化。",
-    "objective_summary": "该学术论文在arXiv上发表，介绍了一种名为Mahjax的GPU加速日式麻将（Riichi Mahjong）强化学习环境。该环境使用JAX实现全矢量化，支持在NVIDIA A100 GPU上大规模并行部署，在8块A100上最高达到每秒200万步的吞吐量，并提供了可视化工具。",
+    "tldr": "推出Mahjax：基于JAX的GPU加速日本麻将模拟器，在8块A100上达每秒200万步，支持从零开始的强化学习研究。",
+    "objective_summary": "研究团队在arXiv发布Mahjax论文，提出一个完全向量化、基于JAX实现的日本麻将强化学习环境，可在GPU上大规模并行推演。在8块NVIDIA A100 GPU上，无赤牌规则下达每秒200万步吞吐量，有赤牌规则下达100万步。附带可视化工具，并验证了智能体可有效提升对基线策略的排名。",
     "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
-      "companies": [
-        "NVIDIA"
-      ],
+      "companies": [],
       "technologies": [
         "JAX",
-        "Riichi Mahjong",
-        "GPU",
         "Reinforcement Learning",
+        "Mahjax",
+        "GPU Acceleration",
+        "NVIDIA A100",
         "AlphaZero"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "日式麻将是一种包含随机性和高维状态空间的多玩家不完全信息游戏，其复杂性反映了强化学习中现实决策问题的挑战。",
-      "Mahjax是一个基于JAX实现的全矢量化日式麻将模拟器，旨在利用GPU实现大规模rollout并行化。",
-      "该环境在8块NVIDIA A100 GPU上分别实现了无红牌规则下每秒200万步和有红牌规则下每秒100万步的吞吐量。",
-      "Mahjax附带高质量可视化工具，用于调试和与训练后的智能体交互。",
-      "实验证明，基于Mahjax训练的强化学习智能体能够有效提升其对基线策略的排名表现。"
+      "日本麻将（Riichi Mahjong）是一个多玩家、不完全信息博弈游戏，具有随机性和高维状态空间，其决策挑战映射了现实世界中的复杂强化学习问题。",
+      "现有研究主要依赖从人类对局记录进行监督学习来预训练策略，而从零开始（tabula rasa）学习的方法（如AlphaZero系列）更具通用性潜力但缺乏合适的模拟环境。",
+      "Mahjax 作为解决方案被提出——一个完全向量化的日本麻将环境，基于JAX实现，可在GPU上进行大规模并行推演。",
+      "在8块NVIDIA A100 GPU上，Mahjax在无赤牌规则下达到每秒200万步的吞吐量，在有赤牌规则下达到每秒100万步。",
+      "Mahjax同时提供高质量的可视化工具，用于调试和与训练好的智能体交互。",
+      "实验验证表明，基于Mahjax训练的强化学习智能体能够有效提升对基线策略的排名表现，证明了该环境在强化学习研究中的实用性。"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -814,8 +871,8 @@
     "extraction_status": "success",
     "id": "9e626e3df4476d3b",
     "source_type": "academic_paper",
-    "tldr": "提出三种改进逻辑推理语句嵌入质量的方法，使用三元组损失训练提升下游排序效果。",
-    "objective_summary": "该论文提出并评估了三种提升Horn逻辑推理中语句嵌入质量的方法：生成重复项更多的锚点、平衡正负样本难度分布、训练中周期性强调困难样本。实验跨多个知识库对比不同嵌入特征对推理任务的影响。",
+    "tldr": "论文提出利用三元组损失训练神经网络生成Horn逻辑嵌入，通过三项创新提升逻辑推理搜索效率。",
+    "objective_summary": "一篇arXiv论文（2026年）提出并评估了多种为Horn逻辑推理创建高质量嵌入的方法。研究者使用三元组损失训练神经网络，以将逻辑语句转化为数值表示，从而让神经网络能够对逻辑推理器的选择进行排序、提升搜索效率。论文引入三项创新：生成更可能包含重复项的锚点、平衡易中难样本的正负例生成策略、以及训练中周",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
@@ -823,17 +880,19 @@
       "technologies": [
         "Horn Logic",
         "triplet loss",
-        "embeddings"
+        "neural networks",
+        "embeddings",
+        "logical reasoning"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "论文目标是创建逻辑语句的数值嵌入，帮助神经网络更高效地排序逻辑推理器的候选答案。",
-      "嵌入训练使用三元组损失函数，需要锚点、正样本和负样本三个要素。",
-      "第一种方法：生成更可能包含重复项的锚点，以提升嵌入的区分能力。",
-      "第二种方法：构建正负样本时确保难易程度（简单、中等、困难）的合理分布。",
-      "第三种方法：训练过程中周期性加大对最困难样本的关注权重。",
-      "实验跨多个知识库对比不同嵌入方法，分析何种嵌入特征最适合特定推理任务。"
+      "神经网络可被训练用于对逻辑推理器的候选选择进行排序，从而加速答案搜索过程，其关键步骤是创建有效的逻辑语句嵌入（数值表示）",
+      "使用三元组损失（triplet loss）训练嵌入，需要构造由锚点、正例和负例组成的三元组训练样本",
+      "提出第一项创新：生成更可能包含重复项的锚点，以增强嵌入的判别能力",
+      "提出第二项创新：在生成正负例时确保易、中、难样本的良好平衡，避免训练偏差",
+      "提出第三项创新：在训练过程中周期性强调最难样本，以推动模型突破性能瓶颈",
+      "实验在多个知识库上比较不同嵌入方法，目标是识别何种嵌入特征最适合特定的逻辑推理任务"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -853,24 +912,29 @@
     "extraction_status": "success",
     "id": "a963ebea3b7e855f",
     "source_type": "academic_paper",
-    "tldr": "ReElicit 用 LLM 启发式嵌入做系统提示词贝叶斯优化，30 次评估内优于基线方法",
-    "objective_summary": "arXiv 论文提出 ReElicit 框架，通过 LLM 启发式嵌入将提示词映射到紧凑特征空间，结合高斯过程代理模型和采集函数进行贝叶斯优化。在 10 个提示词优化任务上、30 次总评估预算内取得最优聚合性能。",
+    "tldr": "提出ReElicit框架，用LLM动态构建语义表征空间辅助贝叶斯优化系统提示词",
+    "objective_summary": "该论文针对系统提示词在仅有聚合标量反馈而无逐样本标签的场景下难以调优的问题，提出ReElicit框架。该方法通过LLM从任务描述和历史评估中引出可解释的特征空间，结合高斯过程代理模型和采集函数，迭代生成并优化系统提示词。在10个任务、30次评估预算的实验中，ReElicit在仅使用聚合反馈的基线中表",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
+        "ReElicit",
         "Bayesian Optimization",
         "Gaussian Process",
-        "ReElicit",
         "LLM",
-        "System Prompt Optimization"
+        "System Prompts",
+        "Embedding by Elicitation"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "ReElicit 是一个贝叶斯优化框架，专门解决仅有聚合指标反馈（无逐样本标签）时的系统提示词调优问题。",
-      "框架通过"
+      "系统提示词调优面临核心挑战：反馈仅为聚合标量分数，缺乏逐样本标签、错误信息或批评意见，形成样本受限的黑箱优化问题",
+      "ReElicit 框架的核心创新是\"通过引出嵌入\"：LLM根据任务描述、已评估提示词及对应分数，动态构建紧凑且可解释的特征空间，并将提示词映射到该空间",
+      "在此特征空间中部署概率高斯过程代理模型，通过采集函数选择目标特征向量，再由LLM将目标向量实现并细化为可部署的系统提示词",
+      "随着新评估结果不断到达，特征空间会被重新引出以适应提示词-分数历史，使表征持续进化",
+      "实验以离线基准准确率作为受控聚合代理指标，在10个系统提示优化任务上分配总计30次评估预算",
+      "结果表明LLM不仅可以作为提示词生成器，还能作为贝叶斯优化中自然语言产物的自适应语义表征构建器，ReElicit在纯聚合反馈提示优化基线中取得最强的综合性能"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -890,25 +954,29 @@
     "extraction_status": "success",
     "id": "ada55ba5a6201e9f",
     "source_type": "academic_paper",
-    "tldr": "提出冲突感知加性引导方法，解决流模型在多约束组合生成中的离流形漂移问题。",
-    "objective_summary": "该研究识别了扩散模型和流模型在推理时组合多个约束进行引导生成时产生离流形漂移的根本原因，发现近似误差随梯度方向不一致性严重放大。基于此提出冲突感知加性引导（g^car），一种轻量级可学习方法，通过动态检测和解决梯度冲突来主动修正漂移。在合成数据集、图像编辑和生成式决策规划等多个领域验证了有效性。",
+    "tldr": "提出冲突感知加性引导方法g^car，解决流模型在多约束组合采样时的流形漂移问题",
+    "objective_summary": "该论文针对扩散模型和流模型在推理时组合多个约束条件进行引导采样时出现的偏离数据流形问题，识别其根因在于梯度不对齐导致的近似误差放大，提出轻量级可学习的冲突感知加性引导方法g^car，通过动态检测和化解梯度冲突来纠正流形漂移，在合成数据、图像编辑和生成式决策规划等多个领域验证了其有效性和计算效率。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
-        "flow models",
-        "diffusion models",
-        "additive guidance",
-        "Conflict-Aware Additive Guidance"
+        "Flow Models",
+        "Diffusion Models",
+        "Guided Sampling",
+        "Classifier-Free Guidance",
+        "Gradient Conflict Resolution",
+        "Compositional Rewards"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "现有推理时引导采样方法可无需微调即可控制扩散模型和流模型的生成过程，但在组合多个约束时效果不佳，会导致偏离真实数据流形的问题。",
-      "研究首先识别了组合约束下离流形漂移的根本原因，证明梯度方向不一致性会严重放大近似误差。",
-      "提出冲突感知加性引导（g^car），一种轻量级可学习方法，通过动态检测和解决梯度冲突来主动修正离流形漂移。",
-      "在合成数据集、图像编辑和生成式决策规划等多个领域验证了方法有效性，g^car在生成保真度上超越基线方法且计算开销低。"
+      "现有推理时引导采样方法在组合多个约束条件时会出现偏离真实数据流形的问题，即流形漂移（off-manifold drift）",
+      "经分析发现，流形漂移的根因在于梯度不对齐（gradient misalignment）导致近似误差被严重放大",
+      "基于该发现，提出冲突感知加性引导方法g^car，能够动态检测多个约束梯度之间的冲突并主动化解",
+      "g^car是一种轻量级、可学习的方法，在保持低计算开销的同时有效纠正流形漂移",
+      "在合成数据集、图像编辑、以及规划与控制领域的生成式决策三个不同维度上验证了g^car的有效性",
+      "实验结果表明g^car在生成保真度上超越基线方法，代码已开源"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -928,27 +996,30 @@
     "extraction_status": "success",
     "id": "b795c984d9074979",
     "source_type": "academic_paper",
-    "tldr": "提出并验证了面向生产环境的文档AI微服务架构，发现OCR延迟是主要瓶颈而非LLM推理。",
-    "objective_summary": "该论文提出了一种面向生产环境的文档AI微服务架构，将分类、OCR和LLM结构化字段提取封装为多模型流水线。通过批量性能分析发现：OCR是端到端延迟的主要瓶颈，而非LLM解析；系统并发饱和度由共享GPU推理容量决定，而非工作进程数量。",
+    "tldr": "论文提出用于生产环境的文档AI微服务架构，将OCR与LLM管道解耦并异步化，发现OCR而非LLM解析主导端到端延迟。",
+    "objective_summary": "一篇arXiv学术论文提出了一套用于文档理解的微服务架构，将分类、OCR和大语言模型结构化字段提取封装为独立管道，在数千页/小时的生产吞吐量下运行。核心设计包括混合分类、GPU推理与CPU编排分离、IO密集型操作的全异步化以及独立水平扩展策略。",
     "event_type": "infrastructure_update",
-    "epistemic_status": "verified_fact",
+    "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
         "OCR",
         "LLM",
+        "Microservice Architecture",
         "Document AI",
-        "Microservice Architecture"
+        "Hybrid Classification",
+        "GPU Inference",
+        "Asynchronous Processing"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "现有文献在文档理解模型定义与生产级运行之间存在较大空白，该论文旨在弥合这一鸿沟。",
-      "提出了一种微服务架构，将分类、光学字符识别（OCR）和大语言模型（LLM）结构化字段提取封装为多模型流水线。",
-      "架构设计决策包括：混合分类策略、GPU绑定推理与CPU绑定编排分离、IO密集型操作的异步处理、以及独立水平扩展策略。",
-      "通过批量化性能分析发现两个反直觉结论：OCR是端到端延迟的主要瓶颈，而非LLM解析阶段。",
-      "系统并发饱和度由共享GPU推理容量决定，而非工作进程数量。",
-      "该系统已在生产环境中经受了每小时数千页多页文档的处理验证。"
+      "学术研究通常聚焦于文档理解新模型的定义，但模型定义与生产级运行之间存在巨大鸿沟，该论文旨在弥合这一差距。",
+      "论文提出了一套微服务架构，将分类、OCR和大语言模型结构化字段提取等多个模型管道封装为独立服务。",
+      "核心设计决策包括：混合分类策略、将GPU密集型推理与CPU密集型编排分离、对管道中大量IO密集型操作采用异步处理、以及各组件独立水平扩展。",
+      "该架构在生产环境中以每小时处理数千页多页文档的吞吐量运行。",
+      "通过批量性能分析得出两个反直觉的定性发现：OCR而非大语言模型解析主导端到端延迟；系统饱和瓶颈取决于共享GPU推理容量而非工作节点数量。",
+      "论文目标是为从业者提供在基准测试之外仍能有效运行的文档理解系统的具体架构模式。"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -968,26 +1039,27 @@
     "extraction_status": "success",
     "id": "c8b5a62b3e777356",
     "source_type": "academic_paper",
-    "tldr": "POLAR-Bench 基准测试发现前沿 LLM 能保护99%隐私，但小模型泄露过半",
-    "objective_summary": "arXiv 论文提出 POLAR-Bench 诊断基准，通过10个领域7852个样本让持有隐私策略的可信模型与对抗性第三方对话，评估 LLM 代理的隐私-效用权衡。结果显示前沿模型能隐藏99%以上受保护属性，而1-30B参数的小模型最差者泄露超过一半。",
-    "event_type": "policy_and_safety",
-    "epistemic_status": "theoretical_claim",
+    "tldr": "POLAR-Bench基准测试揭示小型开源LLM在隐私保护上的严重不足，前沿模型可保护99%以上隐私属性，而1-30B模型最差泄露过半。",
+    "objective_summary": "研究团队提出POLAR-Bench，一个用于诊断LLM Agent隐私与效用权衡的基准。测试中，持有隐私策略的受信任模型与对抗性第三方模型对话，后者试图探测任务相关属性和受保护属性。基准覆盖10个领域、7852个样本，通过变化隐私策略维度和攻击策略构成5×5诊断矩阵。",
+    "event_type": "framework_tools",
+    "epistemic_status": "verified_fact",
     "entities": {
       "companies": [],
       "technologies": [
-        "LLM Agent",
         "POLAR-Bench",
-        "Privacy Alignment"
+        "LLM Agent",
+        "privacy-utility trade-off",
+        "adversarial probing"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "POLAR-Bench 是一个诊断基准，用于评估 LLM 代理在隐私保护与任务效用之间的权衡表现。",
-      "该基准设计为可信模型持有隐私策略并与对抗性第三方模型对话，后者会主动探测任务相关属性和受保护属性。",
-      "基准覆盖10个领域共7852个样本，通过隐私策略维度和攻击策略两个正交轴构建5×5诊断矩阵。",
-      "当前前沿模型能隐藏超过99%的受保护属性，隐私保护表现优异。",
-      "1-30B参数范围的开放权重小模型表现显著较差，最弱的模型泄露超过一半的受保护属性。",
-      "POLAR-Bench 能够定位每个模型的意图遵循能力在何处失效，为隐私对齐提供针对性改进方向。"
+      "LLM Agent在代表用户与第三方系统交互时，需要严格遵循用户定义的隐私策略，区分可共享与不可共享的信息",
+      "POLAR-Bench通过让持有隐私策略的受信任模型与对抗性第三方模型对话，系统性地测试Agent的意图遵循能力",
+      "基准覆盖10个领域、7852个样本，通过正交变化隐私策略维度和攻击策略，为每个模型生成5×5的诊断矩阵",
+      "前沿模型（如GPT-4级别）能够保护超过99%的受保护属性不被泄露",
+      "1-30B参数的小型开源模型（用户最常在端侧或私有推理中自行运行的类别）表现显著更差，最差模型泄露超过一半的受保护属性",
+      "POLAR-Bench能够精确定位每个模型意图遵循能力失效的位置，为隐私对齐研究提供切入点和改进方向"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -1007,30 +1079,31 @@
     "extraction_status": "success",
     "id": "ebc3121a6857149f",
     "source_type": "academic_paper",
-    "tldr": "OSCToM用RL引导对抗生成，建模高阶心智理论中的嵌套信念冲突，在FANToM基准上达76%准确率。",
-    "objective_summary": "arXiv论文提出OSCToM方法，结合强化学习、领域特定语言和组合替代模型，用于提升大语言模型在高阶心智理论任务中的递归信念推理能力。OSCToM-8B在FANToM基准上达到76%准确率（基线仅0.2%），数据合成效率提升6倍。",
+    "tldr": "提出OSCToM方法，用强化学习生成观察者-自我冲突场景以测试LLM的高阶心智理论推理，在FANToM上准确率达76%。",
+    "objective_summary": "2025年，研究者通过arXiv发布OSCToM论文，提出一种结合强化学习、扩展领域特定语言和组合式代理模型的方法，用于生成观察者-自我信念冲突场景以评估LLM的递归心智理论推理能力。OSCToM-8B在信息不对称的FANToM基准上达到76%准确率（ExploreToM仅0.",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
-        "LLM",
-        "Theory of Mind",
-        "RL",
         "OSCToM",
+        "ToM",
+        "RL",
+        "LLM",
         "ExploreToM",
         "FANToM",
         "Hi-ToM",
-        "BigToM"
+        "BigToM",
+        "DSL"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "OSCToM（Observer-Self Conflict Theory of Mind）是一种针对高阶心智理论推理中嵌套信念冲突的建模方法，核心场景是观察者对他人信念的判断与观察者自身信念状态发生冲突。",
-      "该方法结合强化学习（RL）、扩展领域特定语言和组合替代模型，自动生成带有观察者-自我冲突的训练数据。",
-      "在信息不对称的FANToM基准测试中，OSCToM达到76%准确率，而ExploreToM仅报告0.2%。",
-      "OSCToM-8B在测试系统中取得最佳综合表现，在FANToM上优于ExploreToM已有结果，在Hi-ToM和BigToM上也保持竞争力。",
-      "OSCToM的数据合成效率比现有方法高6倍，表明针对性训练数据能帮助小型模型处理高级认知推理。"
+      "现有LLM在复杂社交场景中的心智理论（ToM）推理表现不均衡，现有基准未能充分测试递归信念和信息不对称场景。",
+      "OSCToM引入观察者-自我冲突概念（observer-self conflict），即观察者对他人的信念认知与自身信念状态发生冲突的情形，这需要多层递归推理而非简单视角切换。",
+      "该方法使用强化学习（RL）驱动对抗生成，结合扩展的领域特定语言（DSL）和组合式代理模型来构造冲突场景。",
+      "在信息不对称的FANToM基准上，OSCToM-8B达到76%准确率，远超ExploreToM报告的0.2%，同时在Hi-ToM和BigToM上保持竞争力。",
+      "数据合成流程效率提升6倍，表明有针对性的训练数据可帮助较小模型处理高阶认知推理任务。"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -1050,29 +1123,30 @@
     "extraction_status": "success",
     "id": "ed0d77dab9cf497a",
     "source_type": "academic_paper",
-    "tldr": "论文提出证据携带型多模态智能体（ECA），用确定性门控阻止AI幻觉导致未授权操作。",
-    "objective_summary": "一篇arXiv论文形式化了多模态智能体中幻觉引发未授权操作的安全漏洞，并提出ECA架构：将工具调用的前提条件分解为关键谓词，通过DOM/OCR/AX验证器获取类型化证书，由确定性门控仅授权证书支持的权限。在1900次攻击测试中，四次加固将门控绕过率从15%降至1.",
-    "event_type": "policy_and_safety",
+    "tldr": "提出证据携带多模态智能体(ECA)架构，用外部验证证书替代模型自由文本来授权敏感操作，将幻觉攻击面从100%降至0%。",
+    "objective_summary": "论文于2026年5月发表，将多模态智能体的幻觉问题重新定义为授权失败而非回答质量错误，提出ECA架构：将工具调用拆解为动作关键谓词，通过DOM/OCR/AX验证器获取类型化证书，由确定性门控决定授权。在1900+攻击红队测试中，绕过率从15%降至1.3%；端到端200任务管道实现0%不安全操作率。",
+    "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
         "ECA",
-        "HACR",
+        "Multimodal Agents",
         "DOM",
         "OCR",
         "AX",
-        "GPT-5.4"
+        "GPT-5.4",
+        "HACR"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "论文将多模态智能体中的幻觉问题重新定义为授权失败而非答案质量错误：虚假视觉断言触发点击、邮件、提取或转账等特权操作。",
-      "形式化提出了hallucination-to-action conversion（HACR）这一失效模式，即无证据支持的感知断言为特权操作提供了看似允许的前提条件。",
-      "提出证据携带型多模态智能体（ECA）架构，将模型自由文本视为不可采纳证据，工具调用需通过约束性DOM/OCR/AX验证器获取类型化证书。",
-      "确定性门控机制仅授予证书支持的权限，将不透明的模型信念转化为可追溯的验证器残留（verifier residuals）。",
-      "通过1900次红队攻击进行验证器对抗测试，四次针对性加固将门控绕过率从15%降至1.3%。",
-      "200任务端到端管线中ECA获得0%不安全操作率（Wilson 95%置信上限2.67%），500任务分层HACR审计显示朴素智能体unsafe execution率为100%，纯提示防御为49.6%，ECA为0%。"
+      "多模态智能体通过截屏、文档、网页选择工具调用时，错误的视觉声明可触发点击、邮件、提取或转账等特权操作，构成授权失败而非简单的回答质量错误。",
+      "将这一失败模式形式化为幻觉到行动转换(HAC)：未经证实的感知声明充当了使特权行动看似合法的前提条件。",
+      "提出证据携带多模态智能体(ECA)架构：将模型自由文本视为不可采纳的证据，每个工具调用被分解为动作关键谓词。",
+      "ECA通过受限的DOM/OCR/AX验证器获取类型化证书，由确定性门控仅授予证书支持的权限，将不透明的模型信念转化为命名的验证器、模式和实现残差。",
+      "在1900+次攻击的验证器红队测试中，四轮定向加固将门控绕过率从15%降至1.3%，端到端200任务管道实现0%不安全操作率（Wilson 95%置信上界2.67%）。",
+      "对500个分层任务键的HACR审计表明：朴素智能体100.0%的不安全执行率，纯提示防御降至49.6%，而ECA为0%；神经法官基线在同一威胁模型下仍然可被绕过。"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -1092,8 +1166,8 @@
     "extraction_status": "success",
     "id": "fbdfb0571adfd5a3",
     "source_type": "academic_paper",
-    "tldr": "研究提出VBFDD-Agent，将电池数字信号转为描述性文本，结合LLM推理实现故障检测与诊断。",
-    "objective_summary": "该研究提出VBFDD-Agent框架，将电池监测信号、统计特征等转换为结构化自然语言描述，结合历史案例检索、维修手册和LLM推理，生成诊断结果与维护建议。实验表明该框架能准确进行异常监测，专家评估确认了生成建议的实用价值。",
+    "tldr": "提出VBFDD-Agent，将电池信号转化为自然语言描述并结合LLM推理，实现电动车电池故障检测与可解释维修决策支持",
+    "objective_summary": "一篇arXiv论文提出VBFDD-Agent框架，将电动汽车锂离子电池的监测信号、统计特征和异常记录转化为结构化自然语言描述，形成诊断语料库，再结合历史案例检索、维修手册与大语言模型推理，生成结构化诊断结果和维修建议。实验与专家评估验证了其准确性和实用价值。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
@@ -1101,17 +1175,18 @@
       "technologies": [
         "VBFDD-Agent",
         "LLM",
-        "lithium-ion battery"
+        "Descriptive Text Modeling",
+        "Lithium-ion Battery",
+        "Battery Digital Signals"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "电动汽车锂离子电池系统日益复杂，传统故障诊断方法在跨域适应性和人机协作方面存在局限。",
-      "研究提出描述性文本建模方法，将电池监测信号、统计特征、异常记录和状态评估结果转换为结构化自然语言描述，形成电池健康诊断语料库。",
-      "基于该语料库，研究提出VBFDD-Agent框架，整合电池状态文本、历史案例检索、本地维修手册和LLM推理能力。",
-      "VBFDD-Agent能生成结构化的诊断结果和可操作的维护建议。",
-      "实验证明该框架能基于描述性文本表示准确进行异常监测，并提供灵活高效的维护建议。",
-      "专家评估确认了生成建议的实用价值，该框架将传统电池诊断从标签预测扩展到可解释的、面向维护的决策支持。"
+      "电动汽车锂离子电池系统日趋复杂，传统故障检测方法针对特定场景设计，缺乏跨领域适应性和人机协作能力，且缺少开源的电池故障报告语料库和统一的维修知识表示",
+      "提出描述性文本建模方法，将电池监测信号、统计特征、异常记录和状态评估结果转化为结构化可读的自然语言描述，构建电池健康诊断与维修语料库",
+      "基于该语料库构建VBFDD-Agent，整合描述性电池状态文本、历史案例检索、本地维修手册和大语言模型推理四个模块",
+      "实验表明VBFDD-Agent能准确进行基于描述性文本表示的异常监测，并提供灵活、高效、可操作的维修建议",
+      "专家评估证实了生成维修建议的实用价值，该方法将传统电池诊断从标签预测扩展到可解释的、面向维修的决策支持"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -1131,30 +1206,34 @@
     "extraction_status": "success",
     "id": "fda608774415188c",
     "source_type": "academic_paper",
-    "tldr": "COAgents 多智能体框架通过部分搜索图动态引导路径规划，在 VRPTW 上创下学习方法新纪录",
-    "objective_summary": "arXiv 论文提出 COAgents 多智能体协同框架，将组合优化搜索过程建模为图结构，动态构建部分搜索图（PSG）并训练节点选择、移动选择和跳跃三个智能体协同搜索。在 CVRP 基准上与现有学习方法相当，在 VRPTW 基准上以学习方法达最优，N=100 时相比 POMO 将差距缩小 14%。",
+    "tldr": "COAgents提出一种多智能体框架，将车辆路径问题的搜索过程建模为图，通过三种协作智能体实现局部优化与全局探索的分离控制。",
+    "objective_summary": "该论文于2025年发布在arXiv上，提出COAgents多智能体协作框架，将车辆路径问题（VRP）的搜索空间建模为图结构，通过节点选择智能体、移动选择智能体和跳跃智能体分别负责局部增强与全局探索。实验在CVRP和VRPTW基准上验证，在VRPTW任务上达到学习型方法最优水平，",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
         "COAgents",
-        "Vehicle Routing Problems (VRP)",
+        "VRP",
         "CVRP",
         "VRPTW",
-        "Partial Search Graph (PSG)",
+        "Partial Search Graph",
         "POMO",
-        "ALNS"
+        "ALNS",
+        "Multi-Agent Framework",
+        "Node Selection Agent",
+        "Move Selection Agent",
+        "Jump Agent"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "COAgents 将路径规划问题的搜索过程建模为图结构，其中节点代表解，边代表局部改进或大幅扰动（跳跃）。",
-      "框架在搜索过程中动态构建部分搜索图（PSG），用于训练节点选择智能体和移动选择智能体以引导强度搜索。",
-      "跳跃智能体（Jump Agent）负责在适当时机触发对新区域的探索，帮助搜索跳出局部最优。",
-      "COAgents 将问题无关的搜索控制逻辑与紧凑的领域特定编码分离，提升了跨不同任务的适应能力。",
-      "在 CVRP 基准上，COAgents 与多种学习式搜索基线方法保持竞争力。",
-      "在更具挑战性的 VRPTW 实例上，COAgents 在所有学习方法中取得最优结果，在 N=100 和 N=50 时分别将最优解的差距缩小 14% 和 44%（相对 POMO），以及 21% 和 40%（相对 ALNS）。"
+      "车辆路径问题（VRP）因组合复杂性，在大规模实例上传统启发式方法难以泛化，端到端学习方法也存在局限。",
+      "COAgents将搜索过程建模为图：节点表示候选解，边表示局部优化移动或大幅扰动跳跃（用于逃离局部最优）。",
+      "搜索过程中动态构建部分搜索图（PSG），为智能体训练提供结构化搜索历史信息。",
+      "框架训练三种协作智能体：节点选择智能体和移动选择智能体负责增强局部搜索，跳跃智能体负责在适当时机触发新区域的探索。",
+      "COAgents将问题无关的搜索控制逻辑与紧凑的领域特定编码分离，便于跨任务迁移适应。",
+      "在VRPTW基准上达到学习型方法的新最优水平：N=100时相比POMO将最优解差距缩小14%、相比ALNS缩小21%；N=50时分别缩小44%和40%。"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -1174,28 +1253,29 @@
     "extraction_status": "success",
     "id": "fe1219b8ab66d74d",
     "source_type": "academic_paper",
-    "tldr": "提出COSMO-Agent框架，用强化学习训练LLM闭环执行CAD-CAE设计与仿真优化。",
-    "objective_summary": "arXiv论文提出COSMO-Agent，一种工具增强的强化学习框架，将CAD生成、CAE求解、结果解析和几何修正构建为交互式RL环境，训练小规模开源LLM完成闭环工业设计优化，在可行性、效率与稳定性上超越大模型。",
+    "tldr": "COSMO-Agent用工具增强RL训练LLM完成闭环CAD-CAE设计优化，小模型表现超越大模型",
+    "objective_summary": "研究者提出COSMO-Agent框架，将CAD生成、CAE求解、结果解析和几何修订构造为交互式强化学习环境，通过多重约束奖励函数训练LLM编排外部工具并迭代修改参数化几何体，在覆盖25个零件类别的工业数据集上验证，小参数量开源模型在可行性、效率和稳定性上超过大型开源与闭源模型。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
         "COSMO-Agent",
-        "LLM",
-        "Reinforcement Learning",
         "CAD",
-        "CAE"
+        "CAE",
+        "Reinforcement Learning",
+        "LLM",
+        "Parametric Geometry"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "工业设计-仿真迭代优化面临CAD-CAE语义鸿沟，即仿真反馈无法直接转化为有效的几何编辑。",
-      "COSMO-Agent将CAD生成、CAE求解、结果解析和几何修正四个环节构建为一个交互式强化学习环境。",
-      "LLM在该环境中学习编排外部工具并反复修正参数化几何，直至所有约束被满足。",
-      "设计了多约束奖励函数，同时鼓励可行性、工具链鲁棒性和结构化输出的有效性。",
-      "贡献了覆盖25个零部件类别的工业对齐数据集，支持真实的CAD-CAE任务训练与评估。",
-      "实验表明COSMO-Agent训练显著提升小规模开源LLM的约束驱动设计能力，在可行性、效率和稳定性上超越大型开源和强闭源模型。"
+      "工业迭代设计仿真优化的瓶颈在于CAD-CAE语义鸿沟，仿真反馈难以自动转化为有效的几何修改",
+      "提出COSMO-Agent框架，将CAD生成、CAE求解、结果解析和几何修订整体构造为交互式强化学习环境",
+      "LLM在该环境中学习编排外部工具并迭代修改参数化几何体，直至满足多重约束条件",
+      "设计多重约束奖励函数，联合鼓励约束可行性、工具链调用鲁棒性和结构化输出有效性",
+      "贡献覆盖25个零件类别的工业对齐数据集，支持真实训练与评估",
+      "实验表明COSMO-Agent训练显著提升小型开源LLM的约束驱动设计能力，在可行性与稳定性上超越大型模型"
     ],
     "pipeline_stage": "fact_extracted"
   }

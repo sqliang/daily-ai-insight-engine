@@ -11,9 +11,9 @@ tags:
 - clippings
 id: ef2c16cfdd65c7a2
 source_type: news_media
-tldr: Spotify AI DJ 新增法语、德语、意大利语和巴西葡萄牙语四语种支持
-objective_summary: Spotify 于 2026 年 5 月 7 日宣布，AI DJ 互动功能新增支持法语、德语、意大利语和巴西葡萄牙语四种语言，每种语言配置了不同名称和个性的
-  AI DJ。该功能已扩展至奥地利、巴西等新市场，覆盖超过 75 个国家。
+tldr: Spotify AI DJ新增法语、德语、意大利语和巴西葡萄牙语支持，扩展至75个国家。
+objective_summary: 2026年5月7日，Spotify宣布其交互式AI DJ功能新增法语、德语、意大利语和巴西葡萄牙语四种语言，每种语言配备不同名称和个性的AI
+  DJ。该功能同步扩展至奥地利、巴西、法国、德国、意大利、葡萄牙、韩国和瑞士八个新市场，现已在超过75个国家可用。
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
@@ -21,13 +21,18 @@ entities:
   - Spotify
   technologies:
   - AI DJ
+  - voice interaction
+  - text prompting
+  - AI-powered commentary
+  - prompt-based playlist generation
   key_people: []
 key_logic_flow:
-- Spotify 于 2026 年 5 月 7 日宣布，AI DJ 功能新增法语、德语、意大利语和巴西葡萄牙语四种语言支持
-- 此前该功能仅支持英语和西班牙语，新增语种分别配置了不同名称和个性的 AI DJ（Maia、Ben、Alex、Dani）
-- 该功能已扩展至奥地利、巴西、法国、德国、意大利、葡萄牙、韩国和瑞士，目前覆盖超过 75 个国家
-- 2025 年 5 月，Spotify 更新 AI DJ 使其支持用户使用语音指令调整情绪或音乐流派
-- 2025 年 10 月，Spotify 为 AI DJ 添加了文本对话功能，用户可通过文字指令点播歌曲
+- Spotify于2026年5月7日宣布AI DJ功能新增四种语言支持：法语、德语、意大利语和巴西葡萄牙语，此前仅支持英语和西班牙语
+- 每种语言的AI DJ拥有不同的名称和个性：Maia（法语）、Ben（德语）、Alex（意大利语）和Dani（巴西葡萄牙语）
+- 该功能同步扩展至奥地利、巴西、法国、德国、意大利、葡萄牙、韩国和瑞士八个新市场，全球可用国家超过75个
+- Spotify最初版AI DJ仅提供AI生成的口语歌曲评论，2025年5月升级为支持用户通过语音与AI DJ交互并请求切换心情或曲风
+- 2025年10月进一步新增文字提示功能，用户可像使用ChatGPT、Claude或Gemini一样通过文字描述请求播放特定曲目
+- Spotify持续在应用中添加AI功能，包括通过自然语言描述生成自定义歌曲或播客播放列表
 pipeline_stage: fact_extracted
 ---
 

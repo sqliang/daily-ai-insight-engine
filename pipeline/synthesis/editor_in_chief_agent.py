@@ -19,11 +19,13 @@ import logging
 from pathlib import Path
 from typing import Optional
 
+from pydantic import ValidationError
+
 from ..core.agent import call_agent_with_retry, parse_json_response
 from pipeline.utils.file_utils import read_json, ensure_dir
 from .prompts.system_prompt import EDITOR_IN_CHIEF_SYSTEM_PROMPT
 from .prompts.user_prompt import build_user_prompt
-from .report_generator import validate_report
+from ..schemas.daily_report import validate_daily_report
 
 logger = logging.getLogger(__name__)
 
@@ -105,13 +107,12 @@ async def run_editor_in_chief(
 
     report = parse_json_response(response_text)
 
-    validation = validate_report(report)
-    if not validation["valid"]:
-        error_list = "\n  - ".join(validation["errors"])
-        logger.warning("日报 JSON 校验发现问题:\n  - %s", error_list)
-    if validation.get("warnings"):
-        warn_list = "\n  - ".join(validation["warnings"])
-        logger.info("日报 JSON 校验提醒:\n  - %s", warn_list)
+    try:
+        validated = validate_daily_report(report)
+        report = validated.model_dump(mode="json", by_alias=False)
+    except ValidationError as exc:
+        logger.warning("日报 JSON Pydantic 校验失败 (%d 个错误):\n  %s", len(exc.errors()), exc.errors())
+        # 校验失败不阻断流程，仍返回原始 dict
 
     return report
 

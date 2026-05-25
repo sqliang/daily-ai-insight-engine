@@ -10,8 +10,8 @@ tags:
 extraction_status: success
 id: dd24c17d9d37bbde
 source_type: news_media
-tldr: 8点1氪：英伟达Q1净利583亿美元，Gemini月活9亿，寿司郎回应卫生问题
-objective_summary: 36氪8点1氪栏目发布新闻速递，包含三条核心要闻：英伟达第一季度净利润达583亿美元；谷歌CEO透露Gemini月活跃用户已达9亿；寿司郎就餐具抽检不合格事件作出官方回应。
+tldr: 英伟达Q1净利润583亿美元，谷歌Gemini月活用户达9亿，寿司郎回应卫生抽检问题
+objective_summary: 2026年5月24日，36氪「8点1氪」早间新闻汇总三条消息：英伟达公布Q1财报净利润583亿美元；谷歌CEO披露Gemini月活跃用户已达9亿；日本连锁寿司品牌寿司郎回应餐具卫生抽检10抽10脏事件。
 event_type: capital_movement
 epistemic_status: verified_fact
 entities:
@@ -23,9 +23,9 @@ entities:
   - Gemini
   key_people: []
 key_logic_flow:
-- 英伟达公布第一季度财报，净利润达到583亿美元。
-- 谷歌CEO宣布其AI产品Gemini月活跃用户已达到9亿。
-- 寿司郎就餐具抽检10次结果10次不合格的事件作出官方回应。
+- 英伟达2026年Q1季度净利润达到583亿美元，反映AI芯片需求持续强劲
+- 谷歌CEO宣布Gemini月活跃用户数已达9亿，显示出AI助手产品的规模化增长
+- 寿司郎回应餐具卫生抽检结果，10件抽检样品全部不合格
 pipeline_stage: fact_extracted
 ---
 

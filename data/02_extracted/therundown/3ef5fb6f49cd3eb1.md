@@ -11,37 +11,33 @@ tags:
 extraction_status: success
 id: 3ef5fb6f49cd3eb1
 source_type: newsletter_rss
-tldr: OpenAI通用推理模型推翻存在80年的Erdős数学猜想
-objective_summary: OpenAI宣布其内部通用推理模型自主推翻Erdős 1946单位距离问题中存在80年的理论，经Tim Gowers等专家验证为AI首次数学原创发现，模型即将发布。
+tldr: OpenAI 通用推理模型自主证伪了 Erdős 1946 年单位距离问题的80年猜想，被公司称为 AI 在数学原创发现领域的首次突破。
+objective_summary: OpenAI 于近期宣布，其内部一个即将发布的通用推理模型自主证伪了 Erdős 在 1946 年提出的单位距离问题相关长期猜想，该证明采用了代数数论路径，并经过
+  Tim Gowers、Noga Alon、Thomas Bloom 等专家验证。
 event_type: application_landing
-epistemic_status: verified_fact
+epistemic_status: pr_statement
 entities:
   companies:
   - OpenAI
-  - Google
-  - Stanford University
   - DeepMind
   technologies:
-  - Co-Scientist
-  - Gemini
-  - NotebookLM
-  - AlphaEvolve
+  - general reasoning model
   - AlphaProof
-  - GPT-5
+  - algebraic number theory
   key_people:
   - Sam Altman
   - Alex Wei
   - Tim Gowers
   - Noga Alon
   - Thomas Bloom
+  - Paul Erdős
 key_logic_flow:
-- OpenAI宣布其内部通用推理模型自主推翻了Erdős 1946年单位距离问题中存在80年的数学猜想，经Tim Gowers、Noga Alon和Thomas
-  Bloom等数学家验证，被认为是AI首次在数学领域实现原创发现。
-- 该证明借鉴了代数数论方法而非传统网格理论，成果来自即将发布的通用推理模型，而非DeepMind AlphaProof这类专用数学系统。
-- OpenAI此前曾撤回2025年关于GPT-5解决10个Erdős问题的说法，当时那些所谓解决实为文献检索发现而非原创证明。
-- OpenAI的Alex Wei指出该突破标志着AI进入Level 4阶段——系统能在多个领域做出原创贡献，而不仅是加速现有工作。
-- Google在Nature上发表Co-Scientist研究成果，推出Hypothesis Generation工具，通过思想锦标赛机制让研究代理相互提出、批判和排序科学假设。
-- 在Stanford肝纤维化项目中，Google称Co-Scientist的一个候选药物将疤痕相关信号降低了91%，同时推出Gemini for Science工具包整合多项能力。
+- OpenAI 内部通用推理模型（非数学专用系统）对 Erdős 1946 年单位距离问题发起探索
+- 该模型独立找到了一条不同于主流网格理论的证明路径，转而使用代数数论分支的方法
+- 模型最终证伪了该领域流行 80 年的一个核心猜想
+- 结果经过三位数学专家（Tim Gowers、Noga Alon、Thomas Bloom）验证确认
+- OpenAI 的 Alex Wei 将此视为数学作为 AI 能力「先行指标」的证据，预示系统可做出跨领域原创贡献
+- OpenAI 此前在 2025 年曾声称 GPT-5 解决 10 个 Erdős 问题后撤回，此次发布在可信度管理上更为谨慎
 pipeline_stage: fact_extracted
 ---
 

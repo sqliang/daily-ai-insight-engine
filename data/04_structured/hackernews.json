@@ -15,30 +15,31 @@
     "extraction_status": "success",
     "id": "0592b45f36d8c1a7",
     "source_type": "community_discussion",
-    "tldr": "Python 3.15 新增 TaskGroup 取消、线程安全迭代器、上下文管理器装饰器增强等功能",
-    "objective_summary": "Python 3.15 在 2026 年进入功能冻结（3.15.0b1），除了惰性导入和 tachyon 分析器外，还包含多项小功能更新：asyncio.TaskGroup.cancel() 方法、ContextDecorator 支持异步和生成器函数、threading.",
-    "event_type": "infrastructure_update",
+    "tldr": "Python 3.15 beta 1 带来 TaskGroup.cancel()、线程安全迭代器、ContextDecorator 增强、Counter",
+    "objective_summary": "2025年 Python 3.15.0b1 特性冻结后，开发者社区文章梳理了五个未获头条关注但实用的新特性：asyncio.TaskGroup 新增 cancel() 方法实现优雅取消；ContextDecorator 现在能正确包裹异步函数与生成器的完整生命周期；threading 模块新增",
+    "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [],
       "technologies": [
         "Python 3.15",
-        "asyncio.TaskGroup",
+        "asyncio",
+        "TaskGroup",
         "ContextDecorator",
         "threading",
-        "collections.Counter",
         "frozendict",
-        "JSON"
+        "Counter",
+        "json"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "Python 3.15 已进入 3.15.0b1 功能冻结阶段，新版本将于年内正式发布。",
-      "asyncio.TaskGroup 新增 cancel() 方法，允许优雅地取消整个任务组，无需借助异常机制。",
-      "ContextDecorator 在 3.15 中会检查所装饰函数的类型（同步、异步、生成器），确保装饰器覆盖完整的生命周期。",
-      "threading 模块新增 serialize_iterator、synchronized_iterator 和 concurrent_tee 工具，提供线程安全的迭代器包装和复制功能。",
-      "collections.Counter 新增 XOR（^）运算符支持，用于计算两个 Counter 的对称差集。",
-      "json.load/json.loads 新增 array_hook 参数，配合 frozendict 可实现 JSON 数据的完全不可变（可哈希）表示。"
+      "Python 3.15.0b1 已进入特性冻结阶段，确定了最终发布的全部功能集。",
+      "asyncio.TaskGroup 新增 cancel() 方法，可直接取消任务组而不抛出异常，替代以往通过 raise Interrupt + suppress ExceptionGroup 的迂回方式。",
+      "ContextDecorator 现能识别所包裹函数的类型（普通函数、异步函数、生成器、异步生成器），确保装饰器覆盖函数完整生命周期而非仅在调用瞬间退出。",
+      "threading 模块引入 serialize_iterator 和 synchronized_iterator 装饰器解决迭代器在多线程/自由线程下的非线程安全问题，concurrent_tee 支持将单个迭代器复制为多个独立消费端，替代传统的 Queue 同步模式。",
+      "collections.Counter 新增 XOR（^）运算符，实现对称差集语义：c ^ d 等价于 c | d - c & d。",
+      "json.load/loads 新增 array_hook 参数，与 frozendict 搭配可将 JSON 对象完全解析为不可变（可哈希）形式。"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -58,36 +59,41 @@
     "extraction_status": "success",
     "id": "07c80dd10e9d8b42",
     "source_type": "community_discussion",
-    "tldr": "通过20年修复，Emily Seyl新书公开数百张1945年三位一体核试验高清照片",
-    "objective_summary": "Emily Seyl著作《Trinity: An Illustrated History of the World's First Atomic Test》（芝加哥大学出版社）基于20年修复工作，公布了数百张1945年7月16日三位一体核试验的清晰照片。",
+    "tldr": "Emily Seyl 新书收录20年修复成果，呈现1945年三位一体核试验被遗忘的珍贵影像与目击者记录。",
+    "objective_summary": "2026年，Emily Seyl 通过芝加哥大学出版社出版《Trinity: An Illustrated History of the World's First Atomic Test》，公开了历经20年修复的曼哈顿计划摄影档案，还原了1945年7月16日人类首次核试验的震撼画面与科学家亲身见证",
     "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
         "Los Alamos National Laboratory",
-        "The University of Chicago Press"
+        "The University of Chicago Press",
+        "IEEE Spectrum"
       ],
-      "technologies": [],
+      "technologies": [
+        "plutonium implosion bomb",
+        "high-speed Fastax camera",
+        "nuclear fission",
+        "motion-picture photography"
+      ],
       "key_people": [
         "Emily Seyl",
-        "Alan B. Carr",
         "Berlyn Brixner",
         "Julian Mack",
         "Norris Bradbury",
         "Robert Oppenheimer",
-        "Herbert Lehr",
         "Isidor Isaac Rabi",
         "James Chadwick",
-        "George Kistiakowsky"
+        "George Kistiakowsky",
+        "Herbert Lehr"
       ]
     },
     "key_logic_flow": [
-      "Emily Seyl的新书《Trinity: An Illustrated History of the World's First Atomic Test》经20年照片修复，公布了数百张曼哈顿计划期间三位一体核试验的生动影像。",
-      "1945年7月16日5时29分45秒（山区战时时间），人类首次核裂变链式反应在新疆西哥州Jornada del Muerto盆地引爆，标志核时代开启。",
-      "摄影师Berlyn Brixner在North 10,000摄影地堡中使用Mitchell电影摄影机和Fastax高速摄影机拍摄，记录了火球在不到百分之一秒内从黑暗中爆出的全过程。",
-      "52台摄影机中仅11台产出合格图像，但Spectrographic and Photographic Measurements Group通过错位布设不同距离、角度和帧率的设备，仍拼凑出完整的爆炸时序记录。",
-      "爆炸实际威力远超预期，大量摄影和诊断仪器被冲击波摧毁；目击者描述强光'震撼人心'，爆炸轰鸣'似乎永远不会离开'。",
-      "摄影组负责人Julian Mack指出，超过10万帧拍摄画面仍无法呈现爆炸的真实亮度和时空尺度，爆炸的视觉冲击远超任何照片或文字所能描述。"
+      "1945年7月16日凌晨5:29:45，人类在新墨西哥州 Jornada del Muerto 盆地进行了代号为\"Gadget\"的首次核试验，32块高爆炸药向内压缩钚核触发链式裂变反应。",
+      "Berlyn Brixner 在摄影掩体中通过多台摄影机（含高速 Fastax 摄像机）捕捉到爆炸后不到百分之一秒的透亮火球画面，成为科学家反复测量核爆效应的核心影像资料。",
+      "摄影团队由 Julian Mack 领导，共部署52台摄像机，以交错距离、互补角度和不同帧率布置，仅11台产出满意图像，但仍拼凑出超过10万帧的完整爆炸记录。",
+      "爆炸当量超出预测数倍，强烈光线和冲击波压倒了多数摄像机和诊断仪器，但整体摄影工作被视为巨大成功。",
+      "物理学家 Norris Bradbury、Isidor Isaac Rabi、James Chadwick 和 George Kistiakowsky 等人的亲身描述强调：核爆体验超越任何既有认知，文字与图片均无法还原其震撼。",
+      "Emily Seyl 历经20年修复工作，将这些被遗忘的影像集结成书，由芝加哥大学出版社于2026年出版，IEEE Spectrum 刊载了该书节选。"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -107,44 +113,52 @@
     "extraction_status": "success",
     "id": "088bbc860d363b76",
     "source_type": "community_discussion",
-    "tldr": "Flipper One 完整硬件规格文档发布，含 RK3576 芯片、M.2 扩展槽和 Wi-Fi 6 等参数。",
-    "objective_summary": "Flipper 官方发布了仍在开发中的 Flipper One 设备的全面技术规格，包括 Rockchip RK3576 主 CPU、Raspberry Pi RP2350 协处理器、8GB LPDDR5 内存、64GB UFS 2.2 存储、M.",
-    "event_type": "infrastructure_update",
+    "tldr": "Flipper One 公布完整硬件技术规格，搭载 RK3576 八核 CPU、8GB RAM、M.2 扩展接口与双千兆网口。",
+    "objective_summary": "Flipper Devices 在官方文档中披露了 Flipper One 多功能硬件设备的完整技术规格。该设备尺寸 155×67×40mm，采用 Rockchip RK3576（4×A72+4×A53）主 CPU 与 Raspberry Pi RP2350 低功耗 MCU 双芯片架构，配备",
+    "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
-        "Flipper",
+        "Flipper Devices Inc.",
         "Rockchip",
         "Raspberry Pi",
-        "Texas Instruments",
         "MediaTek",
         "Realtek",
+        "Texas Instruments",
         "Nuvoton"
       ],
       "technologies": [
         "RK3576",
         "RP2350",
-        "M.2 Key B",
+        "Cortex-A72",
+        "Cortex-A53",
+        "Cortex-M33",
+        "RISC-V Hazard3",
+        "Mali-G52 MC3",
+        "LPDDR5",
+        "UFS 2.2",
         "Wi-Fi 6",
         "Bluetooth 5.2",
         "HDMI 2.1",
         "DisplayPort 1.4",
-        "USB 3.1",
-        "LPDDR5",
-        "UFS 2.2",
-        "PCIe",
-        "SATA",
+        "USB PD",
+        "PCIe 2.1",
+        "SATA3",
+        "M.2 Key B",
+        "Gigabit Ethernet",
+        "TRRS",
+        "QSPI",
         "NPU 6 TOPS"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "Flipper One 采用 Rockchip RK3576 八核处理器（4×Cortex-A72 + 4×Cortex-A53）作为主 CPU，搭载 6 TOPS NPU。",
-      "设备配备 Raspberry Pi RP2350B 双核 MCU（Cortex-M33 + RISC-V Hazard3）作为低功耗协处理器。",
-      "内存为 8GB LPDDR5，内部存储为 64GB UFS 2.2，并支持 microSD 卡扩展。",
-      "无线通信由 MediaTek MT7921AUN 模组提供 Wi-Fi 6（2.4/5/6 GHz）和蓝牙 5.2 支持。",
-      "背面配备 M.2 Key B 扩展槽（支持 2242/3042/3052 尺寸），提供 PCIe 2.1、USB 3.1、SATA3 等多种接口。",
-      "视频输出支持 HDMI 2.1（全尺寸，4K@120Hz）和 DisplayPort 1.4 Alt Mode（通过 USB-C1）。"
+      "Flipper One 是一款正在开发中的多功能硬件设备，官方声明最终规格可能调整，当前重量和电池容量尚未最终确定",
+      "采用 Rockchip RK3576 八核 CPU（4×Cortex-A72 + 4×Cortex-A53，最高 2.2GHz）作为主处理器，集成 Mali-G52 MC3 GPU 和 6 TOPS NPU，搭配 Raspberry Pi RP2350B 双核 Cortex-M33 + 双核 RISC-V 低功耗 MCU",
+      "配备 8GB LPDDR5 运行内存、64GB UFS 2.2 内部存储、24000mWh（约 7000mAh）电池，支持 USB PD 快充协议最高 26V 输入",
+      "提供丰富的物理接口：两个 USB 3.1 Type-C（其中一个支持 DisplayPort Alt Mode）、一个 USB 3.1 Type-A、全尺寸 HDMI 2.1（4K@120Hz）、双千兆 RJ45 网口、3.5mm TRRS 音频孔、MicroSD 卡槽和 Nano SIM 卡槽",
+      "设备背板设有 M.2 Key B 扩展端口（支持 2242/3042/3052 规格），可扩展 PCIe 2.1 x1、USB 3.1、SATA3 及 SIM 卡直通等，对外提供 GPIO 排针和 Debug 调试接口",
+      "无线通信采用 MediaTek MT7921AUN 方案，支持 Wi-Fi 6 三频（2.4/5/6GHz）2×2 MIMO 和蓝牙 5.2"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -164,33 +178,37 @@
     "extraction_status": "success",
     "id": "0a405ad6b4659766",
     "source_type": "community_discussion",
-    "tldr": "使用SBCL汇编器快速原型化8槽位堆栈虚拟机",
-    "objective_summary": "作者受F18处理器和x87栈启发，使用SBCL的汇编器在REPL中构建了一个8槽位循环堆栈虚拟机，通过模8计数器实现零数据移动的栈操作，并为每个栈指针值生成专门指令变体，最终实现100万次循环仅需6.18M周期。",
+    "tldr": "利用SBCL内置汇编器作为汇编代码实验平台，设计并实现一个基于旋转寄存器栈的轻量级堆栈虚拟机原型。",
+    "objective_summary": "作者于2014年利用SBCL Common Lisp编译器的内置汇编器，设计并验证了一种堆栈虚拟机实现技术：将8个x86-64寄存器(r8-r15)作为固定栈槽，通过模块化栈指针旋转而非数据移动来实现push/pop操作，并为每种栈指针状态生成专用原语变体。",
     "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [],
       "technologies": [
         "SBCL",
-        "x87",
+        "Common Lisp",
+        "x86-64",
+        "stack-based VM",
+        "direct threaded VM",
         "Forth",
-        "F18",
-        "x86",
-        "SLIME",
-        "VM"
+        "x87 FPU",
+        "F18 processor",
+        "SLIME"
       ],
       "key_people": [
+        "Paul Khuong",
         "Chuck Moore",
-        "Lutz Euler",
-        "djb (Daniel J. Bernstein)"
+        "Daniel J. Bernstein (djb)",
+        "Lutz Euler"
       ]
     },
     "key_logic_flow": [
-      "作者受Chuck Moore的F18处理器（仅10个堆栈槽位，无溢出陷阱）和x87浮点栈的启发，设计了一个8槽位循环堆栈虚拟机。",
-      "虚拟机通过模8计数器实现栈顶指针，push/pop仅增减计数器不移动数据，并为每个栈指针值（共8种）生成专门的指令变体，间距4288字节。",
-      "作者使用SBCL的汇编器（sb-assem）和SLIME REPL生成并测试虚拟机代码，将r8-r15寄存器映射为堆栈槽位。",
-      "实现了enter/leave（CL调用接口）、lit/inc/dec（立即数）、swap/drop/add/sub、jmp/jnz/jz控制流以及call/ret等基本指令。",
-      "通过融合指令（djn将dec+jnz合并）和用条件跳转替代条件移动，将100万次递减循环从15M周期逐步优化至6.18M周期。"
+      "受Chuck Moore的F18处理器（仅10槽栈）和djb对x87旋转栈的论述启发，作者探索将堆栈槽数限制为8个时可行的实现技术",
+      "核心设计：使用8个x86-64寄存器作为栈槽，push/pop不移动数据，仅通过增减模块化栈指针计数器来改变TOS指向",
+      "关键优化：为栈指针的8种可能取值分别生成独立的原语变体代码，变体以4288字节为间隔排列以减小缓存别名冲突",
+      "字节码编码采用32位相对偏移量替代64位绝对地址，由虚拟指令指针(rdi)和原语基址(rsi)共同定位目标代码",
+      "通过操作融合技术（如lit+sub融合为dec，dec+jnz融合为djn）将百万次迭代循环的每轮开销从15周期降至约6周期",
+      "整个实验利用SBCL的SLIME REPL交互环境和内置汇编器完成，展示了Lisp系统作为底层汇编实验平台的独特能力"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -210,45 +228,47 @@
     "extraction_status": "success",
     "id": "0da4f54ed5d4332d",
     "source_type": "community_discussion",
-    "tldr": "开发者用2021款MacBook本地运行Gemma 4 31B，为一年视频素材建立可搜索索引",
-    "objective_summary": "一位在肯尼亚马赛马拉与硅谷之间生活的开发者，为管理大量未标注视频素材，在2021款MacBook Pro M1 Max（64GB）上构建了本地视频索引系统。系统使用LM Studio运行Gemma 4 31B Q4模型，通过ffmpeg提取帧、WhisperX转录、insightface检测人脸，",
+    "tldr": "开发者在2021款M1 Max MacBook上用Gemma4-31B本地构建视频索引系统，swap峰值50.89GB，使一年未标注视频素材可通过自然语言查询。",
+    "objective_summary": "2026年，一名开发者在肯尼亚马赛马拉和硅谷之间往返工作，面对一年积累的未标注视频素材（iPhone、DJI、无人机等），放弃了SaaS视频编辑方案，转而自建本地优先的视频索引系统。系统使用2021款M1 Max MacBook Pro（64GB RAM），通过LM Studio加载Gemma 4",
     "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
-        "SimbaStack",
-        "Apple",
-        "LM Studio",
         "Anthropic",
-        "DJI",
-        "Nikon",
-        "Meta"
+        "LM Studio",
+        "Blackmagic Design",
+        "ElevenLabs",
+        "SimbaStack",
+        "Eddie AI",
+        "Higgsfield",
+        "Submagic",
+        "Buffer"
       ],
       "technologies": [
         "Gemma 4 31B",
         "WhisperX",
         "insightface",
-        "ArcFace",
         "ffmpeg",
         "ffprobe",
         "exiftool",
-        "Nominatim",
-        "DaVinci Resolve",
-        "MCP",
-        "Claude Code",
         "pyannote",
-        "Q4",
-        "LM Studio"
+        "ArcFace",
+        "DaVinci Resolve MCP",
+        "Claude Code",
+        "Nominatim",
+        "YAML Frontmatter",
+        "LM Studio",
+        "Sidecar Pattern"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "作者每年有一半时间在马赛马拉拍摄大量视频素材，另一半时间在终端前编程，视频素材因缺乏编辑时间而堆积。",
-      "作者最初考虑使用SaaS AI视频编辑方案（Eddie AI、Higgsfield MCP等，月费约140美元），但发现这些工具需要素材已标注标签，无法直接处理未标注的原始视频。",
-      "作者转而构建本地优先的视频索引系统：核心思路是先为每个视频建立索引（.description.md侧边文件），让素材可被自然语言查询，再叠加AI编辑。",
-      "系统流水线包括：ffprobe提取元数据、exiftool读取GPS信息、ffmpeg抽取5帧、WhisperX多语言转录和说话人分离、insightface人脸识别、Gemma 4 31B视觉模型一次性生成完整描述（含评分、技术质量、光照、色彩、关键词等）。",
-      "在2021款MacBook Pro M1 Max（64GB）上运行Gemma 4 31B Q4模型时，峰值使用了50.89GB交换空间，系统仍能正常工作，作者称该机器为\"传奇\"。",
-      "开发过程中遇到4个关键bug：WhisperX API接口变更、Claude CLI权限错误返回成功响应、Gemma返回字符串而非整数字段、视频筛选标准需从\"技术完美\"调整为\"记忆保留\"。"
+      "作者最初尝试SaaS视频编辑方案（Eddie AI等，月费约140美元），发现现有AI视频工具假设素材已标注，而他的归档全是IMG_*.mov和DJI_*.mp4等无意义文件名，AI编辑器解决的是第二个问题，第一个问题是索引",
+      "转向自建本地优先的视频索引系统，放弃云端方案以保护隐私和降低成本，采用旁车（sidecar）模式：为每个视频生成.description.md文件存放于视频旁，纯文本可grep，不依赖中心化数据库",
+      "设计原则为单次视觉调用提取全部所需信息（评分、技术质量、光照、时间、调色板、音频质量、人数、关键词、人脸、位置、转录、散文描述），支持三种视觉后端：Claude CLI（零边际成本）、Anthropic API、LM Studio本地模型",
+      "完整pipeline链：ffprobe提取元数据→exiftool提取GPS经纬度→Nominatim反向地理编码→ffmpeg均匀抽取5帧1920px画面→WhisperX转录含词级对齐和pyannote说话人分离（支持97种语言）→insightface检测人脸存储512维ArcFace嵌入→视觉模型读取帧和转录生成YAML frontmatter与描述",
+      "在2021款M1 Max MacBook Pro（64GB RAM）上通过LM Studio加载Gemma 4 31B Q4（28.40GB显存占用）进行批量处理，swap峰值50.89GB，内存压力进入黄色区域但系统持续产出sidecar文件",
+      "四个关键bug：WhisperX 3.8破坏性API变更（DiarizationPipeline模块路径和token参数改名），通过签名内省自动适配；Claude CLI非交互模式权限错误返回成功状态码，需增加字符串匹配防御检查；Gemma遵循提示返回people_count:'many'字符串而非整数，教训是不应使用联合类型schema字段；剔除标准过于激进（按摄影作品标准）误删有情感价值的摩托视频，修正为仅剔除无效录制"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -268,23 +288,64 @@
     "extraction_status": "partial",
     "id": "142b256fd6d1cb0b",
     "source_type": "community_discussion",
-    "tldr": "一个名为 Project Hail Mary 的恒星导航可视化项目在 Hacker News 获得 754 分关注",
-    "objective_summary": "valhovey 在 GitHub Pages 上发布了一个名为 Project Hail Mary – Stellar Navigation Chart 的项目，内容是关于恒星导航的可视化图表。该链接在 Hacker News 上获得 754 个点赞和 170 条评论，但页面正文未能被成功提取。",
+    "tldr": "基于GAIA星表数据构建《火星救援》作者新作《Project Hail Mary》的恒星导航图可视化项目。",
+    "objective_summary": "一个独立开发者利用ESA的GAIA卫星星表数据，为安迪·威尔的科幻小说《Project Hail Mary》中的星际航行路线制作了交互式恒星导航图，并在Hacker News上获得754分和170条评论的热度。",
     "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
-      "companies": [
-        "Hacker News"
+      "companies": [],
+      "technologies": [
+        "GAIA",
+        "stellar cartography",
+        "data visualization"
       ],
-      "technologies": [],
-      "key_people": []
+      "key_people": [
+        "Andy Weir"
+      ]
     },
     "key_logic_flow": [
-      "valhovey 在 GitHub Pages 上托管了一个名为 Project Hail Mary – Stellar Navigation Chart 的项目页面。",
-      "该页面被发布到 Hacker News 并引发了社区讨论，获得 754 个点赞和 170 条评论。",
-      "页面 HTML 获取成功但正文内容无法被自动提取，无法获取详细的项目描述和技术细节。"
+      "该项目以安迪·威尔的科幻小说《Project Hail Mary》中的星际旅行为背景设定",
+      "利用ESA GAIA卫星的真实恒星观测数据构建星图",
+      "制作成交互式恒星导航图并托管于GitHub Pages公开访问",
+      "该项目在Hacker News上引发广泛讨论，获得754个点赞和170条评论"
     ],
     "pipeline_stage": "fact_extracted"
+  },
+  {
+    "source_dir": "hackernews",
+    "title": "Green card seekers must leave U.S. to apply, Trump administration says",
+    "source": "https://www.nytimes.com/2026/05/22/us/politics/green-card-changes-trump.html",
+    "author": [
+      "[[tlhunter]]"
+    ],
+    "published": "2026-05-22",
+    "created": "2026-05-24",
+    "description": "https://www.uscis.gov/newsroom/news-releases/us-citizenship-...https://www.uscis.gov/sites/default/files/document/memos/PM-... [pdf]https://twitter.com/DHSgov/status/2057817233200418837, https://xcancel.com/DHSgov/status/2057817233200418837https://www.bbc.com/news/articles/cgrpz4l1klgohttps://www.washingtonpost.com/immigration/2026/05/22/new-ru..., https://archive.is/yi2cX Comments URL: https://news.ycombinator.com/item?id=48241890 Points: 791 # Comments: 1338",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "142c0f7a9b1f7a01",
+    "source_type": "community_discussion",
+    "tldr": "特朗普政府要求绿卡申请人必须离开美国境内才能提交申请",
+    "objective_summary": "2026年5月22日，《纽约时报》报道特朗普政府发布新规：寻求绿卡者必须离境申请，改变以往可在美国境内调整身份的流程。报道原文因反广告拦截机制未能加载，仅基于标题提取。",
+    "event_type": "policy_and_safety",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [],
+      "technologies": [],
+      "key_people": [
+        "Donald Trump"
+      ]
+    },
+    "key_logic_flow": [
+      "特朗普政府于2026年5月宣布绿卡申请新规",
+      "新规要求申请人必须离开美国本土提交绿卡申请",
+      "此政策改变了此前可在美国境内调整移民身份的既有流程",
+      "报道由《纽约时报》于2026年5月22日发布",
+      "文章完整正文因网站反广告拦截机制未能获取，以上仅基于标题推断"
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -301,25 +362,7 @@
     ],
     "extraction_status": "partial",
     "id": "1c2f4e3b793a65d0",
-    "source_type": "community_discussion",
-    "tldr": "Qwen 发布 Qwen3.7-Max，定位为面向 Agent 前沿的旗舰模型。",
-    "objective_summary": "阿里巴巴 Qwen 团队在官方博客发布文章《Qwen3.7-Max: The Agent Frontier》，介绍其最新旗舰模型。该文章在 Hacker News 上获得 635 分和 252 条评论，讨论热度较高。",
-    "event_type": "infrastructure_update",
-    "epistemic_status": "pr_statement",
-    "entities": {
-      "companies": [
-        "Alibaba",
-        "Qwen"
-      ],
-      "technologies": [],
-      "key_people": []
-    },
-    "key_logic_flow": [
-      "阿里巴巴 Qwen 团队发布名为 Qwen3.7-Max 的新模型，定位为面向 Agent 能力的前沿模型。",
-      "该公告发布在 qwen.ai 官方博客上，标题为《Qwen3.7-Max: The Agent Frontier》。",
-      "该新闻在 Hacker News 上引发社区广泛讨论，获得 635 分和 252 条评论。"
-    ],
-    "pipeline_stage": "fact_extracted"
+    "source_type": "community_discussion"
   },
   {
     "source_dir": "hackernews",
@@ -337,29 +380,81 @@
     "extraction_status": "success",
     "id": "1d6d4753038eb57e",
     "source_type": "community_discussion",
-    "tldr": "GitHub确认约3800个内部仓库因员工安装恶意VSCode扩展被入侵",
-    "objective_summary": "GitHub一名员工安装恶意VSCode扩展后，导致约3800个内部仓库被入侵。黑客组织TeamPCP声称窃取数据并在论坛开价至少5万美元出售。GitHub已移除恶意扩展并隔离受感染设备，称未发现客户数据受影响。",
+    "tldr": "GitHub确认一名员工安装恶意VS Code扩展导致约3800个内部仓库被攻破，黑客组织TeamPCP索价至少5万美元。",
+    "objective_summary": "GitHub确认一名员工安装了被投毒的VS Code扩展，导致约3800个内部代码仓库数据遭窃取。黑客组织TeamPCP在Breached论坛声称持有约4000个私有仓库代码，索价至少5万美元。GitHub已移除恶意扩展、隔离受感染设备并启动应急响应，表示暂无证据表明客户数据受到影响。",
     "event_type": "policy_and_safety",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
         "GitHub",
-        "Microsoft"
+        "Microsoft",
+        "TeamPCP",
+        "OpenAI",
+        "PyPI",
+        "NPM",
+        "Docker"
       ],
       "technologies": [
         "VS Code",
-        "VS Code Marketplace"
+        "VS Code Marketplace",
+        "XMRig"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "GitHub一名员工安装了被篡改的恶意VSCode扩展，导致其设备被入侵，约3800个内部仓库数据遭窃取。",
-      "GitHub确认入侵仅涉及内部仓库，未发现外部客户数据受影响，并已从VS Code Marketplace移除该恶意扩展。",
-      "黑客组织TeamPCP在Breached论坛声称对此次攻击负责，开价至少5万美元出售窃取数据，否则将免费公开。",
-      "TeamPCP此前曾关联多起针对GitHub、PyPI、NPM、Docker等开发者平台的供应链攻击。",
-      "近年来VS Code Marketplace多次出现恶意扩展，累计数千万安装量，用于窃取开发者凭证或植入挖矿程序。"
+      "GitHub一名员工从VS Code Marketplace安装了一个被投毒的扩展插件",
+      "该恶意扩展使攻击者获得了对GitHub内部代码仓库的未授权访问权限",
+      "约3800个内部仓库的源代码被窃取并外泄",
+      "黑客组织TeamPCP在Breached网络犯罪论坛上声称持有约4000个私有仓库代码，索价至少5万美元，并威胁若无买家将免费公开数据",
+      "GitHub已从VS Code Marketplace移除该恶意扩展、隔离受感染设备并启动应急响应调查",
+      "GitHub表示暂无证据表明受影响仓库范围之外的客户数据遭到泄露",
+      "TeamPCP此前曾针对GitHub、PyPI、NPM、Docker等平台发动大规模供应链攻击，近期还与影响两名OpenAI员工的Mini Shai-Hulud供应链攻击活动有关联"
     ],
     "pipeline_stage": "fact_extracted"
+  },
+  {
+    "source_dir": "hackernews",
+    "title": "On The (2021)",
+    "source": "https://benmyers.dev/blog/on-the-dl/",
+    "author": [
+      "[[ravenical]]"
+    ],
+    "published": "2026-05-23",
+    "created": "2026-05-24",
+    "description": "Article URL: https://benmyers.dev/blog/on-the-dl/ Comments URL: https://news.ycombinator.com/item?id=48247325 Points: 377 # Comments: 110",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "1f0c8b8061cfb6db",
+    "source_type": "community_discussion",
+    "tldr": "HTML <dl> 元素是描述名称-值对的语义化标签，由 <dt> 和 <dd> 组成，能提升屏幕阅读器可访问性。",
+    "objective_summary": "作者 Ben Myers 于 2021 年在其博客撰文，系统介绍 HTML 描述列表元素 <dl>/<dt>/<dd> 的语法结构、语义价值及无障碍访问优势，并以 D&D 角色卡为例展示其多样化的实际应用场景。",
+    "event_type": "framework_tools",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [],
+      "technologies": [
+        "HTML5",
+        "Semantic HTML",
+        "Description List",
+        "Screen Reader",
+        "Web Accessibility",
+        "ARIA"
+      ],
+      "key_people": [
+        "Ben Myers"
+      ]
+    },
+    "key_logic_flow": [
+      "<dl>（描述列表）元素用于标记名称-值对，是 Web 开发中被低估的语义化标签，由 <dt>（描述项）和 <dd>（描述详情）两个子元素组成。",
+      "一个 <dt> 可对应多个 <dd>，允许一对多的名称-值关系；如需样式包裹，规范仅允许使用 <div> 作为 <dt>/<dd> 分组的唯一合法包装元素。",
+      "HTML5 之前该元素被称为定义列表（definition list），最初仅用于术语词汇表；HTML5 将其语义扩展为通用的描述列表。",
+      "使用 <dl> 而非嵌套 <div> 的语义化价值在于：屏幕阅读器可识别列表项总数、告知用户当前所处位置、并将整个列表作为可跳过的独立区块。",
+      "尽管主流浏览器与屏幕阅读器组合已基本支持 <dl> 的语义解析，但尚未达到普遍覆盖，开发者可在无障碍回退体验与语义完整性之间做权衡。",
+      "文章以 D&D 角色属性卡为案例，展示了一个页面中可存在多达五个独立 <dl> 区块，证明了描述列表模式在视觉差异巨大的场景中仍能统一适用。"
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -377,28 +472,69 @@
     "extraction_status": "success",
     "id": "268751f4fde4a012",
     "source_type": "community_discussion",
-    "tldr": "DOS Zone 是一个免费、无广告的在线 DOS 游戏集合平台，支持移动端和离线游玩。",
-    "objective_summary": "DOS Zone（dos.zone）提供数千款经典 DOS 游戏在线游玩，涵盖动作、冒险、策略、RPG 等数十个分类，游戏按发行年份（1986-2025）整理，完全免费且无广告，支持移动设备和离线模式，通过加密货币捐款维持运营。",
+    "tldr": "DOS Zone 是一个免费的在线 DOS 游戏合集平台，收录超 28000 款经典游戏，支持移动端和离线游玩。",
+    "objective_summary": "DOS Zone（dos.zone）是一个在线经典 DOS 游戏存档与游玩平台，收录 28567 款以上游戏，涵盖动作、冒险、策略、RPG 等数十个品类，按年份和类型分类。平台支持移动端和离线模式，完全免费且无广告，通过 BTC 和 ETH 加密货币捐赠维持运营。",
     "event_type": "application_landing",
-    "epistemic_status": "verified_fact",
+    "epistemic_status": "pr_statement",
     "entities": {
       "companies": [
-        "DOS Zone"
+        "dos.zone"
       ],
       "technologies": [
-        "MS-DOS",
-        "DOS"
+        "DOS emulation",
+        "browser-based emulation"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "DOS Zone 是一个免费在线 DOS 游戏集合网站，提供数千款经典游戏。",
-      "游戏涵盖动作、冒险、策略、RPG、射击、模拟、体育、益智等数十个分类，总数达数万款。",
-      "平台支持移动端设备和离线模式游玩。",
-      "网站完全免费且无广告展示，通过 BTC 和 ETH 加密货币捐款维持运营。",
-      "游戏按发行年份整理，覆盖从 1986 年到 2025 年的 DOS 游戏。"
+      "DOS Zone 是一个专门收录和提供经典 DOS 游戏在线游玩的平台，总游戏数量超过 28000 款",
+      "平台覆盖数十个游戏品类，包括动作、冒险、策略、RPG、模拟器、射击等，并按发布年份归档",
+      "支持移动端设备和离线模式，用户无需持续联网即可游玩",
+      "平台以完全免费且无广告的模式运营，宣称旨在让经典游戏体验对所有人开放",
+      "通过比特币（BTC）和以太坊（ETH）加密货币捐赠来维持平台的持续运营"
     ],
     "pipeline_stage": "fact_extracted"
+  },
+  {
+    "source_dir": "hackernews",
+    "title": "-​-dangerously-skip-reading-code",
+    "source": "https://olano.dev/blog/dangerously-skip/",
+    "author": [
+      "[[fagnerbrack]]"
+    ],
+    "published": "2026-05-23",
+    "created": "2026-05-24",
+    "description": "Article URL: https://olano.dev/blog/dangerously-skip/ Comments URL: https://news.ycombinator.com/item?id=48246232 Points: 135 # Comments: 129",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "27f463d728e8c461",
+    "source_type": "community_discussion",
+    "tldr": "组织可主动选择不审查LLM生成的代码，将质量严谨性从代码审查转移到规格说明和自动化测试上。",
+    "objective_summary": "作者在博客中提出：若组织层面明确要求利用LLM最大化编码速度，工程师可以不再阅读AI生成的代码（将其视为机器码），转而将严谨性重新锚定在Markdown规格说明和测试用例上。文章引用Thoughtworks撤退报告，论证LLM输出速度已远超人类审查能力，因此必须从组织架构层面移除人工审查环节，",
+    "event_type": "framework_tools",
+    "epistemic_status": "theoretical_claim",
+    "entities": {
+      "companies": [
+        "Thoughtworks"
+      ],
+      "technologies": [
+        "LLM",
+        "Specification-driven Development",
+        "Markdown"
+      ],
+      "key_people": []
+    },
+    "key_logic_flow": [
+      "作者此前认为假设无需阅读和调试LLM生成的代码是不负责任的，因为程序员需要对LLM的输出负责。",
+      "但如果组织领导层在了解风险后仍选择追求编码速度最大化，这就成为新的工程约束，而非个人选择。",
+      "Thoughtworks撤退报告指出：LLM输出是非确定性的，且生成代码的速度远超人类阅读和审查的能力，因此期望逐行审查每一处差异已不现实。",
+      "解决办法不是放弃严谨性，而是将严谨性从代码审查迁移到规格说明和测试上——规格说明成为软件项目的新知识单元。",
+      "这必须是组织级决策而非团队级决策，因为Amdahl定律表明：若只加速编码而不重组组织流程，整体生产力不会有实质性提升。",
+      "具体方案：用标准化Markdown规格说明替代代码作为知识单元，产品负责人和工程师协作编写规格和测试用例，通过自动化PR检查验证代码与规格的一致性。"
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -416,8 +552,8 @@
     "extraction_status": "success",
     "id": "3e75a71c979f64af",
     "source_type": "community_discussion",
-    "tldr": "Freenet 发布去中心化 P2P 应用平台，无需服务器即可构建抗审查应用",
-    "objective_summary": "Freenet 团队发布基于小型世界网络（small-world network）的 P2P 去中心化应用平台。节点按环形拓扑组织，消息在数跳内路由至目标，可扩展至数百万节点。开发者可使用 Rust 和 TypeScript 构建应用，应用在用户浏览器中运行，无需云端服务器。",
+    "tldr": "Freenet 发布去中心化 P2P 应用平台，应用运行于浏览器、无服务器、不可被下架。",
+    "objective_summary": "Freenet 在 Hacker News 上展示其点对点去中心化应用平台，用户可在浏览器中运行无法被下架的应用，开发者可使用 Rust 和 TypeScript 构建并部署到全球网络，无需维护服务器或支付云费用。其底层采用按环形位置组织的小世界网络拓扑，消息在少数几跳内到达目标节点。",
     "event_type": "application_landing",
     "epistemic_status": "pr_statement",
     "entities": {
@@ -425,18 +561,65 @@
         "Freenet"
       ],
       "technologies": [
+        "peer-to-peer",
         "small-world network",
-        "P2P"
+        "Rust",
+        "TypeScript",
+        "decentralized applications"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "Freenet 采用小型世界网络架构，节点按环形位置组织，消息通过少量跳数即可高效到达目标节点。",
-      "该平台无需中心服务器，可扩展至数百万对等节点，所有通信和协作直接在节点间完成。",
-      "应用在用户浏览器中运行，外观与普通网站无异，但具备抗关闭、不追踪用户、完全 P2P 的特性。",
-      "开发者可使用 Rust 和 TypeScript 等熟悉工具构建应用，直接部署到全球网络中，无需维护服务器或支付云服务费用。"
+      "Freenet 是一个无需中心化服务器的点对点去中心化应用平台，旨在替代大型科技公司的云基础设施。",
+      "网络采用按环形位置组织的小世界拓扑结构，消息可在少数几跳内到达目标节点，支持百万级节点规模。",
+      "用户端应用直接在浏览器中运行，外观与普通网站无异，但不可被下架、不追踪用户且完全点对点通信。",
+      "开发者可使用 Rust 和 TypeScript 等熟悉工具构建应用，部署到全球网络后无需维护服务器或支付云账单。"
     ],
     "pipeline_stage": "fact_extracted"
+  },
+  {
+    "source_dir": "hackernews",
+    "title": "Hengefinder: Finding when the sun aligns with your street",
+    "source": "https://victoriaritvo.com/blog/hengefinder/",
+    "author": [
+      "[[evakhoury]]"
+    ],
+    "published": "2026-05-22",
+    "created": "2026-05-24",
+    "description": "Article URL: https://victoriaritvo.com/blog/hengefinder/ Comments URL: https://news.ycombinator.com/item?id=48241335 Points: 132 # Comments: 29",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "5dd4c28c55828390",
+    "source_type": "community_discussion",
+    "tldr": "一个开源工具 Hengefinder，可在任意地点计算日落与街道对齐的日期，灵感来自曼哈顿巨石阵现象。",
+    "objective_summary": "Victoria Ritvo 在 Recurse Center 期间开发了 Hengefinder，一个用于计算任意地点日落与街道完美对齐日期的工具。项目通过三个技术步骤实现：计算道路方位角（考虑地球曲率）、计算太阳日落方位角（用二分查找精确定位日轮接触地平线的时刻）、以及用两阶段搜索匹配两者。",
+    "event_type": "application_landing",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [
+        "Recurse Center"
+      ],
+      "technologies": [
+        "Astral",
+        "Python",
+        "atan2",
+        "binary search"
+      ],
+      "key_people": [
+        "Victoria Ritvo",
+        "John Pribyl"
+      ]
+    },
+    "key_logic_flow": [
+      "项目灵感来自曼哈顿巨石阵（Manhattanhenge）现象——每年两次日落与曼哈顿东西向街道网格完美对齐，人群聚集观看。",
+      "第一步计算道路方位角时，发现不能直接将经纬度差值代入 atan2，因为经度线在高纬度会聚，需用 cos(latitude) 缩放经度以统一单位。",
+      "第二步计算太阳方位角时，天文标准定义的日落是太阳完全沉入地平线以下，而 henge 需要日轮恰好接触地平线，因此采用边界二分查找寻找最后一个满足条件的时刻。",
+      "第三步匹配道路方位角与太阳方位角时，由于一年中太阳方位角曲线非单调，采用两阶段搜索：粗粒度 30 天采样识别可能错过对齐的区间，再细粒度逐日搜索精确定位。",
+      "最终产出 Hengefinder 网站供用户输入地址查询下一次 henge 日期，John Pribyl 进一步开发了移动端应用，将功能扩展至月球对齐（Sauron Henges）。"
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -454,8 +637,8 @@
     "extraction_status": "partial",
     "id": "5f5f9f550b9978a0",
     "source_type": "community_discussion",
-    "tldr": "科罗拉多州SB051年龄验证法案修正案豁免开源项目",
-    "objective_summary": "科罗拉多州立法机构对SB051法案提出修正，将开源项目从年龄验证要求中排除。该法案原要求在线服务实施年龄验证措施，修正后开源软件项目无需遵守该规定。",
+    "tldr": "科罗拉多州修订SB051年龄验证法案，将开源项目排除在适用范围之外。",
+    "objective_summary": "科罗拉多州立法机构对SB051年龄验证法案进行修订，新增豁免条款明确将开源项目排除在年龄验证义务之外。该修订在Hacker News上引发155票讨论，反映开源社区对年龄验证法规可能带来的合规负担的关切。",
     "event_type": "policy_and_safety",
     "epistemic_status": "verified_fact",
     "entities": {
@@ -464,12 +647,104 @@
       "key_people": []
     },
     "key_logic_flow": [
-      "科罗拉多州SB051法案是一项关于在线年龄验证的立法提案。",
-      "该法案经过修正后，明确将开源项目排除在年龄验证要求之外。",
-      "修正后的法案意味着开源软件开发者无需为其项目部署年龄验证机制。",
-      "该立法动态在Hacker News上引发讨论，获得155个点赞和45条评论。"
+      "科罗拉多州立法机构提出SB051法案，要求在线服务提供商实施年龄验证机制",
+      "开源社区担忧年龄验证要求会对开源项目造成不合理的合规负担和准入门槛",
+      "立法机构对SB051进行修订，新增豁免条款，明确将开源项目排除在法案适用范围之外",
+      "该修订在Hacker News上获得155个投票和45条评论，引发广泛讨论"
     ],
     "pipeline_stage": "fact_extracted"
+  },
+  {
+    "source_dir": "hackernews",
+    "title": "Time to talk about my writerdeck",
+    "source": "https://veronicaexplains.net/my-first-writerdeck/",
+    "author": [
+      "[[hggh]]"
+    ],
+    "published": "2026-05-23",
+    "created": "2026-05-24",
+    "description": "Article URL: https://veronicaexplains.net/my-first-writerdeck/ Comments URL: https://news.ycombinator.com/item?id=48250144 Points: 350 # Comments: 203",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "6d054060f496123f",
+    "source_type": "community_discussion",
+    "tldr": "将旧 System76 笔记本改装为基于 Debian tty 的离线无干扰写作设备，搭配 neovim/tmux/vimwiki 工具链。",
+    "objective_summary": "作者 Veronica 于 2026 年将一台六年前的 System76 Galago Pro 笔记本电脑改装为专用写作设备（writerdeck），通过安装 Debian Trixie 纯控制台模式（无 GUI）、neovim 编辑器、tmux 终端复用器、kmscon",
+    "event_type": "framework_tools",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [
+        "System76"
+      ],
+      "technologies": [
+        "Debian Trixie",
+        "neovim",
+        "tmux",
+        "kmscon",
+        "vimwiki",
+        "Syncthing",
+        "LUKS",
+        "acpi",
+        "light",
+        "network-manager",
+        "nm-tui",
+        "systemd",
+        "bash"
+      ],
+      "key_people": []
+    },
+    "key_logic_flow": [
+      "作者因注意力问题，决定将一台闲置六年的 System76 Galago Pro 笔记本改造为专用写作设备，利用其优秀键盘和磨砂屏幕的硬件优势",
+      "放弃桌面操作系统，选择 Debian Trixie 纯控制台模式安装，彻底移除浏览器和 GUI，打破桌面操作系统的肌肉记忆",
+      "安装 network-manager 和 nm-tui 以便偶尔联网备份文件，日常写作保持离线状态",
+      "安装 neovim 作为编辑器并配置 vimwiki 插件管理写作内容，替代传统桌面写作软件",
+      "通过 kmscon 实现终端字体缩放（Ctrl+/-），提升长时间写作的视觉舒适度",
+      "配置 tmux 状态栏显示电池电量（acpi）和屏幕亮度快捷键（light），并设置自动登录后自动启动 tmux + vimwiki 会话",
+      "通过 Syncthing 将 writerdeck 的 vimwiki 文件夹同步到服务器，实现写作内容的安全备份",
+      "使用约一周后已完成本篇博客文章、配套视频脚本及另一未来脚本的写作，验证了该方案的实际可用性"
+    ]
+  },
+  {
+    "source_dir": "hackernews",
+    "title": "The Art of Money Getting",
+    "source": "https://kk.org/cooltools/book-freak-210-the-art-of-money-getting/",
+    "author": [
+      "[[dxs]]"
+    ],
+    "published": "2026-05-23",
+    "created": "2026-05-24",
+    "description": "Article URL: https://kk.org/cooltools/book-freak-210-the-art-of-money-getting/ Comments URL: https://news.ycombinator.com/item?id=48247208 Points: 256 # Comments: 147",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "6d953819f9e6b88f",
+    "source_type": "community_discussion",
+    "tldr": "P.T. Barnum 1880年著作《赚钱的艺术》总结了20条基于一生经验的致富法则，核心为择业从天赋、避债如避疫、全力投入、诚信为本。",
+    "objective_summary": "1880年，70岁的P.T. Barnum将毕生商业经验浓缩为《赚钱的艺术》一书，提出20条致富法则。书中强调选择与天赋匹配的职业、避免债务侵蚀自由、做事必须全力以赴、诚信是长期声誉资产。该内容由Cool Tools Lab旗下Book Freak简报于2026年5月摘录发布。",
+    "event_type": "application_landing",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [
+        "Cool Tools Lab"
+      ],
+      "technologies": [],
+      "key_people": [
+        "P.T. Barnum"
+      ]
+    },
+    "key_logic_flow": [
+      "P.T. Barnum在70岁时将毕生商业经验写成《赚钱的艺术》，于1880年出版，书中包含20条敛财法则。",
+      "第一条法则强调选择与自身天赋匹配的职业，而非盲目追求高薪岗位，找到擅长的领域再深耕。",
+      "第二条法则警告债务如同瘟疫，会剥夺个人自由与自尊，核心原则是保持收入大于支出。",
+      "第三条法则要求做事必须全力以赴，半途而废的代价高昂，全情投入者终将领先。",
+      "第四条法则指出诚信是商人的核心资产，欺骗可能短期获利，但长期会摧毁客户信任与个人声誉。",
+      "文章由Cool Tools Lab的Book Freak简报发布，该公司同时运营Recomendo、Cool Tools网站等多个内容产品。"
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -487,10 +762,10 @@
     "extraction_status": "success",
     "id": "78046019b0a9d463",
     "source_type": "community_discussion",
-    "tldr": "批评 uv 包管理器在项目维护阶段的 CLI 用户体验问题，包括缺少独立 outdated 命令、默认无版本上限、升级命令繁琐。",
-    "objective_summary": "loopwerk.io 作者发文指出 Astral 的 uv 包管理器在项目维护阶段存在严重的 CLI 用户体验问题：缺少独立的 outdated 命令、默认依赖版本无上限导致升级不安全、升级命令需要重复指定 --upgrade-package 参数。",
+    "tldr": "uv包管理的维护阶段CLI体验糟糕：缺少outdated命令、默认版本约束不安全、更新命令语法繁琐。",
+    "objective_summary": "2026年5月，开发者通过博客文章系统批评Astral公司uv工具在项目维护阶段的包管理UX缺陷：缺乏专用outdated命令、默认版本约束无上限导致更新不安全、批量更新命令语法反人类，并与pnpm和Poetry进行对比。uv已引入--bounds预览功能作为补救，但尚未成为默认行为。",
     "event_type": "framework_tools",
-    "epistemic_status": "theoretical_claim",
+    "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
         "Astral"
@@ -498,17 +773,19 @@
       "technologies": [
         "uv",
         "pnpm",
-        "Poetry"
+        "Poetry",
+        "SemVer"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "uv 没有独立的 outdated 命令，必须使用 uv tree --outdated --depth 1，且输出包含所有顶层依赖而非仅过时的依赖列表。",
-      "uv 默认添加依赖时不设版本上限（如 pydantic>=2.13.4），允许大版本跳跃，更新不安全。",
-      "pnpm 和 Poetry 默认使用语义化版本约束（如 ^1.23.4 或 >=1.23.4,<2.0.0），更新默认安全。",
-      "uv 的升级命令 uv lock --upgrade 是核选项，会无差别升级所有包到最新版本，可能引入深层嵌套依赖的破坏性变更。",
-      "uv 的 --upgrade-package 参数需要为每个包重复指定，无法像 pnpm update pydantic httpx 那样批量简洁更新。",
-      "uv 已推出 --bounds major 预览选项用于设置版本上限，但目前仍为 opt-in 模式，非默认行为。"
+      "uv在项目初始化阶段体验优秀，但进入维护阶段后，检查过期包和升级操作的CLI体验明显落后于pnpm和Poetry",
+      "uv没有独立的`uv outdated`命令，用户必须使用`uv tree --outdated --depth 1`，且输出显示完整依赖树而非仅列出过期包，信息噪声大",
+      "uv添加依赖时默认不设置版本上限约束（如`pydantic>=2.13.4`），允许大版本号无限制突破，导致批量更新可能引入破坏性变更",
+      "pnpm和Poetry默认使用安全约束（`^1.23.4`或`>=1.23.4,<2.0.0`），确保更新不会跨越主版本号",
+      "`uv lock --upgrade`是核选项，会将所有包（包括深层嵌套依赖）升级到绝对最新版，忽略SemVer安全性",
+      "更新特定包时需为每个包重复书写`--upgrade-package`标志，而pnpm只需`pnpm update pkg1 pkg2 pkg3`",
+      "uv最近引入`--bounds major`预览功能可生成带主版本上限的安全约束，但需手动启用且非默认行为"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -528,26 +805,32 @@
     "extraction_status": "success",
     "id": "78f411ae4c2e9a10",
     "source_type": "community_discussion",
-    "tldr": "低视力用户介绍Kagi付费搜索引擎的无广告体验和可访问性自定义功能",
-    "objective_summary": "Veroniiiica（低视力用户）分享了从传统搜索引擎切换到Kagi付费搜索引擎的体验，详细介绍了Kagi的无广告搜索结果、搜索自定义工具（Lenses、Bangs、域名管理）以及面向低视力的可访问性设置（字体大小、主题、对齐方式等），并提供了在Chrome、Edge、Firefox等浏览器中设置",
+    "tldr": "低视力用户评测付费搜索引擎Kagi：无广告、高度可定制的无障碍搜索体验",
+    "objective_summary": "一位低视力用户因传统搜索引擎页面视觉杂乱（广告、AI摘要、自动播放内容）导致视觉疲劳，转而使用付费搜索引擎Kagi。Kagi通过用户订阅而非广告盈利，提供无广告搜索结果、Lenses过滤、域名屏蔽/提升、Bangs快捷搜索等功能，并支持字体大小、主题、URL展示等无障碍定制。",
     "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
         "Kagi"
       ],
-      "technologies": [],
-      "key_people": [
-        "Veroniiiica"
-      ]
+      "technologies": [
+        "search engine",
+        "ad-free search",
+        "Kagi Lenses",
+        "Kagi Bangs",
+        "Kagi Assistant",
+        "Small Web"
+      ],
+      "key_people": []
     },
     "key_logic_flow": [
-      "低视力用户Veroniiiica因传统搜索引擎结果页面视觉杂乱（AI摘要、广告、自动播放内容）导致视觉疲劳加重，转而使用Kagi付费搜索引擎。",
-      "Kagi是由用户订阅而非广告资助的付费搜索引擎，搜索结果页面无广告、无追踪、无赞助结果，靠质量而非SEO关键词排序。",
-      "Kagi提供多种订阅方案：试用版（100次免费搜索）、Starter（5美元/月，300次搜索）、Professional（10美元/月，无限搜索）、Ultimate（25美元/月，含Research模式AI助手），并有公平定价政策。",
-      "Kagi提供Lenses（筛选过滤器）、Bangs（快速跳转搜索）、域名屏蔽/提升/置顶等搜索自定义工具，并能整合博客和非商业性小型网络内容。",
-      "Kagi的可访问性设置包括主题（浅色/深色）、字体大小（Small到Larger）、结果对齐方式（左对齐/居中）、URL显示样式和位置等，可降低低视力用户的视觉疲劳。",
-      "Kagi可在Chrome、Edge、Firefox等主流浏览器中设为默认搜索引擎，支持浏览器扩展安装和手动配置两种方式。"
+      "作者作为低视力用户，在使用传统搜索引擎时因页面充满广告、AI摘要和自动播放内容而产生严重视觉疲劳，文本转语音等辅助策略无法解决浏览搜索结果时的困难",
+      "转向付费搜索引擎Kagi后获得显著改善——Kagi完全依赖用户订阅付费而非广告，搜索结果按质量而非SEO关键词排名，页面无广告、无赞助结果、无自动播放媒体",
+      "Kagi提供多档付费方案：免费试用（100次搜索）、Starter（$5/月，300次搜索）、Professional（$10/月，无限搜索）、Ultimate（$25/月，含Research模式AI助手），并实行未使用不计费的Fair Pricing政策",
+      "核心自定义工具包括：Lenses（按来源类型过滤结果的预设过滤器）、域名控制（屏蔽/降低/提升/置顶特定网站）、Bangs（通过!前缀快捷搜索特定网站）、搜索小部件可见性配置",
+      "Kagi搜索结果优先整合博客和非商业Small Web内容，避免低质量AI生成文章的泛滥，用户可以永久屏蔽低质量网站并优先展示可信来源",
+      "Kagi可在Chrome、Edge、Firefox、Safari等主流浏览器中设为默认搜索引擎，提供浏览器扩展和手动配置两种方式",
+      "外观设置提供无障碍定制：独立于移动端和桌面端的主题与字体大小设置、结果左对齐或居中、URL展示样式（完整URL或面包屑）、Favicon显示选项"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -567,28 +850,34 @@
     "extraction_status": "success",
     "id": "821a60b43f70e8c4",
     "source_type": "community_discussion",
-    "tldr": "Inkwell 开发者详述 App Store 审核困境：Apple 使用已失效的商标阻止应用上架。",
-    "objective_summary": "Manton Reece 于 2026 年 4 月 21 日将 Inkwell for iOS 提交至 Apple 审核，先后因内容举报机制、登录功能、收入模式、UI 设计、账户删除和商标冲突等条款被多次拒审。最大障碍是 Apple 认为 Inkwell 名称侵犯其已失效的商标，",
+    "tldr": "iOS应用Inkwell因Apple App Store审核条款中的历史商标争议被反复拒绝，已僵持一个月，Android版已通过Google审核。",
+    "objective_summary": "2026年4月21日，Micro.blog开发者Manton Reece将iOS阅读器应用Inkwell提交至Apple App Store审核。此后经历多次拒绝，涉及7条审核准则（内容举报、Sign in with Apple、内购、设计、账户删除、商标等）。",
     "event_type": "policy_and_safety",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
         "Apple",
         "Micro.blog",
-        "Google"
+        "Google",
+        "USPTO"
       ],
-      "technologies": [],
+      "technologies": [
+        "iOS",
+        "RSS",
+        "Android",
+        "Newton"
+      ],
       "key_people": [
         "Manton Reece"
       ]
     },
     "key_logic_flow": [
-      "Inkwell for iOS（Micro.blog 的 RSS 阅读器配套应用）于 2026 年 4 月 21 日提交至 Apple 审核，遭遇连续多次拒审。",
-      "Apple 以 1.2、2.1(a)、2.1(b)、3.1、4、5.1.1(v)、5.2.5 等多条审核准则要求修改，涉及内容举报、登录按钮修复、收入说明、UI 设计、账户删除功能等。",
-      "为满足 3.1 条款（避免应用内购买抽成），开发者移除了发帖、高亮等创作功能，并将应用仅在美国区上架。",
-      "主要障碍来自 5.2.5 条款：Apple 认为 Inkwell 名称侵犯其商标权，但该商标（2002 年 Mac OS X 手写识别功能）已被 USPTO 标注为死亡状态。",
-      "开发者已向 Apple 审核委员会上诉，仍在等待结果；同期 Android 版本已于 4 月通过 Google 审核无问题。",
-      "开发者批评 Apple 利用 iOS 应用分发控制权实施超出法律范围的商标限制。"
+      "Inkwell for iOS 于2026年4月21日提交至Apple App Store审核，至今已超过一个月仍未通过",
+      "审核过程中遭遇基于7条App Review Guideline的多次拒绝：1.2（缺少内容举报与用户屏蔽功能）、2.1(a)（Sign in with Apple存在技术问题）、2.1(b)（Apple询问商业模式）、3.1（未使用应用内购买）、4（设计问题）、5.1.1(v)（缺少账户删除功能）、5.2.5（商标争议）",
+      "开发者针对每条拒绝理由进行了代码修改：添加举报/屏蔽菜单、隐藏Sign in with Apple按钮、移除发布与注册功能、限制仅在美国区上架以利用Epic vs. Apple案后的规则差异、添加账户删除按钮",
+      "最关键的争议为5.2.5商标条款：Apple审核者发现Apple自身商标页面上列有\"Inkwell\"（源自2002年Mac OS X 10.2 Jaguar的手写识别功能），尽管该商标已被USPTO标记为\"dead\"且停用数十年，Apple员工甚至未听说过此功能",
+      "该名称在其他Inkwell相关应用中被App Store放行，Android版Inkwell也已于上月通过Google审核并上架",
+      "开发者已向App Review Board提出申诉并等待结果，质疑Apple利用iOS分发控制权在商标法律之外施加额外限制"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -608,32 +897,38 @@
     "extraction_status": "success",
     "id": "84ef61ea813b1bf9",
     "source_type": "community_discussion",
-    "tldr": "Firefox 148 起 SpiderMonkey 默认关闭 asm.js 优化，未来版本将完全移除。",
-    "objective_summary": "Mozilla 在 Firefox 148 中默认禁用 SpiderMonkey 的 asm.js 优化路径，计划在未来版本中彻底移除相关代码。asm.js 曾是 Mozilla 为在 Web 上运行原生速度代码而提出的方案，后成为 WebAssembly 的前身。官方建议仍在使用 asm.",
+    "tldr": "Firefox 148 默认禁用 asm.js 优化，计划后续版本彻底移除代码，建议开发者迁移至 WebAssembly。",
+    "objective_summary": "Mozilla 于 2026 年 5 月在 Firefox 148 中默认禁用了 SpiderMonkey 引擎的 asm.js 优化编译器 OdinMonkey，并计划在未来版本中彻底移除相关代码。asm.js 于 2013 年作为 NaCl/PNaCl 的 Web 原生替代方案推出，曾让",
     "event_type": "infrastructure_update",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
-        "Mozilla"
+        "Mozilla",
+        "Unity",
+        "Unreal"
       ],
       "technologies": [
         "asm.js",
         "WebAssembly",
-        "NaCl",
-        "PNaCl",
+        "SpiderMonkey",
         "OdinMonkey",
         "BaldrMonkey",
-        "RabaldrMonkey"
+        "RabaldrMonkey",
+        "NaCl",
+        "PNaCl",
+        "JavaScript",
+        "JIT"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "Firefox 148 起，SpiderMonkey 默认禁用 asm.js 优化，未来版本将完全移除相关代码。",
-      "asm.js 仍作为普通 JavaScript 子集通过常规 JIT 正常运行，不会导致现有网站崩溃。",
-      "asm.js 是 Mozilla 为回应 NaCl/PNaCl 而提出的方案，通过选取 JavaScript 严格静态类型子集实现接近原生的执行速度。",
-      "asm.js 于 2013 年在 Firefox 22 中发布，成功让 Unity 和 Unreal 等 C/C++ 项目首次通过标准 Web 技术运行在浏览器中。",
-      "asm.js 验证了 Web 技术可实现接近原生的运行速度，为后续 WebAssembly 在 Firefox 52 中的发布铺平了道路。",
-      "保留 asm.js 代码路径带来维护成本和额外攻击面，而 WebAssembly 已成功替代其功能，这是关闭 asm.js 优化的直接原因。"
+      "Firefox 148 起，SpiderMonkey 默认禁用 asm.js 优化编译器 OdinMonkey，并计划在未来版本中彻底移除相关代码。",
+      "现有 asm.js 代码不会损坏，因为它只是普通 JavaScript 的子集，仍可通过常规 JIT 编译器正常运行。",
+      "asm.js 于 2013 年在 Firefox 22 中发布，是一种可通过引擎即时识别并编译为原生代码的严格静态类型 JavaScript 子集，旨在回应 NaCl/PNaCl 提出的 Web 原生性能挑战。",
+      "asm.js 的成功让 Unity 和 Unreal 等游戏引擎首次将 C/C++ 代码库部署到 Web，其 Epic Citadel 演示仅用四天完成移植，证明了使用纯 Web 技术即可实现近原生速度。",
+      "这一概念验证直接催生了 WebAssembly，后者于数年后的 Firefox 52 中正式发布。",
+      "WebAssembly 已成功取代 asm.js，大部分使用场景已完成迁移；继续维护 asm.js 路径不仅增加维护工时，还扩大了 VM 的攻击面。",
+      "OdinMonkey 将被淘汰，其继任者 BaldrMonkey（WebAssembly 优化编译器）和 RabaldrMonkey（WebAssembly 基线编译器）将继续掌管 WebAssembly 编译管线。"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -653,8 +948,8 @@
     "extraction_status": "success",
     "id": "8ecb5ce2dd40da80",
     "source_type": "community_discussion",
-    "tldr": "Waymo 因无人出租车反复驶入积水路段，暂停亚特兰大等四城服务",
-    "objective_summary": "2026年5月，Waymo 无人驾驶出租车在亚特兰大驶入积水街道并被困约一小时，公司随后暂停亚特兰大、达拉斯、休斯顿和圣安东尼奥四城服务。此前 Waymo 已因积水问题发布软件召回，但尚未完成最终修复方案。NHTSA 和 NTSB 正就此及校车违规、1月撞伤儿童等多起事件展开调查。",
+    "tldr": "Waymo因robotaxi无法应对暴雨洪水，已在亚特兰大等四座城市暂停服务，NHTSA正密切关注此事。",
+    "objective_summary": "2026年5月21日前后，Waymo因robotaxi在暴雨中驶入被淹道路，相继暂停亚特兰大、圣安东尼奥、达拉斯和休斯顿四城的自动驾驶服务。公司上周已针对洪水风险发起软件召回，但未完成最终修复方案，NHTSA表示已介入调查。",
     "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
@@ -662,23 +957,23 @@
         "Waymo",
         "NHTSA",
         "NTSB",
-        "Bloomberg News",
-        "TechCrunch",
-        "National Weather Service"
+        "National Weather Service",
+        "Bloomberg News"
       ],
       "technologies": [
-        "自动驾驶",
-        "Robotaxi"
+        "autonomous driving",
+        "robotaxi",
+        "software recall"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "Waymo 一辆无人出租车5月20日在亚特兰大驶入积水道路并被困约一小时，车辆后被拖离现场。",
-      "Waymo 因积水问题暂停亚特兰大、达拉斯、休斯顿和圣安东尼奥四个城市的服务。",
-      "Waymo 上周已发布软件召回，但承认尚未开发出避免积水区域的最终修复方案，仅部署了针对高风险时段和路段的限制措施。",
-      "亚特兰大暴雨积水在 National Weather Service 发布警报之前就已形成，超出 Waymo 当前预警体系的覆盖范围。",
-      "NHTSA 正就此事件与 Waymo 沟通，并已于5月15日向 Waymo 发出第二份文件请求，认为其初步回应仍需补充数据。",
-      "除积水问题外，Waymo 还面临校车违规（去年未完全修复）和1月23日圣莫尼卡撞伤儿童等多起事件的 NHTSA 和 NTSB 双线调查。"
+      "Waymo的robotaxi在亚特兰大暴雨中驶入被淹街道并被困约一小时，随后被拖离现场。",
+      "Waymo已因同一洪水问题在圣安东尼奥、达拉斯和休斯顿暂停服务，累计四座城市停运。",
+      "Waymo上周已向NHTSA发起软件召回，但承认尚未完成避免洪水区域的\"最终修复方案\"，仅推送了限制性措施。",
+      "亚特兰大暴雨来势迅猛，在国家气象局发布山洪预警之前就已发生洪水，Waymo依赖的预警信号未能及时触发。",
+      "NHTSA表示已知悉此次事件，正与Waymo沟通，如有必要将采取进一步行动。",
+      "这不是Waymo首次召回后问题复发——去年robotaxi非法超越校车的问题经修复后仍持续出现，NHTSA和NTSB正对此进行双重调查。"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -698,49 +993,93 @@
     "extraction_status": "success",
     "id": "8f42139add497894",
     "source_type": "community_discussion",
-    "tldr": "西雅图警方运营的 Seattle Shield 情报共享网络将 Facebook、亚马逊、ICE 等公私机构连接至反恐监控体系，引发隐私担忧。",
-    "objective_summary": "Prism Reports 通过公开记录请求披露，西雅图警察局自 2009 年起运营 Seattle Shield 情报共享网络，成员包括 Facebook、亚马逊、ICE、FBI 等公私机构。该网络在反恐名义下收集抗议活动情报，2025 年报告几乎全部聚焦抗议与交通延误。",
+    "tldr": "西雅图警方自2009年起运营Seattle Shield情报共享网络，连接私企与联邦机构，实际主要用于监控抗议活动而非反恐。",
+    "objective_summary": "调查报道揭露西雅图警方自2009年起运营Seattle Shield公私情报共享网络，成员包括Facebook、Amazon、FBI、DHS、ICE及全国多家执法机构。2020-2025年间的报告几乎全部涉及抗议活动监控，而非其所宣称的反恐目的。",
     "event_type": "policy_and_safety",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
-        "Seattle Police Department",
         "Facebook",
         "Amazon",
-        "ICE",
-        "FBI",
-        "DHS",
-        "NYPD",
-        "United Nations",
-        "Global Shield Network",
         "Seattle Theatre Group",
-        "American Civil Liberties Union of Washington",
         "Church of Scientology",
-        "U.S. Navy",
-        "Washington State Military Department",
-        "Knight First Amendment Institute",
-        "The Intercept"
+        "Global Shield Network",
+        "NYPD Shield",
+        "FBI",
+        "Department of Homeland Security",
+        "ICE"
       ],
       "technologies": [],
       "key_people": [
-        "Phil Mocek",
         "Erin Nicholson",
+        "Phil Mocek",
         "Austin White",
-        "William Edwards",
         "Terry Albury",
-        "Amy Alexander",
-        "Rachel Liuzzi"
+        "William Edwards",
+        "Donald Trump"
       ]
     },
     "key_logic_flow": [
-      "Seattle Shield 是西雅图警察局自 2009 年起运营的私有情报共享网络，成员涵盖 Facebook、亚马逊、ICE、FBI 等公私机构，以反恐为名义运作。",
-      "Prism Reports 通过公开记录请求获取了截至 2020 年的完整成员名单以及 2020–2025 年间的通报文件，发现 2025 年的通报几乎全部涉及抗议活动和潜在交通延误。",
-      "该网络鼓励私企提交可疑活动报告，信息汇入全国性执法监控体系，可能被用于将受宪法保护的抗议言论标记为恐怖主义威胁。",
-      "长期隐私活动人士 Phil Mocek 指出，该网络缺乏有效的监督、追踪和审计机制，信息共享路径不透明。",
-      "Seattle Shield 效仿 2005 年 9/11 后成立的 NYPD Shield 模式，各地独立运营，由 Global Shield Network 作为松散联盟串联。",
-      "Prism 未发现 Seattle Shield 曾公开宣称其情报直接导致任何恐怖主义逮捕的证据，FBI 拒绝确认该网络是否曾促成恐怖主义相关逮捕。"
+      "Seattle Shield于2009年成立，模仿NYPD Shield（2005年创立，借鉴FBI的InfraGard）模式，名义上旨在通过公私信息共享预防恐怖主义。",
+      "该网络由西雅图警方运营，Erin Nicholson警官管理，被描述为一项\"无资金支持的项目\"，成员包括FBI、DHS、ICE、Facebook、Amazon及纽约、明尼苏达等多地执法机构。",
+      "Prism审查了2020年至2025年间数十份Seattle Shield报告，发现这些报告几乎全部涉及抗议活动及抗议可能导致的交通延误，而非反恐内容。",
+      "2025年10月的一封邮件将哈马斯袭击以色列两周年纪念日与\"本土暴力极端分子\"威胁挂钩，并将抗议活动中对某科技公司CEO住所的涂鸦列为潜在威胁事件。",
+      "隐私活动人士Phil Mocek自2012年起追踪该网络，指出其缺乏任何形式的监督、问责或审计机制，且西雅图市政府与ICE之间的信息共享令人担忧。",
+      "2025年秋季特朗普签署的国家安全总统备忘录将抗议言论列为恐怖主义\"迹象\"，Mocek警告Seattle Shield的信息可能足以将抗议者标记为\"极左国内恐怖分子\"。",
+      "前FBI特工Terry Albury将该网络比作\"全景监狱\"——通过广布监视名单制造寒蝉效应，使公众时刻感觉被监控。"
     ],
     "pipeline_stage": "fact_extracted"
+  },
+  {
+    "source_dir": "hackernews",
+    "title": "Amazon Web Services – Four Years and Out",
+    "source": "https://www.adventuresinoss.com/aws-four-years/",
+    "author": [
+      "[[RyeCombinator]]"
+    ],
+    "published": "2026-05-24",
+    "created": "2026-05-24",
+    "description": "Article URL: https://www.adventuresinoss.com/aws-four-years/ Comments URL: https://news.ycombinator.com/item?id=48254475 Points: 103 # Comments: 16",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "9141d95c533aa509",
+    "source_type": "community_discussion",
+    "tldr": "前AWS开源社区联络人离职，揭露公司GenAI战略转向导致客户关注丧失与组织文化恶化",
+    "objective_summary": "一名在AWS工作四年的开源社区联络人员于2026年5月被解雇，回顾了其2022年入职以来AWS的组织变迁：直属经理David Nalley晋升后失去有效指导、公司全面转向GenAI导致客户焦点偏移、2025年10月和2026年1月两轮大规模裁员、以及个人健康因工作压力恶化。",
+    "event_type": "application_landing",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [
+        "Amazon Web Services",
+        "Amazon",
+        "Sun Microsystems",
+        "Dell"
+      ],
+      "technologies": [
+        "Generative AI",
+        "S3",
+        "EC2",
+        "RDS",
+        "cloud computing",
+        "open source"
+      ],
+      "key_people": [
+        "David Nalley",
+        "Cory Doctorow",
+        "Jay Clapsadle"
+      ]
+    },
+    "key_logic_flow": [
+      "作者于2022年受David Nalley招募加入AWS的开源战略与营销团队（OSSM），负责在开源社区中改善AWS形象并充当商业开源客户联络人",
+      "2025年David Nalley因业绩出色晋升为AWS开发者体验部门负责人，作者与其直接互动骤降至几乎为零，组织归属感减弱",
+      "同期AWS战略全面且急切地转向GenAI，内部推行用AI生成邮件摘要、会议演示等内容，作者认为这背离了对客户的真正关注",
+      "亚马逊将多数员工视为可替换的 fungible 资源，与IT行业依赖长期积累的制度知识这一特性存在根本冲突",
+      "2025年10月和2026年1月AWS发生两轮大规模裁员，后者影响多位作者的同事好友，导致工作压力严重损害其身体健康",
+      "作者在2026年5月被解雇，视其为一种解脱，并计划回归开源领域，同时对GenAI时代开源精神能否存续表达深切忧虑"
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -758,21 +1097,23 @@
     "extraction_status": "success",
     "id": "92fcd09782093e71",
     "source_type": "community_discussion",
-    "tldr": "三星芯片员工因AI利润飙升，人均获约34万美元奖金",
-    "objective_summary": "三星电子因AI业务利润大幅增长，向其芯片部门员工发放人均约34万美元的奖金。该消息由Quartz于2026年5月21日报道。",
+    "tldr": "三星芯片部门因AI利润飙升，向员工发放平均34万美元的绩效奖金",
+    "objective_summary": "三星电子芯片业务受AI驱动的半导体需求激增推动，利润大幅增长，公司据此向芯片部门员工发放平均约34万美元的绩效奖金。具体发放时间、覆盖范围及详细分配方案因文章正文被Cloudflare安全防护拦截而无法确认。",
     "event_type": "capital_movement",
     "epistemic_status": "pr_statement",
     "entities": {
       "companies": [
-        "Samsung"
+        "Samsung Electronics"
       ],
       "technologies": [],
       "key_people": []
     },
     "key_logic_flow": [
-      "三星电子的AI相关芯片业务利润大幅增长，推动公司业绩提升。",
-      "三星决定向芯片部门员工发放人均约34万美元的绩效奖金。",
-      "该奖金金额显著高于行业平均水平，反映了AI芯片需求的强劲增长。"
+      "三星电子的芯片业务因全球AI算力需求爆发而利润飙升",
+      "公司将AI带动的超额利润以绩效奖金形式回馈给芯片部门员工",
+      "员工平均获得的奖金额度为34万美元",
+      "此次奖金发放反映了AI产业繁荣对上游半导体厂商的直接财务传导效应",
+      "文章原文因目标网站启用Cloudflare防护而无法抓取，以上事实仅基于标题推断"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -792,8 +1133,8 @@
     "extraction_status": "success",
     "id": "968cf0450120cd8b",
     "source_type": "community_discussion",
-    "tldr": "Spotify 推出 Reserved 功能，为超级粉丝预留演唱会门票。",
-    "objective_summary": "Spotify 在投资者日宣布推出\"Reserved\"功能，为艺术家的付费订阅用户预留两张演唱会门票，粉丝可获一天购买窗口。Spotify 与 Live Nation 签署多年合作协议，通过流媒体数据识别核心粉丝。该功能于 2026 年夏在美国率先上线。",
+    "tldr": "Spotify推出Reserved功能，根据用户收听数据为超级粉丝预留演唱会门票",
+    "objective_summary": "Spotify在投资者日宣布推出Reserved功能，将于2026年夏季在美国上线，与Live Nation达成多年合作，通过用户的流媒体播放、分享等行为识别忠实粉丝并为其预留最多两张门票，中选粉丝享有一天购票窗口。同期还发布了Studio桌面应用并与UMG签署AI翻唱授权协议。",
     "event_type": "application_landing",
     "epistemic_status": "pr_statement",
     "entities": {
@@ -802,16 +1143,19 @@
         "Live Nation",
         "UMG"
       ],
-      "technologies": [],
+      "technologies": [
+        "AI covers",
+        "AI remixes"
+      ],
       "key_people": []
     },
     "key_logic_flow": [
-      "Spotify 在投资者日宣布推出\"Reserved\"功能，为付费用户的超级粉丝预留演唱会门票。",
-      "Spotify 与 Live Nation 签署了多年合作协议，共同推进该票务预留计划。",
-      "Spotify 通过流媒体播放次数、分享和其他用户行为数据识别艺术家最忠实的粉丝。",
-      "被选中的粉丝可获最多两张门票购买资格，并有一整天的购买窗口期。",
-      "Spotify 承认超级粉丝数量远超可用座位，并非每位粉丝都能获得购票机会。",
-      "Spotify 还发布了桌面应用 Studio by Spotify Labs，并与 UMG 达成新授权协议支持 AI 翻唱和混音。"
+      "Spotify在投资者日宣布推出Reserved门票预留功能，计划于2026年夏季在美国率先上线",
+      "该功能与Live Nation达成多年合作协议，由Spotify根据用户的流媒体播放量、分享行为等数据识别艺人的忠实粉丝",
+      "被选中的超级粉丝可获得最多两张门票的预留资格，并在一天内完成购买",
+      "Spotify承认超级粉丝数量远超巡演座位数，因此并非所有粉丝都能获得购票邀请",
+      "Spotify同期还发布了Studio by Spotify Labs桌面应用，用于生成个性化播客和播放列表",
+      "Spotify与UMG签署了新的授权协议，允许订阅用户使用UMG旗下部分艺人的作品制作AI翻唱和混音"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -831,9 +1175,9 @@
     "extraction_status": "success",
     "id": "9903597976374477",
     "source_type": "community_discussion",
-    "tldr": "Phosphene 开源发布，逆向苹果私有框架实现 macOS 视频壁纸引擎。",
-    "objective_summary": "开发者 @kageroumado 逆向苹果私有 WallpaperExtensionKit 框架，构建并开源了 Phosphene——一款 macOS Tahoe 菜单栏视频壁纸引擎，支持 MP4/MOV 文件作为桌面和锁屏壁纸，具备多显示器、功耗感知播放、无间隙循环等特性。",
-    "event_type": "framework_tools",
+    "tldr": "开发者逆向工程 Apple 私有框架，开源了 macOS Tahoe 原生视频壁纸引擎 Phosphene",
+    "objective_summary": "开发者 kageroumado 于 2026 年开源了 Phosphene，一个基于 Apple 私有框架 WallpaperExtensionKit 的 macOS Tahoe 视频壁纸引擎。通过 dlopen 动态加载和 Mirror 反射技术绕过 API 限制，",
+    "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
@@ -842,22 +1186,23 @@
       "technologies": [
         "WallpaperExtensionKit",
         "AVSampleBufferDisplayLayer",
+        "AVFoundation",
         "XPC",
         "SwiftUI",
-        "AVAssetReader",
+        "CAContext",
         "HEVC"
       ],
       "key_people": [
-        "@kageroumado"
+        "kageroumado"
       ]
     },
     "key_logic_flow": [
-      "Phosphene 通过 dlopen 加载苹果私有的 WallpaperExtensionKit 框架，利用 Mirror 运行时反射与 XPC 类型通信，实现视频壁纸播放。",
-      "项目包含菜单栏应用和壁纸扩展两部分，扩展运行在系统 WallpaperAgent 进程中，通过 XPC 接收 acquire/update/invalidate/snapshot 调用。",
-      "视频渲染使用 AVSampleBufferDisplayLayer 替代 AVPlayerLayer（后者在远程 CAContext 中静默失败），通过预加载下一循环和 PTS 偏移实现无间隙循环。",
-      "PlaybackPolicy 根据热状态、电池电量、演示模式、窗口遮挡等输入动态将播放质量调整为 full/reduced/minimal/paused 四档。",
-      "项目支持多显示器独立壁纸、自适应变体渲染、锁屏渐入渐出过渡、窗口遮挡暂停以及菜单栏控制等高级特性。",
-      "该项目最初为商业项目，因市场竞争激烈而转为开源发布，基于 MIT 许可证。"
+      "Phosphene 通过 dlopen 动态加载 Apple 私有框架 WallpaperExtensionKit，并使用 Swift Mirror 反射机制解析未公开的 XPC 请求类型，从而注册为系统级壁纸提供者",
+      "应用端（Phosphene.app）作为 SwiftUI 菜单栏应用，负责视频库管理、元数据编辑，以及通过 VideoOptimizationService 转码低分辨率变体",
+      "扩展端（PhospheneExtension.appex）在系统 WallpaperAgent 进程中运行，使用 AVAssetReader 手动驱动 AVSampleBufferDisplayLayer 解码管线，以偏移 PTS/DTS 的方式实现跨循环边界的无抖动无缝循环",
+      "PlaybackPolicy 模块将热状态、电池电量、电源模式、Game Mode、演示模式等多维输入归约为 full/reduced/minimal/paused 四档播放策略，渲染器在每次状态变化时即时应用",
+      "运行时通过检测 NSXPCCoder 子类进行方法调配（swizzle），解决系统快照编码器静默失败导致锁屏画面变灰的问题",
+      "项目以 MIT 协议开源，原为商业项目，因 macOS 视频壁纸市场竞争超出预期而转为开源"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -877,8 +1222,8 @@
     "extraction_status": "success",
     "id": "9bb872591765732b",
     "source_type": "community_discussion",
-    "tldr": "Google在搜索中测试Gemini驱动的AI广告新格式，并扩展Direct Offers试点",
-    "objective_summary": "Google于2026年5月宣布在搜索中测试基于Gemini的对话式发现广告和突出回答两种新格式，推出AI购物广告和Business Agent for Leads，并扩展Direct Offers试点支持促销捆绑、原生结账和旅游场景。",
+    "tldr": "Google 在 AI Mode 中测试由 Gemini 驱动的新广告格式，并扩展 Direct Offers 试点，覆盖购物、线索生成和旅行场景。",
+    "objective_summary": "Google 于 2026 年 5 月在官方博客宣布，正在 Google Search 和 AI Mode 中测试多项由 Gemini 模型驱动的新广告格式，包括对话式发现广告、高亮答案广告、AI 购物广告和线索业务代理；同时扩展 Direct Offers 试点，",
     "event_type": "application_landing",
     "epistemic_status": "pr_statement",
     "entities": {
@@ -886,28 +1231,81 @@
         "Google",
         "Chewy",
         "Gap",
-        "L'Oreal",
+        "L'Oréal",
         "Booking",
         "Expedia"
       ],
       "technologies": [
         "Gemini",
+        "AI Mode",
+        "Universal Commerce Protocol",
+        "AI Brief",
         "AI Max for Search",
         "AI Max for Shopping",
-        "Performance Max",
-        "Universal Commerce Protocol"
+        "Performance Max"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "Google正在搜索AI模式中测试两种由Gemini构建的新广告格式：对话式发现广告（回答用户具体问题并生成定制创意）和突出回答（在AI推荐列表中展示高相关性广告）。",
-      "两种新广告格式均包含独立的AI解释器，Gemini模型会评估并综合产品信息，显示在广告素材旁以提升透明度。",
-      "Google即将推出AI购物广告，当用户搜索产品时，Gemini会自动拉取最相关的商品并生成定制解释器说明为何该产品是合适选择。",
-      "Google推出Business Agent for Leads，将智能品牌代理嵌入广告中，用户可点击聊天按钮基于商家网站内容获得即时回答以产生潜在客户。",
-      "自2026年1月启动以来，Direct Offers试点已有Chewy、Gap和L'Oreal等品牌参与，现扩展支持促销捆绑、为UCP商户提供原生结账集成以及旅游合作伙伴（如Booking和Expedia）的旅行优惠。",
-      "Direct Offers将直接在AI模式的响应中自然呈现，使折扣信息在用户浏览选项时更易于发现。"
+      "Google 在 AI Mode 中测试两种新广告格式：Conversational Discovery ads 根据用户具体问题生成定制化广告创意，Highlighted Answers 将相关广告以推荐列表形式嵌入 AI Mode 回答中",
+      "两种新广告格式均包含由 Gemini 独立生成的 AI 解释器，对产品进行客观评估并展示在广告创意旁，同时明确标注为「Sponsored」以保障透明度",
+      "Google 将 AI 广告扩展至常规搜索，推出 AI-powered Shopping ads，由 Gemini 为商品即时生成定制化推荐理由",
+      "推出 Business Agent for Leads 广告格式，在广告内嵌入基于 Gemini 的智能品牌代理，用户可通过聊天获取即时回答完成线索转化，替代静态表单",
+      "Direct Offers 试点自 2026 年 1 月启动后扩展升级：支持促销捆绑、UCP 商家原生结账集成、旅行合作伙伴（Booking、Expedia）的优惠展示",
+      "Google 建议广告主使用 AI Max for Search、AI Max for Shopping 和 Performance Max 作为基础投放策略，以充分利用新广告格式"
     ],
     "pipeline_stage": "fact_extracted"
+  },
+  {
+    "source_dir": "hackernews",
+    "title": "80386 microcode disassembled",
+    "source": "https://www.reenigne.org/blog/80386-microcode-disassembled/",
+    "author": [
+      "[[nand2mario]]"
+    ],
+    "published": "2026-05-23",
+    "created": "2026-05-24",
+    "description": "Article URL: https://www.reenigne.org/blog/80386-microcode-disassembled/ Comments URL: https://news.ycombinator.com/item?id=48247004 Points: 241 # Comments: 46",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "a10ea9d96a9881b2",
+    "source_type": "community_discussion",
+    "tldr": "独立研究者团队从80386芯片显微图像中提取并反汇编了全部微码，发现215个入口点和一处潜伏40余年的IO权限位图处理漏洞。",
+    "objective_summary": "在8086微码反汇编成果发表后，Ken Shirriff提供了80386微码ROM的高分辨率芯片图像（94720比特）。研究者Daniel Balsom（GloriousCow）、Smartest Blob等人利用图像处理、神经网络和人工辅助自动化，从芯片照片中提取并交叉验证了二进制数据。",
+    "event_type": "framework_tools",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [],
+      "technologies": [
+        "80386",
+        "microcode ROM",
+        "PLA",
+        "binary blob extraction",
+        "image processing",
+        "neural networks",
+        "x86 microcode",
+        "protection test PLA",
+        "barrel shifter"
+      ],
+      "key_people": [
+        "Ken Shirriff",
+        "Daniel Balsom (GloriousCow)",
+        "Smartest Blob",
+        "nand2mario",
+        "reenigne"
+      ]
+    },
+    "key_logic_flow": [
+      "Ken Shirriff在作者发布8086微码反汇编成果后，提供了一张80386微码ROM的高分辨率芯片显微图像，包含94720比特数据，远超8086的10752比特。",
+      "GloriousCow与Smartest Blob结合图像处理、神经网络和人工辅助自动化方法，在数日内从芯片图像中提取出二进制数据并完成交叉验证。",
+      "团队通过识别微码中的规律模式，逐步将二进制数据重组为μ-op维度矩阵，确定μ-op读取顺序，并划分出源/目标寄存器、ALU第二输入、指令结束标记等字段。",
+      "Ken Shirriff通过追踪80386芯片上的物理走线和逻辑电路，帮助团队理解微码与乘法/除法硬件、桶形移位器、保护测试单元等加速器之间的接口关系。",
+      "反汇编结果显示80386微码有215个入口点（8086仅60个），微码覆盖每一条指令的执行，仅有一段未使用例程（0x849-0x856），且发现一处IO权限位图检查可能遗漏4字节端口访问最后一个字节的安全漏洞，该漏洞可能已存在超过40年。",
+      "完整反汇编成果已发布在GitHub上的x86 microcode仓库中，nand2mario基于该成果撰写了多篇技术博客进行解读。"
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -925,9 +1323,9 @@
     "extraction_status": "success",
     "id": "aa07b24b2785a328",
     "source_type": "community_discussion",
-    "tldr": "Google 在 I/O 2026 强制推送 Antigravity 2.0，旧版 IDE 被替换且无法共存。",
-    "objective_summary": "Google 在 I/O 2026 发布 Antigravity 2.0 对话式版本，通过自动更新强制替换用户已有的 Antigravity IDE。新旧版本无法共存，旧版聊天记录和设置被清除。用户需完全卸载所有相关文件后才能重新安装旧版 IDE。",
-    "event_type": "application_landing",
+    "tldr": "Google 在 I/O 2026 后将 Antigravity IDE 强制升级为 2.0 对话式界面，覆盖原有安装且两版本互斥，",
+    "objective_summary": "2026 年 Google I/O 发布 Antigravity 2.0，从 IDE 转变为纯对话式编程工具，并通过后台自动更新覆盖用户已有安装。新旧版本因路径冲突无法共存，用户只能通过彻底清除 2.0 二进制文件后重装旧版 IDE 来恢复。",
+    "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
@@ -935,17 +1333,18 @@
       ],
       "technologies": [
         "Antigravity",
-        "Cursor"
+        "Antigravity 2.0",
+        "Google AI Ultra"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "Google 在 I/O 2026 发布了 Antigravity 2.0，以独立的 Codex 风格对话式界面取代了原有的 IDE 形态。",
-      "Antigravity 2.0 通过自动更新强制替换了用户已有的旧版 Antigravity IDE，导致原有工作计划编程环境完全消失。",
-      "用户尝试下载独立安装包来恢复旧版 IDE，但 2.0 版本重写了默认应用程序路径，新旧版本无法同时安装和运行。",
-      "用户只能彻底清除机器上所有 Antigravity 相关文件后，才能成功安装旧版 IDE。",
-      "强制更新导致用户的聊天历史记录和设置被清空，虽然遗留了一个备份文件夹，但作者暂无时间恢复。",
-      "作者批评 Google 通过后台更新偷偷替换软件的行为越过了合理更新的界限，计划寻找关闭自动更新的方法。"
+      "Google 在 I/O 2026 发布 Antigravity 2.0，将其从 IDE 形态转变为类似 Codex 的纯对话式编程体验",
+      "新版通过后台自动更新覆盖了用户已有的 Antigravity IDE 安装，原有 IDE 界面被替换为单一对话提示框",
+      "Google 虽提供了旧版 IDE 的独立下载包，但因 2.0 版本会强制重写默认应用路径，两个版本无法同时运行",
+      "用户的唯一恢复方案是完全清除机器上所有 Antigravity 相关文件，然后干净安装旧版 IDE 安装包",
+      "强制更新和清除过程导致用户聊天历史与设置丢失，仅保留一个名为 antigravity-backup 的备份文件夹",
+      "作者批评 Google 通过后台更新静默替换完全不同产品形态的做法，认为这越过了从便利升级到重大困扰的界限"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -965,24 +1364,33 @@
     "extraction_status": "partial",
     "id": "af7878dd3dbdb2e2",
     "source_type": "community_discussion",
-    "tldr": "USNI 海军历史杂志文章讲述钱学森——美国失去、中国获得导弹天才的历史故事。",
-    "objective_summary": "美国海军研究所（USNI）《海军历史》杂志2025年12月号发表专题文章，回顾钱学森（Hsue-Shen Tsien）的生平，聚焦其作为导弹科学家从美国流向中国的历史过程及其对两国导弹技术的深远影响。",
-    "event_type": "policy_and_safety",
+    "tldr": "USNI《海军历史》刊文回顾钱学森从美国导弹先驱到中国航天之父的传奇经历，称其为美国失去、中国获得的导弹天才。",
+    "objective_summary": "2025年12月，美国海军学会（USNI）旗下《海军历史》杂志发表专题文章，梳理钱学森的生平轨迹：早年作为加州理工学院喷气推进实验室（JPL）联合创始人参与美国早期火箭研究，后在红色恐慌中被剥夺安全许可并遭驱逐，1955年返回中国后领导导弹与航天事业，成为中国火箭技术奠基人。",
+    "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
-        "US Naval Institute (USNI)"
+        "US Naval Institute",
+        "Jet Propulsion Laboratory",
+        "Caltech",
+        "MIT"
       ],
       "technologies": [
-        "弹道导弹技术"
+        "ballistic missile",
+        "rocketry",
+        "hypersonics"
       ],
       "key_people": [
-        "Qian Xuesen (Hsue-Shen Tsien)"
+        "Qian Xuesen",
+        "Theodore von Kármán"
       ]
     },
     "key_logic_flow": [
-      "美国海军研究所《海军历史》杂志2025年12月号刊登了关于钱学森的专题文章。",
-      "文章标题明确指出钱学森是"
+      "美国海军学会（USNI）在2025年12月《海军历史》杂志上刊发钱学森专题文章，标题直指其为'美国失去、中国获得的导弹天才'",
+      "文章追溯钱学森早年在美国的学术与工程成就，包括在加州理工学院与冯·卡门共同创立喷气推进实验室（JPL），深度参与美国早期火箭与导弹研究",
+      "冷战时期的红色恐慌导致钱学森被怀疑为共产主义同情者，其安全许可被吊销，随后被软禁并最终于1955年通过换俘协议遣返中国",
+      "钱学森返回中国后主导建立导弹与航天工业体系，领导东风导弹系列和长征运载火箭的研制，被尊为中国航天之父",
+      "文章将钱学森案定性为美国在人才战略上的重大失误——驱逐一位顶级科学家最终加速了中国战略武器能力的崛起"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -1002,28 +1410,81 @@
     "extraction_status": "success",
     "id": "b712f3b78f44dd93",
     "source_type": "community_discussion",
-    "tldr": "批评将AI生成的长篇文本直接粘贴到日常对话中，认为这会摧毁沟通本身。",
-    "objective_summary": "作者指出，人们将AI生成的长篇回答粘贴到即时通讯或邮件中，替代原本一句话就能表达的人类回复。这种行为浪费接收者时间、扼杀对话、以帮助为名行攻击之实。作者主张用AI让表达更清晰而非更冗长。",
-    "event_type": "policy_and_safety",
+    "tldr": "在对话中粘贴AI生成的长篇文本破坏交流媒介，窃取时间并压制对话，AI应让思考更清晰而非更长。",
+    "objective_summary": "一篇评论文章指出，人们在聊天或邮件中将AI生成的长篇回复粘贴到本应一句话回答的场景中，破坏了人类交流媒介本身。作者认为这种行为窃取接收者时间、压制双向对话，并引用Jean Baudrillard的名言指出信息越多意义越少的悖论。",
+    "event_type": "application_landing",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
-        "AI",
-        "ChatGPT"
+        "ChatGPT",
+        "AI-generated text"
       ],
       "key_people": [
         "Jean Baudrillard"
       ]
     },
     "key_logic_flow": [
-      "将AI生成的长篇文本直接粘贴到聊天或邮件中，替代人类本应一句话表达的回复，破坏了沟通媒介本身的特性。",
-      "接收方如果想看AI回答会直接去问ChatGPT，他们找你是为了你的人类判断，而非一份AI文档。",
-      "AI长篇回复窃取接收方时间，对方需要花大量精力从文本中提取本该直给的一句话答案。",
-      "即使回答技术上正确，但格式本身对人际沟通充满敌意，会扼杀对话，让接收者无法回应、反驳或澄清。",
-      "AI生成的长篇文本本质上是伪装成帮助的武器，应该用AI让表达更清晰而非更冗长，让AI辅助思考而非替代思考。"
+      "将AI生成的长篇文本粘贴到聊天或邮件中，破坏了人类以简短语句交流的媒介特性",
+      "对方问一个简单问题，却收到一份长篇分析文档，这种格式与人类自然沟通方式相悖",
+      "接收者被迫花大量时间从中提取本该一句话给出的答案，时间被窃取",
+      "长篇AI文本成为对话杀手——对方无法回复、无法反驳、无法澄清，压制了双向交流",
+      "正确的使用方式是让AI让思维更清晰而非更长，用它来打磨思考而非替代思考",
+      "引用Jean Baudrillard的观点：信息越来越多，意义却越来越少，揭示AI滥用导致的沟通异化"
     ],
     "pipeline_stage": "fact_extracted"
+  },
+  {
+    "source_dir": "hackernews",
+    "title": "Wake up! 16b",
+    "source": "https://hellmood.111mb.de/wake_up_16b_writeup.html",
+    "author": [
+      "[[MaximilianEmel]]"
+    ],
+    "published": "2026-05-24",
+    "created": "2026-05-24",
+    "description": "Article URL: https://hellmood.111mb.de/wake_up_16b_writeup.html Comments URL: https://news.ycombinator.com/item?id=48253060 Points: 153 # Comments: 10",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "bc2197128103ef22",
+    "source_type": "community_discussion",
+    "tldr": "一个16字节x86 DOS程序，用XOR在显存上生成Sierpinski分形并同步驱动PC喇叭发声。",
+    "objective_summary": "HellMood于2026年5月在荷兰Outline Demoparty发布了16字节的x86实模式DOS汇编程序\"Wake up! 16b\"。程序将VGA文本显存(0xB800)作为计算空间，以-56字节步长反向遍历，用XOR累积运算在显存中生成Sierpinski分形图案（Rule",
+    "event_type": "application_landing",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [
+        "Outline Demoparty",
+        "Plex"
+      ],
+      "technologies": [
+        "x86 assembly",
+        "Sierpinski fractal",
+        "cellular automaton",
+        "Rule 60",
+        "XOR",
+        "PC speaker",
+        "bytebeat",
+        "BIOS interrupt",
+        "DOS real mode",
+        "VGA text buffer"
+      ],
+      "key_people": [
+        "HellMood",
+        "miragept"
+      ]
+    },
+    "key_logic_flow": [
+      "HellMood于2026年5月在荷兰Outline Demoparty发布了一个仅16字节的x86实模式DOS汇编程序，受Plex的\"Rainbow Surf\"（同为16字节）启发而作",
+      "程序将数据段指向VGA文本显存地址0xB800，以`lodsb`加载字节后通过XOR指令写入-56字节偏移位置，步长与段大小(65536)不整除使得遍历周期延长至8192步，声音频率降低一个八度",
+      "在模2下XOR等价于无进位加法，二项式系数序列在显存中自然形成Sierpinski分形图案，映射为Rule 60细胞自动机——仅bit 1在0x00与0x02间切换",
+      "端口61h的bit 1直接控制PC喇叭振膜推拉，分形图案中的0/1序列被转换为频率与脉宽自相似变化的方波声音，形成近乎节奏不变的字节节拍",
+      "80字节宽的屏幕上，-56步长等价于向前24字节（12列），仅访问10个不同列，分形图案被剪切为对角线上移的10列字符柱",
+      "显存段中混杂的BIOS ROM影子代码与分形数据XOR后，为声音加入了不属于纯Sierpinski波形的粗糙质感；miragept在真实286+EGA/MDA硬件上捕获验证了程序行为"
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -1041,28 +1502,27 @@
     "extraction_status": "success",
     "id": "bd0babd2bdb18a7f",
     "source_type": "community_discussion",
-    "tldr": "Google在I/O大会宣布搜索全面转向AI生成答案，削弱链接呈现，被批为对开放网络的宣战。",
-    "objective_summary": "Google在2026年5月20日的I/O主题演讲中宣布进一步推动搜索向AI直接生成答案的方向演进，减少对网页链接的呈现。作者认为此举意味着Google在传统网页之上建立了一个由自己控制的抽象层，将网站内容视为免费的原材料，实际上垄断了信息访问入口。",
+    "tldr": "Google在IO大会上宣布搜索将全面转向AI生成答案，减少来源链接，被作者视为对开放Web的宣战。",
+    "objective_summary": "2026年5月20日，Google在IO大会上宣布搜索产品将深化AI Overviews方向，以AI生成的答案替代传统的链接索引范式。作者分析此举意在建立一个由Google控制的Web抽象层，将网站内容降格为训练AI的免费原材料，从而垄断信息获取渠道，颠覆参与式开放Web。",
     "event_type": "application_landing",
-    "epistemic_status": "theoretical_claim",
+    "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
         "Google"
       ],
       "technologies": [
-        "AI Overviews"
+        "AI Overviews",
+        "LLM"
       ],
-      "key_people": [
-        "Mark Zuckerberg"
-      ]
+      "key_people": []
     },
     "key_logic_flow": [
-      "Google在2026年I/O主题演讲中宣布搜索将进一步转向AI直接生成答案的模式，延续了AI Overviews的方向。",
-      "该模式大幅减少对原始网页链接的呈现，用户获取信息不再通过访问来源网站。",
-      "作者认为Google正在网页之上建立一个由其控制的抽象层，像围墙花园一样垄断信息访问。",
-      "网站创作者的劳动被降级为AI系统的免费训练原料，其作品不再作为独立的文化产物被分享和访问。",
-      "作者预测Google或类似公司未来会创造贬义标签来污名化开放网页，将其AI抽象层包装为所谓的安全网络。",
-      "作者呼吁用户去Google化，使用其他搜索引擎和浏览器，避免信息获取被单一公司控制。"
+      "Google在2026年IO大会上宣布搜索产品将全面转向AI生成的答案摘要，减少甚至放弃传统的来源链接范式。",
+      "此举意味着Google试图在开放Web之上建立一个由其完全控制的新抽象层，将Web内容降格为训练AI的免费原材料。",
+      "网站、创作者和艺术家的工作不再被视为独立的文化产物，而仅是Google合成文本机器的无偿输入。",
+      "这本质上是对参与式Web的颠覆，目标是垄断信息获取渠道，使公众只能通过Google控制的界面接触信息。",
+      "作者预测Google及其同类企业下一步将制造贬低开放Web的话术（类似暗网），将自身抽象层包装为安全Web。",
+      "作者呼吁用户通过更换默认搜索引擎和停止使用Chrome浏览器来抵制这一趋势。"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -1082,14 +1542,14 @@
     "extraction_status": "success",
     "id": "bd53dd1ca19bc441",
     "source_type": "community_discussion",
-    "tldr": "Meta应沙特和阿联酋政府要求，对人权组织及活动家账号实施地理封锁",
-    "objective_summary": "2026年4月30日起，Meta应沙特和阿联酋政府要求，对ALQST等独立人权组织及活动家的Facebook和Instagram账号实施地理封锁。多个国际人权组织联合谴责Meta此举违反表达自由和国际人权责任。",
+    "tldr": "Meta应沙特和阿联酋政府要求，对百余个人权组织及活动人士的社交媒体账号实施地理封锁，12个国际人权组织联合谴责并要求恢复访问。",
+    "objective_summary": "自2026年3月以来，Meta应沙特和阿联酋政府要求，依据两国网络犯罪法对超过100个Facebook页面和Instagram账号实施地理封锁，涉及ALQST人权组织、研究人员Abdullah Alaoudh等。2026年5月20日，12个国际人权组织发表联合声明，谴责此举侵犯言论自由，",
     "event_type": "policy_and_safety",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
         "Meta",
-        "X"
+        "X (Twitter)"
       ],
       "technologies": [],
       "key_people": [
@@ -1098,12 +1558,12 @@
       ]
     },
     "key_logic_flow": [
-      "2026年4月30日起，Meta应沙特政府请求，对ALQST for Human Rights、Democratic Diwan等组织及沙特研究员Abdullah Alaoudh、人权捍卫者Yahya Assiri的Facebook账号在沙特境内实施地理封锁。",
-      "类似限制在阿联酋同步实施，包括针对一名学者的账号。X平台也收到沙特政府的类似地理封锁请求，截至5月20日尚未执行。",
-      "据Meta公开的内容限制报告，自2026年3月以来已有超过100个Facebook页面和Instagram账号被限制。",
-      "Meta援引沙特和阿联酋的网络犯罪法作为合规依据，称受限内容涉及'区域性地缘政治冲突和安全事态报道'。",
-      "多个国际人权组织联合声明，要求Meta公布完整的政府法律请求及其声称开展的人权影响评估详情。",
-      "签署方呼吁Meta立即恢复所有受影响账号的访问权限，并承诺以具体细节通知受影响用户哪些内容触发了限制及依据哪条法律。"
+      "2026年3月起，Meta依据沙特和阿联酋政府的请求，对超过100个Facebook页面和Instagram账号实施地理封锁，受影响账号在对应国家显示为'不可用'。",
+      "Meta在通知中称此举是遵守'当地法律要求'，具体援引沙特和阿联酋的网络犯罪法与反恐法规，声称内容涉及'地区地缘政治冲突与安全动态的报道'。",
+      "2026年2月28日美国与以色列对伊朗发动打击后，海湾国家政府加速收紧信息环境，加强对民众可观看、表达和分享内容的控制。",
+      "受影响方包括ALQST人权组织（自2015年起在沙特被封）、Democratic Diwan、沙特研究人员Abdullah Alaoudh和人权捍卫者Yahya Assiri等，阿联酋境内亦有学者受影响。",
+      "Meta声称在合规前进行了人权尽职调查，但拒绝披露审查细节、执行者身份及评估标准。12个签署组织要求Meta公开收到的完整法律请求及人权评估，立即恢复所有受影响账号的完整访问权限。",
+      "同时期，沙特政府也向X平台提出类似地理封锁要求，但截至2026年5月20日，X未予配合，形成与Meta截然不同的平台应对策略。"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -1122,24 +1582,7 @@
     ],
     "extraction_status": "partial",
     "id": "bf40d911137c5353",
-    "source_type": "community_discussion",
-    "tldr": "OpenAI模型推翻了离散几何中一项长期存在的核心猜想。",
-    "objective_summary": "OpenAI发表公告称，其AI模型在离散几何领域证明了一个核心猜想不成立，推翻了该领域的已有结论。该成果引发学术界广泛关注。",
-    "event_type": "application_landing",
-    "epistemic_status": "pr_statement",
-    "entities": {
-      "companies": [
-        "OpenAI"
-      ],
-      "technologies": [],
-      "key_people": []
-    },
-    "key_logic_flow": [
-      "OpenAI官方发布消息，称其AI模型成功推翻了一个离散几何领域的核心猜想。",
-      "该成果表明AI模型具备在纯数学领域进行原创性发现的能力。",
-      "相关消息在Hacker News上引发了大量讨论（824分、617条评论）。"
-    ],
-    "pipeline_stage": "fact_extracted"
+    "source_type": "community_discussion"
   },
   {
     "source_dir": "hackernews",
@@ -1157,8 +1600,8 @@
     "extraction_status": "success",
     "id": "c2dee8b7d4741e8b",
     "source_type": "community_discussion",
-    "tldr": "BBC调查发现AI聊天机器人易被操纵传播虚假信息，Google已更新规则应对。",
-    "objective_summary": "BBC记者Thomas Germain通过发布一篇个人博客，在20分钟内成功操纵ChatGPT和Google AI Overviews传播其虚构的\"世界热狗大赛冠军\"身份，揭示AI工具易被单一网页内容操纵的问题。Google随后更新反垃圾政策，明确操纵AI回答属违规行为。",
+    "tldr": "BBC调查揭示AI聊天机器人可被简单手段操控散播虚假信息，Google已更新反垃圾政策应对。",
+    "objective_summary": "2025年5月，BBC记者通过仅发布一篇博客文章即成功让ChatGPT、Gemini和Google AI概览传播虚假信息，揭示了AI搜索工具因引用单一网页而极易被操控的系统性漏洞。Google随后更新了垃圾信息政策，明确禁止操纵AI回复的行为，但专家认为这属于打地鼠式应对，",
     "event_type": "policy_and_safety",
     "epistemic_status": "verified_fact",
     "entities": {
@@ -1171,24 +1614,27 @@
         "Harps Digital"
       ],
       "technologies": [
+        "AI Overviews",
         "ChatGPT",
         "Gemini",
-        "AI Overviews",
-        "SEO"
+        "Claude",
+        "SEO",
+        "AI chatbots",
+        "Retrieval-Augmented Generation"
       ],
       "key_people": [
-        "Thomas Germain",
         "Lily Ray",
+        "Thomas Germain",
         "Harpreet Chatha"
       ]
     },
     "key_logic_flow": [
-      "BBC记者Thomas Germain于2026年2月通过在其个人网站发布一篇\"热狗大赛冠军\"假文章，成功在20分钟内让ChatGPT和Google AI Overviews传播该虚假信息。",
-      "调查发现，AI工具在搜索互联网回答问题时容易从单一网页或社交媒体帖子中提取信息，导致系统易被操纵。",
-      "有公司利用这一漏洞系统性地操纵AI回答，涉及健康医疗和金融信息等严肃领域。",
-      "Google于2026年5月更新反垃圾政策，明确将操纵AI回答的行为列为违规，违规网站可能被降权或移除出搜索结果。",
-      "Google称该更新只是对现有政策的\"澄清\"而非改变，但专家观察到Google和ChatGPT正在试验移除自荐信息等隐性措施。",
-      "SEO专家指出Google面临\"打地鼠\"困境，操纵者已转向通过YouTube网红等更隐蔽方式继续操纵AI回答。"
+      "BBC记者Thomas Germain通过在自己个人网站发布一篇关于热狗竞赛冠军的虚假文章，在24小时内成功让ChatGPT、Gemini和Google AI概览将这些虚假信息当作事实呈现给公众。",
+      "AI搜索工具的核心漏洞在于：当模型需要从互联网检索信息回答问题时，往往仅依赖单一网页或社交媒体帖子作为信息来源，缺乏交叉验证机制。",
+      "该漏洞已被商业机构大规模利用，BBC调查发现有人用同样手法在医疗保健品评论和退休理财信息中植入偏见内容，影响公众健康和财务决策。",
+      "Google于调查曝光后更新了垃圾信息政策，首次明确将操纵AI回复的行为列入违规规则，违者可能被从搜索结果中降权或移除，Google称这只是对既有政策的澄清而非实质性改变。",
+      "业内专家Lily Ray观察到，Google和ChatGPT近期已开始静默移除AI回答中疑似自我推广的公司名称，并在不确定的回答上增加警示标签，但OpenAI和Anthropic拒绝对此置评。",
+      "专家Harpreet Chatha指出这是打地鼠式博弈：当Google打击操纵性博客文章时，操纵者已转向付费YouTube网红传播产品信息，而Google AI现已开始引用YouTube视频，循环仍在继续。"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -1208,48 +1654,92 @@
     "extraction_status": "success",
     "id": "c6d92b8095bf1095",
     "source_type": "community_discussion",
-    "tldr": "Flipper 公布开源 Linux 硬件平台 Flipper One，与 Collabora 合作推进 RK3576 主线内核支持，",
-    "objective_summary": "Flipper 团队在官方博客公开了历时多年研发的 Flipper One 项目。该设备是基于 RK3576 SoC 和 RP2350 MCU 双处理器架构的开放式 Linux 硬件平台，支持 PCIe/USB 3.0/SATA 扩展及 5G 网络。",
+    "tldr": "Flipper公开宣布Linux掌上开源硬件项目Flipper One，向社区求助共同开发。",
+    "objective_summary": "Flipper公司于2026年5月公开宣布其研发多年的开源ARM Linux硬件平台Flipper One。该项目与Flipper Zero完全独立，定位为IP网络层的开放计算设备。公司已与Collabora合作将RK3576 SoC推入主线Linux内核，采用RK3576 CPU+RP2350",
     "event_type": "application_landing",
     "epistemic_status": "pr_statement",
     "entities": {
       "companies": [
         "Flipper",
         "Collabora",
-        "Raspberry Pi",
-        "Rockchip"
+        "Rockchip",
+        "Raspberry Pi"
       ],
       "technologies": [
-        "RK3576",
-        "RP2350",
         "ARM",
         "Linux",
-        "SoC",
+        "RK3576",
+        "RP2350",
+        "Mali-G52",
+        "NPU",
         "PCI Express",
         "USB 3.0",
         "SATA",
         "Wi-Fi 6E",
         "SDR",
-        "NPU",
-        "Mali-G52",
+        "DDR trainer",
+        "Debian",
         "SPI",
         "I²C",
         "UART",
-        "DDR",
+        "GPIO",
+        "Flipper OS",
         "FlipCTL",
-        "Debian"
+        "5G"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "Flipper 宣布 Flipper One 项目，这不是 Flipper Zero 的升级版，而是一个全新的开放式 Linux 硬件平台，定位为网络层 IP 连接设备。",
-      "该设备采用双处理器架构：RK3576（8 核 CPU + Mali-G52 GPU + NPU）运行 Linux，RP2350 MCU 独立控制显示/按键/电源，即使主 CPU 关机也能操作。",
-      "Flipper 与 Collabora 合作将 Rockchip RK3576 SoC 完全支持推入主线 Linux 内核，目标是无二进制 blob、无闭源驱动、无厂商锁定的 BSP。",
-      "团队正在构建 Flipper OS——基于 Debian 的系统层，引入配置文件快照（profiles）机制，允许用户在不同预配置环境间自由切换。",
-      "同时开发 FlipCTL 框架，为小屏幕 Linux 设备提供菜单式界面，将 ping/nmap 等 CLI 工具封装为 D-pad 可导航的 UI。",
-      "Flipper 公开了开发者门户 wiki，任何人都可以编辑和参与硬件、机械、Linux 软件、MCU 固件、UI、文档、测试等子项目的开发。"
+      "Flipper One是与Flipper Zero完全不同的产品线：Zero处理NFC、RFID、Sub-1 GHz等离线接入控制协议（Layer 0），One处理Wi-Fi、以太网、5G等IP网络与高性能计算（Layer 1）。",
+      "为实现真正开放的ARM计算机目标，Flipper与Collabora合作将Rockchip RK3576 SoC推入主线Linux内核，承诺无二进制blob、无闭源驱动、无供应商锁定BSP，目前仅剩DDR trainer一个二进制blob待解决。",
+      "Flipper One采用双处理器架构：8核RK3576（运行Linux，含Mali-G52 GPU和NPU用于本地AI推理）与2核RP2350微控制器（控制显示屏、按键、触控板和电源子系统），MCU可独立运行，Linux关闭时设备仍可操作。",
+      "Flipper OS在Debian基础上引入配置文件系统，支持操作系统完整快照的启动、克隆和回滚，解决Linux便携设备反复安装配置导致系统混乱的问题。",
+      "FlipCTL是一个面向小尺寸LCD屏幕的菜单式UI框架，通过D-pad和按键操控，封装ping、nmap等Linux命令行工具，目标让任意嵌入式Linux设备通过一条命令即可获得可用人机界面。",
+      "公司上线Flipper One开发者门户网站，公开硬件、机械、Linux内核、MCU固件、UI、文档和测试七个子项目的任务追踪和内部讨论，任何人可参与编辑和贡献。"
     ],
     "pipeline_stage": "fact_extracted"
+  },
+  {
+    "source_dir": "hackernews",
+    "title": "Scammers are abusing an internal Microsoft account to send spam links",
+    "source": "https://techcrunch.com/2026/05/21/scammers-are-abusing-an-internal-microsoft-account-to-send-spam/",
+    "author": [
+      "[[spike021]]"
+    ],
+    "published": "2026-05-24",
+    "created": "2026-05-24",
+    "description": "Article URL: https://techcrunch.com/2026/05/21/scammers-are-abusing-an-internal-microsoft-account-to-send-spam/ Comments URL: https://news.ycombinator.com/item?id=48253186 Points: 108 # Comments: 27",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "d410f3444c39b889",
+    "source_type": "community_discussion",
+    "tldr": "诈骗者利用微软内部邮件系统漏洞，冒充官方账号发送钓鱼垃圾邮件，持续数月未被修复。",
+    "objective_summary": "2026年5月，TechCrunch记者发现诈骗者滥用微软内部邮件地址 msonlineservicesteam@microsoftonline.com 发送钓鱼垃圾邮件，该地址本用于发送双因素认证等官方通知。反垃圾邮件组织Spamhaus确认此活动已持续数月，并批评系统自定义权限过宽。",
+    "event_type": "policy_and_safety",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [
+        "Microsoft",
+        "The Spamhaus Project",
+        "TechCrunch",
+        "Betterment",
+        "Namecheap"
+      ],
+      "technologies": [],
+      "key_people": [
+        "Emelia Katon"
+      ]
+    },
+    "key_logic_flow": [
+      "诈骗者通过创建新微软账户的方式，利用系统漏洞从微软官方通知邮箱 msonlineservicesteam@microsoftonline.com 发送钓鱼垃圾邮件，该邮箱通常用于发送双因素认证等重要账户通知",
+      "诈骗邮件主题模仿欺诈交易警报等官方通知格式，正文包含钓鱼网站链接，试图诱骗收件人点击",
+      "反垃圾邮件非营利组织 The Spamhaus Project 在社交平台上确认此问题已持续数月，批评自动化通知系统不应允许如此级别的自定义，并已通知微软",
+      "微软在 TechCrunch 报道发布后通过第三方公关公司回应，称正在积极调查并采取行动，包括加强检测和拦截机制、移除违规账户",
+      "该事件并非孤例，此前 Betterment（2026年初）和 Namecheap（2023年）等公司也曾因内部系统被滥用而发送钓鱼通知给用户"
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -1267,25 +1757,124 @@
     "extraction_status": "success",
     "id": "d9eec0131f42f13a",
     "source_type": "community_discussion",
-    "tldr": "SpaceX 向 SEC 提交 S-1 注册声明文件",
-    "objective_summary": "SpaceX 通过 SEC EDGAR 系统提交了 S-1 注册声明文件，该文件通常用于公司上市前的信息披露。页面内容因自动访问限制未能完整加载。",
-    "event_type": "capital_movement",
+    "tldr": "SEC.gov 因检测到未声明的自动化工具而拒绝访问请求，页面展示了 SEC 的自动化流量管控政策。",
+    "objective_summary": "SEC.gov（美国证券交易委员会）拒绝了来自未声明自动化工具的访问请求（Reference ID: 0.37f00f17.1779338372.453fc5e），页面内容为 SEC 的自动化访问政策说明，而非实际的 SpaceX S-1 文件内容。",
+    "event_type": "policy_and_safety",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
-        "SpaceX",
-        "SEC"
+        "SEC",
+        "SpaceX"
       ],
       "technologies": [],
       "key_people": []
     },
     "key_logic_flow": [
-      "SpaceX 向美国证券交易委员会（SEC）提交了 S-1 注册声明文件。",
-      "该文件通过 SEC 的 EDGAR 系统公开存档，文档编号指向 SpaceX 的官方备案记录。",
-      "S-1 文件通常用于公司首次公开募股（IPO）的注册和信息披露。",
-      "页面实际内容因 SEC 自动访问限制策略未能完整获取，仅返回了访问限制和系统使用政策说明。"
+      "请求被 SEC.gov 识别为来自未声明的自动化工具网络，访问被拒绝",
+      "SEC 要求自动化工具在 User-Agent 中声明公司特定信息以合法访问其网站",
+      "SEC 实施频率限制：每用户每秒不超过 10 次请求，超限后 IP 可能被短暂封禁",
+      "访问限制在请求速率降至阈值以下持续 10 分钟后自动解除",
+      "页面本应展示 SpaceX 的 S-1 注册文件（CIK: 0001181412），但实际内容被 SEC 的自动化防护机制替换",
+      "SEC 依据《计算机欺诈与滥用法》(1986) 和《国家信息基础设施保护法》(1996) 对未经授权的访问进行法律追诉"
     ],
     "pipeline_stage": "fact_extracted"
+  },
+  {
+    "source_dir": "hackernews",
+    "title": ".NET (OK, C#) finally gets union types",
+    "source": "https://andrewlock.net/exploring-the-dotnet-11-preview-2-dotnet-gets-union-types/",
+    "author": [
+      "[[ingve]]"
+    ],
+    "published": "2026-05-22",
+    "created": "2026-05-24",
+    "description": "Article URL: https://andrewlock.net/exploring-the-dotnet-11-preview-2-dotnet-gets-union-types/ Comments URL: https://news.ycombinator.com/item?id=48234954 Points: 178 # Comments: 164",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "e344bcc2fda636ef",
+    "source_type": "community_discussion",
+    "tldr": "C# 15/.NET 11 预览版正式引入 union 关键字，支持可穷尽模式匹配的联合类型。",
+    "objective_summary": "2026年，.NET 11 预览版 4 中 C# 15 引入了 union 关键字，允许开发者声明可表示多种不相关类型的联合类型。编译器生成实现 IUnion 接口的 struct，通过 [Union] 属性驱动隐式转换和 switch 表达式穷尽检查。",
+    "event_type": "framework_tools",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [
+        "Microsoft"
+      ],
+      "technologies": [
+        "C# 15",
+        ".NET 11",
+        "union types",
+        "IUnion",
+        "UnionAttribute",
+        "OneOf",
+        "Sasa"
+      ],
+      "key_people": [
+        "Andrew Lock"
+      ]
+    },
+    "key_logic_flow": [
+      "联合类型允许一个类型表示多种可能不相关的数据类型，常见例子包括 Option<T> 和 Result<TSuccess, TError>。",
+      "C# 15 通过 union 关键字声明联合类型，语法为 `public union TypeName(CaseType1, CaseType2, ...)`。",
+      "编译器将 union 声明生成为一个实现 IUnion 接口的 struct，包含 object? Value 属性和每个 case 类型的构造函数，并标注 [Union] 属性。",
+      "[Union] 属性驱动隐式转换（从 case 类型到 union 类型）和 switch 表达式的穷尽性检查，遗漏 case 会触发 CS8509 警告。",
+      "默认实现将值类型参数装箱为 object 存储在 Value 属性中，在值类型较多的场景下会产生不必要的堆分配。",
+      "开发者可通过手动实现 IUnion 接口并添加 [Union] 属性来创建自定义联合类型，以此避免装箱开销并复用编译器的模式匹配支持。"
+    ]
+  },
+  {
+    "source_dir": "hackernews",
+    "title": "Microsoft open-sources \"the earliest DOS source code discovered to date\"",
+    "source": "https://arstechnica.com/gadgets/2026/04/microsoft-open-sources-the-earliest-dos-source-code-discovered-to-date/",
+    "author": [
+      "[[DamnInteresting]]"
+    ],
+    "published": "2026-05-24",
+    "created": "2026-05-24",
+    "description": "https://opensource.microsoft.com/blog/2026/04/28/continuing-... Comments URL: https://news.ycombinator.com/item?id=48253386 Points: 166 # Comments: 34",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "e60b985a02c56b99",
+    "source_type": "community_discussion",
+    "tldr": "微软开源了迄今为止发现的最早DOS源代码——86-DOS 1.00内核及PC-DOS 1.00开发快照",
+    "objective_summary": "2026年4月，微软发布了迄今为止发现的最早DOS源代码，包括86-DOS 1.00内核源代码、PC-DOS 1.00内核开发快照以及CHKDSK等实用工具。该操作系统最初由Tim Paterson为Seattle Computer Products创建，微软获得授权后买断版权，",
+    "event_type": "framework_tools",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [
+        "Microsoft",
+        "IBM",
+        "Seattle Computer Products"
+      ],
+      "technologies": [
+        "86-DOS",
+        "MS-DOS",
+        "PC-DOS",
+        "QDOS",
+        "CHKDSK",
+        "Intel 8086"
+      ],
+      "key_people": [
+        "Tim Paterson",
+        "Stacey Haffner",
+        "Scott Hanselman"
+      ]
+    },
+    "key_logic_flow": [
+      "微软在过去二十年中多次发布MS-DOS历史源代码，本周发布了迄今为止发现的最早版本",
+      "本次发布内容包括86-DOS 1.00内核源代码、PC-DOS 1.00内核的多个开发快照以及CHKDSK等知名实用工具",
+      "86-DOS原名QDOS，由程序员Tim Paterson为Seattle Computer Products的Intel 8086计算机套件创建",
+      "微软为给IBM PC 5150提供操作系统而获得86-DOS授权，随后聘请Paterson继续开发并最终买断了该操作系统的全部版权",
+      "微软将该操作系统授权给IBM以PC-DOS名义销售，同时保留向其他公司销售的权利并以MS-DOS名义发行",
+      "上世纪八九十年代大量IBM PC兼容机的出现使MS-DOS成为大多数用户实际使用的操作系统版本"
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -1303,8 +1892,8 @@
     "extraction_status": "success",
     "id": "eec1bd5cdabc90d3",
     "source_type": "community_discussion",
-    "tldr": "博主将运行10年的Ubuntu 16.04服务器从DigitalOcean迁移至Hetzner并改用FreeBSD系统",
-    "objective_summary": "作者将其运行超过10年的DigitalOcean VPS（Ubuntu 16.04 LTS，纽约机房，$13/月）迁移至Hetzner VPS（FreeBSD 14.3，德国机房，€5.99/月），旧服务器曾持续运行1491天未中断。新架构使用FreeBSD Jails配合Bastille管理实现站",
+    "tldr": "一位开发者将其运行10年的博客从Digital Ocean的Ubuntu 16.04 VPS迁移至Hetzner的FreeBSD 14.",
+    "objective_summary": "作者于2026年将运行在Digital Ocean纽约节点上已达1491天uptime的Ubuntu 16.04 VPS（$13/月），迁移至Hetzner德国节点的FreeBSD 14.3虚拟机（约€6/月）。迁移中采用FreeBSD Jails+Bastille实现每站点独立隔离，",
     "event_type": "infrastructure_update",
     "epistemic_status": "verified_fact",
     "entities": {
@@ -1314,26 +1903,24 @@
       ],
       "technologies": [
         "FreeBSD",
-        "Ubuntu 16.04 LTS",
-        "nginx",
-        "Caddy",
-        "Hugo",
         "FreeBSD Jails",
         "Bastille",
         "ZFS",
-        "Btrfs",
-        "PF (Packet Filter)",
-        "LaTeX"
+        "Caddy",
+        "nginx",
+        "Hugo",
+        "PF",
+        "Btrfs"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "作者的个人博客在DigitalOcean的Ubuntu 16.04 LTS VPS上运行了超过10年，该系统已停止安全支持至少5年。",
-      "作者将服务器迁移至Hetzner的德国机房VPS，配置更高（4GB内存、2 vCPU、40GB磁盘）但价格更低（€5.99/月 vs $13/月）。",
-      "新系统选择FreeBSD 14.3，核心设计理念是利用FreeBSD Jails实现各站点的安全隔离，每个站点运行在独立的Jail中。",
-      "使用Bastille工具管理Jails的生命周期（创建、启动、控制台访问等），替代手动创建Jail的复杂步骤。",
-      "网络架构中，Caddy运行在一个独立Jail中作为反向代理网关，处理所有HTTP/HTTPS流量并自动管理SSL证书，再将请求转发至各站点Jail。",
-      "通过PF（Packet Filter）配置NAT和端口转发规则，设置虚拟网络接口bastille0供Jails使用，实现内部网络隔离与外部访问。"
+      "旧服务器为Digital Ocean纽约节点VPS，运行Ubuntu 16.04 LTS超10年，已停止安全更新支持至少5年，存在安全隐患",
+      "新服务器选用Hetzner德国节点虚拟机，配置为旧机两倍内存和CPU，月费仅为旧机一半以下（从$13降至约€6）",
+      "迁移动机之一是学习FreeBSD，尤其是其Jails容器化技术和成熟的ZFS文件系统的快照功能",
+      "通过Bastille工具管理Jails，为Caddy反向代理和每个站点分别创建独立Jail，实现网络隔离",
+      "使用PF防火墙配置NAT出站规则和HTTP/HTTPS端口重定向，将外部流量引导至Caddy Jail",
+      "用Caddy替代nginx作为Web服务器，主要原因是Caddy可自动处理SSL证书的申请和续期，避免手动运行certbot"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -1353,14 +1940,13 @@
     "extraction_status": "success",
     "id": "efb62eb85d99d0a0",
     "source_type": "community_discussion",
-    "tldr": "超340家美国地方新闻媒体限制互联网档案馆爬取其内容，防止AI公司通过后门抓取训练数据。",
-    "objective_summary": "2026年5月，Nieman Lab分析发现382家新闻网站通过robots.txt限制互联网档案馆的爬虫访问，其中342家为地方媒体。出版商采取预防性封锁，担忧AI公司通过Archive的仓库抓取其内容用于模型训练，尚无证据表明已发生实际抓取。",
+    "tldr": "超340家美国本地新闻媒体因担忧AI公司抓取训练数据而限制Internet Archive的网络爬虫访问",
+    "objective_summary": "2025年1月至5月，Nieman Lab调查发现限制Internet Archive爬虫的新闻网站从241家增至382家，其中342家为本地新闻媒体（93%位于美国）。五大本地新闻出版巨头（USA Today Co.、McClatchy、Advance Local、MediaNews",
     "event_type": "policy_and_safety",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
         "Internet Archive",
-        "Wayback Machine",
         "The New York Times",
         "The Guardian",
         "USA Today Co.",
@@ -1370,40 +1956,43 @@
         "Tribune Publishing",
         "Alden Global Capital",
         "Advance Publications",
-        "Condé Nast",
-        "The Atlantic",
-        "The Baltimore Banner",
-        "Folha de S.Paulo",
         "OpenAI",
         "Microsoft",
+        "Condé Nast",
+        "The Atlantic",
         "Cloudflare",
+        "Dark Visitors",
         "DataDome",
-        "Nieman Lab"
+        "The Baltimore Banner",
+        "Folha de S.Paulo"
       ],
       "technologies": [
+        "Wayback Machine",
         "Heritrix",
-        "Archive-It"
+        "robots.txt",
+        "web crawler bot",
+        "AI training data scraping"
       ],
       "key_people": [
-        "Edward McCain",
-        "B.J. Mendelson",
         "Mark Graham",
         "Meredith Broussard",
+        "Edward McCain",
         "Ben Welsh",
         "Christine deWit",
         "Biswajit Ganguly",
-        "Anna Bross",
         "Nick Thompson",
-        "Sérgio Dávila"
+        "Sérgio Dávila",
+        "B.J. Mendelson",
+        "Anna Bross"
       ]
     },
     "key_logic_flow": [
-      "2026年1月Nieman Lab首次披露主要新闻出版商开始封锁互联网档案馆，5个月后封锁站点数量持续上升。",
-      "超过340家美国地方新闻网站加入了封锁行列，隶属于USA Today Co.、McClatchy、Advance Local、MediaNews Group和Tribune Publishing五大出版商。",
-      "Advance Local自2025年8月起开始封锁互联网档案馆，系预防性措施，无证据表明其内容已被AI公司通过Wayback Machine抓取。",
-      "Alden Global Capital旗下约60家媒体集团和7家论坛出版报纸同步实施了封锁，该公司此前曾公开批评AI公司未经补偿使用新闻内容。",
-      "部分独立出版商（如The Baltimore Banner）更关注AI产品能否正确归因回原文，而非完全禁止AI访问，仍保留与AI公司沟通的开放态度。",
-      "国际出版商如巴西最大报纸Folha de S.Paulo也加入封锁，强调AI公司若需使用存档进行训练应签订授权协议。"
+      "2025年1月Nieman Lab首次披露主要新闻出版商因AI训练数据风险开始屏蔽Internet Archive，至5月限制爬虫的新闻网站从241家增至382家",
+      "新增屏蔽网站中342家为本地新闻媒体（93%位于美国），主要归属于USA Today Co.、McClatchy、Advance Local、MediaNews Group和Tribune Publishing五大本地新闻出版集团，后两家均为Alden Global Capital子公司",
+      "Advance Local于2025年8月开始主动屏蔽Internet Archive，承认此举为预防性措施，并无证据表明其内容已被AI公司通过Wayback Machine抓取",
+      "Alden Global Capital于2025年7月在旗下60多家报纸发表社论批评OpenAI等AI公司无偿使用新闻内容训练模型，其子公司MediaNews Group和Tribune Publishing已加入对OpenAI和Microsoft的版权侵权诉讼",
+      "部分独立出版商（如The Baltimore Banner）的动机并非阻止AI引用，而是担忧Wayback Machine作为'后门'会导致AI产品无法正确标注信息来源和原始出处",
+      "Internet Archive创始人Mark Graham回应称已实施限流下载、与Cloudflare合作监控爬虫等措施，并强调其使用条款仅允许学术研究用途"
     ],
     "pipeline_stage": "fact_extracted"
   },
@@ -1423,27 +2012,37 @@
     "extraction_status": "success",
     "id": "f716300a07e5c697",
     "source_type": "community_discussion",
-    "tldr": "Railway 因 GCP 错误暂停账户导致全平台宕机约 8 小时",
-    "objective_summary": "2026年5月19日22:20 UTC，Google Cloud 自动错误地将 Railway 的生产账户标记为暂停状态，导致 Railway 在 GCP 上的 API、控制面板和数据库离线。路由缓存过期后，AWS 和 Railway Metal 上的全部工作负载也相继不可用。",
+    "tldr": "Railway 因 Google Cloud 错误暂停其生产账户导致约 8 小时全平台服务中断，故障从 GCP 蔓延至所有区域。",
+    "objective_summary": "2026年5月19日22:20 UTC至5月20日约06:14 UTC，Railway 因 Google Cloud 将生产账户错误标记为暂停状态，导致仪表板、API、数据库及 GCP 托管计算基础设施全部离线。边缘代理路由缓存过期后，故障蔓延至 Railway Metal 和 AWS",
     "event_type": "infrastructure_update",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
         "Railway",
         "Google Cloud",
-        "GitHub",
-        "AWS"
+        "AWS",
+        "GitHub"
       ],
-      "technologies": [],
+      "technologies": [
+        "control plane",
+        "edge proxies",
+        "routing tables",
+        "persistent disks",
+        "compute instances",
+        "OAuth",
+        "webhooks",
+        "database shards",
+        "network mesh"
+      ],
       "key_people": []
     },
     "key_logic_flow": [
-      "2026年5月19日22:20 UTC，Google Cloud 自动错误地将 Railway 的生产账户置于暂停状态，导致 Railway 在 GCP 上的 API、控制面板、数据库及所有计算基础设施离线。",
-      "Railway 的边缘代理依赖 GCP 托管的控制平面 API 填充路由表，GCP 宕机约一小时后路由缓存过期，AWS 和 Railway Metal 上的工作负载因无法解析路由而返回 404 错误，宕机影响波及全平台。",
-      "恢复 GCP 账户访问后，持久磁盘、计算实例和网络需逐一恢复，磁盘在 23:54 UTC 恢复就绪，但核心网络和边缘路由直到次日 01:30 UTC 才完全恢复。",
-      "恢复过程中 GitHub 因重试请求激增对 Railway 的 OAuth 和 Webhook 集成实施速率限制，导致用户登录和构建功能受阻。",
-      "Railway 承认其架构存在单点依赖——工作负载发现能力绑定在 GCP 托管的控制平面 API 上，计划移除该依赖以构建真正的多云网状网络。",
-      "Railway 计划将高可用数据库分片扩展到 AWS 和 Metal，并将 GCP 从数据平面热路径中移除，仅保留作为次要/故障转移用途。"
+      "Google Cloud 于 5 月 19 日 22:20 UTC 通过自动化操作错误地将 Railway 生产账户置于暂停状态，属于平台级误操作，影响多个 GCP 账户且未事先通知。",
+      "Railway 仪表板、API 及 GCP 托管计算基础设施立即离线，用户遭遇 503 错误且无法登录，但 Railway Metal 和 AWS 上的工作负载因边缘代理路由缓存仍短暂可用。",
+      "约一小时后，边缘代理的路由表缓存过期，由于网络控制平面 API 托管在 GCP 上已不可用，无法解析到活跃实例的路由，Metal 和 AWS 上的工作负载也开始返回 404 错误，故障蔓延至全平台。",
+      "GCP 账户访问虽于 22:29 UTC 恢复，但持久磁盘、计算实例、网络需分别恢复，磁盘于 23:54 UTC 就绪但核心网络和边缘路由直到次日 01:30 UTC 才完全恢复，导致中断延长数小时。",
+      "Railway 逐步恢复核心服务期间，GitHub 因重试请求激增开始对 Railway 的 OAuth 和 webhook 集成进行速率限制，暂时阻断用户登录和构建，服务条款接受记录也被重置。",
+      "Railway 承认架构中存在对 GCP 托管网络控制平面的单点依赖，宣布将移除该依赖以建立真正的网状架构，扩展高可用数据库分片至 AWS 和 Metal，并将 GCP 从数据平面热路径中移除仅保留为次级/故障转移。"
     ],
     "pipeline_stage": "fact_extracted"
   }

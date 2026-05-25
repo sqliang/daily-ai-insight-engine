@@ -20,6 +20,7 @@ from .deep_analysis import (
     ForesightAndActionability,
 )
 from .daily_ai_insight import DailyAIInsight
+from .daily_report import DailyReport, validate_daily_report
 
 __all__ = [
     "BaseInfo",
@@ -28,4 +29,6 @@ __all__ = [
     "ValueAssessment",
     "ForesightAndActionability",
     "DailyAIInsight",
+    "DailyReport",
+    "validate_daily_report",
 ]

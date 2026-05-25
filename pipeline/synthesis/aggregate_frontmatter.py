@@ -22,9 +22,13 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
+from pydantic import ValidationError
+
 from ..core.config_loader import resolve_data_dir
 from pipeline.utils.file_utils import ensure_dir
 from pipeline.utils.frontmatter import read_frontmatter
+from pipeline.utils.schema_utils import flat_frontmatter_to_nested
+from pipeline.schemas.daily_ai_insight import DailyAIInsight
 
 logger = logging.getLogger(__name__)
 
@@ -49,7 +53,44 @@ def _serialize_value(obj):
     return str(obj)
 
 
-def _extract_article(filepath: Path, source_dir: str) -> Optional[dict]:
+def _validate_article_fm(fm: dict, filepath: Path) -> int:
+    """
+    对单篇文章的扁平 frontmatter 做逐子模型 Pydantic 校验。
+
+    将扁平字段路由到 DailyAIInsight 的 5 个子模型槽位，
+    对有数据的子模型分别执行 model_validate()。
+    校验失败仅记录 warning，不阻断数据流。
+    未处理阶段（无数据的子模型）静默跳过。
+
+    返回：
+        校验失败的子模型数量
+    """
+    nested = flat_frontmatter_to_nested(fm)
+    article_id = fm.get("id", "?")
+    failed = 0
+
+    for parent_key, sub_fields in nested.items():
+        if not sub_fields:
+            continue  # 该子模型无数据（文章尚未完成对应阶段），跳过
+        sub_model_cls = DailyAIInsight.model_fields[parent_key].annotation
+        try:
+            sub_model_cls.model_validate(sub_fields)
+        except ValidationError as exc:
+            failed += 1
+            error_count = len(exc.errors())
+            logger.warning(
+                "DailyAIInsight 校验失败 [%s] %s 子模型 (%d 个错误): %s — %s",
+                parent_key,
+                article_id,
+                error_count,
+                filepath,
+                exc.errors(),
+            )
+
+    return failed
+
+
+def _extract_article(filepath: Path, source_dir: str) -> tuple[Optional[dict], int]:
     """
     从单个 .md 文件提取 frontmatter 并构造文章记录。
 
@@ -59,30 +100,33 @@ def _extract_article(filepath: Path, source_dir: str) -> Optional[dict]:
         - 正文为空（死文件）
 
     返回：
-        包含 source_dir 和所有 frontmatter 字段的扁平 dict，或 None
+        (文章记录 dict 或 None, 校验失败的子模型数)
     """
     try:
         fm, body = read_frontmatter(filepath)
     except Exception as exc:
         logger.warning("跳过（解析失败）: %s — %s", filepath, exc)
-        return None
+        return None, 0
 
     if not fm:
         logger.debug("跳过（无 frontmatter）: %s", filepath)
-        return None
+        return None, 0
 
     if not fm.get("id") or not fm.get("title"):
         logger.debug("跳过（缺少 id/title）: %s", filepath)
-        return None
+        return None, 0
 
     body_stripped = body.strip() if body else ""
     if not body_stripped:
         logger.debug("跳过（正文为空）: %s", filepath)
-        return None
+        return None, 0
+
+    # 逐子模型校验 frontmatter 数据完整性（非阻塞质量门）
+    validation_failures = _validate_article_fm(fm, filepath)
 
     record = {"source_dir": source_dir}
     record.update(fm)
-    return _serialize_value(record)
+    return _serialize_value(record), validation_failures
 
 
 def aggregate_frontmatter(
@@ -135,12 +179,14 @@ def aggregate_frontmatter(
     # 提取文章记录
     all_articles: list[dict] = []
     errors = 0
+    validation_warnings = 0
     source_counts: dict[str, int] = {}
 
     for source, files in sorted(source_groups.items()):
         articles = []
         for fp in files:
-            record = _extract_article(fp, source)
+            record, vf = _extract_article(fp, source)
+            validation_warnings += vf
             if record is None:
                 errors += 1
                 continue
@@ -184,11 +230,14 @@ def aggregate_frontmatter(
     with open(combined_path, "w", encoding="utf-8") as f:
         json.dump(combined, f, ensure_ascii=False, indent=2)
     print(f"\n  合并: {len(all_articles)} 篇文章 → {combined_path}")
+    if validation_warnings > 0:
+        print(f"  DailyAIInsight 校验警告: {validation_warnings} 个子模型校验失败（文章仍正常输出）")
 
     return {
         "total_articles": len(all_articles),
         "sources": source_counts,
         "errors": errors,
+        "validation_warnings": validation_warnings,
     }
 
 

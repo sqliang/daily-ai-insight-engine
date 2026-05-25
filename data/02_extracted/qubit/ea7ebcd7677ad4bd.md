@@ -11,35 +11,41 @@ tags:
 extraction_status: success
 id: ea7ebcd7677ad4bd
 source_type: news_media
-tldr: 腾讯混元开源翻译模型Hy-MT2，上线「腾讯Hy翻译」小程序
-objective_summary: 2026年5月21日，腾讯混元开源多语言翻译模型Hy-MT2并上线翻译小程序。模型支持33种语言互译，三个尺寸版本在通用翻译、专业领域和指令遵循任务上均达到开源最佳或接近一流水平，1.8B版本通过极端量化可端侧部署。
-event_type: framework_tools
-epistemic_status: pr_statement
+tldr: 腾讯混元开源Hy-MT2翻译模型系列，支持33种语言互译，并上线「腾讯Hy翻译」小程序。
+objective_summary: 2026年5月21日，腾讯混元宣布开源Hy-MT2多语言翻译模型系列（1.8B/7B/30B-A3B三个尺寸），同时上线「腾讯Hy翻译」微信小程序。Hy-MT2在FLORES-200评测中接近Gemini
+  3.1 Pro水平，最大提升体现在指令遵循能力。1.8B模型通过AngelSlim 1.
+event_type: application_landing
+epistemic_status: verified_fact
 entities:
   companies:
-  - 腾讯混元
-  - 腾讯
+  - Tencent
+  - Google
   - Microsoft
   - ARM
-  - 高通
+  - Qualcomm
   - Intel
   - 沐曦
   - 天数智芯
   technologies:
   - Hy-MT2
   - AngelSlim
-  - Sherry
   - FLORES-200
   - IFMT Bench
+  - Sherry
+  - MoE
+  - 1.25-bit量化
+  - 4-bit量化
+  - 8-bit量化
+  - FP16
   - WMT26
   key_people: []
 key_logic_flow:
-- 2026年5月21日，腾讯混元宣布开源全新翻译模型Hy-MT2并上线翻译小程序「腾讯Hy翻译」。
-- Hy-MT2包含1.8B、7B、30B-A3B三个尺寸，支持33种语言互译，7B和30B-A3B版本在多项翻译任务上达到开源模型最佳效果，超越几十倍参数量的模型。
-- 基于AngelSlim 1.25-bit极端量化，1.8B版本仅需440MB存储空间，可在主流手机芯片上本地推理，推理速度相比Hy-MT1.5提升1.5倍。
-- Hy-MT2最大提升在指令遵循能力上，能准确理解并执行用户在术语、风格和格式方面的具体要求，混元同步开源自建评估数据集IFMT Bench。
-- 在真实场景测试集上，Hy-MT2-30B-A3B效果已超过Gemini 3.1 Pro，在金融、政治、教育等垂直领域翻译效果部分超过主流翻译模型。
-- Hy-MT2已在GitHub、HuggingFace等平台开源，支持ARM、高通、Intel、沐曦、天数智芯等多个硬件平台部署。
+- 2026年5月21日，腾讯混元正式开源Hy-MT2翻译模型系列，包含1.8B（端侧轻量）、7B（均衡实力）和30B-A3B（专业效果）三个尺寸，支持33种语言互译。
+- Hy-MT2在FLORES-200通用翻译评测中接近Gemini 3.1 Pro水平，7B和30B-A3B在开源模型中达到最佳效果，1.8B轻量模型超越微软等主流商业翻译API。
+- 相比上一代Hy-MT1.5，Hy-MT2的最大提升在于指令遵循能力，能更准确理解用户对术语、风格和输出格式的具体要求，IFMT Bench测试集已同步开源。
+- Hy-MT2采用混元自研AngelSlim极端量化方案，提供1.25-bit、2-bit、4-bit、8-bit和FP16版本，1.8B模型仅需440MB存储空间，基于Sherry框架在苹果A15上推理速度提升1.5倍。
+- 「腾讯Hy翻译」微信小程序同步上线，支持语音输入、自定义翻译风格和指令，可通过提前下载端侧模型实现离线翻译。
+- Hy-MT2已在GitHub、HuggingFace、ModelScope和腾讯云等平台开源，ARM、高通、Intel、沐曦、天数智芯等多个硬件平台支持部署，腾讯混元同时与WMT26合作举办翻译赛事。
 pipeline_stage: fact_extracted
 ---
 

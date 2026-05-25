@@ -1,9 +1,11 @@
 """
-pipeline/synthesis/report_generator.py — JSON 校验 + Markdown 报告生成
+pipeline/synthesis/report_generator.py — Markdown 报告生成 + 文件写入
 
 功能：
-    - validate_report(): 校验 synthesis 输出的 JSON 是否包含所有必要字段
     - generate_markdown(): 将 daily report JSON 转换为人类可读的 Markdown 报告
+    - write_report_files(): 写入 daily-report.json 和 daily-report.md
+
+日报 JSON 结构校验已迁移至 pipeline/schemas/daily_report.py（Pydantic 模型）。
 """
 
 import json
@@ -44,116 +46,6 @@ DIMENSION_LABELS = {
     "policy": "政策",
     "capital": "资本",
 }
-
-# =============================================================================
-# 必需字段定义
-# =============================================================================
-
-_REQUIRED_TOP_KEYS = [
-    "date", "generatedAt", "reportTitle", "executiveSummary",
-    "dataSourceSummary", "topEvents", "deepDives", "trendInsights",
-    "riskSignals", "opportunitySignals", "visualizationData",
-]
-
-_REQUIRED_EVENT_KEYS = [
-    "title", "articleIds", "eventType", "impactScore", "whyItMatters", "evidence",
-]
-
-_REQUIRED_DEEPDIVE_KEYS = ["title", "background", "impact", "watchNext"]
-
-_REQUIRED_TREND_KEYS = ["dimension", "judgment", "supportingSignals"]
-
-_REQUIRED_SIGNAL_KEYS = ["signal", "severity", "rationale"]
-
-_VALID_EVENT_TYPES = set(EVENT_TYPE_LABELS.keys())
-_VALID_SEVERITIES = {"low", "medium", "high"}
-_VALID_DIMENSIONS = {"technology", "application", "policy", "capital"}
-
-
-# =============================================================================
-# JSON 校验
-# =============================================================================
-
-
-def validate_report(report: dict) -> dict:
-    """
-    校验 synthesis 输出的 JSON 结构完整性。
-
-    返回: {"valid": bool, "errors": [str], "warnings": [str]}
-    """
-    errors: list[str] = []
-    warnings: list[str] = []
-
-    # 顶层字段
-    for key in _REQUIRED_TOP_KEYS:
-        if key not in report:
-            errors.append(f"缺少顶层字段: {key}")
-
-    ds = report.get("dataSourceSummary", {})
-    if isinstance(ds, dict):
-        if "totalArticles" not in ds:
-            errors.append("dataSourceSummary 缺少 totalArticles")
-        if "sources" not in ds:
-            warnings.append("dataSourceSummary 缺少 sources")
-
-    # topEvents
-    for i, event in enumerate(report.get("topEvents", [])):
-        for key in _REQUIRED_EVENT_KEYS:
-            if key not in event:
-                errors.append(f"topEvents[{i}] 缺少字段: {key}")
-        et = event.get("eventType")
-        if et and et not in _VALID_EVENT_TYPES:
-            errors.append(f"topEvents[{i}] 无效 eventType: {et}")
-
-    # deepDives
-    for i, dive in enumerate(report.get("deepDives", [])):
-        for key in _REQUIRED_DEEPDIVE_KEYS:
-            if key not in dive:
-                errors.append(f"deepDives[{i}] 缺少字段: {key}")
-
-    # trendInsights
-    for i, trend in enumerate(report.get("trendInsights", [])):
-        for key in _REQUIRED_TREND_KEYS:
-            if key not in trend:
-                errors.append(f"trendInsights[{i}] 缺少字段: {key}")
-        dim = trend.get("dimension")
-        if dim and dim not in _VALID_DIMENSIONS:
-            errors.append(f"trendInsights[{i}] 无效 dimension: {dim}")
-
-    # riskSignals
-    for i, sig in enumerate(report.get("riskSignals", [])):
-        for key in _REQUIRED_SIGNAL_KEYS:
-            if key not in sig:
-                errors.append(f"riskSignals[{i}] 缺少字段: {key}")
-        sev = sig.get("severity")
-        if sev and sev not in _VALID_SEVERITIES:
-            errors.append(f"riskSignals[{i}] 无效 severity: {sev}")
-
-    # opportunitySignals
-    for i, sig in enumerate(report.get("opportunitySignals", [])):
-        for key in _REQUIRED_SIGNAL_KEYS:
-            if key not in sig:
-                errors.append(f"opportunitySignals[{i}] 缺少字段: {key}")
-        sev = sig.get("severity")
-        if sev and sev not in _VALID_SEVERITIES:
-            errors.append(f"opportunitySignals[{i}] 无效 severity: {sev}")
-
-    # visualizationData
-    vis = report.get("visualizationData", {})
-    if isinstance(vis, dict):
-        if "eventTypeDistribution" not in vis:
-            errors.append("visualizationData 缺少 eventTypeDistribution")
-        if "sentimentDistribution" not in vis:
-            warnings.append("visualizationData 缺少 sentimentDistribution")
-        if "entityFrequency" not in vis:
-            warnings.append("visualizationData 缺少 entityFrequency")
-
-    return {
-        "valid": len(errors) == 0,
-        "errors": errors,
-        "warnings": warnings,
-    }
-
 
 # =============================================================================
 # Markdown 生成

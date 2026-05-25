@@ -2,6 +2,6 @@
 
 from .aggregate_frontmatter import aggregate_frontmatter
 from .run_synthesis import synthesize_report
-from .report_generator import validate_report, generate_markdown
+from .report_generator import generate_markdown
 
-__all__ = ["aggregate_frontmatter", "synthesize_report", "validate_report", "generate_markdown"]
+__all__ = ["aggregate_frontmatter", "synthesize_report", "generate_markdown"]
