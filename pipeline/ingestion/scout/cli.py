@@ -10,7 +10,12 @@ pipeline/ingestion/scout/cli.py — Scout CLI 契约
     run.py 通过 register_subparser 复用同一套参数定义。
 """
 
+import logging
+
 from pipeline.ingestion.scout.orchestrator import run_scout
+
+logger = logging.getLogger(__name__)
+
 
 
 # ---------------------------------------------------------------------------
@@ -47,10 +52,12 @@ def execute(args) -> int:
     返回：
         int: 始终返回 0（单个源失败通过 print 报告，不阻塞整体流程）
     """
+    logger.info("Stage 1 Scout 开始 force=%s", args.force)
     print("=== Stage 1 Scout: URL 清单生成 ===\n")
     manifests = run_scout(force=args.force)
     total = sum(len(v) for v in manifests.values())
     print(f"\n总计: {len(manifests)} 个源, {total} 篇文章")
+    logger.info("Stage 1 Scout 完成 sources=%d articles=%d", len(manifests), total)
     return 0
 
 

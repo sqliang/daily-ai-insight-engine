@@ -9,7 +9,6 @@ pipeline/extraction/cli.py — Stage 2 Extraction CLI 契约
 """
 
 import asyncio
-import logging
 import sys
 from pathlib import Path
 from typing import Optional
@@ -53,10 +52,6 @@ def _add_arguments(parser):
         "--model", "-m", type=str, default=None,
         help="LLM 模型名称 (默认: 从 config.yaml 读取)",
     )
-    parser.add_argument(
-        "--verbose", "-v", action="store_true",
-        help="详细日志输出",
-    )
 
 
 def register_subparser(subparsers):
@@ -80,14 +75,6 @@ def execute(args) -> int:
     返回：
         int: 0 成功, 1 失败
     """
-    # 配置日志
-    log_level = logging.DEBUG if args.verbose else logging.INFO
-    logging.basicConfig(
-        level=log_level,
-        format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-        datefmt="%H:%M:%S",
-    )
-
     # 解析输入路径
     input_path: Optional[Path] = None
     if args.input:
@@ -117,10 +104,9 @@ def execute(args) -> int:
         print("\n中断", file=sys.stderr)
         return 1
     except Exception as exc:
+        import traceback
         print(f"错误: {exc}", file=sys.stderr)
-        if args.verbose:
-            import traceback
-            traceback.print_exc()
+        traceback.print_exc()
         return 1
 
 

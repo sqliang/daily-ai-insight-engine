@@ -8,10 +8,8 @@ pipeline/analysis/run_analysis.py — Stage 3 深度分析管道编排
     - 支持 dry-run、部分维度运行、并发控制等 CLI 参数
 """
 
-import argparse
 import asyncio
 import logging
-import sys
 from pathlib import Path
 from typing import Optional
 
@@ -26,16 +24,6 @@ logger = logging.getLogger(__name__)
 # Stage 3 回退模型（在 config.yaml 和 CLI 参数均未指定时使用）
 DEFAULT_MODEL = "deepseek-v4-pro"
 
-
-
-def _setup_logging(verbose: bool = False) -> None:
-    """配置日志格式与级别。verbose=True 时显示 DEBUG 日志。"""
-    level = logging.DEBUG if verbose else logging.INFO
-    logging.basicConfig(
-        level=level,
-        format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-        datefmt="%H:%M:%S",
-    )
 
 
 # =============================================================================

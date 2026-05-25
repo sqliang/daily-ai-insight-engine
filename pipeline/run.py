@@ -79,6 +79,10 @@ if __name__ == "__main__":
   uv run python pipeline/run.py synthesize --dry-run        Stage 4b: 显示 prompt 预估
         """,
     )
+    parser.add_argument(
+        "--verbose", "-v", action="store_true",
+        help="详细日志输出（终端显示 DEBUG 级别，日志文件始终记录 DEBUG）",
+    )
     subparsers = parser.add_subparsers(dest="command", help="流水线阶段")
 
     # 各模块注册自己的子命令（参数定义 + 执行回调）
@@ -103,6 +107,13 @@ if __name__ == "__main__":
     if args.command is None:
         parser.print_help()
         sys.exit(0)
+
+    # --- 统一日志初始化 ---
+    # 在 dispatch 前一次性配置日志系统，后续各模块的 logger = logging.getLogger(__name__)
+    # 无需改动即可自动获得终端 + 文件双输出
+    from pipeline.core.logging_config import init_logging
+
+    init_logging(stage=args.command, verbose=args.verbose)
 
     # 每个 register_subparser 通过 set_defaults(func=execute) 设置了执行回调
     sys.exit(args.func(args))

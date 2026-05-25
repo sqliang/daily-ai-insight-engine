@@ -8,7 +8,12 @@ pipeline/ingestion/ingest/cli.py — Ingest CLI 契约
     将 CLI 定义（参数声明）与业务逻辑（orchestrator.py）分离。
 """
 
+import logging
+
 from pipeline.ingestion.ingest.orchestrator import run_ingest
+
+logger = logging.getLogger(__name__)
+
 
 
 # ---------------------------------------------------------------------------
@@ -65,6 +70,8 @@ def execute(args) -> int:
         concurrency = stage_config.get("concurrency", 5)
     concurrency = max(1, concurrency)
 
+    logger.info("Stage 1 Ingest 开始 manifest=%s force=%s concurrency=%d",
+                args.manifest, args.force, concurrency)
     print(f"=== Stage 1 Ingest: 正文抓取与 Markdown 生成 (并发: {concurrency}) ===\n")
     files = run_ingest(
         manifest_name=args.manifest,
@@ -72,6 +79,7 @@ def execute(args) -> int:
         concurrency=concurrency,
     )
     print(f"\n处理完成: {len(files)} 个文件")
+    logger.info("Stage 1 Ingest 完成 files=%d", len(files))
     return 0
 
 
