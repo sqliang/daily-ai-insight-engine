@@ -9,7 +9,6 @@ pipeline/analysis/cli.py — Stage 3 Analysis CLI 契约
 """
 
 import asyncio
-import logging
 import sys
 from pathlib import Path
 from typing import Optional
@@ -51,10 +50,6 @@ def _add_arguments(parser):
         "--model", "-m", type=str, default=None,
         help="LLM 模型名称 (默认: 从 config.yaml 读取)",
     )
-    parser.add_argument(
-        "--verbose", "-v", action="store_true",
-        help="显示详细日志",
-    )
 
 
 def register_subparser(subparsers):
@@ -78,10 +73,6 @@ def execute(args) -> int:
     返回：
         int: 0 成功, 1 存在失败, 130 被中断
     """
-    from .run_analysis import _setup_logging
-
-    _setup_logging(verbose=args.verbose)
-
     input_path = None
     if args.input:
         input_path = Path(args.input).resolve()
@@ -109,10 +100,9 @@ def execute(args) -> int:
         print("\n操作已取消", file=sys.stderr)
         return 130
     except Exception as exc:
+        import traceback
         print(f"\n分析失败: {exc}", file=sys.stderr)
-        if args.verbose:
-            import traceback
-            traceback.print_exc()
+        traceback.print_exc()
         return 1
 
 

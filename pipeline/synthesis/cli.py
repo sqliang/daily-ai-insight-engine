@@ -10,9 +10,13 @@ pipeline/synthesis/cli.py — Stage 4 Synthesis CLI 契约
     避免在两个业务逻辑文件中重复 argparse 声明。
 """
 
+import logging
 import sys
 from pathlib import Path
 from typing import Optional
+
+logger = logging.getLogger(__name__)
+
 
 
 # ===========================================================================
@@ -62,6 +66,8 @@ def execute_aggregate(args) -> int:
     output_dir = Path(args.output) if args.output else None
 
     try:
+        logger.info("Stage 4a Aggregate 开始 input=%s output=%s dry_run=%s",
+                     input_dir, output_dir, args.dry_run)
         result = aggregate_frontmatter(
             input_dir=input_dir,
             output_dir=output_dir,
@@ -69,6 +75,7 @@ def execute_aggregate(args) -> int:
         )
 
         if args.dry_run:
+            logger.info("Stage 4a Aggregate dry-run 完成")
             return 0
 
         print(f"\n=== 聚合完成 ===")
@@ -77,10 +84,14 @@ def execute_aggregate(args) -> int:
             print(f"    {source}: {count}")
         if result["errors"]:
             print(f"  跳过/错误: {result['errors']}")
+        logger.info("Stage 4a Aggregate 完成 articles=%d sources=%d errors=%d",
+                     result["total_articles"], len(result["sources"]), result["errors"])
         return 0
 
     except Exception as exc:
+        import traceback
         print(f"\n聚合失败: {exc}")
+        traceback.print_exc()
         return 1
 
 
@@ -110,10 +121,6 @@ def _add_synthesize_arguments(parser):
         "--dry-run", action="store_true",
         help="仅显示 prompt 预估，不调用 LLM",
     )
-    parser.add_argument(
-        "--verbose", "-v", action="store_true",
-        help="显示详细日志",
-    )
 
 
 def register_synthesize_subparser(subparsers):
@@ -137,31 +144,28 @@ def execute_synthesize(args) -> int:
     返回：
         int: 0 成功, 1 失败
     """
-    import logging
-
-    if args.verbose:
-        logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
-
     from .run_synthesis import synthesize_report
 
     input_path = Path(args.input) if args.input else None
     output_dir = Path(args.output) if args.output else None
 
     try:
+        logger.info("Stage 4b Synthesize 开始 model=%s max_detail=%s dry_run=%s",
+                     args.model, args.max_detail, args.dry_run)
         synthesize_report(
             input_path=input_path,
             output_dir=output_dir,
             model=args.model,
             max_detail=args.max_detail,
             dry_run=args.dry_run,
-            verbose=args.verbose,
         )
+        logger.info("Stage 4b Synthesize 完成")
         return 0
     except Exception as exc:
+        import traceback
         print(f"\n合成失败: {exc}")
-        if args.verbose:
-            import traceback
-            traceback.print_exc()
+        traceback.print_exc()
+        logger.error("Stage 4b Synthesize 失败: %s", exc)
         return 1
 
 

@@ -1,0 +1,53 @@
+# ===========================================================================
+# pipeline/logging_config.yaml — 统一日志配置
+#
+# 由 pipeline/core/logging_config.py 的 init_logging() 加载，
+# 通过 logging.config.dictConfig 一次性应用到整个 pipeline。
+#
+# 设计决策：
+#   - formatter 分离为 brief（终端）和 detailed（文件），各司其职
+#   - file handler 的 filename 由 Python 代码在运行时动态设置（按日期+stage）
+#   - pipeline logger 设为 DEBUG 级别，由 handler level 控制实际输出粒度
+#   - root logger 保持 WARNING 兜底，避免第三方库日志噪音
+# ===========================================================================
+
+version: 1
+disable_existing_loggers: false
+
+# ---------------------------------------------------------------------------
+# Formatters
+# ---------------------------------------------------------------------------
+formatters:
+  brief:
+    # 终端输出 — 紧凑可读，含时间+级别+模块名
+    format: "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+    datefmt: "%H:%M:%S"
+
+  detailed:
+    # 文件输出 — 含文件名+行号，方便 grep 后直接跳转到源码
+    format: "%(asctime)s [%(levelname)s] %(name)s [%(filename)s:%(lineno)d]: %(message)s"
+    datefmt: "%Y-%m-%d %H:%M:%S"
+
+# ---------------------------------------------------------------------------
+# Handlers
+# ---------------------------------------------------------------------------
+# file handler 的 filename 由 init_logging() 在运行时注入，此处仅为占位
+handlers:
+  console:
+    class: logging.StreamHandler
+    formatter: brief
+    stream: ext://sys.stderr
+    level: INFO
+
+# ---------------------------------------------------------------------------
+# Loggers
+# ---------------------------------------------------------------------------
+loggers:
+  pipeline:
+    level: DEBUG
+    propagate: false
+    handlers: [console]
+
+root:
+  level: WARNING
+  handlers: [console]
