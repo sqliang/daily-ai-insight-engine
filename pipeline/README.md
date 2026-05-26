@@ -79,10 +79,16 @@ pipeline/
 │   ├── fuzzy_maps.py
 │   └── prompts/
 │
-└── synthesis/                # Stage 4: 汇总报告 ✅
+├── aggregation/              # Stage 4a: Frontmatter 聚合 ✅
+│   ├── README.md
+│   ├── __init__.py
+│   └── aggregate_frontmatter.py  # 多阶段扫描 + 热冷分流 → data/04_structured/
+│
+└── synthesis/                # Stage 4b: 日报合成 ✅
+    ├── README.md
     ├── cli.py
-    ├── aggregate_frontmatter.py   # Stage 4a — frontmatter 聚合 → data/04_structured/
-    ├── synthesize_report.py       # Stage 4b — Editor-in-Chief 日报生成 → data/05_reports/
+    ├── synthesize_report.py       # Editor-in-Chief 日报生成 → data/05_reports/
+    ├── report_generator.py        # JSON → Markdown 报告文件生成
     └── prompts/
 ```
 
@@ -277,7 +283,8 @@ Stage 4b: synthesize ──Editor-in-Chief 日报──▶  data/05_reports/dail
 | Stage 1b | [`ingestion/ingest/README.md`](ingestion/ingest/README.md) | 正文抓取、双通道并行调度、截断策略、去重机制 |
 | Stage 2 | [`extraction/README.md`](extraction/README.md) | BaseInfo 推断 + FactExtraction、5 级容错校验、两阶段分离 |
 | Stage 3 | [`analysis/README.md`](analysis/README.md) | 三维度深度分析、双层并行、模糊枚举修复、部分成功策略 |
-| Stage 4 | [`synthesis/README.md`](synthesis/README.md) | Frontmatter 聚合 + Editor-in-Chief 日报合成 |
+| Stage 4a | [`aggregation/README.md`](aggregation/README.md) | Frontmatter 聚合 + 热冷分流 |
+| Stage 4b | [`synthesis/README.md`](synthesis/README.md) | Editor-in-Chief 日报合成 |
 
 ## 设计原则
 

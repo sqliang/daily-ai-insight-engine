@@ -15,7 +15,7 @@ Return ONLY a valid JSON object matching this schema:
 {
   "date": "YYYY-MM-DD",
   "generatedAt": "ISO-8601 timestamp",
-  "reportTitle": "YYYY-MM-DD AI 行业情报日报",
+  "reportTitle": "YYYY-MM-DD AI 洞察日报",
   "executiveSummary": "3-5 sentence overview of today's key themes and the overall landscape",
   "dataSourceSummary": {
     "totalArticles": <number>,

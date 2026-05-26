@@ -178,7 +178,7 @@ daily-ai-insight-engine/
 {
   "date": "2026-05-08",
   "generatedAt": "2026-05-08T12:00:00Z",
-  "reportTitle": "2026-05-08 AI 行业情报日报",
+  "reportTitle": "2026-05-08 AI 洞察日报",
   "executiveSummary": "...",
   "topEvents": [5],
   "deepDives": [3],

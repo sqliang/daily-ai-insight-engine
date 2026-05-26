@@ -54,7 +54,7 @@ class TopEvent(BaseModel):
     title: str = Field(..., description="事件标题（中文）")
     article_ids: list[str] = Field(..., alias="articleIds", min_length=1, description="关联文章 ID 列表")
     event_type: EventType = Field(..., alias="eventType", description="事件分类")
-    impact_score: int = Field(..., ge=1, le=10, alias="impactScore", description="影响力评分 (1-10)")
+    impact_score: float = Field(..., ge=1, le=10, alias="impactScore", description="影响力评分 (1-10)")
     why_it_matters: str = Field(..., alias="whyItMatters", description="为什么重要（中文）")
     evidence: list[str] = Field(..., min_length=1, max_length=6, alias="evidence", description="支撑证据")
 
@@ -110,7 +110,7 @@ class ImpactRankingItem(BaseModel):
 
     article_id: str = Field(..., alias="articleId", description="文章 ID")
     title: str = Field(..., description="文章标题")
-    score: int = Field(..., ge=1, le=10, description="影响力评分")
+    score: float = Field(..., ge=1, le=10, description="影响力评分")
 
     class Config:
         populate_by_name = True
@@ -146,7 +146,7 @@ class VisualizationData(BaseModel):
 
 class DailyReport(BaseModel):
     """
-    AI 行业情报日报顶层模型。
+    AI 洞察日报顶层模型。
 
     Editor-in-Chief Agent 的最终输出，包含人类可读的分析文本 + 预计算可视化数据，
     使前端看板页面可完全无状态、纯展示地渲染。

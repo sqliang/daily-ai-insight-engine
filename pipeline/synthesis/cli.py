@@ -27,7 +27,7 @@ def _add_aggregate_arguments(parser):
     """注册 aggregate 子命令的命令行参数。"""
     parser.add_argument(
         "--input", "-i", type=str, default=None,
-        help="输入目录 (默认: data/03_analyzed/)",
+        help="输入目录 (默认: 自动扫描 data/03_analyzed/ + data/02_extracted/ + data/01_raw/，按最完整版本去重)",
     )
     parser.add_argument(
         "--output", "-o", type=str, default=None,
@@ -37,6 +37,18 @@ def _add_aggregate_arguments(parser):
         "--dry-run", action="store_true",
         help="仅列出文件，不实际写入",
     )
+    parser.add_argument(
+        "--lookback-days", type=int, default=None,
+        help="all_articles.json 日报窗口 (天)。默认从 config.yaml 读取, 1。0 = 不限",
+    )
+    parser.add_argument(
+        "--hot-days", type=int, default=None,
+        help="per-source JSON 热数据窗口 (天)。默认从 config.yaml 读取, 7",
+    )
+    parser.add_argument(
+        "--max-history-days", type=int, default=None,
+        help="archive 分片最大保留天数 (天)。默认从 config.yaml 读取, 365。0 = 不限",
+    )
 
 
 def register_aggregate_subparser(subparsers):
@@ -44,7 +56,7 @@ def register_aggregate_subparser(subparsers):
     parser = subparsers.add_parser(
         "aggregate",
         help="Stage 4a: 提取 Frontmatter 并聚合为结构化 JSON",
-        description="递归扫描 data/03_analyzed/ 下所有 .md 文件，提取 YAML frontmatter，按数据源分组输出 JSON",
+        description="扫描 data/01_raw/ + data/02_extracted/ + data/03_analyzed/，按 ID 去重保留最完整版本，提取 frontmatter 输出 JSON",
     )
     _add_aggregate_arguments(parser)
     parser.set_defaults(func=execute_aggregate)
@@ -60,7 +72,7 @@ def execute_aggregate(args) -> int:
     返回：
         int: 0 成功, 1 失败
     """
-    from .aggregate_frontmatter import aggregate_frontmatter
+    from ..aggregation.aggregate_frontmatter import aggregate_frontmatter
 
     input_dir = Path(args.input) if args.input else None
     output_dir = Path(args.output) if args.output else None
@@ -72,6 +84,9 @@ def execute_aggregate(args) -> int:
             input_dir=input_dir,
             output_dir=output_dir,
             dry_run=args.dry_run,
+            lookback_days=args.lookback_days,
+            hot_days=args.hot_days,
+            max_history_days=args.max_history_days,
         )
 
         if args.dry_run:
@@ -123,6 +138,10 @@ def _add_synthesize_arguments(parser):
         "--dry-run", action="store_true",
         help="仅显示 prompt 预估，不调用 LLM",
     )
+    parser.add_argument(
+        "--lookback-days", type=int, default=None,
+        help="先按 N 天窗口重新聚合，再合成日报 (默认: 跳过，使用已有 all_articles.json)。0 = 不限",
+    )
 
 
 def register_synthesize_subparser(subparsers):
@@ -147,11 +166,22 @@ def execute_synthesize(args) -> int:
         int: 0 成功, 1 失败
     """
     from .run_synthesis import synthesize_report
+    from ..aggregation.aggregate_frontmatter import aggregate_frontmatter
 
     input_path = Path(args.input) if args.input else None
     output_dir = Path(args.output) if args.output else None
 
     try:
+        # 如果指定了 --lookback-days，先重新聚合以过滤文章
+        if args.lookback_days is not None:
+            logger.info("预聚合: lookback_days=%s", args.lookback_days)
+            aggregate_frontmatter(
+                input_dir=None,
+                output_dir=None,
+                dry_run=False,
+                lookback_days=args.lookback_days,
+            )
+
         logger.info("Stage 4b Synthesize 开始 model=%s max_detail=%s dry_run=%s",
                      args.model, args.max_detail, args.dry_run)
         synthesize_report(

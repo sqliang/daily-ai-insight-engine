@@ -1,0 +1,735 @@
+- generic [active] [ref=e1]:
+  - banner:
+    - generic [ref=e2]:
+      - link "Skip to main content":
+        - /url: "#main"
+      - generic [ref=e4]:
+        - link "OpenAI Home" [ref=e5] [cursor=pointer]:
+          - /url: /
+          - img [ref=e7]
+        - generic [ref=e9]:
+          - navigation "Main Navigation" [ref=e11]:
+            - list [ref=e12]:
+              - listitem [ref=e13]:
+                - link "Research" [ref=e14] [cursor=pointer]:
+                  - /url: /research/index/
+                  - generic [ref=e16]: Research
+                - button "Research menu"
+              - listitem [ref=e17]:
+                - button "Products" [ref=e18] [cursor=pointer]:
+                  - generic [ref=e20]: Products
+                - button "Products menu"
+              - listitem [ref=e21]:
+                - link "Business" [ref=e22] [cursor=pointer]:
+                  - /url: /business/
+                  - generic [ref=e24]: Business
+                - button "Business menu"
+              - listitem [ref=e25]:
+                - link "Developers" [ref=e26] [cursor=pointer]:
+                  - /url: /api/
+                  - generic [ref=e28]: Developers
+                - button "Developers menu"
+              - listitem [ref=e29]:
+                - link "Company" [ref=e30] [cursor=pointer]:
+                  - /url: /about/
+                  - generic [ref=e32]: Company
+                - button "Company menu"
+              - listitem [ref=e33]:
+                - link "Foundation (opens in a new window)" [ref=e34] [cursor=pointer]:
+                  - /url: https://openaifoundation.org/
+                  - generic [ref=e36]: Foundation
+                  - generic [ref=e37]: (opens in a new window)
+          - generic [ref=e39]:
+            - button "Open Search" [ref=e41] [cursor=pointer]:
+              - img [ref=e42]
+            - button "Close Search" [ref=e44] [cursor=pointer]:
+              - img [ref=e45]
+          - generic [ref=e48]:
+            - button "Log in" [ref=e49] [cursor=pointer]:
+              - text: Log in
+              - img [ref=e50]
+            - link "Try ChatGPT (opens in a new window)" [ref=e52] [cursor=pointer]:
+              - /url: https://chatgpt.com/?openaicom-did=2d5a1b4e-77af-4fe1-9ddc-c69ba14ff654&openaicom_referred=true
+              - text: Try ChatGPT
+              - img [ref=e53]
+              - generic [ref=e55]: (opens in a new window)
+  - generic [ref=e56]:
+    - main [ref=e57]:
+      - generic [ref=e58]: An OpenAI model has disproved a central conjecture in discrete geometry | OpenAI
+      - navigation:
+        - generic [ref=e60]:
+          - button "Table of contents" [ref=e61] [cursor=pointer]:
+            - generic [ref=e62]: Table of contents
+          - img [ref=e64]
+      - article [ref=e66]:
+        - generic [ref=e67]:
+          - generic [ref=e68]:
+            - generic [ref=e71]:
+              - generic [ref=e72]:
+                - paragraph [ref=e73]: May 20, 2026
+                - link "Research" [ref=e74] [cursor=pointer]:
+                  - /url: /news/research/
+                - link "Milestone" [ref=e75] [cursor=pointer]:
+                  - /url: /research/index/milestone/
+              - heading "An OpenAI model has disproved a central conjecture in discrete geometry" [level=1] [ref=e76]
+              - generic [ref=e78]:
+                - link "Read the proof (opens in a new window)" [ref=e79] [cursor=pointer]:
+                  - /url: https://cdn.openai.com/pdf/74c24085-19b0-4534-9c90-465b8e29ad73/unit-distance-proof.pdf
+                  - text: Read the proof
+                  - img [ref=e80]
+                  - generic [ref=e82]: (opens in a new window)
+                - link "Read the companion remarks (opens in a new window)" [ref=e83] [cursor=pointer]:
+                  - /url: https://cdn.openai.com/pdf/74c24085-19b0-4534-9c90-465b8e29ad73/unit-distance-remarks.pdf
+                  - text: Read the companion remarks
+                  - img [ref=e84]
+                  - generic [ref=e86]: (opens in a new window)
+            - generic [ref=e870]:
+              - iframe [ref=e871]:
+                
+              - button "Pause video" [ref=e872] [cursor=pointer]:
+                - img [ref=e873]
+              - generic [ref=e876]:
+                - button "Pause video" [ref=e878] [cursor=pointer]:
+                  - img [ref=e879]
+                - paragraph [ref=e882]: 00:00
+                - button "Fullscreen" [ref=e884] [cursor=pointer]:
+                  - img [ref=e885]
+                - button "Video Settings" [ref=e888] [cursor=pointer]:
+                  - img [ref=e889]
+          - generic [ref=e95]:
+            - generic [ref=e98]:
+              - button "Play audio of page text" [ref=e99] [cursor=pointer]:
+                - img [ref=e100]
+              - generic [ref=e891]:
+                - generic [ref=e892]: Listen to article
+                - generic [ref=e893]: 9:23
+            - button "Share" [ref=e107] [cursor=pointer]:
+              - img [ref=e108]
+              - text: Share
+        - generic [ref=e111]:
+          - paragraph [ref=e113]:
+            - text: "For nearly 80 years, mathematicians have studied a deceptively simple question: if you place"
+            - generic [ref=e115]:
+              - math [ref=e117]:
+                - generic [ref=e120]: "n"
+              - generic [ref=e122]: "n"
+            - text: points in the plane, how many pairs of points can be exactly distance
+            - generic [ref=e124]:
+              - math [ref=e126]:
+                - generic [ref=e129]: "1"
+              - generic [ref=e131]: "1"
+            - text: apart?
+          - paragraph [ref=e133]:
+            - text: This is the planar unit distance problem, first posed by Paul Erdős in 1946. It is one of the best-known questions in combinatorial geometry, easy to state and remarkably difficult to resolve. The 2005 book
+            - generic [ref=e134]: Research Problems in Discrete Geometry
+            - text: ", by Brass, Moser, and Pach, calls it “possibly the best known (and simplest to explain) problem in combinatorial geometry.” Noga Alon, a leading combinatorialist at Princeton, describes it as “one of Erdős’ favorite problems.” Erdős even offered a monetary prize for resolving this problem."
+          - paragraph [ref=e136]: Today, we share a breakthrough on the unit distance problem. Since Erdős’s original work, the prevailing belief has been that the “square grid” constructions depicted further below were essentially optimal for maximizing the number of unit-distance pairs. An internal OpenAI model has disproved this longstanding conjecture, providing an infinite family of examples that yield a polynomial improvement. The proof has been checked by a group of external mathematicians. They have also written a companion paper explaining the argument and providing further background and context for the significance of the result.
+          - paragraph [ref=e138]: The result is also notable for how it was found. The proof came from a new general-purpose reasoning model, rather than from a system trained specifically for mathematics, scaffolded to search through proof strategies, or targeted at the unit distance problem in particular. As part of a broader effort to test whether advanced models can contribute to frontier research, we evaluated it on a collection of Erdős problems. In this case, it produced a proof resolving the open problem.
+          - paragraph [ref=e140]: "This proof is an important milestone for the math and AI communities. It marks the first time that a prominent open problem, central to a subfield of mathematics, has been solved autonomously by AI. It also demonstrates the depth of reasoning these systems now support. Mathematics provides a particularly clear testbed for reasoning: the problems are precise, potential proofs can be checked, and a long argument only works if the reasoning holds together from beginning to end. The method by which the problem was solved is also notable. The proof brings unexpected, sophisticated ideas from algebraic number theory to bear on an elementary geometric question."
+          - paragraph [ref=e142]: Fields medalist Tim Gowers, writing in the companion paper, calls the result “a milestone in AI mathematics.” According to leading number theorist Arul Shankar, “In my opinion this paper demonstrates that current AI models go beyond just helpers to human mathematicians – they are capable of having original ingenious ideas, and then carrying them out to fruition”.
+          - generic [ref=e145]:
+            - generic [ref=e146]:
+              - paragraph [ref=e147]: Mathematicians on the result
+              - generic [ref=e148]:
+                - generic [ref=e149]: 1 of 4
+                - generic [ref=e150]:
+                  - button "Previous testimonial" [ref=e151] [cursor=pointer]:
+                    - img [ref=e152]
+                  - button "Next testimonial" [ref=e154] [cursor=pointer]:
+                    - img [ref=e155]
+            - generic [ref=e157]:
+              - figure [ref=e162]:
+                - blockquote [ref=e163]:
+                  - generic [ref=e164]: “
+                  - text: This has been one of Erdős' favorite problems, I have heard him myself mentioning the problem multiple times in his lectures. I believe it would be fair to say that every mathematician working in Combinatorial Geometry thought about this problem, and lots of mathematicians working in other areas spent at least some time thinking about it… The solution of the problem by the internal model of Open AI is, in my opinion, an outstanding achievement, settling a long-standing open problem. The fact that the correct answer is not
+                  - generic [ref=e166]:
+                    - math [ref=e168]:
+                      - generic [ref=e171]:
+                        - generic [ref=e172]: "n"
+                        - generic [ref=e173]:
+                          - generic [ref=e174]: "1"
+                          - generic [ref=e175]: +
+                          - generic [ref=e176]: o
+                          - generic [ref=e177]: (
+                          - generic [ref=e178]: "1"
+                          - generic [ref=e179]: )
+                    - generic [ref=e182]:
+                      - text: "n"
+                      - generic [ref=e188]: 1+o(1)
+                  - text: is surprising, and the construction and its analysis apply fairly sophisticated tools from algebraic number theory in an elegant and clever way.”
+              - generic [ref=e193]:
+                - generic:
+                  - list:
+                    - listitem:
+                      - generic: Noga Alon
+                    - listitem:
+                      - generic: Tim Gowers
+                    - listitem:
+                      - generic: Arul Shankar
+                    - listitem:
+                      - generic: Jacob Tsimerman
+                - list "Testimonials" [ref=e194]:
+                  - listitem [ref=e195]:
+                    - button "Show testimonial from Noga Alon" [ref=e196] [cursor=pointer]:
+                      - generic [ref=e197]: Noga Alon
+                  - listitem [ref=e198]:
+                    - button "Show testimonial from Tim Gowers" [ref=e199] [cursor=pointer]:
+                      - generic [ref=e200]: Tim Gowers
+                  - listitem [ref=e201]:
+                    - button "Show testimonial from Arul Shankar" [ref=e202] [cursor=pointer]:
+                      - generic [ref=e203]: Arul Shankar
+                  - listitem [ref=e204]:
+                    - button "Show testimonial from Jacob Tsimerman" [ref=e205] [cursor=pointer]:
+                      - generic [ref=e206]: Jacob Tsimerman
+          - paragraph [ref=e208]:
+            - text: The proof is available
+            - link "here⁠ (opens in a new window)" [ref=e209] [cursor=pointer]:
+              - /url: https://cdn.openai.com/pdf/74c24085-19b0-4534-9c90-465b8e29ad73/unit-distance-proof.pdf
+              - text: here⁠
+              - generic [ref=e210]: (opens in a new window)
+            - text: . The companion paper by leading external mathematicians is available
+            - link "here⁠ (opens in a new window)" [ref=e211] [cursor=pointer]:
+              - /url: https://cdn.openai.com/pdf/74c24085-19b0-4534-9c90-465b8e29ad73/unit-distance-remarks.pdf
+              - text: here⁠
+              - generic [ref=e212]: (opens in a new window)
+            - text: . You can find an abridged version of the model’s chain of thought
+            - link "here⁠ (opens in a new window)" [ref=e213] [cursor=pointer]:
+              - /url: https://cdn.openai.com/pdf/1625eff6-5ac1-40d8-b1db-5d5cf925de8b/unit-distance-cot.pdf
+              - text: here⁠
+              - generic [ref=e214]: (opens in a new window)
+            - text: .
+          - generic [ref=e219]:
+            - img "Dense black network graph with interconnected nodes forming a square pattern." [ref=e224]
+            - paragraph [ref=e230]:
+              - generic [ref=e231]: Previously known construction of many unit distances from a rescaled square grid.
+          - heading "The unit distance problem" [level=2] [ref=e235]
+          - paragraph [ref=e237]:
+            - text: Let
+            - generic [ref=e239]:
+              - math [ref=e241]:
+                - generic [ref=e243]:
+                  - generic [ref=e244]: u
+                  - generic [ref=e245]: (
+                  - generic [ref=e246]: "n"
+                  - generic [ref=e247]: )
+              - generic [ref=e249]: u(n)
+            - text: be the largest possible number of unit-distance pairs among
+            - generic [ref=e251]:
+              - math [ref=e253]:
+                - generic [ref=e256]: "n"
+              - generic [ref=e258]: "n"
+            - text: "points in the plane. Examples attaining linear growth rate are easy to construct: placing"
+            - generic [ref=e260]:
+              - math [ref=e262]:
+                - generic [ref=e265]: "n"
+              - generic [ref=e267]: "n"
+            - text: points in a line gives
+            - generic [ref=e269]:
+              - math [ref=e271]:
+                - generic [ref=e273]:
+                  - generic [ref=e274]: "n"
+                  - generic [ref=e275]: −
+                  - generic [ref=e276]: "1"
+              - generic [ref=e277]:
+                - generic [ref=e278]: n −
+                - generic [ref=e279]: "1"
+            - text: pairs, while a square grid gives about
+            - generic [ref=e281]:
+              - math [ref=e283]:
+                - generic [ref=e285]:
+                  - generic [ref=e286]: "2"
+                  - generic [ref=e287]: "n"
+              - generic [ref=e289]: 2n
+            - text: "pairs. The previously best known construction, coming from a rescaled square grid, turns out to give even more:"
+            - generic [ref=e291]:
+              - math [ref=e293]:
+                - generic [ref=e296]:
+                  - generic [ref=e297]: "n"
+                  - generic [ref=e298]:
+                    - generic [ref=e299]: "1"
+                    - generic [ref=e300]: +
+                    - generic [ref=e301]: C
+                    - generic [ref=e302]: /
+                    - generic [ref=e303]: log
+                    - generic: ⁡
+                    - generic [ref=e304]: log
+                    - generic: ⁡
+                    - generic [ref=e305]: (
+                    - generic [ref=e306]: "n"
+                    - generic [ref=e307]: )
+              - generic [ref=e310]:
+                - text: "n"
+                - generic [ref=e316]:
+                  - text: 1+C/
+                  - generic [ref=e317]: log
+                  - generic [ref=e318]: log
+                  - text: (n)
+            - text: for a constant
+            - generic [ref=e320]:
+              - math [ref=e322]:
+                - generic [ref=e325]: C
+              - generic [ref=e327]: C
+            - text: . Since
+            - generic [ref=e329]:
+              - math [ref=e331]:
+                - generic [ref=e333]:
+                  - generic [ref=e334]: log
+                  - generic: ⁡
+                  - generic [ref=e335]: log
+                  - generic: ⁡
+                  - generic [ref=e336]: (
+                  - generic [ref=e337]: "n"
+                  - generic [ref=e338]: )
+              - generic [ref=e340]:
+                - generic [ref=e341]: log
+                - generic [ref=e342]: log
+                - text: (n)
+            - text: tends to infinity with
+            - generic [ref=e344]:
+              - math [ref=e346]:
+                - generic [ref=e349]: "n"
+              - generic [ref=e351]: "n"
+            - text: ", the additional term in the exponent tends to"
+            - generic [ref=e353]:
+              - math [ref=e355]:
+                - generic [ref=e358]: "0"
+              - generic [ref=e360]: "0"
+            - text: ", meaning these constructions achieve growth only slightly faster than linear. For decades, it was widely believed that this rate was essentially the best possible, and no construction could improve significantly over the square grid. In technical terms, Erdős conjectured an upper bound of"
+            - generic [ref=e362]:
+              - math [ref=e364]:
+                - generic [ref=e367]:
+                  - generic [ref=e368]: "n"
+                  - generic [ref=e369]:
+                    - generic [ref=e370]: "1"
+                    - generic [ref=e371]: +
+                    - generic [ref=e372]: o
+                    - generic [ref=e373]: (
+                    - generic [ref=e374]: "1"
+                    - generic [ref=e375]: )
+              - generic [ref=e378]:
+                - text: "n"
+                - generic [ref=e384]: 1+o(1)
+            - text: in which the additional
+            - generic [ref=e386]:
+              - math [ref=e388]:
+                - generic [ref=e390]:
+                  - generic [ref=e391]: o
+                  - generic [ref=e392]: (
+                  - generic [ref=e393]: "1"
+                  - generic [ref=e394]: )
+              - generic [ref=e396]: o(1)
+            - text: indicates a term tending to
+            - generic [ref=e398]:
+              - math [ref=e400]:
+                - generic [ref=e403]: "0"
+              - generic [ref=e405]: "0"
+            - text: with
+            - generic [ref=e407]:
+              - math [ref=e409]:
+                - generic [ref=e412]: "n"
+              - generic [ref=e414]: "n"
+            - generic [ref=e415]:
+              - text: .
+              - text: Our new result disproves this conjecture. More precisely, for infinitely many values of
+            - generic [ref=e417]:
+              - math [ref=e419]:
+                - generic [ref=e422]: "n"
+              - generic [ref=e424]: "n"
+            - text: ", the proof constructs configurations of"
+            - generic [ref=e426]:
+              - math [ref=e428]:
+                - generic [ref=e431]: "n"
+              - generic [ref=e433]: "n"
+            - text: points with at least
+            - generic [ref=e435]:
+              - math [ref=e437]:
+                - generic [ref=e440]:
+                  - generic [ref=e441]: "n"
+                  - generic [ref=e442]:
+                    - generic [ref=e443]: "1"
+                    - generic [ref=e444]: +
+                    - generic [ref=e445]: δ
+              - generic [ref=e448]:
+                - text: "n"
+                - generic [ref=e454]: 1+δ
+            - text: unit-distance pairs, for some fixed exponent
+            - generic [ref=e456]:
+              - math [ref=e458]:
+                - generic [ref=e460]:
+                  - generic [ref=e461]: δ
+                  - generic [ref=e462]: ">"
+                  - generic [ref=e463]: "0"
+              - generic [ref=e464]:
+                - generic [ref=e465]: δ >
+                - generic [ref=e466]: "0"
+            - text: . (The original AI proof does not give an explicit
+            - generic [ref=e468]:
+              - math [ref=e470]:
+                - generic [ref=e473]: δ
+              - generic [ref=e475]: δ
+            - text: ", but a forthcoming refinement due to Princeton mathematics professor Will Sawin has shown one can take"
+            - generic [ref=e477]:
+              - math [ref=e479]:
+                - generic [ref=e481]:
+                  - generic [ref=e482]: δ
+                  - generic [ref=e483]: =
+                  - generic [ref=e484]: "0.014"
+              - generic [ref=e485]:
+                - generic [ref=e486]: δ =
+                - generic [ref=e487]: "0.014"
+            - generic [ref=e488]:
+              - text: .)
+              - text: The history of the problem helps to see why the result is surprising. The best known lower bound had been essentially unchanged since Erdős’s original 1946 construction. The best upper bound,
+            - generic [ref=e490]:
+              - math [ref=e492]:
+                - generic [ref=e494]:
+                  - generic [ref=e495]: O
+                  - generic [ref=e496]: (
+                  - generic [ref=e497]:
+                    - generic [ref=e498]: "n"
+                    - generic [ref=e499]:
+                      - generic [ref=e500]: "4"
+                      - generic [ref=e501]: /
+                      - generic [ref=e502]: "3"
+                  - generic [ref=e503]: )
+              - generic [ref=e505]:
+                - text: O(
+                - generic [ref=e506]:
+                  - text: "n"
+                  - generic [ref=e512]: 4/3
+                - text: )
+            - generic [ref=e513]:
+              - text: ", dates to work by Spencer, Szemerédi, and Trotter in 1984, and despite later refinements and related structural work by Székely, Katz and Silier, Pach, Raz, and Solymosi and by others, the upper bound has remained essentially unchanged. As evidence in favor of the conjecture, Matoušek and Alon-Bucić-Sauermann studied the problem with non-Euclidean distances in the plane, and proved that \"most\" of these non-Euclidean distances obey the conjecture in some sense."
+              - text: Surprisingly, the key ingredients of the construction come from a very different part of mathematics known as algebraic number theory, which studies concepts like factorization in extensions of the integers known as algebraic number fields.
+          - figure [ref=e515]:
+            - paragraph [ref=e524]:
+              - generic [ref=e525]: After verifying the initial proof, we investigated the success rate of our models on this problem with varying amounts of test-time compute. The results are shown here.
+          - heading "New techniques from algebraic number theory" [level=2] [ref=e529]
+          - paragraph [ref=e531]: At a high level, the proof begins with a familiar geometric idea and pushes it in an unexpected direction.
+          - paragraph [ref=e533]:
+            - text: "Erdős’s original lower bound can be understood through the Gaussian integers: numbers of the form"
+            - generic [ref=e535]:
+              - math [ref=e537]:
+                - generic [ref=e539]:
+                  - generic [ref=e540]: a
+                  - generic [ref=e541]: +
+                  - generic [ref=e542]: b
+                  - generic [ref=e543]: i
+              - generic [ref=e544]:
+                - generic [ref=e545]: a +
+                - generic [ref=e546]: bi
+            - text: ", where"
+            - generic [ref=e548]:
+              - math [ref=e550]:
+                - generic [ref=e553]: a
+              - generic [ref=e555]: a
+            - text: and
+            - generic [ref=e557]:
+              - math [ref=e559]:
+                - generic [ref=e562]: b
+              - generic [ref=e564]: b
+            - text: are integers and
+            - generic [ref=e566]:
+              - math [ref=e568]:
+                - generic [ref=e571]: i
+              - generic [ref=e573]: i
+            - text: is the square root of
+            - generic [ref=e575]:
+              - math [ref=e577]:
+                - generic [ref=e579]:
+                  - generic [ref=e580]: −
+                  - generic [ref=e581]: "1"
+              - generic [ref=e583]: −1
+            - text: . The Gaussian integers extend the ordinary integers and, like them, enjoy properties such a unique factorization into primes. Such extensions of the ordinary integers or rationals are known as algebraic number fields. The new argument replaces the Gaussian integers by more complicated generalizations from algebraic number theory with richer symmetries that can create many more unit-length differences.
+          - paragraph [ref=e585]: The precise argument uses tools such as infinite class field towers and Golod–Shafarevich theory to show the number fields required for the argument actually exist. These ideas were well-known to algebraic number theorists, but it came as a great surprise that these concepts have implications for geometric questions in the Euclidean plane.
+          - heading "What this means for mathematics" [level=2] [ref=e589]
+          - paragraph [ref=e591]: "This result marks an important moment in the interaction between AI and mathematics: an AI system has autonomously resolved a longstanding open problem at the center of an active field. It also offers an early glimpse of a new kind of collaboration between AI and human mathematicians. In this case, the companion work by external mathematicians paints a substantially richer picture than the original solution alone."
+          - paragraph [ref=e593]: "As Thomas Bloom writes in the companion note:"
+          - paragraph [ref=e595]:
+            - text: “
+            - generic [ref=e596]: "When assessing the importance and influence of an AI-generated proof, a question I ask myself is: has this taught us something new about the problem? Do we understand discrete geometry better now? I think the answer is a moderated yes: this shows that there is a lot more that number theoretic constructions have to say about these sorts of questions than we suspected; moreover, that the number theory required can be very deep. No doubt many algebraic number theorists will be taking a close look at other open problems in discrete geometry in the coming months."
+            - text: ”
+          - paragraph [ref=e598]: The unexpected connection between algebraic number theory and discrete geometry revealed by the solution is part of what makes the result notable. It does not simply settle a specific conjecture, but may provide mathematicians with a bridge to begin exploring further related problems.
+          - paragraph [ref=e600]: "Bloom also points toward a broader possibility:"
+          - paragraph [ref=e602]:
+            - text: “
+            - generic [ref=e603]: The frontiers of knowledge are very spiky, and no doubt the coming months and years will see similar successes in many other areas of mathematics, where long-standing open problems are resolved by an AI revealing unexpected connections and pushing the existing technical machinery to its limit. AI is helping us to more fully explore the cathedral of mathematics we have build over the centuries; what other unseen wonders are waiting in the wings?
+            - text: ”
+          - paragraph [ref=e605]: "This result provides a promising example: AI contributing not only a solution, but a mathematical discovery whose significance becomes clearer and richer through subsequent human understanding."
+          - heading "Why this matters" [level=2] [ref=e609]
+          - paragraph [ref=e611]: "The takeaway is bigger than this particular result. Better mathematical reasoning can make AI a stronger research partner: something that can hold together difficult lines of thought, connect ideas across distant areas of knowledge, surface promising paths experts may not have prioritized, and help researchers make progress on problems that would otherwise be too complex or time-intensive to tackle."
+          - paragraph [ref=e613]: "Those capabilities matter beyond mathematics. If a model can keep a complicated argument coherent, connect ideas across distant areas of knowledge, and produce work that survives expert scrutiny, those are also useful abilities in biology, physics, materials science, engineering, and medicine, and they are part of our longer-term path toward more automated research: systems that can help scientists and engineers explore more ideas and pursue harder technical questions."
+          - paragraph [ref=e615]: AI is about to start taking a very serious role in the creative parts of research, and most importantly AI research itself. While this progress is not unexpected, it reinforces the urgency we feel about understanding this next phase of AI development, the challenges of aligning very intelligent systems, and the future of human-AI collaboration.
+          - paragraph [ref=e617]: That future still depends on human judgment. Expertise becomes more valuable, not less. AI can help search, suggest, and verify. People choose the problems that matter, interpret the results, and decide what questions to pursue next.
+        - generic [ref=e620]:
+          - list [ref=e622]:
+            - listitem [ref=e623]:
+              - link "2026" [ref=e624] [cursor=pointer]:
+                - /url: /news/?tags=2026
+          - generic [ref=e625]:
+            - heading "Author" [level=2] [ref=e626]
+            - generic [ref=e627]: OpenAI
+        - generic [ref=e628]:
+          - generic [ref=e629]:
+            - heading "Keep reading" [level=2] [ref=e631]
+            - link "View all" [ref=e632] [cursor=pointer]:
+              - /url: /news/
+          - generic [ref=e635]:
+            - generic [ref=e637]:
+              - img "1 1" [ref=e643]
+              - link "What Parameter Golf taught us - Research - May 12, 2026" [ref=e644] [cursor=pointer]:
+                - /url: /index/what-parameter-golf-taught-us/
+                - generic [ref=e645]:
+                  - generic [ref=e646]: What Parameter Golf taught us
+                  - paragraph [ref=e647]:
+                    - generic [ref=e648]: Research
+                    - time [ref=e650]: May 12, 2026
+            - generic [ref=e652]:
+              - img "Introducing OpenAI Privacy Filter" [ref=e658]
+              - link "Introducing OpenAI Privacy Filter - Research - Apr 22, 2026" [ref=e659] [cursor=pointer]:
+                - /url: /index/introducing-openai-privacy-filter/
+                - generic [ref=e660]:
+                  - generic [ref=e661]: Introducing OpenAI Privacy Filter
+                  - paragraph [ref=e662]:
+                    - generic [ref=e663]: Research
+                    - time [ref=e665]: Apr 22, 2026
+            - generic [ref=e667]:
+              - img "OAI GPT-Rosaling Art Card 1x1" [ref=e673]
+              - link "Introducing GPT-Rosalind for life sciences research - Research - Apr 16, 2026" [ref=e674] [cursor=pointer]:
+                - /url: /index/introducing-gpt-rosalind/
+                - generic [ref=e675]:
+                  - generic [ref=e676]: Introducing GPT-Rosalind for life sciences research
+                  - paragraph [ref=e677]:
+                    - generic [ref=e678]: Research
+                    - time [ref=e680]: Apr 16, 2026
+    - contentinfo [ref=e681]:
+      - generic [ref=e683]:
+        - generic [ref=e684]:
+          - generic [ref=e685]:
+            - heading "Our Research" [level=2] [ref=e686]
+            - list [ref=e687]:
+              - listitem [ref=e688]:
+                - link "Research Index" [ref=e689] [cursor=pointer]:
+                  - /url: /research/index/
+              - listitem [ref=e690]:
+                - link "Research Overview" [ref=e691] [cursor=pointer]:
+                  - /url: /research/
+              - listitem [ref=e692]:
+                - link "Research Residency" [ref=e693] [cursor=pointer]:
+                  - /url: /residency/
+              - listitem [ref=e694]:
+                - link "Economic Research" [ref=e695] [cursor=pointer]:
+                  - /url: /signals/
+          - generic [ref=e696]:
+            - heading "Latest Advancements" [level=2] [ref=e697]
+            - list [ref=e698]:
+              - listitem [ref=e699]:
+                - link "GPT-5.5" [ref=e700] [cursor=pointer]:
+                  - /url: /index/introducing-gpt-5-5/
+              - listitem [ref=e701]:
+                - link "GPT-5.4" [ref=e702] [cursor=pointer]:
+                  - /url: /index/introducing-gpt-5-4/
+              - listitem [ref=e703]:
+                - link "GPT-5.3 Instant" [ref=e704] [cursor=pointer]:
+                  - /url: /index/gpt-5-3-instant/
+              - listitem [ref=e705]:
+                - link "GPT-5.3-Codex" [ref=e706] [cursor=pointer]:
+                  - /url: /index/introducing-gpt-5-3-codex/
+          - generic [ref=e707]:
+            - heading "Safety" [level=2] [ref=e708]
+            - list [ref=e709]:
+              - listitem [ref=e710]:
+                - link "Safety Approach" [ref=e711] [cursor=pointer]:
+                  - /url: /safety/
+              - listitem [ref=e712]:
+                - link "Security & Privacy" [ref=e713] [cursor=pointer]:
+                  - /url: /security-and-privacy/
+              - listitem [ref=e714]:
+                - link "Trust & Transparency" [ref=e715] [cursor=pointer]:
+                  - /url: /trust-and-transparency/
+        - generic [ref=e716]:
+          - generic [ref=e717]:
+            - heading "ChatGPT" [level=2] [ref=e718]
+            - list [ref=e719]:
+              - listitem [ref=e720]:
+                - link "Explore ChatGPT (opens in a new window)" [ref=e721] [cursor=pointer]:
+                  - /url: https://chatgpt.com/overview?openaicom-did=2d5a1b4e-77af-4fe1-9ddc-c69ba14ff654&openaicom_referred=true
+                  - text: Explore ChatGPT
+                  - img [ref=e722]
+                  - generic [ref=e724]: (opens in a new window)
+              - listitem [ref=e725]:
+                - link "Business" [ref=e726] [cursor=pointer]:
+                  - /url: https://chatgpt.com/business/business-plan?openaicom-did=2d5a1b4e-77af-4fe1-9ddc-c69ba14ff654&openaicom_referred=true
+              - listitem [ref=e727]:
+                - link "Enterprise" [ref=e728] [cursor=pointer]:
+                  - /url: https://chatgpt.com/business/enterprise?openaicom-did=2d5a1b4e-77af-4fe1-9ddc-c69ba14ff654&openaicom_referred=true
+              - listitem [ref=e729]:
+                - link "Education" [ref=e730] [cursor=pointer]:
+                  - /url: https://chatgpt.com/business/education?openaicom-did=2d5a1b4e-77af-4fe1-9ddc-c69ba14ff654&openaicom_referred=true
+              - listitem [ref=e731]:
+                - link "Pricing (opens in a new window)" [ref=e732] [cursor=pointer]:
+                  - /url: https://chatgpt.com/pricing?openaicom-did=2d5a1b4e-77af-4fe1-9ddc-c69ba14ff654&openaicom_referred=true
+                  - text: Pricing
+                  - img [ref=e733]
+                  - generic [ref=e735]: (opens in a new window)
+              - listitem [ref=e736]:
+                - link "Download (opens in a new window)" [ref=e737] [cursor=pointer]:
+                  - /url: https://chatgpt.com/download?openaicom-did=2d5a1b4e-77af-4fe1-9ddc-c69ba14ff654&openaicom_referred=true
+                  - text: Download
+                  - img [ref=e738]
+                  - generic [ref=e740]: (opens in a new window)
+          - generic [ref=e741]:
+            - heading "API Platform" [level=2] [ref=e742]
+            - list [ref=e743]:
+              - listitem [ref=e744]:
+                - link "Platform Overview" [ref=e745] [cursor=pointer]:
+                  - /url: /api/
+              - listitem [ref=e746]:
+                - link "Pricing" [ref=e747] [cursor=pointer]:
+                  - /url: /api/pricing/
+              - listitem [ref=e748]:
+                - link "API log in (opens in a new window)" [ref=e749] [cursor=pointer]:
+                  - /url: https://platform.openai.com/login
+                  - text: API log in
+                  - img [ref=e750]
+                  - generic [ref=e752]: (opens in a new window)
+              - listitem [ref=e753]:
+                - link "Documentation (opens in a new window)" [ref=e754] [cursor=pointer]:
+                  - /url: https://developers.openai.com/api/docs
+                  - text: Documentation
+                  - img [ref=e755]
+                  - generic [ref=e757]: (opens in a new window)
+              - listitem [ref=e758]:
+                - link "Developer Forum (opens in a new window)" [ref=e759] [cursor=pointer]:
+                  - /url: https://community.openai.com/
+                  - text: Developer Forum
+                  - img [ref=e760]
+                  - generic [ref=e762]: (opens in a new window)
+        - generic [ref=e763]:
+          - generic [ref=e764]:
+            - heading "For Business" [level=2] [ref=e765]
+            - list [ref=e766]:
+              - listitem [ref=e767]:
+                - link "Business Overview" [ref=e768] [cursor=pointer]:
+                  - /url: /business/
+              - listitem [ref=e769]:
+                - link "Solutions" [ref=e770] [cursor=pointer]:
+                  - /url: /solutions/
+              - listitem [ref=e771]:
+                - link "Contact Sales" [ref=e772] [cursor=pointer]:
+                  - /url: /contact-sales/
+          - generic [ref=e773]:
+            - heading "Company" [level=2] [ref=e774]
+            - list [ref=e775]:
+              - listitem [ref=e776]:
+                - link "About Us" [ref=e777] [cursor=pointer]:
+                  - /url: /about/
+              - listitem [ref=e778]:
+                - link "Our Charter" [ref=e779] [cursor=pointer]:
+                  - /url: /charter/
+              - listitem [ref=e780]:
+                - link "Foundation (opens in a new window)" [ref=e781] [cursor=pointer]:
+                  - /url: https://openaifoundation.org/
+                  - text: Foundation
+                  - img [ref=e782]
+                  - generic [ref=e784]: (opens in a new window)
+              - listitem [ref=e785]:
+                - link "Careers" [ref=e786] [cursor=pointer]:
+                  - /url: /careers/
+              - listitem [ref=e787]:
+                - link "Brand" [ref=e788] [cursor=pointer]:
+                  - /url: /brand/
+          - generic [ref=e789]:
+            - heading "Support" [level=2] [ref=e790]
+            - list [ref=e791]:
+              - listitem [ref=e792]:
+                - link "Help Center (opens in a new window)" [ref=e793] [cursor=pointer]:
+                  - /url: https://help.openai.com/
+                  - text: Help Center
+                  - img [ref=e794]
+                  - generic [ref=e796]: (opens in a new window)
+        - generic [ref=e797]:
+          - generic [ref=e798]:
+            - heading "More" [level=2] [ref=e799]
+            - list [ref=e800]:
+              - listitem [ref=e801]:
+                - link "News" [ref=e802] [cursor=pointer]:
+                  - /url: /news/
+              - listitem [ref=e803]:
+                - link "Stories" [ref=e804] [cursor=pointer]:
+                  - /url: /stories/
+              - listitem [ref=e805]:
+                - link "Academy" [ref=e806] [cursor=pointer]:
+                  - /url: /academy/
+              - listitem [ref=e807]:
+                - link "Livestreams" [ref=e808] [cursor=pointer]:
+                  - /url: /live/
+              - listitem [ref=e809]:
+                - link "Podcast" [ref=e810] [cursor=pointer]:
+                  - /url: /podcast/
+              - listitem [ref=e811]:
+                - link "RSS" [ref=e812] [cursor=pointer]:
+                  - /url: /news/rss.xml
+          - generic [ref=e813]:
+            - heading "Terms & Policies" [level=2] [ref=e814]
+            - list [ref=e815]:
+              - listitem [ref=e816]:
+                - link "Terms of Use" [ref=e817] [cursor=pointer]:
+                  - /url: /policies/terms-of-use/
+              - listitem [ref=e818]:
+                - link "Privacy Policy" [ref=e819] [cursor=pointer]:
+                  - /url: /policies/privacy-policy/
+              - listitem [ref=e820]:
+                - link "Other Policies" [ref=e821] [cursor=pointer]:
+                  - /url: /policies/
+      - generic [ref=e822]:
+        - generic [ref=e823]:
+          - link "X" [ref=e824] [cursor=pointer]:
+            - /url: https://x.com/OpenAI
+            - img [ref=e825]
+            - generic [ref=e827]: (opens in a new window)
+          - link "YouTube" [ref=e828] [cursor=pointer]:
+            - /url: https://www.youtube.com/OpenAI
+            - img [ref=e829]
+            - generic [ref=e831]: (opens in a new window)
+          - link "LinkedIn" [ref=e832] [cursor=pointer]:
+            - /url: https://www.linkedin.com/company/openai
+            - img [ref=e833]
+            - generic [ref=e835]: (opens in a new window)
+          - link "GitHub" [ref=e836] [cursor=pointer]:
+            - /url: https://github.com/openai
+            - img [ref=e837]
+            - generic [ref=e839]: (opens in a new window)
+          - link "Instagram" [ref=e840] [cursor=pointer]:
+            - /url: https://www.instagram.com/openai/
+            - img [ref=e841]
+            - generic [ref=e843]: (opens in a new window)
+          - link "TikTok" [ref=e844] [cursor=pointer]:
+            - /url: https://www.tiktok.com/@openai
+            - img [ref=e845]
+            - generic [ref=e847]: (opens in a new window)
+          - link "Discord" [ref=e848] [cursor=pointer]:
+            - /url: https://discord.gg/openai
+            - img [ref=e849]
+            - generic [ref=e851]: (opens in a new window)
+        - generic [ref=e852]:
+          - generic [ref=e853]: OpenAI © 2015–2026
+          - button "Your privacy choices" [ref=e854] [cursor=pointer]:
+            - text: Your privacy choices
+            - img [ref=e855]
+        - generic [ref=e860]:
+          - button "Change language" [ref=e861] [cursor=pointer]:
+            - generic [ref=e862]:
+              - img [ref=e863]
+              - generic [ref=e866]:
+                - text: English
+                - generic [ref=e867]: United States
+          - generic:
+            - generic:
+              - generic:
+                - generic:
+                  - generic:
+                    - img
+                    - textbox "Search locales by name or region":
+                      - /placeholder: Search
+  - alert [ref=e868]

@@ -24,7 +24,7 @@ export const topEventSchema = z.object({
   title: z.string(),
   articleIds: z.array(z.string()).min(1),
   eventType: eventTypeSchema,
-  impactScore: z.number().int().min(1).max(10),
+  impactScore: z.number().min(1).max(10),
   whyItMatters: z.string(),                        // 为什么重要：面向决策者的简短判断
   evidence: z.array(z.string()).min(2).max(6),      // 支撑证据（2-6 条原文关键事实）
 });
@@ -67,7 +67,7 @@ export const visualizationDataSchema = z.object({
     z.object({
       articleId: z.string(),
       title: z.string(),
-      score: z.number().int().min(1).max(10),
+      score: z.number().min(1).max(10),
     }),
   ),
   entityFrequency: z.array(

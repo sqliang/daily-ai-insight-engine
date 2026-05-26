@@ -13,6 +13,7 @@ pipeline/ingestion/ingest/orchestrator.py — Stage 1b 正文抓取业务逻辑
 """
 
 import logging
+import re
 import sys
 from contextlib import ExitStack
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -51,6 +52,37 @@ def _needs_ingest(article: Dict[str, Any], target_dir: Path, state: IngestState)
     return False
 
 
+def _discover_manifests(manifest_dir: Path, today_str: str) -> list[Path]:
+    """
+    发现今日 manifest；若不存在则回退到目录中最新的日期。
+
+    设计理由：
+        scout 和 ingest 独立计算 date.today()，跨天运行时 ingest
+        找不到今日 manifest 会直接空跑。回退到最近日期可避免断点断裂。
+    """
+    paths = sorted(manifest_dir.glob(f"*_{today_str}.json"))
+    if paths:
+        return paths
+
+    # 回退：找到目录中最新的日期
+    all_manifests = sorted(manifest_dir.glob("*.json"))
+    if not all_manifests:
+        return []
+
+    dates: set[str] = set()
+    for mf in all_manifests:
+        match = re.match(r".*_(\d{4}-\d{2}-\d{2})\.json$", mf.name)
+        if match:
+            dates.add(match.group(1))
+
+    if not dates:
+        return []
+
+    latest = max(dates)
+    logger.warning("今日 (%s) 无 manifest，回退到最近日期: %s", today_str, latest)
+    return sorted(manifest_dir.glob(f"*_{latest}.json"))
+
+
 def run_ingest(
     manifest_name: Optional[str] = None,
     force: bool = False,
@@ -77,7 +109,7 @@ def run_ingest(
     if manifest_name:
         manifest_paths = [manifest_dir / manifest_name]
     else:
-        manifest_paths = sorted(manifest_dir.glob(f"*_{today_str}.json"))
+        manifest_paths = _discover_manifests(manifest_dir, today_str)
 
     if not manifest_paths:
         logger.warning("未找到清单文件 today=%s", today_str)
