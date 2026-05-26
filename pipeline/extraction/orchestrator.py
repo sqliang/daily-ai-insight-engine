@@ -165,6 +165,7 @@ def print_stage_summary(stage_name: str, results: list[StageResult]) -> None:
     if failed:
         print(f"  失败: {len(failed)} 文件")
         for r in failed:
+            logger.error("Stage %s 文件失败 path=%s error=%s", stage_name, r.input_path, r.error)
             print(f"    - {r.input_path}: {r.error}")
 
     # 打印成功提取的字段详情（仅在 verbose 模式下或调试时）

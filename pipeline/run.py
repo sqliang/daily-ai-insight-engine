@@ -16,6 +16,7 @@ pipeline/run.py — Daily AI Insight Engine 管道入口
 """
 
 import argparse
+import logging
 import os
 import sys
 from pathlib import Path
@@ -114,6 +115,21 @@ if __name__ == "__main__":
     from pipeline.core.logging_config import init_logging
 
     init_logging(stage=args.command, verbose=args.verbose)
+
+    # --- 未捕获异常兜底 ---
+    # Python 默认的 traceback 输出绕过 logging 体系，直接写 stderr。
+    # 安装 sys.excepthook 确保未捕获异常也被写入日志文件，便于事后回溯。
+    _original_excepthook = sys.excepthook
+
+    def _logging_excepthook(exc_type, exc_value, exc_tb):
+        import traceback
+        tb_str = "".join(traceback.format_exception(exc_type, exc_value, exc_tb))
+        logging.getLogger("pipeline").critical(
+            "未捕获异常: %s\n%s", exc_value, tb_str.rstrip()
+        )
+        _original_excepthook(exc_type, exc_value, exc_tb)
+
+    sys.excepthook = _logging_excepthook
 
     # 每个 register_subparser 通过 set_defaults(func=execute) 设置了执行回调
     sys.exit(args.func(args))

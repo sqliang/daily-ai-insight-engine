@@ -220,6 +220,7 @@ def _print_summary(results: list, stages: str) -> None:
     if failed:
         print(f"  失败: {len(failed)} 文件")
         for r in failed:
+            logger.error("Stage 3 文件失败 path=%s error=%s", r.input_path, r.error[:120])
             print(f"    - {r.input_path}: {r.error[:120]}")
     print(f"  共提取 {total_fields} 个字段")
     print(f"\n{'='*60}")

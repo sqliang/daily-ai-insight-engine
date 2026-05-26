@@ -10,12 +10,16 @@ Stage 1a 入口函数 run_scout() 的实现。负责遍历启用数据源、按 
     - 每个源的清单独立写入，单个源失败不影响其他源（fail-per-source 策略）
 """
 
+import logging
 import sys
 from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List
 
 from pipeline.core.config_loader import get_sources
+
+logger = logging.getLogger(__name__)
+
 from pipeline.core.config_loader import resolve_data_dir
 from pipeline.utils.file_utils import write_json
 from pipeline.utils.id_utils import generate_id
@@ -55,6 +59,9 @@ def run_scout(force: bool = False) -> Dict[str, List[dict]]:
     manifest_dir = resolve_data_dir("manifest")
     all_manifests: Dict[str, List[dict]] = {}
 
+    logger.info("Scout 开始 sources=%d today=%s", len(sources), today_str)
+
+
     # 检测是否有 browser 策略的源，提前创建 browser session（复用 Chromium 实例）
     needs_browser = any(s.get("fetch_strategy") == "browser" for s in sources)
     browser_session = None
@@ -86,9 +93,11 @@ def run_scout(force: bool = False) -> Dict[str, List[dict]]:
                 elif strategy == "browser":
                     articles = _scout_browser(source, browser_session)
                 else:
+                    logger.warning("未知抓取策略 source=%s strategy=%s", name, strategy)
                     print(f"         未知抓取策略: {strategy}，跳过")
                     continue
             except Exception as e:
+                logger.error("抓取失败 source=%s strategy=%s: %s", name, strategy, e)
                 print(f"         ❌ 抓取失败: {e}")
                 continue
 
@@ -124,4 +133,6 @@ def run_scout(force: bool = False) -> Dict[str, List[dict]]:
         if browser_session:
             browser_session.__exit__(None, None, None)
 
+    total = sum(len(v) for v in all_manifests.values())
+    logger.info("Scout 完成 sources=%d articles=%d", len(all_manifests), total)
     return all_manifests

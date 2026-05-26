@@ -9,9 +9,13 @@ pipeline/analysis/cli.py — Stage 3 Analysis CLI 契约
 """
 
 import asyncio
+import logging
 import sys
 from pathlib import Path
 from typing import Optional
+
+logger = logging.getLogger(__name__)
+
 
 
 # ---------------------------------------------------------------------------
@@ -97,10 +101,13 @@ def execute(args) -> int:
         return 0
 
     except KeyboardInterrupt:
+        logger.info("用户中断 (KeyboardInterrupt)")
         print("\n操作已取消", file=sys.stderr)
         return 130
     except Exception as exc:
         import traceback
+        logger.error("Analysis 阶段失败: %s", exc)
+        logger.debug(traceback.format_exc())
         print(f"\n分析失败: {exc}", file=sys.stderr)
         traceback.print_exc()
         return 1
