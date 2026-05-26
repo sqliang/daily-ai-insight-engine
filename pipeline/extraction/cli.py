@@ -9,11 +9,15 @@ pipeline/extraction/cli.py — Stage 2 Extraction CLI 契约
 """
 
 import asyncio
+import logging
 import sys
 from pathlib import Path
 from typing import Optional
 
 from pipeline.utils.file_utils import get_project_root
+
+logger = logging.getLogger(__name__)
+
 
 
 # ---------------------------------------------------------------------------
@@ -98,13 +102,17 @@ def execute(args) -> int:
         )
         return 0
     except FileNotFoundError as exc:
+        logger.error("输入文件不存在: %s", exc)
         print(f"错误: {exc}", file=sys.stderr)
         return 1
     except KeyboardInterrupt:
+        logger.info("用户中断 (KeyboardInterrupt)")
         print("\n中断", file=sys.stderr)
         return 1
     except Exception as exc:
         import traceback
+        logger.error("Extraction 阶段失败: %s", exc)
+        logger.debug(traceback.format_exc())
         print(f"错误: {exc}", file=sys.stderr)
         traceback.print_exc()
         return 1

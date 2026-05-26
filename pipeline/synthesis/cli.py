@@ -90,6 +90,8 @@ def execute_aggregate(args) -> int:
 
     except Exception as exc:
         import traceback
+        logger.error("Aggregate 阶段失败: %s", exc)
+        logger.debug(traceback.format_exc())
         print(f"\n聚合失败: {exc}")
         traceback.print_exc()
         return 1

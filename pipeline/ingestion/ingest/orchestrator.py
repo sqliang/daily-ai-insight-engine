@@ -12,12 +12,16 @@ pipeline/ingestion/ingest/orchestrator.py — Stage 1b 正文抓取业务逻辑
     截断逻辑拆分到 truncation.py，状态管理委托给 core/concurrency/state.py。
 """
 
+import logging
 import sys
 from contextlib import ExitStack
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import date
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
+
+logger = logging.getLogger(__name__)
+
 
 # 确保项目根目录在 sys.path 中，支持从任意目录运行
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent.parent))
@@ -76,6 +80,7 @@ def run_ingest(
         manifest_paths = sorted(manifest_dir.glob(f"*_{today_str}.json"))
 
     if not manifest_paths:
+        logger.warning("未找到清单文件 today=%s", today_str)
         print("未找到清单文件，请先运行 scout")
         return []
 
@@ -124,9 +129,12 @@ def run_ingest(
 
     total_articles = len(regular_items) + len(browser_items)
     if total_articles == 0:
+        logger.info("所有文章已处理，无新增")
         print("所有文章已处理，无新增")
         return []
 
+    logger.info("Ingest 开始 regular=%d browser=%d concurrency=%d",
+                len(regular_items), len(browser_items), concurrency)
     print(f"待处理: {len(regular_items)} 篇常规 + {len(browser_items)} 篇 browser")
 
     # ------------------------------------------------------------------
@@ -183,6 +191,8 @@ def run_ingest(
                     else:
                         print(f"  [跳过] {title}: URL 缺失")
                 except Exception as exc:
+                    logger.error("Worker 异常 source=%s title=%s url=%s: %s",
+                                 source_name, title, url, exc)
                     print(f"  [异常] {title}: {exc}")
 
     # ------------------------------------------------------------------
@@ -203,6 +213,9 @@ def run_ingest(
 
     skipped = state.seen_count - len(output_files)
 
+    logger.info("Ingest 完成 total=%d success=%d partial=%d failed=%d skipped=%d",
+                len(output_files), status_counts["success"], status_counts["partial"],
+                status_counts["failed"], skipped)
     print(f"\n=== 完成: 总计 {len(output_files)} 篇 "
           f"(success: {status_counts['success']}, "
           f"partial: {status_counts['partial']}, "
