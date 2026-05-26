@@ -318,29 +318,66 @@ function normalizeUrl(url: string): string {
 
 async function loadStructuredData(
   sourceName: string,
+  dateRange?: DateRange,
 ): Promise<StructuredArticle[]> {
   const structuredDir = join(process.cwd(), "data/04_structured");
-  let entries: string[];
-  try {
-    entries = await readdir(structuredDir);
-  } catch {
-    return [];
-  }
+  const results: StructuredArticle[] = [];
 
-  const match = entries.find(
-    (f) =>
-      f.replace(/\.json$/, "").toLowerCase() === sourceName.toLowerCase(),
-  );
-  if (!match) return [];
-
+  // 1. 加载热数据 ({source}.json)
+  const hotPath = join(structuredDir, `${sourceName}.json`);
   try {
-    const raw = await readFile(join(structuredDir, match), "utf8");
+    const raw = await readFile(hotPath, "utf8");
     const parsed: unknown = JSON.parse(raw);
-    const arr = Array.isArray(parsed) ? parsed : [];
-    return structuredArticleSchema.array().parse(arr);
+    if (Array.isArray(parsed)) {
+      const validated = structuredArticleSchema.array().parse(parsed);
+      results.push(...validated);
+    }
   } catch {
-    return [];
+    // 热数据文件不存在或解析失败，继续尝试 archive
   }
+
+  // 2. 如果指定了 dateRange，加载对应的 archive 分片
+  if (dateRange?.from || dateRange?.to) {
+    const archiveDir = join(structuredDir, "archive", sourceName);
+    let shardFiles: string[];
+    try {
+      shardFiles = await readdir(archiveDir);
+    } catch {
+      // archive 目录不存在（老版本兼容），直接返回热数据
+      return results;
+    }
+
+    const seenUrls = new Set(results.map((r) => normalizeUrl(r.source)));
+
+    for (const filename of shardFiles) {
+      if (!filename.endsWith(".json")) continue;
+      // 文件名格式: {source}_{YYYY-MM-DD}.json
+      const datePart = filename.replace(/\.json$/, "").split("_").pop();
+      if (!datePart || datePart.length !== 10) continue;
+
+      // 按 dateRange 筛选分片
+      if (dateRange.from && datePart < dateRange.from) continue;
+      if (dateRange.to && datePart > dateRange.to) continue;
+
+      try {
+        const raw = await readFile(join(archiveDir, filename), "utf8");
+        const parsed: unknown = JSON.parse(raw);
+        if (!Array.isArray(parsed)) continue;
+        const validated = structuredArticleSchema.array().parse(parsed);
+        for (const article of validated) {
+          const url = normalizeUrl(article.source);
+          if (!seenUrls.has(url)) {
+            seenUrls.add(url);
+            results.push(article);
+          }
+        }
+      } catch {
+        // 分片文件损坏，跳过
+      }
+    }
+  }
+
+  return results;
 }
 
 export async function getSourceDetailEnriched(
@@ -356,7 +393,7 @@ export async function getSourceDetailEnriched(
   if (!config) return null;
 
   const latestManifest = latestManifests.get(name);
-  const structuredData = await loadStructuredData(name);
+  const structuredData = await loadStructuredData(name, dateRange);
 
   const structuredMap = new Map<string, StructuredArticle>();
   for (const s of structuredData) {

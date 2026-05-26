@@ -11,8 +11,7 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const { tiersMeta, sources, totalSources, latestDate } =
-    await getSourcesViewData();
+  const { tiersMeta, sources, totalSources } = await getSourcesViewData();
 
   const tierSourceCounts: Record<string, number> = {};
   for (const s of sources) {
@@ -24,7 +23,6 @@ export default async function HomePage() {
       <SourcesHero
         tiersMeta={tiersMeta}
         totalSources={totalSources}
-        latestDate={latestDate}
         tierSourceCounts={tierSourceCounts}
       />
       <SourcesGrid sources={sources} tiersMeta={tiersMeta} />

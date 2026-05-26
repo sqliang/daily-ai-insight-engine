@@ -3,7 +3,7 @@ pipeline/synthesis/report_generator.py — Markdown 报告生成 + 文件写入
 
 功能：
     - generate_markdown(): 将 daily report JSON 转换为人类可读的 Markdown 报告
-    - write_report_files(): 写入 daily-report.json 和 daily-report.md
+    - write_report_files(): 双写模式——归档副本（daily-report-{date}.json/.md）+ 最新副本（daily-report.json/.md，前端读取）
 
 日报 JSON 结构校验已迁移至 pipeline/schemas/daily_report.py（Pydantic 模型）。
 """
@@ -71,12 +71,12 @@ def generate_markdown(report: dict) -> str:
 
     # --- YAML frontmatter ---
     lines.append("---")
-    lines.append(f'title: "{report.get("reportTitle", "AI 行业情报日报")}"')
+    lines.append(f'title: "{report.get("reportTitle", "AI 洞察日报")}"')
     lines.append(f'date: {report.get("date", "")}')
     lines.append(f'generated: {report.get("generatedAt", "")}')
     lines.append("---")
     lines.append("")
-    lines.append(f'# {report.get("reportTitle", "AI 行业情报日报")}')
+    lines.append(f'# {report.get("reportTitle", "AI 洞察日报")}')
     lines.append("")
 
     # --- Executive Summary ---
@@ -183,19 +183,32 @@ def write_report_files(
     *,
     json_filename: str = "daily-report.json",
     md_filename: str = "daily-report.md",
+    archive: bool = True,
 ) -> tuple[Path, Path]:
     """
     将 daily report 写入 JSON 和 Markdown 文件。
 
+    双写模式（archive=True，默认）：
+        1. 归档副本：daily-report-{date}.json / .md（保留历史）
+        2. 最新副本：daily-report.json / .md（前端读取路径不变）
+
     参数：
         report: 日报 dict
         output_dir: 输出目录
+        archive: 是否生成带日期后缀的归档副本
 
     返回：
-        (json_path, md_path)
+        (json_path, md_path) — 最新副本路径
     """
     ensure_dir(output_dir)
 
+    # 从日报数据中获取日期，fallback 到今天
+    report_date = report.get("date", "")
+    if not report_date:
+        from datetime import date
+        report_date = date.today().isoformat()
+
+    # 最新副本（前端读取）
     json_path = output_dir / json_filename
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(report, f, ensure_ascii=False, indent=2)
@@ -204,5 +217,14 @@ def write_report_files(
     md_path = output_dir / md_filename
     with open(md_path, "w", encoding="utf-8") as f:
         f.write(md_content)
+
+    # 归档副本（带日期后缀）
+    if archive:
+        archive_json = output_dir / f"daily-report-{report_date}.json"
+        archive_md = output_dir / f"daily-report-{report_date}.md"
+        with open(archive_json, "w", encoding="utf-8") as f:
+            json.dump(report, f, ensure_ascii=False, indent=2)
+        with open(archive_md, "w", encoding="utf-8") as f:
+            f.write(md_content)
 
     return json_path, md_path

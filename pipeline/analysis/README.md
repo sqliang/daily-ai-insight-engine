@@ -547,7 +547,7 @@ actionable_insight: "monitor"
 
 | 模块 | 说明 |
 |------|------|
-| `pipeline/synthesis/aggregate_frontmatter.py` | Stage 4a，读取 `data/03_analyzed/` 中所有 frontmatter，按 source 分组聚合成 JSON |
+| `pipeline/aggregation/aggregate_frontmatter.py` | Stage 4a，读取 `data/03_analyzed/` 中所有 frontmatter，按 source 分组聚合成 JSON |
 | `pipeline/synthesis/` | Stage 4b，Editor-in-Chief 日报生成，使用分析字段进行 Top 5 排序和信号筛选 |
 | `src/app/dashboard/` | Next.js 前端仪表盘，读取 `data/04_structured/all_articles.json` 渲染 KPI 卡片和图表 |
 
@@ -561,7 +561,7 @@ actionable_insight: "monitor"
 | `pipeline/utils/enum_utils.py` | `fuzzy_match_enum` — 枚举值模糊匹配工具 |
 | `pipeline/utils/text_utils.py` | `truncate_at_natural_break` — 自然边界截断 |
 | `pipeline/utils/file_utils.py` | `ensure_dir` — 目录创建 |
-| `pipeline/synthesis/aggregate_frontmatter.py` | 每次 analyze 完成后自动调用 |
+| `pipeline/aggregation/aggregate_frontmatter.py` | 每次 analyze 完成后自动调用 |
 
 ## 扩展指南
 

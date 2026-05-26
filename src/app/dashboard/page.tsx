@@ -1,41 +1,36 @@
-import { readFile } from "node:fs/promises";
-import { join } from "node:path";
+// ============================================================================
+// dashboard/page.tsx — 日报卡片列表页
+//
+// 顶部 DashboardHero 阐述洞察产出与内化价值，下方为全宽横向卡片，
+// 每张卡片展示日期、标题、摘要、
+// 文章数、信源数、语言覆盖等关键信息。
+// 点击卡片跳转到 /dashboard/[date] 可视化仪表盘。
+// ============================================================================
 
-import { DeepDivesSection } from "@/components/dashboard/DeepDivesSection";
-import { DistributionSection } from "@/components/dashboard/DistributionSection";
-import { KPISection } from "@/components/dashboard/KPISection";
-import { RankingsSection } from "@/components/dashboard/RankingsSection";
-import { ReportFooter } from "@/components/dashboard/ReportFooter";
-import { ReportHeader } from "@/components/dashboard/ReportHeader";
-import { SignalList } from "@/components/dashboard/SignalList";
-import { TopEventsSection } from "@/components/dashboard/TopEventsSection";
-import { TrendInsightsSection } from "@/components/dashboard/TrendInsightsSection";
-import { ErrorBoundary } from "@/components/charts/ErrorBoundary";
 import { PageShell } from "@/components/layout/PageShell";
-import { dailyReportSchema } from "@/lib/agent/schema";
+import { DashboardHero } from "@/components/dashboard/DashboardHero";
+import { ReportCard } from "@/components/reports/ReportCard";
+import { listReports } from "@/lib/data/reports";
 
 export const dynamic = "force-dynamic";
 
-async function getReport() {
-  try {
-    const filePath = join(process.cwd(), "data/05_reports/daily-report.json");
-    const content = await readFile(filePath, "utf8");
-    return dailyReportSchema.parse(JSON.parse(content));
-  } catch {
-    return null;
-  }
-}
-
 export default async function DashboardPage() {
-  const report = await getReport();
+  const reports = await listReports();
 
-  if (!report) {
+  // 空状态：尚无任何日报数据
+  if (reports.length === 0) {
     return (
       <PageShell>
         <div className="flex flex-col items-center justify-center py-32 text-center">
           <svg
-            width="48" height="48" viewBox="0 0 24 24" fill="none"
-            stroke="var(--muted)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"
+            width="48"
+            height="48"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="var(--muted)"
+            strokeWidth="1.2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             className="mb-5"
           >
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
@@ -46,61 +41,34 @@ export default async function DashboardPage() {
           </svg>
           <h2 className="text-lg font-bold text-foreground">暂无日报数据</h2>
           <p className="mt-2 max-w-md text-sm leading-relaxed text-muted">
-            日报文件尚未生成，请先运行数据管道（scout → ingest → extract → analyze →
-            synthesize）以产出当日 AI 情报日报。
+            日报文件尚未生成，请先运行数据管道（scout → ingest → extract → analyze
+            → synthesize）以产出当日 AI 情报日报。
           </p>
         </div>
       </PageShell>
     );
   }
 
+  const totalArticles = reports.reduce((sum, r) => sum + r.totalArticles, 0);
+  // listReports 按日期降序：首项最新，末项最早
+  const latestDate = reports[0]?.date ?? null;
+  const oldestDate = reports[reports.length - 1]?.date ?? null;
+
   return (
     <PageShell>
-      <ReportHeader
-        report={{
-          reportTitle: report.reportTitle,
-          date: report.date,
-          generatedAt: report.generatedAt,
-          executiveSummary: report.executiveSummary,
-        }}
+      <DashboardHero
+        reportCount={reports.length}
+        totalArticles={totalArticles}
+        oldestDate={oldestDate}
+        latestDate={latestDate}
       />
 
-      <KPISection dataSourceSummary={report.dataSourceSummary} />
-
-      <section className="mt-6">
-        <ErrorBoundary sectionName="分布图">
-          <DistributionSection visualizationData={report.visualizationData} />
-        </ErrorBoundary>
-      </section>
-
-      <section className="mt-6">
-        <ErrorBoundary sectionName="热门事件">
-          <TopEventsSection topEvents={report.topEvents} />
-        </ErrorBoundary>
-      </section>
-
-      <ErrorBoundary sectionName="排名">
-        <RankingsSection visualizationData={report.visualizationData} />
-      </ErrorBoundary>
-
-      <ErrorBoundary sectionName="趋势洞察">
-        <TrendInsightsSection trendInsights={report.trendInsights} />
-      </ErrorBoundary>
-
-      <ErrorBoundary sectionName="深度分析">
-        <DeepDivesSection deepDives={report.deepDives} />
-      </ErrorBoundary>
-
-      <section className="mt-6 grid gap-5 lg:grid-cols-2">
-        <ErrorBoundary sectionName="风险提示">
-          <SignalList title="风险提示" items={report.riskSignals} />
-        </ErrorBoundary>
-        <ErrorBoundary sectionName="机会提示">
-          <SignalList title="机会提示" items={report.opportunitySignals} />
-        </ErrorBoundary>
-      </section>
-
-      <ReportFooter selectionRationale={report.dataSourceSummary.selectionRationale} />
+      {/* ====== 卡片列表：全宽横向，垂直排列 ====== */}
+      <div className="mt-8 flex flex-col gap-4">
+        {reports.map((report) => (
+          <ReportCard key={report.date} report={report} />
+        ))}
+      </div>
     </PageShell>
   );
 }

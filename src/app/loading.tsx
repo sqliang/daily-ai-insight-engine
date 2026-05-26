@@ -9,14 +9,17 @@ export default function Loading() {
         <div className="rounded-2xl bg-foreground/5 p-6 md:p-10">
           <div className="h-3 w-52 rounded bg-line" />
           <div className="mt-3 h-8 w-96 rounded bg-line" />
-          <div className="mt-2.5 h-5 w-[672px] rounded bg-line" />
-          <div className="mt-5 flex flex-wrap gap-2">
-            <div className="h-6 w-24 rounded-full bg-line" />
-            <div className="h-6 w-24 rounded-full bg-line" />
-            <div className="h-6 w-32 rounded-full bg-line" />
+          <div className="mt-2.5 space-y-2">
+            <div className="h-5 w-full max-w-xl rounded bg-line" />
+            <div className="h-5 w-full max-w-lg rounded bg-line" />
+            <div className="h-5 w-full max-w-md rounded bg-line" />
+          </div>
+          <div className="mt-5 flex items-center gap-3 md:mt-6">
+            <div className="h-3 w-36 rounded bg-line" />
+            <div className="h-px min-w-0 flex-1 rounded bg-line" />
           </div>
           {/* Vertex cards skeleton */}
-          <div className="mt-6 grid gap-4 sm:grid-cols-3">
+          <div className="mt-4 grid gap-4 sm:grid-cols-3">
             {[1, 2, 3].map((i) => (
               <div key={i} className="rounded-xl border border-line/20 bg-white/[0.02] p-4 md:p-5">
                 <div className="flex items-center gap-3">

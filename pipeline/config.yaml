@@ -657,7 +657,7 @@ stages:
 
   ingest:
     concurrency: 5           # 线程池并发抓取线程数
-    time_window_hours: 48
+
     max_articles_per_source: 5
     hard_filters:
       dedup_by_url: true
@@ -699,9 +699,27 @@ stages:
     concurrency: 3
     skip_existing: true
 
+  # ---------------------------------------------------------------------------
+  # Stage 4a: Frontmatter 聚合 — 将 analyzed .md 文件提取为结构化 JSON
+  # ---------------------------------------------------------------------------
+  # lookback_days: 按 frontmatter.created 字段过滤文章的时效窗口（天）
+  #   1 = 仅当天（默认），0 = 不限（包含所有历史文章）
+  #   设计理由：created 在 Stage 1b ingest 时写入 date.today()，
+  #   精确表示"pipeline 哪天抓取的文章"，不受外部 RSS 解析质量影响
+  # archive_reports: Stage 4b 合成时是否生成带日期后缀的归档报告
+  aggregate:
+    lookback_days: 1          # all_articles.json 日报窗口 (天)，0 = 不限
+    hot_days: 7               # per-source JSON 热数据窗口 (天)
+    max_history_days: 365     # archive 分片最大保留天数，0 = 不限
+    archive_reports: true     # 是否生成 daily-report-{date}.json 归档副本
+
+  # ---------------------------------------------------------------------------
+  # Stage 4b: Editor-in-Chief 日报合成 — 读取 all_articles.json 生成日报
+  # ---------------------------------------------------------------------------
+  # 若 CLI 指定 --lookback-days N，会先调用 aggregate 重新过滤再合成
   synthesize:
     input:
-      dir: "data/03_analyzed"
+      dir: "data/04_structured"
       frontmatter_only: true
     output:
       report_file: "data/05_reports/daily-report.json"

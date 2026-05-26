@@ -447,7 +447,7 @@ pipeline_stage: "fact_extracted"               # ← Stage 2b 更新
 | 模块 | 说明 |
 |------|------|
 | `pipeline/analysis/` | Stage 3，读取 `data/02_extracted/` 中的文件，进行三维度深度分析（tech-architect / capital-analyst / risk-assessor） |
-| `pipeline/synthesis/aggregate_frontmatter.py` | 每次 extract 完成后自动调用，将 frontmatter 聚合到 `data/04_structured/` 供前端使用 |
+| `pipeline/aggregation/aggregate_frontmatter.py` | 每次 extract 完成后自动调用，将 frontmatter 聚合到 `data/04_structured/` 供前端使用 |
 
 ### 水平依赖
 
