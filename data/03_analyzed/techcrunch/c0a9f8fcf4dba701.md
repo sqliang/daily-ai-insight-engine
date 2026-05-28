@@ -68,6 +68,24 @@ confidence:
   compound: low
   hype: high
 actionable_insight: monitor
+compound_value:
+  score: 4.0
+  reason: 轨道数据中心概念具有长期想象空间，但在 3-5 年投资窗口内缺乏复利积累的确定性。正向因素：(1) Google Project Suncatcher
+    已有明确时间线（2027 年原型卫星），表明这不是纯炒作，有实质研发投入；(2) SpaceX 将轨道算力作为 1.75 万亿美元 IPO 的核心叙事，资本市场的定价能力可能加速技术验证；(3)
+    若 Starship 全复用成熟，发射成本有望再降一个数量级，长期经济模型存在拐点可能。负向因素：(1) 当前地面数据中心在计入卫星建造和发射成本后仍远更便宜（TechCrunch
+    已证实），经济可行性未验证；(2) 太空环境下的电力供给、热管理、辐射防护、物理维修等工程挑战属于基础物理层面，非渐进式改进可解决；(3) 事件本身为传闻泄露（rumor_leak），双方尚未确认，存在叙事溢价。综合判断：这是值得持续跟踪的长期期权，但绝非近期可兑现的基础设施投资标的，暂不具备复利积累特征。
+value_capture_layer: hardware_compute
+moat_impact: creates_new_moat
+key_beneficiaries:
+- SpaceX
+- Google
+- NVIDIA
+- Anthropic
+competitive_casualty:
+- Equinix
+- Digital Realty Trust
+- 传统地面数据中心运营商
+- 缺乏航天合作能力的云厂商
 ---
 
 Google and SpaceX are in talks to launch orbital data centers in space, reports The Wall Street Journal, citing sources familiar with the matter.

@@ -109,7 +109,7 @@ async def run_editor_in_chief(
 
     try:
         validated = validate_daily_report(report)
-        report = validated.model_dump(mode="json", by_alias=False)
+        report = validated.model_dump(mode="json", by_alias=True)
     except ValidationError as exc:
         logger.warning("日报 JSON Pydantic 校验失败 (%d 个错误):\n  %s", len(exc.errors()), exc.errors())
         # 校验失败不阻断流程，仍返回原始 dict
