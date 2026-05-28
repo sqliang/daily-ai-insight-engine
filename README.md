@@ -10,6 +10,8 @@
 
 大多数信息聚合工具停在第一步：把标题和链接堆在一起让你自己去读。这个项目做的更重也更深：
 
+**核心主张：少花时间筛信息，多花时间理解与学习。**
+
 | | RSS 阅读器 | Daily AI Insight Engine |
 |---|---|---|
 | 输入 | 标题 + 摘要 | 清洗后的全文 |
@@ -19,46 +21,9 @@
 | 可消费性 | 需要一篇篇读 | 执行摘要 30 秒了解全局，深读可按专题钻取 |
 | 链路可追溯 | 无 | 从日报事件 → 文章 → 提取事实 → 原文 URL 完整回溯 |
 
-**核心主张：少花时间筛信息，多花时间理解与学习。**
-
 ---
 
-## 你得到什么
-
-每天运行流水线后，你会得到三样东西：
-
-**一份日报 JSON**（`data/05_reports/daily-report.json`）
-
-```json
-{
-  "date": "2026-05-28",
-  "reportTitle": "2026-05-28 AI 洞察日报",
-  "executiveSummary": "今日AI行业呈现出三大核心主题：一是AI商业模式的结构性拐点——Anthropic与OpenAI同步将企业定价从固定订阅切换为API代币计价...",
-  "dataSourceSummary": { "totalArticles": 99, "sources": ["hackernews", "arxiv-cs-ai", ...], "languages": ["zh", "en", "mixed"] },
-  "topEvents": [
-    { "title": "Anthropic与OpenAI实现编程智能体PMF...", "impactScore": 9, "whyItMatters": "...", "evidence": [...] }
-  ],
-  "deepDives": [ ... ],        // 3 篇深度研判
-  "trendInsights": [ ... ],    // 四维度趋势判断
-  "riskSignals": [ ... ],      // 4-7 条风险预警
-  "opportunitySignals": [ ... ], // 4-7 条机会信号
-  "visualizationData": { ... }  // 预计算图表数据
-}
-```
-
-**一份 Markdown 全文**（`data/05_reports/daily-report.md`）—— 适合阅读、分享、归档。
-
-**一个交互式看板**（启动 `pnpm dev` 后访问 `/dashboard`）—— 暗色主题，KPI 卡片 + 饼图 + 柱状图 + 信号面板，无需数据库。
-
-```
-pnpm dev
-# http://localhost:3000              → 数据源全景（黄金三角）
-# http://localhost:3000/dashboard     → 日报历史卡片列表
-# http://localhost:3000/dashboard/2026-05-28  → 可视化仪表盘
-# http://localhost:3000/report/2026-05-28     → Markdown 全文
-```
-
-### 效果预览
+## 效果预览
 
 四个页面构成从信源输入到洞察输出的完整消费链路：
 
@@ -157,6 +122,21 @@ uv run python pipeline/run.py analyze --input data/03_analyzed/36kr/abc123.md --
 # 重新处理全部文件（忽略 skip-existing 缓存）
 uv run python pipeline/run.py extract --force
 ```
+
+### 启动前端
+
+```bash
+pnpm dev
+```
+
+打开浏览器验证：
+
+| URL | 页面 |
+|-----|------|
+| `http://localhost:3000` | 数据源全景（黄金三角分层） |
+| `http://localhost:3000/dashboard` | 日报归档卡片列表 |
+| `http://localhost:3000/dashboard/{date}` | 交互式可视化仪表盘 |
+| `http://localhost:3000/report/{date}` | Markdown 全文报告 |
 
 ---
 
