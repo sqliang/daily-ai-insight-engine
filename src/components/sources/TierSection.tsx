@@ -26,7 +26,7 @@ export function TierSection({ tier, meta, sources }: TierSectionProps) {
   const color = TIER_COLORS[tier] ?? "var(--line)";
 
   return (
-    <section className="animate-fade-up">
+    <section className="animate-fade-up" id={`tier-${tier.toLowerCase()}`}>
       {/* Section header */}
       <div className="flex items-center gap-4 mb-6">
         {/* Colored vertical bar */}
