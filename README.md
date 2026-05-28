@@ -48,25 +48,29 @@ pnpm dev
 <table>
 <tr>
 <td width="50%" valign="top">
-  <strong>数据源全景</strong>（<code>/</code>）<br>
-  <sub>输入端：黄金三角分层信源网格，Hero 横幅阐述筛选策略与价值主张</sub><br>
+  <h4>数据源全景&nbsp;&nbsp;<code>/</code></h4>
+  <p><kbd>信 源 端</kbd>&nbsp; 黄金三角分层信源网格，Hero 横幅阐述筛选策略与价值主张</p>
+  <br>
   <img src="./sources-page-full.png" alt="数据源全景" width="100%">
 </td>
 <td width="50%" valign="top">
-  <strong>交互式看板</strong>（<code>/dashboard/2026-05-28</code>）<br>
-  <sub>输出端：KPI 指标 + 事件/情绪双饼图 + 影响力排名 + 四维趋势 + 风险/机会信号</sub><br>
+  <h4>交互式看板&nbsp;&nbsp;<code>/dashboard/:date</code></h4>
+  <p><kbd>洞 察 端</kbd>&nbsp; KPI 指标 + 事件/情绪双饼图 + 影响力排名 + 四维趋势 + 风险/机会信号</p>
+  <br>
   <img src="./dashboard.png" alt="交互式看板" width="100%">
 </td>
 </tr>
 <tr>
 <td width="50%" valign="top">
-  <strong>日报归档列表</strong>（<code>/dashboard</code>）<br>
-  <sub>输入端：历史日报卡片列表，含执行摘要、文章数、信源数、语言覆盖</sub><br>
+  <h4>日报归档列表&nbsp;&nbsp;<code>/dashboard</code></h4>
+  <p><kbd>信 源 端</kbd>&nbsp; 历史日报卡片列表，含执行摘要、文章数、信源数、语言覆盖</p>
+  <br>
   <img src="./dashboard-list.png" alt="日报归档列表" width="100%">
 </td>
 <td width="50%" valign="top">
-  <strong>Markdown 全文</strong>（<code>/report/2026-05-28</code>）<br>
-  <sub>输出端：执行摘要 + 数据概览 + Top 事件 + 深度分析 + 风险/机会表格，适合深读与分享</sub><br>
+  <h4>Markdown 全文&nbsp;&nbsp;<code>/report/:date</code></h4>
+  <p><kbd>洞 察 端</kbd>&nbsp; 执行摘要 + 数据概览 + Top 事件 + 深度分析 + 风险/机会表格，适合深读与分享</p>
+  <br>
   <img src="./report-markdown.png" alt="Markdown 全文" width="100%">
 </td>
 </tr>
