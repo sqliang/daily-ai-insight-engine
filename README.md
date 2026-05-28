@@ -37,20 +37,25 @@
   <br>
   <img src="./sources-page-full.png" alt="数据源全景" width="100%">
 </td>
-<td width="50%" valign="top">
-  <h4>交互式看板&nbsp;&nbsp;<code>/dashboard/:date</code></h4>
-  <p><kbd>洞 察 端</kbd>&nbsp; KPI 指标 + 事件/情绪双饼图 + 影响力排名 + 四维趋势 + 风险/机会信号</p>
-  <br>
-  <img src="./dashboard.png" alt="交互式看板" width="100%">
-</td>
-</tr>
-<tr>
+
 <td width="50%" valign="top">
   <h4>日报归档列表&nbsp;&nbsp;<code>/dashboard</code></h4>
   <p><kbd>洞 察 端</kbd>&nbsp; 历史日报卡片列表，含执行摘要、文章数、信源数、语言覆盖</p>
   <br>
   <img src="./dashboard-list.png" alt="日报归档列表" width="100%">
 </td>
+
+
+</tr>
+<tr>
+
+<td width="50%" valign="top">
+  <h4>交互式看板&nbsp;&nbsp;<code>/dashboard/:date</code></h4>
+  <p><kbd>洞 察 端</kbd>&nbsp; KPI 指标 + 事件/情绪双饼图 + 影响力排名 + 四维趋势 + 风险/机会信号</p>
+  <br>
+  <img src="./dashboard.png" alt="交互式看板" width="100%">
+</td>
+
 <td width="50%" valign="top">
   <h4>Markdown 全文&nbsp;&nbsp;<code>/report/:date</code></h4>
   <p><kbd>洞 察 端</kbd>&nbsp; 执行摘要 + 数据概览 + Top 事件 + 深度分析 + 风险/机会表格，适合深读与分享</p>
