@@ -119,9 +119,10 @@ export function SourcesHero({
             const tierLetter = tier;
 
             return (
-              <div
+              <a
                 key={tier}
-                className="rounded-xl border border-white/8 bg-white/[0.03] p-4 backdrop-blur md:p-5"
+                href={`#tier-${tier.toLowerCase()}`}
+                className="block rounded-xl border border-white/8 bg-white/[0.03] p-4 backdrop-blur transition hover:border-white/15 hover:bg-white/[0.06] md:p-5"
               >
                 {/* Tier color dot + letter */}
                 <div className="flex items-center gap-3">
@@ -143,7 +144,7 @@ export function SourcesHero({
                 <p className="mt-3 text-[12px] leading-relaxed text-white/50">
                   {meta?.subtitle ?? ""}
                 </p>
-              </div>
+              </a>
             );
           })}
         </div>
