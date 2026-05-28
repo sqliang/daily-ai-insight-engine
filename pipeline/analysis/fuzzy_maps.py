@@ -57,6 +57,7 @@ DEVELOPER_TONE_FUZZY: dict[str, str] = {
     "neutral": "neutral",
     "balanced": "neutral",
     "indifferent": "neutral",
+    "mixed": "neutral",
 }
 
 # --- HypeLevel 炒作指数 ---

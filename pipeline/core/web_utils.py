@@ -6,12 +6,15 @@
 RSS 使用 feedparser, 正文抽取使用 trafilatura。
 """
 
+import logging
 import re
 import subprocess
 from datetime import datetime, timezone
 from typing import List, Optional
 
 import feedparser
+
+logger = logging.getLogger(__name__)
 
 
 def fetch_url(url: str, timeout: int = 30) -> Optional[str]:
@@ -32,9 +35,14 @@ def fetch_url(url: str, timeout: int = 30) -> Optional[str]:
             timeout=timeout + 5,
         )
         if result.returncode != 0:
+            logger.warning("curl 返回非零状态码 url=%s code=%d stderr=%s", url, result.returncode, result.stderr.strip()[:200])
             return None
         return result.stdout
-    except (subprocess.TimeoutExpired, Exception):
+    except subprocess.TimeoutExpired:
+        logger.warning("curl 请求超时 url=%s timeout=%d", url, timeout)
+        return None
+    except Exception as e:
+        logger.warning("curl 请求异常 url=%s: %s", url, e)
         return None
 
 
@@ -45,8 +53,15 @@ def fetch_rss_items(feed_url: str, timeout: int = 30) -> List[dict]:
     """
     try:
         feed = feedparser.parse(feed_url)
-    except Exception:
+    except Exception as e:
+        logger.warning("RSS 解析异常 url=%s: %s", feed_url, e)
         return []
+
+    # feedparser 不抛网络异常，而是设 bozo 标记，静默返回空 entries
+    if feed.bozo and len(feed.entries) == 0:
+        logger.warning("RSS 抓取可能失败（网络/代理问题） url=%s bozo=%s", feed_url, getattr(feed, 'bozo_exception', 'unknown'))
+    elif feed.bozo:
+        logger.debug("RSS feed 有格式瑕疵但不影响解析 url=%s bozo=%s", feed_url, getattr(feed, 'bozo_exception', 'unknown'))
 
     items = []
     for entry in feed.entries:
