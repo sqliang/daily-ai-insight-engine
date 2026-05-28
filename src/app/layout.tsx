@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { NavBar } from "@/components/layout/NavBar";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { BackToTop } from "@/components/layout/BackToTop";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -15,6 +16,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <NavBar />
         <div className="flex-1">{children}</div>
         <SiteFooter />
+        <BackToTop />
       </body>
     </html>
   );
