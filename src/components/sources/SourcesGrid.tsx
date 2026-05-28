@@ -7,7 +7,7 @@
 // 分组后委托 TierSection 渲染各组，使用 useMemo 优化分组计算，空分组自动跳过。
 // ============================================================================
 
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import type { SourceStatus } from "@/lib/data/sources";
 import type { TierMeta } from "@/lib/data/tiers";
 import { TierSection } from "./TierSection";
@@ -32,6 +32,14 @@ export function SourcesGrid({ sources, tiersMeta }: SourcesGridProps) {
     }
     return map;
   }, [sources]);
+
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash) {
+      const el = document.getElementById(hash.slice(1));
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+    }
+  }, []);
 
   return (
     <div className="mt-10 space-y-10">
