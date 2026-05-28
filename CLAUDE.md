@@ -4,9 +4,9 @@ This file provides guidance to AI coding agents (Claude Code, Cursor, Copilot, e
 
 ## Architecture
 
-This is a **dual-language** project: a Python offline pipeline ingests 19 AI news sources through a 4-stage Map/Reduce process, and a Next.js 16 App Router dashboard renders the final daily report as interactive charts.
+This is a **dual-language** project: a Python offline pipeline ingests 26 AI information sources (23 active) through a 6-stage Map/Reduce process, and a Next.js 16 App Router dashboard renders the final daily report as interactive charts.
 
-**Data flow:** `19 RSS/scrape sources → Stage 1 (scout+ingest) → Stage 2 (extract facts) → Stage 3 (3-dimension analysis × concurrency) → Stage 4a (aggregate frontmatter JSON) → Stage 4b (Editor-in-Chief synthesis) → Next.js reads JSON directly from disk`
+**Data flow:** `26 RSS/scrape/browser sources → Stage 1a (scout URL manifests) → Stage 1b (ingest content download) → Stage 2 (extract facts) → Stage 3 (3-dimension analysis × concurrency) → Stage 4a (aggregate frontmatter JSON + hot/cold split) → Stage 4b (Editor-in-Chief synthesis) → Next.js reads JSON directly from disk`
 
 **Key design:**
 - The pipeline and frontend are **decoupled by JSON files on disk**. The Next.js server reads `data/05_reports/daily-report.json` via `node:fs` at request time — no database, no API layer. Sources page reads `pipeline/config.yaml` + `data/00_manifest/*.json` via `src/lib/data/sources.ts`.
@@ -170,23 +170,34 @@ Python 依赖通过 `uv` 管理（已安装，无需重复安装）。如需重�
 pipeline/
   run.py                    # Unified CLI (argparse subcommands)
   config.yaml               # Source config + tiers_meta + display_name/display_description for UI
-  core/agent.py             # claude-agent-sdk wrapper: call, retry, JSON parse, options
-  core/frontmatter_utils.py # YAML frontmatter read/write for .md files
-  core/config_loader.py     # Config YAML reader with caching
-  core/browser_utils.py     # Playwright lifecycle management
-  core/web_utils.py         # curl + feedparser + trafilatura wrappers
-  core/file_utils.py        # Atomic writes, JSON I/O, directory helpers
-  core/id_utils.py          # SHA-256 article ID generation
-  core/proxy_utils.py       # Proxy config injection
-  core/text_utils.py        # Text cleaning utilities
+  core/                     # Core business components
+    agent.py                #   claude-agent-sdk wrapper: call, retry, JSON parse, options
+    web_utils.py            #   curl + feedparser + trafilatura wrappers
+    browser_utils.py        #   Playwright lifecycle management
+    config_loader.py        #   Config YAML reader with caching
+    frontmatter_utils.py    #   YAML frontmatter read/write for .md files
+    proxy_utils.py          #   Proxy config injection
+    logging_config.py       #   Unified logging initialization
+    concurrency/            #   Concurrent processing utilities
+  utils/                    # Pure utilities (no business logic)
+    file_utils.py           #   Atomic writes, JSON I/O, directory helpers
+    id_utils.py             #   SHA-256 article ID generation
+    text_utils.py           #   Text cleaning utilities
+    schema_utils.py         #   Flat ↔ nested frontmatter conversion
+    enum_utils.py           #   Enum helpers
+    frontmatter.py          #   Frontmatter parsing
   schemas/                  # Pydantic v2 models (4 schema files for 4 data blocks)
-  ingestion/                # RSS scraping, HTML parsing, browser rendering (Playwright)
-    parsers/                # Source-specific parsers (zhihu, tldrai, machine_heart, anthropic)
-  extraction/               # BaseInfo + FactExtraction agents
-  analysis/                 # 3 persona agents (tech-architect, capital-analyst, risk-assessor)
-    prompts/                # System prompts for each analysis dimension
-  synthesis/                # Frontmatter aggregation + Editor-in-Chief report generation
-    prompts/                # System + user prompts for report synthesis
+  ingestion/                # Stage 1: RSS scraping, HTML parsing, browser rendering (Playwright)
+    scout/                  #   Stage 1a: URL manifest generation
+    ingest/                 #   Stage 1b: Content download + cleaning
+    backfill_ids/           #   Article ID backfill utility
+    parsers/                #   Source-specific parsers (zhihu, tldrai, machine_heart, anthropic)
+  extraction/               # Stage 2: BaseInfo + FactExtraction agents
+  analysis/                 # Stage 3: 3 persona agents (tech-architect, capital-analyst, risk-assessor)
+    prompts/                #   System prompts for each analysis dimension
+  aggregation/              # Stage 4a: Frontmatter aggregation + hot/cold split
+  synthesis/                # Stage 4b: Editor-in-Chief report generation
+    prompts/                #   System + user prompts for report synthesis
 
 src/
   app/
@@ -366,7 +377,7 @@ stages:
 
 ## Source configuration
 
-19 sources organized in 3 tiers (A: academic/technical, B: product/community, C: business/capital), each capped at 5 articles, total target 15. Config in `pipeline/config.yaml` defines fetch strategies (`rss`, `scrape`, `browser`), keyword filters, max age, and truncation per source. 2 A-tier sources are disabled (`meta-ai-blog`, `microsoft-ai-blog`) due to unavailable or stale feeds.
+26 sources (23 active, 3 disabled) organized in 3 tiers (A: academic/technical, B: product/community, C: business/capital), each capped at 5 articles, total target 15. Config in `pipeline/config.yaml` defines fetch strategies (`rss`, `scrape`, `browser`), keyword filters, max age, and truncation per source. 3 sources are disabled (`meta-ai-blog`, `microsoft-ai-blog`, `zhihu`) due to unavailable or stale feeds.
 
 `config.yaml` also includes UI-facing metadata consumed by the Next.js frontend:
 - `tiers_meta` — per-tier labels, subtitles, and rationale for the Sources page hero banner
