@@ -137,7 +137,7 @@ uv run python pipeline/run.py scout          # Stage 1a: 生成 URL 清单
 uv run python pipeline/run.py ingest         # Stage 1b: 正文抓取
 uv run python pipeline/run.py extract        # Stage 2: 事实提取
 uv run python pipeline/run.py analyze        # Stage 3: 三维度深度分析
-uv run python pipeline/run.py aggregate      # Stage 4a: Frontmatter 聚合
+uv run python pipeline/run.py aggregate      # Stage 4a: Frontmatter 聚合（extract/analyze 后自动执行，通常无需手动运行）
 uv run python pipeline/run.py synthesize     # Stage 4b: 日报合成
 ```
 
@@ -162,7 +162,7 @@ uv run python pipeline/run.py synthesize --help
 端到端完整运行（首次或全量重建）：
 
 ```bash
-# 按顺序执行全部 6 个阶段
+# 按顺序执行全部阶段（aggregate 在 extract 和 analyze 后自动执行）
 uv run python pipeline/run.py scout && \
   uv run python pipeline/run.py ingest && \
   uv run python pipeline/run.py extract && \
@@ -170,7 +170,7 @@ uv run python pipeline/run.py scout && \
   uv run python pipeline/run.py synthesize
 ```
 
-> **注意**：`analyze` 完成后会自动调用 `aggregate`（Stage 4a 聚合），无需单独运行。
+> **注意**：`extract` 和 `analyze` 完成后都会自动调用 `aggregate`（Stage 4a 聚合），无需单独运行。
 
 日常增量运行（最常用）：
 

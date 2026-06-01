@@ -44,6 +44,7 @@ sources:
     type: academic_paper
     tier: A
     enabled: true
+    priority: 1
     display_name: "arXiv CS.AI"
     description: "arXiv 计算机科学 · AI 分类"
     display_description: "arXiv 人工智能分类下的最新预印本，通过 RSS 实时获取。覆盖 LLM、Agent、多模态、对齐、推理等前沿研究方向，关键词过滤确保信噪比，仅保留高质量技术论文摘要。"
@@ -68,10 +69,30 @@ sources:
     limit: 15  # arxiv cs.AI 日均 400+ 篇, 关键词命中率近 100%, 必须限流
     truncation:
       mode: abstract_only
+
+  - name: "anthropic-blog"
+    type: tech_blog
+    tier: A
+    enabled: true
+    priority: 2
+    display_name: "Anthropic Blog"
+    description: "Anthropic 官方新闻 (sitemap 解析)"
+    display_description: "Anthropic 官方新闻与技术发布，聚焦 Claude 模型能力演进、AI 安全与对齐研究、企业级应用实践。通过 sitemap 解析获取完整更新，是追踪 AI 安全方向的重要窗口。"
+    url: "https://www.anthropic.com/sitemap.xml"
+    language: en
+    fetch_strategy: scrape
+    filter:
+      keywords: []  # Anthropic 官方博客内容均与 AI 强相关，不做关键词过滤
+      max_age_hours: 168  # Anthropic 发布频率低, 从 72h 放宽到 7 天
+    truncation:
+      mode: first_n_chars
+      limit: 3000
+
   - name: "openai-blog"
     type: tech_blog
     tier: A
     enabled: true
+    priority: 3
     display_name: "OpenAI Blog"
     description: "OpenAI 官方博客"
     display_description: "OpenAI 官方博客，发布 GPT 系列模型、ChatGPT、API、安全对齐等领域的第一手技术公告和研究进展。作为全球最有影响力的 AI 公司之一，其官方信息源技术可信度最高。"
@@ -99,6 +120,7 @@ sources:
     type: tech_blog
     tier: A
     enabled: true
+    priority: 4
     display_name: "Google AI Blog"
     description: "Google AI Blog (含 DeepMind)"
     display_description: "Google 与 DeepMind 的官方 AI 研究博客，涵盖基础模型（Gemini 系列）、强化学习、多模态 AI、科学 AI（AlphaFold 等）方向的突破性研究成果，是追踪前沿研究的风向标。"
@@ -112,27 +134,11 @@ sources:
       mode: first_n_chars
       limit: 3000
 
-  - name: "anthropic-blog"
-    type: tech_blog
-    tier: A
-    enabled: true
-    display_name: "Anthropic Blog"
-    description: "Anthropic 官方新闻 (sitemap 解析)"
-    display_description: "Anthropic 官方新闻与技术发布，聚焦 Claude 模型能力演进、AI 安全与对齐研究、企业级应用实践。通过 sitemap 解析获取完整更新，是追踪 AI 安全方向的重要窗口。"
-    url: "https://www.anthropic.com/sitemap.xml"
-    language: en
-    fetch_strategy: scrape
-    filter:
-      keywords: []  # Anthropic 官方博客内容均与 AI 强相关，不做关键词过滤
-      max_age_hours: 168  # Anthropic 发布频率低, 从 72h 放宽到 7 天
-    truncation:
-      mode: first_n_chars
-      limit: 3000
-
   - name: "nvidia-blog"
     type: tech_blog
     tier: A
     enabled: true
+    priority: 6
     display_name: "NVIDIA AI Blog"
     description: "NVIDIA AI 技术博客"
     display_description: "NVIDIA 官方 AI 技术博客，覆盖 GPU 推理优化、训练基础设施、CUDA 生态演进、大模型部署与加速等硬件与工程前沿，是 AI 算力层最重要的信息源。"
@@ -203,6 +209,7 @@ sources:
     type: tech_blog
     tier: A
     enabled: true
+    priority: 5
     display_name: "Hugging Face Blog"
     description: "Hugging Face 官方博客"
     display_description: "Hugging Face 官方博客，发布开源模型、数据集、训练框架与推理优化等内容。作为开源 AI 社区的核心枢纽，其发布往往代表开源生态的技术方向。"
@@ -234,6 +241,7 @@ sources:
     type: community_discussion
     tier: B
     enabled: true
+    priority: 1
     display_name: "Hacker News"
     description: "Hacker News (hnrss.org, points >= 100)"
     display_description: "Hacker News 科技板块高质量讨论，通过 hnrss.org 预过滤 score ≥ 100 的热门话题。全球开发者社区的实时情绪风向标，技术采纳趋势的领先指标。"
@@ -250,6 +258,7 @@ sources:
     type: community_discussion
     tier: B
     enabled: true
+    priority: 3
     display_name: "Product Hunt"
     description: "Product Hunt 热门产品"
     display_description: "Product Hunt 热门产品榜单，通过关键词过滤 AI/LLM/Agent/Copilot 相关产品。发现新兴 AI 工具与 SaaS 产品，捕捉 AI 产品化的早期信号。"
@@ -272,6 +281,7 @@ sources:
     type: community_discussion
     tier: B
     enabled: true
+    priority: 2
     display_name: "GitHub Trending"
     description: "GitHub Trending (每日热门仓库)"
     display_description: "GitHub 每日热门开源仓库，过滤 AI/LLM/Agent/MCP 相关项目。追踪开发者社区关注的开源基础设施与框架变化，是技术选型的重要参考。"
@@ -298,6 +308,7 @@ sources:
     type: community_discussion
     tier: B
     enabled: true
+    priority: 4
     display_name: "Ben's Bites"
     description: "Ben's Bites AI 日报 Newsletter"
     display_description: "Ben's Bites — AI 领域知名日报 Newsletter，每日精选 AI 行业最重要的新闻、产品发布与研究成果。由资深 AI 观察者人工策展，信噪比高，覆盖范围广。"
@@ -351,6 +362,7 @@ sources:
     type: news_media
     tier: C
     enabled: true
+    priority: 1
     display_name: "TechCrunch"
     description: "TechCrunch 科技新闻"
     display_description: "TechCrunch — 全球最具影响力的科技创投媒体之一。关注 AI 创业公司融资、收购、IPO 等商业事件，通过关键词过滤 AI/创业/融资/收购/上市相关报道。"
@@ -376,6 +388,7 @@ sources:
     type: news_media
     tier: C
     enabled: true
+    priority: 2
     display_name: "The Verge"
     description: "The Verge AI 报道"
     display_description: "The Verge AI 报道板块，关注大型科技公司（Google、Microsoft、Apple、Meta）的 AI 产品发布、战略动向与消费者影响，兼顾科技评论与行业分析视角。"
@@ -400,6 +413,7 @@ sources:
     type: news_media
     tier: C
     enabled: true
+    priority: 7
     display_name: "KDnuggets"
     description: "KDnuggets 数据科学与 AI 教程/新闻"
     display_description: "KDnuggets — 数据科学与 AI 领域知名技术媒体，涵盖机器学习、LLM、Python 工具链等技术教程与业界新闻。兼顾技术深度与实用工具推荐。"
@@ -424,6 +438,7 @@ sources:
     type: news_media
     tier: C
     enabled: true
+    priority: 4
     display_name: "TLDR AI"
     description: "TLDR AI 每日 AI 新闻聚合 (HTML 解析)"
     display_description: "TLDR AI — 每日 AI 新闻聚合服务，精选 AI 行业最重要的 5–10 条新闻并附简要解析。通过 HTML 解析获取，覆盖广度大，适合快速扫描当日 AI 动态。"
@@ -443,6 +458,7 @@ sources:
     type: newsletter_rss
     tier: B
     enabled: true
+    priority: 5
     display_name: "Import AI"
     description: "Import AI (Jack Clark) — AI 行业周刊"
     display_description: "Jack Clark（Anthropic 联合创始人）撰写的 AI 行业周刊，深度分析 AI 技术趋势、政策与产业动态。每周一期，内容精炼，视角独特。"
@@ -461,6 +477,7 @@ sources:
     type: newsletter_rss
     tier: B
     enabled: true
+    priority: 6
     display_name: "NLP Newsletter"
     description: "NLP Newsletter (Elvis Saravia) — NLP 技术周报"
     display_description: "Elvis Saravia 整理的 NLP 领域技术周报，涵盖大模型训练、推理优化、多语言 NLP、评测基准等前沿技术话题。"
@@ -479,6 +496,7 @@ sources:
     type: newsletter_rss
     tier: A
     enabled: true
+    priority: 7
     display_name: "Interconnects"
     description: "Interconnects (Nathan Lambert) — AI 政策与研究评论"
     display_description: "Nathan Lambert（Allen Institute for AI）撰写的 AI 政策与研究深度评论，聚焦 RLHF、对齐、开源 AI 治理等前沿交叉话题。"
@@ -497,6 +515,7 @@ sources:
     type: newsletter_rss
     tier: B
     enabled: true
+    priority: 7
     display_name: "Why Try AI"
     description: "Why Try AI — AI 工具与产品评测"
     display_description: "Why Try AI 独立评测 AI 工具与产品，用实际案例展示新 AI 工具的用途与效果，帮助读者发现实用的 AI 应用。"
@@ -520,6 +539,7 @@ sources:
     type: newsletter_rss
     tier: C
     enabled: true
+    priority: 5
     display_name: "The Rundown AI"
     description: "The Rundown AI — AI 行业日报"
     display_description: "全球订阅量最大的 AI 日报之一，每日精选 AI 领域最重要的新闻、工具发布和行业动态，通过 Beehiiv RSS 获取。"
@@ -538,6 +558,7 @@ sources:
     type: newsletter_rss
     tier: C
     enabled: true
+    priority: 6
     display_name: "The Neuron Daily"
     description: "The Neuron Daily — AI 新闻日刊"
     display_description: "AI 新闻日刊，每日精选 AI 行业要闻与工具推荐，语言轻松但有深度，与 The Rundown 互补覆盖 AI 日报赛道。"
@@ -556,6 +577,7 @@ sources:
     type: newsletter_rss
     tier: A
     enabled: true
+    priority: 8
     display_name: "One Useful Thing"
     description: "One Useful Thing (Ethan Mollick) — AI + 商业学术视角"
     display_description: "沃顿商学院 Ethan Mollick 教授的 AI 专栏，从学术视角分析 AI 对商业、教育和工作的实际影响，以严谨研究为基础，写作通俗易懂。"
@@ -574,6 +596,7 @@ sources:
     type: news_media
     tier: C
     enabled: true
+    priority: 8
     display_name: "量子位"
     description: "量子位 - 中国 AI 前沿科技媒体"
     display_description: "量子位（qbitai.com）— 中国 AI 前沿科技媒体。聚焦大模型技术进展、AI 芯片竞争、算力基建、行业应用落地，通过 RSS 获取中文 AI 产业前沿动态。"
@@ -600,6 +623,7 @@ sources:
     type: news_media
     tier: C
     enabled: true
+    priority: 3
     display_name: "36氪"
     description: "36氪 AI 产业创投报道"
     display_description: "36氪 AI 产业创投报道，追踪中国 AI 创业公司融资事件、IPO 进展、AIGC 应用落地与 SaaS 行业动态，提供资本视角的中国 AI 产业全景。"
@@ -633,7 +657,7 @@ llm:
       temperature: 0.1
       max_tokens: 4096
     analyze:
-      name: "deepseek-v4-pro"
+      name: "deepseek-v4-flash"
       temperature: 0.3
       max_tokens: 8192
     synthesize:

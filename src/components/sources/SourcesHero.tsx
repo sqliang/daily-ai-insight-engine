@@ -78,7 +78,7 @@ export function SourcesHero({
           <p className="text-sm leading-relaxed text-white/55 md:text-[15px] md:leading-7">
             聚合多个中英文精选优质信息数据源，通过{" "}
             <span className="font-medium text-white/85">黄金三角</span>
-            {" "}串联学术前沿、产品动态与商业信号。
+            {" "}串联技术前沿、产品动态与商业信号。
           </p>
           <p className="text-sm leading-relaxed text-white/55 md:text-[15px] md:leading-7">
             经采集、提炼与多维解读，把高噪资讯沉淀为{" "}

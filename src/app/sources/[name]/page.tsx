@@ -29,13 +29,27 @@ export default async function SourceDetailPage({
   searchParams,
 }: {
   params: Promise<{ name: string }>;
-  searchParams: Promise<{ from?: string; to?: string }>;
+  searchParams: Promise<{ from?: string; to?: string; preset?: string }>;
 }) {
   const { name } = await params;
   const sp = await searchParams;
 
-  const dateRange: DateRange | undefined =
-    sp.from || sp.to ? { from: sp.from, to: sp.to } : undefined;
+  // 日期范围计算：
+  //   preset=latest  → 不筛选，仅加载最新 manifest（无 archive 分片）
+  //   有 from/to  → 显式日期范围（兼容旧 URL 和书签）
+  //   无参数       → 默认最近 7 天
+  const dateRange: DateRange | undefined = (() => {
+    if (sp.preset === "latest") return undefined;
+    if (sp.from || sp.to) return { from: sp.from, to: sp.to };
+    // 默认最近7天
+    const pad = (n: number) => String(n).padStart(2, "0");
+    const today = new Date();
+    const to = `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(today.getDate())}`;
+    const fromDate = new Date(today);
+    fromDate.setDate(fromDate.getDate() - 6);
+    const from = `${fromDate.getFullYear()}-${pad(fromDate.getMonth() + 1)}-${pad(fromDate.getDate())}`;
+    return { from, to };
+  })();
 
   const source = await getSourceDetailEnriched(name, dateRange);
   if (!source) notFound();

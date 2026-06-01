@@ -47,6 +47,7 @@ interface SourceConfig {
   type: string;
   tier: "A" | "B" | "C";
   enabled: boolean;
+  priority?: number;  // 同 tier 内排序优先级，数字越小越靠前，未配置的排最后
   display_name?: string;
   description: string;
   display_description?: string;
@@ -63,6 +64,7 @@ export interface SourceStatus {
   type: string;
   tier: "A" | "B" | "C";
   enabled: boolean;
+  priority?: number;
   display_name: string;
   description: string;
   display_description: string;
@@ -108,6 +110,7 @@ export interface EnrichedSourceDetail {
   type: string;
   tier: "A" | "B" | "C";
   enabled: boolean;
+  priority?: number;
   display_name: string;
   description: string;
   display_description: string;
@@ -255,6 +258,7 @@ function configToStatus(
     type: cfg.type,
     tier: cfg.tier,
     enabled: cfg.enabled,
+    priority: cfg.priority,
     display_name: cfg.display_name ?? cfg.name,
     description: cfg.description,
     display_description: cfg.display_description ?? cfg.description,
@@ -284,11 +288,16 @@ export async function getSourceStatuses(): Promise<SourceStatus[]> {
     return configToStatus(cfg, manifest);
   });
 
-  // Sort by tier (A→B→C), then alphabetically by name
+  // Sort by tier (A→B→C) → priority (ascending, unset defaults to 999) → name (alphabetical)
   const tierOrder = { A: 0, B: 1, C: 2 };
+  const DEFAULT_PRIORITY = 999;
   results.sort((a, b) => {
     const d = tierOrder[a.tier] - tierOrder[b.tier];
-    return d !== 0 ? d : a.name.localeCompare(b.name);
+    if (d !== 0) return d;
+    const pa = a.priority ?? DEFAULT_PRIORITY;
+    const pb = b.priority ?? DEFAULT_PRIORITY;
+    if (pa !== pb) return pa - pb;
+    return a.name.localeCompare(b.name);
   });
 
   return results;
@@ -474,6 +483,7 @@ export async function getSourceDetailEnriched(
     type: config.type,
     tier: config.tier,
     enabled: config.enabled,
+    priority: config.priority,
     display_name: config.display_name ?? config.name,
     description: config.description,
     display_description: config.display_description ?? config.description,

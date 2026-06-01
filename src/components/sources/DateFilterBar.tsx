@@ -53,28 +53,35 @@ export function DateFilterBar() {
   const searchParams = useSearchParams();
   const currentFrom = searchParams.get("from");
   const currentTo = searchParams.get("to");
+  const currentPreset = searchParams.get("preset");
 
   const resolvePreset = useCallback((key: Preset) => {
     const params = new URLSearchParams(searchParams.toString());
 
     switch (key) {
       case "latest":
+        // 清除 from/to，设置 preset=latest 以区别于默认 7 天行为
         params.delete("from");
         params.delete("to");
+        params.set("preset", "latest");
         break;
       case "today":
+        params.delete("preset");
         params.set("from", todayStr());
         params.set("to", todayStr());
         break;
       case "last3days":
+        params.delete("preset");
         params.set("from", daysAgoStr(2));
         params.set("to", todayStr());
         break;
       case "last7days":
+        params.delete("preset");
         params.set("from", daysAgoStr(6));
         params.set("to", todayStr());
         break;
       case "all":
+        params.delete("preset");
         params.set("from", "2000-01-01");
         params.set("to", todayStr());
         break;
@@ -85,12 +92,17 @@ export function DateFilterBar() {
   }, [searchParams, router]);
 
   const activePreset = ((): Preset => {
-    if (!currentFrom && !currentTo) return "latest";
+    // preset=latest 显式指定 → "最新"高亮，优先于 from/to 匹配
+    if (currentPreset === "latest") return "latest";
+    // 无参数 → 默认最近7天（与服务端保持一致）
+    if (!currentFrom && !currentTo) return "last7days";
+    // 匹配已知预设
     const today = todayStr();
     if (currentFrom === today && currentTo === today) return "today";
     if (currentFrom === daysAgoStr(2) && currentTo === today) return "last3days";
     if (currentFrom === daysAgoStr(6) && currentTo === today) return "last7days";
     if (currentFrom === "2000-01-01") return "all";
+    // 自定义范围不匹配任何预设 → fallback，无按钮高亮
     return "latest";
   })();
 
