@@ -6,12 +6,12 @@ pipeline/run.py — Daily AI Insight Engine 管道入口
 1. 加载 .env 环境变量（通过 python-dotenv）
 2. 加载 config/proxy.json 并注入代理环境变量
 
-子命令：
+子命令（日常五步，aggregate 在 extract/analyze 后自动执行）：
     uv run python pipeline/run.py scout          Stage 1a: 生成 URL 清单
     uv run python pipeline/run.py ingest         Stage 1b: 正文抓取与清洗
-    uv run python pipeline/run.py extract        Stage 2: 元信息与事实提取
-    uv run python pipeline/run.py analyze        Stage 3: 深度分析
-    uv run python pipeline/run.py aggregate      Stage 4a: Frontmatter 聚合
+    uv run python pipeline/run.py extract        Stage 2: 元信息与事实提取 (自动 aggregate)
+    uv run python pipeline/run.py analyze        Stage 3: 深度分析 (自动 aggregate)
+    uv run python pipeline/run.py aggregate      Stage 4a: Frontmatter 聚合 (独立运行，用于配置变更)
     uv run python pipeline/run.py synthesize     Stage 4b: 日报合成
 """
 
@@ -67,16 +67,20 @@ _setup_proxy()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="Daily AI Insight Engine — 四阶段 AI 资讯处理流水线",
+        description="Daily AI Insight Engine — AI 资讯处理流水线",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
-示例:
+日常五步（aggregate 在 extract/analyze 后自动执行）:
   uv run python pipeline/run.py scout                       Stage 1a: URL 清单生成
   uv run python pipeline/run.py ingest                      Stage 1b: 正文抓取
-  uv run python pipeline/run.py extract                     Stage 2: 事实提取
-  uv run python pipeline/run.py analyze                     Stage 3: 深度分析
-  uv run python pipeline/run.py aggregate                   Stage 4a: 聚合 frontmatter
+  uv run python pipeline/run.py extract                     Stage 2: 事实提取 → 自动 aggregate
+  uv run python pipeline/run.py analyze                     Stage 3: 深度分析 → 自动 aggregate
   uv run python pipeline/run.py synthesize                  Stage 4b: 日报合成
+
+独立 aggregate（配置变更时使用）:
+  uv run python pipeline/run.py aggregate                   Stage 4a: 聚合 frontmatter
+  uv run python pipeline/run.py aggregate --lookback-days 7  修改日报窗口
+  uv run python pipeline/run.py aggregate --hot-days 14      修改热数据窗口
   uv run python pipeline/run.py synthesize --dry-run        Stage 4b: 显示 prompt 预估
         """,
     )

@@ -14,7 +14,9 @@ RSS feed 不需要浏览器渲染，但标记为 browser 策略以便 ingest 阶
 
 from typing import List
 
-from pipeline.core.web_utils import fetch_rss_items
+import feedparser
+
+from pipeline.core.web_utils import fetch_url
 
 
 def parse_openai_browser(source: dict, browser_session) -> List[dict]:
@@ -36,16 +38,25 @@ def parse_openai_browser(source: dict, browser_session) -> List[dict]:
         print("         [openai] RSS 源缺少 url 配置")
         return []
 
-    raw_items = fetch_rss_items(url)
+    # 先用 curl 获取 RSS XML（curl 走代理比 urllib 更稳定），再交给 feedparser 解析
+    # urllib 通过本地 HTTPS 代理时可能遇到 SSL 证书验证问题，curl 不受此影响
+    xml_content = fetch_url(url)
+    if not xml_content:
+        print(f"         [openai] RSS feed 获取失败: {url}")
+        return []
+
+    feed = feedparser.parse(xml_content)
     articles: List[dict] = []
-    for item in raw_items:
-        if not item.get("url") or not item.get("title"):
+    for entry in feed.entries:
+        article_url = entry.get("link") or entry.get("url", "")
+        title = entry.get("title", "")
+        if not article_url or not title:
             continue
         articles.append({
-            "url": item["url"],
-            "title": item["title"],
-            "published": item.get("published", ""),
-            "summary": item.get("summary", ""),
-            "author": item.get("author", ""),
+            "url": article_url,
+            "title": title,
+            "published": entry.get("published", entry.get("updated", "")),
+            "summary": entry.get("summary", ""),
+            "author": entry.get("author", ""),
         })
     return articles

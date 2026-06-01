@@ -94,16 +94,17 @@ cp .env.example .env
 
 ### 运行完整流水线
 
-所有命令从仓库根目录执行，六阶段按顺序运行：
+所有命令从仓库根目录执行。流水线有六个阶段，但 **aggregate 会在 extract 和 analyze 完成后自动执行**，因此日常只需五步：
 
 ```bash
 uv run python pipeline/run.py scout       # ① URL 清单生成（RSS/网页抓取/浏览器渲染）
 uv run python pipeline/run.py ingest      # ② 正文下载 + HTML 清洗
-uv run python pipeline/run.py extract     # ③ 事实提取（BaseInfo + FactExtraction，LLM 驱动）
-uv run python pipeline/run.py analyze     # ④ 三人格并行深度分析（LLM 驱动）
-uv run python pipeline/run.py aggregate   # ⑤ Frontmatter 聚合（纯计算，< 1 秒）
-uv run python pipeline/run.py synthesize  # ⑥ 主编合成日报（LLM 驱动）
+uv run python pipeline/run.py extract     # ③ 事实提取（BaseInfo + FactExtraction，LLM 驱动）→ 自动 aggregate
+uv run python pipeline/run.py analyze     # ④ 三人格并行深度分析（LLM 驱动）→ 自动 aggregate
+uv run python pipeline/run.py synthesize  # ⑤ 主编合成日报（LLM 驱动）
 ```
+
+> **说明：** `extract` 和 `analyze` 完成后会自动调用 aggregate（Stage 4a），更新 `data/04_structured/` 下的 JSON 文件。独立运行 `aggregate` 仅用于修改 lookback-days / hot-days 配置或强制重建。
 
 每个阶段默认 `--skip-existing`——已处理的文件自动跳过，支持断电续跑。重处理加 `--force`。
 
@@ -116,11 +117,13 @@ uv run python pipeline/run.py synthesize --dry-run
 # 仅运行某一分析维度（qualitative / value / foresight）
 uv run python pipeline/run.py analyze --stage qualitative
 
-# 日报窗口扩展为 7 天
+# 日报窗口扩展为 7 天（两步：重新聚合 + 合成）
 uv run python pipeline/run.py aggregate --lookback-days 7
 uv run python pipeline/run.py synthesize --lookback-days 7
+# 或者一步完成（synthesize --lookback-days 会在合成前自动重新聚合）
+uv run python pipeline/run.py synthesize --lookback-days 7
 
-# 调整 per-source JSON 热数据保留天数（默认 7）
+# 调整 per-source JSON 热数据保留天数（默认 7，仅在需要修改配置时单独运行）
 uv run python pipeline/run.py aggregate --hot-days 14
 
 # 单独重处理某一篇文章
@@ -147,7 +150,7 @@ pnpm dev
 
 ---
 
-## 六阶段做了什么
+## 六阶段做了什么（aggregate 自动执行，无需手动运行）
 
 每个阶段产生明确的中间产物，可回溯、可重跑、可独立调试：
 
@@ -157,7 +160,7 @@ pnpm dev
 | **Ingest** | 下载全文、HTML 清洗（curl + trafilatura）、SHA-256 生成 article ID | `data/01_raw/{source}/*.md` | 秒-分钟 |
 | **Extract** | LLM 提取：TLDR、事件类型、实体识别（公司/技术/人物/产品/地区）、关键逻辑链、影响力评分 | `data/02_extracted/{source}/*.md` | 分钟（并发） |
 | **Analyze** | 三种分析人格并发：技术架构师（技术颠覆性） + 资本分析师（复合价值、护城河） + 风险评估师（风险矩阵、市场机会） | `data/03_analyzed/{source}/*.md` | 分钟（并发） |
-| **Aggregate** | 纯计算：多阶段扫描 → 去重 → 热冷分流 → per-source JSON + all_articles.json | `data/04_structured/` | < 1 秒 |
+| **Aggregate** | 纯计算：多阶段扫描 → 去重 → 热冷分流 → per-source JSON + all_articles.json。**自动触发**：extract 和 analyze 完成后自动执行 | `data/04_structured/` | < 1 秒 |
 | **Synthesize** | 主编 Agent 单次调用：阅读 all_articles.json → 生成执行摘要 + 5 事件 + 3 深度 + 4 趋势 + 风险/机会信号 + 可视化数据 | `data/05_reports/` | 分钟 |
 
 ---
@@ -275,7 +278,7 @@ daily-ai-insight-engine/
 | `uv run python pipeline/run.py ingest` | Stage 1b: 下载清洗正文 |
 | `uv run python pipeline/run.py extract` | Stage 2: 事实提取 |
 | `uv run python pipeline/run.py analyze` | Stage 3: 三人格并行分析 |
-| `uv run python pipeline/run.py aggregate` | Stage 4a: 聚合 + 热冷分流 |
+| `uv run python pipeline/run.py aggregate` | Stage 4a: 聚合 + 热冷分流（extract/analyze 后自动执行，通常无需手动运行） |
 | `uv run python pipeline/run.py synthesize` | Stage 4b: 主编合成日报 |
 | `uv run python pipeline/run.py synthesize --dry-run` | 预估 token，不调 LLM |
 | `uv run python pipeline/run.py analyze --stage qualitative` | 仅运行单一分析维度 |

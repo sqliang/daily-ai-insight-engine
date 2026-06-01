@@ -56,7 +56,13 @@ def synthesize_report(
 
     if not input_path.exists():
         print(f"错误: 输入文件不存在: {input_path}")
-        print("请先运行 'uv run python pipeline/run.py aggregate' 生成 all_articles.json")
+        print("")
+        print("all_articles.json 由 aggregate 阶段生成，aggregate 会在以下命令完成后自动执行：")
+        print("  uv run python pipeline/run.py extract     # extract 完成后自动 aggregate")
+        print("  uv run python pipeline/run.py analyze     # analyze 完成后自动 aggregate")
+        print("")
+        print("如果已经运行过 extract 或 analyze，也可以独立运行 aggregate：")
+        print("  uv run python pipeline/run.py aggregate")
         sys.exit(1)
 
     # 预读数据

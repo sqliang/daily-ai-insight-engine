@@ -4,7 +4,7 @@ This file provides guidance to AI coding agents (Claude Code, Cursor, Copilot, e
 
 ## Architecture
 
-This is a **dual-language** project: a Python offline pipeline ingests 26 AI information sources (23 active) through a 6-stage Map/Reduce process, and a Next.js 16 App Router dashboard renders the final daily report as interactive charts.
+This is a **dual-language** project: a Python offline pipeline ingests 26 AI information sources (23 active) through a 6-stage Map/Reduce process (5 runnable commands — aggregate auto-executes after extract and analyze), and a Next.js 16 App Router dashboard renders the final daily report as interactive charts.
 
 **Data flow:** `26 RSS/scrape/browser sources → Stage 1a (scout URL manifests) → Stage 1b (ingest content download) → Stage 2 (extract facts) → Stage 3 (3-dimension analysis × concurrency) → Stage 4a (aggregate frontmatter JSON + hot/cold split) → Stage 4b (Editor-in-Chief synthesis) → Next.js reads JSON directly from disk`
 
@@ -141,19 +141,22 @@ pnpm lint                # ESLint (flat config)
 pnpm typecheck           # tsc --noEmit
 
 # Pipeline (Python — run from repo root with uv)
+# Essential 5-command workflow (aggregate auto-executes after extract & analyze):
 uv run python pipeline/run.py scout              # Stage 1a: generate URL manifests
 uv run python pipeline/run.py ingest             # Stage 1b: download + clean articles
-uv run python pipeline/run.py extract            # Stage 2: BaseInfo + FactExtraction via Claude
-uv run python pipeline/run.py analyze            # Stage 3: 3-dimension deep analysis
-uv run python pipeline/run.py aggregate          # Stage 4a: extract frontmatter → all_articles.json
+uv run python pipeline/run.py extract            # Stage 2: BaseInfo + FactExtraction → auto-aggregates
+uv run python pipeline/run.py analyze            # Stage 3: 3-dimension deep analysis → auto-aggregates
 uv run python pipeline/run.py synthesize         # Stage 4b: Editor-in-Chief daily report generation
+
+# Standalone aggregate (for edge cases: config changes, --lookback-days, --hot-days, --force):
+uv run python pipeline/run.py aggregate          # Stage 4a: extract frontmatter → all_articles.json
 
 # Pipeline variants
 uv run python pipeline/run.py synthesize --dry-run     # Estimate token usage, no LLM call
 uv run python pipeline/run.py analyze --stage qualitative  # Run only one analysis dimension
 uv run python pipeline/run.py extract --force          # Reprocess all, ignoring skip-existing
-uv run python pipeline/run.py aggregate --lookback-days 0  # Include all historical articles (no time filter)
-uv run python pipeline/run.py aggregate --lookback-days 7  # Include articles from last 7 days
+uv run python pipeline/run.py aggregate --lookback-days 0  # Standalone: include all historical articles (no time filter)
+uv run python pipeline/run.py aggregate --lookback-days 7  # Standalone: re-aggregate with wider lookback window
 uv run python pipeline/run.py synthesize --lookback-days 7  # Re-aggregate last 7 days before synthesis
 ```
 

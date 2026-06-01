@@ -4,6 +4,7 @@ pipeline/extraction/orchestrator.py — Stage 2 编排入口
 职责：
     - 文件发现：识别 .md 文件或目录下的所有 .md 文件
     - 编排调度：先执行 Stage 2a (BaseInfo)，全部完成后再执行 Stage 2b (FactExtraction)
+    - 自动聚合：所有提取阶段完成后，自动调用 aggregate_frontmatter() 更新 data/04_structured/，确保前端可以渐进式显示已提取（但尚未分析）的文章
     - 结果汇总：打印每个阶段和每个文件的结果摘要
     - CLI 入口：提供 argparse 子命令，支持各种参数组合
 

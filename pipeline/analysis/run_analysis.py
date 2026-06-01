@@ -5,6 +5,7 @@ pipeline/analysis/run_analysis.py — Stage 3 深度分析管道编排
     - 从 data/02_extracted/ 读取 Stage 2 输出文件
     - 对每篇文章并行调用 3 个评估 Agent
     - 将结果写入 data/03_analyzed/（保持子目录结构）
+    - 分析完成后自动调用 aggregate_frontmatter()，更新 data/04_structured/ 使前端获取最新分析结果
     - 支持 dry-run、部分维度运行、并发控制等 CLI 参数
 """
 
@@ -22,7 +23,7 @@ from pipeline.utils.file_utils import ensure_dir
 logger = logging.getLogger(__name__)
 
 # Stage 3 回退模型（在 config.yaml 和 CLI 参数均未指定时使用）
-DEFAULT_MODEL = "deepseek-v4-pro"
+DEFAULT_MODEL = "deepseek-v4-flash"
 
 
 
