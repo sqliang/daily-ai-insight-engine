@@ -71,12 +71,12 @@ def generate_markdown(report: dict) -> str:
 
     # --- YAML frontmatter ---
     lines.append("---")
-    lines.append(f'title: "{report.get("reportTitle", "AI 洞察日报")}"')
+    lines.append(f'title: "{report.get("reportTitle", "AI 洞察报告")}"')
     lines.append(f'date: {report.get("date", "")}')
     lines.append(f'generated: {report.get("generatedAt", "")}')
     lines.append("---")
     lines.append("")
-    lines.append(f'# {report.get("reportTitle", "AI 洞察日报")}')
+    lines.append(f'# {report.get("reportTitle", "AI 洞察报告")}')
     lines.append("")
 
     # --- Executive Summary ---

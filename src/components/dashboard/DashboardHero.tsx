@@ -1,7 +1,7 @@
 // ============================================================================
 // DashboardHero.tsx — 日报列表页顶部 Hero 横幅
 //
-// 阐述流水线产出侧价值：结构化洞察日报、可读可学的交付形态。
+// 阐述流水线产出侧价值：结构化洞察报告、可读可学的交付形态。
 // 与 SourcesHero（信源输入）形成首尾呼应，被 dashboard/page.tsx 消费。
 // ============================================================================
 
@@ -81,7 +81,7 @@ export function DashboardHero({
 
         {/* 主标题 */}
         <h1 className="mt-4 text-2xl font-bold tracking-tight text-white md:text-3xl">
-          洞察日报<span className="text-accent-light/60"> · </span>
+          洞察报告<span className="text-accent-light/60"> · </span>
           <span className="bg-gradient-to-r from-accent-light via-white to-accent-light bg-clip-text text-transparent">
             历史归档
           </span>
@@ -91,7 +91,7 @@ export function DashboardHero({
         <div className="mt-2.5 space-y-2 text-pretty md:space-y-2.5">
           <p className="text-sm leading-relaxed text-white/55 md:text-[15px] md:leading-7">
             上游信源经采集、提炼与多维解读后，由主编 Agent 综合为{" "}
-            <span className="font-medium text-white/85">结构化洞察日报</span>
+            <span className="font-medium text-white/85">结构化洞察报告</span>
             ——不是链接堆砌，而是可直接吸收的判断与脉络。
           </p>
           <p className="text-sm leading-relaxed text-white/55 md:text-[15px] md:leading-7">
