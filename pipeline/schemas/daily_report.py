@@ -146,7 +146,7 @@ class VisualizationData(BaseModel):
 
 class DailyReport(BaseModel):
     """
-    AI 洞察日报顶层模型。
+    AI 洞察报告顶层模型。
 
     Editor-in-Chief Agent 的最终输出，包含人类可读的分析文本 + 预计算可视化数据，
     使前端看板页面可完全无状态、纯展示地渲染。
