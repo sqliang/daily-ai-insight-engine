@@ -5,6 +5,12 @@ pipeline/ingestion/ingest/orchestrator.py — Stage 1b 正文抓取业务逻辑
   - 常规文章（rss/scrape 策略）→ ThreadPoolExecutor 线程池并发
   - Browser 文章（Playwright 策略）→ 主线程串行（与线程池并行执行）
 
+浏览器回退机制（v2）：
+  常规文章 curl 抓取时如检测到反爬拦截（Cloudflare / JS challenge），
+  不直接写入 partial 兜底文件，而是收集到 bot_blocked_queue，
+  线程池结束后统一用 Playwright 重试。重试失败时调用 _write_fallback_md()
+  写入 failed 兜底文件，防止下次运行反复重试同一篇注定失败的文章。
+
 提供 run_ingest() 主编排函数，被 cli.py 消费。
 
 设计理由：
@@ -31,7 +37,7 @@ from pipeline.core.concurrency.state import IngestState
 from pipeline.core.config_loader import get_source_by_name
 from pipeline.core.config_loader import resolve_data_dir
 from pipeline.utils.file_utils import ensure_dir, read_json
-from pipeline.ingestion.ingest.worker import ingest_article, ingest_browser_article
+from pipeline.ingestion.ingest.worker import ingest_article, ingest_browser_article, BOT_BLOCKED
 
 
 def _needs_ingest(article: Dict[str, Any], target_dir: Path, state: IngestState) -> bool:
@@ -50,6 +56,50 @@ def _needs_ingest(article: Dict[str, Any], target_dir: Path, state: IngestState)
     if not md_path.exists():
         return True
     return False
+
+
+def _write_fallback_md(
+    article: Dict[str, Any],
+    source_name: str,
+    target_dir: Path,
+    state: IngestState,
+    reason: str = "",
+) -> Optional[Path]:
+    """
+    为抓取完全失败的文章写入兜底 .md 文件，确保 downstream 阶段可见。
+
+    当浏览器重试也无法获取正文时调用，写入 extraction_status: failed，
+    防止下次 ingest 运行重复尝试同一篇注定失败的文章。
+    """
+    from pipeline.core.frontmatter_utils import build_ingestion_frontmatter
+    from pipeline.utils.frontmatter import write_frontmatter
+    from pipeline.utils.id_utils import generate_id
+
+    url = article.get("url", "")
+    article_id = article.get("id") or generate_id(url)
+
+    fm = build_ingestion_frontmatter(
+        title=article.get("title", ""),
+        url=url,
+        published=article.get("published", ""),
+        author=article.get("author", ""),
+        description=article.get("summary", ""),
+        source_name=source_name,
+        article_id=article_id,
+        extraction_status="failed",
+    )
+
+    reason_line = f"\n原因：{reason}" if reason else ""
+    body = (
+        f"> **⚠️ 正文抓取失败**：curl + Playwright 均无法获取页面正文{reason_line}\n\n"
+        f"{article.get('summary', '')}"
+    ).strip()
+
+    output_path = target_dir / f"{article_id}.md"
+    write_frontmatter(output_path, fm, body)
+    state.mark_seen(article_id)
+
+    return output_path
 
 
 def _discover_manifests(manifest_dir: Path, today_str: str) -> list[Path]:
@@ -150,6 +200,8 @@ def run_ingest(
     # ------------------------------------------------------------------
     # 4. 预扫描去重（提前剔除已处理文章，减少无用任务提交）
     # ------------------------------------------------------------------
+    total_in_manifests = len(regular_items) + len(browser_items)
+
     regular_items = [
         item for item in regular_items
         if _needs_ingest(item[0], item[2], state)
@@ -191,7 +243,7 @@ def run_ingest(
             future = executor.submit(
                 ingest_article, article, source_name, target_dir, state
             )
-            future_to_info[future] = (article, source_name)
+            future_to_info[future] = (article, source_name, target_dir)
 
         # --- 主线程同时处理 browser 文章（与线程池并行） ---
         if browser_items and browser_session:
@@ -209,15 +261,21 @@ def run_ingest(
                     print(f"         跳过: URL 缺失")
 
         # --- 等待线程池完成 ---
+        bot_blocked_queue: list = []  # 被反爬拦截的文章，稍后用浏览器重试
+
         if future_to_info:
             print(f"\n[thread] 等待 {len(future_to_info)} 篇常规文章完成...")
             for future in as_completed(future_to_info):
-                article, source_name = future_to_info[future]
+                article, source_name, target_dir = future_to_info[future]
                 url = article.get("url", "")
                 title = article.get("title", url)[:60]
                 try:
                     result = future.result()
-                    if result:
+                    if result is BOT_BLOCKED:
+                        # 反爬页面：不写 .md 文件，加入浏览器重试队列
+                        bot_blocked_queue.append((article, source_name, target_dir))
+                        print(f"  [反爬] {title} → 加入浏览器重试队列")
+                    elif result:
                         output_files.append(result)
                         print(f"  [ok] {title}")
                     else:
@@ -226,6 +284,46 @@ def run_ingest(
                     logger.error("Worker 异常 source=%s title=%s url=%s: %s",
                                  source_name, title, url, exc)
                     print(f"  [异常] {title}: {exc}")
+
+        # --- 浏览器重试：处理被反爬拦截的文章 ---
+        if bot_blocked_queue:
+            print(f"\n[browser-retry] 对 {len(bot_blocked_queue)} 篇反爬文章使用浏览器重试...")
+            # 如果还没有 browser session，创建一个
+            if browser_session is None:
+                from pipeline.core.browser_utils import BrowserSession
+                browser_session = stack.enter_context(BrowserSession())
+
+            for article, source_name, target_dir in bot_blocked_queue:
+                url = article.get("url", "")
+                title = article.get("title", url)[:60]
+                print(f"  [browser-retry] {title}...")
+                try:
+                    result = ingest_browser_article(
+                        article, source_name, target_dir, state, browser_session
+                    )
+                    if result:
+                        output_files.append(result)
+                        print(f"    [ok] browser 重试成功")
+                    else:
+                        # URL 为空：写 failed 兜底文件，确保下游阶段能看到这篇文章
+                        result = _write_fallback_md(
+                            article, source_name, target_dir, state,
+                            reason="URL 缺失，无法进行浏览器重试",
+                        )
+                        if result:
+                            output_files.append(result)
+                        print(f"    [跳过] URL 缺失，已写兜底文件")
+                except Exception as exc:
+                    logger.error("Browser 重试异常 source=%s title=%s url=%s: %s",
+                                 source_name, title, url, exc)
+                    # 写 failed 兜底文件，防止下次运行反复重试同一篇文章
+                    result = _write_fallback_md(
+                        article, source_name, target_dir, state,
+                        reason=f"浏览器重试异常: {exc}",
+                    )
+                    if result:
+                        output_files.append(result)
+                    print(f"    [异常] browser 重试失败: {exc}，已写兜底文件")
 
     # ------------------------------------------------------------------
     # 6. 持久化去重状态
@@ -243,7 +341,8 @@ def run_ingest(
         status = fm.get("extraction_status", "success")
         status_counts[status] = status_counts.get(status, 0) + 1
 
-    skipped = state.seen_count - len(output_files)
+    # skipped 基于预扫描实际剔除数量，而非 seen_count 估算（seen_count 含历史，不准确）
+    skipped = total_in_manifests - total_articles
 
     logger.info("Ingest 完成 total=%d success=%d partial=%d failed=%d skipped=%d",
                 len(output_files), status_counts["success"], status_counts["partial"],

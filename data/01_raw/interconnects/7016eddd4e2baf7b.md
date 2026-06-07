@@ -4,7 +4,7 @@ source: https://www.interconnects.ai/p/open-and-closed-models-are-on-different
 author:
 - '[[Nathan Lambert]]'
 published: '2026-06-01'
-created: '2026-06-04'
+created: '2026-06-07'
 description: Where marginally higher intelligence drives value, and where it doesn't.
 tags:
 - clippings

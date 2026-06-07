@@ -6,7 +6,7 @@ This file provides guidance to AI coding agents (Claude Code, Cursor, Copilot, e
 
 This is a **dual-language** project: a Python offline pipeline ingests 26 AI information sources (23 active) through a 6-stage Map/Reduce process (5 runnable commands — aggregate auto-executes after extract and analyze), and a Next.js 16 App Router dashboard renders the final daily report as interactive charts.
 
-**Data flow:** `26 RSS/scrape/browser sources → Stage 1a (scout URL manifests) → Stage 1b (ingest content download) → Stage 2 (extract facts) → Stage 3 (3-dimension analysis × concurrency) → Stage 4a (aggregate frontmatter JSON + hot/cold split) → Stage 4b (Editor-in-Chief synthesis) → Next.js reads JSON directly from disk`
+**Data flow:** `26 RSS/scrape/browser sources → Stage 1a (scout URL manifests) → Stage 1b (ingest content download, with browser fallback for anti-bot pages) → Stage 2 (extract facts) → Stage 3 (3-dimension analysis × concurrency) → Stage 4a (aggregate frontmatter JSON + hot/cold split) → Stage 4b (Editor-in-Chief synthesis) → Next.js reads JSON directly from disk`
 
 **Key design:**
 - The pipeline and frontend are **decoupled by JSON files on disk**. The Next.js server reads `data/05_reports/daily-report.json` via `node:fs` at request time — no database, no API layer. Sources page reads `pipeline/config.yaml` + `data/00_manifest/*.json` via `src/lib/data/sources.ts`.

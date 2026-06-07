@@ -39,15 +39,26 @@ def apply_truncation(body: str, source_config: dict) -> str:
                 else:
                     if line.strip() and not line.startswith(">"):
                         break
-        return "\n".join(abstract_lines) if abstract_lines else body[:3000]
+        # 找不到 Abstract 段落时，回退到段落边界截断（避免裸切片截断单词）
+        return "\n".join(abstract_lines) if abstract_lines else _cut_at_paragraph(body, 3000)
     elif mode == "first_n_chars":
         limit = trunc.get("limit", 3000)
-        if len(body) > limit:
-            # 在最近的段落边界处截断
-            cut = body.rfind("\n\n", 0, limit)
-            if cut > limit // 2:
-                return body[:cut].strip()
-            return body[:limit]
-        return body
+        return _cut_at_paragraph(body, limit)
     else:
         return body
+
+
+def _cut_at_paragraph(body: str, limit: int) -> str:
+    """
+    在段落边界处截断正文，避免截断在单词或句子中间。
+
+    在 limit 字符范围内查找最近的段落分隔符（\\n\\n），
+    找到则在该边界截断，找不到则退化为硬截断。
+    若正文不超过 limit，原样返回。
+    """
+    if len(body) <= limit:
+        return body
+    cut = body.rfind("\n\n", 0, limit)
+    if cut > limit // 2:
+        return body[:cut].strip()
+    return body[:limit].strip()
