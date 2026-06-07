@@ -46,6 +46,45 @@ def fetch_url(url: str, timeout: int = 30) -> Optional[str]:
         return None
 
 
+def is_bot_challenge_html(html: str) -> bool:
+    """
+    检测 HTML 是否为反爬挑战页面，而非真实文章内容。
+
+    当 curl 请求遇到 Cloudflare / JS challenge 等反爬机制时，
+    返回的 HTML 不含正文内容，trafilatura 无法提取任何文本。
+    此函数识别这些反爬页面特征，以便上游调用方决定是否用浏览器重试。
+
+    检测特征（任一匹配即返回 True）：
+        - Cloudflare challenge 脚本标记（_cf_chl_opt、/cdn-cgi/challenge-platform）
+        - <noscript> 中要求启用 JavaScript
+        - 页面极短且包含 meta refresh（Cloudflare 的另一种展示形式）
+
+    参数：
+        html:   fetch_url() 返回的 HTML 字符串
+
+    返回：
+        bool:  True 表示 HTML 很可能是反爬页面，需要浏览器渲染
+    """
+    if not html or len(html.strip()) < 100:
+        return False
+
+    html_lower = html.lower()
+
+    # Cloudflare managed challenge
+    if "_cf_chl_opt" in html:
+        return True
+    if "/cdn-cgi/challenge-platform" in html:
+        return True
+    if "challenge-error-text" in html_lower:
+        return True
+
+    # <noscript> 中提示需要 JavaScript（Cloudflare / 通用 JS 渲染页面）
+    if "enable javascript" in html_lower and "<noscript>" in html_lower:
+        return True
+
+    return False
+
+
 def fetch_rss_items(feed_url: str, timeout: int = 30) -> List[dict]:
     """
     解析 RSS/Atom feed，返回条目列表。

@@ -1,0 +1,652 @@
+[
+  {
+    "source_dir": "github-trending",
+    "title": "harry0703/MoneyPrinterTurbo",
+    "source": "https://github.com/harry0703/MoneyPrinterTurbo",
+    "author": [],
+    "published": "",
+    "created": "2026-05-28",
+    "description": "利用AI大模型，一键生成高清短视频 Generate short videos with one click using AI LLM. MoneyPrinterTurbo 💸 简体中文 | English 只需提供一个视频 主题 或 关键词 ，就可以全自动生成视频文案、视频素材、视频字幕、视频背景音乐，然后合成一个高清的短视频。 Web界面 API界面 功能特性 🎯 完整的 MVC架构，代码 结构清晰，易于维护，支持 API 和 Web界面 支持视频文案 AI自动生成，也可以自定义文案 支持多种 高清视频 尺寸 竖屏 9:16，1080x1920 横屏 16:9，1920x1080 支持 批量视频生成，可以一次生成多个视频，然后选择一个最满意的 支持 视频片段时长 设置，方便调节素材切换频率 支持 中文 和 英文 视频文案 支持 多种语音 合成，可 实时试听 效果 支持 字幕生成，可以调整 字体、位置、颜色、大小，同时支持字幕描边设置 支持 背景音乐，随机或者指定音乐文件，可设置背景音乐音量 视频素材来源 高清，而且 无版权，也可以使用自己的 本地素材 支持 OpenAI、Moonshot、Azure、gpt4free、one-api、通义千问、Google Gemini、Ollama、DeepSeek、MiniMax、 文心一言, Pollinations、ModelScope 等多种模型接入 中国用户建议使用 DeepSeek 或 Moonshot 作为大模型提供商（国内可直接访问，不需要VPN。注册就送额度，基本够用） 视频演示 📺 竖屏 9:16 ▶️ 《如何增加生活的乐趣》 ▶️ 《金钱的作用》更真实的合成声音 ▶️ 《生命的意义是什么》 横屏 16:9 ▶️ 《生命的意义是什么》 ▶️ 《为什么要运动》 配置要求 📦 建议系统：Windows 10 或 MacOS 11.0 以上，或主流 Linux 发行版 GPU 不是必需项，但如果你希望本地转录、更快的视频处理或更顺畅的批量生成体验，建议使用带显存的独立显卡 项目 最低配置 推荐配置 理想配置 CPU 4 核 6 到 8 核 8 核及以上 RAM 4 GB 8 GB 16 GB 及以上 GPU 非必须 4 GB 显存及以上 8 GB 显存及以上 如果你主要依赖云端 LLM、云端 TTS 和在线素材源，CPU 与内存比 GPU 更重要 如果你启用 faster-whisper、批量生成或更重的本地处理链路，GPU 会明显提升速度 快速开始 🚀 推荐使用方式 Windows 用户：优先使用一键启动包，适合快速体验 MacOS / Linux 用户：优先使用 uv sync --frozen 进行本地部署 想要隔离运行环境：优先使用 Docker 部署 在 Google Colab 中运行 免去本地环境配置，点击直接在 Google Colab 中快速体验 MoneyPrinterTurbo Windows一键启动包 下载一键启动包，解压直接使用（路径不要有 中文、特殊字符、空格） 当前提供的安装包仍是 v1.2.6 的旧打包版本，建议下载后先执行 update.bat 更新到最新代码。 百度网盘（v1.2.6）: https://pan.baidu.com/s/1wg0UaIyXpO3SqIpaq790SQ?pwd=sbqx 提取码: sbqx Google Drive (v1.2.6): https://drive.google.com/file/d/1HsbzfT7XunkrCrHw5ncUjFX8XX4zAuUh/view?usp=sharing 下载后，建议先双击执行 update.bat 更新到最新代码，然后双击 start.bat 启动 启动后，会自动打开浏览器（如果打开是空白，建议换成 Chrome 或者 Edge 打开） 安装部署 📥 前提条件 尽量不要使用 中文路径，避免出现一些无法预料的问题 请确保你的 网络 是正常的，VPN需要打开全局流量模式 ① 克隆代码 git clone https://github.com/harry0703/MoneyPrinterTurbo.git ② 修改配置文件（可选，建议启动后也可以在 WebUI 里面配置） 将 config.example.toml 文件复制一份，命名为 config.toml 按照 config.toml 文件中的说明，配置好 pexels_api_keys 和 llm_provider，并根据 llm_provider 对应的服务商，配置相关的 API Key Docker部署 🐳 ① 启动Docker 如果未安装 Docker，请先安装 https://www.docker.com/products/docker-desktop/ 如果是Windows系统，请参考微软的文档： https://learn.microsoft.com/zh-cn/windows/wsl/install https://learn.microsoft.com/zh-cn/windows/wsl/tutorials/wsl-containers cd MoneyPrinterTurbo docker-compose up 注意：最新版的docker安装时会自动以插件的形式安装docker compose，启动命令调整为docker compose up ② 访问Web界面 打开浏览器，访问 http://0.0.0.0:8501 ③ 访问API文档 打开浏览器，访问 http://0.0.0.0:8080/docs 或者 http://0.0.0.0:8080/redoc 手动部署 📦 视频教程 完整的使用演示：https://v.douyin.com/iFhnwsKY/ 如何在Windows上部署：https://v.douyin.com/iFyjoW3M ① 创建虚拟环境 推荐使用 uv 管理 Python 环境和依赖，默认使用 Python 3.11 git clone https://github.com/harry0703/MoneyPrinterTurbo.git cd MoneyPrinterTurbo uv python install 3.11 uv sync --frozen 如果你暂时不使用 uv，也可以继续使用 venv + pip python3.11 -m venv .venv source .venv/bin/activate pip install -r requirements.txt 说明： pyproject.toml 是主依赖定义文件 uv.lock 是锁文件，建议默认执行 uv sync --frozen requirements.txt 仅保留给旧的 pip 安装方式兼容使用 ② 安装好 ImageMagick Windows: 下载 https://imagemagick.org/script/download.php 选择Windows版本，切记一定要选择 静态库 版本，比如 ImageMagick-7.1.1-32-Q16-x64-static.exe 安装下载好的 ImageMagick，注意不要修改安装路径 修改 配置文件 config.toml 中的 imagemagick_path 为你的 实际安装路径 MacOS: brew install imagemagick Ubuntu sudo apt-get install imagemagick CentOS sudo yum install ImageMagick ③ 启动Web界面 🌐 注意需要到 MoneyPrinterTurbo 项目 根目录 下执行以下命令 Windows uv run streamlit run ./webui/Main.py --browser.gatherUsageStats=False 如果你已经手动激活了虚拟环境，也可以直接执行： webui.bat MacOS or Linux uv run streamlit run ./webui/Main.py --browser.gatherUsageStats=False 如果你已经手动激活了虚拟环境，也可以直接执行： sh webui.sh 启动后，会自动打开浏览器（如果打开是空白，建议换成 Chrome 或者 Edge 打开） ④ 启动API服务 🚀 uv run python main.py 如果你已经手动激活了虚拟环境，也可以直接执行： python main.py 特别感谢 🙏 由于该项目的 部署 和 使用，对于一些小白用户来说，还是 有一定的门槛，在此特别感谢 录咖（AI智能 多媒体服务平台） 网站基于该项目，提供的免费AI视频生成器服务，可以不用部署，直接在线使用，非常方便。 中文版：https://reccloud.cn 英文版：https://reccloud.com 感谢赞助 🙏 感谢佐糖 https://picwish.cn 对该项目的支持和赞助，使得该项目能够持续的更新和维护。 佐糖专注于图像处理领域，提供丰富的图像处理工具，将复杂操作极致简化，真正实现让图像处理更简单。 启动后，可以查看 API文档 http://127.0.0.1:8080/docs 或者 http://127.0.0.1:8080/redoc 直接在线调试接口，快速体验。 语音合成 🗣 所有支持的声音列表，可以查看：声音列表 2024-04-16 v1.1.2 新增了9种Azure的语音合成声音，需要配置API KEY，该声音合成的更加真实。 字幕生成 📜 当前支持2种字幕生成方式： edge: 生成速度快，性能更好，对电脑配置没有要求，但是质量可能不稳定 whisper: 生成速度慢，性能较差，对电脑配置有一定要求，但是质量更可靠。 可以修改 config.toml 配置文件中的 subtitle_provider 进行切换 建议使用 edge 模式，如果生成的字幕质量不好，再切换到 whisper 模式 注意： whisper 模式下需要到 HuggingFace 下载一个模型文件，大约 3GB 左右，请确保网络通畅 如果留空，表示不生成字幕。 由于国内无法访问 HuggingFace，可以使用以下方法下载 whisper-large-v3 的模型文件 下载地址： 百度网盘: https://pan.baidu.com/s/11h3Q6tsDtjQKTjUu3sc5cA?pwd=xjs9 夸克网盘：https://pan.quark.cn/s/3ee3d991d64b 模型下载后解压，整个目录放到 .\\MoneyPrinterTurbo\\models 里面， 最终的文件路径应该是这样: .\\MoneyPrinterTurbo\\models\\whisper-large-v3 MoneyPrinterTurbo ├─models │ └─whisper-large-v3 │ config.json │ model.bin │ preprocessor_config.json │ tokenizer.json │ vocabulary.json 背景音乐 🎵 用于视频的背景音乐，位于项目的 resource/songs 目录下。 当前项目里面放了一些默认的音乐，来自于 YouTube 视频，如有侵权，请删除。 字幕字体 🅰 用于视频字幕的渲染，位于项目的 resource/fonts 目录下，你也可以放进去自己的字体。 常见问题 🤔 ❓RuntimeError: No ffmpeg exe could be found 通常情况下，ffmpeg 会被自动下载，并且会被自动检测到。 但是如果你的环境有问题，无法自动下载，可能会遇到如下错误： RuntimeError: No ffmpeg exe could be found. Install ffmpeg on your system, or set the IMAGEIO_FFMPEG_EXE environment variable. 此时你可以从 https://www.gyan.dev/ffmpeg/builds/ 下载ffmpeg，解压后，设置 ffmpeg_path 为你的实际安装路径即可。 [app] # 请根据你的实际路径设置，注意 Windows 路径分隔符为 \\\\ ffmpeg_path = \"C:\\\\Users\\\\harry\\\\Downloads\\\\ffmpeg.exe\" ❓ImageMagick的安全策略阻止了与临时文件@/tmp/tmpur5hyyto.txt相关的操作 可以在ImageMagick的配置文件policy.xml中找到这些策略。 这个文件通常位于 /etc/ImageMagick-X/ 或 ImageMagick 安装目录的类似位置。 修改包含pattern=\"@\"的条目，将rights=\"none\"更改为rights=\"read|write\"以允许对文件的读写操作。 ❓OSError: [Errno 24] Too many open files 这个问题是由于系统打开文件数限制导致的，可以通过修改系统的文件打开数限制来解决。 查看当前限制 ulimit -n 如果过低，可以调高一些，比如 ulimit -n 10240 ❓Whisper 模型下载失败，出现如下错误 LocalEntryNotfoundEror: Cannot find an appropriate cached snapshotfolderfor the specified revision on the local disk and outgoing trafic has been disabled. To enablerepo look-ups and downloads online, pass 'local files only=False' as input. 或者 An error occurred while synchronizing the model Systran/faster-whisper-large-v3 from the Hugging Face Hub: An error happened while trying to locate the files on the Hub and we cannot find the appropriate snapshot folder for the specified revision on the local disk. Please check your internet connection and try again. Trying to load the model directly from the local cache, if it exists. 解决方法：点击查看如何从网盘手动下载模型 反馈建议 📢 可以提交 issue 或者 pull request。 许可证 📝 点击查看 LICENSE 文件 Star History",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "0604d6a7a7d7afd2",
+    "source_type": "community_discussion",
+    "tldr": "MoneyPrinterTurbo 是一个开源全自动 AI 短视频生成工具，输入主题即可生成文案、素材、字幕和背景音乐并合成高清视频。",
+    "objective_summary": "GitHub 用户 harry0703 发布了开源项目 MoneyPrinterTurbo，该工具接收视频主题或关键词后，自动调用 LLM 生成文案、检索无版权素材、合成语音与字幕、添加背景音乐，最终通过 ffmpeg 输出高清短视频，支持 Web 界面与 API 两种交互方式。",
+    "event_type": "framework_tools",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [
+        "OpenAI",
+        "Moonshot",
+        "Microsoft",
+        "Google",
+        "DeepSeek",
+        "MiniMax",
+        "Baidu",
+        "Alibaba",
+        "ModelScope",
+        "Ollama",
+        "Pollinations",
+        "Pexels",
+        "Picwish"
+      ],
+      "technologies": [
+        "Python",
+        "Streamlit",
+        "ffmpeg",
+        "ImageMagick",
+        "Docker",
+        "Whisper",
+        "faster-whisper",
+        "TTS",
+        "LLM",
+        "REST API",
+        "MVC"
+      ],
+      "key_people": [
+        "harry0703"
+      ]
+    },
+    "key_logic_flow": [
+      "用户输入视频主题或关键词，系统自动调用 LLM（支持 OpenAI、DeepSeek、Moonshot 等多种模型提供商）生成视频文案",
+      "根据文案内容从 Pexels 等无版权素材源检索匹配的高清视频片段，也可使用本地素材",
+      "通过 TTS 引擎（Edge TTS 或 faster-whisper）将文案合成为语音旁白，并同步生成字幕文件",
+      "使用 ffmpeg 和 ImageMagick 将文案、视频素材、语音、字幕和背景音乐合成为一个完整的高清短视频",
+      "支持竖屏 9:16（1080x1920）和横屏 16:9（1920x1080）两种分辨率，以及批量视频生成",
+      "提供基于 Streamlit 的 Web 界面和 FastAPI 驱动的 RESTful API 两种交互方式，支持 Docker 一键部署"
+    ],
+    "impact_score": {
+      "score": 5.5,
+      "reason": "MoneyPrinterTurbo 是一个设计精良的开源工程化项目，将 LLM 文案生成、无版权素材检索、TTS 语音合成、字幕渲染和 ffmpeg 视频合成整合为一条全自动流水线，显著降低了 AI 短视频创作的门槛。但它本质上是现有技术的编排器（orchestrator），而非底层技术突破。项目在 GitHub 获得了可观的社区关注，并催生了第三方 SaaS 衍生服务（录咖），属于'重要产品发布，改变局部竞争格局'的上限——对个人创作者和小型内容团队的工具链产生了实质影响，但未触及行业范式层面。"
+    },
+    "sentiment": "positive",
+    "developer_sentiment": {
+      "tone": "excited",
+      "primary_focus": "多模型提供商抽象层的工程化设计及 Docker 一键部署的易用性"
+    },
+    "hype_assessment": {
+      "level": "low",
+      "reason": "README 文档客观描述了工具的实际能力边界——明确标注了'需要配置各服务商 API Key'、'whisper 模型需手动下载'、'ffmpeg 和 ImageMagick 需额外安装'等前置条件，未使用'颠覆''革命性'等夸大词汇，整体保持了开源技术文档应有的克制和诚实。"
+    },
+    "information_entropy": "medium",
+    "domain_disruption": {
+      "technical_innovation": "将 LLM 文案生成、无版权素材检索（Pexels API）、TTS 语音合成（Edge TTS / Whisper）、字幕同步渲染和 ffmpeg 视频合成为一个全自动 MVC 架构管线，并通过统一的 LLM Provider 抽象层支持 OpenAI、DeepSeek、Moonshot 等十余种模型后端，实现了从主题输入到成品视频的端到端自动化，这是工程整合层面的创新而非单点技术突破。",
+      "business_model": "开源项目通过第三方 SaaS 平台（录咖）提供免费在线托管服务，形成了'开源核心 + 托管变现'的典型商业化路径，降低了非技术用户的部署门槛，同时保持了开发者社区的自主可控性。"
+    },
+    "engineering_complexity": "production_ready",
+    "compound_value": {
+      "score": 3.5,
+      "reason": "MoneyPrinterTurbo 是一个典型的「第三方服务编排层」项目：它将 LLM 文案生成、Pexels 素材检索、TTS 语音合成和 ffmpeg 视频合成整合为一条自动化流水线。从 VC 视角看，长期复利效应有限，原因有三：(1) 项目本身不掌握任何核心技术——LLM、TTS、素材源均依赖外部 API，切换成本极低，无法形成技术护城河；(2) AI 视频生成赛道正在从「剪辑拼接」范式向「原生生成」范式迁移（Sora、Veo、Kling 等），2-3 年内 clip-assembly 路径可能被降维打击；(3) 开源项目 107K+ GitHub Stars 验证了 PMF 真实存在，但开源社区不等于可投资的商业实体，且 Streamlit + Python 的技术栈门槛低，竞品可快速复制。当前评分反映其短期实用价值被认可，但缺乏 3-5 年尺度的复利积累基础。"
+    },
+    "value_capture_layer": "end_application",
+    "moat_impact": "democratizes_access",
+    "key_beneficiaries": [
+      "OpenAI",
+      "DeepSeek",
+      "Moonshot",
+      "Pexels",
+      "录咖",
+      "Picwish"
+    ],
+    "competitive_casualty": [
+      "InVideo",
+      "Lumen5",
+      "传统短视频外包制作服务商",
+      "入门级视频剪辑工具"
+    ],
+    "market_opportunities": [
+      "基于 MoneyPrinterTurbo 的多模型抽象架构，创业者可围绕特定垂直行业（如电商带货、房产展示、教育培训）开发定制化 AI 短视频生成 SaaS，叠加行业模板库与合规审核层形成差异化壁垒",
+      "该项目的 LLM 多供应商适配模式（OpenAI/DeepSeek/Moonshot/Ollama 等统一接入）揭示了工具层创业机会——为 AI 视频生成工作流提供跨模型 provider 的中间件或 MCP 插件，降低企业切换模型成本",
+      "个人开发者可将该项目作为学习 AI 视频管线的最佳实践案例，重点研究 ffmpeg 自动化合成、TTS+字幕同步、多模型编排等工程模式，提升 AI 应用工程化能力"
+    ],
+    "risk_matrix": {
+      "regulatory": "AI 生成视频面临全球深度伪造监管收紧（中国《深度合成管理规定》、欧盟 AI Act 透明度义务、美国各州 deepfake 立法），全自动文案+配音+画面合成链路若缺乏内容审核机制，极易触碰合规红线；Pexels 等素材源的版权条款变更也可能导致历史生成内容侵权",
+      "technological": "Sora、Veo、Kling、可灵等端到端 AI 视频生成模型正在快速迭代，其生成质量远超「文案→素材拼接→合成」的传统管线模式，MoneyPrinterTurbo 的管道式架构存在被端到端模型替代的架构性风险；项目依赖的 Whisper、Edge TTS、ImageMagick 等组件面临上游停止维护或协议变更风险",
+      "competitive": "字节跳动（剪映/CapCut）、YouTube（Shorts）、Meta（Reels）等平台方正在将 AI 视频生成能力原生集成到创作者工具中，免费+平台流量分发的组合将挤压独立开源工具的生存空间；录咖等基于该项目二次开发的商业服务已形成竞争",
+      "ethical": "全自动「关键词→完整视频」链路降低了虚假信息批量生产的门槛，可被用于政治宣传、金融诈骗、冒充名人等恶意场景；TTS 语音克隆结合视频合成可能被用于深度伪造；视频编辑、配音演员、字幕制作等岗位面临 AI 自动化替代的职业冲击",
+      "additional": [
+        "供应链依赖风险：项目强依赖 Pexels 无版权素材源的持续可用性，若 Pexels API 策略变更或服务关停，素材检索链路将断裂",
+        "开源维护可持续性风险：项目核心维护者为个人开发者（harry0703），长期维护意愿和资源投入存在不确定性，社区 fork 碎片化可能导致生态分裂",
+        "中国用户合规特殊性：项目明确引导中国用户使用 DeepSeek/Moonshot 等国内可访问的模型，若国产模型 API 政策调整（如实名认证、内容安全接口强制接入），将直接影响核心用户群的使用体验"
+      ]
+    },
+    "confidence": {
+      "impact": "medium",
+      "compound": "medium",
+      "hype": "low"
+    },
+    "actionable_insight": "monitor"
+  },
+  {
+    "source_dir": "github-trending",
+    "title": "p-e-w/heretic",
+    "source": "https://github.com/p-e-w/heretic",
+    "author": [],
+    "published": "",
+    "created": "2026-05-28",
+    "description": "Fully automatic censorship removal for language models Heretic: Fully automatic censorship removal for language models Heretic is a tool that removes censorship (aka \"safety alignment\") from transformer-based language models without expensive post-training. It combines an advanced implementation of directional ablation, also known as \"abliteration\" (Arditi et al. 2024, Lai 2025 (1, 2)), with a TPE-based parameter optimizer powered by Optuna. This approach enables Heretic to work completely automatically. Heretic finds high-quality abliteration parameters by co-minimizing the number of refusals and the KL divergence from the original model. This results in a decensored model that retains as much of the original model's intelligence as possible. Using Heretic does not require an understanding of transformer internals. In fact, anyone who knows how to run a command-line program can use Heretic to decensor language models. Heretic supports most dense models, including many multimodal models, several different MoE architectures, and even some hybrid models like Qwen3.5. Pure state-space models and certain other research architectures are not yet supported out of the box. &nbsp; Running unsupervised with the default configuration, Heretic can produce decensored models that rival the quality of abliterations created manually by human experts: Model Refusals for \"harmful\" prompts KL divergence from original model for \"harmless\" prompts google/gemma-3-12b-it (original) 97/100 0 (by definition) mlabonne/gemma-3-12b-it-abliterated-v2 3/100 1.04 huihui-ai/gemma-3-12b-it-abliterated 3/100 0.45 p-e-w/gemma-3-12b-it-heretic (ours) 3/100 0.16 The Heretic version, generated without any human effort, achieves the same level of refusal suppression as other abliterations, but at a much lower KL divergence, indicating less damage to the original model's capabilities. (You can reproduce those numbers using Heretic's built-in evaluation functionality, e.g. heretic --model google/gemma-3-12b-it --evaluate-model p-e-w/gemma-3-12b-it-heretic. Note that the exact values might be platform- and hardware-dependent. The table above was compiled using PyTorch 2.8 on an RTX 5090.) Of course, mathematical metrics and automated benchmarks never tell the whole story, and are no substitute for human evaluation. Models generated with Heretic have been well-received by users (links and emphasis added): \"I was skeptical before, but I just downloaded GPT-OSS 20B Heretic model and holy shit. It gives properly formatted long responses to sensitive topics, using the exact uncensored words that you would expect from an uncensored model, produces markdown format tables with details and whatnot. Looks like this is the best abliterated version of this model so far...\" (Link to comment) \"Heretic GPT 20b seems to be the best uncensored model I have tried yet. It doesn't destroy a the model's intelligence and it is answering prompts normally would be rejected by the base model.\" (Link to comment) \"[Qwen3-4B-Instruct-2507-heretic] Has been the best unquantized abliterated model that I have been able to run on 16gb vram.\" (Link to comment) Heretic models have also been independently benchmarked using standard metrics like MMLU and GSM8K, and have been found to compare favorably with models produced by competing abliteration tools: 1, 2. The community has created and published well over 3000 models with Heretic. Usage Prepare a Python 3.10+ environment with PyTorch 2.2+ installed as appropriate for your hardware. Then run: pip install -U heretic-llm heretic Qwen/Qwen3-4B-Instruct-2507 Replace Qwen/Qwen3-4B-Instruct-2507 with whatever model you want to decensor. Important While PyTorch 2.2 is the minimum version of PyTorch needed for Heretic to work, some models and configurations might require features only found in later versions. For example, loading MXFP4-quantized models like gpt-oss uses torch.accelerator, which was added in PyTorch 2.6. Tip Heretic uses uv for dependency management, and the repository includes a uv.lock file pinning every package version. If you already use uv (and you probably should!), you can just clone the repo and run Heretic with uv run heretic, which ensures that your dependencies match those used by the developers, improving reliability and security. The process is fully automatic and does not require configuration; however, Heretic has a variety of configuration parameters that can be changed for greater control. Run heretic --help to see available command-line options, or look at config.default.toml if you prefer to use a configuration file. At the start of a program run, Heretic benchmarks the system to determine the optimal batch size to make the most of the available hardware. On an RTX 3090, with the default configuration, decensoring Qwen3-4B-Instruct-2507 takes about 20-30 minutes. Note that Heretic supports model quantization with bitsandbytes, which can drastically reduce the amount of VRAM required to process models. Set the quantization option to bnb_4bit to enable quantization. After Heretic has finished decensoring a model, you are given the option to save the model, upload it to Hugging Face, chat with it to test how well it works, run standard benchmarks on it, or any combination of those actions. Research features In addition to its primary function of removing model censorship, Heretic also provides features designed to support research into the semantics of model internals (interpretability). To use those features, you need to install Heretic with the optional research extra: pip install -U heretic-llm[research] This gives you access to the following functionality: Generate plots of residual vectors by passing --plot-residuals When run with this flag, Heretic will: Compute residual vectors (hidden states) for the first output token, for each transformer layer, for both \"harmful\" and \"harmless\" prompts. Perform a PaCMAP projection from residual space to 2D-space. Left-right align the projections of \"harmful\"/\"harmless\" residuals by their geometric medians to make projections for consecutive layers more similar. Additionally, PaCMAP is initialized with the previous layer's projections for each new layer, minimizing disruptive transitions. Scatter-plot the projections, generating a PNG image for each layer. Generate an animation showing how residuals transform between layers, as an animated GIF. See the configuration file for options that allow you to control various aspects of the generated plots. Note that PaCMAP is an expensive operation that is performed on the CPU. For larger models, it can take an hour or more to compute projections for all layers. Print details about residual geometry by passing --print-residual-geometry If you are interested in a quantitative analysis of how residual vectors for \"harmful\" and \"harmless\" prompts relate to each other, this flag gives you the following table, packed with metrics that can facilitate understanding the same (for gemma-3-270m-it in this case): ┏━━━━━━━┳━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━┓ ┃ Layer ┃ S(g,b) ┃ S(g*,b*) ┃ S(g,r) ┃ S(g*,r*) ┃ S(b,r) ┃ S(b*,r*) ┃ |g| ┃ |g*| ┃ |b| ┃ |b*| ┃ |r| ┃ |r*| ┃ Silh ┃ ┡━━━━━━━╇━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━╇━━━━━━━━━╇━━━━━━━━┩ │ 1 │ 1.0000 │ 1.0000 │ -0.4311 │ -0.4906 │ -0.4254 │ -0.4847 │ 170.29 │ 170.49 │ 169.78 │ 169.85 │ 1.19 │ 1.31 │ 0.0480 │ │ 2 │ 1.0000 │ 1.0000 │ 0.4297 │ 0.4465 │ 0.4365 │ 0.4524 │ 768.55 │ 768.77 │ 771.32 │ 771.36 │ 6.39 │ 5.76 │ 0.0745 │ │ 3 │ 0.9999 │ 1.0000 │ -0.5699 │ -0.5577 │ -0.5614 │ -0.5498 │ 1020.98 │ 1021.13 │ 1013.80 │ 1014.71 │ 12.70 │ 11.60 │ 0.0920 │ │ 4 │ 0.9999 │ 1.0000 │ 0.6582 │ 0.6553 │ 0.6659 │ 0.6627 │ 1356.39 │ 1356.20 │ 1368.71 │ 1367.95 │ 18.62 │ 17.84 │ 0.0957 │ │ 5 │ 0.9987 │ 0.9990 │ -0.6880 │ -0.6761 │ -0.6497 │ -0.6418 │ 766.54 │ 762.25 │ 731.75 │ 732.42 │ 51.97 │ 45.24 │ 0.1018 │ │ 6 │ 0.9998 │ 0.9998 │ -0.1983 │ -0.2312 │ -0.1811 │ -0.2141 │ 2417.35 │ 2421.08 │ 2409.18 │ 2411.40 │ 43.06 │ 43.47 │ 0.0900 │ │ 7 │ 0.9998 │ 0.9997 │ -0.5258 │ -0.5746 │ -0.5072 │ -0.5560 │ 3444.92 │ 3474.99 │ 3400.01 │ 3421.63 │ 86.94 │ 94.38 │ 0.0492 │ │ 8 │ 0.9990 │ 0.9991 │ 0.8235 │ 0.8312 │ 0.8479 │ 0.8542 │ 4596.54 │ 4615.62 │ 4918.32 │ 4934.20 │ 384.87 │ 377.87 │ 0.2278 │ │ 9 │ 0.9992 │ 0.9992 │ 0.5335 │ 0.5441 │ 0.5678 │ 0.5780 │ 5322.30 │ 5316.96 │ 5468.65 │ 5466.98 │ 265.68 │ 267.28 │ 0.1318 │ │ 10 │ 0.9974 │ 0.9973 │ 0.8189 │ 0.8250 │ 0.8579 │ 0.8644 │ 5328.81 │ 5325.63 │ 5953.35 │ 5985.15 │ 743.95 │ 779.74 │ 0.2863 │ │ 11 │ 0.9977 │ 0.9978 │ 0.4262 │ 0.4045 │ 0.4862 │ 0.4645 │ 9644.02 │ 9674.06 │ 9983.47 │ 9990.28 │ 743.28 │ 726.99 │ 0.1576 │ │ 12 │ 0.9904 │ 0.9907 │ 0.4384 │ 0.4077 │ 0.5586 │ 0.5283 │ 10257.40 │ 10368.50 │ 11114.51 │ 11151.21 │ 1711.18 │ 1664.69 │ 0.1890 │ │ 13 │ 0.9867 │ 0.9874 │ 0.4007 │ 0.3680 │ 0.5444 │ 0.5103 │ 12305.12 │ 12423.75 │ 13440.31 │ 13432.47 │ 2386.43 │ 2282.47 │ 0.1293 │ │ 14 │ 0.9921 │ 0.9922 │ 0.3198 │ 0.2682 │ 0.4364 │ 0.3859 │ 16929.16 │ 17080.37 │ 17826.97 │ 17836.03 │ 2365.23 │ 2301.87 │ 0.1282 │ │ 15 │ 0.9846 │ 0.9850 │ 0.1198 │ 0.0963 │ 0.2913 │ 0.2663 │ 16858.58 │ 16949.44 │ 17496.00 │ 17502.88 │ 3077.08 │ 3029.60 │ 0.1611 │ │ 16 │ 0.9686 │ 0.9689 │ -0.0029 │ -0.0254 │ 0.2457 │ 0.2226 │ 18912.77 │ 19074.86 │ 19510.56 │ 19559.62 │ 4848.35 │ 4839.75 │ 0.1516 │ │ 17 │ 0.9782 │ 0.9784 │ -0.0174 │ -0.0381 │ 0.1908 │ 0.1694 │ 27098.09 │ 27273.00 │ 27601.12 │ 27653.12 │ 5738.19 │ 5724.21 │ 0.1641 │ │ 18 │ 0.9184 │ 0.9196 │ 0.1343 │ 0.1430 │ 0.5155 │ 0.5204 │ 190.16 │ 190.35 │ 219.91 │ 220.62 │ 87.82 │ 87.59 │ 0.1855 │ └───────┴────────┴──────────┴─────────┴──────────┴─────────┴──────────┴──────────┴──────────┴──────────┴──────────┴─────────┴─────────┴────────┘ g = mean of residual vectors for good prompts g* = geometric median of residual vectors for good prompts b = mean of residual vectors for bad prompts b* = geometric median of residual vectors for bad prompts r = refusal direction for means (i.e., b - g) r* = refusal direction for geometric medians (i.e., b* - g*) S(x,y) = cosine similarity of x and y |x| = L2 norm of x Silh = Mean silhouette coefficient of residuals for good/bad clusters How Heretic works Heretic implements a parametrized variant of directional ablation. For each supported transformer component (currently, attention out-projection and MLP down-projection), it identifies the associated matrices in each transformer layer, and orthogonalizes them with respect to the relevant \"refusal direction\", inhibiting the expression of that direction in the result of multiplications with that matrix. Refusal directions are computed for each layer as a difference-of-means between the first-token residuals for \"harmful\" and \"harmless\" example prompts. The ablation process is controlled by several optimizable parameters: direction_index: Either the index of a refusal direction, or the special value per layer, indicating that each layer should be ablated using the refusal direction associated with that layer. max_weight, max_weight_position, min_weight, and min_weight_distance: For each component, these parameters describe the shape and position of the ablation weight kernel over the layers. The following diagram illustrates this: &nbsp; Heretic's main innovations over existing abliteration systems are: The shape of the ablation weight kernel is highly flexible, which, combined with automatic parameter optimization, can improve the compliance/quality tradeoff. Non-constant ablation weights were previously explored by Maxime Labonne in gemma-3-12b-it-abliterated-v2. The refusal direction index is a float rather than an integer. For non-integral values, the two nearest refusal direction vectors are linearly interpolated. This unlocks a vast space of additional directions beyond the ones identified by the difference-of-means computation, and often enables the optimization process to find a better direction than that belonging to any individual layer. Ablation parameters are chosen separately for each component. I have found that MLP interventions tend to be more damaging to the model than attention interventions, so using different ablation weights can squeeze out some extra performance. Prior art I'm aware of the following publicly available implementations of abliteration techniques: AutoAbliteration abliterator.py wassname's Abliterator ErisForge Removing refusals with HF Transformers deccp Note that Heretic was written from scratch, and does not reuse code from any of those projects. Acknowledgments The development of Heretic was informed by: The original abliteration paper (Arditi et al. 2024) Maxime Labonne's article on abliteration, as well as some details from the model cards of his own abliterated models (see above) Jim Lai's articles describing \"projected abliteration\" and \"norm-preserving biprojected abliteration\" Citation If you use Heretic for your research, please cite it using the following BibTeX entry: @misc{heretic, author = {Weidmann, Philipp Emanuel}, title = {Heretic: Fully automatic censorship removal for language models}, year = {2025}, publisher = {GitHub}, journal = {GitHub repository}, howpublished = {\\url{https://github.com/p-e-w/heretic}} } License Copyright © 2025-2026 Philipp Emanuel Weidmann (pew@worldwidemann.com) + contributors This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details. You should have received a copy of the GNU Affero General Public License along with this program. If not, see https://www.gnu.org/licenses/. By contributing to this project, you agree to release your contributions under the same license.",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "3db40af345d5afa2",
+    "source_type": "community_discussion",
+    "tldr": "Heretic开源工具通过方向消融自动移除大语言模型安全审查，以TPE优化器平衡拒答抑制与能力保留",
+    "objective_summary": "开发者p-e-w在GitHub发布Heretic开源工具，通过方向消融（abliteration）与Optuna TPE参数优化器自动移除Transformer模型的安全审查。工具联合最小化拒答次数与KL散度，在gemma-3-12b-it上以KL散度0.16达到与人工专家相同的拒答抑制水平。",
+    "event_type": "framework_tools",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [
+        "Hugging Face",
+        "Google",
+        "Qwen"
+      ],
+      "technologies": [
+        "Directional Ablation",
+        "Abliteration",
+        "TPE",
+        "Optuna",
+        "KL Divergence",
+        "PaCMAP",
+        "Transformer",
+        "MoE",
+        "bitsandbytes",
+        "PyTorch"
+      ],
+      "key_people": [
+        "p-e-w",
+        "Andy Arditi",
+        "Maxime Labonne",
+        "Lai"
+      ]
+    },
+    "key_logic_flow": [
+      "Heretic是一个基于方向消融（abliteration）技术的开源命令行工具，旨在无需昂贵后训练即可自动移除Transformer语言模型的安全对齐/审查机制，其理论基础来自Arditi et al. 2024和Lai 2025的研究",
+      "该工具将参数化的方向消融与基于Optuna的TPE（Tree-structured Parzen Estimator）参数优化器结合，通过联合最小化有害提示的拒答次数和无害提示上的KL散度，自动搜索最优消融参数（包括方向索引、权重核形状等）",
+      "在gemma-3-12b-it模型的基准测试中，Heretic生成的版本在保持相同拒答抑制水平（100条有害提示中仅3次拒答）的同时，KL散度仅为0.16，显著低于人工专家创建的消融版本（mlabonne版本KL散度1.04，huihui-ai版本0.45），表明对原始模型能力的损伤更小",
+      "Heretic支持大多数密集模型、多种MoE（混合专家）架构以及Qwen3.5等混合模型，纯状态空间模型和部分研究架构暂不支持；支持通过bitsandbytes进行4bit量化以降低VRAM需求",
+      "除消融功能外，Heretic还提供可解释性研究工具（需安装research扩展），包括对每层残差向量的PaCMAP降维可视化（生成PNG散点图和动画GIF）以及包含余弦相似度、L2范数、轮廓系数等指标的逐层定量分析表",
+      "社区已使用Heretic创建并发布超过3000个消融模型，独立基准测试（MMLU、GSM8K）显示其质量优于其他消融工具，用户反馈称其为'目前尝试过的最佳未审查模型'"
+    ],
+    "impact_score": {
+      "score": 5.5,
+      "reason": "Heretic 将原本需要人工专家手动调试的方向消融（abliteration）流程完全自动化，并通过 TPE 参数优化器在拒答抑制与模型能力保留之间取得了优于人类专家的平衡（KL 散度 0.16 vs 人类专家 0.45-1.04）。该工具已催生 3000+ 社区消融模型，显著降低了「去审查」模型的技术门槛。但其影响力局限于开源模型修改的细分领域，未触及主流 AI 公司的安全对齐策略或行业范式，属于重要工具发布但非行业范式转移。"
+    },
+    "sentiment": "mixed",
+    "developer_sentiment": {
+      "tone": "excited",
+      "primary_focus": "自动化消融参数搜索的质量超越人工专家，KL 散度大幅降低意味着模型能力损伤更小"
+    },
+    "hype_assessment": {
+      "level": "low",
+      "reason": "项目 README 提供了可复现的基准对比表格（含具体模型、拒答次数、KL 散度值）、独立的 MMLU/GSM8K 评测引用、以及明确的硬件与 PyTorch 版本依赖说明。用户评价虽热情但来自真实社区评论且有链接可查。全文未使用「颠覆」「革命性」等 PR 滥用词汇，技术声明均有数据或文献支撑。"
+    },
+    "information_entropy": "high",
+    "domain_disruption": {
+      "technical_innovation": "将方向消融（abliteration）从人工调参的手艺活转变为基于 Optuna TPE 的双目标自动优化问题——联合最小化有害提示拒答次数与无害提示上的 KL 散度，自动搜索最优消融方向索引、权重核形状等参数。这本质上是将模型可解释性研究（Arditi et al. 2024 的拒绝方向发现）工程化为可复现的自动化流水线。",
+      "business_model": "作为开源 CLI 工具（MIT 协议），Heretic 本身不构成直接商业模式，但其降低了「未审查模型」的供给成本，可能对依赖安全对齐作为护城河的商业 API 服务形成替代压力，同时为 Hugging Face 等模型托管平台带来内容审核方面的挑战。"
+    },
+    "engineering_complexity": "production_ready",
+    "compound_value": {
+      "score": 5.5,
+      "reason": "Heretic在'低成本模型去审查'这一细分赛道建立了自动化壁垒，通过TPE优化器将方向消融从专家手工调参变为一键CLI操作，且在gemma-3-12b-it上的KL散度（0.16）显著优于人工版本（0.45-1.04），构成真实的技术质量优势。社区已产出3000+消融模型，初步形成使用惯性。然而，其核心IP建立在已发表的学术研究（Arditi et al. 2024, Lai 2025）之上，自身不拥有底层技术专利；方向消融作为特定技术范式，存在被更优对齐移除方法替代的风险；作为纯开源CLI工具，缺乏商业化路径、数据飞轮和网络效应护城河。3-5年内，Heretic更可能被更大的ML工具生态（Hugging Face transformers、vLLM等）吸收为一项内置功能，而非独立成长为平台型产品。监管风险同样不可忽视——政府对未审查AI模型的打击可能直接压缩其适用场景。综合来看，这是一个细分赛道的优质工具，但长期复利能力受限，评分5.5。"
+    },
+    "value_capture_layer": "agent_middleware",
+    "moat_impact": "democratizes_access",
+    "key_beneficiaries": [
+      "Hugging Face",
+      "Google (Gemma)",
+      "Qwen (Alibaba)",
+      "Optuna (Preferred Networks)",
+      "开源AI社区"
+    ],
+    "competitive_casualty": [
+      "mlabonne (手动消融工作流)",
+      "huihui-ai (手动消融工作流)",
+      "其他依赖人工调参的去审查工具",
+      "AI安全对齐审计服务商"
+    ],
+    "market_opportunities": [
+      "安全审计与合规检测工具创业机会：随着消融模型的激增（已超3000个），企业亟需能够检测模型是否经过安全对齐移除的自动化审计工具，可围绕消融检测、KL散度异常识别、拒答率回归测试等维度构建SaaS产品，面向金融、医疗等强监管行业的AI合规需求",
+      "垂直领域可控消融服务：Heretic证明自动化消融可在保持模型能力的前提下精准降低特定维度的拒答——可将此技术产品化为面向医疗咨询、法律援助、创意写作等场景的'合规可控微调'服务，在监管框架内解决过度审查导致的可用性问题",
+      "模型可解释性工具链整合：Heretic的research扩展提供的PaCMAP残差可视化和逐层定量分析功能可独立产品化，与现有的可解释性平台（如Anthropic的TransformerLens、Neel Nanda的工具集）互补，面向AI安全研究人员和红队团队"
+    ],
+    "risk_matrix": {
+      "regulatory": "高风险：该工具直接移除模型安全对齐机制，与欧盟AI Act的高风险AI系统安全要求、中国生成式AI管理办法的安全审查条款直接冲突。上传至Hugging Face的消融模型可能面临DMCA下架或平台政策封禁。模型输出若产生违法内容，工具开发者和使用者均可能承担法律责任",
+      "technological": "中等风险：方向消融技术依赖Transformer架构的残差流假设，纯状态空间模型（如Mamba）和未来新架构天然不受影响；此外Google、OpenAI等已在探索将安全对齐嵌入模型权重更深层或采用电路级安全机制，可能使消融技术失效。但短期内该技术对主流密集模型和MoE架构持续有效",
+      "competitive": "中等风险：Hugging Face等平台可能收紧消融模型的托管政策，形成分发渠道的竞争壁垒；大型AI厂商可能推出内置消融检测的API服务，挤压第三方检测工具市场。但Heretic的自动化程度和社区生态（3000+模型）已形成先发优势",
+      "ethical": "极高风险：该工具将创建未审查模型的门槛降至'会运行命令行即可'，大幅放大了恶意内容生成、深度伪造、仇恨言论、诈骗信息、武器制造指导等社会危害风险。KL散度最小化算法虽保留模型能力，但也意味着有害输出的质量更高、更具欺骗性。3/100的拒答率意味着97%的有害提示可获实质性回应",
+      "additional": [
+        "分发链风险：Heretic通过PyPI（pip install）和Hugging Face双重渠道分发，且支持一键上传消融模型，形成快速传播网络，传统内容审核手段难以拦截",
+        "军备竞赛风险：该工具可能引发安全对齐与消融技术的长期对抗，资源持续消耗，且每次对抗升级都可能产生新的安全漏洞窗口期",
+        "开源生态声誉风险：GitHub作为分发平台的立场将面临考验——若移除该项目可能引发开源自由争议，若保留则面临安全问责压力"
+      ]
+    },
+    "confidence": {
+      "impact": "high",
+      "compound": "medium",
+      "hype": "high"
+    },
+    "actionable_insight": "strategic_invest"
+  },
+  {
+    "source_dir": "github-trending",
+    "title": "byoungd/English-level-up-tips",
+    "source": "https://github.com/byoungd/English-level-up-tips",
+    "author": [],
+    "published": "",
+    "created": "2026-05-28",
+    "description": "An advanced guide to learn English which might benefit you a lot 🎉 . 离谱的英语学习指南/英语学习教程/英语学习/学英语简体中文 | English 谨以此献给我曾今的挚爱 W. 我们每个人都生活在各自的过去中，人们会用一分钟的时间去认识一个人，用一小时的时间去喜欢一个人，再用一天的时间去爱上一个人，到最后呢，却要用一辈子的时间去忘记一个人。 项目介绍 An advanced guide to learn English which might benefit you a lot. 离谱的英语学习指南/英语学习教程。 推荐资源：ku0.com - 库 如果你在使用本指南里的 AI 学习方案时，需要更稳定、可信的 AI 账户与接口资源，可以看看我们的产品：ku0.com - 库。 ku0.com 是一个可信任 AI 资源库，可一站式获取 ChatGPT、Claude、Gemini 账户充值、成品号和号池资源。我们用 Token 质检和统一网关筛掉不稳定、掺水、冒名的中转服务，并通过可信账户资源、质检报告和接入记录，帮助你降低 AI 使用成本与采购风险。 背景 你好啊朋友，欢迎来到离谱的英语学习指南。 当你的目光与这些文字相遇，我衷心希望，这不仅仅是一次攻克英语的艰苦征程，更是一场开启智慧之门的奇妙冒险。愿这方寸纸墨，化作你我心灵共鸣的琴弦，弹奏出语言学习的天籁妙音。 时间回到 2017 年 7 月初，备考托福的女神W.问了我一个问题：如何高效学习英语？ 在我思考如何回答这个问题时，回想起我在大四一学期一次性考过 26 门课的经验（其中重修 19 门，当前学期 7 门），再加上本人英语 和 语文 两门学科曾侥幸在高考时摘得省第一（江苏卷），或许我勉强有资格提供一些高效学习的小技巧，权当抛砖引玉。 与她交流了一番学习心得后，我惊讶于她在学习方面的热情竟是如此之高，同时也发现了她的学习方法存在一些不可取之处。 于是我写了一篇简单的文章零散地介绍了下我学习英语的心得体会，几天后她告诉我，希望我可以将这些学习经验稍加整理，分享给更多有需要的人。 在此之前，我并不知道原来有那么多同学在学习英语的这件事上磕磕绊绊。 他们甚至从未想过：英语作为一门语言，学习起来应该是一件比较自然而然的事情，就像我们自然而然地学会汉语那样。 我由衷地希望大家能热爱学习英语这件事情，如果做不到，那就尝试着去发现这件事情的乐趣亦或是收益。请允许我奉上乔布斯的一段话(原话指的是工作，表达的意思却是相似的)： The only way to do great work is to love what you do. If you haven't found it yet, keep looking. Don't settle. As with all matters of the heart, you'll know when you find it. 成就一番伟业的唯一途径就是热爱自己的事业。如果你还没能找到让自己热爱的事业，继续寻找，不要放弃。跟随自己的心，总有一天你会找到的。 热爱之于学习，同样如此。 在这份指南里，我会尽可能地综合我主观的看法与一定的科学依据，为大家提供一份详尽的英语进阶指南，真心希望本指南能给你带来一点小小的帮助。 英语水平等级 本图主要参考 Global scale - Table 1 (CEFR 3.3): Common Reference levels 特色 章节 新增的 AI 章节已经更新为 2026 版，重点不再只是通用 Prompt，而是更系统地回答： 为什么现在更推荐把 Gemini 作为英语学习主引擎 如何把 Gem / Live / Guided Learning / Canvas / quiz / flashcards 串成完整训练流程 除了 Gemini 之外，ChatGPT / Claude / Perplexity / DeepL Write 应该如何分工使用 怎样设计真正能长期起作用的听说读写训练回路 如果你想把 AI 真正变成英语学习的加速器，而不只是偶尔帮你翻译两句，这一章值得重点看。 我的故事 感谢 感谢所有关心以及为这份指南做出贡献的人 ❤️ 番外篇 聊聊我的个人成长经历中的爱情部分，欢迎查阅 离谱的前女友们 如果你想看我在创业失败后那段时间的真实经历，也可以读这篇：我的故事 在线阅读 知乎 离谱的英语学习指南 GitHub Pages English-level-up-tips GitBook English-level-up-tips 转载声明 转载本指南，请注明作者与 GitHub 链接，谢谢！ 协议/License 本作品采用知识共享署名-非商业性使用 4.0 国际许可协议进行许可。 特别声明 有不少热心的小伙伴来信，表明本指南写的很用心，认为对其学习英语有一定的帮助，希望能进行赞赏。 命运已经给了离谱诸多额外的馈赠，便不再需要其他奖赏。 统一声明：本指南不接受也不需要金钱上的赞助。 请把你那些原本想用来赞赏的零钱给自己买几本好书。 学习，难道不是人生最棒的乐趣么？ Cheers and Enjoy 😃",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "6fc77bdc5b8a25da",
+    "source_type": "community_discussion",
+    "tldr": "GitHub 开源英语学习指南更新至 2026 版，新增以 Gemini 为主引擎、多 AI 工具分工协作的听说读写训练体系。",
+    "objective_summary": "作者 byoungd（离谱）于 2017 年应友人请求开始撰写英语学习心得，后整理为结构化指南发布于 GitHub。2026 版新增 AI 学习章节，系统阐述以 Gemini 为核心引擎，配合 ChatGPT、Claude、Perplexity、DeepL Write",
+    "event_type": "application_landing",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [
+        "ku0.com"
+      ],
+      "technologies": [
+        "Gemini",
+        "ChatGPT",
+        "Claude",
+        "Perplexity",
+        "DeepL Write",
+        "Gem",
+        "Live",
+        "Guided Learning",
+        "Canvas"
+      ],
+      "key_people": [
+        "byoungd"
+      ]
+    },
+    "key_logic_flow": [
+      "作者于 2017 年 7 月因友人 W. 备考托福时询问学习方法，开始撰写英语学习心得",
+      "作者将零散的学习经验整理为结构化指南，发布至 GitHub 供更多人参考",
+      "指南核心理念主张英语学习应如母语习得般自然发生，强调热爱是高效学习的驱动力",
+      "2026 版新增 AI 章节，不再仅提供通用 Prompt，而是系统回答如何用 AI 加速英语学习",
+      "推荐以 Gemini 作为英语学习主引擎，将 Gem、Live、Guided Learning、Canvas、Quiz、Flashcards 串联为完整训练流程",
+      "设计 ChatGPT、Claude、Perplexity、DeepL Write 等工具的明确分工方案，构建长期有效的听说读写训练回路",
+      "指南以知识共享署名-非商业性使用 4.0 国际许可协议开源，作者声明不接受金钱赞助"
+    ],
+    "impact_score": {
+      "score": 2.0,
+      "reason": "该事件实质是一个个人英语学习 GitHub 仓库的年度内容更新，新增了如何组合使用 Gemini、ChatGPT、Claude 等现有 AI 工具进行英语学习的实操指南。对 AI 行业本身无任何技术推动或格局改变——它只是消费和编排已有工具，不产生新模型、新架构或新范式。属于典型的个人知识分享，仅在小众英语学习者圈子内有一定参考价值，行业冲击力极低。"
+    },
+    "sentiment": "neutral",
+    "developer_sentiment": {
+      "tone": "neutral",
+      "primary_focus": "AI 工具在语言学习场景中的实用编排方案"
+    },
+    "hype_assessment": {
+      "level": "medium",
+      "reason": "指南本身以务实风格编写，但存在一定包装成分：(1) 将「使用多个 AI 工具学英语」包装为「AI 学习方案/训练体系」，本质上是 Prompt 工程和工具组合的经验分享；(2) 文中嵌入商业推广链接 ku0.com（AI 账户资源售卖平台），指南同时承担引流功能；(3) 「2026 版」「主引擎」「训练回路」等措辞赋予个人经验分享以系统化产品的观感。整体未出现「颠覆」「革命性」等严重 PR 滥用词汇，但商业动机降低了纯粹性。"
+    },
+    "information_entropy": "low",
+    "domain_disruption": {
+      "technical_innovation": "无。该指南不涉及任何 AI 技术突破，仅是对 Gemini、ChatGPT、Claude、Perplexity、DeepL Write 等已有商用产品的使用经验总结和工作流编排，属于消费级应用层的工具组合推荐。",
+      "business_model": "指南本身以 CC BY-NC 4.0 协议开源且声明不接受赞助，但其关联的 ku0.com 平台以「可信 AI 资源库」定位，提供 ChatGPT、Claude、Gemini 的账户充值、成品号和号池服务，本质是 AI API 代理/转售生意。指南作为引流内容为 ku0.com 导流，构成内容营销漏斗的一部分。"
+    },
+    "engineering_complexity": "production_ready",
+    "compound_value": {
+      "score": 2.5,
+      "reason": "该事件本身是一个 GitHub 开源学习指南的版本更新，作为独立资产不具备任何商业护城河、收入模型或网络效应，长期复利价值极低。但它作为用户行为信号具有参考价值：揭示了重度 AI 用户如何将多个大模型工具编排为'语言学习操作系统'——Gemini 做主引擎、ChatGPT/Claude/Perplexity/DeepL Write 各司其职。这种多模型分工协作的使用模式，是对 AI 原生学习行为的真实田野记录。然而从投资视角，一个 CC BY-NC 4.0 协议开源、拒绝商业化赞助的指南项目，本身无法成为任何赛道的'基础设施'。3-5 年后这份指南大概率已停止维护，不具备持续积累效应。"
+    },
+    "value_capture_layer": "end_application",
+    "moat_impact": "democratizes_access",
+    "key_beneficiaries": [
+      "Google (Gemini)",
+      "ku0.com",
+      "OpenAI",
+      "Anthropic",
+      "Perplexity (AI search)"
+    ],
+    "competitive_casualty": [
+      "传统英语培训机构（新东方等线下班课）",
+      "Duolingo 等单一功能语言学习App",
+      "在线英语家教平台（VIPKID 等）",
+      "传统英语教材出版社"
+    ],
+    "market_opportunities": [
+      "AI语言学习工作流设计方法论可产品化为独立SaaS——将\"Gemini主引擎+多工具分工协作\"的模式封装为面向英语学习者的付费训练平台，覆盖听说读写全链路训练闭环",
+      "ku0.com 的AI账户聚合商业模式验证了跨境AI服务访问痛点的市场需求，建议关注面向中国市场的合规AI资源聚合与账号管理平台的创业机会，尤其是在多模型订阅统一管理、Token质检、成本优化方向",
+      "面向垂直领域的多AI工具编排与工作流设计能力将成为高价值个人技能——能够为特定场景（语言学习、编程教育、学术写作等）设计工具链并持续迭代优化的专业人士将具备市场稀缺性"
+    ],
+    "risk_matrix": {
+      "regulatory": "ku0.com 作为跨境AI账户转售平台存在显著监管风险——ChatGPT、Claude、Gemini等产品在中国未获官方运营许可，账户转售行为可能涉及网络接入服务违规；该灰色商业模式面临随时被政策清理的不确定性，且作者以开源指南导流商业平台的做法可能引发平台合规审查",
+      "technological": "Gemini作为主引擎的推荐可能因模型能力迭代而迅速过时——AI工具能力边界变化极快（如Gemini自身功能整合可能吞并ChatGPT/Claude的分工价值），基于当前工具组合的工作流设计生命周期有限，需持续维护更新",
+      "competitive": "Duolingo、多邻国等成熟语言学习平台已深度内嵌AI功能，提供一站式体验；独立工具链方案面临大厂生态整合风险，ku0.com的账户聚合模式也面临官方API分销商（如Azure OpenAI、Google Cloud）和同类灰色平台的价格战挤压",
+      "ethical": "AI辅助学习存在替代真人语言交流的隐忧——过度依赖AI反馈可能削弱学习者主动寻求人际互动的动机，不利于跨文化交际能力培养；指南内含ku0.com商业推广，内容教育与商业利益混同降低了指南的独立性和可信度",
+      "additional": [
+        "过度依赖单一生态（Google/Gemini）的工作流设计存在供应商锁定风险，一旦Gemini调整API策略、定价或功能边界，整个训练体系将面临重构压力",
+        "学习者将英语练习数据分发给多个AI平台（Gemini、ChatGPT、Claude、DeepL Write），跨平台数据隐私与合规风险被低估"
+      ]
+    },
+    "confidence": {
+      "impact": "medium",
+      "compound": "medium",
+      "hype": "high"
+    },
+    "actionable_insight": "monitor"
+  },
+  {
+    "source_dir": "github-trending",
+    "title": "twentyhq/twenty",
+    "source": "https://github.com/twentyhq/twenty",
+    "author": [],
+    "published": "",
+    "created": "2026-05-28",
+    "description": "The open alternative to Salesforce, designed for AI. The #1 Open-Source CRM Website · Documentation · Roadmap · Discord · Figma Why Twenty Twenty gives technical teams the building blocks for a custom CRM that meets complex business needs and quickly adapts as the business evolves. Twenty is the CRM you build, ship, and version like the rest of your stack. Learn more about why we built Twenty Installation Cloud The fastest way to get started. Sign up at twenty.com and spin up a workspace in under a minute, with no infrastructure to manage and always up to date. Build an app Scaffold a new app with the Twenty CLI: npx create-twenty-app my-app Define objects, fields, and views as code: import { defineObject, FieldType } from 'twenty-sdk/define'; export default defineObject({ nameSingular: 'deal', namePlural: 'deals', labelSingular: 'Deal', labelPlural: 'Deals', fields: [ { name: 'name', label: 'Name', type: FieldType.TEXT }, { name: 'amount', label: 'Amount', type: FieldType.CURRENCY }, { name: 'closeDate', label: 'Close Date', type: FieldType.DATE_TIME }, ], }); Then ship it to your workspace: npx twenty app:publish --private See the app development guide for objects, views, agents, and logic functions. Self-hosting Run Twenty on your own infrastructure with Docker Compose, or contribute locally via the local setup guide. Everything you need Twenty gives you the building blocks of a modern CRM (objects, views, workflows, and agents) and lets you extend them as code. Here's a tour of what's in the box. Want to go deeper? Read the User Guide for product walkthroughs, or the Documentation for developer reference. Learn more about apps in doc Learn more about version control in doc Learn more about primitives in doc Learn more about layouts in doc Learn more about AI in doc Learn more about CRM features in doc Stack TypeScript Nx NestJS, with BullMQ, PostgreSQL, Redis React, with Jotai, Linaria and Lingui Thanks &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; Thanks to these amazing services that we use and recommend for UI testing (Chromatic), code review (Greptile), catching bugs (Sentry) and translating (Crowdin). Join the Community Star the repo · Discord · Feature requests · Releases · X · LinkedIn · Crowdin · Contribute",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "a20220596b25af30",
+    "source_type": "community_discussion",
+    "tldr": "Twenty 是一个开源可编程 CRM 平台，允许技术团队以代码方式定义、构建和版本管理自定义 CRM 系统。",
+    "objective_summary": "Twenty 提供一个 CRM 构建平台，技术团队通过 CLI 脚手架创建应用，以 TypeScript 代码定义数据对象、字段和视图，并发布到工作区。支持云端 SaaS（twenty.com）和 Docker Compose 自托管两种部署方式。",
+    "event_type": "application_landing",
+    "epistemic_status": "pr_statement",
+    "entities": {
+      "companies": [
+        "Twenty",
+        "twentyhq",
+        "Chromatic",
+        "Greptile",
+        "Sentry",
+        "Crowdin"
+      ],
+      "technologies": [
+        "TypeScript",
+        "Nx",
+        "NestJS",
+        "BullMQ",
+        "PostgreSQL",
+        "Redis",
+        "React",
+        "Jotai",
+        "Linaria",
+        "Lingui",
+        "Docker",
+        "twenty-sdk"
+      ],
+      "key_people": []
+    },
+    "key_logic_flow": [
+      "Twenty 将 CRM 拆解为 objects、views、workflows 和 agents 四个核心构建块，允许开发者以代码方式扩展和定制",
+      "用户通过 npx create-twenty-app CLI 命令脚手架新建一个 CRM 应用项目",
+      "使用 twenty-sdk 的 defineObject API 以 TypeScript 代码声明式定义数据对象、字段类型和视图",
+      "通过 npx twenty app:publish --private 将应用发布到个人或团队工作区",
+      "支持两种部署模式：在 twenty.com 注册云端工作区（无需管理基础设施），或通过 Docker Compose 在自有基础设施上自托管"
+    ],
+    "impact_score": {
+      "score": 3.5,
+      "reason": "Twenty 是一个面向技术团队的开源可编程 CRM 平台，以 TypeScript 代码定义数据对象、字段和视图。虽然其'CRM as Code'理念在开发者工具体验上有一定创新，但该事件本质上是一个产品落地页/README 展示，并非 AI 领域的核心技术突破。对 AI 行业的短期冲击力有限——它属于开发者工具/开源基础设施范畴，与 AI 模型、训练范式、推理架构等核心议题关联度低。评分 3.5 反映其作为开源项目对开发者生态的局部价值，但不足以改变 AI 行业竞争格局。"
+    },
+    "sentiment": "neutral",
+    "developer_sentiment": {
+      "tone": "neutral",
+      "primary_focus": "CRM 的可编程性、自托管部署灵活性以及开发者体验"
+    },
+    "hype_assessment": {
+      "level": "low",
+      "reason": "README 全文采用务实的产品介绍风格，客观描述了 CLI 脚手架、defineObject API、双模式部署等技术细节，未出现'颠覆'、'革命性'、'下一代'等典型 PR 滥用词汇。表述克制，聚焦于'技术团队可以获得什么'而非'这将改变世界'，水分较低。"
+    },
+    "information_entropy": "medium",
+    "domain_disruption": {
+      "technical_innovation": "将 CRM 系统拆解为 objects（数据对象）、views（视图）、workflows（工作流）和 agents（代理）四个可编程构建块，通过 twenty-sdk 的 defineObject API 以声明式 TypeScript 代码定义数据模型，实现 CRM 的版本化管理——本质上是用前端工程化方法论重构传统 SaaS 配置体验。但该模式在低代码/无代码领域已有先例（如 Airtable、Notion 的 database 视图），并非首创。",
+      "business_model": "采用开源核心（open-core）模式：云端 SaaS（twenty.com）提供托管工作区，降低运维门槛；同时支持 Docker Compose 自托管，满足数据主权和定制化需求。这种双轨策略在开发者工具市场较为成熟（参考 GitLab、Supabase），无显著商业模式创新，但可能对 Salesforce 等传统闭源 CRM 构成一定的社区替代压力。"
+    },
+    "engineering_complexity": "production_ready",
+    "compound_value": {
+      "score": 5.0,
+      "reason": "Twenty 的「CRM-as-code」范式在理念上有创新性，将 IaC 思维引入 CRM 领域，对技术团队主导的组织具有差异化吸引力。但 CRM 市场是一个极端残酷的赛道：Salesforce 年营收 $37B+ 且拥有 AppExchange 生态飞轮，HubSpot 正在高速增长，Microsoft Dynamics 背靠 Office 365 捆绑效应。开源 CRM 历史上反复失败（SuiteCRM、EspoCRM 等），根本原因是 CRM 的核心价值不在技术层而在生态、集成和销售工作流网络上——这是代码无法复制的。Twenty 目前处于 PR 声明阶段，无市场验证数据，且「代码优先」策略天然将 TAM 限制在技术团队，而 CRM 的主要购买决策者是销售和运营负责人。评分 5.0：介于昙花一现和赛道基础设施之间——有成为开发者友好型 CRM 细分龙头的潜力，但 3-5 年后大概率仍是 niche player，不具备颠覆主流 CRM 格局的能力。真正的变量在于其「agents」构建块的 AI 化程度：如果能在 CRM 中深度嵌入 AI Agent 形成差异化工作流自动化，可能打开新的价值空间，但目前信息不足以支撑这一判断。"
+    },
+    "value_capture_layer": "end_application",
+    "moat_impact": "democratizes_access",
+    "key_beneficiaries": [
+      "Twenty",
+      "Supabase",
+      "Vercel",
+      "Neon"
+    ],
+    "competitive_casualty": [
+      "Salesforce (定制化平台部分)",
+      "低代码 CRM 平台 (如 Airtable CRM、Monday.com CRM)",
+      "传统非可编程 CRM (如 Pipedrive)"
+    ],
+    "market_opportunities": [
+      "可编程 CRM 的兴起为 AI Agent 集成创造了新入口：Twenty 的 objects/views/workflows/agents 四层架构天然适配 AI Agent 编排，技术服务商可基于其 SDK 开发\"AI 驱动的 CRM 智能体\"模块，实现自动线索评分、客户意图预测、合同智能审核等垂直场景应用",
+      "Twenty 的 CLI 脚手架 + TypeScript 定义模式降低了 CRM 定制门槛，独立开发者和小型技术咨询公司可借此切入\"行业垂直 CRM\"利基市场，如为律师事务所、医疗诊所、教育机构等提供代码化的行业 CRM 模板和微服务方案",
+      "自托管 CRM 市场的合规审计工具需求上升：Twenty 支持 Docker Compose 自托管，意味着大量企业将自行管理客户数据基础设施，催生针对自托管 CRM 的安全审计、GDPR/CCPA 合规扫描、数据泄露监控等配套工具机会"
+    ],
+    "risk_matrix": {
+      "regulatory": "CRM 平台天然处理大量个人可识别信息（PII），自托管模式下合规责任从平台方转移至部署方，若缺少内置的 GDPR/CCPA 数据治理工具（如数据删除自动化、同意管理），可能导致中小企业用户面临严重合规风险；此外跨境数据存储涉及 Schrems II 等数据主权问题",
+      "technological": "Twenty 深度绑定特定技术栈（TypeScript+NestJS+PostgreSQL+Redis+BullMQ），技术栈迭代或社区偏好迁移可能导致维护成本陡增；'可编程 CRM'范式目前缺乏行业标准和互操作性，用户代码资产可能形成供应商锁定；项目尚处早期，API 稳定性无长期承诺，版本升级可能破坏用户自定义代码",
+      "competitive": "Salesforce、HubSpot、Microsoft Dynamics 三大巨头合计占据 CRM 市场超 50% 份额，且均在大力投入 AI 原生功能和低代码平台；Salesforce 的 Agentforce 和 HubSpot 的 Breeze AI 已形成生态壁垒；开源 CRM 领域还有 SuiteCRM、EspoCRM 等成熟竞品，Twenty 的'可编程'差异化需证明其市场必要性",
+      "ethical": "CRM 系统存储大量客户隐私数据和商业机密，自托管模式下数据安全完全依赖部署方的安全实践水平，缺乏统一的安全基线可能导致数据泄露事件频发；'以代码定义 CRM'降低了技术门槛，但也可能被用于构建欺诈性客户管理系统或非法数据聚合平台",
+      "additional": [
+        "商业化可持续性风险：Twenty 目前依赖 twenty.com 云端 SaaS 作为主要收入来源，但开源 + 自托管的双重模式可能形成'免费吞噬付费'效应，若云端付费转化率不足，项目长期维护资金存疑",
+        "社区治理风险：开源项目早期由单一公司主导（twentyhq），若核心团队战略转向或被收购，社区 fork 可能导致生态分裂，用户代码资产的连续性面临不确定性"
+      ]
+    },
+    "confidence": {
+      "impact": "medium",
+      "compound": "low",
+      "hype": "medium"
+    },
+    "actionable_insight": "monitor"
+  },
+  {
+    "source_dir": "github-trending",
+    "title": "Chachamaru127/claude-code-harness",
+    "source": "https://github.com/Chachamaru127/claude-code-harness",
+    "author": [],
+    "published": "",
+    "created": "2026-05-28",
+    "description": "Claude Code Dedicated Development Harness - Achieving High-Quality Development Through an Autonomous Plan→Work→Review CycleClaude Code Harness Plan. Work. Review. Ship. A disciplined delivery loop for Claude Code, with bounded paths for Codex and OpenCode. English | 日本語 Claude Code is powerful, but raw agent work drifts: plans live in chat, tests become optional, review happens too late, and release evidence gets rebuilt by memory. Harness turns that into one repeatable operating path. After install, the default changes from \"ask the agent to code\" to: write the spec and plan, implement only the approved slice, verify the result, review independently, package evidence for PR or release. Quickstart New users should start from the tool they already use. Existing users should run the migration report before cleanup or reinstall. Path Start New user Tool-first onboarding Existing user Migration check Claude Code fast path Install in 30 seconds Trigger proof Skill trigger gate Install in 30 Seconds claude /plugin marketplace add Chachamaru127/claude-code-harness /plugin install claude-code-harness@claude-code-harness-marketplace /harness-setup Next command: run /harness-plan with one small request. /harness-plan Improve the README onboarding flow First 15 Minutes Install through your tool route. Run /harness-setup or the equivalent setup script. Run /harness-plan with a small request; Harness writes the spec.md and Plans.md drafts for you to check. Small typo, docs, and status updates stay lightweight. Approve the generated contract or reply with the correction you want. Run the smallest approved task, for example /harness-work 1.1.1. Run /harness-review and keep the verification output. Your job is not to hand-write the plan. It is to approve or correct the generated contract before execution continues. How It Works Harness adds a source-of-truth loop around agent work. The 5 verb skills keep that surface small: plan, work, review, sync, release. You describe the outcome in normal language. /harness-plan drafts or updates spec.md and Plans.md with scope, acceptance criteria, unknowns, and stop conditions. Non-trivial planning records team_validation_mode and validates the plan through team/sub-agent or manual-pass perspectives for spec/Plans alignment, memory reuse, product fit, security fit, and works-in-practice. Harness treats those files as the source of truth. Data the agent has not seen stays unknown instead of being silently invented. /harness-work implements the approved slice with TDD and verification. /harness-review separates review from implementation. /harness-release packages only verified evidence. Commands Command What happens inside /harness-setup Installs project guidance, command surfaces, hooks, and checks so the workflow starts from one known baseline. /harness-plan Turns intent into spec.md and Plans.md, including scope, acceptance criteria, dependencies, unknowns, stop conditions, and non-trivial planning validation. /harness-work Executes one approved task or range, adds tests when required, runs verification, and keeps work inside the plan. /harness-work all Runs the approved plan through implementation and review paths; use after the plan is clear and the repo baseline is known. /harness-review Reviews the result separately from implementation and treats major findings as blockers. /harness-release Checks release readiness, CHANGELOG/tag boundaries, and evidence packaging after implementation and review are complete. bin/harness doctor --migration-report Inventories old plugin caches, Codex skills, OpenCode files, symlinks, and memory state without deleting data. Basic Workflow Stage Output Gate Investigate Evidence and unknowns Do not promote unobserved data into claims. Plan spec.md + Plans.md User approves or corrects the generated contract. Work Code and tests TDD required when the task says so. Review Independent verdict Major findings block completion. PR Evidence pack PR ready is not release ready. Release Tag/release artifacts Release preflight must pass on the release path. Install By Tool Tool Tier Route Claude Code supported Claude plugin marketplace, then /harness-setup. Codex CLI internal-compatible scripts/setup-codex.sh --user; direct plugin smoke is tracked separately. Codex app candidate Candidate smoke only; do not reuse Codex CLI proof. OpenCode internal-compatible scripts/setup-opencode.sh; runtime parity is not claimed. Cursor candidate PM handoff or adapter research only. GitHub Copilot CLI candidate Manual profile research only. Antigravity CLI future/unsupported No end-user install route in this phase. Existing User Migration Run bin/harness doctor --migration-report before changing an existing setup. The report inventories stale Claude plugin caches, duplicate Codex skills, old symlinks, OpenCode backup paths, and harness-mem state without deleting anything. Support Boundary Harness can describe candidate paths, but it does not inherit support claims from Superpowers, Hermes Agent, or any other project. A host only moves up when Harness has its own bootstrap, trigger, runtime, and release evidence. not_observed != absent: missing local proof means \"not proven here\", not \"impossible\" and not \"supported\". Requirements Claude Code v2.1+ for the supported Claude path. A project repository with write access for local setup. No Node.js is required for the Go-native guardrail engine. Optional harness-mem for cross-session memory when configured and healthy. Advanced Use these after the basic trigger path is visible. Capability What it adds Boundary Breezing Planner/Critic/Worker style team execution for larger task lists. Still gated by plan quality and review. Codex companion review Schema-backed Codex second opinion through scripts/codex-companion.sh. Raw codex exec is not the Harness companion path. OpenCode bootstrap Mirrors Harness guidance into OpenCode-compatible surfaces. Real runtime parity is not claimed. harness-mem Project-scoped memory and recall across sessions. Optional companion; purge remains explicit. Documentation Resource Description Tool-first onboarding Where to start by host tool. Install routes Per-tool setup and support-tier boundaries. Migration check Existing-user impact, compatibility, and rollback path. Skill trigger gate How install success is verified. Capability matrix Supported, internal-compatible, candidate, and unsupported host claims. Claude Code Compatibility Current Claude Code requirements and compatibility notes. Cursor Integration Cursor handoff boundary and candidate-route notes. Distribution Scope Included vs compatibility vs development-only paths. Hardening parity Runtime safety differences between Claude hooks and Codex gates. Work All Evidence Pack Success/failure verification contract for full-plan execution. Changelog User-facing version history. Contributing Issues and PRs welcome. See CONTRIBUTING.md. Acknowledgments AI Masao - Hierarchical skill design Beagle - Test tampering prevention patterns License MIT License. See LICENSE.md.",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "cea129f9b669edcc",
+    "source_type": "community_discussion",
+    "tldr": "一个为 Claude Code 提供规范化 Plan-Work-Review-Ship 开发工作流的开源工具，通过 MCP 插件市场安装。",
+    "objective_summary": "开发者 Chachamaru127 发布了 claude-code-harness 开源项目（MIT 协议），为 Claude Code 等 AI 编程智能体引入结构化的五阶段交付循环：规划、实施、独立评审、同步与发布。用户通过 Claude 插件市场安装后，以 /harness-plan",
+    "event_type": "framework_tools",
+    "epistemic_status": "pr_statement",
+    "entities": {
+      "companies": [],
+      "technologies": [
+        "Claude Code",
+        "MCP",
+        "Go",
+        "Codex CLI",
+        "OpenCode"
+      ],
+      "key_people": [
+        "Chachamaru127"
+      ]
+    },
+    "key_logic_flow": [
+      "Harness 将 Claude Code 的原始智能体工作流升级为 Plan → Work → Review → Ship 的四阶段纪律循环，每个阶段有明确的输出物和门禁条件",
+      "/harness-plan 命令将用户意图转化为 spec.md 和 Plans.md 两份合约文件，包含范围、验收标准、依赖项、未知因素和停止条件，用户只需批准或纠正即可",
+      "/harness-work 执行已批准的任务切片，强制要求 TDD 和验证，确保实施不偏离计划边界",
+      "/harness-review 将评审从实施中分离，重大发现被视作阻塞项而非可忽略建议",
+      "工具通过 Claude 插件市场分发（/plugin marketplace add），支持 Claude Code（正式支持）、Codex CLI 和 OpenCode（内部兼容）三条路径",
+      "提供 bin/harness doctor --migration-report 迁移检查命令，可盘点旧插件缓存和配置状态而不删除任何数据"
+    ],
+    "impact_score": {
+      "score": 4.5,
+      "reason": "该工具针对 AI 编程智能体「工作漂移」这一真实痛点提出了结构化的 Plan-Work-Review-Ship 四阶段纪律循环方案，通过 MCP 插件市场分发降低了安装门槛。但本质上是在 Claude Code 现有能力之上叠加流程约束层，而非底层能力突破；其影响力受限于 Claude Code 用户群，且开源 MIT 协议意味着无直接商业杠杆。属于「解决真问题但圈子不大」的工具型发布，评分 4.5 反映其务实价值与有限辐射范围的平衡。"
+    },
+    "sentiment": "positive",
+    "developer_sentiment": {
+      "tone": "skeptical",
+      "primary_focus": "流程仪式感是否真正减少 agent 漂移还是增加了不必要的开发摩擦"
+    },
+    "hype_assessment": {
+      "level": "medium",
+      "reason": "README 使用了 'source-of-truth loop'、'disciplined delivery loop' 等包装性表述，但整体保持诚实——明确区分了 supported/internal-compatible/candidate 三级支持状态，承认 'not_observed != absent'，且没有使用 '颠覆'、'革命性' 等严重 PR 词汇。存在一定包装但核心功能描述具体可验证，属于中等水分。"
+    },
+    "information_entropy": "high",
+    "domain_disruption": {
+      "technical_innovation": "将软件工程中经典的 Plan-Do-Check-Act 循环固化为 Claude Code 的 MCP 插件命令集（/harness-plan → /harness-work → /harness-review → /harness-release），以 spec.md + Plans.md 作为合约文件实现意图与实施的分离，用 Go 原生引擎做守卫而不依赖 Node.js 运行时，且将 TDD 和独立评审作为强制性门禁条件嵌入智能体工作流。",
+      "business_model": "无直接商业模式——MIT 开源协议、通过 Claude 插件市场免费分发。其生态价值在于可能成为 AI 辅助开发的流程标准参考实现，间接推动 Claude Code 企业级采纳。"
+    },
+    "engineering_complexity": "prototype",
+    "compound_value": {
+      "score": 5.0,
+      "reason": "该工具解决了 AI 编码智能体\"无纪律漂移\"的真实痛点，Plan-Work-Review-Ship 四阶段门禁模型将软件工程纪律注入 Agent 工作流，概念正确且实用。但长期复利效应受限：(1) 核心价值是流程模式而非专有技术，MIT 开源协议下任何人都可复制；(2) 严重依赖 Claude Code 插件生态，平台风险集中——若 Anthropic 原生内置类似能力，Harness 的独立价值将大幅缩水；(3) 个人开发者维护的开源项目，缺乏商业化路径和持续投入保障；(4) MCP 插件分发降低了安装门槛但未构建数据网络效应或用户迁移成本。3-5 年后更可能被平台吸收为原生功能或被更成熟的竞品替代，难以独立成为行业基石。"
+    },
+    "value_capture_layer": "agent_middleware",
+    "moat_impact": "democratizes_access",
+    "key_beneficiaries": [
+      "Anthropic",
+      "开源 AI 编码社区",
+      "Go 生态工具链开发者"
+    ],
+    "competitive_casualty": [
+      "依赖人力 Code Review 的传统研发流程工具",
+      "以\"AI 结对编程\"为卖点但缺乏结构化流程的轻量 AI 编码工具"
+    ],
+    "market_opportunities": [
+      "开发者可基于 Harness 的 Plan-Work-Review-Ship 四阶段纪律循环模式，为企业内部 AI 编程助手定制合规工作流插件，满足金融、医疗等强监管行业的代码审计追溯需求",
+      "MCP 插件市场中\"AI Agent 流程治理\"品类尚属蓝海，创业者可参考 Harness 的 spec.md/Plans.md 合约文件机制，打造覆盖更多 AI 编程工具（Cursor、Copilot、Windsurf）的跨平台工作流治理产品",
+      "个人开发者应尽早掌握 /harness-plan → /harness-work → /harness-review 的结构化 AI 协作范式，这将是从\"对话式编程\"升级到\"工程化 AI 协作\"的核心竞争力分水岭"
+    ],
+    "risk_matrix": {
+      "regulatory": "无",
+      "technological": "Claude Code 或 Anthropic 官方可能在未来版本中原生集成类似的结构化工作流能力，导致 Harness 作为第三方插件的存在价值被大幅削弱；此外，项目重度依赖 Claude Code 的插件架构和 MCP 协议，若平台接口发生破坏性变更，工具将面临适配滞后风险",
+      "competitive": "AI 编程工作流治理赛道正快速拥挤——Codex CLI 自带类似规划能力、OpenCode 已实现内部兼容、Cursor 拥有 Rules 体系、GitHub Copilot 也在扩展 Agent 模式，Harness 作为单人开源项目在生态位上面临巨头和已有工具的挤压",
+      "ethical": "过度依赖 AI 编程工作流的\"门禁式\"约束可能导致开发者丧失独立判断能力，尤其是初级工程师可能将 spec.md 和 review 环节完全托管给 AI，形成\"流程合规但实质空洞\"的虚假安全感；此外，TDD 强制要求若被机械执行，可能催生为满足门禁而编写的低质量测试",
+      "additional": [
+        "项目当前处于单人维护阶段，若作者精力不足或兴趣转移，工具将面临停更风险，已集成该工作流的团队需承担迁移成本",
+        "跨工具兼容性声明（Codex、OpenCode）标记为 internal-compatible 或 candidate，实际体验可能与 Claude Code 正式路径存在显著差距，多工具团队引入时需评估一致性风险",
+        "harness-mem 跨会话记忆功能若配置不当，可能在不经意间将项目敏感信息（设计决策、架构讨论）持久化到非预期的存储位置"
+      ]
+    },
+    "confidence": {
+      "impact": "medium",
+      "compound": "low",
+      "hype": "medium"
+    },
+    "actionable_insight": "monitor"
+  },
+  {
+    "source_dir": "github-trending",
+    "title": "iii-hq/iii",
+    "source": "https://github.com/iii-hq/iii",
+    "author": [],
+    "published": "",
+    "created": "2026-05-28",
+    "description": "Effortlessly compose, extend, and observe every service in real-time for the first time ever.iii What is iii? iii is the easiest way to compose, extend, and observe every service in your stack in real time. Every backend starts as a project before the first line of business logic. Queues, cron, HTTP, state, observability, agents, and sandboxes each usually bring their own integration story. iii collapses that into one live system surface. iii worker add queue iii worker add agent iii worker add sandbox iii worker add <anything> Each worker joins the live catalog. Every other worker is notified and can call it immediately. Browse available workers at workers.iii.dev. That is the agent story too: when a task needs a capability the system does not have, an agent can add a worker, discover its functions, call them, and trace what happened. Same interface a developer uses. Three Primitives Worker _ Function _ Trigger is the entire mental model. Workers are processes that register with the iii engine and then register triggers and functions. A TypeScript API service is a worker. A Python data pipeline is a worker. A Rust microservice is a worker. Any functionality can be transformed into a worker with a few lines of code. Workers can also create other workers at runtime, so agents and applications can extend the system while it is running. Triggers are anything that causes a function to run. A trigger can be a direct call to a function, an HTTP endpoint, a cron schedule, a queue subscription, a state change, a stream event, or anything else. Triggers are declarative: the Worker defines \"this function runs when this thing happens,\" and iii handles routing, serialization, and delivery. Functions are units of work with a stable identifier (e.g., content::classify, orders::validate). It receives input, does work, and optionally returns output. Functions exist in workers. By mapping everything a service can do to these three primitives iii creates a development process that is both effortlessly composable, and completely observable. What Changes Before iii: New observability tool: uncountable integrations New agent harness: separate retry config, separate traces, separate timeouts New queue: vendor evaluation, procurement, and weeks of integration After iii: iii worker add observability iii worker add queue Done. It is in the system, traceable, and callable. Platform teams publish workers. Application teams register functions and declare triggers. Agents use the same catalog and the same function calls. Extending iii is iii worker add. Composing iii is calling functions. Observing iii is opening the trace. Quick Start iii project init myapp # scaffold a project cd myapp iii # start the engine Need to install iii first? Full walkthrough at the Quickstart guide. Add Workers Install new capabilities into a project with iii worker add: SDKs Language Package Install Node.js iii-sdk pnpm add iii-sdk or npm install iii-sdk Python iii-sdk pip install iii-sdk Rust iii-sdk Add to Cargo.toml Agent Skills Install iii's agent-readable reference material: npx skills add iii-hq/iii/skills Skills cover every iii primitive: HTTP endpoints, queues, cron, state, streams, custom triggers, and more. See skills/ for the full list. Console The iii-console is a developer and operations console for inspecting workers, functions, triggers, queues, traces, logs, and real-time state. See the Console docs for setup and usage. Repository Structure Directory What it is README engine/ iii Engine (Rust) - core runtime, modules, and protocol engine/README.md sdk/ SDKs for Node.js, Python, and Rust sdk/README.md console/ Developer console (React + Rust) console/README.md skills/ Agent-readable reference material skills/README.md website/ iii website website/ docs/ Documentation site (Mintlify/MDX) docs/README.md See STRUCTURE.md for the full monorepo layout, dependency chain, and CI/CD details. Examples See the Quickstart guide for step-by-step tutorials. Resources Documentation CLI & Engine Console Examples Contributing License The iii is licensed as such: Directory License engine/ Elastic License 2.0 sdk/ Apache License 2.0 console/ Apache License 2.0 docs/ Apache License 2.0 website/ Apache License 2.0 The engine runtime is licensed under the Elastic License 2.0 (ELv2). All SDKs, CLI, console, documentation, and the website are licensed under the Apache License 2.0. See CONTRIBUTING.md for additional details.",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "de22fb294f8e8973",
+    "source_type": "community_discussion",
+    "tldr": "iii 是一个统一后端服务编排框架，通过 Worker-Function-Trigger 三原语实现队列、定时任务、HTTP、Agent",
+    "objective_summary": "iii-hq 组织在 GitHub 发布了 iii 项目，这是一个用 Rust 编写引擎、支持 Node.js/Python/Rust 多语言 SDK 的后端服务编排平台。它将队列、定时任务、HTTP、状态管理、Agent、沙箱等后端能力统一为 Worker-Function-Trigger",
+    "event_type": "framework_tools",
+    "epistemic_status": "pr_statement",
+    "entities": {
+      "companies": [
+        "iii-hq"
+      ],
+      "technologies": [
+        "iii Engine",
+        "iii-sdk",
+        "iii-console",
+        "Rust",
+        "Worker-Function-Trigger",
+        "Node.js",
+        "Python"
+      ],
+      "key_people": []
+    },
+    "key_logic_flow": [
+      "iii 将后端服务的所有能力抽象为三个原语：Worker（进程）、Function（工作单元）和 Trigger（触发机制）。",
+      "Worker 是注册到 iii 引擎的进程，可以是任何语言编写的服务（TypeScript API、Python 数据管道、Rust 微服务等），且可在运行时动态创建新 Worker。",
+      "Trigger 是声明式的触发条件，包括直接调用、HTTP 端点、定时任务、队列订阅、状态变更、流事件等，iii 负责路由、序列化和投递。",
+      "Agent 可以通过 `iii worker add` 动态添加 Worker、发现其函数、调用并追踪执行过程，与开发者使用相同的接口。",
+      "开发者通过 `iii worker add <能力>` 即可将新的后端能力（如可观测性、队列）集成进系统，无需单独评估供应商或编写集成代码。",
+      "项目引擎核心采用 Elastic License 2.0 许可，SDK、控制台、文档等配套组件采用 Apache License 2.0 许可。"
+    ],
+    "impact_score": {
+      "score": 4.5,
+      "reason": "iii 提出了一种将后端服务统一抽象为 Worker-Function-Trigger 三原语的编排框架，其 Agent 可动态创建 Worker 的设计具有一定新意。但项目处于极早期阶段（新 GitHub 组织、无生产案例、无性能基准），本质上是对现有服务编排概念（服务网格、工作流引擎、无服务器框架）的重新组合而非范式突破。评分依据：架构设计有思考深度但缺乏实证验证，短期内难以改变开发者工作流，对行业格局影响有限。"
+    },
+    "sentiment": "neutral",
+    "developer_sentiment": {
+      "tone": "skeptical",
+      "primary_focus": "核心引擎采用 Elastic License 2.0 而非完全开源，且与 Temporal、AWS Step Functions 等成熟方案的差异化优势尚不明确"
+    },
+    "hype_assessment": {
+      "level": "medium",
+      "reason": "文章使用了'effortlessly composable, and completely observable'等包装性表述，将队列、定时任务、可观测性、Agent、沙箱等复杂后端能力简化为一句 `iii worker add`，存在将工程复杂性过度浪漫化的倾向。但整体未使用'革命性''颠覆'等极端 PR 词汇，技术描述相对务实，判定为中等包装水平。"
+    },
+    "information_entropy": "medium",
+    "domain_disruption": {
+      "technical_innovation": "将 Worker（进程）、Function（工作单元）、Trigger（触发机制）作为后端服务的三种原子抽象，并通过统一的 III Engine（Rust）实现跨语言（Node.js/Python/Rust）的运行时编排。Agent 可在运行时动态发现和注册 Worker 是其区别于传统服务编排框架的设计亮点，但本质上仍是对 Actor 模型、事件驱动架构和无服务器范式的工程化融合，而非底层技术突破。",
+      "business_model": "采用 Open Core 模式：核心引擎使用 Elastic License 2.0（限制云服务商直接提供托管服务），SDK/控制台/文档使用 Apache 2.0。这为后续推出 iii Cloud 托管平台预留了商业化空间，与 Temporal、Dagster 等开源编排项目的商业模式路径相似。"
+    },
+    "engineering_complexity": "prototype",
+    "compound_value": {
+      "score": 5.5,
+      "reason": "iii 的 Worker-Function-Trigger 三原语抽象在架构美学上得分很高，Agent 可动态添加 Worker 并发现函数的设计在 AI Agent 自主编排基础设施的趋势中具有前瞻性。然而，这是一个零用户基础的全新项目，团队背景不明，核心引擎采用 ELv2 许可（虽保护商业化但限制生态扩散）。正面看：如果 3-5 年内 Agent-native 基础设施成为主流范式，iii 有机会成为该赛道的核心玩家，具备复利效应——Worker 越多，目录越丰富，Agent 可组合能力越强，形成双边网络效应。负面看：后端编排赛道已有 Temporal、Dapr、Inngest 等成熟竞品，iii 的差异化仅在于 Agent-native 设计，但这一优势窗口期有限，大厂随时可跟进。综合判断：有潜力成为细分赛道基础设施，但存活至 3-5 年后的概率不高于 30%，需要在 12-18 个月内证明 PMF 和社区增长，否则将被边缘化。"
+    },
+    "value_capture_layer": "agent_middleware",
+    "moat_impact": "creates_new_moat",
+    "key_beneficiaries": [
+      "iii-hq",
+      "AI Agent 框架（LangChain、CrewAI、Vercel AI SDK）",
+      "Rust 基础设施生态"
+    ],
+    "competitive_casualty": [
+      "Temporal",
+      "Dapr",
+      "Trigger.dev",
+      "Inngest",
+      "Windmill.dev",
+      "传统 Backend-as-a-Service 平台"
+    ],
+    "market_opportunities": [
+      "Agent 原生编排理念（Agent 可动态创建 Worker、发现函数并追踪执行）切中了 AI Agent 从单次推理走向自主任务执行的核心痛点，建议后端架构团队评估将 Worker-Function-Trigger 三原语模式融入内部服务治理框架的可行性，尤其在 Agent 工作流引擎和 MCP 工具动态注册场景中具有参考价值",
+      "iii 的 'iii worker add <能力>' 命令行模式降低了后端能力集成的门槛，形成天然的 Worker 市场生态位——开发者可将企业内部的队列、可观测性、沙箱等基础设施封装为标准 Worker 并发布，创业团队可考虑构建企业级 Worker 市场或托管 iii 引擎的 SaaS 服务，对标 Temporal Cloud 的部署模型",
+      "Rust 引擎 + Node.js/Python/Rust 多语言 SDK 的技术栈组合兼顾性能与开发者生态覆盖，个人开发者可深入学习 Rust 引擎的协议设计与跨语言 SDK 通信机制，这将成为下一代后端编排平台的基础技术能力"
+    ],
+    "risk_matrix": {
+      "regulatory": "核心引擎采用 Elastic License 2.0（非 OSI 批准许可），对以开源合规为采购前提的企业和政府客户构成准入壁垒；ELv2 禁止将引擎作为托管服务提供给第三方，限制了基于 iii 构建商业 SaaS 产品的法律空间，需仔细评估许可证边界",
+      "technological": "项目处于极早期阶段，无生产环境验证记录，Worker-Function-Trigger 三原语抽象能否覆盖复杂工作流 DAG、长事务 Saga、补偿回滚等真实企业场景尚未证明；Rust 引擎的单点架构在高并发下的性能与可靠性未经压测，团队规模和社区支持度有限，存在项目停滞风险",
+      "competitive": "后端编排赛道已有 Temporal（C 轮融资，强企业采用）、Inngest、Trigger.dev、Windmill 等成熟竞品，以及 AWS Step Functions、GCP Workflows、Azure Durable Functions 等云原生方案，iii 需在生态壁垒和用户迁移成本上进行突破；Vercel Fluid Compute + Queues 也在向统一后端计算平台演进，巨头挤压风险显著",
+      "ethical": "Agent 可在运行时动态添加 Worker 并调用任意函数的设计带来了新的安全攻击面——恶意 Agent 或被投毒的模型可能注入未授权 Worker、窃取系统函数清单、扩大横向移动范围；Worker 间的自动发现与即时调用机制若缺乏细粒度鉴权，可能被滥用为隐蔽的持久化通道",
+      "additional": [
+        "人才风险：Rust 后端开发者供给有限，项目若无法快速建立贡献者社区，长期维护能力存疑",
+        "锁定风险：采用 iii 的三原语抽象意味着将整个后端架构绑定在特定框架上，迁移成本极高，企业需评估供应商锁定风险"
+      ]
+    },
+    "confidence": {
+      "impact": "medium",
+      "compound": "low",
+      "hype": "high"
+    },
+    "actionable_insight": "speculative_watch"
+  }
+]
