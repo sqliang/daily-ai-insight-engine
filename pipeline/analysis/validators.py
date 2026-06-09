@@ -205,6 +205,16 @@ def validate_value(data: dict) -> ValueAssessment:
         repaired["compoundValue"] = {"score": float(repaired["compoundValue"]), "reason": "AI 未提供评分依据"}
         logger.info("compoundValue 自动包装: %s → {score, reason}", data["compoundValue"])
 
+    # compoundValue 字段误嵌套修复：LLM 可能把根层级字段（valueCaptureLayer 等）
+    # 错误地塞进 compoundValue 对象内部，检测到后自动提升至根层级
+    _ROOT_FIELDS = ("valueCaptureLayer", "moatImpact", "keyBeneficiaries", "competitiveCasualty")
+    if isinstance(repaired.get("compoundValue"), dict):
+        cv = repaired["compoundValue"]
+        for field in _ROOT_FIELDS:
+            if field in cv:
+                repaired[field] = cv.pop(field)
+                logger.info("compoundValue 字段提升至根层级: %s", field)
+
     # --- 尝试严格校验 ---
     try:
         return ValueAssessment.model_validate(repaired)
