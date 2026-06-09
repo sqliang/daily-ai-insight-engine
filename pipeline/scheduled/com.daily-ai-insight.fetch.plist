@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  com.daily-ai-insight.fetch.plist — launchd 定时任务配置模板
+
+  占位符（setup.sh 安装时自动替换为实际值）：
+    {{PROJECT_ROOT}}  → 项目根目录绝对路径
+    {{HOME}}          → 当前用户 Home 目录
+
+  调度规则：每天 17:30 执行一次。
+  修改执行时间：编辑 StartCalendarInterval 中的 Hour / Minute 后重新运行 setup.sh。
+-->
+<plist version="1.0">
+<dict>
+    <!-- 任务标识符，全局唯一 -->
+    <key>Label</key>
+    <string>com.daily-ai-insight.fetch</string>
+
+    <!-- 执行命令：bash 运行 daily_fetch.sh -->
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>{{PROJECT_ROOT}}/pipeline/scheduled/daily_fetch.sh</string>
+    </array>
+
+    <!-- 工作目录设为项目根目录 -->
+    <key>WorkingDirectory</key>
+    <string>{{PROJECT_ROOT}}</string>
+
+    <!-- 每天 17:30 执行 -->
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>17</integer>
+        <key>Minute</key>
+        <integer>30</integer>
+    </dict>
+
+    <!-- launchd 自身的标准输出日志 -->
+    <key>StandardOutPath</key>
+    <string>{{PROJECT_ROOT}}/logs/launchd-stdout.log</string>
+
+    <!-- launchd 自身的标准错误日志 -->
+    <key>StandardErrorPath</key>
+    <string>{{PROJECT_ROOT}}/logs/launchd-stderr.log</string>
+
+    <!-- 环境变量：确保 uv 和 python 在 PATH 中 -->
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>{{HOME}}/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+        <key>HOME</key>
+        <string>{{HOME}}</string>
+    </dict>
+
+    <!-- 如果机器在 17:30 处于休眠状态，唤醒后立即补跑 -->
+    <key>RunAtLoad</key>
+    <false/>
+</dict>
+</plist>
