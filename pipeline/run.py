@@ -59,6 +59,124 @@ from pipeline.core.proxy_utils import setup_proxy as _setup_proxy
 _setup_proxy()
 
 # ---------------------------------------------------------------------------
+# schedule-status 子命令 — 查看定时任务最近运行状态
+# ---------------------------------------------------------------------------
+# 不单独创建 CLI 模块文件，因为逻辑很简单：读 JSON → 格式化输出（约 30 行）。
+# ---------------------------------------------------------------------------
+
+
+def _execute_schedule_status(args) -> int:
+    """
+    读取 data/scheduled/last_run.json 并以人类可读格式输出定时任务状态。
+
+    参数：
+        args: 未使用（保持与其他 execute 函数签名一致）
+
+    返回：
+        int: 0 成功读取，1 状态文件不存在
+    """
+    import json
+    from datetime import datetime, time
+
+    status_path = _PROJECT_ROOT / "data" / "scheduled" / "last_run.json"
+
+    if not status_path.exists():
+        print("⚠️  尚未运行过定时任务（没有历史状态记录）")
+        print(f"   期待的状态文件: {status_path}")
+        print()
+        print("   请先手动执行一次测试：")
+        print(f"     ./pipeline/scheduled/daily_fetch.sh")
+        print()
+        print("   或安装定时任务后等待每天 17:30 自动执行：")
+        print(f"     ./pipeline/scheduled/setup.sh")
+        return 1
+
+    with open(status_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    timestamp = data.get("timestamp", "未知")
+    status = data.get("status", "未知")
+    scout = data.get("scout", {})
+    ingest = data.get("ingest", {})
+    log_files = data.get("log_files", {})
+
+    # 状态映射为可读 emoji
+    status_display = {
+        "success": "✅ 成功",
+        "partial": "⚠️ 部分失败",
+        "failed": "❌ 失败",
+    }.get(status, f"❓ {status}")
+
+    print()
+    print("=" * 50)
+    print("  定时任务最近运行状态")
+    print("=" * 50)
+    print(f"  运行时间: {timestamp}")
+    print(f"  状态:     {status_display}")
+    print()
+    print("  Scout 阶段:")
+    print(f"    扫描数据源: {scout.get('sources_scanned', 0)} 个")
+    print(f"    发现文章:   {scout.get('articles_found', 0)} 篇")
+
+    failed_sources = scout.get("failed_sources", [])
+    if failed_sources:
+        print(f"    失败源:     {', '.join(failed_sources)}")
+    else:
+        print(f"    失败源:     无")
+
+    scout_errors = scout.get("errors", [])
+    if scout_errors:
+        print(f"    错误信息:")
+        for e in scout_errors:
+            print(f"      - {e}")
+
+    print()
+    print("  Ingest 阶段:")
+    print(f"    总计:   {ingest.get('total', 0)} 篇")
+    print(f"    成功:   {ingest.get('success', 0)} 篇")
+    print(f"    部分:   {ingest.get('partial', 0)} 篇")
+    print(f"    失败:   {ingest.get('failed', 0)} 篇")
+    print(f"    跳过:   {ingest.get('skipped', 0)} 篇（历史去重）")
+
+    ingest_errors = ingest.get("errors", [])
+    if ingest_errors:
+        print(f"    错误信息:")
+        for e in ingest_errors:
+            print(f"      - {e}")
+
+    print()
+    print("  日志文件:")
+    if log_files.get("scout"):
+        print(f"    scout:  {log_files['scout']}")
+    if log_files.get("ingest"):
+        print(f"    ingest: {log_files['ingest']}")
+
+    # 计算下一次执行时间（每天 17:30）
+    now = datetime.now()
+    next_run = now.replace(hour=17, minute=30, second=0, microsecond=0)
+    if now >= next_run:
+        # 今天的 17:30 已过，下一次是明天
+        from datetime import timedelta
+        next_run = next_run + timedelta(days=1)
+    print()
+    print(f"  下一次执行: {next_run.strftime('%Y-%m-%d %H:%M')}")
+    print("=" * 50)
+    print()
+
+    return 0
+
+
+def _register_schedule_status(subparsers):
+    """注册 schedule-status 子命令：查看定时任务最近运行状态。"""
+    parser = subparsers.add_parser(
+        "schedule-status",
+        help="查看定时任务最近运行状态",
+        description="读取 data/scheduled/last_run.json，以人类可读格式展示最近一次 scout + ingest 的执行结果。",
+    )
+    parser.set_defaults(func=_execute_schedule_status)
+
+
+# ---------------------------------------------------------------------------
 # 子命令注册与派发
 # ---------------------------------------------------------------------------
 # 每个子命令通过其模块的 register_subparser 自行注册参数并设置 execute 回调。
@@ -106,6 +224,7 @@ if __name__ == "__main__":
     _reg_analyze(subparsers)
     _reg_aggregate(subparsers)
     _reg_synthesize(subparsers)
+    _register_schedule_status(subparsers)  # 定时任务状态查询（在 run.py 内定义）
 
     args = parser.parse_args()
 
