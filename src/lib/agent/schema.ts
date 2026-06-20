@@ -16,9 +16,16 @@ export const eventTypeSchema = z.enum([
   "capital_movement",        // 资本动向：巨额融资、并购、财报、IPO
   "application_landing",     // 应用落地：具体的 ToB/ToC AI 产品发布与迭代
   "policy_and_safety",       // 政策与安全：监管、版权诉讼、安全事故、伦理争议
+  "unknown",                 // 未知分类：LLM 无法确定事件类型时的兜底值
 ]);
 
 export const sentimentSchema = z.enum(["positive", "neutral", "negative", "mixed"]);
+
+export const evidenceSourceSchema = z.object({
+  sourceDir: z.string(),    // 信源目录名，如 "theverge"
+  title: z.string(),        // 文章标题
+  url: z.string(),          // 原文 URL
+});
 
 export const topEventSchema = z.object({
   title: z.string(),
@@ -27,6 +34,8 @@ export const topEventSchema = z.object({
   impactScore: z.number().min(1).max(10),
   whyItMatters: z.string(),                        // 为什么重要：面向决策者的简短判断
   evidence: z.array(z.string()).min(2).max(6),      // 支撑证据（2-6 条原文关键事实）
+  evidenceArticleIds: z.array(z.array(z.string())).optional(), // 每条 evidence 对应的 articleId 列表
+  evidenceSources: z.array(evidenceSourceSchema).optional(),  // 来源链接，pipeline 后处理解析
 });
 
 export const deepDiveSchema = z.object({
@@ -102,5 +111,6 @@ export const dailyReportSchema = z.object({
 });
 
 export type DailyReport = z.infer<typeof dailyReportSchema>;
+export type EvidenceSource = z.infer<typeof evidenceSourceSchema>;
 export type EventType = z.infer<typeof eventTypeSchema>;
 export type Sentiment = z.infer<typeof sentimentSchema>;

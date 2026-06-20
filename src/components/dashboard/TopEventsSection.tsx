@@ -1,9 +1,96 @@
+"use client";
+
 import { eventTypeLabels } from "@/lib/report/labels";
 import type { DailyReport } from "@/lib/agent/schema";
+import { SourceCitations } from "@/components/reports/SourceCitations";
 
 type TopEventsSectionProps = {
   topEvents: DailyReport["topEvents"];
 };
+
+// ---------------------------------------------------------------------------
+// EvidenceText — 每行 evidence 末尾的引用标记渲染
+// 精准模式："...text [1][3]"  → [1] [3] 可点击编号，各跳转到参考列表对应行
+// 降级模式："...text [7来源]" → [7来源] 可点击徽章，跳转到参考列表容器
+// ---------------------------------------------------------------------------
+
+function EvidenceText({
+  text,
+  eventIndex,
+}: {
+  text: string;
+  eventIndex: number;
+}) {
+  // 先试精准编号 [1][3]...
+  const numRegex = /\[(\d+)\]/g;
+  const numMatches: Array<{ index: number; num: string; len: number }> = [];
+  let m: RegExpExecArray | null;
+  while ((m = numRegex.exec(text)) !== null) {
+    numMatches.push({ index: m.index, num: m[1], len: m[0].length });
+  }
+
+  // 再试降级计数 [N来源]
+  const countMatch = /\[(\d+)来源\]/.exec(text);
+
+  if (numMatches.length > 0) {
+    // 精准模式：每个 [n] 渲染为可点击 pill
+    const parts: React.ReactNode[] = [];
+    let last = 0;
+    for (const nm of numMatches) {
+      if (nm.index > last) {
+        parts.push(<span key={`t-${last}`}>{text.slice(last, nm.index)}</span>);
+      }
+      parts.push(
+        <CitationPill
+          key={`c-${nm.index}`}
+          label={nm.num}
+          targetId={`src-${eventIndex}-${nm.num}`}
+        />,
+      );
+      last = nm.index + nm.len;
+    }
+    if (last < text.length) {
+      parts.push(<span key={`t-${last}`}>{text.slice(last)}</span>);
+    }
+    return <>{parts}</>;
+  }
+
+  if (countMatch) {
+    // 降级模式：[N来源] 渲染为可点击徽章
+    const before = text.slice(0, countMatch.index);
+    const after = text.slice(countMatch.index + countMatch[0].length);
+    return (
+      <>
+        {before}
+        <CitationPill
+          label={`${countMatch[1]} 来源`}
+          targetId={`src-${eventIndex}-list`}
+        />
+        {after}
+      </>
+    );
+  }
+
+  return <>{text}</>;
+}
+
+/** 单个可点击引用 pill — 点击滚动到参考列表 */
+function CitationPill({ label, targetId }: { label: string; targetId: string }) {
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    document.getElementById(targetId)?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  };
+
+  return (
+    <a
+      onClick={handleClick}
+      href={`#${targetId}`}
+      className="inline-flex cursor-pointer items-center rounded bg-accent/10 px-1 text-[11px] font-semibold tabular-nums text-accent no-underline transition-colors hover:bg-accent/20"
+    >
+      {label}
+    </a>
+  );
+}
 
 const rankCircleBg = [
   "bg-accent",
@@ -56,10 +143,14 @@ export function TopEventsSection({ topEvents }: TopEventsSectionProps) {
               {event.evidence.map((item) => (
                 <li key={item} className="flex items-start gap-2">
                   <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-accent" />
-                  {item}
+                  <EvidenceText text={item} eventIndex={index} />
                 </li>
               ))}
             </ul>
+            <SourceCitations
+              sources={event.evidenceSources ?? []}
+              eventIndex={index}
+            />
           </article>
         ))}
       </div>

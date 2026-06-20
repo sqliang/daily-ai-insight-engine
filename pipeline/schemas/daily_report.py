@@ -48,6 +48,17 @@ class DataSourceSummary(BaseModel):
         populate_by_name = True
 
 
+class EvidenceSource(BaseModel):
+    """证据来源的可解析结构。从 articleIds 解析 URL，供前端渲染可点击来源链接。"""
+
+    source_dir: str = Field(..., alias="sourceDir", description="信源目录名（如 theverge）")
+    title: str = Field(..., description="文章标题")
+    url: str = Field(..., description="原文 URL")
+
+    class Config:
+        populate_by_name = True
+
+
 class TopEvent(BaseModel):
     """Top 事件。按 impactScore 排名的头条新闻聚合条目。"""
 
@@ -57,6 +68,14 @@ class TopEvent(BaseModel):
     impact_score: float = Field(..., ge=1, le=10, alias="impactScore", description="影响力评分 (1-10)")
     why_it_matters: str = Field(..., alias="whyItMatters", description="为什么重要（中文）")
     evidence: list[str] = Field(..., min_length=1, max_length=6, alias="evidence", description="支撑证据")
+    evidence_article_ids: list[list[str]] = Field(
+        default_factory=list, alias="evidenceArticleIds",
+        description="每条 evidence 对应的 articleId 列表，长度与 evidence 一致，由 LLM 输出",
+    )
+    evidence_sources: list[EvidenceSource] = Field(
+        default_factory=list, alias="evidenceSources",
+        description="证据来源的可解析结构，由 pipeline 后处理从 articleIds 解析",
+    )
 
     class Config:
         populate_by_name = True

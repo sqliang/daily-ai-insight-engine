@@ -19,6 +19,7 @@ type Preset =
   | "today"
   | "last3days"
   | "last7days"
+  | "last15days"
   | "all";
 
 const PRESETS: { key: Preset; label: string }[] = [
@@ -26,6 +27,7 @@ const PRESETS: { key: Preset; label: string }[] = [
   { key: "today", label: "今天" },
   { key: "last3days", label: "最近 3 天" },
   { key: "last7days", label: "最近 7 天" },
+  { key: "last15days", label: "近半个月" },
   { key: "all", label: "全部" },
 ];
 
@@ -80,6 +82,11 @@ export function DateFilterBar() {
         params.set("from", daysAgoStr(6));
         params.set("to", todayStr());
         break;
+      case "last15days":
+        params.delete("preset");
+        params.set("from", daysAgoStr(14));
+        params.set("to", todayStr());
+        break;
       case "all":
         params.delete("preset");
         params.set("from", "2000-01-01");
@@ -94,13 +101,13 @@ export function DateFilterBar() {
   const activePreset = ((): Preset => {
     // preset=latest 显式指定 → "最新"高亮，优先于 from/to 匹配
     if (currentPreset === "latest") return "latest";
-    // 无参数 → 默认最近7天（与服务端保持一致）
-    if (!currentFrom && !currentTo) return "last7days";
     // 匹配已知预设
     const today = todayStr();
+    if (!currentFrom && !currentTo) return "last15days";
     if (currentFrom === today && currentTo === today) return "today";
     if (currentFrom === daysAgoStr(2) && currentTo === today) return "last3days";
     if (currentFrom === daysAgoStr(6) && currentTo === today) return "last7days";
+    if (currentFrom === daysAgoStr(14) && currentTo === today) return "last15days";
     if (currentFrom === "2000-01-01") return "all";
     // 自定义范围不匹配任何预设 → fallback，无按钮高亮
     return "latest";

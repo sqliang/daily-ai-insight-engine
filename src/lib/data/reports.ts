@@ -12,6 +12,7 @@ import { readFile, readdir } from "node:fs/promises";
 import { join } from "node:path";
 
 import { dailyReportSchema, type DailyReport } from "@/lib/agent/schema";
+import type { DateRange } from "@/lib/data/types";
 
 // 日报文件命名前缀，用于识别和解析文件名中的日期
 const REPORT_PREFIX = "daily-report-";
@@ -45,7 +46,7 @@ export interface ReportSummary {
  *
  * 返回按 date 降序排列的摘要列表。
  */
-export async function listReports(): Promise<ReportSummary[]> {
+export async function listReports(dateRange?: DateRange): Promise<ReportSummary[]> {
   const reportsDir = join(process.cwd(), "data/05_reports");
   let entries: string[];
 
@@ -70,6 +71,12 @@ export async function listReports(): Promise<ReportSummary[]> {
     // 日期格式校验：YYYY-MM-DD
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
       continue;
+    }
+
+    // 日期范围过滤
+    if (dateRange) {
+      if (dateRange.from && date < dateRange.from) continue;
+      if (dateRange.to && date > dateRange.to) continue;
     }
 
     try {

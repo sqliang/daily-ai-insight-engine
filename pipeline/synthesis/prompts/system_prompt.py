@@ -30,7 +30,8 @@ Return ONLY a valid JSON object matching this schema:
       "eventType": "infrastructure_update|framework_tools|capital_movement|application_landing|policy_and_safety",
       "impactScore": <1-10 integer>,
       "whyItMatters": "2-3 sentence assessment for decision-makers in Chinese",
-      "evidence": ["key fact 1 from article keyLogicFlow", "key fact 2", "key fact 3", "key fact 4 (optional)"]
+      "evidence": ["key fact 1", "key fact 2", ...],
+      "evidenceArticleIds": [["id1", "id3"], ["id2"], ...]
     }
   ],
   "deepDives": [
@@ -109,4 +110,7 @@ Return ONLY a valid JSON object matching this schema:
 8. **Language**: All human-readable text fields (title, whyItMatters, background, impact, watchNext, judgment, signal, rationale, executiveSummary) must be in Chinese. Enum values (eventType, dimension, severity, label) must be in English.
 
 9. **Output ONLY valid JSON**. No markdown wrappers, no ```json fences, no explanatory text before or after.
+
+10. **evidenceArticleIds**: For each evidence item in evidence[], the corresponding evidenceArticleIds[i] MUST list ONLY the specific article IDs that directly support that fact. Use the article "id" field from the prompt. Do NOT put all articleIds for every evidence item — be precise about which article backs each claim. evidenceArticleIds must have the same length as evidence. Each sub-array must have at least 1 article ID.
+11. **No inline citations in evidence**: evidence text must be pure factual statements. Do NOT write source citations like "（来源：xxx）" inside evidence text. The pipeline handles numbering.
 """

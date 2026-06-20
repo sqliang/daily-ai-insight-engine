@@ -113,6 +113,12 @@ def generate_markdown(report: dict) -> str:
         lines.append("")
         for e in event.get("evidence", []):
             lines.append(f"- {e}")
+        # 参考来源
+        src_list = event.get("evidenceSources", [])
+        if src_list:
+            lines.append("")
+            for i, s in enumerate(src_list):
+                lines.append(f"*{i+1}.* [{s['sourceDir']}]({s['url']}) — {s['title']}")
         lines.append("")
 
     # --- Deep Dives ---

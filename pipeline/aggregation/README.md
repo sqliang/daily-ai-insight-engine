@@ -41,6 +41,9 @@ uv run python pipeline/run.py aggregate --input data/03_analyzed/
 # 指定日报窗口天数和热数据窗口
 uv run python pipeline/run.py aggregate --lookback-days 7 --hot-days 14
 
+# 精确日期过滤：仅保留 created == 指定日期的文章到 all_articles.json（用于回溯历史日报）
+uv run python pipeline/run.py aggregate --target-date 2026-06-10
+
 # 干跑预览
 uv run python pipeline/run.py aggregate --dry-run
 ```
@@ -52,6 +55,7 @@ uv run python pipeline/run.py aggregate --dry-run
 | `--input` / `-i` | 自动扫描三目录 | 输入目录（指定时仅扫描该目录） |
 | `--output` / `-o` | `data/04_structured/` | 输出目录 |
 | `--lookback-days` | `config.yaml` 中 `stages.aggregate.lookback_days`（1） | `all_articles.json` 日报时间窗口（天） |
+| `--target-date` | 无 | 精确日期过滤（YYYY-MM-DD）。仅保留 created == 指定日期的文章。与 `--lookback-days` 互斥 |
 | `--hot-days` | `config.yaml` 中 `stages.aggregate.hot_days`（7） | per-source JSON 热数据窗口（天） |
 | `--max-history-days` | `config.yaml` 中 `stages.aggregate.max_history_days`（365） | archive 分片最大保留天数 |
 | `--dry-run` | `false` | 只列出文件，不实际输出 |

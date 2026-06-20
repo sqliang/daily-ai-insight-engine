@@ -46,7 +46,7 @@ export default async function SourceDetailPage({
     const today = new Date();
     const to = `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(today.getDate())}`;
     const fromDate = new Date(today);
-    fromDate.setDate(fromDate.getDate() - 6);
+    fromDate.setDate(fromDate.getDate() - 14);
     const from = `${fromDate.getFullYear()}-${pad(fromDate.getMonth() + 1)}-${pad(fromDate.getDate())}`;
     return { from, to };
   })();

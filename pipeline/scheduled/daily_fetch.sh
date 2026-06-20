@@ -131,6 +131,37 @@ INGEST_SKIPPED=${INGEST_SKIPPED:-0}
 echo "$INGEST_OUTPUT" | grep -E "\[异常\]|ERROR" | head -5 > "$INGEST_ERRORS_FILE"
 
 # ---------------------------------------------------------------------------
+# Stage 1c: Repair — 自动修复抓取失败的文章
+# ---------------------------------------------------------------------------
+
+REPAIR_TOTAL=0
+REPAIR_REPAIRED=0
+REPAIR_STILL_FAILED=0
+
+if [ "$INGEST_FAILED" -gt 0 ] || [ "$INGEST_PARTIAL" -gt 0 ]; then
+    echo "========== $(date '+%Y-%m-%d %H:%M:%S') Repair 开始 =========="
+
+    REPAIR_LOG="$LOG_DIR/repair_scheduled.log"
+    cd "$PROJECT_ROOT"
+    uv run python pipeline/run.py repair 2>&1 | tee "$REPAIR_LOG"
+    REPAIR_OUTPUT=$(cat "$REPAIR_LOG")
+
+    # 解析 repair 统计
+    REPAIR_TOTAL=$(echo "$REPAIR_OUTPUT" | grep "发现:" | grep -o '[0-9]*' | head -1)
+    REPAIR_REPAIRED=$(echo "$REPAIR_OUTPUT" | grep "修复:" | grep -o '[0-9]*' | head -1)
+    REPAIR_STILL_FAILED=$(echo "$REPAIR_OUTPUT" | grep "仍失败:" | grep -o '[0-9]*' | head -1)
+    REPAIR_TOTAL=${REPAIR_TOTAL:-0}
+    REPAIR_REPAIRED=${REPAIR_REPAIRED:-0}
+    REPAIR_STILL_FAILED=${REPAIR_STILL_FAILED:-0}
+
+    echo "========== $(date '+%Y-%m-%d %H:%M:%S') Repair 结束 =========="
+    echo ""
+else
+    echo "无需修复：无 failed 或 partial 文章，跳过 Repair"
+    echo ""
+fi
+
+# ---------------------------------------------------------------------------
 # 判断整体状态
 # ---------------------------------------------------------------------------
 
@@ -181,9 +212,15 @@ data = {
         "skipped": $INGEST_SKIPPED,
         "errors": read_lines("$INGEST_ERRORS_FILE"),
     },
+    "repair": {
+        "total": $REPAIR_TOTAL,
+        "repaired": $REPAIR_REPAIRED,
+        "still_failed": $REPAIR_STILL_FAILED,
+    },
     "log_files": {
         "scout": "$SCOUT_LOG",
         "ingest": "$INGEST_LOG",
+        "repair": "$REPAIR_LOG",
     },
 }
 

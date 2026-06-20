@@ -234,6 +234,20 @@ uv run python pipeline/run.py analyze --concurrency 1     # 单文件逐篇调�
 uv run python pipeline/run.py ingest --concurrency 10     # 高速抓取
 ```
 
+历史日报回溯：
+
+```bash
+# 针对特定历史日期生成日报（会先自动按目标日期聚合，再合成）
+uv run python pipeline/run.py synthesize --target-date 2026-06-10
+
+# 或分步操作：先聚合，确认结果后再合成
+uv run python pipeline/run.py aggregate --target-date 2026-06-10 --dry-run   # 预览将筛选出的文章数
+uv run python pipeline/run.py aggregate --target-date 2026-06-10              # 执行聚合
+uv run python pipeline/run.py synthesize                                       # 合成日报
+
+# --target-date 与 --lookback-days 互斥，不能同时指定
+```
+
 单篇文章端到端调试：
 
 ```bash
