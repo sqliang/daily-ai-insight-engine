@@ -1,0 +1,513 @@
+[
+  {
+    "source_dir": "github-trending",
+    "title": "roboflow/supervision",
+    "source": "https://github.com/roboflow/supervision",
+    "author": [],
+    "published": "",
+    "created": "2026-06-09",
+    "description": "We write your reusable computer vision tools. 💜 notebooks | inference | autodistill | maestro 👋 hello We are your essential toolkit for computer vision. From data loading to real-time zone counting, we provide the building blocks so you can focus on building applications around your models. 🤝 💻 install Pip install the supervision package in a Python>=3.9 environment. pip install supervision Read more about conda, mamba, and installing from source in our guide. 🔥 quickstart models Supervision was designed to be model agnostic. Just plug in any classification, detection, or segmentation model. For your convenience, we have created connectors for the most popular libraries like Ultralytics, Transformers, MMDetection, or Inference. Other integrations, like rfdetr, already return sv.Detections directly. Install the optional dependencies for this example with pip install pillow rfdetr. import supervision as sv from PIL import Image from rfdetr import RFDETRSmall image = Image.open(...) model = RFDETRSmall() detections = model.predict(image, threshold=0.5) len(detections) # 5 👉 more model connectors inference Running with Inference requires a Roboflow API KEY. import supervision as sv from PIL import Image from inference import get_model image = Image.open(...) model = get_model(model_id=\"rfdetr-small\", api_key=\"ROBOFLOW_API_KEY\") result = model.infer(image)[0] detections = sv.Detections.from_inference(result) len(detections) # 5 annotators Supervision offers a wide range of highly customizable annotators, allowing you to compose the perfect visualization for your use case. import cv2 import supervision as sv image = cv2.imread(...) detections = sv.Detections(...) box_annotator = sv.BoxAnnotator() annotated_frame = box_annotator.annotate(scene=image.copy(), detections=detections) https://github.com/roboflow/supervision/assets/26109316/691e219c-0565-4403-9218-ab5644f39bce datasets Supervision provides a set of utils that allow you to load, split, merge, and save datasets in one of the supported formats. import supervision as sv from roboflow import Roboflow project = Roboflow().workspace(\"WORKSPACE_ID\").project(\"PROJECT_ID\") dataset = project.version(\"PROJECT_VERSION\").download(\"coco\") ds = sv.DetectionDataset.from_coco( images_directory_path=f\"{dataset.location}/train\", annotations_path=f\"{dataset.location}/train/_annotations.coco.json\", ) path, image, annotation = ds[0] # loads image on demand for path, image, annotation in ds: # loads image on demand pass 👉 more dataset utils load dataset = sv.DetectionDataset.from_yolo( images_directory_path=..., annotations_directory_path=..., data_yaml_path=..., ) dataset = sv.DetectionDataset.from_pascal_voc( images_directory_path=..., annotations_directory_path=..., ) dataset = sv.DetectionDataset.from_coco( images_directory_path=..., annotations_path=..., ) split train_dataset, test_dataset = dataset.split(split_ratio=0.7) test_dataset, valid_dataset = test_dataset.split(split_ratio=0.5) len(train_dataset), len(test_dataset), len(valid_dataset) # (700, 150, 150) merge ds_1 = sv.DetectionDataset(...) len(ds_1) # 100 ds_1.classes # ['dog', 'person'] ds_2 = sv.DetectionDataset(...) len(ds_2) # 200 ds_2.classes # ['cat'] ds_merged = sv.DetectionDataset.merge([ds_1, ds_2]) len(ds_merged) # 300 ds_merged.classes # ['cat', 'dog', 'person'] save dataset.as_yolo( images_directory_path=..., annotations_directory_path=..., data_yaml_path=..., ) dataset.as_pascal_voc( images_directory_path=..., annotations_directory_path=..., ) dataset.as_coco( images_directory_path=..., annotations_path=..., ) convert sv.DetectionDataset.from_yolo( images_directory_path=..., annotations_directory_path=..., data_yaml_path=..., ).as_pascal_voc( images_directory_path=..., annotations_directory_path=..., ) 🎬 tutorials Want to learn how to use Supervision? Explore our how-to guides, end-to-end examples, cheatsheet, and cookbooks! Dwell Time Analysis with Computer Vision | Real-Time Stream Processing Created: 5 Apr 2024 Learn how to use computer vision to analyze wait times and optimize processes. This tutorial covers object detection, tracking, and calculating time spent in designated zones. Use these techniques to improve customer experience in retail, traffic management, or other scenarios. Speed Estimation & Vehicle Tracking | Computer Vision | Open Source Created: 11 Jan 2024 Learn how to track and estimate the speed of vehicles using YOLO, ByteTrack, and Roboflow Inference. This comprehensive tutorial covers object detection, multi-object tracking, filtering detections, perspective transformation, speed estimation, visualization improvements, and more. 💜 built with supervision Did you build something cool using supervision? Let us know! https://user-images.githubusercontent.com/26109316/207858600-ee862b22-0353-440b-ad85-caa0c4777904.mp4 https://github.com/roboflow/supervision/assets/26109316/c9436828-9fbf-4c25-ae8c-60e9c81b3900 https://github.com/roboflow/supervision/assets/26109316/3ac6982f-4943-4108-9b7f-51787ef1a69f 📚 documentation Visit our documentation page to learn how supervision can help you build computer vision applications faster and more reliably. 🏆 contribution We love your input! Please see our contributing guide to get started. Thank you 🙏 to all our contributors!",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "04aa3744e1ae44ce",
+    "source_type": "community_discussion",
+    "tldr": "Roboflow 开源计算机视觉工具包 supervision，提供标注、数据集管理和模型集成功能。",
+    "objective_summary": "Roboflow 发布的 supervision 是一个模型无关的计算机视觉工具包，支持分类、检测和分割模型。它提供可自定义的标注器、数据集加载/分割/合并/保存/格式转换工具，以及实时区域计数等功能。该库通过 pip 安装，支持 Python 3.",
+    "event_type": "framework_tools",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [
+        "Roboflow"
+      ],
+      "technologies": [
+        "computer vision",
+        "object detection",
+        "segmentation",
+        "YOLO",
+        "ByteTrack",
+        "COCO",
+        "Pascal VOC",
+        "Ultralytics",
+        "Transformers",
+        "MMDetection"
+      ],
+      "key_people": []
+    },
+    "key_logic_flow": [
+      "Supervision 是 Roboflow 开发的计算机视觉工具包，通过 pip 安装，支持 Python 3.9 及以上环境。",
+      "该工具包是模型无关的，支持分类、检测和分割模型，并内置了 Ultralytics、Transformers、MMDetection 和 Inference 等主流框架的连接器。",
+      "Supervision 提供多种可自定义的标注器（如 BoxAnnotator），用于构建可视化应用。",
+      "其数据集工具支持加载、分割、合并、保存以及在不同格式（COCO、YOLO、Pascal VOC）之间的转换。",
+      "工具包包含实时区域计数、停留时间分析和车速估计等实用功能及其教程。"
+    ],
+    "impact_score": {
+      "score": 5.5,
+      "reason": "Supervision 是一个模型无关的开源计算机视觉工具包，为开发者提供了标注、数据集管理和模型集成的统一接口。它降低了 CV 应用开发中重复造轮子的成本，在 GitHub 社区已有一定影响力。但它并非范式转移级突破——类似工具（如 FiftyOne、CVAT）也存在，Supervision 的优势在于更轻量和更广的模型后端适配。影响评分落在'重要工具发布，改善局部生态'区间。"
+    },
+    "sentiment": "positive",
+    "developer_sentiment": {
+      "tone": "excited",
+      "primary_focus": "模型无关的通用 API 层，统一了 Ultralytics/Transformers/MMDetection 等多种后端的推理接口"
+    },
+    "hype_assessment": {
+      "level": "low",
+      "reason": "文章采用 GitHub README 的直白叙述风格，以代码示例和功能列表为主，没有使用'颠覆'、'革命性'等 PR 包装词汇。功能描述具体可验证，不构成概念炒作。"
+    },
+    "information_entropy": "medium",
+    "domain_disruption": {
+      "technical_innovation": "无根本性技术突破，但提供了实用的工程创新：在模型无关的抽象层上统一了主流 CV 框架（Ultralytics、Transformers、MMDetection 等）的推理输出格式，并通过 sv.Detections 标准数据结构屏蔽了后端差异，降低了集成复杂度。",
+      "business_model": "开源社区版（supervision）作为 Roboflow 商业生态的引流入口——通过提供便捷的工具链吸引开发者，进而引导用户使用 Roboflow 的付费平台服务（Inference API、数据集托管等），属于典型的 Open Core 商业策略。"
+    },
+    "engineering_complexity": "production_ready",
+    "compound_value": {
+      "score": 7.5,
+      "reason": "Supervision 是模型无关的计算机视觉工具包，定位在 CV 基础设施层而非应用层，具备显著的长期复利潜力。首先，模型无关性使其免受单一模型（如 YOLO、Transformers）兴衰的影响，任何检测/分割/分类模型的进步都会扩大其可用场景而非替代它。其次，数据集管理功能（COCO/YOLO/Pascal VOC 格式转换、分割、合并）具备典型的切换成本效应：一旦团队将标注流水线建立在 supervision 之上，迁移成本极高。第三，开源策略+Roboflow 商业版的金字塔模型已被 MongoDB、GitLab 等验证，社区贡献和生态插件会随时间形成网络效应。主要风险在于：纯开源工具包商业变现路径不如 SaaS 直接，需要依赖 Roboflow 企业版（Inference API 等）转化；且 CV 工具链赛道竞品众多（FiftyOne、CVAT、Label Studio），差异化护城河尚未固化。综合来看，3-5 年后有望成为 CV 开发者的标配基础设施层，但需要持续观察 Roboflow 的生态锁定能力和营收转化效率。"
+    },
+    "value_capture_layer": "agent_middleware",
+    "moat_impact": "democratizes_access",
+    "key_beneficiaries": [
+      "Roboflow",
+      "Ultralytics",
+      "开源 CV 开发者社区",
+      "计算机视觉应用型企业"
+    ],
+    "competitive_casualty": [
+      "闭源 CV 标注平台",
+      "传统计算机视觉 SDK 厂商",
+      "Voxel51 (FiftyOne)",
+      "Label Studio 等独立标注工具"
+    ],
+    "market_opportunities": [
+      "计算机视觉开发者可直接利用 supervision 的统一标注器和数据集转换工具（COCO↔YOLO↔Pascal VOC），将数据预处理效率提升数倍，适合在数据标注服务或 MLOps 平台中集成该工具链",
+      "智能零售、交通管理、安防监控等领域可基于 supervision 的区域计数、停留时间分析和车速估计功能，快速构建实时视频分析应用，降低从模型到产品的工程成本",
+      "模型无关架构带来了中间层商业机会——可围绕 supervision 构建跨框架的模型评估平台、标注数据市场或训练数据质量审计服务，作为 Roboflow 生态之外的增值层"
+    ],
+    "risk_matrix": {
+      "regulatory": "下游应用（实时区域计数、车速估计、停留时间分析）若部署在公共场所，可能触发 GDPR、中国《个人信息保护法》等隐私法规对视频监控和人脸/车牌数据的合规要求，工具本身虽无直接监管风险，但使用方需自行承担合规责任",
+      "technological": "supervision 高度依赖上游模型框架（Ultralytics、Transformers、MMDetection）的接口稳定性，若某框架重大版本变更导致 Detections 协议不兼容，整个标注和数据流转链路将受阻；此外，CV 领域正快速向多模态+Foundation Model 迁移，纯检测/分割工具包存在架构层面的长期替代风险",
+      "competitive": "Roboflow 通过 Inference 功能（需 API Key）构建商业闭环，可能逐步收紧开源功能边界，与开源竞争对手（如 CVAT、FiftyOne、Label Studio）形成生态挤压；同时 YOLO 生态自带的工具链（Ultralytics YOLO 内置标注工具）也在不断成熟，可能蚕食 supervision 的用户群",
+      "ethical": "区域计数、车速估计和停留时间分析可直接用于大规模行为监控和生物特征推断，如果部署在执法或公共管理场景且缺乏透明度和同意机制，可能加剧社会监控和不平等",
+      "additional": []
+    },
+    "confidence": {
+      "impact": "high",
+      "compound": "medium",
+      "hype": "low"
+    },
+    "actionable_insight": "deep_dive"
+  },
+  {
+    "source_dir": "github-trending",
+    "title": "luongnv89/claude-howto",
+    "source": "https://github.com/luongnv89/claude-howto",
+    "author": [],
+    "published": "",
+    "created": "2026-06-09",
+    "description": "A visual, example-driven guide to Claude Code — from basic concepts to advanced agents, with copy-paste templates that bring immediate value. 🌐 Language / Ngôn ngữ / 语言 / Мова: English | Tiếng Việt | 中文 | Українська | 日本語 Master Claude Code in a Weekend Go from typing claude to orchestrating agents, hooks, skills, and MCP servers — with visual tutorials, copy-paste templates, and a guided learning path. Get Started in 15 Minutes | Find Your Level | Browse the Feature Catalog Table of Contents The Problem How Claude How To Fixes This How It Works Not Sure Where to Start? Get Started in 15 Minutes What Can You Build With This? FAQ Contributing License The Problem You installed Claude Code. You ran a few prompts. Now what? The official docs describe features — but don't show you how to combine them. You know slash commands exist, but not how to chain them with hooks, memory, and subagents into a workflow that actually saves hours. There's no clear learning path. Should you learn MCP before hooks? Skills before subagents? You end up skimming everything and mastering nothing. Examples are too basic. A \"hello world\" slash command doesn't help you build a production code review pipeline that uses memory, delegates to specialized agents, and runs security scans automatically. You're leaving 90% of Claude Code's power on the table — and you don't know what you don't know. How Claude How To Fixes This This isn't another feature reference. It's a structured, visual, example-driven guide that teaches you to use every Claude Code feature with real-world templates you can copy into your project today. Official Docs This Guide Format Reference documentation Visual tutorials with Mermaid diagrams Depth Feature descriptions How it works under the hood Examples Basic snippets Production-ready templates you use immediately Structure Feature-organized Progressive learning path (beginner to advanced) Onboarding Self-directed Guided roadmap with time estimates Self-Assessment None Interactive quizzes to find your gaps and build a personalized path What you get: 10 tutorial modules covering every Claude Code feature — from slash commands to custom agent teams Copy-paste configs — slash commands, CLAUDE.md templates, hook scripts, MCP configs, subagent definitions, and full plugin bundles Mermaid diagrams showing how each feature works internally, so you understand why, not just how A guided learning path that takes you from beginner to power user in 11-13 hours Built-in self-assessment — run /self-assessment or /lesson-quiz hooks directly in Claude Code to identify gaps Start the Learning Path -> How It Works 1. Find your level Take the self-assessment quiz or run /self-assessment in Claude Code. Get a personalized roadmap based on what you already know. 2. Follow the guided path Work through 10 modules in order — each builds on the last. Copy templates directly into your project as you learn. 3. Combine features into workflows The real power is in combining features. Learn to wire slash commands + memory + subagents + hooks into automated pipelines that handle code reviews, deployments, and documentation generation. 4. Test your understanding Run /lesson-quiz [topic] after each module. The quiz pinpoints what you missed so you can fill gaps fast. Get Started in 15 Minutes Trusted by Developers GitHub stars from developers who use Claude Code daily Forks from teams adapting this guide for their own workflows Actively maintained — synced with every Claude Code release (latest: v2.1.160, June 2026) Community-driven — contributions from developers who share their real-world configurations Not Sure Where to Start? Take the self-assessment or pick your level: Level You can... Start here Time Beginner Start Claude Code and chat Slash Commands ~2.5 hours Intermediate Use CLAUDE.md and custom commands Skills ~3.5 hours Advanced Configure MCP servers and hooks Advanced Features ~5 hours Full learning path with all 10 modules: Order Module Level Time 1 Slash Commands Beginner 30 min 2 Memory Beginner+ 45 min 3 Checkpoints Intermediate 45 min 4 CLI Basics Beginner+ 30 min 5 Skills Intermediate 1 hour 6 Hooks Intermediate 1 hour 7 MCP Intermediate+ 1 hour 8 Subagents Intermediate+ 1.5 hours 9 Advanced Features Advanced 2-3 hours 10 Plugins Advanced 2 hours Complete Learning Roadmap -> Get Started in 15 Minutes Installation note: Starting in v2.1.113, Claude Code ships as a native per-platform binary (macOS/Linux/Windows). npm install -g @anthropic-ai/claude-code still works — the native binary is downloaded as an optional dep on first use. As of v2.1.116, downloads come from https://downloads.claude.ai/claude-code-releases — corporate proxies must allowlist this host. # 1. Clone the guide git clone https://github.com/luongnv89/claude-howto.git cd claude-howto # 2. Copy your first slash command mkdir -p /path/to/your-project/.claude/commands cp 01-slash-commands/optimize.md /path/to/your-project/.claude/commands/ # 3. Try it — in Claude Code, type: # /optimize # 4. Ready for more? Set up project memory: cp 02-memory/project-CLAUDE.md /path/to/your-project/CLAUDE.md # 5. Install a skill: cp -r 03-skills/code-review-specialist ~/.claude/skills/ Want the full setup? Here's the 1-hour essential setup: # Slash commands (15 min) cp 01-slash-commands/*.md .claude/commands/ # Project memory (15 min) cp 02-memory/project-CLAUDE.md ./CLAUDE.md # Install a skill (15 min) cp -r 03-skills/code-review-specialist ~/.claude/skills/ # Weekend goal: add hooks, subagents, MCP, and plugins # Follow the learning path for guided setup View the Full Installation Reference What Can You Build With This? Use Case Features You'll Combine Automated Code Review Slash Commands + Subagents + Memory + MCP Team Onboarding Memory + Slash Commands + Plugins CI/CD Automation CLI Reference + Hooks + Background Tasks Documentation Generation Skills + Subagents + Plugins Security Audits Subagents + Skills + Hooks (read-only mode) DevOps Pipelines Plugins + MCP + Hooks + Background Tasks Complex Refactoring Checkpoints + Planning Mode + Hooks FAQ Is this free? Yes. MIT licensed, free forever. Use it in personal projects, at work, in your team — no restrictions beyond including the license notice. Is this maintained? Actively. The guide is synced with every Claude Code release. Current version: v2.1.160 (June 2026), compatible with Claude Code 2.1+. How is this different from the official docs? The official docs are a feature reference. This guide is a tutorial with diagrams, production-ready templates, and a progressive learning path. They complement each other — start here to learn, reference the docs when you need specifics. How long does it take to go through everything? 11-13 hours for the full path. But you'll get immediate value in 15 minutes — just copy a slash command template and try it. Can I use this with Claude Sonnet / Haiku / Opus? Yes. All templates work with Claude Sonnet 4.6, Claude Opus 4.8, and Claude Haiku 4.5. Can I contribute? Absolutely. See CONTRIBUTING.md for guidelines. We welcome new examples, bug fixes, documentation improvements, and community templates. Can I read this offline? Yes. Run uv run scripts/build_epub.py to generate an EPUB ebook with all content and rendered diagrams. Start Mastering Claude Code Today You already have Claude Code installed. The only thing between you and 10x productivity is knowing how to use it. This guide gives you the structured path, the visual explanations, and the copy-paste templates to get there. MIT licensed. Free forever. Clone it, fork it, make it yours. Start the Learning Path -> | Browse the Feature Catalog | Get Started in 15 Minutes Quick Navigation — All Features Feature Description Folder Feature Catalog Complete reference with installation commands CATALOG.md Slash Commands User-invoked shortcuts 01-slash-commands/ Memory Persistent context 02-memory/ Skills Reusable capabilities 03-skills/ Subagents Specialized AI assistants 04-subagents/ MCP Protocol External tool access 05-mcp/ Hooks Event-driven automation 06-hooks/ Plugins Bundled features 07-plugins/ Checkpoints Session snapshots & rewind 08-checkpoints/ Advanced Features Planning, thinking, background tasks 09-advanced-features/ CLI Reference Commands, flags, and options 10-cli/ Blog Posts Real-world usage examples Blog Posts Feature Comparison Feature Invocation Persistence Best For Slash Commands Manual (/cmd) Session only Quick shortcuts Memory Auto-loaded Cross-session Long-term learning Skills Auto-invoked Filesystem Automated workflows Subagents Auto-delegated Isolated context Task distribution MCP Protocol Auto-queried Real-time Live data access Hooks Event-triggered Configured Automation & validation Plugins One command All features Complete solutions Checkpoints Manual/Auto Session-based Safe experimentation Planning Mode Manual/Auto Plan phase Complex implementations Background Tasks Manual Task duration Long-running operations CLI Reference Terminal commands Session/Script Automation & scripting Installation Quick Reference # Slash Commands cp 01-slash-commands/*.md .claude/commands/ # Memory cp 02-memory/project-CLAUDE.md ./CLAUDE.md # Skills cp -r 03-skills/code-review-specialist ~/.claude/skills/ # Subagents cp 04-subagents/*.md .claude/agents/ # MCP export GITHUB_TOKEN=\"token\" claude mcp add github -- npx -y @modelcontextprotocol/server-github # Hooks mkdir -p ~/.claude/hooks cp 06-hooks/*.sh ~/.claude/hooks/ chmod +x ~/.claude/hooks/*.sh # Plugins /plugin install pr-review # Checkpoints (auto-enabled, configure in settings) # See 08-checkpoints/README.md # Advanced Features (configure in settings) # See 09-advanced-features/config-examples.json # CLI Reference (no installation needed) # See 10-cli/README.md for usage examples 01. Slash Commands Location: 01-slash-commands/ What: User-invoked shortcuts stored as Markdown files Examples: optimize.md - Code optimization analysis pr.md - Pull request preparation generate-api-docs.md - API documentation generator Installation: cp 01-slash-commands/*.md /path/to/project/.claude/commands/ Usage: /optimize /pr /generate-api-docs Learn More: Discovering Claude Code Slash Commands 02. Memory Location: 02-memory/ What: Persistent context across sessions Examples: project-CLAUDE.md - Team-wide project standards directory-api-CLAUDE.md - Directory-specific rules personal-CLAUDE.md - Personal preferences Installation: # Project memory cp 02-memory/project-CLAUDE.md /path/to/project/CLAUDE.md # Directory memory cp 02-memory/directory-api-CLAUDE.md /path/to/project/src/api/CLAUDE.md # Personal memory cp 02-memory/personal-CLAUDE.md ~/.claude/CLAUDE.md Usage: Automatically loaded by Claude 03. Skills Location: 03-skills/ What: Reusable, auto-invoked capabilities with instructions and scripts Examples: code-review-specialist/ - Comprehensive code review with scripts brand-voice/ - Brand voice consistency checker doc-generator/ - API documentation generator Installation: # Personal skills cp -r 03-skills/code-review-specialist ~/.claude/skills/ # Project skills cp -r 03-skills/code-review-specialist /path/to/project/.claude/skills/ Usage: Automatically invoked when relevant 04. Subagents Location: 04-subagents/ What: Specialized AI assistants with isolated contexts and custom prompts Examples: code-reviewer.md - Comprehensive code quality analysis test-engineer.md - Test strategy and coverage documentation-writer.md - Technical documentation secure-reviewer.md - Security-focused review (read-only) implementation-agent.md - Full feature implementation Installation: cp 04-subagents/*.md /path/to/project/.claude/agents/ Usage: Automatically delegated by main agent 05. MCP Protocol Location: 05-mcp/ What: Model Context Protocol for accessing external tools and APIs Examples: github-mcp.json - GitHub integration database-mcp.json - Database queries filesystem-mcp.json - File operations multi-mcp.json - Multiple MCP servers Installation: # Set environment variables export GITHUB_TOKEN=\"your_token\" export DATABASE_URL=\"postgresql://...\" # Add MCP server via CLI claude mcp add github -- npx -y @modelcontextprotocol/server-github # Or add to project .mcp.json manually (see 05-mcp/ for examples) Usage: MCP tools are automatically available to Claude once configured 06. Hooks Location: 06-hooks/ What: Event-driven shell commands that execute automatically in response to Claude Code events Examples: format-code.sh - Auto-format code before writing pre-commit.sh - Run tests before commits security-scan.sh - Scan for security issues log-bash.sh - Log all bash commands validate-prompt.sh - Validate user prompts notify-team.sh - Send notifications on events Installation: mkdir -p ~/.claude/hooks cp 06-hooks/*.sh ~/.claude/hooks/ chmod +x ~/.claude/hooks/*.sh Configure hooks in ~/.claude/settings.json: { \"hooks\": { \"PreToolUse\": [{ \"matcher\": \"Write\", \"hooks\": [\"~/.claude/hooks/format-code.sh\"] }], \"PostToolUse\": [{ \"matcher\": \"Write\", \"hooks\": [\"~/.claude/hooks/security-scan.sh\"] }] } } Usage: Hooks execute automatically on events Hook Types (5 types, 29 events): Tool Hooks: PreToolUse, PostToolUse, PostToolUseFailure, PermissionRequest Session Hooks: SessionStart, SessionEnd, Stop, StopFailure, SubagentStart, SubagentStop Task Hooks: UserPromptSubmit, TaskCompleted, TaskCreated, TeammateIdle Lifecycle Hooks: ConfigChange, CwdChanged, FileChanged, PreCompact, PostCompact, WorktreeCreate, WorktreeRemove, Notification, InstructionsLoaded, Elicitation, ElicitationResult 07. Plugins Location: 07-plugins/ What: Bundled collections of commands, agents, MCP, and hooks Examples: pr-review/ - Complete PR review workflow devops-automation/ - Deployment and monitoring documentation/ - Documentation generation Installation: /plugin install pr-review /plugin install devops-automation /plugin install documentation Usage: Use bundled slash commands and features 08. Checkpoints and Rewind Location: 08-checkpoints/ What: Save conversation state and rewind to previous points to explore different approaches Key Concepts: Checkpoint: Snapshot of conversation state Rewind: Return to previous checkpoint Branch Point: Explore multiple approaches from same checkpoint Usage: # Checkpoints are created automatically with every user prompt # To rewind, press Esc twice or use: /rewind # Then choose from five options: # 1. Restore code and conversation # 2. Restore conversation # 3. Restore code # 4. Summarize from here # 5. Never mind Use Cases: Try different implementation approaches Recover from mistakes Safe experimentation Compare alternative solutions A/B testing different designs 09. Advanced Features Location: 09-advanced-features/ What: Advanced capabilities for complex workflows and automation Includes: Planning Mode — Create detailed implementation plans before coding Extended Thinking — Deep reasoning for complex problems (toggle with Alt+T / Option+T) Background Tasks — Run long operations without blocking Permission Modes — default, acceptEdits, plan, dontAsk, bypassPermissions Headless Mode — Run Claude Code in CI/CD: claude -p \"Run tests and generate report\" Session Management — /resume, /rename, /fork, claude -c, claude -r Configuration — Customize behavior in ~/.claude/settings.json See config-examples.json for complete configurations. 10. CLI Reference Location: 10-cli/ What: Complete command-line interface reference for Claude Code Quick Examples: # Interactive mode claude \"explain this project\" # Print mode (non-interactive) claude -p \"review this code\" # Process file content cat error.log | claude -p \"explain this error\" # JSON output for scripts claude -p --output-format json \"list functions\" # Resume session claude -r \"feature-auth\" \"continue implementation\" Use Cases: CI/CD pipeline integration, script automation, batch processing, multi-session workflows, custom agent configurations Example Workflows Complete Code Review Workflow # Uses: Slash Commands + Subagents + Memory + MCP User: /review-pr Claude: 1. Loads project memory (coding standards) 2. Fetches PR via GitHub MCP 3. Delegates to code-reviewer subagent 4. Delegates to test-engineer subagent 5. Synthesizes findings 6. Provides comprehensive review Automated Documentation # Uses: Skills + Subagents + Memory User: \"Generate API documentation for the auth module\" Claude: 1. Loads project memory (doc standards) 2. Detects doc generation request 3. Auto-invokes doc-generator skill 4. Delegates to api-documenter subagent 5. Creates comprehensive docs with examples DevOps Deployment # Uses: Plugins + MCP + Hooks User: /deploy production Claude: 1. Runs pre-deploy hook (validates environment) 2. Delegates to deployment-specialist subagent 3. Executes deployment via Kubernetes MCP 4. Monitors progress 5. Runs post-deploy hook (health checks) 6. Reports status Directory Structure ├── 01-slash-commands/ │ ├── optimize.md │ ├── pr.md │ ├── generate-api-docs.md │ └── README.md ├── 02-memory/ │ ├── project-CLAUDE.md │ ├── directory-api-CLAUDE.md │ ├── personal-CLAUDE.md │ └── README.md ├── 03-skills/ │ ├── code-review-specialist/ │ │ ├── SKILL.md │ │ ├── scripts/ │ │ └── templates/ │ ├── brand-voice/ │ │ ├── SKILL.md │ │ └── templates/ │ ├── doc-generator/ │ │ ├── SKILL.md │ │ └── generate-docs.py │ └── README.md ├── 04-subagents/ │ ├── code-reviewer.md │ ├── test-engineer.md │ ├── documentation-writer.md │ ├── secure-reviewer.md │ ├── implementation-agent.md │ └── README.md ├── 05-mcp/ │ ├── github-mcp.json │ ├── database-mcp.json │ ├── filesystem-mcp.json │ ├── multi-mcp.json │ └── README.md ├── 06-hooks/ │ ├── format-code.sh │ ├── pre-commit.sh │ ├── security-scan.sh │ ├── log-bash.sh │ ├── validate-prompt.sh │ ├── notify-team.sh │ └── README.md ├── 07-plugins/ │ ├── pr-review/ │ ├── devops-automation/ │ ├── documentation/ │ └── README.md ├── 08-checkpoints/ │ ├── checkpoint-examples.md │ └── README.md ├── 09-advanced-features/ │ ├── config-examples.json │ ├── planning-mode-examples.md │ └── README.md ├── 10-cli/ │ └── README.md └── README.md (this file) Best Practices Do's Start simple with slash commands Add features incrementally Use memory for team standards Test configurations locally first Document custom implementations Version control project configurations Share plugins with team Don'ts Don't create redundant features Don't hardcode credentials Don't skip documentation Don't over-complicate simple tasks Don't ignore security best practices Don't commit sensitive data Troubleshooting Feature Not Loading Check file location and naming Verify YAML frontmatter syntax Check file permissions Review Claude Code version compatibility MCP Connection Failed Verify environment variables Check MCP server installation Test credentials Review network connectivity Subagent Not Delegating Check tool permissions Verify agent description clarity Review task complexity Test agent independently Testing This project includes comprehensive automated testing: Unit Tests: Python tests using pytest (Python 3.10, 3.11, 3.12) Code Quality: Linting and formatting with Ruff Security: Vulnerability scanning with Bandit Type Checking: Static type analysis with mypy Build Verification: EPUB generation testing Coverage Tracking: Codecov integration # Install development dependencies uv pip install -r requirements-dev.txt # Run all unit tests pytest scripts/tests/ -v # Run tests with coverage report pytest scripts/tests/ -v --cov=scripts --cov-report=html # Run code quality checks ruff check scripts/ ruff format --check scripts/ # Run security scan bandit -c pyproject.toml -r scripts/ --exclude scripts/tests/ # Run type checking mypy scripts/ --ignore-missing-imports Tests run automatically on every push to main/develop and every PR to main. See TESTING.md for detailed information. EPUB Generation Want to read this guide offline? Generate an EPUB ebook: uv run scripts/build_epub.py This creates claude-howto-guide.epub with all content, including rendered Mermaid diagrams. See scripts/README.md for more options. Contributing Found an issue or want to contribute an example? We'd love your help! Please read CONTRIBUTING.md for detailed guidelines on: Types of contributions (examples, docs, features, bugs, feedback) How to set up your development environment Directory structure and how to add content Writing guidelines and best practices Commit and PR process Our Community Standards: CODE_OF_CONDUCT.md - How we treat each other SECURITY.md - Security policy and vulnerability reporting Reporting Security Issues If you discover a security vulnerability, please report it responsibly: Use GitHub Private Vulnerability Reporting: https://github.com/luongnv89/claude-howto/security/advisories Or read .github/SECURITY_REPORTING.md for detailed instructions Do NOT open a public issue for security vulnerabilities Quick start: Fork and clone the repository Create a descriptive branch (add/feature-name, fix/bug, docs/improvement) Make your changes following the guidelines Submit a pull request with a clear description Need help? Open an issue or discussion, and we'll guide you through the process. Additional Resources Claude Code Documentation MCP Protocol Specification Skills Repository - Collection of ready-to-use skills Anthropic Cookbook Boris Cherny's Claude Code Workflow - The creator of Claude Code shares his systematized workflow: parallel agents, shared CLAUDE.md, Plan mode, slash commands, subagents, and verification hooks for autonomous long-running sessions. Contributing We welcome contributions! Please see our Contributing Guide for details on how to get started. License MIT License - see LICENSE. Free to use, modify, and distribute. The only requirement is including the license notice. Last Updated: June 2, 2026 Claude Code Version: 2.1.160 Sources: https://code.claude.com/docs/en/overview https://code.claude.com/docs/en/changelog https://platform.claude.com/docs/en/about-claude/models/overview https://github.com/anthropics/claude-code/releases https://github.com/anthropics/claude-code/releases/tag/v2.1.154 Compatible Models: Claude Sonnet 4.6, Claude Opus 4.8, Claude Haiku 4.5",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "98a99d0df7599b35",
+    "source_type": "community_discussion",
+    "tldr": "Claude Code 功能速成指南，从基础到高级的模块化学习路径",
+    "objective_summary": "luongnv89 在 GitHub 上发布了一个名为 claude-howto 的 Claude Code 学习指南，包含 10 个教程模块、可复制模板和可视化图表，覆盖从斜杠命令到插件的高级用法，总计 11-13 小时学习路径。",
+    "event_type": "framework_tools",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [
+        "Anthropic",
+        "GitHub"
+      ],
+      "technologies": [
+        "Claude Code",
+        "MCP",
+        "Slash Commands",
+        "Hooks",
+        "Skills",
+        "Subagents",
+        "Plugins",
+        "Checkpoints"
+      ],
+      "key_people": [
+        "luongnv89"
+      ]
+    },
+    "key_logic_flow": [
+      "luongnv89 在 GitHub 上创建了 claude-howto 开源项目，旨在填补官方文档与实践之间的空白，提供结构化、可视化、示例驱动的 Claude Code 学习资源。",
+      "该指南包含 10 个教程模块，从斜杠命令（入门）、记忆、检查点、CLI、技能、钩子、MCP、子代理，到高级功能和插件（高级），总计需要 11-13 小时完成全部学习路径。",
+      "每个模块提供可直接复制到项目中的生产级模板（如 CLAUDE.md 配置、斜杠命令、钩子脚本、MCP 配置和子代理定义），并附带 Mermaid 图表解释底层工作原理。",
+      "用户可以在 15 分钟内通过复制一个斜杠命令模板获得即时价值，1 小时内完成基础设置（斜杠命令 + 项目记忆 + 技能安装）。",
+      "内置自我评估功能（/self-assessment 和 /lesson-quiz 命令）帮助用户识别知识盲区并生成个性化学习路径。",
+      "该项目采用 MIT 许可证，免费且永久可用，积极维护并与 Claude Code v2.1.160（2026年6月）保持同步。"
+    ],
+    "impact_score": {
+      "score": 2.5,
+      "reason": "该项目是一个 Claude Code 的功能学习指南和模板集合，属于社区教程类资源。虽然内容组织系统、实用性强，包含生产级可复制模板和可视化原理图，能显著提升现有用户的 Claude Code 使用效率，但本质上是对 Anthropic 现有产品的教育补充，不改变 AI 行业的竞争格局或技术范式。其影响力局限于 Claude Code 用户群体内部的知识传递，不具备跨领域冲击力或范式颠覆性。"
+    },
+    "sentiment": "positive",
+    "developer_sentiment": {
+      "tone": "excited",
+      "primary_focus": "获得从入门到高级的模块化学习路径和即用生产模板，填补官方文档与实践之间的鸿沟"
+    },
+    "hype_assessment": {
+      "level": "low",
+      "reason": "文章没有使用'颠覆'、'革命性'等 PR 夸张词汇，而是以实用主义态度呈现学习路径。项目定位清晰——'填补官方文档与实践之间的空白'，内容由 10 个模块、具体时间估计和可复制模板构成，Mermaid 图表解释底层原理。MIT 许可、开源社区驱动，整体风格符合技术文档的克制表达，没有水分包装。"
+    },
+    "information_entropy": "medium",
+    "domain_disruption": {
+      "technical_innovation": "无，该项目是教学指南而非技术突破，其核心贡献在于知识组织与教学法设计——将 Claude Code 的分散功能编排为渐进式学习路径并提供即用模板",
+      "business_model": "无，该项目采用 MIT 许可证免费开源，不涉及商业模式创新，纯粹是开发者社区的知识共享"
+    },
+    "engineering_complexity": "production_ready",
+    "compound_value": {
+      "score": 5.5,
+      "reason": "该事件本身是一个开源教程项目，不具备直接商业变现能力，但其长期价值体现在：1) 为 Claude Code 构建了结构化的学习基础设施，降低上手门槛，间接加速 Claude Code 生态的用户增长和留存；2) 模板化、模块化的设计使其具有持续维护和迭代的生命力，社区贡献可形成飞轮效应；3) 随着 Claude Code 在企业开发团队中渗透率提升，该指南的生产级模板可能成为团队 onboarding 的事实标准。但受限于：教程类资产护城河较浅，可被 fork 或替代，价值完全依附于 Anthropic/Claude Code 的生态发展。综合判断，该资产有潜力成为 Claude Code 生态中的基础性教育资源，属于'细分赛道基础设施'的早期形态，但需持续验证其社区活跃度和内容更新频率。"
+    },
+    "value_capture_layer": "agent_middleware",
+    "moat_impact": "strengthens_monopoly",
+    "key_beneficiaries": [
+      "Anthropic",
+      "Claude Code 社区"
+    ],
+    "competitive_casualty": [
+      "其他 AI 编程工具（GitHub Copilot、Cursor）",
+      "Claude Code 零散教程/付费课程"
+    ],
+    "market_opportunities": [
+      "培训与教育市场机会：基于该指南的结构化学习路径，可开发面向企业团队的 Claude Code 企业内训课程，将 11-13 小时的自学内容转化为带讲师辅导的付费 workshop，定价每人 500-2000 美元",
+      "模板与配置商业化：该指南提供的可复制模板（斜杠命令、CLAUDE.md、钩子脚本、MCP 配置）可作为付费模板包在开发者市场上架，或打包为 'Claude Code 企业初始化工具包' 向中小团队销售",
+      "咨询与集成服务机会：为技术团队提供 Claude Code 工作流设计与优化服务，包括自定义子代理编排、MCP 服务器集成、CI/CD 管道对接，按项目收费 1-5 万美元"
+    ],
+    "risk_matrix": {
+      "regulatory": "无",
+      "technological": "Claude Code 迭代速度极快（当前 v2.1.160），指南中的配置模板和命令若未及时同步更新，可能因 API 变更或功能废弃而失效，用户信任会随时间衰减",
+      "competitive": "Anthropic 官方文档持续完善后可能降低第三方指南的差异化价值；同时可能涌现更多同类社区教程导致注意力分散，形成长尾竞争格局",
+      "ethical": "无",
+      "additional": [
+        "该项目依赖 GitHub 社区贡献者的持续维护，若维护者精力不济或失去兴趣，项目可能陷入停滞，依赖该指南的用户将面临知识断层"
+      ]
+    },
+    "confidence": {
+      "impact": "high",
+      "compound": "medium",
+      "hype": "medium"
+    },
+    "actionable_insight": "monitor"
+  },
+  {
+    "source_dir": "github-trending",
+    "title": "google/skills",
+    "source": "https://github.com/google/skills",
+    "author": [],
+    "published": "",
+    "created": "2026-06-09",
+    "description": "Agent Skills for Google products and technologiesAgent Skills This repository contains Agent Skills for Google products and technologies, including Google Cloud. Note This repository is under active development. Installation npx skills add google/skills From the npx install command, you can select the specific skills from this repo to install. Available Skills Gemini API on Agent Platform Gemini Interactions API on Agent Platform Managed Agents API on Agent Platform Skill Registry API on Agent Platform AlloyDB Basics BigQuery Basics Cloud Run Basics Cloud SQL Basics Firebase Basics Kubernetes Engine (GKE) Basics Recipe: Onboarding to Google Cloud Recipe: Authenticating to Google Cloud Recipe: Google Cloud Network Observability Google Cloud Well-Architected Framework: Security Reliability Cost optimization Operational excellence Performance optimization Sustainability Support If you need help or encounter issues with these skills, search for existing issues or open a new one in the GitHub Issue Tracker. Contributing We welcome contributions to improve our skills. You can help by: Reporting bugs or inaccuracies in the skill Markdown files. Suggesting new skills to add to this repository (for example, Google technologies or recipes) by filing a feature request. License You are free to copy, modify, and distribute these skills under the terms of the Apache 2.0 license. See the LICENSE file for details.",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "ad904a51b1769854",
+    "source_type": "community_discussion",
+    "tldr": "Google 开源了 google/skills 仓库，包含 Google 产品与 Google Cloud 的 Agent Skills 技能包。",
+    "objective_summary": "Google 在 GitHub 上发布了 google/skills 仓库，提供针对 Google 产品和 Google Cloud 技术的 Agent Skills 集合，用户可通过 npx skills add 命令安装，采用 Apache 2.0 开源许可证，处于活跃开发阶段。",
+    "event_type": "framework_tools",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [
+        "Google",
+        "Google Cloud"
+      ],
+      "technologies": [
+        "Agent Skills",
+        "Gemini API",
+        "Gemini Interactions API",
+        "Managed Agents API",
+        "Skill Registry API",
+        "AlloyDB",
+        "BigQuery",
+        "Cloud Run",
+        "Cloud SQL",
+        "Firebase",
+        "Kubernetes Engine (GKE)"
+      ],
+      "key_people": []
+    },
+    "key_logic_flow": [
+      "Google 在 GitHub 上创建了 google/skills 仓库，用于托管 Google 产品和 Google Cloud 的 Agent Skills。",
+      "该仓库处于活跃开发阶段，用户可通过 npx skills add google/skills 命令安装所需技能。",
+      "仓库涵盖的技能包括：Gemini API、Gemini Interactions API、Managed Agents API、Skill Registry API、AlloyDB、BigQuery、Cloud Run、Cloud SQL、Firebase、Kubernetes Engine (GKE) 等。",
+      "还包含了多个实操指南类 Recipe 技能：Google Cloud 入门、Google Cloud 身份认证、Google Cloud 网络可观测性。",
+      "所有技能以 Apache 2.0 许可证发布，允许自由复制、修改和分发。",
+      "项目欢迎社区贡献，包括报告 bug、提交新技能需求等。"
+    ],
+    "impact_score": {
+      "score": 5.5,
+      "reason": "Google 开源 Agent Skills 仓库是其参与 agent 工具生态的重要举措，通过 npx skills add 的标准化安装方式降低了 Google Cloud 服务与 AI agent 的集成门槛。但技能集高度绑定 Google 生态（Gemini API、BigQuery、GKE 等），且 'skills' 概念本身并非 Google 首创——属于生态补位而非范式创新。对 Google Cloud 开发者生态有实质价值，能拉动云服务在 agent 工作负载中的采用，但对行业全局影响有限。评分位于 4-7 区间中位。"
+    },
+    "sentiment": "positive",
+    "developer_sentiment": {
+      "tone": "excited",
+      "primary_focus": "Google Cloud 服务的标准化 Agent Skills 安装方式与即装即用体验"
+    },
+    "hype_assessment": {
+      "level": "low",
+      "reason": "README 风格的事实性陈述，未出现'颠覆性''革命性'等 PR 话术。仓库明确标注处于活跃开发阶段，许可证（Apache 2.0）和贡献指引清晰，没有过度包装或虚假承诺。"
+    },
+    "information_entropy": "medium",
+    "domain_disruption": {
+      "technical_innovation": "提出 Agent Skills 的标准化安装框架（npx skills add），将 Google Cloud 各类 API 和最佳实践封装为可组合、可安装的技能包，是 agent 工具生态走向模块化和包管理化的具体实践",
+      "business_model": "通过开源技能生态降低 Google Cloud 的开发者集成摩擦，吸引更多 agent 工作负载运行在 Google Cloud 上，形成'技能市集驱动云消费'的商业模式——安装技能即绑定云服务"
+    },
+    "engineering_complexity": "production_ready",
+    "compound_value": {
+      "score": 7.5,
+      "reason": "Google 通过开源 Skill Registry 抢占 AI Agent 时代的工具标准化层，Apache 2.0 许可证大幅降低开发者采用门槛，社区贡献机制驱动技能数量的网络效应飞轮。一旦开发者习惯用 npx skills add google/skills 接入 Google 服务，这一层将成为 GCP 在 Agent 时代的核心流量入口和锁定机制，复利效应显著。但当前处于早期活跃开发阶段，且技能范围局限于 Google 生态系统，面临 MCP 等跨平台标准的竞争，长期能否成为行业基石取决于 Google Cloud 的市场份额扩张速度和社区生态的活跃度维持能力。"
+    },
+    "value_capture_layer": "agent_middleware",
+    "moat_impact": "creates_new_moat",
+    "key_beneficiaries": [
+      "Google",
+      "Google Cloud",
+      "GCP developers",
+      "LangChain",
+      "Vercel AI SDK"
+    ],
+    "competitive_casualty": [
+      "AWS",
+      "Microsoft Azure",
+      "MCP standardization efforts",
+      "third-party GCP tool integrators"
+    ],
+    "market_opportunities": [
+      "创业者和云服务商可参考 google/skills 的 'npx install' 模式，构建跨云平台的 Agent Skills 市场，让开发者能像安装 npm 包一样接入云服务 Agent 能力",
+      "专注于 Google Cloud 的咨询公司和 MSP 可将这些技能包集成到内部自动化工具中，提供标准化的云上 Agent 部署方案，降低客户使用 Gemini API 和相关云服务的门槛",
+      "基于 Apache 2.0 的开放协议，第三方开发者可针对 AlloyDB、BigQuery、Cloud Run 等细分场景开发垂直技能包，填补官方技能未覆盖的企业级需求（如合规审计、成本优化等）"
+    ],
+    "risk_matrix": {
+      "regulatory": "Apache 2.0 许可证虽宽松，但技能包涉及 Google Cloud 服务调用，若在受监管行业（金融、医疗）中使用，需关注技能自动执行的云操作是否符合当地数据驻留和合规要求",
+      "technological": "Skills 格式当前由 Google 单方面定义，若社区或竞争对手（如 Anthropic MCP、OpenAI Function Calling）推出更广泛采纳的 Agent 技能标准，Google 的这套技能包可能面临互操作性挑战，存在被边缘化的技术替代风险",
+      "competitive": "Google 发布该仓库意在抢占 Agent 开发生态的先机，但 AWS（Bedrock Agents）、Microsoft（Copilot Studio）和开源社区（LangChain、CrewAI）均已布局类似能力，生态竞争激烈，单一技能包难以形成网络效应",
+      "ethical": "技能包自动化云操作虽然提升效率，但可能降低人工审核环节，增加因错误配置或误操作导致的数据泄漏风险；同时可能减少对初级云运维人员的需求，带来就业结构冲击",
+      "additional": [
+        "技能包质量依赖社区贡献和 Google 维护，长期活跃度和文档更新速度存在不确定性，企业若深度依赖可能有维护断档风险"
+      ]
+    },
+    "confidence": {
+      "impact": "high",
+      "compound": "medium",
+      "hype": "medium"
+    },
+    "actionable_insight": "deep_dive"
+  },
+  {
+    "source_dir": "github-trending",
+    "title": "phuryn/pm-skills",
+    "source": "https://github.com/phuryn/pm-skills",
+    "author": [],
+    "published": "",
+    "created": "2026-06-09",
+    "description": "PM Skills Marketplace: 100+ agentic skills, commands, and plugins — from discovery to strategy, execution, launch, and growth. PM Skills Marketplace: The AI Operating System for Better Product Decisions 68 PM skills and 42 chained workflows across 9 plugins. Claude Code, Cowork, and more. From discovery to strategy, execution, launch, growth, and shipping AI-built code. Designed for Claude Code and Cowork. Skills compatible with other AI assistants. Start Here New idea? → /discover Need strategic clarity? → /strategy Writing a PRD? → /write-prd Planning a launch? → /plan-launch Defining metrics? → /north-star If this project helps you, ⭐ the repo. Why PM Skills Marketplace? Generic AI gives you text. PM Skills Marketplace gives you structure. Each skill encodes a proven PM framework — discovery, assumption mapping, prioritization, strategy — and walks you through it step by step. You get the rigor of Teresa Torres, Marty Cagan, and Alberto Savoia built into your daily workflow, not sitting on a bookshelf. The result: better product decisions, not just faster documents. How It Works (Skills, Commands, Plugins) Skills are the building blocks of the marketplace. Each skill gives Claude domain knowledge, analytical frameworks, or a guided workflow for a specific PM task. Some skills also work as reusable foundations that multiple commands share. Skills are loaded automatically when relevant to the conversation — no explicit invocation needed. If needed (e.g., prioritizing skills over general knowledge), you can force loading skills with /plugin-name:skill-name or /skill-name (Claude will add the prefix). Commands are user-triggered workflows invoked with /command-name. They chain one or more skills into an end-to-end process. For example, /discover chains four skills together: brainstorm-ideas → identify-assumptions → prioritize-assumptions → brainstorm-experiments. Plugins group related skills and commands into installable packages. Each plugin covers a PM domain — discovery, strategy, execution, and so on. Installing the marketplace gives you all 9 plugins at once. Commands use skills. Some skills serve multiple commands. Some skills (like prioritization-frameworks or opportunity-solution-tree) are standalone references that Claude draws on whenever relevant — no command needed. Commands are designed to flow into each other, matching the PM workflow. After any command completes, it suggests relevant next commands — just follow the prompts. Installation Claude Cowork (recommended for non-developers) Open Customize (bottom-left) Go to Browse plugins → Personal → + Select Add marketplace from GitHub Enter: phuryn/pm-skills All 9 plugins install automatically. You get both commands (/discover, /strategy, etc.) and skills. Claude Code (CLI) # Step 1: Add the marketplace claude plugin marketplace add phuryn/pm-skills # Step 2: Install individual plugins claude plugin install pm-toolkit@pm-skills claude plugin install pm-product-strategy@pm-skills claude plugin install pm-product-discovery@pm-skills claude plugin install pm-market-research@pm-skills claude plugin install pm-data-analytics@pm-skills claude plugin install pm-marketing-growth@pm-skills claude plugin install pm-go-to-market@pm-skills claude plugin install pm-execution@pm-skills claude plugin install pm-ai-shipping@pm-skills Codex CLI (OpenAI) Codex reads the same plugin marketplace file as Claude Code, so you can install PM Skills natively — no conversion or file-copying needed: # Step 1: Add the marketplace codex plugin marketplace add phuryn/pm-skills # Step 2: Install the plugins you want codex plugin add pm-toolkit@pm-skills codex plugin add pm-product-strategy@pm-skills codex plugin add pm-product-discovery@pm-skills codex plugin add pm-market-research@pm-skills codex plugin add pm-data-analytics@pm-skills codex plugin add pm-marketing-growth@pm-skills codex plugin add pm-go-to-market@pm-skills codex plugin add pm-execution@pm-skills codex plugin add pm-ai-shipping@pm-skills What you get: every skill (the PM frameworks), available to Codex and invocable by name. Install whole plugins rather than cherry-picking individual skills — a workflow usually relies on several skills that ship together. What's different from Claude Code: the /slash commands (/discover, /write-prd, …) install but don't run as Codex slash commands — Codex plugins don't expose commands. To run a workflow, just describe the steps in plain language, for example: Run product discovery on [your idea]: brainstorm options, map assumptions, prioritize the risky ones, then design experiments — pause between each step. Optional — let Codex turn the workflows into skills. Because the command files ship inside each installed plugin, you can ask Codex to convert the ones you use most: Read the command files in the pm-execution plugin and create equivalent Codex skills for the workflows I use most often. This is a best-effort, model-driven conversion (some Claude-specific command syntax won't translate), but it's a quick way to get the guided workflows on Codex without leaving the CLI. Other AI assistants (skills only) The skills/*/SKILL.md files follow the universal skill format and work with any tool that reads it. Commands (/slash-commands) are Claude-specific. Tool How to use What works Gemini CLI Copy skill folders to .gemini/skills/ Skills only OpenCode Copy skill folders to .opencode/skills/ Skills only Cursor Copy skill folders to .cursor/skills/ Skills only Kiro Copy skill folders to .kiro/skills/ Skills only # Example: copy all skills for OpenCode (project-level) for plugin in pm-*/; do mkdir -p .opencode/skills/ cp -r \"$plugin/skills/\"* .opencode/skills/ 2>/dev/null done # Example: copy all skills for Gemini CLI (global) for plugin in pm-*/; do cp -r \"$plugin/skills/\"* ~/.gemini/skills/ 2>/dev/null done Available Plugins 1. pm-product-discovery — Ideation, experiments, assumption testing, OSTs, interviews (13 skills, 5 commands) Skills (13): brainstorm-ideas-existing — Multi-perspective ideation for existing products (PM, Designer, Engineer) brainstorm-ideas-new — Ideation for new products in initial discovery brainstorm-experiments-existing — Design experiments to test assumptions for existing products brainstorm-experiments-new — Design lean startup pretotypes for new products (Alberto Savoia) identify-assumptions-existing — Identify risky assumptions across Value, Usability, Viability, and Feasibility identify-assumptions-new — Identify risky assumptions across 8 risk categories including Go-to-Market, Strategy, and Team prioritize-assumptions — Prioritize assumptions using an Impact × Risk matrix with experiment suggestions prioritize-features — Prioritize a feature backlog based on impact, effort, risk, and strategic alignment analyze-feature-requests — Analyze and categorize customer feature requests by theme and strategic fit opportunity-solution-tree — Build an Opportunity Solution Tree (Teresa Torres) — outcome → opportunities → solutions → experiments interview-script — Create a structured customer interview script with JTBD probing questions summarize-interview — Summarize an interview transcript into JTBD, satisfaction signals, and action items metrics-dashboard — Design a product metrics dashboard with North Star, input metrics, and alert thresholds Commands (5): /discover — Full discovery cycle: ideation → assumption mapping → prioritization → experiment design /brainstorm — Multi-perspective ideation (ideas|experiments × existing|new) /triage-requests — Analyze and prioritize a batch of feature requests /interview — Prepare an interview script or summarize a transcript (prep|summarize) /setup-metrics — Design a product metrics dashboard Examples: Skills: What are the riskiest assumptions for our AI writing assistant idea? Help me build an Opportunity Solution Tree for improving user activation Prioritize these 12 feature requests from our enterprise customers [attach CSV] Commands: /discover AI-powered meeting summarizer for remote teams /brainstorm experiments existing — We need to reduce churn in our onboarding flow /interview prep — We're interviewing enterprise buyers about their procurement workflow 2. pm-product-strategy — Vision, business models, pricing, competitive landscape (12 skills, 5 commands) Product strategy, vision, business models, pricing, and macro environment analysis. Covers the full strategic toolkit from vision crafting through competitive landscape scanning. Skills (12): product-strategy — Comprehensive 9-section Product Strategy Canvas (vision → defensibility) startup-canvas — Startup Canvas combining Product Strategy (9 sections) + Business Model — an alternative to BMC and Lean Canvas for new products product-vision — Craft an inspiring, achievable, and emotional product vision value-proposition — 6-part JTBD value proposition (Who, Why, What before, How, What after, Alternatives) lean-canvas — Lean Canvas business model for startups and new products business-model — Business Model Canvas with all 9 building blocks monetization-strategy — Brainstorm 3–5 monetization strategies with validation experiments pricing-strategy — Pricing models, competitive analysis, willingness-to-pay, and price elasticity swot-analysis — SWOT analysis with actionable recommendations pestle-analysis — Macro environment: Political, Economic, Social, Technological, Legal, Environmental porters-five-forces — Competitive forces analysis (rivalry, suppliers, buyers, substitutes, new entrants) ansoff-matrix — Growth strategy mapping across markets and products Commands (5): /strategy — Create a complete 9-section Product Strategy Canvas /business-model — Explore business models (lean|full|startup|value-prop|all) /value-proposition — Design a value proposition using the 6-part JTBD template /market-scan — Macro environment analysis combining SWOT + PESTLE + Porter's + Ansoff /pricing — Design a pricing strategy with competitive analysis and experiments Examples: Skills: Compare Lean Canvas vs Business Model Canvas vs Startup Canvas for my marketplace startup Design a value proposition for our AI writing assistant targeting non-native English speakers Run a Porter's Five Forces analysis for the project management SaaS market Commands: /strategy B2B project management tool for agencies /business-model startup — AI writing tool for non-native English speakers /value-proposition SaaS onboarding tool for enterprise customers 3. pm-execution — PRDs, OKRs, roadmaps, sprints, retros, release notes, stakeholder management (16 skills, 11 commands) Day-to-day product management: PRDs, OKRs, roadmaps, sprints, retrospectives, release notes, pre-mortems, stakeholder management, user stories, and prioritization frameworks. Skills (16): create-prd — Comprehensive 8-section PRD template brainstorm-okrs — Team-level OKRs aligned with company objectives outcome-roadmap — Transform a feature list into an outcome-focused roadmap sprint-plan — Sprint planning with capacity estimation, story selection, and risk identification retro — Structured sprint retrospective facilitation release-notes — User-facing release notes from tickets, PRDs, or changelogs pre-mortem — Risk analysis with Tigers/Paper Tigers/Elephants classification stakeholder-map — Power × Interest grid with tailored communication plan summarize-meeting — Meeting transcript → decisions + action items user-stories — User stories following the 3 C's and INVEST criteria job-stories — Job stories: When [situation], I want to [motivation], so I can [outcome] wwas — Product backlog items in Why-What-Acceptance format test-scenarios — Test scenarios: happy paths, edge cases, error handling dummy-dataset — Realistic dummy datasets as CSV, JSON, SQL, or Python prioritization-frameworks — Reference guide to 9 prioritization frameworks (Opportunity Score, ICE, RICE, MoSCoW, Kano, etc.) strategy-red-team — Adversarial stress-test of a plan: surface load-bearing assumptions, name what would make each one fail, and rank by cheapest test Commands (11): /write-prd — Create a PRD from a feature idea or problem statement /plan-okrs — Brainstorm team-level OKRs /transform-roadmap — Convert a feature-based roadmap into outcome-focused /sprint — Sprint lifecycle (plan|retro|release) /pre-mortem — Pre-mortem risk analysis on a PRD or launch plan /red-team-prd — Adversarially stress-test a PRD, roadmap, or strategy and rank the riskiest assumptions by cheapest test /meeting-notes — Summarize a meeting transcript into structured notes /stakeholder-map — Map stakeholders and create a communication plan /write-stories — Break features into backlog items (user|job|wwa) /test-scenarios — Generate test scenarios from user stories /generate-data — Create realistic dummy datasets Examples: Skills: Which prioritization framework should I use for a 50-item backlog? Map our stakeholders for the platform migration project What's the difference between Opportunity Score, ICE, and RICE? Commands: /write-prd Smart notification system that reduces alert fatigue /sprint retro — Here are the notes from our last sprint /write-stories job — Break down the \"team dashboard\" feature into job stories 4. pm-market-research — Personas, segmentation, journey maps, market sizing, competitor analysis (7 skills, 3 commands) User research and competitive analysis: personas, segmentation, journey maps, market sizing, competitor analysis, and feedback analysis. Skills (7): user-personas — Create refined user personas from research data market-segments — Identify 3–5 customer segments with demographics, JTBD, and product fit user-segmentation — Segment users from feedback data based on behavior, JTBD, and needs customer-journey-map — End-to-end journey map with stages, touchpoints, emotions, and pain points market-sizing — TAM, SAM, SOM with top-down and bottom-up approaches competitor-analysis — Competitor strengths, weaknesses, and differentiation opportunities sentiment-analysis — Sentiment analysis and theme extraction from user feedback Commands (3): /research-users — Build personas, segment users, and map the customer journey /competitive-analysis — Analyze the competitive landscape /analyze-feedback — Sentiment analysis and segment insights from user feedback Examples: Skills: Estimate TAM/SAM/SOM for an AI code review tool in the US market Create a customer journey map for our e-commerce checkout flow Segment these survey respondents by behavior and needs [attach CSV] Commands: /research-users We have interview data from 12 users of our fitness app /competitive-analysis Figma competitors in the design tool space /analyze-feedback Here's 200 NPS responses from Q4 [attach file] 5. pm-data-analytics — SQL generation, cohort analysis, A/B test analysis (3 skills, 3 commands) Data analytics for PMs: SQL query generation, cohort analysis, and A/B test analysis. Skills (3): sql-queries — Generate SQL from natural language (BigQuery, PostgreSQL, MySQL) cohort-analysis — Retention curves, feature adoption, and engagement trends by cohort ab-test-analysis — Statistical significance, sample size validation, and ship/extend/stop recommendations Commands (3): /write-query — Generate SQL queries from natural language /analyze-cohorts — Cohort analysis on user engagement data /analyze-test — Analyze A/B test results Examples: Skills: How large a sample do I need for 95% confidence with a 2% MDE? What retention metrics should I track for a subscription app? Commands: /write-query Show me monthly active users by country for Q4 2025 (BigQuery) /analyze-test Here are the results from our checkout flow A/B test [attach CSV] /analyze-cohorts Weekly retention for users who signed up in January vs February 6. pm-go-to-market — Beachhead segments, ICPs, messaging, growth loops, GTM motions, battlecards (6 skills, 3 commands) Go-to-market strategy: beachhead segments, ideal customer profiles, messaging, growth loops, GTM motions, and competitive battlecards. Skills (6): gtm-strategy — Full GTM strategy: channels, messaging, success metrics, and launch plan beachhead-segment — Identify the first beachhead market segment ideal-customer-profile — ICP with demographics, behaviors, JTBD, and needs growth-loops — Design sustainable growth loops (flywheels) gtm-motions — Evaluate GTM motions and tools (product-led, sales-led, etc.) competitive-battlecard — Sales-ready battlecard with objection handling and win strategies Commands (3): /plan-launch — Full GTM strategy from beachhead to launch plan /growth-strategy — Design growth loops and evaluate GTM motions /battlecard — Create a competitive battlecard Examples: Skills: What's the best beachhead segment for a developer productivity tool? Design a growth loop for a B2B SaaS with a freemium tier Define our ICP for an AI-powered HR screening platform Commands: /plan-launch AI code review tool targeting mid-size engineering teams /battlecard Our CRM vs Salesforce for the SMB market /growth-strategy Two-sided marketplace for connecting freelancers with startups 7. pm-marketing-growth — Marketing ideas, positioning, value props, naming, North Star metrics (5 skills, 2 commands) Product marketing and growth: marketing ideas, positioning, value proposition statements, product naming, and North Star metrics. Skills (5): marketing-ideas — Creative, cost-effective marketing ideas with channels and messaging positioning-ideas — Product positioning differentiated from competitors value-prop-statements — Value proposition statements for marketing, sales, and onboarding product-name — Product name brainstorming aligned to brand values and audience north-star-metric — North Star Metric + input metrics with business game classification Commands (2): /market-product — Brainstorm marketing ideas, positioning, value props, and product names /north-star — Define your North Star Metric and supporting input metrics Examples: Skills: Brainstorm 5 positioning angles that differentiate us from Notion What's a good North Star Metric for a two-sided marketplace? Generate value prop statements for our sales team's pitch deck Commands: /market-product B2B analytics dashboard for e-commerce managers /north-star Two-sided marketplace connecting freelancers with clients 8. pm-toolkit — Resume review, legal documents, proofreading (4 skills, 5 commands) PM utilities beyond core product work: resume review, legal documents, and proofreading. Skills (4): review-resume — PM resume review and tailoring against 10 best practices (XYZ+S formula, keywords, structure) draft-nda — Non-Disclosure Agreement with jurisdiction-appropriate clauses privacy-policy — Privacy policy covering GDPR/CCPA compliance grammar-check — Grammar, logic, and flow checking with targeted fixes Commands (5): /review-resume — Comprehensive PM resume review /tailor-resume — Tailor a resume to a specific job description /draft-nda — Draft an NDA /privacy-policy — Draft a privacy policy /proofread — Check grammar, logic, and flow Examples: Skills: Review my PM resume against best practices [attach PDF] Check this product announcement for grammar and clarity Commands: /review-resume [attach your PM resume] /tailor-resume [attach resume + paste job description] /proofread Here's the draft of our Q1 investor update 9. pm-ai-shipping — AI Shipping Kit: document a vibe-coded app, audit security and performance, map test coverage, compile a shipping packet (2 skills, 5 commands) For PMs and founders accountable for AI-built code. AI agents write code fast but leave no record of intent — what the system should do, who may do what, where the secrets live, which rules are actually verified. This kit restores reviewability: it documents the system, then audits the gap between what the docs say and what the code actually does — the class of bug generic scanners miss. Skills (2): shipping-artifacts — The durable documentation set that makes an AI-built app reviewable: a core every app needs (architecture, user/permission flows, permissions, variables/secrets, test-coverage map) plus conditional docs added only when they apply (emails, cron, SEO, embedded agents/automation). Defines what each doc must capture and how a reviewer uses it intended-vs-implemented — The method for finding the gap between what a system is documented to do and what the code actually does, with cited evidence on both sides Commands (5): /ship-check — Turn a vibe-coded repo into a reviewer-ready shipping packet: document, wire agent context, run security and performance audits, map test coverage, and compile the results /document-app — Reverse-engineer a codebase into the system documents reviewers and auditors need — a core set (architecture, flows, permissions, variables) plus conditional docs (emails, cron, SEO, automation) when they apply /derive-tests — Turn documented intent into a test-coverage map: inventory the tests that exist today, separate them from proposed tests and unverified gaps, and recommend a green-before-merge CI gate /security-audit-static — Static security audit: map trust boundaries, cross-reference documented intent, self-refute every finding, and report only evidence-backed risks /performance-audit-static — Static performance audit: find over-fetching, missing indexes, and caching opportunities, ranked by effort and impact Examples: Skills: What documentation does my Supabase app need before someone can review it? Where does what this code does diverge from what the docs say it should do? Commands: /ship-check the payments service /document-app — Reverse-engineer the system docs for this repo /derive-tests — Which documented rules have no test yet? /security-audit-static src/api About This marketplace evolves with product practice and AI capabilities. Selected skills based on the work of: Teresa Torres — Continuous Discovery Habits Marty Cagan — INSPIRED and TRANSFORMED Alberto Savoia — The Right It Dan Olsen — The Lean Product Playbook Roger L. Martin — Playing to Win Ash Maurya — Running Lean Strategyzer — Business Model Generation and Value Proposition Design Christina Wodtke — Radical Focus Anthony W. Ulwick — Jobs to Be Done Alistair Croll & Benjamin Yoskovitz — Lean Analytics Sean Ellis — Hacking Growth Maja Voje — Go-To-Market Strategist Curated by Paweł Huryn from The Product Compass Newsletter. Compose with PM Brain PM Brain a second brain for product managers. Plain markdown files in a folder on your laptop. Claude reads them before answering, writes to them after, sweeps them every Friday. No vector DB. No cloud. No agent memory tricks. Contributing See CONTRIBUTING.md. Known Issue on Windows If your Cowork is unstable and can't start a VM (claude-code/issues/27010), try: $action = New-ScheduledTaskAction -Execute \"powershell.exe\" -Argument \"-WindowStyle Hidden -Command `\"if ((Get-Service CoworkVMService).Status -ne 'Running') { Start-Service CoworkVMService }`\"\" $trigger = New-ScheduledTaskTrigger -RepetitionInterval (New-TimeSpan -Minutes 1) -Once -At (Get-Date) $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries Register-ScheduledTask -TaskName \"CoworkVMServiceMonitor\" ` -Action $action ` -Trigger $trigger ` -Settings $settings ` -RunLevel Highest ` -User \"SYSTEM\" It solves 90% of the issues on Windows. The remaining 10%: open services.msc > start \"Claude\" service manually License MIT — see LICENSE.",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "b92602274d6abd3d",
+    "source_type": "community_discussion",
+    "tldr": "GitHub 发布 PM Skills Marketplace，含 68 个 PM 技能和 42 个工作流，支持 Claude Code 等多款 AI",
+    "objective_summary": "phuryn 在 GitHub 上发布 pm-skills 仓库，提供 68 个产品管理技能和 42 个链式工作流，分布在 9 个插件中。该项目支持 Claude Code、Cowork、Codex 等 AI 编程助手，覆盖从产品发现、战略、执行到发布增长的全流程。",
+    "event_type": "framework_tools",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [
+        "phuryn",
+        "GitHub"
+      ],
+      "technologies": [
+        "Claude Code",
+        "Cowork",
+        "Codex"
+      ],
+      "key_people": [
+        "Teresa Torres",
+        "Marty Cagan",
+        "Alberto Savoia"
+      ]
+    },
+    "key_logic_flow": [
+      "phuryn/pm-skills 仓库包含 68 个 PM 技能和 42 个链式工作流，分布在 9 个插件中。",
+      "该项目为 AI 编程助手（Claude Code、Cowork、Codex 等）提供结构化的产品管理框架，涵盖发现、战略、执行、发布、增长和 AI 代码交付。",
+      "9 个插件包括：pm-product-discovery、pm-product-strategy、pm-execution、pm-market-research、pm-data-analytics、pm-marketing-growth、pm-go-to-market、pm-ai-shipping 和 pm-toolkit。",
+      "技能和命令通过 /discover、/strategy、/write-prd、/plan-launch、/north-star 等斜杠命令触发，支持端到端工作流。",
+      "技能编码了 Teresa Torres、Marty Cagan 和 Alberto Savoia 等知名 PM 方法论作为日常工作流。",
+      "该项目还支持通过复制 SKILL.md 文件适配 Gemini CLI、OpenCode、Cursor、Kiro 等其他 AI 编程工具。"
+    ],
+    "impact_score": {
+      "score": 4.5,
+      "reason": "该项目是 AI 编程助手生态中一个实用性较强的社区贡献，将产品管理方法论（68 个技能、42 个工作流）系统性地编码为可安装的 AI 插件。短期内对 PM 从业者的日常工作流有一定提升价值，但本质上属于现有 AI 插件/技能市场模式的垂直填充，而非范式级创新。9 个插件的覆盖范围（从发现、战略到发布增长）确实全面，但没有引入新的技术架构或改变 AI 行业竞争格局。"
+    },
+    "sentiment": "positive",
+    "developer_sentiment": {
+      "tone": "excited",
+      "primary_focus": "将 PM 方法论直接嵌入 AI 工作流的实用价值，以及跨工具兼容性"
+    },
+    "hype_assessment": {
+      "level": "low",
+      "reason": "项目没有使用'颠覆'、'革命性'等夸张词汇，整体描述务实。'Generic AI gives you text. PM Skills Marketplace gives you structure' 虽有营销色彩但并未过度夸大。项目提供了明确的技能数量（68）、工作流数量（42）、插件清单和详细的安装指南，内容与交付物一致，属于实打实的干货。"
+    },
+    "information_entropy": "high",
+    "domain_disruption": {
+      "technical_innovation": "将产品管理经典方法论（Teresa Torres 的机会解决方案树、Marty Cagan 的产品发现框架、Alberto Savoia 的实验设计）编码为 AI 编程助手可执行的结构化技能和工作流，实现了 PM 知识框架的'可编程化'和'可链接化'——技能可以链式组合成端到端工作流，这是传统 PM 工具没有做到的工程化封装。",
+      "business_model": "展示了 AI 编程助手的插件/技能市场从纯工程技术领域向产品管理角色扩展的可行性。若形成生态，可能催生面向不同职业角色（PM、设计师、数据分析师等）的'角色专属 AI 技能'品类，并推动技能市场的商业化（付费技能、企业级 PM 工作流模板）。"
+    },
+    "engineering_complexity": "production_ready",
+    "compound_value": {
+      "score": 4.5,
+      "reason": "pm-skills 作为开源技能市场，将成熟的 PM 方法论（Teresa Torres、Marty Cagan 等）编码为 AI 编程助手的可复用插件，短期内能提升 Claude Code、Codex 等平台的 PM 场景渗透率。但该项目本质是个人开源项目，无公司实体、无商业模式、无数据飞轮或网络效应壁垒。长期价值完全绑定于上游平台（Anthropic、GitHub）对插件生态的投入程度，自身难以独立积累复利。若未来形成社区驱动的技能贡献网络，价值可能攀升至 6-7 分区间，但当前阶段仍属'生态补充品'而非'基础设施'，且 68 个技能和 42 个工作流的规模尚不足以构成不可替代的深度护城河。"
+    },
+    "value_capture_layer": "agent_middleware",
+    "moat_impact": "democratizes_access",
+    "key_beneficiaries": [
+      "Anthropic",
+      "GitHub",
+      "AI 编程助手用户群体"
+    ],
+    "competitive_casualty": [
+      "传统 PM 培训/咨询机构",
+      "低端项目管理模板 SaaS",
+      "零散销售 PM 框架的知识付费创作者"
+    ],
+    "market_opportunities": [
+      "AI编程助手的技能市场正从工程领域扩展到产品管理，创业者可借鉴该模式为运营、设计、营销等非工程角色构建行业垂直的技能插件包",
+      "企业和咨询公司可将内部沉淀的方法论（如敏捷管理、设计思维）打包为AI Agent可加载的技能，形成知识资产化和内部赋能的新路径",
+      "该模式验证了'编码化方法论+AI代理'的商业可行性，培训机构和个人专家可将自身框架（如OKR、GTD）封装为付费技能插件，开辟知识变现新渠道"
+    ],
+    "risk_matrix": {
+      "regulatory": "无",
+      "technological": "技能插件与AI编程工具（Claude Code、Codex等）的插件架构深度耦合，若上游平台变更插件API或废弃旧格式，技能包可能需要重构；不同工具间的技能格式兼容性（SKILL.md vs slash命令）存在碎片化风险",
+      "competitive": "技能市场的进入壁垒较低，大量同类PM技能包可能快速涌现，导致同质化竞争；巨头（如Anthropic、GitHub）可能直接集成类似方法论进核心产品，挤压第三方插件生存空间",
+      "ethical": "将特定PM方法论编码为AI技能可能导致决策框架固化，削弱产品经理的批判性思维和创造性；团队过度依赖AI引导的标准化流程可能忽视产品独特语境和用户隐性需求",
+      "additional": [
+        "依赖风险：团队可能跳过方法论学习直接使用技能命令，造成知其然不知其所以然的能力空心化"
+      ]
+    },
+    "confidence": {
+      "impact": "medium",
+      "compound": "medium",
+      "hype": "low"
+    },
+    "actionable_insight": "monitor"
+  },
+  {
+    "source_dir": "github-trending",
+    "title": "Andyyyy64/whichllm",
+    "source": "https://github.com/Andyyyy64/whichllm",
+    "author": [],
+    "published": "",
+    "created": "2026-06-09",
+    "description": "Find the local LLM that actually runs and performs best on your hardware. Ranked by real, recency-aware benchmarks, not parameter count. One command, run it instantly.whichllm Find the best local LLM that actually runs on your hardware. Auto-detects your GPU/CPU/RAM and ranks the top models from HuggingFace that fit your system. 日本語版はこちら Quick start Run the recommendation command once, with no project setup. uvx whichllm@latest Simulate a GPU before you buy hardware. uvx whichllm@latest --gpu \"RTX 4090\" Install it when you use it often. uv tool install whichllm uv tool upgrade whichllm # update an existing install Other install paths. brew install andyyyy64/whichllm/whichllm pip install whichllm Common workflows After install, run whichllm directly. For one-off runs, replace whichllm with uvx whichllm@latest. # Best models for this machine whichllm # Pretend you have a specific GPU whichllm --gpu \"RTX 4090\" # Compare upgrade candidates whichllm upgrade \"RTX 4090\" \"RTX 5090\" \"H100\" # Find the GPU needed for a model whichllm plan \"llama 3 70b\" # Start a chat with a model whichllm run \"qwen 2.5 1.5b gguf\" # Print copy-paste Python whichllm snippet \"qwen 7b\" # Return JSON for scripts whichllm --top 1 --json See it $ whichllm --gpu \"RTX 4090\" #1 Qwen/Qwen3.6-27B 27.8B Q5_K_M score 92.8 27 t/s #2 Qwen/Qwen3-32B 32.0B Q4_K_M score 83.0 31 t/s #3 Qwen/Qwen3-30B-A3B 30.0B Q5_K_M score 82.7 102 t/s The 32B model fits your card fine — whichllm still ranks the 27B #1, because it scores higher on real benchmarks and is a newer generation. A size-only \"what fits?\" tool would hand you the bigger one. That gap is the whole point of whichllm. (Note #3: a MoE model at 102 t/s — speed is ranked on active params, quality on total.) What can I run? Real top picks (snapshot 2026-05 — your results track live HuggingFace data, this is not a static list): Hardware VRAM Top pick Speed RTX 5090 32 GB Qwen3.6-27B · Q6_K · score 94.7 ~40 t/s RTX 4090 / 3090 24 GB Qwen3.6-27B · Q5_K_M · score 92.8 ~27 t/s RTX 4060 8 GB Qwen3-14B · Q3_K_M · score 71.0 ~22 t/s Apple M3 Max 36 GB Qwen3.6-27B · Q5_K_M · score 89.4 ~9 t/s CPU only — gpt-oss-20b (MoE) · Q4_K_M · score 45.2 ~6 t/s whichllm --gpu \"<your card>\" simulates any of these before you buy. Why whichllm? Fitting a model into your VRAM is the easy part. The hard part is knowing which of the models that fit is actually the best — and that is what whichllm is built to get right. Evidence-based ranking, not a size heuristic — The top pick is chosen from merged real benchmarks (LiveBench, Artificial Analysis, Aider, multimodal/vision, Chatbot Arena ELO, Open LLM Leaderboard) — never \"the biggest model that happens to fit.\" Recency-aware — Stale leaderboards are demoted along each model's lineage, so a 2024 model can't outrank a current-generation one on an outdated score. The benchmark snapshot date is printed under every ranking, so a stale recommendation is self-evident instead of silently trusted. Evidence-graded and guarded — Every score is tagged direct / variant / base / interpolated / self-reported and discounted by confidence. Fabricated uploader claims and cross-family inheritance (a small fork borrowing its much larger base's score) are actively rejected. Architecture-aware estimates — VRAM = weights + GQA KV cache + activation + overhead; speed is bandwidth-bound with per-quant efficiency, per-backend factors, MoE active-vs-total split, and unified-memory vs discrete-PCIe partial-offload modeling. One command, scriptable — whichllm prints the answer; add --json | jq for pipelines. No TUI, no keybindings to memorize. Live data — Models fetched directly from the HuggingFace API, with curated frozen fallbacks for offline or rate-limited use. Features Auto-detect hardware — NVIDIA, AMD, Apple Silicon, CPU-only Smart ranking — Scores models by VRAM fit, speed, and benchmark quality One-command chat — whichllm run downloads and starts a chat session instantly Code snippets — whichllm snippet prints ready-to-run Python for any model Live data — Fetches models directly from HuggingFace (cached for performance) Benchmark-aware — Integrates real eval scores with confidence-based dampening Task profiles — Filter by general, coding, vision, or math use cases GPU simulation — Test with any GPU: whichllm --gpu \"RTX 4090\" Hardware planning — Reverse lookup: whichllm plan \"llama 3 70b\" Upgrade planning — Compare your current machine with candidate GPUs JSON output — Pipe-friendly: whichllm --json Run & Snippet Try any model with a single command. No manual installs needed — whichllm creates an isolated environment via uv, installs dependencies, downloads the model, and starts an interactive chat. # Chat with a model (auto-picks the best GGUF variant) whichllm run \"qwen 2.5 1.5b gguf\" # Auto-pick the best model for your hardware and chat whichllm run # CPU-only mode whichllm run \"phi 3 mini gguf\" --cpu-only Works with all model formats: GGUF — via llama-cpp-python (lightweight, fast) AWQ / GPTQ — via transformers + autoawq / auto-gptq FP16 / BF16 — via transformers Get a copy-paste Python snippet instead: whichllm snippet \"qwen 7b\" from llama_cpp import Llama llm = Llama.from_pretrained( repo_id=\"Qwen/Qwen2.5-7B-Instruct-GGUF\", filename=\"qwen2.5-7b-instruct-q4_k_m.gguf\", n_ctx=4096, n_gpu_layers=-1, verbose=False, ) output = llm.create_chat_completion( messages=[{\"role\": \"user\", \"content\": \"Hello!\"}], ) print(output[\"choices\"][0][\"message\"][\"content\"]) Usage # Auto-detect hardware and show best models whichllm # Simulate a GPU (e.g. planning a purchase) whichllm --gpu \"RTX 4090\" whichllm --gpu \"RTX 5090\" # Specify variant whichllm --gpu \"RTX 5060 16\" # CPU-only mode whichllm --cpu-only # More results / filters whichllm --top 20 whichllm --quant Q4_K_M whichllm --min-speed 30 whichllm --evidence base # allow id/base-model matches whichllm --evidence strict # id-exact only (same as --direct) whichllm --direct # JSON output whichllm --json # Force refresh (ignore cache) whichllm --refresh # Show hardware info only whichllm hardware # Plan: what GPU do I need for a specific model? whichllm plan \"llama 3 70b\" whichllm plan \"Qwen2.5-72B\" --quant Q8_0 whichllm plan \"mistral 7b\" --context-length 32768 # Upgrade: compare your current machine against candidate GPUs whichllm upgrade \"RTX 4090\" \"RTX 5090\" \"H100\" whichllm upgrade \"Apple M4 Max\" --top 5 # Run: download and chat with a model instantly whichllm run \"qwen 2.5 1.5b gguf\" whichllm run # auto-pick best for your hardware # Snippet: print ready-to-run Python code whichllm snippet \"qwen 7b\" whichllm snippet \"llama 3 8b gguf\" --quant Q5_K_M JSON model rows include estimated_tok_per_sec, speed_confidence, speed_range_tok_per_sec, and speed_notes. The speed range is a planning range, not a live benchmark. Integrations Ollama Use JSON output to feed scripts that map HuggingFace IDs to your local Ollama model names: # Pick the top HuggingFace model ID whichllm --top 1 --json | jq -r '.models[0].model_id' # Find the best coding model ID whichllm --profile coding --top 1 --json | jq -r '.models[0].model_id' Ollama model names do not always match HuggingFace repo IDs, so a small mapping step is usually needed before ollama run. Shell alias Add to your .bashrc / .zshrc: alias bestllm='whichllm --top 1 --json | jq -r \".models[0].model_id\"' # Usage: ollama run $(bestllm) Scoring Each model gets a 0-100 score. Benchmark quality and size form the core; evidence confidence and runtime fit then scale it, with speed, source trust, and popularity as adjustments. Factor Effect Description Benchmark quality core Merged LiveBench / Artificial Analysis / Aider / Vision / Arena ELO / Open LLM Leaderboard, weighted by source confidence Model size up to 35 log2-scaled world-knowledge proxy (MoE uses total params) Quantization × penalty Lower-bit quants discounted multiplicatively Evidence confidence ×0.55–1.0 none / self-reported ×0.55, inherited ×0.78, direct full Runtime fit ×0.50–1.0 partial-offload ×0.72, CPU-only ×0.50 Speed -8 to +8 Usability gate vs a fit-dependent tok/s floor; reported with confidence and range metadata Source trust -5 to +5 Official-org bonus, known-repackager penalty Popularity tie-breaker Downloads/likes; weight shrinks as evidence strengthens Score markers: ~ (yellow) — No direct benchmark; score inherited/interpolated from the model family !sr (bright yellow) — Uploader-reported benchmark only, not independently verified ? (red) — No benchmark data available Speed markers in --status: ~ (yellow) — Estimated tok/s range is available ? (red) — Low-confidence speed estimate; backend/runtime sensitivity is high Documentation CLI reference How it works Scoring Hardware detection and simulation Run and snippet Troubleshooting How it works Data pipeline Model fetching — Fetches popular models from HuggingFace API: Text-generation (downloads + recently updated) GGUF-filtered (separate query for coverage) Vision models (image-text-to-text) when --profile vision or any Benchmark sources — Current tier (LiveBench, Artificial Analysis Index, Aider) merged live when reachable, plus a curated multimodal / vision index; frozen tier (Open LLM Leaderboard v2, Chatbot Arena ELO). Tiers have separate caps and lineage-aware recency demotion so stale leaderboards stop over-rewarding older generations. Benchmark evidence — Five resolution levels, increasingly discounted: direct — Exact model ID match variant — Suffix-stripped or -Instruct variant base_model — Base model from cardData line_interp — Size-aware interpolation within model family self_reported — Uploader-claimed eval (heavily discounted) Inheritance is rejected when a model's params diverge more than 2× from its family's dominant member, catching draft / MTP / abliterated forks that share a family_id with a much larger base. Cache — ~/.cache/whichllm/: models.json — 6h TTL benchmark.json — 24h TTL Ranking engine Hardware detection — NVIDIA (nvidia-ml-py), AMD (dbgpu/ROCm), Apple Silicon (Metal), CPU cores, RAM, disk VRAM estimation — Weights + KV cache + activation + framework overhead (~500MB) Compatibility — Full GPU / Partial Offload / CPU-only; compute capability and OS checks Speed — tok/s from GPU memory bandwidth, quantization, backend, fit type, and MoE active parameters Scoring — Benchmark (with confidence dampening), size, quantization penalty, fit type, speed, popularity, source trust (official vs repackager) Backend filter — Apple Silicon and CPU-only restrict to GGUF for stability; Linux+NVIDIA allows AWQ/GPTQ Project structure src/whichllm/ ├── cli.py # Typer CLI: main, plan, run, snippet, hardware ├── constants.py # GPU bandwidth, quantization bytes, compute capability ├── hardware/ │ ├── detector.py # Orchestrates GPU/CPU/RAM detection │ ├── nvidia.py # NVIDIA GPU via nvidia-ml-py │ ├── amd.py # AMD GPU (Linux) │ ├── apple.py # Apple Silicon (Metal) │ ├── cpu.py # CPU name, cores, AVX support │ ├── memory.py # RAM and disk free │ ├── gpu_simulator.py # --gpu flag: synthetic GPU from name │ └── types.py # GPUInfo, HardwareInfo ├── models/ │ ├── fetcher.py # HuggingFace API, model parsing, evalResults │ ├── benchmark.py # Arena ELO, Leaderboard (parquet/rows API) │ ├── grouper.py # Family grouping by base_model and name │ ├── cache.py # JSON cache with TTL │ └── types.py # ModelInfo, GGUFVariant, ModelFamily ├── engine/ │ ├── vram.py # VRAM = weights + KV cache + activation + overhead │ ├── compatibility.py# Fit type, disk check, compute/OS warnings │ ├── performance.py # tok/s from bandwidth │ ├── quantization.py # Bytes per weight, quality penalty, non-GGUF inference │ ├── ranker.py # Scoring, evidence filter, profile/match │ └── types.py # CompatibilityResult └── output/ └── display.py # Rich table, JSON output, hardware/plan displays Development git clone https://github.com/Andyyyy64/whichllm.git cd whichllm uv sync --dev uv run whichllm uv run pytest Contributing Contributions are welcome! See CONTRIBUTING.md for guidelines. Support If whichllm helped you find a model or avoid a bad hardware guess, sponsoring is appreciated. It helps keep the project maintained: hardware reports, packaging, test fixtures, benchmark updates, and support for more machines. whichllm will stay open-source either way. Issues and PRs are always welcome. Useful? A GitHub star helps other people find it, and I'd genuinely like to know what it picked for your rig. Drop it in Issues. Star History Requirements Python 3.11+ NVIDIA GPU detection via nvidia-ml-py (included by default) AMD / Apple Silicon detected automatically License MIT",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "dda0d6d4ba781ee6",
+    "source_type": "community_discussion",
+    "tldr": "自动检测本地硬件并推荐最适配本地运行的大语言模型的 CLI 工具",
+    "objective_summary": "Andyyyy64 发布了开源 CLI 工具 whichllm，可自动检测用户 GPU/CPU/RAM，从 HuggingFace 实时获取模型数据，基于 LiveBench、Aider、Arena ELO 等多源基准测试与硬件适配度进行加权评分（0-100），推荐最适合本地运行的大语言模型，支持",
+    "event_type": "framework_tools",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [
+        "HuggingFace"
+      ],
+      "technologies": [
+        "GGUF",
+        "AWQ",
+        "GPTQ",
+        "MoE",
+        "GQA",
+        "KV Cache",
+        "llama-cpp-python",
+        "transformers",
+        "LiveBench",
+        "Artificial Analysis",
+        "Aider",
+        "Chatbot Arena ELO",
+        "Open LLM Leaderboard"
+      ],
+      "key_people": [
+        "Andyyyy64"
+      ]
+    },
+    "key_logic_flow": [
+      "whichllm 是一个开源 CLI 工具，通过检测用户硬件（NVIDIA/AMD/Apple Silicon/CPU）的 VRAM、RAM 和算力，自动筛选出能在本地运行的 LLM 模型。",
+      "工具从 HuggingFace API 实时拉取模型数据，并融合 LiveBench、Artificial Analysis、Aider、Arena ELO 等多个基准测试进行加权评分，而非单纯按模型大小推荐。",
+      "评分机制包含基准质量、模型大小、量化精度、证据置信度、运行适配度、速度、来源可信度和流行度等多个因子，最终输出 0-100 的综合得分。",
+      "基准证据分为 direct/variant/base/interpolated/self-reported 五个置信等级，虚构的上传者声明和跨家族继承分数会被主动拒绝。",
+      "除核心推荐功能外，还提供 GPU 模拟（--gpu）、硬件规划（plan）、一键聊天（run）、Python 代码片段生成（snippet）和 JSON 输出等子命令。",
+      "支持通过 uvx、Homebrew、pip 等多种方式安装，单次运行无需项目配置，执行 uvx whichllm@latest 即可获得推荐结果。"
+    ],
+    "impact_score": {
+      "score": 5.5,
+      "reason": "whichllm 是一个开源的 CLI 工具，虽然不构成行业范式转移，但它精准解决了本地 LLM 部署中一个长期存在的痛点——'什么模型能在我硬件上跑且效果最好'。其核心创新在于融合多源基准测试（LiveBench、Arena ELO、Aider 等）并引入 5 级证据置信等级（direct/variant/base/interpolated/self-reported），主动拒绝虚假的上传者声明和跨家族继承分数。这一设计思路提升了本地模型选择的科学性，改变了以往'只看模型大小和参数量'的粗放推荐方式。但它的影响力局限于本地推理开发者社区，对大模型训练、API 服务等更广泛的 AI 行业格局影响有限。评分：5.5。"
+    },
+    "sentiment": "positive",
+    "developer_sentiment": {
+      "tone": "excited",
+      "primary_focus": "自动检测硬件并基于多源基准测试加权评分，科学推荐最适合本地运行的 LLM，而非简单按模型大小推荐"
+    },
+    "hype_assessment": {
+      "level": "low",
+      "reason": "该项目的 README 和技术文档使用了平实的语言描述功能，没有出现'颠覆'、'革命性'等 PR 滥用词汇。所有功能都有明确的技术实现说明，基准融合和证据置信度体系设计严谨，评分机制透明可解释，属于实打实的技术工具。"
+    },
+    "information_entropy": "high",
+    "domain_disruption": {
+      "technical_innovation": "多源基准融合（LiveBench、Artificial Analysis、Aider、Arena ELO 等）加权评分机制，配合 5 级证据置信等级标签和主动拒绝机制（虚假上传者声明、跨家族继承分数），解决了本地 LLM 推荐中'适配性 vs 质量'的平衡问题；同时实现了架构感知的 VRAM 估算（含 GQA KV Cache、MoE 活跃/总参数量分流、统一内存 vs PCIe 部分卸载建模）。",
+      "business_model": "无"
+    },
+    "engineering_complexity": "production_ready",
+    "compound_value": {
+      "score": 6.0,
+      "reason": "whichllm 精准击中了开源 LLM 生态中模型爆炸式增长带来的选择困难痛点。其基于证据置信度分级的加权评分机制（direct/variant/base/interpolated/self-reported）构成真实技术差异化，相比单纯按显存大小推荐的方案有质的不同。从 VC 视角看，该工具受益于三大结构性趋势：本地推理需求增长（隐私/成本/延迟考量）、Apple Silicon 等消费级硬件性能提升、以及开源模型持续涌现。然而该项目目前为个人开源项目，无商业模式、无团队、无资本背书，护城河较浅——核心逻辑可被 HuggingFace 原生集成或被 Ollama/LM Studio 等平台复刻。长期复利价值取决于能否从 CLI 工具演变为模型发现与评估的标准协议层或形成商业化实体。当前阶段属于'有潜力成为细分赛道基础设施，但需持续验证'。"
+    },
+    "value_capture_layer": "end_application",
+    "moat_impact": "democratizes_access",
+    "key_beneficiaries": [
+      "HuggingFace",
+      "开源大模型开发者",
+      "NVIDIA",
+      "Apple"
+    ],
+    "competitive_casualty": [
+      "闭源模型推荐/评估服务平台",
+      "纯规格对照表式的模型选型方式"
+    ],
+    "market_opportunities": [
+      "企业级 LLMOps 团队可将 whichllm 的硬件检测与评分逻辑集成到模型部署流水线中，实现自动化的硬件-模型匹配，降低人工评估成本",
+      "GPU 厂商（NVIDIA/AMD/Apple）可与 whichllm 合作，在营销页面嵌入 GPU 模拟推荐功能，让用户在购买前即可了解特定显卡对最新模型的运行效果",
+      "AI 开发工具生态（IDE 插件、DevContainer 模板、CI/CD 工具链）可内嵌 whichllm 的 snippet 生成和 run 命令，打造\"检测→推荐→运行→调试\"的本地模型开发闭环"
+    ],
+    "risk_matrix": {
+      "regulatory": "无。该工具为开源 CLI，仅做本地硬件检测与公开基准查询，不涉及模型分发、内容生成或用户数据采集。",
+      "technological": "强依赖 HuggingFace API 的实时可用性和接口兼容性；LLM 架构快速演进（如新量化格式、新注意力机制）可能使硬件适配模型过时；如果主流模型运行框架（Ollama/LM Studio）内置同类推荐功能，whichllm 的技术差异化将被大幅削弱。",
+      "competitive": "开源社区复制门槛极低，已有 Ollama 的硬件感知推荐和 HuggingFace 的 Model Selector 构成直接竞争；若大厂（HuggingFace、GitHub Copilot）将类似功能作为生态内嵌功能免费提供，独立工具的用户黏性将受到严重挤压。",
+      "ethical": "该工具本身无显著伦理风险，但推荐本地运行模型的能力客观上降低了内容审查门槛，可能被用于运行未经安全对齐的模型。基准评分体系（如 evidence 置信等级）存在主观设计偏差，可能系统性高估或低估某些模型家族。",
+      "additional": [
+        "单开发者项目（Andyyyy64）的长期维护持续性不确定；跨平台硬件检测（AMD ROCm、Linux 异构配置）可能因驱动版本差异出现兼容性 Bug，影响推荐准确度。"
+      ]
+    },
+    "confidence": {
+      "impact": "medium",
+      "compound": "medium",
+      "hype": "low"
+    },
+    "actionable_insight": "monitor"
+  }
+]
