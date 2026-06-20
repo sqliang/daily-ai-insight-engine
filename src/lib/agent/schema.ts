@@ -82,7 +82,7 @@ export const visualizationDataSchema = z.object({
   entityFrequency: z.array(
     z.object({
       entity: z.string(),
-      count: z.number().int().positive(),
+      count: z.number().int().nonnegative(),
       type: z.enum(["company", "technology", "person", "product", "region"]),
     }),
   ),
