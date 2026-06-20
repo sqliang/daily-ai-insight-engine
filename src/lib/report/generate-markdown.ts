@@ -53,6 +53,14 @@ export function generateMarkdown(report: DailyReport): string {
     event.evidence.forEach((e) => {
       lines.push(`- ${e}`);
     });
+    // 参考来源
+    const srcList = (event as any).evidenceSources;
+    if (srcList && srcList.length > 0) {
+      lines.push("");
+      srcList.forEach((s: any, i: number) => {
+        lines.push(`*${i + 1}.* [${s.sourceDir}](${s.url}) — ${s.title}`);
+      });
+    }
     lines.push("");
   });
 

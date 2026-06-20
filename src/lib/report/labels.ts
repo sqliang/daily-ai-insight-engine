@@ -9,6 +9,7 @@ import type { EventType, Sentiment } from "@/lib/agent/schema";
 // ============================================================================
 
 export const eventTypeLabels: Record<EventType, string> = {
+  unknown: "其他",
   infrastructure_update: "基建更新",
   framework_tools: "框架工具",
   capital_movement: "资本动向",

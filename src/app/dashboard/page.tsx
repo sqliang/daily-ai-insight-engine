@@ -1,8 +1,8 @@
 // ============================================================================
 // dashboard/page.tsx — 日报卡片列表页
 //
-// 顶部 DashboardHero 阐述洞察产出与内化价值，下方为全宽横向卡片，
-// 每张卡片展示日期、标题、摘要、
+// 顶部 DashboardHero 阐述洞察产出与内化价值，中间 DateFilterBar 时间过滤，
+// 下方为全宽横向卡片，每张卡片展示日期、标题、摘要、
 // 文章数、信源数、语言覆盖等关键信息。
 // 点击卡片跳转到 /dashboard/[date] 可视化仪表盘。
 // ============================================================================
@@ -10,17 +10,61 @@
 import { PageShell } from "@/components/layout/PageShell";
 import { DashboardHero } from "@/components/dashboard/DashboardHero";
 import { ReportCard } from "@/components/reports/ReportCard";
+import { DateFilterBar } from "@/components/sources/DateFilterBar";
 import { listReports } from "@/lib/data/reports";
+import type { DateRange } from "@/lib/data/types";
 
 export const dynamic = "force-dynamic";
 
-export default async function DashboardPage() {
-  const reports = await listReports();
+// ---------------------------------------------------------------------------
+// Search params
+// ---------------------------------------------------------------------------
+
+interface DashboardSearchParams {
+  from?: string;
+  to?: string;
+  preset?: string;
+}
+
+// ---------------------------------------------------------------------------
+// 默认日期范围（近 15 天）
+// ---------------------------------------------------------------------------
+
+function defaultDateRange(): DateRange {
+  const to = new Date().toISOString().slice(0, 10);
+  const from = new Date(Date.now() - 14 * 86400000).toISOString().slice(0, 10);
+  return { from, to };
+}
+
+// ---------------------------------------------------------------------------
+// Page
+// ---------------------------------------------------------------------------
+
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<DashboardSearchParams>;
+}) {
+  const sp = await searchParams;
+
+  // 日期范围：from/to 优先 → preset=latest 无限定 → 默认半个月
+  let dateRange: DateRange | undefined;
+  if (sp.from || sp.to) {
+    dateRange = { from: sp.from, to: sp.to };
+  } else if (sp.preset !== "latest") {
+    dateRange = defaultDateRange();
+  }
+  // preset=latest → dateRange=undefined，显示全部
+
+  const reports = await listReports(dateRange);
 
   // 空状态：尚无任何日报数据
   if (reports.length === 0) {
     return (
       <PageShell>
+        <div className="mt-6">
+          <DateFilterBar />
+        </div>
         <div className="flex flex-col items-center justify-center py-32 text-center">
           <svg
             width="48"
@@ -41,8 +85,7 @@ export default async function DashboardPage() {
           </svg>
           <h2 className="text-lg font-bold text-foreground">暂无日报数据</h2>
           <p className="mt-2 max-w-md text-sm leading-relaxed text-muted">
-            日报文件尚未生成，请先运行数据管道（scout → ingest → extract → analyze
-            → synthesize）以产出当日 AI 情报日报。
+            当前筛选范围内暂无日报，请调整时间范围或运行数据管道。
           </p>
         </div>
       </PageShell>
@@ -50,7 +93,6 @@ export default async function DashboardPage() {
   }
 
   const totalArticles = reports.reduce((sum, r) => sum + r.totalArticles, 0);
-  // listReports 按日期降序：首项最新，末项最早
   const latestDate = reports[0]?.date ?? null;
   const oldestDate = reports[reports.length - 1]?.date ?? null;
 
@@ -63,8 +105,12 @@ export default async function DashboardPage() {
         latestDate={latestDate}
       />
 
+      <div className="mt-6">
+        <DateFilterBar />
+      </div>
+
       {/* ====== 卡片列表：全宽横向，垂直排列 ====== */}
-      <div className="mt-8 flex flex-col gap-4">
+      <div className="mt-6 flex flex-col gap-4">
         {reports.map((report) => (
           <ReportCard key={report.date} report={report} />
         ))}

@@ -148,7 +148,7 @@ uv run python pipeline/run.py extract            # Stage 2: BaseInfo + FactExtra
 uv run python pipeline/run.py analyze            # Stage 3: 3-dimension deep analysis → auto-aggregates
 uv run python pipeline/run.py synthesize         # Stage 4b: Editor-in-Chief daily report generation
 
-# Standalone aggregate (for edge cases: config changes, --lookback-days, --hot-days, --force):
+# Standalone aggregate (for edge cases: config changes, --lookback-days, --hot-days, --target-date, --force):
 uv run python pipeline/run.py aggregate          # Stage 4a: extract frontmatter → all_articles.json
 
 # Pipeline variants
@@ -158,6 +158,8 @@ uv run python pipeline/run.py extract --force          # Reprocess all, ignoring
 uv run python pipeline/run.py aggregate --lookback-days 0  # Standalone: include all historical articles (no time filter)
 uv run python pipeline/run.py aggregate --lookback-days 7  # Standalone: re-aggregate with wider lookback window
 uv run python pipeline/run.py synthesize --lookback-days 7  # Re-aggregate last 7 days before synthesis
+uv run python pipeline/run.py aggregate --target-date 2026-06-10  # Exact date: only articles with created==2026-06-10
+uv run python pipeline/run.py synthesize --target-date 2026-06-10  # Generate report for a specific past date
 ```
 
 ## Python environment

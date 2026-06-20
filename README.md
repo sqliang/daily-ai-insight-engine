@@ -123,6 +123,10 @@ uv run python pipeline/run.py synthesize --lookback-days 7
 # 或者一步完成（synthesize --lookback-days 会在合成前自动重新聚合）
 uv run python pipeline/run.py synthesize --lookback-days 7
 
+# 回溯历史日报：针对特定日期生成报告（--target-date 与 --lookback-days 互斥）
+uv run python pipeline/run.py aggregate --target-date 2026-06-10
+uv run python pipeline/run.py synthesize --target-date 2026-06-10
+
 # 调整 per-source JSON 热数据保留天数（默认 7，仅在需要修改配置时单独运行）
 uv run python pipeline/run.py aggregate --hot-days 14
 
@@ -283,6 +287,7 @@ daily-ai-insight-engine/
 | `uv run python pipeline/run.py synthesize --dry-run` | 预估 token，不调 LLM |
 | `uv run python pipeline/run.py analyze --stage qualitative` | 仅运行单一分析维度 |
 | `uv run python pipeline/run.py aggregate --lookback-days 7` | 日报窗口扩展为 7 天 |
+| `uv run python pipeline/run.py synthesize --target-date YYYY-MM-DD` | 回溯历史日报：仅聚合指定日期的文章并合成报告 |
 | `uv run python pipeline/run.py analyze --input <file> --force` | 单独重处理指定文件 |
 | `pnpm dev` | 启动前端开发服务器 (Turbopack, :3000) |
 | `pnpm build` | 生产构建 (standalone) |

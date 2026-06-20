@@ -30,6 +30,9 @@ uv run python pipeline/run.py synthesize --model claude-opus-4-7
 # 指定日报窗口（会先触发 aggregate 预处理）
 uv run python pipeline/run.py synthesize --lookback-days 7
 
+# 回溯历史日报：针对特定日期聚合并合成（会先触发 aggregate 预处理）
+uv run python pipeline/run.py synthesize --target-date 2026-06-10
+
 # 限制详细展示文章数
 uv run python pipeline/run.py synthesize --max-detail 20
 ```
@@ -41,6 +44,7 @@ uv run python pipeline/run.py synthesize --max-detail 20
 | `--model` / `-m` | `config.yaml` 中 `llm.models.synthesize.name` | LLM 模型名称 |
 | `--dry-run` | `false` | 显示 token 预估值，不调用 LLM |
 | `--lookback-days` | `0`（不预处理） | 日报窗口天数，> 0 时先触发 aggregate 预处理 |
+| `--target-date` | 无 | 精确日期过滤（YYYY-MM-DD）。先按目标日期聚合再合成。与 `--lookback-days` 互斥 |
 | `--hot-days` | `7` | 传递给 aggregate 的热数据窗口 |
 | `--max-detail` | `15` | 详细展示文章数上限 |
 | `--verbose` / `-v` | `false` | 详细日志输出 |
@@ -87,7 +91,7 @@ synthesize_report()
 │     包含 lookback_days 窗口内的所有文章 frontmatter + 统计元数据
 │
 ├─ 2. （可选）aggregate 预处理
-│     当 --lookback-days > 0 时，先调用 aggregate_frontmatter() 重新聚合
+│     当 --lookback-days > 0 或 --target-date 指定时，先调用 aggregate_frontmatter() 重新聚合
 │
 ├─ 3. Editor-in-Chief Agent 调用
 │     ├─ system prompt: 日报格式规范（reportTitle / executiveSummary / topEvents / ...）

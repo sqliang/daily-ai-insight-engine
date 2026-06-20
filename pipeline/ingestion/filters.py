@@ -71,7 +71,14 @@ def filter_by_age(articles: List[dict], max_age_hours: int) -> List[dict]:
     for a in articles:
         pub = a.get("published", "")
         dt = parse_datetime(pub)
-        if dt is None or dt >= cutoff:
+        if dt is None:
+            result.append(a)
+            continue
+        # 用日期比较而非 datetime 比较，避免因 fetch_rss_items 输出的
+        # YYYY-MM-DD 格式（无时分秒）与 cutoff 的时分秒不对齐导致的误过滤。
+        # 例如 pub=2026-06-11, cutoff=2026-06-11T09:30:00 —
+        # datetime 比较下 06-11 00:00 < 06-11 09:30 会错误过滤同一天的文章。
+        if dt.date() >= cutoff.date():
             result.append(a)
     return result
 

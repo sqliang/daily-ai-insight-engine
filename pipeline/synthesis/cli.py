@@ -42,6 +42,11 @@ def _add_aggregate_arguments(parser):
         help="all_articles.json 日报窗口 (天)。默认从 config.yaml 读取, 1。0 = 不限",
     )
     parser.add_argument(
+        "--target-date", type=str, default=None,
+        help="精确日期过滤 (YYYY-MM-DD)。仅保留 created == 指定日期的文章到 all_articles.json。"
+             "与 --lookback-days 互斥。用于回溯历史日报。",
+    )
+    parser.add_argument(
         "--hot-days", type=int, default=None,
         help="per-source JSON 热数据窗口 (天)。默认从 config.yaml 读取, 7",
     )
@@ -72,14 +77,27 @@ def execute_aggregate(args) -> int:
     返回：
         int: 0 成功, 1 失败
     """
+    from datetime import date
     from ..aggregation.aggregate_frontmatter import aggregate_frontmatter
 
     input_dir = Path(args.input) if args.input else None
     output_dir = Path(args.output) if args.output else None
 
+    # 解析 --target-date（与 --lookback-days 互斥）
+    target_date: Optional[date] = None
+    if args.target_date:
+        if args.lookback_days is not None:
+            print("错误: --target-date 和 --lookback-days 不能同时指定", file=sys.stderr)
+            return 1
+        try:
+            target_date = date.fromisoformat(args.target_date)
+        except ValueError:
+            print(f"错误: --target-date 格式无效: {args.target_date} (期望 YYYY-MM-DD)", file=sys.stderr)
+            return 1
+
     try:
-        logger.info("Stage 4a Aggregate 开始 input=%s output=%s dry_run=%s",
-                     input_dir, output_dir, args.dry_run)
+        logger.info("Stage 4a Aggregate 开始 input=%s output=%s dry_run=%s target_date=%s",
+                     input_dir, output_dir, args.dry_run, target_date)
         result = aggregate_frontmatter(
             input_dir=input_dir,
             output_dir=output_dir,
@@ -87,6 +105,7 @@ def execute_aggregate(args) -> int:
             lookback_days=args.lookback_days,
             hot_days=args.hot_days,
             max_history_days=args.max_history_days,
+            target_date=target_date,
         )
 
         if args.dry_run:
@@ -142,6 +161,11 @@ def _add_synthesize_arguments(parser):
         "--lookback-days", type=int, default=None,
         help="先按 N 天窗口重新聚合，再合成日报 (默认: 跳过，使用已有 all_articles.json)。0 = 不限",
     )
+    parser.add_argument(
+        "--target-date", type=str, default=None,
+        help="精确日期过滤 (YYYY-MM-DD)。先按指定日期重新聚合 all_articles.json，再合成日报。"
+             "与 --lookback-days 互斥。用于回溯历史日报。",
+    )
 
 
 def register_synthesize_subparser(subparsers):
@@ -165,15 +189,37 @@ def execute_synthesize(args) -> int:
     返回：
         int: 0 成功, 1 失败
     """
+    from datetime import date
     from .run_synthesis import synthesize_report
     from ..aggregation.aggregate_frontmatter import aggregate_frontmatter
 
     input_path = Path(args.input) if args.input else None
     output_dir = Path(args.output) if args.output else None
 
-    try:
-        # 如果指定了 --lookback-days，先重新聚合以过滤文章
+    # 解析 --target-date（与 --lookback-days 互斥）
+    target_date: Optional[date] = None
+    if args.target_date:
         if args.lookback_days is not None:
+            print("错误: --target-date 和 --lookback-days 不能同时指定", file=sys.stderr)
+            return 1
+        try:
+            target_date = date.fromisoformat(args.target_date)
+        except ValueError:
+            print(f"错误: --target-date 格式无效: {args.target_date} (期望 YYYY-MM-DD)", file=sys.stderr)
+            return 1
+
+    try:
+        # 如果指定了 --target-date，先按目标日期重新聚合（精确匹配模式）
+        if target_date is not None:
+            logger.info("预聚合: target_date=%s", target_date)
+            aggregate_frontmatter(
+                input_dir=None,
+                output_dir=None,
+                dry_run=False,
+                target_date=target_date,
+            )
+        # 如果指定了 --lookback-days，先重新聚合以过滤文章
+        elif args.lookback_days is not None:
             logger.info("预聚合: lookback_days=%s", args.lookback_days)
             aggregate_frontmatter(
                 input_dir=None,
@@ -182,14 +228,15 @@ def execute_synthesize(args) -> int:
                 lookback_days=args.lookback_days,
             )
 
-        logger.info("Stage 4b Synthesize 开始 model=%s max_detail=%s dry_run=%s",
-                     args.model, args.max_detail, args.dry_run)
+        logger.info("Stage 4b Synthesize 开始 model=%s max_detail=%s dry_run=%s target_date=%s",
+                     args.model, args.max_detail, args.dry_run, target_date)
         synthesize_report(
             input_path=input_path,
             output_dir=output_dir,
             model=args.model,
             max_detail=args.max_detail,
             dry_run=args.dry_run,
+            target_date=args.target_date,
         )
         logger.info("Stage 4b Synthesize 完成")
         return 0

@@ -144,12 +144,23 @@ def _execute_schedule_status(args) -> int:
         for e in ingest_errors:
             print(f"      - {e}")
 
+    repair = data.get("repair", {})
+    if repair:
+        print()
+        print("  Repair 阶段:")
+        print(f"    发现:   {repair.get('total', 0)} 篇")
+        print(f"    修复:   {repair.get('repaired', 0)} 篇")
+        if repair.get("still_failed", 0) > 0:
+            print(f"    仍失败: {repair.get('still_failed', 0)} 篇")
+
     print()
     print("  日志文件:")
     if log_files.get("scout"):
         print(f"    scout:  {log_files['scout']}")
     if log_files.get("ingest"):
         print(f"    ingest: {log_files['ingest']}")
+    if log_files.get("repair"):
+        print(f"    repair: {log_files['repair']}")
 
     # 计算下一次执行时间（每天 17:30）
     now = datetime.now()
@@ -164,6 +175,34 @@ def _execute_schedule_status(args) -> int:
     print()
 
     return 0
+
+
+def _execute_repair(args) -> int:
+    """
+    执行 repair 阶段：扫描今天 failed/partial 的文章并用 browser 重试修复。
+    """
+    from pipeline.ingestion.repair import repair_failed_articles
+
+    result = repair_failed_articles()
+    print(f"\n=== 修复完成 ===")
+    print(f"  发现: {result['total']} 篇")
+    print(f"  修复: {result['repaired']} 篇")
+    print(f"  仍失败: {result['still_failed']} 篇")
+    if result["repaired_files"]:
+        print(f"  已修复文件:")
+        for f in result["repaired_files"]:
+            print(f"    - {f}")
+    return 0
+
+
+def _register_repair(subparsers):
+    """注册 repair 子命令：自动修复 ingest 失败的文章。"""
+    parser = subparsers.add_parser(
+        "repair",
+        help="Stage 1c: 自动修复 ingest 失败的文章",
+        description="扫描 data/01_raw/ 中今天 extraction_status=failed/partial 的文章，用 browser 重试抓取",
+    )
+    parser.set_defaults(func=_execute_repair)
 
 
 def _register_schedule_status(subparsers):
@@ -199,7 +238,9 @@ if __name__ == "__main__":
   uv run python pipeline/run.py aggregate                   Stage 4a: 聚合 frontmatter
   uv run python pipeline/run.py aggregate --lookback-days 7  修改日报窗口
   uv run python pipeline/run.py aggregate --hot-days 14      修改热数据窗口
+  uv run python pipeline/run.py aggregate --target-date 2026-06-10  精确日期回溯
   uv run python pipeline/run.py synthesize --dry-run        Stage 4b: 显示 prompt 预估
+  uv run python pipeline/run.py synthesize --target-date 2026-06-10  回溯历史日报
         """,
     )
     parser.add_argument(
@@ -224,6 +265,7 @@ if __name__ == "__main__":
     _reg_analyze(subparsers)
     _reg_aggregate(subparsers)
     _reg_synthesize(subparsers)
+    _register_repair(subparsers)  # 自动修复 ingest 失败的文章
     _register_schedule_status(subparsers)  # 定时任务状态查询（在 run.py 内定义）
 
     args = parser.parse_args()

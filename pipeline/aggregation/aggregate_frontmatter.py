@@ -117,6 +117,32 @@ def _is_outside_window(record: dict, lookback_cutoff: Optional[date]) -> bool:
         return False  # created 字段异常时保守保留
 
 
+def _matches_target_date(record: dict, target_date: date) -> bool:
+    """
+    检查文章的 created 字段是否等于 target_date。
+
+    YAML 解析器会将日期字符串反序列化为 date 对象，需兼容两种类型。
+    与 _is_outside_window 的区别：本函数用于精确日期匹配（target_date 模式），
+    而非时间窗口过滤（lookback_days 模式）。
+
+    参数：
+        record: 文章 frontmatter 字典
+        target_date: 目标日期
+
+    返回：
+        True 如果 created == target_date
+    """
+    created_val = record.get("created", "")
+    if not created_val:
+        return False
+    try:
+        if isinstance(created_val, date):
+            return created_val == target_date
+        return date.fromisoformat(str(created_val)) == target_date
+    except (ValueError, TypeError):
+        return False
+
+
 def _cleanup_expired_archives(archive_dir: Path, source: str, max_history_days: Optional[int]) -> int:
     """
     清理 source 目录下超出 max_history_days 的归档分片。
@@ -255,6 +281,7 @@ def aggregate_frontmatter(
     lookback_days: Optional[int] = None,
     hot_days: Optional[int] = None,
     max_history_days: Optional[int] = None,
+    target_date: Optional[date] = None,
 ) -> dict:
     """
     Stage 4a 主函数：聚合所有 pipeline 阶段的 .md 文件 frontmatter。
@@ -266,7 +293,12 @@ def aggregate_frontmatter(
     热冷分离：
         - {source}.json：仅保留最近 hot_days 天的文章（热数据）
         - archive/{source}/{source}_{date}.json：冷数据按 created 日期分片
-        - all_articles.json：由 lookback_days 控制时间窗口
+        - all_articles.json：由 lookback_days 或 target_date 控制时间窗口
+
+    时间过滤模式（互斥）：
+        - lookback_days（默认）：created >= today - lookback_days 的文章
+        - target_date（精确模式）：仅 created == target_date 的文章（用于回溯历史日报）
+        - 两者均为 None 时，从 config 读取 lookback_days 默认值
 
     参数：
         input_dir: 输入目录（None = 多阶段扫描；显式 Path = 单目录）
@@ -275,6 +307,8 @@ def aggregate_frontmatter(
         lookback_days: all_articles.json 时间窗口（天）。None 时从 config 读取
         hot_days: per-source JSON 热数据窗口（天）。None 时从 config 读取，默认 7
         max_history_days: archive 最大保留天数。None 时从 config 读取，默认 365（0 = 不限）
+        target_date: 精确日期过滤（YYYY-MM-DD）。指定后仅保留 created == target_date 的文章。
+                     与 lookback_days 互斥（target_date 优先）。不影响 per-source JSON 热冷分离。
 
     返回：
         汇总 dict：{total_articles, sources: {name: count}, errors, skipped_old,
@@ -292,8 +326,12 @@ def aggregate_frontmatter(
     if max_history_days is None:
         max_history_days = agg_config.get("max_history_days", 365)
 
+    # target_date 模式与 lookback_days 互斥：target_date 优先
     lookback_cutoff: Optional[date] = None
-    if lookback_days is not None and lookback_days > 0:
+    if target_date is not None:
+        # 精确日期模式：lookback 不生效，热冷分离仍按 hot_days 正常运作
+        lookback_days = None  # 标记为不使用 lookback 窗口
+    elif lookback_days is not None and lookback_days > 0:
         lookback_cutoff = date.today() - timedelta(days=lookback_days)
 
     hot_cutoff: Optional[date] = None
@@ -314,7 +352,9 @@ def aggregate_frontmatter(
     stage_label = " > ".join(aggregated_stages)
     print(f"\n发现 {len(all_files)} 个 .md 文件，来自 {len(source_groups)} 个数据源")
     print(f"  扫描阶段: {stage_label}")
-    if lookback_cutoff:
+    if target_date:
+        print(f"  日报窗口: 精确匹配 created == {target_date.isoformat()} (target_date 模式)")
+    elif lookback_cutoff:
         print(f"  日报窗口: 仅保留 created >= {lookback_cutoff.isoformat()} (lookback_days={lookback_days})")
     if hot_cutoff:
         print(f"  热数据窗口: 仅保留 created >= {hot_cutoff.isoformat()} (hot_days={hot_days})")
@@ -353,7 +393,13 @@ def aggregate_frontmatter(
                 errors += 1
                 continue
             all_source_articles.append(record)
-            if not _is_outside_window(record, lookback_cutoff):
+            # all_articles.json 时间过滤：target_date 精确匹配优先于 lookback 窗口
+            if target_date is not None:
+                if _matches_target_date(record, target_date):
+                    in_window_articles.append(record)
+                else:
+                    skipped_old += 1
+            elif not _is_outside_window(record, lookback_cutoff):
                 in_window_articles.append(record)
             else:
                 skipped_old += 1

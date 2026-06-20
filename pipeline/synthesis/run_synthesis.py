@@ -35,6 +35,7 @@ def synthesize_report(
     model: Optional[str] = None,
     max_detail: int = 30,
     dry_run: bool = False,
+    target_date: Optional[str] = None,
 ) -> dict:
     """
     Stage 4b 主函数：从 all_articles.json 生成日报。
@@ -45,6 +46,7 @@ def synthesize_report(
         model: LLM 模型名称
         max_detail: user prompt 中完整展示的文章数
         dry_run: True 时仅显示 prompt 预估，不调用 LLM
+        target_date: 目标报告日期（YYYY-MM-DD），注入 prompt 并覆盖输出日期
 
     返回：
         日报 dict
@@ -96,6 +98,7 @@ def synthesize_report(
         input_path,
         model=model,
         max_detail=max_detail,
+        target_date=target_date,
     )
 
     # Pydantic 校验已在 editor_in_chief_agent 内部完成（DailyReport.model_validate）

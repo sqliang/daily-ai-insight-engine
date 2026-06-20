@@ -6,6 +6,7 @@ Stage 4b Editor-in-Chief user prompt builder
 
 import json
 from collections import Counter
+from typing import Optional
 
 
 def _compute_statistics(articles: list[dict]) -> dict:
@@ -127,11 +128,12 @@ def _format_article_detail(article: dict, index: int) -> str:
     return "\n".join(fields)
 
 
-def build_user_prompt(all_articles: list[dict], max_detail: int = 30) -> str:
+def build_user_prompt(all_articles: list[dict], max_detail: int = 30, target_date: Optional[str] = None) -> str:
     """
     构造 Editor-in-Chief 的用户提示词。
 
     结构：
+        0. 报告日期（当指定 target_date 时）
         1. 统计概览（全部文章）
         2. Top-N 文章完整 frontmatter
         3. 剩余文章标题列表
@@ -139,6 +141,7 @@ def build_user_prompt(all_articles: list[dict], max_detail: int = 30) -> str:
     参数：
         all_articles: 所有文章记录列表
         max_detail: 包含完整 frontmatter 的文章数上限
+        target_date: 目标报告日期（YYYY-MM-DD），None 时使用 today
     """
     # 按 impactScore 降序排列
     def _impact_score(a: dict) -> float:
@@ -153,7 +156,15 @@ def build_user_prompt(all_articles: list[dict], max_detail: int = 30) -> str:
 
     stats = _compute_statistics(sorted_articles)
 
+    # 确定报告日期：target_date 优先，否则用今天
+    from datetime import date as _date
+    report_date = target_date or _date.today().isoformat()
+
     sections = [
+        f"## 0. REPORT DATE",
+        "",
+        f"The report date is **{report_date}**. All analysis and commentary should be written as of this date.",
+        "",
         "## 1. STATISTICAL OVERVIEW (ALL ARTICLES)",
         "",
         f"Total articles: {len(sorted_articles)}",
