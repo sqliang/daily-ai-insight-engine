@@ -1,0 +1,115 @@
+---
+title: Claude Fable 5 Mythos 5
+source: https://www.anthropic.com/news/claude-fable-5-mythos-5
+author: []
+published: '2026-06-09'
+created: '2026-06-10'
+description: ''
+tags:
+- clippings
+extraction_status: success
+pipeline_stage: fact_extracted
+id: e11fcea9cd94bb20
+source_type: tech_blog
+tldr: Anthropic 发布 Claude Fable 5 和 Claude Mythos 5，后者专供网络防御用途
+objective_summary: Anthropic 推出 Claude Fable 5（安全版）及 Claude Mythos 5（无限制版），后者通过 Project
+  Glasswing 与美国政府合作部署。定价每百万输入令牌 10 美元、输出令牌 50 美元，为 Mythos Preview 的一半。
+event_type: application_landing
+epistemic_status: verified_fact
+entities:
+  companies:
+  - Anthropic
+  technologies: []
+  key_people: []
+key_logic_flow:
+- Anthropic 发布了 Claude Fable 5（通用安全版）和 Claude Mythos 5（专为网络防御设计）两款新模型。
+- Fable 5 在几乎所有基准测试中达到最先进水平，在软件工程、知识工作、视觉、科学研究和生命科学等领域表现领先。
+- Fable 5 配备安全防护，涉及某些敏感话题的查询将被转至 Claude Opus 4.8 处理，平均触发率低于 5% 的会话。
+- Claude Mythos 5 与 Fable 5 共享同一基础模型，但在部分领域移除了安全限制，通过 Project Glasswing 与美国政府合作部署。
+- 两款模型的定价为每百万输入令牌 10 美元、输出令牌 50 美元，是 Claude Mythos Preview 价格的一半。
+impact_score:
+  score: 7.0
+  reason: Anthropic 发布的 Claude Fable 5 和 Mythos 5 是前沿模型领域的重要产品落地。Fable 5 在多项基准测试中达到
+    SOTA，覆盖软件工程、知识工作、视觉、生命科学等关键领域，同时定价仅为 Mythos Preview 的一半（$10/$50 每百万 token），兼具能力跃升和价格下探的双重冲击力。Mythos
+    5 通过 Project Glasswing 与美国政府合作部署，开创了 '安全版公开发售 + 无限制版政府专用' 的双轨发布模式，可能重塑 AI 公司与政府合作的标准范式。评分
+    7.0：属于重要产品发布，显著改变局部竞争格局，但尚未达到 ChatGPT 发布或 Transformer 论文级别的范式转移。
+sentiment: positive
+developer_sentiment:
+  tone: excited
+  primary_focus: SOTA 能力叠加半价 API 定价，软件工程领域表现突出，但安全路由机制可能带来 <5% 的查询降级到 Opus 4.8 的体验不一致
+hype_assessment:
+  level: medium
+  reason: 文章使用了 'state-of-the-art on nearly all tested benchmarks'、'strongest cybersecurity
+    capabilities of any model' 等强力措辞，存在一定的产品发布包装。但 Anthropic 提供了具体的基准对比表、明确的定价数据和实际部署案例（Project
+    Glasswing），核心 claims 有实质支撑。'革命性' 等过度词汇未出现，整体属于合理的产品发布宣传范畴，非空洞炒作。
+information_entropy: high
+domain_disruption:
+  technical_innovation: Fable 5 和 Mythos 5 共享同一个基础模型，通过安全路由层（敏感查询转至 Opus 4.8）实现了同一架构下的能力分级释放。这种
+    '模型级安全门控' 设计替代了传统的 prompt-level 过滤，是 AI 安全架构的重要演进。模型在超长上下文和复杂自主任务完成上展现出代际提升，工程实现上属于可靠的前沿迭代。
+  business_model: 开创了 '安全版（Fable）公开发售 + 无限制版（Mythos）政府专用' 的双轨商业模式。通过 Project Glasswing
+    建立美国政府合作渠道，将模型能力直接嵌入国家级网络防御体系。同时以高出行业主流（GPT-4o/Claude 4）50-100% 的定价锚定高端市场，再用 '半价于上一代旗舰'
+    的策略制造强烈性价比感知，形成清晰的价格阶梯。
+engineering_complexity: production_ready
+compound_value:
+  score: 7.5
+  reason: Anthropic 此次发布的 Fable 5 和 Mythos 5 是典型的能力跃迁+价格下降的复利组合。一方面，Fable 5 在几乎所有基准测试中达
+    SOTA，软件工程、生命科学等场景的能力积累具有强飞轮效应——用户越多、用例越复杂，模型优势越明显；另一方面，定价仅为 Mythos Preview 的一半（$10/$50
+    per million tokens），说明推理成本正在快速下降，这进一步扩大了可寻址市场。Mythos 5 通过 Project Glasswing 与美国政府深度绑定网络防御场景，形成了一条不易复制的政府收入护城河。但需注意：目前安全护栏仍偏保守（<5%
+    会话触发回退），若误报率未能快速降低可能影响企业采用率；此外，这是继 4.x 系列的增量跃迁而非范式革命，竞争格局仍可能被下一代架构（如推理时计算、MoE
+    优化）重新洗牌。长期看，Anthropic 在安全对齐+政府合作上的差异化投入具有 3-5 年持续性，但评分不追顶分是因为价格战可能压缩利润率，且 OpenAI/Google
+    的跟进速度不可忽视。
+value_capture_layer: foundation_model
+moat_impact: creates_new_moat
+key_beneficiaries:
+- Anthropic
+- US Cyber Command / 政府网络防御机构
+- Project Glasswing 合作企业
+- 生命科学研究机构（加速新药研发）
+competitive_casualty:
+- OpenAI（直接竞争 SOTA 基准 + 定价下压）
+- Google DeepMind（Gemini 系列面临能力与价格双重对标）
+- 中小型基础模型创业公司（能力差距拉大且价格战加剧）
+- 传统网络安全 SaaS 厂商（AI 驱动的网络防御能力可能替代部分人力密集型业务）
+market_opportunities:
+- 软件工程自动化是当前最直接的落地场景——Fable 5 在 SWE-bench 等基准上领先，且定价降至 Mythos Preview 的一半，可大幅降低 AI
+  辅助编码、自动化代码审查和测试生成的成本门槛，建议 SaaS 工具团队快速集成 Fable 5 API 推出增值服务
+- 生命科学研究加速赛道存在结构性机会——Anthropic 明确指出模型在新假设提出和治疗开发方面有加速作用，AI 制药和科研辅助平台可基于 Fable 5 构建分子设计、文献挖掘和实验方案建议等垂直功能
+- 网络防御即服务(NaaS)的政府/军工市场值得关注——Mythos 5 通过 Project Glasswing 与美国政府合作的模式可能扩展为可信访问计划，安全厂商可提前布局与此类政府合作项目的技术对接和合规认证
+risk_matrix:
+  regulatory: Mythos 5 移除安全限制用于网络防御，面临出口管制（ITAR/EAR）和 AI Act 高风险分类的合规压力；Fable 5 的保守安全审查机制（低于
+    5% 误转 Opus 4.8）可能触发欧盟和英国监管机构对'安全审查透明度'的调查
+  technological: Fable 5 的安全审查机制采用保守阈值，虽宣称平均触发率低于 5%，但在复杂长任务场景中误转概率可能更高，影响关键业务的连贯性；若竞争方（如
+    OpenAI、Google）在同等价位推出能力相近的模型，Fable 5 的技术领先窗口期可能缩短至 3-6 个月
+  competitive: Anthropic 将旗舰模型定价腰斩至 $10/$50 每百万 token，直接加剧了与 GPT-5、Gemini Ultra 等竞品的价格战；开源社区（如
+    Llama、DeepSeek）若在类似能力上突破，将对闭源定价体系形成更大挤压
+  ethical: 双轨模型策略（Fable 5 受限制 vs Mythos 5 无限制）引发 AI 安全治理的深层伦理争议——同一基础能力仅因部署方身份不同而施加不同安全约束，可能导致'安全歧视'争议；Mythos
+    5 的网络防御能力若被滥用或泄露，可能造成大规模网络攻击工具平民化风险
+  additional:
+  - Anthropic 对 Fable 5 安全机制的'保守调优'表述模糊，未公开具体触发条件清单，存在信息不对称风险
+confidence:
+  impact: high
+  compound: medium
+  hype: low
+actionable_insight: deep_dive
+---
+
+# Claude Fable 5 and Claude Mythos 5
+
+Today we’re launching **Claude Fable 5**: a Mythos-class1 model that we’ve made safe for general use.
+
+Fable 5’s capabilities exceed those of any model we’ve ever made generally available. It is state-of-the-art on nearly all tested benchmarks of AI capability, showing exceptional performance in software engineering, knowledge work, vision, scientific research, and many other areas. The longer and more complex the task, the larger Fable 5’s lead over our other models.
+
+Releasing a model this capable comes with risks. Without safeguards, Fable 5’s capabilities in areas like cybersecurity could be misused to cause serious damage. We’ve therefore launched the model with safeguards that mean queries on some topics will instead receive a response from our next-most-capable model, Claude Opus 4.8. To release the model both safely and quickly, we’ve tuned these safeguards conservatively—they’ll sometimes catch harmless requests, though they trigger, on average, in less than 5% of sessions. With more capable models arriving in the coming months, we’re working to improve our safeguards and reduce false positives as quickly as we can.
+
+For a small group of cyberdefenders and infrastructure providers, we’re also launching **Claude Mythos 5**. It’s the same underlying model as Fable 5, but with the safeguards lifted in some areas.2 Mythos 5 will initially be deployed through Project Glasswing, in collaboration with the US government, as an upgrade to Claude Mythos Preview. It has the strongest cybersecurity capabilities of any model in the world. Soon, we intend to expand access to Mythos 5 through a broader trusted access program.
+
+The capabilities of models like Fable 5 and Mythos 5 have the potential to do profound good for the world. We’ve seen the beginnings of this in Project Glasswing, where the models have helped cyber defenders secure critically important software. We’ve also seen it in life sciences research, where the models are positing novel hypotheses and speeding up the development of new therapeutics.
+
+Fable 5 and Mythos 5 are being offered at $10 per million input tokens and $50 per million output tokens—less than half the price of Claude Mythos Preview. Today’s joint launch is another step towards our goal of bringing advanced AI capabilities to as many users as possible, as quickly and as safely as we can.
+
+## Evaluating Claude Fable 5 and Claude Mythos 5
+
+The table below compares the capabilities of Fable 5 and Mythos 5 to other leading models.
+
+
+Fable 5 and Mythos 5 can work autonomously for longer than any previous Claude models. Below we discuss how these skills apply to software engineering, and cover the model’s improved capabilities in knowledge work, vision, memory, and life sciences research.
