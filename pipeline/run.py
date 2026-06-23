@@ -7,12 +7,16 @@ pipeline/run.py — Daily AI Insight Engine 管道入口
 2. 加载 config/proxy.json 并注入代理环境变量
 
 子命令（日常五步，aggregate 在 extract/analyze 后自动执行）：
-    uv run python pipeline/run.py scout          Stage 1a: 生成 URL 清单
-    uv run python pipeline/run.py ingest         Stage 1b: 正文抓取与清洗
-    uv run python pipeline/run.py extract        Stage 2: 元信息与事实提取 (自动 aggregate)
-    uv run python pipeline/run.py analyze        Stage 3: 深度分析 (自动 aggregate)
-    uv run python pipeline/run.py aggregate      Stage 4a: Frontmatter 聚合 (独立运行，用于配置变更)
-    uv run python pipeline/run.py synthesize     Stage 4b: 日报合成
+    uv run python pipeline/run.py scout              Stage 1a: 生成 URL 清单
+    uv run python pipeline/run.py ingest             Stage 1b: 正文抓取与清洗
+    uv run python pipeline/run.py extract            Stage 2: 元信息与事实提取 (自动 aggregate)
+    uv run python pipeline/run.py analyze            Stage 3: 深度分析 (自动 aggregate)
+    uv run python pipeline/run.py aggregate          Stage 4a: Frontmatter 聚合 (独立运行，用于配置变更)
+    uv run python pipeline/run.py synthesize         Stage 4b: 日报合成
+
+修复子命令（自动发现并修复失败文章）：
+    uv run python pipeline/run.py repair             Stage 1c: 自动修复 ingest 失败的文章
+    uv run python pipeline/run.py extract-repair     Stage 2c: 自动修复 extract 失败的文章
 """
 
 import argparse
@@ -153,6 +157,15 @@ def _execute_schedule_status(args) -> int:
         if repair.get("still_failed", 0) > 0:
             print(f"    仍失败: {repair.get('still_failed', 0)} 篇")
 
+    extract_repair = data.get("extract_repair", {})
+    if extract_repair:
+        print()
+        print("  Extract-Repair 阶段:")
+        print(f"    发现:   {extract_repair.get('total', 0)} 篇")
+        print(f"    修复:   {extract_repair.get('repaired', 0)} 篇")
+        if extract_repair.get("still_failed", 0) > 0:
+            print(f"    仍失败: {extract_repair.get('still_failed', 0)} 篇")
+
     print()
     print("  日志文件:")
     if log_files.get("scout"):
@@ -161,6 +174,8 @@ def _execute_schedule_status(args) -> int:
         print(f"    ingest: {log_files['ingest']}")
     if log_files.get("repair"):
         print(f"    repair: {log_files['repair']}")
+    if log_files.get("extract_repair"):
+        print(f"    extract-repair: {log_files['extract_repair']}")
 
     # 计算下一次执行时间（每天 17:30）
     now = datetime.now()
@@ -203,6 +218,43 @@ def _register_repair(subparsers):
         description="扫描 data/01_raw/ 中今天 extraction_status=failed/partial 的文章，用 browser 重试抓取",
     )
     parser.set_defaults(func=_execute_repair)
+
+
+def _execute_extract_repair(args) -> int:
+    """
+    执行 extract-repair 阶段：扫描今天 extract_result=failed 的文章并重试修复。
+    """
+    from datetime import date
+    from pipeline.extraction.repair import repair_failed_extractions
+
+    target_date = None
+    if hasattr(args, "target_date") and args.target_date:
+        target_date = date.fromisoformat(args.target_date)
+
+    result = repair_failed_extractions(target_date=target_date)
+    print(f"\n=== Extract-Repair 完成 ===")
+    print(f"  发现: {result['total']} 篇")
+    print(f"  修复: {result['repaired']} 篇")
+    print(f"  仍失败: {result['still_failed']} 篇")
+    if result["repaired_files"]:
+        print(f"  已修复文件:")
+        for f in result["repaired_files"]:
+            print(f"    - {f}")
+    return 0
+
+
+def _register_extract_repair(subparsers):
+    """注册 extract-repair 子命令：自动修复 extract 失败的文章。"""
+    parser = subparsers.add_parser(
+        "extract-repair",
+        help="Stage 2c: 自动修复 extract 失败的文章",
+        description="扫描 data/02_extracted/ 中今天 extract_result=failed 的文章，重新执行 LLM 提取",
+    )
+    parser.add_argument(
+        "--target-date", "-d", type=str, default=None,
+        help="只修复指定日期的文章 (格式: YYYY-MM-DD，默认: 今天)",
+    )
+    parser.set_defaults(func=_execute_extract_repair)
 
 
 def _register_schedule_status(subparsers):
@@ -266,6 +318,7 @@ if __name__ == "__main__":
     _reg_aggregate(subparsers)
     _reg_synthesize(subparsers)
     _register_repair(subparsers)  # 自动修复 ingest 失败的文章
+    _register_extract_repair(subparsers)  # 自动修复 extract 失败的文章
     _register_schedule_status(subparsers)  # 定时任务状态查询（在 run.py 内定义）
 
     args = parser.parse_args()

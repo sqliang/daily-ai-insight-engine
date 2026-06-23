@@ -135,6 +135,79 @@ def compute_output_base(input_dir: Path, raw_base_dir: Path, extracted_base_dir:
 
 
 # =============================================================================
+# extract_result 持久化（供 repair 阶段扫描）
+# =============================================================================
+
+def _write_extract_result(
+    results: dict[str, list[StageResult]],
+    output_base_dir: Path,
+    input_base_dir: Path,
+    file_paths: list[Path],
+) -> None:
+    """
+    将 extract_result 写入每个输出文件的前置元数据中。
+
+    extract_result 取值：
+        - "success": 所有阶段正常完成
+        - "failed":  Agent 调用失败 / JSON 解析失败
+        - "partial": 跳过了 LLM 调用（正文为空、ingest 失败等）
+
+    设计理由：
+        Stage 2 失败标记目前只在内存 StageResult 中，不写入文件。
+        新增 extract_result 字段让 repair 阶段可以扫描发现失败文章，
+        与 Stage 1 的 extraction_status（正文抓取质量）形成独立维度。
+    """
+    from pipeline.utils.frontmatter import read_frontmatter, write_frontmatter
+
+    # 初始化为 success
+    status_map: dict[str, str] = {}
+    for fp in file_paths:
+        status_map[str(fp)] = "success"
+
+    # --- Stage 2a 结果 ---
+    if "base_info" in results:
+        for fp, r in zip(file_paths, results["base_info"]):
+            key = str(fp)
+            if not r.success:
+                status_map[key] = "failed"
+            elif r.skipped:
+                status_map[key] = "partial"
+
+    # --- Stage 2b 结果（仅影响 2a 成功的文件） ---
+    if "fact_extraction" in results:
+        # 重建 2a 成功的文件列表
+        stage_2a_success = (
+            [fp for fp, r in zip(file_paths, results["base_info"]) if r.success]
+            if "base_info" in results
+            else file_paths
+        )
+        for fp, r in zip(stage_2a_success, results["fact_extraction"]):
+            key = str(fp)
+            if not r.success:
+                status_map[key] = "failed"
+            elif r.skipped and status_map.get(key, "success") != "failed":
+                status_map[key] = "partial"
+
+    # --- 写入各输出文件的 frontmatter ---
+    for fp in file_paths:
+        rel = fp.relative_to(input_base_dir)
+        out_path = output_base_dir / rel
+        status = status_map.get(str(fp), "failed")
+
+        if out_path.exists():
+            try:
+                fm, body = read_frontmatter(out_path)
+                # 后校验：skipped 可能是因为"字段已存在无需处理"而非"正文有问题"，
+                # 若 pipeline_stage 已达到 fact_extracted 则正常升级为 success
+                if status == "partial" and fm.get("pipeline_stage") == "fact_extracted":
+                    status = "success"
+                fm["extract_result"] = status
+                write_frontmatter(out_path, fm, body)
+            except Exception as exc:
+                logger.warning("无法写入 extract_result: %s: %s", out_path, exc)
+
+
+# =============================================================================
 # 结果汇总
 # =============================================================================
 
@@ -405,6 +478,15 @@ async def run_extraction(
         aggregate_frontmatter(
             output_dir=synthesize_dir,
             dry_run=False,
+        )
+
+    # --- 写入 extract_result 到输出文件（供 extract-repair 阶段扫描） ---
+    if not dry_run and results:
+        _write_extract_result(
+            results=results,
+            output_base_dir=output_base_dir,
+            input_base_dir=input_base_dir,
+            file_paths=file_paths,
         )
 
     # --- 最终汇总 ---
