@@ -54,6 +54,7 @@ key_logic_flow:
 - 在1900+次攻击的验证器红队测试中，四轮定向加固将门控绕过率从15%降至1.3%，端到端200任务管道实现0%不安全操作率（Wilson 95%置信上界2.67%）。
 - 对500个分层任务键的HACR审计表明：朴素智能体100.0%的不安全执行率，纯提示防御降至49.6%，而ECA为0%；神经法官基线在同一威胁模型下仍然可被绕过。
 pipeline_stage: fact_extracted
+extract_result: success
 ---
 
 # Computer Science > Artificial Intelligence

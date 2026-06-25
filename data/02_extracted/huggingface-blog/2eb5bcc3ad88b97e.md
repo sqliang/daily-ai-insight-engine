@@ -31,6 +31,7 @@ key_logic_flow:
 - 实验发现仅优化任务性能会加剧隐私泄漏，代理回答越好泄漏越多。
 - ServiceNow 提出隐私感知深度研究（PA-DR）训练方法，通过马赛克泄漏感知的强化学习同时提升任务完成度和隐私保护能力。
 - PA-DR 将严格链成功率从 48.7% 提升至 58.7%，同时将答案/全信息泄漏率从 34.0% 降低至 9.9%。
+extract_result: success
 ---
 
 Deep research agents increasingly combine private local documents with external tools like web retrieval, creating a privacy risk: an agent's external queries may leak sensitive information. **MosaicLeaks** proposes a new deep-research task with multi-hop questions that interleave public and private information. Across the models we tested, agents frequently leaked private information, and training only for task performance made it worse. We propose a mosaic-leakage-aware RL training method, **Privacy-Aware Deep Research (PA-DR)**, which raises strict chain success (the share of chains where every hop is answered correctly) from 48.7% to 58.7% while reducing answer/full-information leakage from 34.0% to 9.9%.

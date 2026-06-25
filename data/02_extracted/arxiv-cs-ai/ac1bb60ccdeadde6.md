@@ -53,6 +53,7 @@ key_logic_flow:
 - 在包含 20 个系统的评估中，Lung-R1-14B 在选择题、肺部问答和 EMR 诊断三项任务上均达到最先进水平。
 - Lung-R1-14B 的 EMR 诊断得分为 4.3583，超过最强非 Lung-R1 基线 0.1476 分。
 - 实验结果证明了 LungKG 引导的训练方法对基于 EMR 的肺部诊断的有效性。
+extract_result: success
 ---
 
 # Computer Science > Artificial Intelligence

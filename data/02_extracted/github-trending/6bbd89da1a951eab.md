@@ -67,6 +67,7 @@ key_logic_flow:
 - Plane 的核心功能包括工作项管理（支持富文本编辑器和文件上传）、周期与燃尽图、模块化项目拆分、自定义筛选视图、AI 辅助页面（Pages）以及实时分析仪表盘。
 - Plane 托管在 GitHub 上，采用 GNU Affero General Public License v3.0 开源协议。
 - Plane 通过 GitHub Discussions 和官方论坛鼓励社区参与，支持报告 bug、提交功能请求和改进文档等贡献方式。
+extract_result: success
 ---
 
 **Modern project management for all teams**

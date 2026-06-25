@@ -130,6 +130,7 @@ key_logic_flow:
 - 生成的trace文件（trace.fxt.gz）可通过magic-trace.org（基于Perfetto的Web UI）打开，支持缩放、平移和耗时测量等交互式分析
 - magic-trace不发送任何用户代码或追踪数据到外部，Web界面完全在浏览器本地运行
 - 核心作者Tristan Hume在Jane Street工作期间开发了magic-trace，项目目前由Jane Street维护
+extract_result: success
 ---
 
 magic-trace collects and displays high-resolution traces of what a process is doing. People have used it to:

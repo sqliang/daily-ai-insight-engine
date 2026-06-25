@@ -52,6 +52,7 @@ key_logic_flow:
 - Cadence基于NemoClaw构建自主RTL工程师，协调Cadence ChipStack进行设计与验证，将RTL验证时间从数周缩短到数小时。
 - Dassault Systèmes正将3DEXPERIENCE Agentic Platform产品化，基于NemoClaw和OpenShell运行自主设计、仿真和制造代理。
 - Siemens将NemoClaw和OpenShell集成到Fuse EDA AI Agent中，用于半导体、3D集成电路和PCB系统设计的多工具工作流编排。
+extract_result: success
 ---
 
 Accelerated computing has revolutionized industrial engineering, compressing simulation times from weeks to hours.

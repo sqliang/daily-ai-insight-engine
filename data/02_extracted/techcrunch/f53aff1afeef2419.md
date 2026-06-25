@@ -42,6 +42,7 @@ key_logic_flow:
 - Dean Ball将于2026年7月6日加入OpenAI，领导新成立的Strategic Futures团队，直接向首席战略官Jason Kwon汇报。
 - Strategic Futures团队将专注于灾难性风险、递归自我改进、劳动力市场影响以及前沿实验室与政府关系等议题，涵盖对外政策与内部治理双重职责。
 - Shazeer在谷歌期间曾因在内部论坛发表关于跨性别身份和加沙战争的政治观点引发争议，其帖子被管理层删除。
+extract_result: success
 ---
 
 OpenAI is bringing on some big names to the team in the lead-up to its public debut: Google DeepMind AI legend Noam Shazeer and former Trump White House AI policy official Dean Ball.

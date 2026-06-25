@@ -34,6 +34,7 @@ key_logic_flow:
 - 医生评审显示 GPT-5.5 Instant 的失效模式少于旧模型和人类医生撰写的回复，尤其在遗漏警示信号和就医转诊建议方面。
 - 基于生产流量监测，过去两个月中至少有一个事实性问题被标记的健康回复比例下降了 71%。
 - OpenAI 还在推进 ChatGPT for Clinicians 和 OpenAI for Healthcare 等面向医疗专业人员的工具。
+extract_result: success
 ---
 
 健康是人们使用 ChatGPT 的最有意义的方式之一。每周，超过 2.3 亿人会向 ChatGPT 寻求健康与身心健康问题方面的帮助：理解健康信息、看懂化验结果、为就诊做准备、处理保险事宜、养成更健康的习惯，以及弄清下一步该问什么。

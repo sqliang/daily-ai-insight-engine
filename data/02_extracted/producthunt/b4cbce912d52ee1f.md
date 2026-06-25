@@ -26,6 +26,7 @@ key_logic_flow:
 - Atomic Mail Agentic 在 Product Hunt 上有一个产品页面
 - 该页面受到安全服务（Cloudflare 类型）保护，触发了自动程序验证
 - 当前无法获取该产品的任何描述、功能、价格或发布信息
+extract_result: success
 ---
 
 # www.producthunt.com

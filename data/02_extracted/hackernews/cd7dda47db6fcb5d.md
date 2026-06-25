@@ -36,6 +36,7 @@ key_logic_flow:
 - EFF指出该法案未经任何听证会或实质性审议即被快速推进，缺乏必要的公众监督和辩论。
 - EFF批评版权局此前在AI合理使用报告和SOPA等议题上已偏向大型娱乐产业利益，新法案将使其更加政治化。
 - EFF呼吁参议院否决该法案，认为版权机构应服务公共利益，而非总统行政部门或行业游说者。
+extract_result: success
 ---
 
 In a voice vote earlier this week, the House of Representatives passed H.R. 6028, the “Legislative Branch Agencies Clarification Act.” The legislation is presented as a technical reorganization of some government agencies, but it’s much more than that.

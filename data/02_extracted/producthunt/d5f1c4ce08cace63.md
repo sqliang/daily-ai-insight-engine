@@ -26,6 +26,7 @@ key_logic_flow:
 - 文章标题为 Henji，来自 Product Hunt 产品页面。
 - 页面触发了 Cloudflare 类型的安全验证，正文内容被拦截，无法阅读。
 - 由于内容不可获取，无法提取关于 Henji 产品的任何功能、定位或具体信息。
+extract_result: success
 ---
 
 # www.producthunt.com

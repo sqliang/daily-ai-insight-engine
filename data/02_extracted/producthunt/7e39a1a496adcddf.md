@@ -27,6 +27,7 @@ key_logic_flow:
 - 爬虫访问该页面时触发了 ProductHunt 的安全验证机制（反爬保护），页面仅返回验证提示。
 - 由于安全验证拦截，无法获取 Genie Mentions 的产品描述、功能特性或任何实质内容。
 - 该产品页面当前状态为只可访问标题，正文内容被安全服务屏蔽。
+extract_result: success
 ---
 
 # www.producthunt.com

@@ -52,6 +52,7 @@ key_logic_flow:
 - 第五至第八章是全书核心：系统对比四种并行策略的适用场景与通信开销，并引入重计算、ZeRO优化器分片、主机卸载、梯度累积等内存优化手段
 - 实战部分以LLaMA 3为例，在TPU v5e上估算训练成本与时间、推理延迟与吞吐量的权衡，最后通过JAX+TensorBoard分析器教授性能调试方法；第十二章新增GPU章节作为补充
 pipeline_stage: fact_extracted
+extract_result: success
 ---
 
 A Systems View of LLMs on TPUs

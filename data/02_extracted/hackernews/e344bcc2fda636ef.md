@@ -40,6 +40,7 @@ key_logic_flow:
 - '[Union] 属性驱动隐式转换（从 case 类型到 union 类型）和 switch 表达式的穷尽性检查，遗漏 case 会触发 CS8509 警告。'
 - 默认实现将值类型参数装箱为 object 存储在 Value 属性中，在值类型较多的场景下会产生不必要的堆分配。
 - 开发者可通过手动实现 IUnion 接口并添加 [Union] 属性来创建自定义联合类型，以此避免装箱开销并复用编译器的模式匹配支持。
+extract_result: success
 ---
 
 Unions are one of those features that have been requested for years, and in .NET 11 (or rather, C# 15) they're *finally* here. In this post I describe what that support looks like, how you can use them, how they're implemented, and how you can implement your own custom types.

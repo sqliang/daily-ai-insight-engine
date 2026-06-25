@@ -27,6 +27,7 @@ key_logic_flow:
 - Fable 5 配备安全防护，涉及某些敏感话题的查询将被转至 Claude Opus 4.8 处理，平均触发率低于 5% 的会话。
 - Claude Mythos 5 与 Fable 5 共享同一基础模型，但在部分领域移除了安全限制，通过 Project Glasswing 与美国政府合作部署。
 - 两款模型的定价为每百万输入令牌 10 美元、输出令牌 50 美元，是 Claude Mythos Preview 价格的一半。
+extract_result: success
 ---
 
 # Claude Fable 5 and Claude Mythos 5

@@ -25,6 +25,7 @@ key_logic_flow:
 - 目标页面为 ProductHunt 上的产品 Fonda（https://www.producthunt.com/products/fonda）。
 - 页面访问被安全服务拦截，要求通过验证码确认非自动程序。
 - 最终获取到的正文内容仅为安全验证提示页面，未包含任何产品实际信息。
+extract_result: success
 ---
 
 # www.producthunt.com

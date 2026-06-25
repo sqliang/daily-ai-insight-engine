@@ -34,6 +34,7 @@ key_logic_flow:
 - 微软的AI训练数据规模超过250万亿token，经过筛选后用于高效训练模型。
 - Suleyman提出'人本超级智能'理念，认为判断技术是否该存在的标准是它能否加速人类进步。
 - 微软与Mayo Clinic合作，从零开始训练一个新的医疗基础模型。
+extract_result: success
 ---
 
 # 😸 WATCH: Sleeping on Microsoft AI? Whoops.

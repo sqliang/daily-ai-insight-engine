@@ -34,6 +34,7 @@ key_logic_flow:
 - Strato E通过HDMI 2.1接口输出，提供接近视觉无损的4K画质和清晰的Atmos音效，画质优于流媒体服务。
 - 该设备的缺点是价格昂贵、内置存储空间有限，且仅支持昂贵的生态系统内存储扩展。
 - Kaleidescape产品线一直面向高端定制影院市场，Strato E是其目前最便宜的4K播放器机型。
+extract_result: success
 ---
 
 We’ve lost something in the past 15 years. Netflix, Amazon, Disney, Apple; they’ve all convinced us that streaming is the best way to watch movies and shows at home. With everything at our fingertips, there’s no need to run to Blockbuster for the weekend’s entertainment, or wait for a DVD rental to arrive in the mail. And going to the movie theater is a luxury — one that keeps getting more expensive.

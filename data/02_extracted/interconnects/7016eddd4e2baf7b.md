@@ -31,6 +31,7 @@ key_logic_flow:
 - 闭源实验室的API业务将不可避免地出现下滑，实验室会通过延迟推出最佳模型来保护token供应、防止蒸馏并维持高利润率。
 - 深度依赖编程智能体完成复杂知识工作的用户会始终为最佳模型付费，而非满足于足够好的方案。
 - 顶级闭源实验室（Anthropic、OpenAI，以及可能追赶上的Google）在给定成本下总能制造出智能效率最高的模型。
+extract_result: success
 ---
 
 # Open and closed models are on different exponentials

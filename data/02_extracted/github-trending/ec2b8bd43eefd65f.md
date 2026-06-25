@@ -154,6 +154,7 @@ key_logic_flow:
 - Hermes Agent 提供六种终端后端——本地、Docker、SSH、Singularity、Modal 和 Daytona，可在低至 $5 的 VPS 到
   GPU 集群上运行，其中 Modal 和 Daytona 支持无服务器持久化（空闲时休眠）。
 - Hermes Agent 支持从 OpenClaw 一键迁移设置、记忆、技能和 API 密钥，并兼容 agentskills.io 开放标准。
+extract_result: success
 ---
 
 **The self-improving AI agent built by Nous Research.** It's the only agent with a built-in learning loop — it creates skills from experience, improves them during use, nudges itself to persist knowledge, searches its own past conversations, and builds a deepening model of who you are across sessions. Run it on a $5 VPS, a GPU cluster, or serverless infrastructure that costs nearly nothing when idle. It's not tied to your laptop — talk to it from Telegram while it works on a cloud VM.

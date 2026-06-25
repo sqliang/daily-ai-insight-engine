@@ -25,6 +25,7 @@ key_logic_flow:
 - 该页面是 Product Hunt 上 agmsg 产品的页面，但访问被安全服务拦截
 - 页面显示的内容仅为安全验证提示，无 agmsg 产品的任何功能描述或介绍
 - 由于安全验证机制，无法获取 agmsg 产品的实际信息
+extract_result: success
 ---
 
 # www.producthunt.com

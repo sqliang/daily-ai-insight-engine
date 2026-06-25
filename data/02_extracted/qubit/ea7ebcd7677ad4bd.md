@@ -47,6 +47,7 @@ key_logic_flow:
 - 「腾讯Hy翻译」微信小程序同步上线，支持语音输入、自定义翻译风格和指令，可通过提前下载端侧模型实现离线翻译。
 - Hy-MT2已在GitHub、HuggingFace、ModelScope和腾讯云等平台开源，ARM、高通、Intel、沐曦、天数智芯等多个硬件平台支持部署，腾讯混元同时与WMT26合作举办翻译赛事。
 pipeline_stage: fact_extracted
+extract_result: success
 ---
 
 # 腾讯混元开源全新翻译模型Hy-MT2 ，上线小程序「腾讯Hy翻译」

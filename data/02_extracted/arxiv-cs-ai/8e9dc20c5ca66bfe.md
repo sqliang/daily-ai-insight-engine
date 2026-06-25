@@ -56,6 +56,7 @@ key_logic_flow:
 - 梯度裁剪基线方法无法复现LBW-Guard的效果，证明其机制不同于简单的局部梯度抑制
 - 作者得出有限系统结论：稳定性敏感的LLM训练可以从优化器之上的治理平面中受益，有界运行时控制可在压力下保持有效算力利用
 pipeline_stage: fact_extracted
+extract_result: success
 ---
 
 # Computer Science > Artificial Intelligence

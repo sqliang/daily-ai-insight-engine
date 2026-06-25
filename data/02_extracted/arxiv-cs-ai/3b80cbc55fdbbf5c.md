@@ -32,6 +32,7 @@ key_logic_flow:
 - 当前的过程奖励模型采用启发式定义的奖励函数，对各维度因素进行等权加权。
 - 等权加权方式会导致主导因素掩盖个别维度的失败，无法保证推理过程整体有效性。
 - 该论文提出最差维度优化方法，旨在解决上述过程奖励模型的结构性缺陷。
+extract_result: success
 ---
 
 # Computer Science > Artificial Intelligence

@@ -192,6 +192,7 @@ key_logic_flow:
 - 基准证据分为 direct/variant/base/interpolated/self-reported 五个置信等级，虚构的上传者声明和跨家族继承分数会被主动拒绝。
 - 除核心推荐功能外，还提供 GPU 模拟（--gpu）、硬件规划（plan）、一键聊天（run）、Python 代码片段生成（snippet）和 JSON 输出等子命令。
 - 支持通过 uvx、Homebrew、pip 等多种方式安装，单次运行无需项目配置，执行 uvx whichllm@latest 即可获得推荐结果。
+extract_result: success
 ---
 
 **Find the best local LLM that actually runs on your hardware.**

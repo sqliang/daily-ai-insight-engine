@@ -32,6 +32,7 @@ key_logic_flow:
 - 产品定位是让agent和自动化工具能够直接消费产品分析数据
 - 该产品在Product Hunt平台上进行发布和讨论
 pipeline_stage: fact_extracted
+extract_result: success
 ---
 
 > **⚠️ 正文提取不完整**：HTML 获取成功但无法从中提取正文，以下为文章摘要

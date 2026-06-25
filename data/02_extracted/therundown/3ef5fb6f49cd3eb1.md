@@ -39,6 +39,7 @@ key_logic_flow:
 - OpenAI 的 Alex Wei 将此视为数学作为 AI 能力「先行指标」的证据，预示系统可做出跨领域原创贡献
 - OpenAI 此前在 2025 年曾声称 GPT-5 解决 10 个 Erdős 问题后撤回，此次发布在可信度管理上更为谨慎
 pipeline_stage: fact_extracted
+extract_result: success
 ---
 
 Good morning, {{ first_name | AI enthusiasts }}. Sam Altman called it a "kinda big milestone." That may be the rare case of a tech CEO underselling a headline.

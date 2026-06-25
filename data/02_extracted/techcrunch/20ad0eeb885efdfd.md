@@ -35,6 +35,7 @@ key_logic_flow:
 - Gemini 可通过 Personal Intelligence 学习用户信息后代填表单，该功能为 opt-in 且可随时关闭。
 - Gemini 集成到 Gboard 键盘，推出 Rambler 语音功能，可转录并过滤语气词后格式化输出。
 - Android 用户可通过自然语言描述来生成自定义小部件（vibe-coding），遵循 Material 3 设计语言。
+extract_result: partial
 ---
 
 Google announced a number of new Gemini Intelligence-branded AI features at its Android Show: I/O Edition event on Tuesday. These include the ability for AI to complete tasks across apps, browse the web, fill out forms, dictate speech, and even allow you to vibe-code your own Android widgets.

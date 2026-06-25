@@ -37,6 +37,7 @@ key_logic_flow:
 - 存储芯片专家向金融时报表示iPhone几乎必然受涨价影响，苹果9月新机发布提供了调价窗口
 - TechInsights估算苹果需将下一代iPhone Pro加价270美元才能维持当前利润率（iPhone 17 Pro起售价1099美元）
 - AI至今未为苹果带来收益：公司因未兑现AI承诺支付2.5亿美元和解金，WWDC展示的Siri改造等进展反而意味着更多内存需求
+extract_result: success
 ---
 
 It’s been called RAMageddon: AI’s insatiable demand for hardware has caused a worldwide shortage of memory chips. Now outgoing Apple CEO Tim Cook is warning its customers that your next Mac, iPhone, or iPad could be more expensive thanks to surging memory and storage chips costs.

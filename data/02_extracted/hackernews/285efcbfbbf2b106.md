@@ -29,6 +29,7 @@ key_logic_flow:
 - Fabrice Bellard 是一位在巴黎低调生活的法国工程师，三十年来持续编写软件。
 - Bellard 编写的代码支撑了 YouTube、Netflix、TikTok 等平台的视频流传输，成为整个互联网基础设施的一部分。
 - 尽管 Bellard 的软件被广泛使用，但他的名字并不为大众所知。
+extract_result: success
 ---
 
 I admire Fabrice Bellard. He is almost certainly a better overall programmer than I am.

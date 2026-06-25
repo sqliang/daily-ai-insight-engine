@@ -39,6 +39,7 @@ key_logic_flow:
 - 结果显示哪些模型返回了哪些答案，并高亮显示模型可能产生的幻觉内容。
 - Dimson表示，2026年Google虚荣搜索已不再合适，因为越来越多流量转向了LLM。
 - Dimson和Flynn此前通过其设计公司Global Illumination被收购而加入OpenAI，离职后创建了这一项目。
+extract_result: success
 ---
 
 Anyone who’s Googled themselves recently knows that it doesn’t quite hit the way it used to. Sure, there’s everything going on with Google search itself, but there’s also an inescapable feeling that web search isn’t the canonical source of information that it used to be, with just as many people learning about who you and I might be from chatbots.

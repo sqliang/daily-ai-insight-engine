@@ -28,6 +28,7 @@ key_logic_flow:
 - 游戏作曲家Bobby Prince（全名Robert 'Bobby' Prince III）已去世。
 - 他是经典游戏《毁灭战士》（Doom）、《德军总部3D》（Wolfenstein 3D）和《毁灭公爵3D》（Duke Nukem 3D）的配乐作曲家。
 - 讣告由Legacy.com发布，该网站因安全验证机制导致正文内容无法完整获取。
+extract_result: success
 ---
 
 # www.legacy.com

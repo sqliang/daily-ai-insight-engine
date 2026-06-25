@@ -27,6 +27,7 @@ key_logic_flow:
 - 访问该页面时触发了网站的安全验证（Cloudflare 防护），未能获取到实际的产品内容。
 - 返回的页面正文仅包含安全验证提示，无任何关于 Deep Work Plan 产品的功能、定价或描述信息。
 - 由于安全机制拦截，无法确认该产品的具体类别、目标用户或核心价值主张。
+extract_result: success
 ---
 
 # www.producthunt.com

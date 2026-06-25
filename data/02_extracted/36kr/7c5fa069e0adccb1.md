@@ -69,6 +69,7 @@ key_logic_flow:
 - 金融垂域AI大模型公司GIM完成超亿元天使+轮融资，由赛富投资基金领投，将自研金融垂域大模型。
 - 诺基亚推出Deepfield Genome Shield，定位为业界首个主动式全天候DDoS自动化防护系统。
 - 京东方A公告控股子公司能源科技拟终止北交所上市申请并撤回文件。
+extract_result: success
 ---
 
 ## 大公司：

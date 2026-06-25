@@ -32,6 +32,7 @@ key_logic_flow:
 - 作者预测Google及其同类企业下一步将制造贬低开放Web的话术（类似暗网），将自身抽象层包装为安全Web。
 - 作者呼吁用户通过更换默认搜索引擎和停止使用Chrome浏览器来抵制这一趋势。
 pipeline_stage: fact_extracted
+extract_result: success
 ---
 
 In Yesterday’s IO Keynote Google declared war on the remnants of the Web. (See longer description on their website.) TL;DR: They are pushing Search more into the “here’s your processed answer” direction that “AI Overviews” have established (you know, those AI snippets in current Search that are wrong about 10% of the time). So they are mostly giving up on the paradigm of providing links to information.

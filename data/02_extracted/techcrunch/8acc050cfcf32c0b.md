@@ -34,6 +34,7 @@ key_logic_flow:
 - 美国国防部将Anthropic列为供应链风险，原因是Anthropic拒绝让政府将其模型用于大规模国内监控和自主武器系统。
 - 各国政府正争相获取Mythos的访问权限，而Anthropic出于对其网络安全能力被滥用的担忧，已限制该模型的访问。
 - NSA发言人拒绝对该报道置评，Anthropic也未回应置评请求。
+extract_result: success
 ---
 
 Anthropic has deployed around half-a-dozen engineers to the National Security Agency to help its spies use the company’s frontier cybersecurity AI model, Mythos, Financial Times reported, citing anonymous sources.

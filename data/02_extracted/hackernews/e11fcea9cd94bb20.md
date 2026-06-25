@@ -40,6 +40,7 @@ key_logic_flow:
 - 定价为每百万输入token 10美元、每百万输出token 50美元，低于Claude Mythos Preview的一半。
 - Fable 5在软件工程、知识工作、视觉、记忆与长上下文、生命科学研究等多个领域的基准测试中达到业界领先水平。
 - Mythos 5在蛋白质设计中加速了约10倍的流程，能自主完成科学家级别的全流程任务，并在分子生物学假设生成和基因组学研究中取得突破。
+extract_result: success
 ---
 
 # Claude Fable 5 and Claude Mythos 5

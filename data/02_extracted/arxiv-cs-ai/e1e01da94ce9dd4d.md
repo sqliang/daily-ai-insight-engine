@@ -48,6 +48,7 @@ key_logic_flow:
 - ToM-U 与贝叶斯心智理论不同，后者预设而非推导信念状态。
 - ToM-U 与模拟理论和理论-理论不同，后者缺乏认知状态推理的形式化工具。
 - 该框架声称能产生基于模型结构性质的方向性、可证伪的心智化失败预测，并定位为目标推理等下游社会认知过程的上游机制。
+extract_result: success
 ---
 
 # Computer Science > Artificial Intelligence

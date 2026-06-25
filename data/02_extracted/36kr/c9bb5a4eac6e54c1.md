@@ -25,6 +25,7 @@ key_logic_flow:
 - 知情人士透露Uber对Nuro的承诺投资总额已接近5亿美元
 - Uber此前宣布计划向Nuro投资数亿美元
 - 该承诺投资包含Uber参与Nuro的2.03亿美元融资轮
+extract_result: success
 ---
 
 > **⚠️ 正文提取不完整**：HTML 获取成功但无法从中提取正文，以下为文章摘要

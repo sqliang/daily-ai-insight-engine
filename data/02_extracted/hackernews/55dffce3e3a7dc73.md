@@ -50,6 +50,7 @@ key_logic_flow:
 - Niantic的前身Keyhole曾接受CIA风投机构In-Q-Tel资助，其技术被用于支持伊拉克战争中的美军；2025年Niantic分拆后，游戏业务被沙特主权基金收购，地图技术则独立为Niantic
   Spatial并向防务领域发展。
 - 该事件引发广泛的数据同意伦理争议：玩家为游戏目的提供的扫描数据可能被用于武器系统，而用户无法预见或追溯其数据的最终用途。
+extract_result: success
 ---
 
 Hundreds of millions of Pokémon Go players spent years filming the streets, parks, and buildings around them to earn in-game rewards. Those roughly 30 billion environmental scans are now owned by **Niantic Spatial**, and they helped train a camera-based navigation model that a U.S. defense contractor is preparing to put into drones and other military robots. Most of the players had no idea.

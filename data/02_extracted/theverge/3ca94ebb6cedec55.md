@@ -35,6 +35,7 @@ key_logic_flow:
 - Apple 采取了相反的设计路线，新版 Siri 被设定为明确拒绝当用户将其视为恋爱伴侣。
 - Federighi 表示 Siri 的核心定位是帮助用户完成任务和了解世界，而非建立情感关系。
 - 采访中 Apple 营销主管 Greg Joswiak 也参与了讨论，话题还涉及隐私保护和儿童安全功能。
+extract_result: success
 ---
 
 Our early testing has already shown that Siri AI knows when to shut up, and that’s very much by design. In an interview with *Mostly Human* spotted by *MacRumors*, Craig Federighi said Apple’s new Siri won’t act all sycophantic like chatbots made by OpenAI, Google, and others.

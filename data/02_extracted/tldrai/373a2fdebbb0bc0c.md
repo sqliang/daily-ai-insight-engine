@@ -32,6 +32,7 @@ key_logic_flow:
 - 基准使用 mini-SWE-agent 作为统一脚手架，避免针对特定任务调优工具链，确保模型能力的公平对比
 - 智能体在多项任务上取得了部分进展，但完全通过所有行为测试仍超出当前所有模型的能力边界
 pipeline_stage: fact_extracted
+extract_result: success
 ---
 
 # ./ProgramBench

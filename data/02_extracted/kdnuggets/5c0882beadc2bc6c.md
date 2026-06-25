@@ -41,6 +41,7 @@ key_logic_flow:
 - 部署后自动获得交互式 API 文档（/docs），并可通过 FastAPI Cloud 控制台查看应用日志和运行状态进行监控
 - 该平台还提供集成面板，支持在应用发展过程中接入额外服务
 pipeline_stage: fact_extracted
+extract_result: success
 ---
 
 ## \# Introduction

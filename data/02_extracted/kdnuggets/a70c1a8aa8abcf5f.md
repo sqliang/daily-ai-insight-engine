@@ -34,6 +34,7 @@ key_logic_flow:
 - PyTorch通过设置张量的requires_grad=True来动态跟踪所有操作，构建有向无环图（DAG），调用.backward()即可自动计算梯度。
 - 文章通过对比手动反向传播和PyTorch自动微分的代码示例，验证两种方式得到完全一致的梯度计算结果。
 - Autograd对每个数学运算节点动态跟踪为C++对象，能够灵活处理动态循环、条件执行和递归网络等复杂架构。
+extract_result: success
 ---
 
 # 5 Must-Know Python Concepts for AI Engineers

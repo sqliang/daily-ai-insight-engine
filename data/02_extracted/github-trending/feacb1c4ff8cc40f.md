@@ -81,6 +81,7 @@ key_logic_flow:
 - cua-bench 支持 OSWorld、ScreenSpot、Windows Arena 等基准测试，可导出代理执行轨迹用于模型训练和评估。
 - Lume 基于 Apple Virtualization.Framework 在 Apple Silicon 上创建和管理 macOS/Linux VM，提供接近原生的性能。
 - 项目采用 MIT 许可证，部分组件使用 Kasm（MIT）、OmniParser（CC-BY-4.0）和 Ultralytics（AGPL-3.0）等第三方许可证。
+extract_result: success
 ---
 
 **Building your own agent?** Start with Cua ·

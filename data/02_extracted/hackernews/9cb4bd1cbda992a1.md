@@ -35,6 +35,7 @@ key_logic_flow:
 - 2022年9月，IMY根据GDPR一站式服务机制（第56(1)条）将案件移交挪威Datatilsynet，因实际控制者Elkjop Nordic AS主营业地位于挪威。
 - 2026年6月1日，Datatilsynet对Elkjop集团处以2000万挪威克朗（约180万欧元）罚款，认定其同意无效（强迫、不具体、信息不充分），且未经第6(4)条兼容性评估擅自将数据用于广告和转化追踪。
 - 作者通过志愿者运营的GDPRhub维基而非监管机构获知处罚结果，正追究IMY未履行第77(2)条告知义务的责任，并计划对Elkjop提起民事诉讼。
+extract_result: success
 ---
 
 Back in the summer of 2021 I was a member of the Elgiganten Kundklubb, the customer club the Elkjop group runs across the Nordics, and like a lot of members I was buried under marketing emails. So I did the obvious thing and went looking for a way to switch them off. What I found instead was the problem that has taken five years to put right - the only way to stop the marketing was to cancel my membership of the club altogether.

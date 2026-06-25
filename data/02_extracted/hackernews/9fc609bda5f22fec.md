@@ -32,6 +32,7 @@ key_logic_flow:
   年仍被欧盟成员国出口至第三国。
 - 被禁农药从欧盟出口至第三国后，通过进口食品以残留形式返回欧洲市场，形成"有毒农药回旋镖"效应。
 - 欧盟拟通过"omnibus"快速通道一揽子削弱食品安全法规，包括降低农药安全审查、残留限量和进口管控标准。
+extract_result: success
 ---
 
 Pesticides that are not approved for use or sale in the EU have been found in everyday food products such as rice, tea and spices. New laboratory tests on 64 products from the Netherlands, France, Austria and Germany detected residues of multiple pesticides — including substances no longer approved in the EU.

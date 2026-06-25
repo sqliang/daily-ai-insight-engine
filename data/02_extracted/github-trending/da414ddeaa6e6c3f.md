@@ -176,6 +176,7 @@ key_logic_flow:
 - 该项目替代了 libSQL 成为 Turso 的发展方向——libSQL 已生产就绪，Turso Database 尚在快速演进中，已用于 Turso Cloud、Kin
   AI 助手和 Spice.ai 等生产环境。
 - 支持 Rust、JavaScript、Python、Go、.NET、Java 六种语言绑定，CLI 可通过 curl 一键安装或通过 Docker 运行。
+extract_result: success
 ---
 
 An in-process SQL database, compatible with SQLite.

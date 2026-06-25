@@ -33,6 +33,7 @@ key_logic_flow:
 - 截至 2023 年底，发电厂并网请求总量已超过现有发电厂总装机容量，电网拥堵严重，新建电厂本身也面临并网困难。
 - AI 数据中心电力需求预计到 2035 年增长近三倍，部分区域批发电价较五年前上涨最高 267%，PJM 等电网运营商陷入混乱。
 - 能源部长 Chris Wright 于 2025 年 10 月敦促 FERC 处理数据中心并网延迟问题，称其威胁美国 AI 竞争力。
+extract_result: success
 ---
 
 The Federal Energy Regulatory Commission (FERC) told grid operators on Thursday to fast-track interconnection requests from data centers and other large electricity users.

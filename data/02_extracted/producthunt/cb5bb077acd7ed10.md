@@ -27,6 +27,7 @@ key_logic_flow:
 - 该产品页面被安全验证机制拦截，无法获取详细的产品描述和内容。
 - 从产品名称推测，该工具可能与 Markdown 和 HTML 文件的阅读或渲染相关。
 - 由于安全验证，无法确认该产品的具体功能、开发者、定价或用户评价等信息。
+extract_result: success
 ---
 
 # www.producthunt.com

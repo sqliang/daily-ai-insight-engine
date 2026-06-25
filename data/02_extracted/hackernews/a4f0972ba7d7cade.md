@@ -41,6 +41,7 @@ key_logic_flow:
 - 动物工具使用分两类：proto-tool use（利用环境，如将猎物摔在石头上）和 true tool use（操控独立物体），鸦科鸟类能掌握更复杂的 true
   tool use。
 - 马来西亚 house crow 学会在红绿灯处等待运粮卡车，停车时啄破粮袋取食，绿灯亮时飞离，展现了环境观察与时机把握能力。
+extract_result: success
 ---
 
 [Editor’s note: Not only is it a bit rude to call someone a “featherbrain,” it’s also highly inaccurate, Louis Lefebvre writes in ‘*A Bird’s IQ*,’ translated from the original French by Pablo Strauss and out now from Greystone Books. In fact, when humans study birds, there’s a lot we can learn about ourselves. In this excerpt, Lefebvre shares a litany of innovative, sometimes bloody-minded, corvid meal acquisition tactics.]

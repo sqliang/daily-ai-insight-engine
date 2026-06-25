@@ -50,6 +50,7 @@ key_logic_flow:
 - 在常见场景下，MTC 握手的认证路径仅包含一个签名、一个公钥和一个包含证明，比当前 PKI 握手更小，同时使用后量子算法。
 - MTC 将证书透明度（Certificate Transparency）内建于签发过程本身，证书无法脱离 Merkle 树存在，无需额外的透明度日志签名。
 - Google 宣布 2029 年前完成迁移，Cloudflare 同步承诺，Go 1.27 已将 ML-DSA 加入标准库，多方推动后量子认证时间表大幅提前。
+extract_result: success
 ---
 
 Let’s Encrypt is committed to a post-quantum-safe Web PKI. The path we’re planning to take is Merkle Tree Certificates (“MTCs”), a new approach that adds post-quantum authentication to the web without sacrificing the speed and reliability that have made TLS universal.

@@ -34,6 +34,7 @@ key_logic_flow:
 - X 帧缓冲区内容以原生分辨率呈现，小尺寸表面采用最近邻缩放算法。
 - 内置 CRT 扫描线、荧光粉遮罩、辉光和暗角等复古显示器外观预设。
 - 支持 GLX 渲染，允许 OpenGL 客户端通过 X11 进行 3D 渲染，但兼容性因具体环境而异。
+extract_result: success
 ---
 
 ### Rootless Spatial Windows

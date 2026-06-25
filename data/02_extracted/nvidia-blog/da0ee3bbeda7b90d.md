@@ -35,6 +35,7 @@ key_logic_flow:
 - NVIDIA DSX AI 工厂参考设计采用干式冷却器闭循环系统，几乎消除了数据中心的用水量，传统冷却塔每兆瓦每年约消耗 260 万加仑水。
 - 传统数据中心冷却占电力消耗高达 40%，每提高冷却液温度 1°C 可降低约 4% 的冷却能耗。
 - 一个 50 兆瓦的超大规模数据中心通过转向液冷基础设施，每年可在冷却相关能源和水成本上节省超过 400 万美元。
+extract_result: success
 ---
 
 Hot tubs sit at about 38 to 40 degrees Celsius, warm enough that most people can only soak for about 15 minutes. NVIDIA’s newest AI servers can run their cooling liquid even hotter — up to 45 degrees Celsius, or 113 degrees Fahrenheit. That higher temperature limit is precisely what makes them more energy efficient.

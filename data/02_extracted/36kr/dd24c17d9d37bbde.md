@@ -27,6 +27,7 @@ key_logic_flow:
 - 谷歌CEO宣布Gemini月活跃用户数已达9亿，显示出AI助手产品的规模化增长
 - 寿司郎回应餐具卫生抽检结果，10件抽检样品全部不合格
 pipeline_stage: fact_extracted
+extract_result: success
 ---
 
 8点1氪丨英伟达Q1净利润583亿美元；谷歌CEO：Gemini月活跃用户达9亿；寿司郎回应“盘子抽检10抽10脏”

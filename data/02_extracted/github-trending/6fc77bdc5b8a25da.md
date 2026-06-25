@@ -61,6 +61,7 @@ key_logic_flow:
 - 推荐以 Gemini 作为英语学习主引擎，将 Gem、Live、Guided Learning、Canvas、Quiz、Flashcards 串联为完整训练流程
 - 设计 ChatGPT、Claude、Perplexity、DeepL Write 等工具的明确分工方案，构建长期有效的听说读写训练回路
 - 指南以知识共享署名-非商业性使用 4.0 国际许可协议开源，作者声明不接受金钱赞助
+extract_result: success
 ---
 
 谨以此献给我曾今的挚爱 `W.`

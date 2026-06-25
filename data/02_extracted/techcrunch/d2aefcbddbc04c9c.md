@@ -39,6 +39,7 @@ key_logic_flow:
 - Sarvam计划将自身AI模型与HCLTech的企业客户关系、工程团队和软件资产相结合，为企业和政府客户构建AI产品。
 - 该融资发生在各国对AI主权关注日益加剧的背景下，此前Anthropic因美国政府禁令限制其最新模型Fable 5和Mythos 5向外国用户开放。
 - 印度是全球第二大AI消费市场，但受限于高昂算力成本和有限资本，本土前沿模型竞争者稀少，Sarvam是少数尝试构建本土基础模型的公司之一。
+extract_result: success
 ---
 
 Sarvam has raised $234 million at a $1.5 billion valuation, the company announced on Monday. The Bengaluru-based company is now India’s newest AI unicorn, as governments and companies seek greater control over critical artificial intelligence technologies and computing infrastructure.

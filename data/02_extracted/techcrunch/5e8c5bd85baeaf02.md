@@ -38,6 +38,7 @@ key_logic_flow:
 - Google向TechCrunch发表声明承认该问题，称"单词内计数字母是LLM的已知挑战，正在修复此特定问题"
 - AI研究员Matthew Guzdial解释了根本技术原因：LLM基于Transformer架构将文字切分为token进行数值编码，模型不知道'T'、'H'、'E'这些单个字母的存在
 - 研究人员对能否彻底解决LLM的拼写问题持悲观态度，认为基于token的架构从根本上限制了模型对字母级别的理解能力
+extract_result: success
 ---
 
 How many Ps are in Google? According to Google, there are two.

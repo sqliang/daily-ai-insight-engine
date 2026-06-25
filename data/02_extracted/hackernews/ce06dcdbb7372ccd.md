@@ -34,6 +34,7 @@ key_logic_flow:
 - 用户可以构建自定义镜像（如 Ubuntu 24.04 带 systemd 的镜像），通过 container build 和 container machine
   create 命令使用。
 - 容器机支持配置 CPU 和内存资源（默认内存为宿主机一半），修改配置需停止后重新启动生效。
+extract_result: success
 ---
 
 Container machine provides a highly integrated Linux environment that works seamlessly on your Mac. Container machines are fast, lightweight and persistent. They are based on standard OCI images that can be built and shared. Host integrations such as automatic user and home directory sharing provide quick and easy access to your Linux environment no matter where you are in a terminal.
