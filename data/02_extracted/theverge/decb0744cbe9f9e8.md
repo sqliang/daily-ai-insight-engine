@@ -35,6 +35,7 @@ key_logic_flow:
 - 创作者拥有控制权：可在上传时选择关闭 AI 重混功能，防止他人操纵自己的视频内容
 - 所有通过 Gemini Omni 重混生成的视频均强制添加数字水印（digital watermark），并自动链接回原始视频以保障来源可追溯
 pipeline_stage: fact_extracted
+extract_result: success
 ---
 
 Google announced a new YouTube Shorts Remix feature that lets users restyle clips or even insert themselves into other people’s videos using Gemini Omni. Now, at the bottom of a YouTube Short, when you click the remix icon, you’ll see an option to “reimagine” it. Here, you can prompt Gemini to turn a video into pixel art, an anime, or a found-footage horror film. But, beyond that, you can also alter the contents by, say, inflating heads, inserting background actors, dressing people in pirate costumes, or even putting yourself in the clip.

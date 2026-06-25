@@ -38,6 +38,7 @@ key_logic_flow:
 - 臭氧吸收模型不散射光，仅吸收上层大气中特定波段的光，使地平线和日落时分天空颜色更深、偏紫红。
 - 引入光源方向步进，在每个采样点向太阳方向做二次步进，计算光线到达该点前的大气衰减，实现真实的日出/日落色彩变化。
 - 最后讨论 Sebastian Hillaire 基于 LUT（预计算查找表）的优化方法，以减少运行时计算开销、提升性能。
+extract_result: partial
 ---
 
 # On Rendering the Sky, Sunsets, and Planets

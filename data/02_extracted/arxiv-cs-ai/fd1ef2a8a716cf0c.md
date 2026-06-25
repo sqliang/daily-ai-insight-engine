@@ -44,6 +44,7 @@ key_logic_flow:
 - 实验发现模态鸿沟：图结构被压平为文本后，一旦去除直接答案提示，其益处大幅减弱，推理效率和答案质量均显著下降。
 - 相比之下，视觉化图引导在无直接答案线索时仍然有效，且该优势在监督微调和KL蒸馏后依然保持。
 - 论文主张图不仅应作为LLM的外部知识结构来研究，也应作为组织推理的视觉化支撑框架。
+extract_result: success
 ---
 
 # Computer Science > Artificial Intelligence

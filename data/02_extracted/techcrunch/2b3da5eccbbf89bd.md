@@ -36,6 +36,7 @@ key_logic_flow:
 - 新插件和连接器向所有付费Claude客户开放，建筑在此前2月发布的法律行业插件基础之上。
 - 法律AI领域竞争激烈：Harvey以110亿美元估值融资2亿美元，Legora完成6亿美元D轮融资。
 - 报道同时指出AI在法律行业应用存在风险，包括律师使用AI生成错误文件、加州开出首例相关罚单等问题。
+extract_result: partial
 ---
 
 Anthropic announced Tuesday that it is launching a host of new chatbot features designed to provide automated assistance to law firms. The new features expand Claude for Legal — the law-focused plug-in that launched earlier this year — offering users a new set of legal plug-ins and MCP connectors designed for specific areas of law.

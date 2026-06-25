@@ -35,6 +35,7 @@ key_logic_flow:
   Policy阻止iframe嵌套。'
 - Stack Overflow上大量CORS相关问题中，许多推荐的不安全默认配置（如express的*通配符）加剧了安全隐患。
 - 作者认为CORS API过于复杂且开发者教育不足是导致普遍误解的主要原因。
+extract_result: success
 ---
 
 ### Developers don't understand CORS

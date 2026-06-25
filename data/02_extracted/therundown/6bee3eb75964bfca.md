@@ -39,6 +39,7 @@ key_logic_flow:
 - 微软预览了Project Solara平台，用于打造代理优先设备，包含徽章和桌面伴侣等硬件概念产品。
 - 微软在Surface Laptop Ultra之后推出了Surface RTX Spark Dev Box迷你PC，专为AI工作负载而设计。
 - 美国总统特朗普签署行政令，要求AI实验室自愿将前沿模型提交政府进行30天安全审查，取代此前拟定的90天要求。
+extract_result: success
 ---
 
 Good morning, {{ first_name | AI enthusiasts }}. For years, Microsoft's AI story was really OpenAI's story. At Build 2026, it felt like the tech giant was finally writing its own path.

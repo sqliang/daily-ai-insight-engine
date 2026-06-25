@@ -26,6 +26,7 @@ key_logic_flow:
 - 目标页面为 ProductHunt 上 Encord 公司的 Merlin 产品页面。
 - 页面内容被 Cloudflare 安全验证机制拦截，无法获取实际产品信息。
 - 基于现有材料无法进行有效的事实提取。
+extract_result: success
 ---
 
 # www.producthunt.com

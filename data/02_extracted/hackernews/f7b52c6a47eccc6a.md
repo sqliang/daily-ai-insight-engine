@@ -33,6 +33,7 @@ key_logic_flow:
 - DMSD在离子交换过滤床中积累后易被其他物质置换，导致TOC周期性飙升的假象。
 - 2015年NASA改用活性炭空气过滤器捕捉硅氧烷蒸气，但导致霉菌爆发，最终采用活性炭与HEPA混合方案。
 - 该问题在火星任务情景中会跟随船员在不同栖息地间重复出现，可能引发危险决策失误。
+extract_result: success
 ---
 
 # L'Affaire Siloxane

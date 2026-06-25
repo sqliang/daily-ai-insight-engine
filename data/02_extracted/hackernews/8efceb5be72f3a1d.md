@@ -38,6 +38,7 @@ key_logic_flow:
 - 此次收购将补充 Salesforce 的 Agentforce 平台（Q1 FY27 ARR 达 12 亿美元，同比增长 205%），为中小企业提供快速部署的
   AI 客服方案。
 - 交易预计在 Salesforce 2027 财年第四季度完成，不会影响其 2027 财年财务指引和资本回报计划。
+extract_result: success
 ---
 
 *Acquisition will bring Fin’s customer agent platform to companies of all sizes, accelerating time-to-value and expanding Salesforce’s ability to deliver autonomous agents across the enterprise *

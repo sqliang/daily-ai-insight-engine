@@ -57,6 +57,7 @@ key_logic_flow:
   AI 安全和对齐研究。
 - Claude for Startups 已在韩国启动，Anthropic 与 BASS Ventures 合办 Claude Build Day，并将与 Replit
   等机构合办黑客松。
+extract_result: success
 ---
 
 # Anthropic opens Seoul office and announces new partnerships across the Korean AI ecosystem

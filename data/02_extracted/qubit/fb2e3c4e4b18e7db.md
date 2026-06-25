@@ -45,6 +45,7 @@ key_logic_flow:
 - Jason 放弃 Codex 内置记忆系统，将核心记忆数据存放在本地 Obsidian vault 中，通过 AGENTS.md 规则同步更新，实现工具无关的知识库可迁移性
 - Codex 近期更新包括 Appshots 截图直喂、锁屏后远程工作、侧边栏支持 Markdown/PDF/PPT 渲染及内置浏览器 JavaScript 操控能力，周活用户已破
   400 万
+extract_result: success
 ---
 
 # OpenAI大神教你如何榨干Codex

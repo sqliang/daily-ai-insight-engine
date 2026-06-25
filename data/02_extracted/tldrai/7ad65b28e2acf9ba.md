@@ -63,6 +63,7 @@ key_logic_flow:
 - RadixArk以SGLang推理栈和Miles后训练框架为基础，完成1亿美元种子轮融资，目标是让前沿基础设施开源化、生产可用
 - Meta推出ProgramBench基准测试，包含SQLite、FFmpeg、PHP编译器等200个端到端仓库生成任务，当前顶级模型准确率为0%，引发基准公平性争议
 pipeline_stage: fact_extracted
+extract_result: success
 ---
 
 ### A series of announcements line up to a big theme: Services are the next big opportunity.

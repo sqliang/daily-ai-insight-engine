@@ -54,6 +54,7 @@ key_logic_flow:
 - 实验表明VBFDD-Agent能准确进行基于描述性文本表示的异常监测，并提供灵活、高效、可操作的维修建议
 - 专家评估证实了生成维修建议的实用价值，该方法将传统电池诊断从标签预测扩展到可解释的、面向维修的决策支持
 pipeline_stage: fact_extracted
+extract_result: success
 ---
 
 # Computer Science > Artificial Intelligence

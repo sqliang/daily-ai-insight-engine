@@ -39,6 +39,7 @@ key_logic_flow:
 - AI生产力工具承诺解决的是科技公司自己制造的效率问题，而非社会根本问题。
 - 作者以童年母亲剪优惠券的经历类比，认为AI能帮助找到最佳优惠但无法改变需要优惠券才能维持生活的经济体系。
 - 作者认为当代计算机任务让所有事情都显得重要且紧急，AI助手在这种语境下虽看起来有价值，但掩盖了更深层的社会问题。
+extract_result: success
 ---
 
 This week we’ve got tandem hands-ons with Google’s new Gemini AI agent — Spark — from my colleagues David Pierce and Jay Peters. Their takeaways are similar: It’s so effective that it’s scary. Spark knew that David’s dog is named Frida and knew the first name of Jay’s wife, even though neither of them explicitly provided this information to Google. But what’s scary to *me *is how all of this stuff seems geared toward a future of “productivity” that completely misses what needs to be fixed in our world.

@@ -30,6 +30,7 @@ key_logic_flow:
 - 新 Siri AI 将深度集成到各类应用中，基于用户的个人上下文信息提供智能帮助。
 - Apple 强调该系统在每一个环节都注重用户隐私保护。
 - Apple Intelligence 新功能将于今年秋季发布，Siri AI 首批仅支持英语，计划年内晚些时候推出。
+extract_result: success
 ---
 
 # Apple Intelligence and Siri

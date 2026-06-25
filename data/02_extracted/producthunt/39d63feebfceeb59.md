@@ -28,6 +28,7 @@ key_logic_flow:
 - 产品页面提供讨论区和外部链接入口
 - 原文抓取不完整，仅获得摘要级信息，缺少详细功能描述、定价、开发者等关键事实
 pipeline_stage: fact_extracted
+extract_result: success
 ---
 
 > **⚠️ 正文提取不完整**：HTML 获取成功但无法从中提取正文，以下为文章摘要

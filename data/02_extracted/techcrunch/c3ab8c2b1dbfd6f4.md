@@ -40,6 +40,7 @@ key_logic_flow:
 - IBM X-Force 安全研究员 Valentina Palmiotti 表示 Fable 甚至拒绝"阅读博客文章"这一类无害请求。
 - Tolmo 安全研究员 Matt Suiche 指出护栏基于关键词匹配，"网络安全"词域内的任何内容都会触发限制，但同时表示早期阶段收紧限制比放松更合理，护栏预计会逐步进化。
 - Mythos 于今年 4 月通过 Project Glasswing 以有限范围发布，上周已扩展至 15 个国家的数百个组织。
+extract_result: success
 ---
 
 Anthropic released its latest model Fable on Tuesday, billing it as a public and limited version of its powerful and much-hyped cybersecurity model Mythos.

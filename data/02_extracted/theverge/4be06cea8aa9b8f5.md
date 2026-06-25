@@ -44,6 +44,7 @@ key_logic_flow:
 - 和解后仍有约1200个学区已提起诉讼尚待审理，洛杉矶州法院的下一个类案预计7月开庭，下一场联邦风向标审判排在2026年1月
 - Meta发言人强调公司将持续推进Teen Accounts等青少年保护功能，YouTube和Snap也表示将继续完善年龄适配产品和家长控制工具
 pipeline_stage: fact_extracted
+extract_result: success
 ---
 
 After back-to-back losses in trials grappling with its impact on teens’ mental health, Meta just settled what was supposed to be its next legal battle with Kentucky’s Breathitt County School District. Google’s YouTube, Snap, and TikTok all recently settled similar claims brought by the school district, which was seeking payment from the companies to cover the cost of combatting social media-related mental health harms.

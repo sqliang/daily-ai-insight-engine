@@ -25,6 +25,7 @@ key_logic_flow:
 - IdleDev 是 Product Hunt 平台上的一个产品页面。
 - 该页面触发了安全验证机制，内容被拦截无法正常抓取。
 - 无法获取 IdleDev 的产品描述、功能特性或任何实质性信息。
+extract_result: success
 ---
 
 # www.producthunt.com

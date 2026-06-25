@@ -36,6 +36,7 @@ key_logic_flow:
 - Google还在与其他火箭发射公司接触，并计划在2027年前发射原型卫星，该计划名为Project Suncatcher，于2025年底公布。
 - Elon Musk声称轨道数据中心运营成本更低，且不受美国地面数据中心面临的本地社区反对影响。
 - TechCrunch指出，考虑卫星建造和发射成本后，目前地面数据中心仍比轨道数据中心便宜得多。
+extract_result: partial
 ---
 
 Google and SpaceX are in talks to launch orbital data centers in space, reports The Wall Street Journal, citing sources familiar with the matter.

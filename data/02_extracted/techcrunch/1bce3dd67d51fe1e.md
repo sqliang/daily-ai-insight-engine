@@ -42,6 +42,7 @@ key_logic_flow:
 - Messages新增AI回复建议，Phone应用可在通话中从Mail和Messages等其他应用提取上下文信息。
 - 苹果确认与Google合作，基于Gemini模型系列开发下一代Apple Foundation Models。
 - 苹果允许用户选择回滚或增强Liquid Glass设计元素，并展示新的分层应用图标方案。
+extract_result: success
 ---
 
 Apple’s WWDC 2026 event kicked off this morning at 10 a.m. PT at Apple Park, starting a week full of expected announcements around Siri, iOS 27, Apple Intelligence and more, along with developer events and demos. This year’s event is particularly notable for a couple things. It marks CEO Tim Cook’s last with the company, after announcing he’s handing things off to Senior Vice President of Hardware Engineering John Ternus September 1. And it’s expected to play host to Apple’s attempt to give Siri and its AI efforts overall a big boost after handing some work off to Google and delaying some releases.

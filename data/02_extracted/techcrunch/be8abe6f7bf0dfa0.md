@@ -47,6 +47,7 @@ key_logic_flow:
 - OpenAI企业主管Alexander Embiricos表示，企业客户的关注点已从"AI能做什么"转向"成本透明度和token管控"。
 - 2025年11月发布的Anthropic Claude Opus 4.5、OpenAI GPT-5.1和Google Gemini 3 Pro等新模型大幅提升了Agent能力，进一步推高了token消耗。
 - 一家公司因忘记为员工设置使用限制，产生了5亿美元的Claude账单。
+extract_result: success
 ---
 
 Across the industry, companies are starting to balk at the price of AI. Uber blew through its entire 2026 AI coding budget by April. Microsoft revoked its developers’ Claude Code licenses months after enabling them. A Priceline employee told TechCrunch that a routine Cursor contract renewal came back 4-5x more expensive.

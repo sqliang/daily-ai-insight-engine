@@ -36,6 +36,7 @@ key_logic_flow:
 - 梯度流分布可视化可检测梯度消失问题：通过注册反向传播钩子逐层捕获梯度幅度，发现深层网络的早期层梯度可能比输出层小20倍，导致早期层几乎不学习
 - 文章推荐使用TensorBoard及其替代工具进行训练过程中的可视化监控
 - 除工具外，可通过PyTorch的hooks机制和断点直接在模型计算图中插入监控逻辑，实现自定义的可视化数据捕获
+extract_result: success
 ---
 
 # Visual Debugging Tools for Machine Learning Workflows

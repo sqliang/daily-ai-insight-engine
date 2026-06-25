@@ -110,6 +110,7 @@ key_logic_flow:
 - 技术栈包括 Vanilla TypeScript、Vite、Three.js、deck.gl、MapLibre GL、Tauri 2（Rust）、Protocol
   Buffers（276 protos, 34 services）和 Redis 三层缓存。
 - 代码采用 AGPL-3.0-only 许可，由 Elie Habib 开发，支持 Vercel Edge Functions、Docker 和静态文件等多种部署方式。
+extract_result: success
 ---
 
 **Real-time global intelligence dashboard** — AI-powered news aggregation, geopolitical monitoring, and infrastructure tracking in a unified situational awareness interface.

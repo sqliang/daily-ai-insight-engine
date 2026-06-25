@@ -39,6 +39,7 @@ key_logic_flow:
 - 'SEGA 确认在《Crazy Taxi: World Tour》开发中使用了生成式 AI 作为开发者支持工具，但声明未针对游戏表演者使用 AI。'
 - Xbox 游戏部门在 4 月经历高管改组，新任负责人 Asha Sharma 承诺推动"Xbox 的回归"。
 - '活动亮点包括《Fable: Order of the Hero》故事扩展包的首批展示，以及《Persona 6》的简短预告。'
+extract_result: success
 ---
 
 The console industry is in a weird place, and both Xbox and PlayStation have a chance to change the narrative a bit with their showcases at Summer Game Fest. Sony did that by focusing on the single-player titles it’s known for, and then it was Microsoft’s turn.

@@ -34,6 +34,7 @@ key_logic_flow:
 - 核心采用Streaming-first流式架构，支持组件到达即刻挂载实现边生成边呈现，配合最小化节点差分更新与独立线程异步渲染。
 - AGenUI内置22个基础组件和45项CSS属性，Theme系统支持Design Token，模型仅需输出语义描述即可自动映射为品牌规范样式。
 - 高德与千问C端应用团队已完成生成式UI链路的Demo验证，将推动其在真实应用场景中落地上线。
+extract_result: partial
 ---
 
 # 高德与千问C端应用团队开源AGenUI：首个覆盖iOS、安卓、鸿蒙三端的原生A2UI框架

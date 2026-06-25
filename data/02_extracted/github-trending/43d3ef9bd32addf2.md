@@ -40,6 +40,7 @@ key_logic_flow:
 - Svelte 采用 MIT 开源许可，其开发完全由社区志愿者推动。
 - 项目通过 Open Collective 接受捐赠，资金用于托管费用和直接支持项目开发。
 - 项目提供官方网站、Discord 聊天室、贡献指南和路线图等社区资源。
+extract_result: success
 ---
 
 Svelte is a new way to build web applications. It's a compiler that takes your declarative components and converts them into efficient JavaScript that surgically updates the DOM.

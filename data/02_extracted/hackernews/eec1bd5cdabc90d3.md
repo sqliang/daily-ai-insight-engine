@@ -41,6 +41,7 @@ key_logic_flow:
 - 使用PF防火墙配置NAT出站规则和HTTP/HTTPS端口重定向，将外部流量引导至Caddy Jail
 - 用Caddy替代nginx作为Web服务器，主要原因是Caddy可自动处理SSL证书的申请和续期，避免手动运行certbot
 pipeline_stage: fact_extracted
+extract_result: success
 ---
 
 This blog has been running on a Digital Ocean VPS for over ten years. A machine hosted in New York City, running **Ubuntu 16.04 LTS**. An LTS that hasn’t been in support for at least 5 years. It was about time to change it. After some considerations, I migrated to a Hetzner virtual machine that is way better than my old Ubuntu one, less than half the price of what I used to pay, and just across the country from me. Not only that, but I took the challenge to move my stack to **FreeBSD**. It’s a long text, but stay for a cool introduction of *FreeBSD Jails* with *Bastille* and some interesting site load benchmarks.

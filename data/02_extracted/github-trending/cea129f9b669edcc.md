@@ -116,6 +116,7 @@ key_logic_flow:
 - /harness-review 将评审从实施中分离，重大发现被视作阻塞项而非可忽略建议
 - 工具通过 Claude 插件市场分发（/plugin marketplace add），支持 Claude Code（正式支持）、Codex CLI 和 OpenCode（内部兼容）三条路径
 - 提供 bin/harness doctor --migration-report 迁移检查命令，可盘点旧插件缓存和配置状态而不删除任何数据
+extract_result: success
 ---
 
 **Plan. Work. Review. Ship.**

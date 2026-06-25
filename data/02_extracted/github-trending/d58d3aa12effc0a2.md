@@ -164,6 +164,7 @@ key_logic_flow:
 - 支持同一机位的连续镜头并行处理，以提高长视频制作效率
 - 提供idea2video和script2video两种输入模式，通过OpenAI兼容API接入Google Gemini、MiniMax等多种模型
 pipeline_stage: fact_extracted
+extract_result: success
 ---
 
 - ❌

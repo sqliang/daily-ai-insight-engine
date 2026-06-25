@@ -54,6 +54,7 @@ key_logic_flow:
 - 平台支持独立VST头显和轻量级OST眼镜两种形态，首批设备包括XREAL Project Aura和Play for Dream的产品。
 - 高通发布START工具包，包含AR芯片、软件平台、配套应用和白标方案，提供三种参考设计（音频+摄像头、单目显示、双目显示）。
 - Inspecs和O'Neill成为START白标方案首批合作伙伴，该平台未来将扩展至智能眼镜以外的其他设备形态。
+extract_result: success
 ---
 
 Qualcomm CEO Cristiano Amon said Tuesday that the company is working on over 40 different AI wearable devices — including jewelry, earbuds with cameras, pins, and watches — a sign of how aggressively the chipmaker is betting that the next major computing platform won’t be a phone.

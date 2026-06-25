@@ -37,6 +37,7 @@ key_logic_flow:
 - NHTSA表示已知悉此次事件，正与Waymo沟通，如有必要将采取进一步行动。
 - 这不是Waymo首次召回后问题复发——去年robotaxi非法超越校车的问题经修复后仍持续出现，NHTSA和NTSB正对此进行双重调查。
 pipeline_stage: fact_extracted
+extract_result: success
 ---
 
 Waymo has now paused service in four cities because its robotaxis are struggling to deal with heavy rain and flooded roads, a problem that already prompted the company to issue a recall last week.

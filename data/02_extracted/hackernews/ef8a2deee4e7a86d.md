@@ -35,6 +35,7 @@ key_logic_flow:
 - 作者构建了不到1KB的validation-enhancer HTML Web组件，利用浏览器原生HTML验证API提供现代化UI，失败时优雅降级到浏览器内置验证或后端验证。
 - 上线后表单完成用户量一夜翻倍，JS分析工具无法识别这些来自JS失败用户的流量来源。
 - 后端会话机制确保用户数据永不丢失，有用户在一个月后继续完成之前开始的表单提交。
+extract_result: success
 ---
 
 # How building an HTML-first site doubled our users overnight

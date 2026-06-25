@@ -44,6 +44,7 @@ key_logic_flow:
 - Scaleway推出NVIDIA Blackwell B300-SXM实例，提供按需加速计算服务。
 - Bull与Foxconn宣布在欧洲生产NVIDIA Vera Rubin NVL72系统，在捷克制造并在法国Angers完成组装验证。
 - 施耐德电气与NVIDIA合作开发吉瓦级AI工厂蓝图，加速AI基础设施部署。
+extract_result: success
 ---
 
 A year ago at NVIDIA GTC Paris at VivaTech, France laid out plans to advance local AI — from new AI factories and national compute capacity to open frontier models and industrial platforms.

@@ -34,6 +34,7 @@ key_logic_flow:
   AI 代理。
 - Zenity Labs 为 OWASP 和 MITRE ATLAS 框架贡献基础研究，其企业 Copilot 间接提示注入攻击发现是该领域的奠基性参考。
 - Zenity 平台提供 AI 可观测性、安全态势管理和检测与响应三大能力，覆盖代理全生命周期安全。
+extract_result: success
 ---
 
 # Gartner® Names Zenity as the Company to Beat in AI Agent Governance as of April 17, 2026

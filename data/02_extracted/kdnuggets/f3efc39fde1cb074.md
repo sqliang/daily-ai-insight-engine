@@ -36,6 +36,7 @@ key_logic_flow:
 - 本教程使用Ollama+Mistral 7B运行本地大语言模型，FastAPI构建后端API和WebSocket，React构建前端界面。
 - 系统具备四项核心智能功能：自适应学习路径、AI动态生成测验、本地模型驱动的实时聊天导师和真实进度仪表盘。
 - 整套技术栈完全开源，无需付费API订阅，可在本地机器零成本运行。
+extract_result: partial
 ---
 
 # Build an AI-Powered Learning Management System That Actually Trains People

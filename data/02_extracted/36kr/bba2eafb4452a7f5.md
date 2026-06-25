@@ -78,6 +78,7 @@ key_logic_flow:
 - 谷歌CEO桑达尔·皮查伊宣布追加5000万美元投资，帮助美国30万人接受AI相关技术职业培训。
 - 腾讯云宣布自6月12日起下调Hy-MT2-Pro模型价格约55-67%，自6月15日起下调MiniMax-M3模型价格50%。
 - SK海力士CEO郭鲁正表示正评估引入ChatGPT和Microsoft 365 Copilot等外部生成式AI模型改造工作流程。
+extract_result: success
 ---
 
 **今日热点导览**

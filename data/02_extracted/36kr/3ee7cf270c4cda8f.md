@@ -95,6 +95,7 @@ key_logic_flow:
 - 微软推出首个AI推理模型Mai-Thinking-1，拥有350亿活跃参数。
 - 腾讯云宣布下调DeepSeek-V4系列模型价格，最高降幅达97.5%。
 - 英伟达CEO黄仁勋在Computex上表示Vera CPU将比GPU更受欢迎，将成为公司新的主要增长动力。
+extract_result: success
 ---
 
 ## 今日热点导览

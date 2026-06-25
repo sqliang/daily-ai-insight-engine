@@ -29,6 +29,7 @@ key_logic_flow:
 - Palantir 对一家瑞士调查杂志提起法律挑战，试图阻止或限制该杂志的报道。
 - 法院最终判决 Palantir 败诉，意味着该杂志的报道或调查行为未被认定违法。
 - Financial Times 报道了此案，但文章全文位于付费墙后，无法获取更多案件细节。
+extract_result: success
 ---
 
 Palantir loses legal challenge against Swiss investigative magazine

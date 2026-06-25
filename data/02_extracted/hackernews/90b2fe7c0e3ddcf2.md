@@ -31,6 +31,7 @@ key_logic_flow:
 - 该语言内置高级分支、状态管理和函数等复杂叙事所需的全部功能。
 - Loreline 可集成到游戏引擎、Web 应用或独立项目中，所写故事保持可移植性。
 - 翻译功能从设计之初就已内置，支持 PO 和 XLIFF 等标准本地化格式，便于译者使用现有工具。
+extract_result: success
 ---
 
 Tools for writing **interactive fiction**, video game **dialogues** and **branching narratives**.
