@@ -144,6 +144,7 @@ key_logic_flow:
 - 工具内置系统仪表盘、启动管理器、计划任务管理、磁盘清理和 AppX 臃肿软件移除等管理工具。
 - 每项修改自动生成 JSON 格式备份文件，支持单次或一键全部还原，首次运行提示创建系统还原点。
 - 软件基于 .NET 10 的 WPF 框架开发，支持 Windows 10/11 x64，单文件运行无需安装，不收集任何遥测数据。
+extract_result: success
 ---
 
 **optimizerDuck is a free, open-source Windows optimization tool focused on performance, privacy, and simplicity.**

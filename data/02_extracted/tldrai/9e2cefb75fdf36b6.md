@@ -37,6 +37,7 @@ key_logic_flow:
 - 2026 年上半年 AI 应用下载量预计达 23 亿次，消费支出 42 亿美元，同比大幅增长但增速放缓，显示市场趋于成熟。
 - Claude 付费转化率 13% 领先行业；AI 应用使用时长从 2025 H1 的 17.2 亿小时增至 2026 H1 约 36 亿小时。
 - OpenAI 在 ChatGPT 中测试广告，5 月日均 17% 用户看到广告；ChatGPT 购物导流向 Target、Walmart 等零售商倾斜，亚马逊因屏蔽爬虫而流量停滞。
+extract_result: success
 ---
 
 More than three and a half years after ChatGPT’s initial release, AI assistants are now used by millions of people worldwide, and the competitive landscape is changing fast. While OpenAI’s chatbot is still the most popular assistant globally, its market share has dipped below 50% for the first time as users are migrating between different assistants like Google’s Gemini, Anthropic’s Claude, and xAI’s Grok, according to analytics firm Sensor Tower’s State of AI Report for 2026.

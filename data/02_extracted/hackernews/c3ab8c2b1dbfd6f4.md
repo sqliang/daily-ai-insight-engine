@@ -42,6 +42,7 @@ key_logic_flow:
 - Suiche 同时表示理解这种保守策略，认为 Anthropic 会在与新一代网络安全公司合作中逐步放宽护栏。
 - Anthropic 通过 Cyber Verification Program 允许认证专业人士减少限制；OpenAI 有类似项目 Trusted Access
   for Cyber。
+extract_result: success
 ---
 
 Anthropic released its latest model Fable on Tuesday, billing it as a public and limited version of its powerful and much-hyped cybersecurity model Mythos.

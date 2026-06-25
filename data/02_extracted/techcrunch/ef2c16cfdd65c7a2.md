@@ -34,6 +34,7 @@ key_logic_flow:
 - 2025年10月进一步新增文字提示功能，用户可像使用ChatGPT、Claude或Gemini一样通过文字描述请求播放特定曲目
 - Spotify持续在应用中添加AI功能，包括通过自然语言描述生成自定义歌曲或播客播放列表
 pipeline_stage: fact_extracted
+extract_result: success
 ---
 
 Spotify said on Thursday that its interactive AI DJ feature now supports four additional languages: French, German, Italian, and Brazilian Portuguese. Until now, the feature, which you can interact with to request songs and get AI-powered spoken commentary, was only available in English and Spanish.

@@ -89,6 +89,7 @@ key_logic_flow:
 - 用户可通过 Claude Code 插件市场或 /plugin install 命令直接安装 document-skills 和 example-skills
   插件。
 - 开发者可通过 Claude API 调用预置技能或上传自定义技能，并可基于仓库中的 template-skill 创建新技能。
+extract_result: success
 ---
 
 Note:This repository contains Anthropic's implementation of skills for Claude. For information about the Agent Skills standard, see agentskills.io.

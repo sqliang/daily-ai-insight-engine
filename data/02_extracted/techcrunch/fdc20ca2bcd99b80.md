@@ -37,6 +37,7 @@ key_logic_flow:
 - Sureel AI成立于2022年，提供知识产权溯源、审计合规报告、模型优化和AI商业智能等服务，以及NIL归属套件
 - 交易金额未披露，Sureel将继续作为独立平台服务更广泛的音乐和AI生态系统
 - WMG此前曾起诉AI音乐公司Suno（2024年）和Udio，后与两者分别签署了许可协议
+extract_result: success
 ---
 
 theWarner Music Music (WMG) announced on Wednesday that it’s acquiring AI attribution startup Sureel AI. Sureel’s patented technology creates “AI DNA” for songs and breaks them down into component parts to trace how AI models use those elements.

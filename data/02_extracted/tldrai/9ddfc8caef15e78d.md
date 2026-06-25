@@ -31,6 +31,7 @@ key_logic_flow:
 - 报告分析了各路径上可能出现的摩擦与瓶颈，并提出了若干具体开放研究问题。
 - 由于预测 ASI 进展存在巨大不确定性，不能排除 AI 进展在未来几年持续加速的可能性。
 - 报告认为，与其将 AGI 视为单一变革性事件，更可能的情景是 AI 驱动的科学和技术突破带来一系列变革性社会变化，需要全球跨学科协作来应对。
+extract_result: success
 ---
 
 # Computer Science > Artificial Intelligence

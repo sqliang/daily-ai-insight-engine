@@ -40,6 +40,7 @@ key_logic_flow:
 - 该公司目前拥有约 150 名员工。
 - Prometheus 将开发 AI 驱动的工程工具，应用于机器人、药物设计和制造业等物理产品开发领域。
 - Bezos 表示其旗下 Blue Origin 等复杂设备制造公司将从 Prometheus 的工具中受益。
+extract_result: success
 ---
 
 Amazon founder Jeff Bezos says his new AI startup will work toward developing an “artificial general engineer,” according to reports from *The New York Times* and CNBC. The startup, called Prometheus, aims to develop AI-powered engineering tools to aid in the design of physical products.

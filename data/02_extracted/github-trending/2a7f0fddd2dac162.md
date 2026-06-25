@@ -365,6 +365,7 @@ key_logic_flow:
 - jcode 集成了 Claude、OpenAI、Gemini、GitHub Copilot、Azure、Ollama、LM Studio 等十余种模型提供商，支持
   OpenAI 兼容端点和自定义配置。
 - jcode 包含侧面板、Mermaid 图表渲染（自研 Rust 渲染库，速度提升 1800 倍）、自定义终端 Handterm 等辅助功能。
+extract_result: success
 ---
 
 The next generation coding agent harness to raise the skill ceiling.

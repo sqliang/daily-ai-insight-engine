@@ -84,6 +84,7 @@ key_logic_flow:
 - 该仓库同时也是 Cursor 插件市场，用户可在 Cursor 内直接搜索安装；对于 OpenAI Codex，可通过 skill-installer CLI
   按 GitHub URL 安装单个技能
 pipeline_stage: fact_extracted
+extract_result: success
 ---
 
 This repository contains the .NET team's curated set of core skills and custom agents for coding agents. For information about the Agent Skills standard, see agentskills.io.

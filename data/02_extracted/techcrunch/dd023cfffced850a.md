@@ -40,6 +40,7 @@ key_logic_flow:
 - 获胜者将获得 10 万美元无股权融资，所有入选公司均可获得免费展位、大会通行证、品牌曝光、媒体曝光以及创始人专属大师课程等权益。
 - 大赛面向拥有可用 MVP 的早期初创公司，包括自力更生、种子轮和 pre-seed 阶段公司，部分资本密集型行业的 A 轮公司也可申请。
 - 历届校友公司累计融资超过 320 亿美元，实现超过 250 次退出，知名校友包括 Dropbox、Discord、Mint、Fitbit 和 Trello。
+extract_result: success
 ---
 
 Founders, your window to enter **Startup Battlefield 200** closes in just three short days.

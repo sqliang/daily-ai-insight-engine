@@ -34,6 +34,7 @@ key_logic_flow:
 - Opendoor全球员工从2024年底的1470人缩减至2025年底的1042人，其中非美国员工从342人降至184人。
 - Better Tomorrow Ventures联合创始人Sheel Mohnot认为AI替代人工将导致印度大量岗位流失。
 - Emergent Ventures投资人Keshav Lohia称此举为AI驱动运营的'分水岭时刻'，认为AI正挑战印度外包的成本套利模式。
+extract_result: success
 ---
 
 Opendoor, the San Francisco-based online home-buying platform, is shutting down its India operations less than two years after expanding its presence in the country. The decision has become a flashpoint in the debate over whether AI is starting to alter the economics of offshore work.

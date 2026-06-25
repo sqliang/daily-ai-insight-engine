@@ -44,6 +44,7 @@ key_logic_flow:
 - 贡献指南要求每个 PR 只处理一个 issue、选择正确基准分支、包含测试和文档、清理提交历史、遵循编码风格。
 - OpenCV 提供 YouTube 频道、LinkedIn、Mastodon 和 Twitter 等社交媒体平台供社区关注。
 - OpenCV.ai 提供计算机视觉与 AI 开发服务。
+extract_result: success
 ---
 
 - Homepage: https://opencv.org

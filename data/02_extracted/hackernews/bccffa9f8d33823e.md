@@ -58,6 +58,7 @@ key_logic_flow:
 - 开关电源的真正革命是由半导体技术进步驱动的，特别是低成本高压高速功率晶体管的问世（1960年代末至1970年代初），使电源可以省去笨重的工频变压器直接离线运行。
 - 1976年PWM控制器IC的引入极大简化了开关电源设计，而Apple II仍使用分立元件振荡器，这在技术路线上是死胡同。
 - Apple II使用的简单离线反激变换器拓扑在Boschert等公司已有类似产品，现代计算机电源基于PWM控制器IC，与Rod Holt的设计没有继承关系。
+extract_result: success
 ---
 
 *Steve Jobs*contains a remarkable claim about the power supply of the Apple II and its designer Rod Holt:[1]

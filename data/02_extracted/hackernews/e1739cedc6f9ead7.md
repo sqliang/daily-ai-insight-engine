@@ -68,6 +68,7 @@ key_logic_flow:
 - 在生产环境中，Needle在Cactus平台上达到6000 toks/s的prefill速度和1200 toks/s的解码速度。
 - 模型权重和数据集完全开源，用户可通过命令行或Web UI在本地Mac/PC上进行测试和微调。
 - 在单次函数调用任务上，Needle性能优于FunctionGemma-270m、Qwen-0.6B、Graninte-350m等更大参数模型。
+extract_result: partial
 ---
 
 We distilled Gemini 3.1 into a 26m parameter "Simple Attention Network" that you can even finetune locally on your Mac/PC. In production, Needle runs on Cactus at 6000 toks/sec prefill and 1200 decode speed. Weights are fully open on Cactus-Compute/needle, as well as the dataset generation.

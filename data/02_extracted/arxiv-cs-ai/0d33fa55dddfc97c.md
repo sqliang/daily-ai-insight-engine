@@ -47,6 +47,7 @@ key_logic_flow:
 - 锚点解释了一种传统共识规则禁止的行为：智能体对正确答案的置信度可以超越所有初始信念形成的凸包范围。
 - 在三个开放权重模型家族上的实验表明，锚点影响强度相近，但锚点位置各异。
 - 仅当锚点位置远离初始意见时，协商才会突破凸包范围，此时必须使用完整闭环模型进行描述。
+extract_result: success
 ---
 
 # Computer Science > Artificial Intelligence

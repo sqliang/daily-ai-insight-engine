@@ -66,6 +66,7 @@ key_logic_flow:
 - 根目录下通过 .cursor-plugin/marketplace.json 统一管理所有插件的注册信息。
 - 插件作者除 Cursor 官方外，还有个人开发者 Lauren Tan 贡献了 pstack 插件。
 - 仓库中的 cursor-sdk 插件支持基于 Cursor TypeScript SDK 构建应用，集成了 MCP、流式处理等能力。
+extract_result: success
 ---
 
 Official Cursor plugins for popular developer tools, frameworks, and SaaS products. Each plugin is a standalone directory at the repository root with its own `.cursor-plugin/plugin.json`

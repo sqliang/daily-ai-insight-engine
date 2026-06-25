@@ -33,6 +33,7 @@ key_logic_flow:
 - 产品负责人Gozde Oznur表示，限制每日故事数量是为了对抗手机成瘾和刷屏行为，鼓励用户获取灵感后回归现实生活。
 - 隐私方面，用户可随时删除数据，并可自主选择授权哪些Google服务接入该应用。
 - 应用名称'Dreambeans'的构词逻辑：'Dream'指应用在用户睡眠时处理数据，'Beans'喻意晨间如咖啡般提供浓缩灵感。
+extract_result: success
 ---
 
 Google Labs, the tech giant’s team devoted to experimental product design, has launched a new AI-fueled app for iOS and Android that will quite literally animate your life.

@@ -45,6 +45,7 @@ key_logic_flow:
 - 实验发现Claude Opus 4.6赢得+15,730筹码和14次第一名，但在平均轴得分上仅排名第五（共七个模型）。
 - 持久性记忆对某些模型有帮助，但对另一些模型反而有害。
 - 多轴评估揭示了标量排行榜系统性误排的能力结构，跨维度一致性比单轴峰值表现更重要。
+extract_result: success
 ---
 
 # Computer Science > Artificial Intelligence

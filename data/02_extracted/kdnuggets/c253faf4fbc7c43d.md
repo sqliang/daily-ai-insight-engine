@@ -32,6 +32,7 @@ key_logic_flow:
 - 第二个脚本使用 pypdf 进行基础文本提取、pdfplumber 进行布局感知的表格提取，支持输出为纯文本、Markdown、CSV 或 Excel 格式，并生成摘要报告。
 - 第三个脚本支持对 PDF 批量添加文本/图像水印、页眉/页脚文字、页码等，位置、字体大小、透明度和颜色均可配置。
 - 文章共介绍了 5 个脚本，涵盖 PDF 日常处理中最常见的痛点场景，但正文仅完整描述了前 3 个脚本。
+extract_result: success
 ---
 
 # 5 Useful Python Scripts to Automate Boring PDF Tasks

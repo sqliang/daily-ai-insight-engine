@@ -26,6 +26,7 @@ key_logic_flow:
 - 文章标题为 EmailFlow.AI，来源为 Product Hunt 产品页面，URL 路径包含 B2B 邮件营销关键词。
 - 页面内容被安全验证（验证是否为自动程序）拦截，未返回任何实际产品信息。
 - 由于内容被屏蔽，无法获取该产品的具体功能、定价、发布状态或用户评价等任何实质性信息。
+extract_result: success
 ---
 
 # www.producthunt.com

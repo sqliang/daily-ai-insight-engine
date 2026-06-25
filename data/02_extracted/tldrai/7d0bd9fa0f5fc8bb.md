@@ -43,6 +43,7 @@ key_logic_flow:
 - 项目集成 TriAttention KV 缓存压缩（50% KV 缩减无损质量）和 KV-cache 相对 RoPE 适配（支持无限长视频生成），并在 SANA-Video
   线性注意力模型上实现 60 秒实时交互视频生成
 pipeline_stage: fact_extracted
+extract_result: success
 ---
 
 - 🔥 [2026.05.13] We release

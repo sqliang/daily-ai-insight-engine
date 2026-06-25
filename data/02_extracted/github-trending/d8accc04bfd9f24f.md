@@ -106,6 +106,7 @@ key_logic_flow:
 - 支持 FP8 量化、FlashAttention-4（Blackwell GPU）、xFormers（Hopper GPU）等加速方案以降低显存占用。
 - 模型支持多种 LoRA 控制方式，包括 IC-LoRA 联合控制、运动轨迹控制、姿态控制、相机运动控制等。
 - 用户可通过命令行或 Python API 调用模型，并支持 ComfyUI 集成。
+extract_result: success
 ---
 
 **LTX-2** is the first DiT-based audio-video foundation model that contains all core capabilities of modern video generation in one model: synchronized audio and video, high fidelity, multiple performance modes, production-ready outputs, API access, and open access.

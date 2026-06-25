@@ -42,6 +42,7 @@ key_logic_flow:
 - 美国政府未提供具体的国家安全顾虑细节，Anthropic推测政府已掌握绕过或越狱Fable 5的方法。
 - 其他Claude模型（包括Opus 4.8）暂时不受影响，用户新建会话将使用默认模型或Opus 4.8，现有Fable 5会话将报错中止。
 - Anthropic在官方声明中表示正在努力尽快恢复访问权限。
+extract_result: success
 ---
 
 究竟为何，Anthropic突然下线了地表最强Claude？

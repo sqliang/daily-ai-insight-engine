@@ -37,6 +37,7 @@ key_logic_flow:
 - 在产业端，AI驱动比赛视频智能剪辑、虚拟主播和电竞衍生品开发
 - 中国已成为全球最大电竞市场，产业规模超过1500亿元人民币，电竞首次入选杭州亚运会
 pipeline_stage: fact_extracted
+extract_result: success
 ---
 
 > **⚠️ 正文提取不完整**：HTML 获取成功但无法从中提取正文，以下为文章摘要

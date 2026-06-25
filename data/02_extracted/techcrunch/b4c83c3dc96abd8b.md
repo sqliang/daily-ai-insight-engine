@@ -42,6 +42,7 @@ key_logic_flow:
 - 法律AI工具Harvey与Fireworks AI合作测试显示，组合使用Claude Opus和Fireworks的GLM 5.1可在不降低质量的情况下将推理成本降低3倍。
 - Harvey联合创始人Gabe Pereyra表示，质量的定义正在从"使用最强大的模型做所有事"演变为"用最合适的模型最高效地得到正确答案"。
 - 真正的分界线不在于专有模型与开源模型之争，而在于大模型与小模型之分，用户可通过选择任一类小型模型来降低成本。
+extract_result: success
 ---
 
 The AI boom has been built on a basic assumption: Bigger models are more powerful, and the most powerful models win. Now, the industry is about to learn what happens if that assumption starts to break.

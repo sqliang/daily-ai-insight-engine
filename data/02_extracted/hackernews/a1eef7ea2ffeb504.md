@@ -44,6 +44,7 @@ key_logic_flow:
   deception 类派对游戏，被批评为一场用真人秀形式为手握资本和武器合同的科技寡头洗白的魅力攻势。
 - OpenAI 收购 TBPN 播客以及 Founders Fund 安排其 CMO 担任媒体主编等现象表明，科技公司正在转型为媒体公司，进一步侵蚀传统媒体的客观性和公信力。
 - 作者建议创始人保持目标透明、平衡自我、回归书呆子价值观——热爱学习、好奇心、专注领域、谦逊低调，避免成为真人秀明星式的公众人物。
+extract_result: success
 ---
 
 # What the Fuck Happened to Nerds

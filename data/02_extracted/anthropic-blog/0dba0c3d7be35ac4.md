@@ -31,6 +31,7 @@ key_logic_flow:
 - 用户可从文本提示、上传图片文档或指向代码库开始创作，支持 DOCX、PPTX、XLSX 等格式导入和网页元素抓取。
 - 提供行内评论、直接文字编辑和滑块调节等精细化控制手段，用户可实时调整间距、颜色和布局。
 - 输出结果可导出为 PPTX 或发送至 Canva，也可将线框稿交给 Claude Code 进行代码实现。
+extract_result: success
 ---
 
 # Introducing Claude Design by Anthropic Labs

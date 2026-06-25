@@ -52,6 +52,7 @@ key_logic_flow:
 - 提供DVP摄像头接口(8-16位)和多种LCD显示接口(8-24位并行RGB/I8080/MOTO6800)，内置JPEG编解码器、PPA和2D-DMA硬件加速器，支持多达14路电容触摸传感。
 - 集成TRNG和基于RAM的PUF硬件安全能力，支持安全启动、闪存和PSRAM加密、AES/RSA/ECDSA密码加速器，并通过TEE和APM实现软件隔离。
 - 软件方面支持ESP-IDF、ESP-Matter、ESP-BLE-AUDIO和ESP-GMF等开源框架，可配合ESP Private Agents平台或直接对接常用LLM构建支持语音交互的AI终端设备。
+extract_result: success
 ---
 
 ### Comprehensive Connectivity

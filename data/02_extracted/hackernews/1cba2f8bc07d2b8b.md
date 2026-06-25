@@ -48,6 +48,7 @@ key_logic_flow:
 - 相同PE模式在救护车（KKR控制的Envision Healthcare已破产）、养老院（PE投资从2000年50亿增至2024年1040亿，死亡率显著上升）、住房（机构投资者控制超50万套独栋出租房）和报纸（Alden
   Global Capital系统性削减新闻编辑室）等行业重复出现。
 - 结构性激励缺陷：PE在3-7年内最大化回报，当应用于需求无弹性的基础服务时，债务加载和费用提取使利润来自服务恶化，破产损失则由债权人、工人和社区承担。
+extract_result: success
 ---
 
 When a fire truck fails to deploy in a burning building and four people die, the cause isn’t just mechanical failure. It’s a business model.

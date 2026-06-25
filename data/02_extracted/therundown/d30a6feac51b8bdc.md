@@ -39,6 +39,7 @@ key_logic_flow:
 - Fable在编程、推理、知识工作等主要基准测试中超越Opus 4.8和GPT 5.5，达到新的SOTA水平。
 - Fable在所有Claude订阅等级中可用至6月22日，之后转为独立计费，价格为输入$10/M token、输出$50/M token。
 - Mythos 5同时向Project Glasswing合作伙伴发布，提供比Mythos Preview更低的成本和更少的限制。
+extract_result: success
 ---
 
 Good morning, AI enthusiasts. Frontier releases usually trigger a week of benchmark arguments. Anthropic's new model just launched into a class of its own.

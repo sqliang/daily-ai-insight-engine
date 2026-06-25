@@ -33,6 +33,7 @@ key_logic_flow:
 - 整套规范以开源MCP服务器形式提供，无需认证的只读访问，同时发布了Agent Skill供兼容的AI代理使用。
 - '用户可通过llms.txt和Accept: text/markdown头获取每页的Markdown版本。'
 - 该站点提供审计清单供开发者逐项检查、点击进入学习实现细节，并通过GitHub PR接受改进建议。
+extract_result: success
 ---
 
 # What a good website does.

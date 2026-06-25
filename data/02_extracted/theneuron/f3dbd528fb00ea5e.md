@@ -30,6 +30,7 @@ key_logic_flow:
 - AI 产业正面临芯片、电力、冷却、土地等物理资源瓶颈，运营模式从软件转向重工业。
 - SpaceX 凭借 Starlink 全球卫星网络和发射能力，处于 AI 基础设施瓶颈的独特位置。
 - 投资者的核心逻辑是：Starlink 成为数据传输管道，SpaceX 发射硬件，AI 客户购买算力与连接服务。
+extract_result: success
 ---
 
 # 🙀 SpaceX raised $75B for AI in space

@@ -32,6 +32,7 @@ key_logic_flow:
 - 从业人员上传源文件和客户备注后，Tax AI自动创建税务引擎提交草案供审核，涵盖1040和1041类型税表的准备流程。
 - 系统在试点期间处理了7000份税表，字段完成准确率从上线初期的25%（75%正确率阈值）在六周内提升至86%，90%和100%正确率阈值增长更快。
 - 最终效果：节省约三分之一税务准备时间，草拟税表准确率最高达97%，吞吐量提升约50%。
+extract_result: success
 ---
 
 *How Thrive Holdings and OpenAI co-developed Tax AI for Crete accountants by fusing practitioner expertise with a Codex-driven loop*

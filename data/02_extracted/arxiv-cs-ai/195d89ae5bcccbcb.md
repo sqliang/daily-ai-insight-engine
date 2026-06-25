@@ -50,6 +50,7 @@ key_logic_flow:
 - SEAGym 将 Harbor 兼容的基准测试转化为动态自进化任务源，提供训练批次、冻结更新验证、ID/OOD 迁移视图、回放诊断及快照记录。
 - 研究者在 Terminal-Bench 2.0 和 HLE 上对 ACE、TF-GRPO 和 AHE 三种方法进行了对比实验。
 - 实验发现：频繁更新未必提升保留集性能，有用的中间快照可能在后续训练中失效，来源多样性和模型后端影响代理框架的可靠性。
+extract_result: success
 ---
 
 # Computer Science > Artificial Intelligence

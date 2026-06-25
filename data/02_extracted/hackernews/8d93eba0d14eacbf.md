@@ -38,6 +38,7 @@ key_logic_flow:
   6.0+）可跳过数据拷贝到内核缓冲区的步骤。
 - SQPOLL 模式的代价是在提交队列为空时内核线程仍会空转消耗 CPU，可通过 sq_thread_idle 设置空闲超时使其休眠。
 - io_uring 自 Linux 内核 5.1（2019 年）起可用，对于在新系统上从零开始的项目，io_uring 是异步 I/O 的首选方案。
+extract_result: success
 ---
 
 # epoll vs io_uring in Linux

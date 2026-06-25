@@ -54,6 +54,7 @@ key_logic_flow:
 - 路由保真度@1在不同条件下仅为7.5%-29.5%，交付通道（按需工具vs预加载描述）的影响远大于描述内容本身
 - 反事实上限分析表明，完美委托比当前实测性能高出15-31个百分点，揭示了未来编排方法的巨大提升空间
 pipeline_stage: fact_extracted
+extract_result: success
 ---
 
 # Computer Science > Artificial Intelligence

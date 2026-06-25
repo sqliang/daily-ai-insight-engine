@@ -47,6 +47,7 @@ key_logic_flow:
 - 组件包含边界框标注引用、文件上传和电子签名等高级功能。
 - 产品定位为可直接嵌入用户界面流程、AI Agent 或内部工具中。
 - 该项目通过 Hacker News 的 Show HN 栏目公开发布。
+extract_result: success
 ---
 
 # Open source UI kit for modern document apps

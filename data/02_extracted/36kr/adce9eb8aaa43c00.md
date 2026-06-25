@@ -56,6 +56,7 @@ key_logic_flow:
 - 客户INCENZO实现85%自动化运营率，三人团队每周节省18小时社媒分发时间，80%的Meta Description和Alt Text实现批量一键重写。
 - StoreClaw采用行业标准Token授权机制替代传统密码授权，承诺卖家数据不用于模型训练、不出售或共享，并在关键操作前请求二次确认以保障容错率。
 - 创始人Steven Zhou认为StoreClaw与阿里Accio Work定位不重叠：Accio Work专注前端选品建站，StoreClaw专注中后链路多渠道经营。
+extract_result: success
 ---
 
 文｜张子怡

@@ -52,6 +52,7 @@ key_logic_flow:
 - 在5个前沿模型的13个场景上实验发现，所有模型结构有效性高但在战略校准上差异显著。
 - 识别出系统性失效模式：单一顾问捕获、模糊情境下的保守默认和历史遗忘。
 - 发现结构整合-大胆性权衡：越深入参与冲突观点整合的模型，其决策果断性越低。
+extract_result: success
 ---
 
 # Computer Science > Artificial Intelligence

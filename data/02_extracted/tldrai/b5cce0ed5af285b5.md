@@ -32,6 +32,7 @@ key_logic_flow:
 - 文章通过三个场景（现金流优化、交货准时率、影子 IT 治理）对比了 AI 有/无上下文的输出差异。
 - Novo Nordisk 高管 Stephanie Bova 表示，没有包含业务上下文的数字孪生，几乎无法确定在何处部署 AI 和自动化工作流。
 - Celonis 将其 Context Model 定位为企业 AI 提供上下文的平台，并推广其流程智能平台及相关资源。
+extract_result: success
 ---
 
 **Context matters**

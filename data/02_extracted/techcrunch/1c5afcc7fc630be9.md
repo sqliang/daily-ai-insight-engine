@@ -37,6 +37,7 @@ key_logic_flow:
 - Diligenta（TCS旗下英国寿险业务，服务超2200万客户）计划使用Claude进行客户服务和流程自动化。
 - TCS iON将提供Anthropic模型相关的培训和认证项目，TCS还将为Claude Code生态贡献理赔裁决和贷款咨询工具。
 - 该合作发生在印度IT服务业因AI崛起面临质疑的背景下，TCS和Infosys股价今年已分别下跌约34%和31%。
+extract_result: success
 ---
 
 Anthropic has partnered with Indian IT services giant Tata Consultancy Services (TCS) in a bid to accelerate adoption of its artificial intelligence models at enterprises.

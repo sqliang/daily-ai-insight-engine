@@ -39,6 +39,7 @@ key_logic_flow:
 - 直接出售芯片可能削弱AWS的瀑布效应收益——芯片带来的云服务连锁收入（存储、安全、网络、监控等）。
 - Nvidia当前营收运行率约为3260亿美元，500亿美元的竞争体量虽不足以动摇其地位，但已接近Intel的年收入规模。
 - AWS表示该计划仍处于非常早期的讨论阶段，历史上曾多次拒绝直接出售芯片的请求。
+extract_result: success
 ---
 
 If Amazon Web Services has its way, the cloud giant is going to push even deeper into Nvidia’s market, in what might be one of the biggest challenges to Nvidia’s AI chip dominance we’ve seen so far.
