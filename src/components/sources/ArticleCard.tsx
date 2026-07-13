@@ -6,6 +6,7 @@ import { StatusBadge } from "./StatusBadge";
 import { ArticleCardBasic } from "./ArticleCardBasic";
 import { ArticleCardExtraction } from "./ArticleCardExtraction";
 import { ArticleCardAnalysis } from "./ArticleCardAnalysis";
+import { ArticleCardSpecialized } from "./ArticleCardSpecialized";
 import { ImpactScoreBar } from "./ImpactScoreBar";
 import { SentimentIndicator } from "./SentimentIndicator";
 import { ACTIONABLE_INSIGHT_LABELS } from "@/lib/data/status";
@@ -337,6 +338,12 @@ export function ArticleCard({ article }: ArticleCardProps) {
                     </div>
                   )}
                 </div>
+
+                {/* 专题分析（按来源类型匹配） */}
+                <ArticleCardSpecialized
+                  source={article.enriched?.source ?? ''}
+                  enriched={article.enriched}
+                />
               </div>
             )}
           </>
