@@ -151,6 +151,7 @@ class AiDetail(BaseModel):
 
     primary_categories: List[str] = Field(
         default_factory=list,
+        alias="primaryCategories",
         description="AI 一级子分类（可多选）。可选值: agent_framework, llm_infra, "
                     "model_training, model_serving, rag_pipeline, prompt_engineering, "
                     "multimodal, code_gen, ai_testing, ai_observability, ai_security, "
@@ -159,6 +160,7 @@ class AiDetail(BaseModel):
 
     agent_subcategory: Optional[List[str]] = Field(
         default=None,
+        alias="agentSubcategory",
         description="Agent 子领域（仅当 primary_categories 包含 agent_framework 时存在）。"
                     "可选值: orchestration, tool_use, memory_management, planning, "
                     "reflection, multi_modal_agent, browser_agent, coding_agent, general_framework",
@@ -166,8 +168,12 @@ class AiDetail(BaseModel):
 
     tech_tags: List[str] = Field(
         default_factory=list,
+        alias="techTags",
         description="AI 关键技术标签（如 RAG, vector-db, function-calling, RLHF, MoE）",
     )
+
+    class Config:
+        populate_by_name = True
 
 
 class GitHubTags(BaseModel):
@@ -181,21 +187,25 @@ class GitHubTags(BaseModel):
 
     project_name: str = Field(
         ...,
+        alias="projectName",
         description="项目名称（GitHub 仓库名，如 'crewAI/crewAI'）",
     )
 
     project_url: str = Field(
         ...,
+        alias="projectUrl",
         description="GitHub 仓库完整 URL",
     )
 
     primary_language: str = Field(
         ...,
+        alias="primaryLanguage",
         description="主要编程语言（如 Python, TypeScript, Rust）",
     )
 
     license_type: str = Field(
         ...,
+        alias="licenseType",
         description="开源协议类型（如 MIT, Apache 2.0, GPLv3, 无）",
     )
 
@@ -217,8 +227,12 @@ class GitHubTags(BaseModel):
     # 第二层：AI 专项（可选）
     ai_detail: Optional[AiDetail] = Field(
         default=None,
+        alias="aiDetail",
         description="AI 专项标注。仅当 domain == 'ai_ml' 时存在",
     )
+
+    class Config:
+        populate_by_name = True
 
 
 class ProductTags(BaseModel):
