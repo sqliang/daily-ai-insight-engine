@@ -13,11 +13,13 @@ pipeline/analysis/prompts — Stage 3 Deep Analysis 提示词
 from .qualitative_system import get_qualitative_system_prompt
 from .value_system import get_value_system_prompt
 from .foresight_system import get_foresight_system_prompt
+from .github_project_system import get_github_project_system_prompt
 
 from .user_prompts import (
     build_qualitative_user_prompt,
     build_value_user_prompt,
     build_foresight_user_prompt,
+    build_github_project_user_prompt,
 )
 
 __all__ = [
@@ -27,4 +29,6 @@ __all__ = [
     "build_value_user_prompt",
     "get_foresight_system_prompt",
     "build_foresight_user_prompt",
+    "get_github_project_system_prompt",
+    "build_github_project_user_prompt",
 ]

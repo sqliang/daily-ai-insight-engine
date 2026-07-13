@@ -337,3 +337,144 @@ def validate_foresight(data: dict) -> ForesightAndActionability:
             raise ValueError(
                 f"ForesightAndActionability 校验失败（模糊匹配后仍失败）: {second_err}"
             ) from second_err
+
+
+# =============================================================================
+# GitHubProjectAnalysis 校验
+# =============================================================================
+
+
+def validate_github_project(data: dict):
+    """
+    验证并构造 GitHubProjectAnalysis 实例。
+
+    处理流程：
+        1. 自动修复常见的 LLM 格式错误（projectClassification 简化等）
+        2. Pydantic 严格校验
+        3. 校验失败 → 模糊匹配修正枚举值
+        4. 确保列表字段存在
+        5. 修复后重新校验
+
+    参数：
+        data: LLM 返回的原始 dict
+
+    返回：
+        GitHubProjectAnalysis 实例
+
+    异常：
+        ValueError: 模糊匹配后仍无法通过 Pydantic 校验
+    """
+    from ..schemas.specialized_analysis import GitHubProjectAnalysis
+    from .fuzzy_maps import (
+        TECH_STACK_QUALITY_FUZZY,
+        DOCUMENTATION_LEVEL_FUZZY,
+        CONTRIBUTOR_ACTIVITY_FUZZY,
+        RESPONSE_TIME_FUZZY,
+        MERGE_VELOCITY_FUZZY,
+        TIME_TO_PRODUCTION_FUZZY,
+        DOMAIN_FUZZY,
+    )
+
+    repaired = dict(data)
+
+    # --- 预处理：自动修复常见格式错误 ---
+
+    # projectClassification: 如果是字符串 → 包装为 {domain}
+    if "projectClassification" in repaired and isinstance(repaired["projectClassification"], str):
+        repaired["projectClassification"] = {"domain": repaired["projectClassification"], "crossTags": []}
+        logger.info("projectClassification 自动包装: str → {domain, crossTags}")
+
+    # --- 尝试严格校验 ---
+    try:
+        return GitHubProjectAnalysis.model_validate(repaired)
+    except ValidationError as pydantic_err:
+        errors = pydantic_err.errors()
+        logger.warning("GitHubProjectAnalysis 严格校验失败: %s", errors)
+
+        for error in errors:
+            loc = error.get("loc", [])
+            if not loc:
+                continue
+            raw_value = _get_nested(repaired, loc)
+            if not isinstance(raw_value, str):
+                continue
+
+            field_path = loc[0]
+            # 修复嵌套枚举
+            if field_path == "techAssessment" and len(loc) > 1:
+                if loc[1] == "techStackQuality":
+                    matched = fuzzy_match_enum(raw_value, TECH_STACK_QUALITY_FUZZY, "techAssessment.techStackQuality")
+                    if matched and isinstance(repaired.get("techAssessment"), dict):
+                        repaired["techAssessment"]["techStackQuality"] = matched
+                elif loc[1] == "codeQualityIndicators" and len(loc) > 2:
+                    if loc[2] == "documentationLevel":
+                        matched = fuzzy_match_enum(raw_value, DOCUMENTATION_LEVEL_FUZZY, "codeQualityIndicators.documentationLevel")
+                        if matched and isinstance(repaired.get("techAssessment", {}).get("codeQualityIndicators"), dict):
+                            repaired["techAssessment"]["codeQualityIndicators"]["documentationLevel"] = matched
+            elif field_path == "communityHealth" and len(loc) > 1:
+                if loc[1] == "contributorActivity":
+                    matched = fuzzy_match_enum(raw_value, CONTRIBUTOR_ACTIVITY_FUZZY, "communityHealth.contributorActivity")
+                    if matched and isinstance(repaired.get("communityHealth"), dict):
+                        repaired["communityHealth"]["contributorActivity"] = matched
+                elif loc[1] == "issueResponseTime":
+                    matched = fuzzy_match_enum(raw_value, RESPONSE_TIME_FUZZY, "communityHealth.issueResponseTime")
+                    if matched and isinstance(repaired.get("communityHealth"), dict):
+                        repaired["communityHealth"]["issueResponseTime"] = matched
+                elif loc[1] == "prMergeVelocity":
+                    matched = fuzzy_match_enum(raw_value, MERGE_VELOCITY_FUZZY, "communityHealth.prMergeVelocity")
+                    if matched and isinstance(repaired.get("communityHealth"), dict):
+                        repaired["communityHealth"]["prMergeVelocity"] = matched
+            elif field_path == "adoptionGuidance" and len(loc) > 1:
+                if loc[1] == "timeToProduction":
+                    matched = fuzzy_match_enum(raw_value, TIME_TO_PRODUCTION_FUZZY, "adoptionGuidance.timeToProduction")
+                    if matched and isinstance(repaired.get("adoptionGuidance"), dict):
+                        repaired["adoptionGuidance"]["timeToProduction"] = matched
+            elif field_path == "projectClassification" and len(loc) > 1:
+                if loc[1] == "domain":
+                    matched = fuzzy_match_enum(raw_value, DOMAIN_FUZZY, "projectClassification.domain")
+                    if matched and isinstance(repaired.get("projectClassification"), dict):
+                        repaired["projectClassification"]["domain"] = matched
+
+        # --- 确保必要字段存在 ---
+        if "projectProfile" not in repaired:
+            repaired["projectProfile"] = {
+                "name": "未知", "url": "", "primaryLanguage": "未知",
+                "license": "未知", "description": "",
+            }
+        if "techAssessment" not in repaired:
+            repaired["techAssessment"] = {
+                "architectureHighlights": "", "techStackQuality": "experimental",
+                "codeQualityIndicators": {"hasTests": False, "hasCiCd": False, "documentationLevel": "none"},
+                "dependenciesAnalysis": "",
+            }
+        if "communityHealth" not in repaired:
+            repaired["communityHealth"] = {
+                "starsTrend": "", "contributorActivity": "moderate",
+                "issueResponseTime": "normal", "prMergeVelocity": "medium",
+                "busFactorAssessment": "",
+            }
+        if "competitiveLandscape" not in repaired:
+            repaired["competitiveLandscape"] = {
+                "directAlternatives": [], "differentiation": "", "moatAnalysis": "",
+            }
+        if "adoptionGuidance" not in repaired:
+            repaired["adoptionGuidance"] = {
+                "maturityScore": 5.0, "recommendedFor": [], "cautionFor": [],
+                "timeToProduction": "needs_1_3_months",
+            }
+        # 确保列表字段存在
+        if isinstance(repaired.get("competitiveLandscape"), dict):
+            if "directAlternatives" not in repaired["competitiveLandscape"]:
+                repaired["competitiveLandscape"]["directAlternatives"] = []
+        if isinstance(repaired.get("adoptionGuidance"), dict):
+            if "recommendedFor" not in repaired["adoptionGuidance"]:
+                repaired["adoptionGuidance"]["recommendedFor"] = []
+            if "cautionFor" not in repaired["adoptionGuidance"]:
+                repaired["adoptionGuidance"]["cautionFor"] = []
+
+        try:
+            return GitHubProjectAnalysis.model_validate(repaired)
+        except ValidationError as second_err:
+            raise ValueError(
+                f"GitHubProjectAnalysis 校验失败（模糊匹配后仍失败）: {second_err}"
+            ) from second_err
