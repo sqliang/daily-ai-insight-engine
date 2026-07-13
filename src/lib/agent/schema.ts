@@ -88,6 +88,37 @@ export const visualizationDataSchema = z.object({
   ),
 });
 
+// ============================================================================
+// 专题简报 Schema — Stage 4b 日报中的轻量专题摘要
+// ============================================================================
+
+const githubBriefSchema = z.object({
+  summary: z.string(),
+  topProjects: z.array(z.string()),
+  domainDistribution: z.record(z.string(), z.number()),
+  aiCategoryDistribution: z.record(z.string(), z.number()).nullable().optional(),
+  articleCount: z.number().int().positive(),
+});
+
+const productBriefSchema = z.object({
+  summary: z.string(),
+  notableProducts: z.array(z.string()),
+  articleCount: z.number().int().nonnegative(),
+});
+
+const paperBriefSchema = z.object({
+  summary: z.string(),
+  keyPapers: z.array(z.string()),
+  researchAreas: z.array(z.string()),
+  articleCount: z.number().int().nonnegative(),
+});
+
+export const specializedBriefSchema = z.object({
+  githubHighlights: githubBriefSchema.nullable().optional(),
+  productHighlights: productBriefSchema.nullable().optional(),
+  paperHighlights: paperBriefSchema.nullable().optional(),
+});
+
 export const dailyReportSchema = z.object({
   // DailyReport 是 Reduce 阶段的最终输出，也是整个流水线的唯一对外产物。
   // 它包含人类可读的分析文本 + 预计算的可视化数据，
@@ -108,9 +139,11 @@ export const dailyReportSchema = z.object({
   riskSignals: z.array(signalSchema),
   opportunitySignals: z.array(signalSchema),
   visualizationData: visualizationDataSchema,
+  specializedBrief: specializedBriefSchema.optional(),
 });
 
 export type DailyReport = z.infer<typeof dailyReportSchema>;
+export type SpecializedBrief = z.infer<typeof specializedBriefSchema>;
 export type EvidenceSource = z.infer<typeof evidenceSourceSchema>;
 export type EventType = z.infer<typeof eventTypeSchema>;
 export type Sentiment = z.infer<typeof sentimentSchema>;

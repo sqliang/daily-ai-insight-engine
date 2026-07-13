@@ -174,6 +174,40 @@ export const structuredArticleSchema = z
 export type StructuredArticle = z.infer<typeof structuredArticleSchema>;
 
 // ============================================================================
+// 专题标注 Schema — 按来源类型分派
+//
+// 这些 schema 描述管道 Stage 2 为不同来源类型生成的专题标注字段。
+// structuredArticleSchema 已启用 .passthrough()，新字段自动放行；
+// 以下 schema 提供显式的类型推导以支持 TypeScript 编码时提示。
+// ============================================================================
+
+export const aiDetailSchema = z.object({
+  primaryCategories: z.array(z.string()).optional(),
+  agentSubcategory: z.array(z.string()).nullable().optional(),
+  techTags: z.array(z.string()).optional(),
+}).passthrough();
+
+export const githubTagsSchema = z.object({
+  projectName: z.string(),
+  projectUrl: z.string(),
+  primaryLanguage: z.string(),
+  licenseType: z.string(),
+  domain: z.string(),
+  crossTags: z.array(z.string()).optional(),
+  aiDetail: aiDetailSchema.nullable().optional(),
+}).passthrough();
+
+export const specializedTagsSchema = z.object({
+  github: githubTagsSchema.nullable().optional(),
+  product: z.any().nullable().optional(),
+  paper: z.any().nullable().optional(),
+}).passthrough();
+
+export type SpecializedTags = z.infer<typeof specializedTagsSchema>;
+export type GitHubTags = z.infer<typeof githubTagsSchema>;
+export type AiDetail = z.infer<typeof aiDetailSchema>;
+
+// ============================================================================
 // Status detection
 // ============================================================================
 
