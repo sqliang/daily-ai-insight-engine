@@ -454,4 +454,172 @@ class PaperAnalysis(BaseModel):
         populate_by_name = True
 
 
-# Phase 3 占位：ProductAnalysis 后续追加
+# =============================================================================
+# 共享枚举（ProductAnalysis 使用）
+# =============================================================================
+
+
+class LaunchContext(str, Enum):
+    """发布上下文枚举。"""
+    NEW_LAUNCH = "new_launch"
+    MAJOR_UPDATE = "major_update"
+    PIVOT = "pivot"
+    FUNDING = "funding_announcement"
+
+
+class PricingModel(str, Enum):
+    """定价模式枚举。"""
+    FREEMIUM = "freemium"
+    SUBSCRIPTION = "subscription"
+    USAGE_BASED = "usage_based"
+    OPEN_SOURCE = "open_source"
+    FREE = "free"
+    ENTERPRISE = "enterprise"
+    UNKNOWN = "unknown"
+
+
+class InnovationLevel(str, Enum):
+    """功能创新程度枚举。"""
+    BREAKTHROUGH = "breakthrough"
+    INCREMENTAL = "incremental"
+    ME_TOO = "me_too"
+
+
+class GrowthSignals(str, Enum):
+    """增长信号枚举。"""
+    STRONG = "strong"
+    MODERATE = "moderate"
+    EARLY = "early"
+    UNCLEAR = "unclear"
+
+
+class OverallSentiment(str, Enum):
+    """用户整体情绪枚举。"""
+    OVERWHELMINGLY = "overwhelmingly_positive"
+    MOSTLY = "mostly_positive"
+    MIXED = "mixed"
+    MOSTLY_NEG = "mostly_negative"
+
+
+class DifferentiationQuality(str, Enum):
+    """差异化质量枚举。"""
+    UNIQUE = "unique"
+    MEANINGFUL = "meaningful"
+    MARGINAL = "marginal"
+    NONE = "none"
+
+
+class PmfSignal(str, Enum):
+    """PMF 信号枚举。"""
+    STRONG = "strong_pmf"
+    FINDING = "finding_pmf"
+    TOO_EARLY = "too_early_to_tell"
+    NO_SIGNAL = "no_signal"
+
+
+# =============================================================================
+# ProductAnalysis 嵌套模型
+# =============================================================================
+
+
+class ProductProfile(BaseModel):
+    """产品画像——基础识别信息。"""
+
+    name: str = Field(..., description="产品名称")
+    url: str = Field(..., description="产品 URL")
+    company_team: Optional[str] = Field(default=None, alias="companyTeam", description="背后的公司/团队")
+    launch_context: str = Field(..., alias="launchContext", description="发布上下文。可选值: new_launch, major_update, pivot, funding_announcement")
+    pricing_model: str = Field(..., alias="pricingModel", description="定价模式。可选值: freemium, subscription, usage_based, open_source, free, enterprise, unknown")
+
+    class Config:
+        populate_by_name = True
+
+
+class Positioning(BaseModel):
+    """产品定位与目标。"""
+
+    target_users: List[str] = Field(default_factory=list, alias="targetUsers", description="目标用户画像")
+    core_jobs_to_be_done: List[str] = Field(default_factory=list, alias="coreJobsToBeDone", description="核心 JTBD")
+    value_proposition: str = Field(..., alias="valueProposition", description="一句话价值主张")
+    competitive_positioning: str = Field(..., alias="competitivePositioning", description="与同类的定位差异")
+
+    class Config:
+        populate_by_name = True
+
+
+class CoreFeature(BaseModel):
+    """核心功能项。"""
+
+    name: str = Field(..., description="功能名称")
+    description: str = Field(..., description="功能描述")
+    innovation_level: str = Field(..., alias="innovationLevel", description="创新程度。可选值: breakthrough, incremental, me_too")
+
+    class Config:
+        populate_by_name = True
+
+
+class FeatureBreakdown(BaseModel):
+    """功能拆解。"""
+
+    core_features: List[CoreFeature] = Field(default_factory=list, alias="coreFeatures", description="核心功能列表（3-5 项）")
+    ux_highlights: List[str] = Field(default_factory=list, alias="uxHighlights", description="体验亮点")
+    ux_pain_points: List[str] = Field(default_factory=list, alias="uxPainPoints", description="体验槽点/摩擦点")
+    missing_features: List[str] = Field(default_factory=list, alias="missingFeatures", description="用户需要但缺失的关键功能")
+
+    class Config:
+        populate_by_name = True
+
+
+class BusinessModelAnalysis(BaseModel):
+    """商业模式分析。"""
+
+    revenue_model: str = Field(..., alias="revenueModel", description="收入模式分析")
+    unit_economics_indicators: str = Field(..., alias="unitEconomicsIndicators", description="单位经济学信号")
+    growth_signals: str = Field(..., alias="growthSignals", description="增长信号。可选值: strong, moderate, early, unclear")
+    defensibility: str = Field(..., description="壁垒分析")
+
+    class Config:
+        populate_by_name = True
+
+
+class UserSentimentSynthesis(BaseModel):
+    """用户反馈综合分析。"""
+
+    overall_sentiment: str = Field(..., alias="overallSentiment", description="整体情绪。可选值: overwhelmingly_positive, mostly_positive, mixed, mostly_negative")
+    praise_themes: List[str] = Field(default_factory=list, alias="praiseThemes", description="用户高频称赞的点")
+    complaint_themes: List[str] = Field(default_factory=list, alias="complaintThemes", description="用户高频吐槽的点")
+    key_user_quotes: List[str] = Field(default_factory=list, alias="keyUserQuotes", description="代表性用户评论（1-3 条）")
+
+    class Config:
+        populate_by_name = True
+
+
+class MarketAssessment(BaseModel):
+    """市场与竞品评估。"""
+
+    category: str = Field(..., description="产品所属品类")
+    key_competitors: List[str] = Field(default_factory=list, alias="keyCompetitors", description="主要竞品")
+    differentiation_quality: str = Field(..., alias="differentiationQuality", description="差异化质量。可选值: unique, meaningful, marginal, none")
+    pmf_signal: str = Field(..., alias="pmfSignal", description="PMF 信号。可选值: strong_pmf, finding_pmf, too_early_to_tell, no_signal")
+
+    class Config:
+        populate_by_name = True
+
+
+class ProductAnalysis(BaseModel):
+    """
+    产品深度分析——Stage 3 专题分析产出。
+
+    设计理念：
+        产品尽职调查——帮助团队判断 AI 产品的市场定位、功能竞争力、商业模式可行性与用户口碑。
+    """
+
+    product_profile: ProductProfile = Field(..., alias="productProfile", description="产品画像")
+    positioning: Positioning = Field(..., description="产品定位与目标")
+    feature_breakdown: FeatureBreakdown = Field(..., alias="featureBreakdown", description="功能拆解")
+    business_model_analysis: BusinessModelAnalysis = Field(..., alias="businessModelAnalysis", description="商业模式分析")
+    user_sentiment_synthesis: UserSentimentSynthesis = Field(..., alias="userSentimentSynthesis", description="用户反馈综合分析")
+    market_assessment: MarketAssessment = Field(..., alias="marketAssessment", description="市场与竞品评估")
+
+    class Config:
+        populate_by_name = True

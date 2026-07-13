@@ -656,3 +656,185 @@ def validate_paper(data: dict):
             raise ValueError(
                 f"PaperAnalysis 校验失败（模糊匹配后仍失败）: {second_err}"
             ) from second_err
+
+
+# =============================================================================
+# ProductAnalysis 校验
+# =============================================================================
+
+
+def validate_product(data: dict):
+    """
+    验证并构造 ProductAnalysis 实例。
+
+    处理流程：
+        1. 自动修复常见的 LLM 格式错误（嵌套模型简化等）
+        2. Pydantic 严格校验
+        3. 校验失败 → 模糊匹配修正枚举值
+        4. 确保列表字段存在
+        5. 修复后重新校验
+
+    参数：
+        data: LLM 返回的原始 dict
+
+    返回：
+        ProductAnalysis 实例
+
+    异常：
+        ValueError: 模糊匹配后仍无法通过 Pydantic 校验
+    """
+    from ..schemas.specialized_analysis import ProductAnalysis
+    from .fuzzy_maps import (
+        LAUNCH_CONTEXT_FUZZY,
+        PRICING_MODEL_FUZZY,
+        INNOVATION_LEVEL_FUZZY,
+        GROWTH_SIGNALS_FUZZY,
+        OVERALL_SENTIMENT_FUZZY,
+        DIFFERENTIATION_QUALITY_FUZZY,
+        PMF_SIGNAL_FUZZY,
+    )
+
+    repaired = dict(data)
+
+    # --- 预处理：自动修复常见格式错误 ---
+
+    # productProfile: 如果是字符串 → 包装为 {name}
+    if "productProfile" in repaired and isinstance(repaired["productProfile"], str):
+        repaired["productProfile"] = {
+            "name": repaired["productProfile"], "url": "", "launchContext": "new_launch", "pricingModel": "unknown",
+        }
+        logger.info("productProfile 自动包装: str → {name, ...}")
+
+    # positioning: 如果是字符串 → 包装
+    if "positioning" in repaired and isinstance(repaired["positioning"], str):
+        repaired["positioning"] = {
+            "targetUsers": [], "coreJobsToBeDone": [],
+            "valueProposition": repaired["positioning"], "competitivePositioning": "",
+        }
+        logger.info("positioning 自动包装: str → {valueProposition, ...}")
+
+    # featureBreakdown: 如果是字符串 → 包装
+    if "featureBreakdown" in repaired and isinstance(repaired["featureBreakdown"], str):
+        repaired["featureBreakdown"] = {
+            "coreFeatures": [], "uxHighlights": [], "uxPainPoints": [], "missingFeatures": [],
+        }
+        logger.info("featureBreakdown 自动包装: str → {coreFeatures, ...}")
+
+    # businessModelAnalysis: 如果是字符串 → 包装
+    if "businessModelAnalysis" in repaired and isinstance(repaired["businessModelAnalysis"], str):
+        repaired["businessModelAnalysis"] = {
+            "revenueModel": repaired["businessModelAnalysis"], "unitEconomicsIndicators": "",
+            "growthSignals": "early", "defensibility": "",
+        }
+        logger.info("businessModelAnalysis 自动包装: str → {revenueModel, ...}")
+
+    # --- 尝试严格校验 ---
+    try:
+        return ProductAnalysis.model_validate(repaired)
+    except ValidationError as pydantic_err:
+        errors = pydantic_err.errors()
+        logger.warning("ProductAnalysis 严格校验失败: %s", errors)
+
+        for error in errors:
+            loc = error.get("loc", [])
+            if not loc:
+                continue
+            raw_value = _get_nested(repaired, loc)
+            if not isinstance(raw_value, str):
+                continue
+
+            field_path = loc[0]
+            # 修复 productProfile 枚举
+            if field_path == "productProfile" and len(loc) > 1:
+                if loc[1] == "launchContext":
+                    matched = fuzzy_match_enum(raw_value, LAUNCH_CONTEXT_FUZZY, "productProfile.launchContext")
+                    if matched and isinstance(repaired.get("productProfile"), dict):
+                        repaired["productProfile"]["launchContext"] = matched
+                elif loc[1] == "pricingModel":
+                    matched = fuzzy_match_enum(raw_value, PRICING_MODEL_FUZZY, "productProfile.pricingModel")
+                    if matched and isinstance(repaired.get("productProfile"), dict):
+                        repaired["productProfile"]["pricingModel"] = matched
+            # 修复 featureBreakdown.coreFeatures[].innovationLevel
+            elif field_path == "featureBreakdown" and len(loc) > 1:
+                if loc[1] == "coreFeatures" and len(loc) > 3 and loc[3] == "innovationLevel":
+                    matched = fuzzy_match_enum(raw_value, INNOVATION_LEVEL_FUZZY, "coreFeatures.innovationLevel")
+                    if matched:
+                        try:
+                            idx = loc[2]
+                            cf_list = repaired.get("featureBreakdown", {}).get("coreFeatures", [])
+                            if isinstance(cf_list, list) and isinstance(idx, int) and idx < len(cf_list):
+                                cf_list[idx]["innovationLevel"] = matched
+                        except (IndexError, TypeError, KeyError):
+                            pass
+            # 修复 businessModelAnalysis 枚举
+            elif field_path == "businessModelAnalysis" and len(loc) > 1:
+                if loc[1] == "growthSignals":
+                    matched = fuzzy_match_enum(raw_value, GROWTH_SIGNALS_FUZZY, "businessModelAnalysis.growthSignals")
+                    if matched and isinstance(repaired.get("businessModelAnalysis"), dict):
+                        repaired["businessModelAnalysis"]["growthSignals"] = matched
+            # 修复 userSentimentSynthesis 枚举
+            elif field_path == "userSentimentSynthesis" and len(loc) > 1:
+                if loc[1] == "overallSentiment":
+                    matched = fuzzy_match_enum(raw_value, OVERALL_SENTIMENT_FUZZY, "userSentimentSynthesis.overallSentiment")
+                    if matched and isinstance(repaired.get("userSentimentSynthesis"), dict):
+                        repaired["userSentimentSynthesis"]["overallSentiment"] = matched
+            # 修复 marketAssessment 枚举
+            elif field_path == "marketAssessment" and len(loc) > 1:
+                if loc[1] == "differentiationQuality":
+                    matched = fuzzy_match_enum(raw_value, DIFFERENTIATION_QUALITY_FUZZY, "marketAssessment.differentiationQuality")
+                    if matched and isinstance(repaired.get("marketAssessment"), dict):
+                        repaired["marketAssessment"]["differentiationQuality"] = matched
+                elif loc[1] == "pmfSignal":
+                    matched = fuzzy_match_enum(raw_value, PMF_SIGNAL_FUZZY, "marketAssessment.pmfSignal")
+                    if matched and isinstance(repaired.get("marketAssessment"), dict):
+                        repaired["marketAssessment"]["pmfSignal"] = matched
+
+        # --- 确保必要字段存在 ---
+        if "productProfile" not in repaired or not isinstance(repaired.get("productProfile"), dict):
+            repaired["productProfile"] = {
+                "name": "未知", "url": "", "companyTeam": None,
+                "launchContext": "new_launch", "pricingModel": "unknown",
+            }
+        if "positioning" not in repaired or not isinstance(repaired.get("positioning"), dict):
+            repaired["positioning"] = {
+                "targetUsers": [], "coreJobsToBeDone": [],
+                "valueProposition": "", "competitivePositioning": "",
+            }
+        if "featureBreakdown" not in repaired or not isinstance(repaired.get("featureBreakdown"), dict):
+            repaired["featureBreakdown"] = {
+                "coreFeatures": [], "uxHighlights": [], "uxPainPoints": [], "missingFeatures": [],
+            }
+        if "businessModelAnalysis" not in repaired or not isinstance(repaired.get("businessModelAnalysis"), dict):
+            repaired["businessModelAnalysis"] = {
+                "revenueModel": "", "unitEconomicsIndicators": "",
+                "growthSignals": "early", "defensibility": "",
+            }
+        if "userSentimentSynthesis" not in repaired or not isinstance(repaired.get("userSentimentSynthesis"), dict):
+            repaired["userSentimentSynthesis"] = {
+                "overallSentiment": "mixed", "praiseThemes": [],
+                "complaintThemes": [], "keyUserQuotes": [],
+            }
+        if "marketAssessment" not in repaired or not isinstance(repaired.get("marketAssessment"), dict):
+            repaired["marketAssessment"] = {
+                "category": "", "keyCompetitors": [],
+                "differentiationQuality": "marginal", "pmfSignal": "too_early_to_tell",
+            }
+
+        # 确保嵌套列表字段存在
+        for parent, fields in [
+            ("positioning", ["targetUsers", "coreJobsToBeDone"]),
+            ("featureBreakdown", ["coreFeatures", "uxHighlights", "uxPainPoints", "missingFeatures"]),
+            ("userSentimentSynthesis", ["praiseThemes", "complaintThemes", "keyUserQuotes"]),
+            ("marketAssessment", ["keyCompetitors"]),
+        ]:
+            if isinstance(repaired.get(parent), dict):
+                for field in fields:
+                    if field not in repaired[parent]:
+                        repaired[parent][field] = []
+
+        try:
+            return ProductAnalysis.model_validate(repaired)
+        except ValidationError as second_err:
+            raise ValueError(
+                f"ProductAnalysis 校验失败（模糊匹配后仍失败）: {second_err}"
+            ) from second_err

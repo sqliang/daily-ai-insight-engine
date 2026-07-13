@@ -279,3 +279,55 @@ def build_paper_user_prompt(
 2. 专注于需要推理判断的深度分析：研究问题价值、方法创新性、实验严谨性、工业落地潜力
 3. 所有描述性文本字段用中文输出
 """
+
+
+# =============================================================================
+# ProductAnalysis user prompt
+# =============================================================================
+
+
+def build_product_user_prompt(
+    title: str,
+    source: str,
+    body: str,
+    specialized_tags: dict | None = None,
+) -> str:
+    """
+    构建产品分析 Agent 的用户提示词。
+
+    参数：
+        title: 文章标题
+        source: 数据源名（应为 "producthunt" 或 "whytryai"）
+        body: 文章正文（截断至 6000 字符）
+        specialized_tags: Stage 2 提取的 ProductTags（已包含基础标注）
+
+    返回：
+        格式化的用户提示词字符串
+    """
+    truncated_body = body if body else ""
+
+    tags_str = "无（Stage 2 未提取到标注）"
+    if specialized_tags:
+        import json as _json
+        tags_str = _json.dumps(specialized_tags, ensure_ascii=False, indent=2)
+
+    return f"""## 文章信息
+
+标题：{title}
+来源：{source}
+
+## Stage 2 分类标注（已知事实，无需重新判断）
+
+{tags_str}
+
+## 文章正文
+
+{truncated_body}
+
+## 指令
+
+基于以上信息完成产品深度分析。注意：
+1. productProfile 中的名称、URL 等直接引用 Stage 2 标注结果
+2. 专注于需要推理判断的深度分析：产品定位、功能竞争力、商业模式可行性、用户口碑、市场竞品格局
+3. 所有描述性文本字段用中文输出
+"""
