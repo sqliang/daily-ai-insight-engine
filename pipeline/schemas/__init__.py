@@ -13,7 +13,10 @@ AI 舆情分析日报系统核心认知模型 (Daily AI Insight Schema)
 """
 
 from .base_info import BaseInfo
-from .fact_extraction import FactExtraction
+from .fact_extraction import (
+    FactExtraction, Entities, EventType, EpistemicStatus,
+    GitHubTags, ProductTags, PaperTags, SpecializedTags, AiDetail,
+)
 from .deep_analysis import (
     QualitativeAssessment,
     ValueAssessment,
@@ -21,14 +24,35 @@ from .deep_analysis import (
 )
 from .daily_ai_insight import DailyAIInsight
 from .daily_report import DailyReport, validate_daily_report
+from .specialized_analysis import (
+    GitHubProjectAnalysis, ProjectProfile, ProjectClassification,
+    TechAssessment, CodeQualityIndicators, CommunityHealth,
+    CompetitiveLandscape, AdoptionGuidance,
+)
 
 __all__ = [
     "BaseInfo",
     "FactExtraction",
+    "Entities",
+    "EventType",
+    "EpistemicStatus",
+    "GitHubTags",
+    "ProductTags",
+    "PaperTags",
+    "SpecializedTags",
+    "AiDetail",
     "QualitativeAssessment",
     "ValueAssessment",
     "ForesightAndActionability",
     "DailyAIInsight",
     "DailyReport",
     "validate_daily_report",
+    "GitHubProjectAnalysis",
+    "ProjectProfile",
+    "ProjectClassification",
+    "TechAssessment",
+    "CodeQualityIndicators",
+    "CommunityHealth",
+    "CompetitiveLandscape",
+    "AdoptionGuidance",
 ]
