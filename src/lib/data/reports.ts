@@ -32,8 +32,27 @@ export interface ReportSummary {
   sourceCount: number;
   /** 覆盖的语言种类 */
   languages: string[];
+  /** 当日专题报告可用性（Phase 1: GitHub, Phase 2: Product/Paper） */
+  specialized: SpecializedAvailability;
 }
 
+// ============================================================================
+// 专题报告可用性
+// ============================================================================
+
+/** 各专题报告类型在特定日期的数据可用性 */
+export interface SpecializedAvailability {
+  github: { count: number; domains: Record<string, number> } | null;
+  product: { count: number } | null;
+  paper: { count: number } | null;
+}
+
+/**
+ * 检测指定日期是否有 GitHub 专题数据。
+ *
+ * 扫描 data/04_structured/github-trending.json（热数据），
+ * 按 created 日期分组，检查是否存在带 specialized_tags.github 的文章。
+ */
 // ============================================================================
 // 数据读取
 // ============================================================================
@@ -82,6 +101,8 @@ export async function listReports(dateRange?: DateRange): Promise<ReportSummary[
     try {
       const raw = await readFile(join(reportsDir, filename), "utf8");
       const report = dailyReportSchema.parse(JSON.parse(raw));
+      // 从日报 JSON 的 specializedBrief 提取专题可用性
+      const sb = report.specializedBrief;
       summaries.push({
         date,
         reportTitle: report.reportTitle,
@@ -89,6 +110,16 @@ export async function listReports(dateRange?: DateRange): Promise<ReportSummary[
         totalArticles: report.dataSourceSummary.totalArticles,
         sourceCount: report.dataSourceSummary.sources.length,
         languages: report.dataSourceSummary.languages,
+        specialized: {
+          github: sb?.githubHighlights?.articleCount
+            ? {
+                count: sb.githubHighlights.articleCount,
+                domains: sb.githubHighlights.domainDistribution || {},
+              }
+            : null,
+          product: null,
+          paper: null,
+        },
       });
     } catch {
       // 跳过解析失败的文件（数据损坏或格式不兼容）
