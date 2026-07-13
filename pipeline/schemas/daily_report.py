@@ -14,7 +14,7 @@ pipeline/schemas/daily_report.py — Stage 4b 日报输出 Pydantic 模型
 from __future__ import annotations
 
 from enum import Enum
-from typing import Literal
+from typing import Literal, Optional
 
 from pydantic import BaseModel, Field, ValidationError
 
@@ -182,6 +182,107 @@ class DailyReport(BaseModel):
     risk_signals: list[Signal] = Field(default_factory=list, alias="riskSignals", description="风险信号")
     opportunity_signals: list[Signal] = Field(default_factory=list, alias="opportunitySignals", description="机会信号")
     visualization_data: VisualizationData = Field(..., alias="visualizationData", description="可视化数据")
+    specialized_brief: Optional["SpecializedBrief"] = Field(
+        default=None,
+        alias="specializedBrief",
+        description="专题简报——轻量摘要 + 入口引导。仅当有专题文章时存在。",
+    )
+
+    class Config:
+        populate_by_name = True
+
+
+# =============================================================================
+# 专题简报 — Stage 4b 日报中的轻量专题摘要
+# =============================================================================
+
+
+class GithubBrief(BaseModel):
+    """GitHub 项目专题简报——日报中的轻量摘要。"""
+
+    summary: str = Field(
+        ...,
+        description="一句话总结今日 GitHub Trending 项目趋势（中文）",
+    )
+
+    top_projects: list[str] = Field(
+        default_factory=list,
+        alias="topProjects",
+        description="值得关注的项目名列表（Top 3-5）",
+    )
+
+    domain_distribution: dict = Field(
+        default_factory=dict,
+        alias="domainDistribution",
+        description="通用领域分布（如 {'ai_ml': 3, 'devops_infra': 2}）",
+    )
+
+    ai_category_distribution: Optional[dict] = Field(
+        default=None,
+        alias="aiCategoryDistribution",
+        description="AI 子领域分布（仅当有 AI 项目时，如 {'agent_framework': 2}）",
+    )
+
+    article_count: int = Field(
+        ...,
+        alias="articleCount",
+        description="当日 github-trending 文章总数",
+    )
+
+    class Config:
+        populate_by_name = True
+
+
+class ProductBrief(BaseModel):
+    """产品专题简报——Phase 2 实现。"""
+
+    summary: str = ""
+    notable_products: list[str] = Field(
+        default_factory=list,
+        alias="notableProducts",
+    )
+    article_count: int = Field(default=0, alias="articleCount")
+
+    class Config:
+        populate_by_name = True
+
+
+class PaperBrief(BaseModel):
+    """论文专题简报——Phase 2 实现。"""
+
+    summary: str = ""
+    key_papers: list[str] = Field(default_factory=list, alias="keyPapers")
+    research_areas: list[str] = Field(default_factory=list, alias="researchAreas")
+    article_count: int = Field(default=0, alias="articleCount")
+
+    class Config:
+        populate_by_name = True
+
+
+class SpecializedBrief(BaseModel):
+    """
+    日报中的专题简报——轻量摘要 + 入口引导。
+
+    每个子块仅在当天有匹配文章时存在。
+    """
+
+    github_highlights: Optional[GithubBrief] = Field(
+        default=None,
+        alias="githubHighlights",
+        description="今日 GitHub 项目亮点（仅当有 github-trending 文章时）",
+    )
+
+    product_highlights: Optional[ProductBrief] = Field(
+        default=None,
+        alias="productHighlights",
+        description="今日产品亮点（仅当有产品类文章时）",
+    )
+
+    paper_highlights: Optional[PaperBrief] = Field(
+        default=None,
+        alias="paperHighlights",
+        description="今日论文亮点（仅当有论文类文章时）",
+    )
 
     class Config:
         populate_by_name = True
