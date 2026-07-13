@@ -84,8 +84,48 @@ def get_fact_extraction_system_prompt() -> str:
     "technologies": ["GPT-5"],
     "keyPeople": ["Sam Altman"]
   },
-  "keyLogicFlow": ["第一条中文关键事实", "第二条中文关键事实"]
-}"""
+  "keyLogicFlow": ["第一条中文关键事实", "第二条中文关键事实"],
+  "specializedTags": {
+    "github": {
+      "projectName": "crewAI/crewAI",
+      "projectUrl": "https://github.com/crewAI/crewAI",
+      "primaryLanguage": "Python",
+      "licenseType": "MIT",
+      "domain": "ai_ml",
+      "crossTags": ["open-source-alternative"],
+      "aiDetail": {
+        "primaryCategories": ["agent_framework"],
+        "agentSubcategory": ["orchestration", "tool_use"],
+        "techTags": ["RAG", "function-calling"]
+      }
+    }
+  }
+}
+
+## 专题标注（新增）
+当文章来源 URL 匹配特定域名时，提取以下专题字段。
+
+### specializedTags.github（来源 URL 为 github.com 时输出）
+对象包含：
+- **projectName**: 项目名称（如 "crewAI/crewAI"）
+- **projectUrl**: GitHub 仓库完整 URL
+- **primaryLanguage**: 主要编程语言
+- **licenseType**: 开源协议类型（MIT, Apache 2.0, GPLv3 等，如有）
+- **domain**: 项目所属技术领域，必须是以下之一：
+    ai_ml, web_frontend, web_backend, devops_infra, database_storage,
+    programming_languages, developer_tools, security, mobile, blockchain,
+    data_engineering, game_development, documentation, iot_embedded, other
+- **crossTags**: 跨领域标签列表，如 ["open-source-alternative", "cli-tool", "self-hosted"]
+- **aiDetail**: AI 专项标注对象（仅当 domain == "ai_ml" 时输出，否则为 null）
+    - **primaryCategories**: AI 一级子分类列表，可选值：agent_framework, llm_infra, model_training, model_serving, rag_pipeline, prompt_engineering, multimodal, code_gen, ai_testing, ai_observability, ai_security, ai_ui_ux, dataset_tooling, other
+    - **agentSubcategory**: Agent 子领域列表（仅当 primaryCategories 包含 agent_framework 时），可选值：orchestration, tool_use, memory_management, planning, reflection, multi_modal_agent, browser_agent, coding_agent, general_framework
+    - **techTags**: AI 关键技术标签列表，如 ["RAG", "function-calling", "vector-db"]
+
+重要规则：
+- 所有项目都必须填写 domain，即使是 non-AI 项目
+- aiDetail 只有 domain == "ai_ml" 时才输出，非 AI 项目省略此字段
+- 标签尽量准确，不确定时宁缺毋滥
+- 如果来源 URL 不是 github.com，将 specializedTags 设为 null"""
 
 
 def build_fact_extraction_user_prompt(title: str, source: str, body: str) -> str:
