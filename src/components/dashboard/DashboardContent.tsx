@@ -17,6 +17,7 @@ import { ReportHeader } from "@/components/dashboard/ReportHeader";
 import { SignalList } from "@/components/dashboard/SignalList";
 import { TopEventsSection } from "@/components/dashboard/TopEventsSection";
 import { TrendInsightsSection } from "@/components/dashboard/TrendInsightsSection";
+import { SpecializedBriefSection } from "@/components/dashboard/SpecializedBriefSection";
 import { ErrorBoundary } from "@/components/charts/ErrorBoundary";
 
 interface DashboardContentProps {
@@ -73,6 +74,12 @@ export function DashboardContent({ report, backHref, backLabel }: DashboardConte
       <ErrorBoundary sectionName="深度分析">
         <DeepDivesSection deepDives={report.deepDives} />
       </ErrorBoundary>
+
+      {/* 专题洞察入口 */}
+      <SpecializedBriefSection
+        data={report.specializedBrief}
+        date={report.date}
+      />
 
       <section className="mt-6 grid gap-5 lg:grid-cols-2">
         <ErrorBoundary sectionName="风险提示">
