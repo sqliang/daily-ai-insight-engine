@@ -11,7 +11,7 @@ import type { AiDetail } from '@/lib/data/status';
 // 领域颜色映射 (14 domains + other)
 // ---------------------------------------------------------------------------
 
-const DOMAIN_COLORS: Record<string, { bg: string; text: string }> = {
+export const DOMAIN_COLORS: Record<string, { bg: string; text: string }> = {
   ai_ml: { bg: 'bg-purple-100 dark:bg-purple-900/30', text: 'text-purple-700 dark:text-purple-300' },
   web_frontend: { bg: 'bg-blue-100 dark:bg-blue-900/30', text: 'text-blue-700 dark:text-blue-300' },
   web_backend: { bg: 'bg-green-100 dark:bg-green-900/30', text: 'text-green-700 dark:text-green-300' },
@@ -29,7 +29,7 @@ const DOMAIN_COLORS: Record<string, { bg: string; text: string }> = {
   other: { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-600 dark:text-gray-400' },
 };
 
-const DOMAIN_LABELS: Record<string, string> = {
+export const DOMAIN_LABELS: Record<string, string> = {
   ai_ml: 'AI/ML',
   web_frontend: 'Web 前端',
   web_backend: 'Web 后端',
@@ -46,6 +46,12 @@ const DOMAIN_LABELS: Record<string, string> = {
   iot_embedded: 'IoT/嵌入式',
   other: '其他',
 };
+
+export const DOMAIN_LIST = [
+  'ai_ml', 'web_frontend', 'web_backend', 'devops_infra', 'database_storage',
+  'programming_languages', 'developer_tools', 'security', 'mobile', 'blockchain',
+  'data_engineering', 'game_development', 'documentation', 'iot_embedded', 'other',
+];
 
 // ---------------------------------------------------------------------------
 // 专题标注数据形状（匹配 Stage 2 管道输出的 snake_case 字段）
@@ -70,6 +76,7 @@ interface GitHubProjectCardProps {
   /** Stage 2 specialized_tags.github */
   tags: GitHubTagsData;
   /** Stage 3 分析结果（可能未运行） */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   analysis?: Record<string, any>;
 }
 
@@ -131,6 +138,12 @@ function MaturityBadge({ score }: { score?: number }) {
 // 主组件
 // ---------------------------------------------------------------------------
 
+/**
+ * GitHub 开源项目分析卡片。
+ *
+ * 在 Source Detail 页面中，展示单篇文章的 GitHub 项目深度分析，
+ * 包括领域分类、AI 标签、技术评价、社区健康度和采用建议。
+ */
 export function GitHubProjectCard({ tags, analysis }: GitHubProjectCardProps) {
   return (
     <div className="rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
