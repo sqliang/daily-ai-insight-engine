@@ -125,7 +125,39 @@ def get_fact_extraction_system_prompt() -> str:
 - 所有项目都必须填写 domain，即使是 non-AI 项目
 - aiDetail 只有 domain == "ai_ml" 时才输出，非 AI 项目省略此字段
 - 标签尽量准确，不确定时宁缺毋滥
-- 如果来源 URL 不是 github.com，将 specializedTags 设为 null"""
+- 如果来源 URL 不是 github.com，将 specializedTags 设为 null
+
+### specializedTags.paper（来源为 arxiv.org 时输出）
+对象包含：
+- **paperTitle**: 论文标题
+- **authors**: 作者列表（字符串数组）
+- **affiliations**: 作者所属机构列表
+- **venue**: 发表会议/期刊（如 "NeurIPS 2025"，若为 arXiv 预印本则填 "arXiv preprint"）
+- **codeUrl**: 配套代码仓库 URL（如有，否则为 null）
+- **datasetUrl**: 配套数据集 URL（如有，否则为 null）
+- **researchArea**: 研究领域，如 NLP, CV, RL, Systems, Theory, Robotics, Speech, Graph, Security, Bioinformatics, Other
+- **methodType**: 方法类型，如 transformer, diffusion, RL-based, GNN, LLM-based, theoretical, empirical, benchmark
+
+重要规则：
+- 仅当来源 URL 为 arxiv.org 时输出此字段
+- 作者和机构从文章信息中提取，无法确定时留空数组
+- researchArea 从论文标题和摘要中推断
+
+### specializedTags.product（来源为 producthunt.com 或产品评测类网站时输出）
+对象包含：
+- **productName**: 产品名称
+- **productUrl**: 产品 URL
+- **companyTeam**: 背后的公司/团队名称（如有）
+- **launchContext**: 发布上下文，可选值：new_launch, major_update, pivot, funding_announcement
+- **pricingModel**: 定价模式，可选值：freemium, subscription, usage_based, open_source, free, enterprise, unknown
+- **productCategory**: 产品所属品类（如 "AI 开发工具", "设计协作", "数据分析"）
+- **targetUsers**: 目标用户画像列表，如 ["全栈开发者", "产品经理"]
+
+重要规则：
+- 仅当来源为产品类网站（producthunt.com、whytryai 等）时输出
+- 定价和发布上下文无法确定时使用 "unknown"
+- targetUsers 从文章描述的目标受众中推断"""
+
 
 
 def build_fact_extraction_user_prompt(title: str, source: str, body: str) -> str:
