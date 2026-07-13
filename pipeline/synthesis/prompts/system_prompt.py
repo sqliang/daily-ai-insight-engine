@@ -71,7 +71,11 @@ Return ONLY a valid JSON object matching this schema:
       "aiCategoryDistribution": {"agent_framework": 2},
       "articleCount": 5
     },
-    "productHighlights": null,
+    "productHighlights": {
+      "summary": "one-sentence trend summary for today's AI product launches in Chinese",
+      "notableProducts": ["product name 1", "product name 2", "product name 3"],
+      "articleCount": 3
+    },
     "paperHighlights": {
       "summary": "one-sentence trend summary for today's arXiv papers in Chinese",
       "keyPapers": ["paper title 1", "paper title 2", "paper title 3"],
@@ -139,6 +143,9 @@ Return ONLY a valid JSON object matching this schema:
     - paperHighlights.keyPapers 按论文研究影响力筛选 Top 3-5 篇论文标题
     - paperHighlights.researchAreas 应从统计概览中的 specialized_stats.paper.research_areas 数据获取，保持 LLM 输出与统计一致
     - paperHighlights.articleCount 应与统计概览中的 paper.count 一致
-    - productHighlights 为 Phase 2 预留，当前可设为 null
+    - 如果 specialized_stats.product.count > 0，必须在 specializedBrief 中输出 productHighlights
+    - productHighlights.summary 应从产品扫描统计中提炼趋势判断
+    - productHighlights.notableProducts 按产品影响力筛选 Top 3-5 产品名称
+    - productHighlights.articleCount 应与统计概览中的 product.count 一致
     - 不需要深入每篇文章的细节，保持轻量
 """
