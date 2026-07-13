@@ -143,14 +143,14 @@ export function SpecializedEntries({
           icon="🐙"
           label="GitHub 项目"
           href=""
-          stat="即将上线"
+          stat="暂无数据"
           enabled={false}
         />
         <EntryRow
           icon="📄"
           label="论文速递"
           href=""
-          stat="即将上线"
+          stat="暂无数据"
           enabled={false}
         />
         <EntryRow
@@ -226,7 +226,7 @@ export function SpecializedEntries({
       icon="📄"
       label="论文速递"
       href=""
-      stat="即将上线"
+      stat="暂无数据"
       enabled={false}
     />
   );
