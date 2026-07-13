@@ -93,10 +93,11 @@ def ingest_article(
             extraction_status = "partial"
             content = article.get("summary", "")
     else:
-        # HTML 获取失败，用 manifest 元数据兜底
-        meta = {}
-        extraction_status = "failed"
-        content = article.get("summary", "")
+        # curl 获取失败（含重试后仍失败），返回 BOT_BLOCKED 触发浏览器兜底
+        # 设计理由：瞬时网络故障不应直接判定为永久失败，给 Playwright 一次机会
+        # orchestrator 的 browser-retry 循环会自动处理，Playwright 也失败时才写 failed
+        logger.info("curl 获取失败，标记为浏览器重试 source=%s url=%s", source_name, url)
+        return BOT_BLOCKED
 
     # 构建失败/部分提取时的提示语
     if extraction_status == "failed":
@@ -195,11 +196,13 @@ def ingest_browser_article(
 
     # 检测反爬页面：Playwright 也可能被激进反爬系统拦截
     # 若检测到反爬页面，视为 failed 而非 partial，便于区分根本原因
+    #
+    # 注意：中文反爬页面（如 ProductHunt 的 "安全验证" 页面）本身就是纯文本内容，
+    # trafilatura 会将其当正文提取。因此 bot_blocked + content 非空 ≠ 正文正常，
+    # 需对提取内容做二次检查，防止反爬文本混入管线。
     bot_blocked = False
     if html and is_bot_challenge_html(html):
-        # Playwright 渲染后的页面可能残留 Cloudflare 标记但正文正常
-        # 仅在 trafilatura 也无法提取时才视为真正的反爬拦截
-        logger.debug("Playwright 渲染后检测到残留反爬标记 source=%s url=%s", source_name, url)
+        logger.debug("Playwright 渲染后检测到反爬标记 source=%s url=%s", source_name, url)
         bot_blocked = True
 
     if html:
@@ -208,9 +211,20 @@ def ingest_browser_article(
         content = extract_article_content(html, url)
 
         if content:
-            # 正文提取成功 — 即使有反爬特征也是残余标记，以 trafilatura 结果为准
-            extraction_status = "success"
-            content = apply_truncation(content, source_config)
+            if bot_blocked:
+                # 反爬页面被 trafilatura 误提取（如中文 "安全验证" 页面的纯文本）
+                # 对提取内容做二次关键词检查，防反爬文本混入管线
+                if is_bot_challenge_html(content):
+                    extraction_status = "failed"
+                    content = article.get("summary", "")
+                else:
+                    # 残余 Cloudflare 标记不影响正文质量，以 trafilatura 结果为准
+                    extraction_status = "success"
+                    content = apply_truncation(content, source_config)
+            else:
+                # 正文提取成功且无反爬标记，正常成功路径
+                extraction_status = "success"
+                content = apply_truncation(content, source_config)
         elif bot_blocked:
             # 反爬页面 + trafilatura 确认失败 → 标记为 failed（非 partial）
             # 区别于 "内容提取失败"，明确根因是反爬拦截

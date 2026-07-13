@@ -238,26 +238,89 @@ class GitHubTags(BaseModel):
 class ProductTags(BaseModel):
     """产品基础标注——Stage 2 从原始文章中提取的结构化元数据。"""
 
-    product_name: str = Field(..., description="产品名称")
-    product_url: str = Field(..., description="产品 URL")
-    company_team: Optional[str] = Field(default=None, description="背后的公司/团队")
-    launch_context: str = Field(..., description="发布上下文。可选值: new_launch, major_update, pivot, funding_announcement")
-    pricing_model: str = Field(..., description="定价模式。可选值: freemium, subscription, usage_based, open_source, free, enterprise, unknown")
-    product_category: str = Field(..., description="产品所属品类")
-    target_users: List[str] = Field(default_factory=list, description="目标用户画像")
+    product_name: str = Field(
+        ...,
+        alias="productName",
+        description="产品名称",
+    )
+    product_url: str = Field(
+        ...,
+        alias="productUrl",
+        description="产品 URL",
+    )
+    company_team: Optional[str] = Field(
+        default=None,
+        alias="companyTeam",
+        description="背后的公司/团队",
+    )
+    launch_context: str = Field(
+        ...,
+        alias="launchContext",
+        description="发布上下文。可选值: new_launch, major_update, pivot, funding_announcement",
+    )
+    pricing_model: str = Field(
+        ...,
+        alias="pricingModel",
+        description="定价模式。可选值: freemium, subscription, usage_based, open_source, free, enterprise, unknown",
+    )
+    product_category: str = Field(
+        ...,
+        alias="productCategory",
+        description="产品所属品类",
+    )
+    target_users: List[str] = Field(
+        default_factory=list,
+        alias="targetUsers",
+        description="目标用户画像",
+    )
+
+    class Config:
+        populate_by_name = True
 
 
 class PaperTags(BaseModel):
     """论文基础标注——Stage 2 从原始文章中提取的结构化元数据。"""
 
-    paper_title: str = Field(..., description="论文标题")
-    authors: List[str] = Field(default_factory=list, description="作者列表")
-    affiliations: List[str] = Field(default_factory=list, description="作者所属机构")
-    venue: Optional[str] = Field(default=None, description="发表会议/期刊")
-    code_url: Optional[str] = Field(default=None, description="配套代码仓库 URL")
-    dataset_url: Optional[str] = Field(default=None, description="配套数据集 URL")
-    research_area: str = Field(..., description="研究领域（如 NLP, CV, RL, Systems）")
-    method_type: str = Field(..., description="方法类型（如 transformer, diffusion, RL-based）")
+    paper_title: str = Field(
+        ...,
+        alias="paperTitle",
+        description="论文标题",
+    )
+    authors: List[str] = Field(
+        default_factory=list,
+        description="作者列表",
+    )
+    affiliations: List[str] = Field(
+        default_factory=list,
+        description="作者所属机构",
+    )
+    venue: Optional[str] = Field(
+        default=None,
+        description="发表会议/期刊",
+    )
+    code_url: Optional[str] = Field(
+        default=None,
+        alias="codeUrl",
+        description="配套代码仓库 URL",
+    )
+    dataset_url: Optional[str] = Field(
+        default=None,
+        alias="datasetUrl",
+        description="配套数据集 URL",
+    )
+    research_area: str = Field(
+        ...,
+        alias="researchArea",
+        description="研究领域（如 NLP, CV, RL, Systems）",
+    )
+    method_type: str = Field(
+        ...,
+        alias="methodType",
+        description="方法类型（如 transformer, diffusion, RL-based）",
+    )
+
+    class Config:
+        populate_by_name = True
 
 
 class SpecializedTags(BaseModel):

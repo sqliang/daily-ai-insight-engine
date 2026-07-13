@@ -1,0 +1,81 @@
+[
+  {
+    "source_dir": "huggingface-blog",
+    "title": "Run a vLLM Server on HF Jobs in One Command",
+    "source": "https://huggingface.co/blog/vllm-jobs",
+    "author": [],
+    "published": "2026-06-26",
+    "created": "2026-06-26",
+    "description": "",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "5d2de9152522b89c",
+    "source_type": "tech_blog",
+    "tldr": "Hugging Face 支持一键在 HF Jobs 上运行 vLLM 推理服务器",
+    "objective_summary": "Hugging Face 发布了通过单条命令在 HF Jobs 上部署 vLLM OpenAI 兼容服务器的功能。用户使用 hf jobs run 命令指定 GPU flavor、暴露端口和超时时间，即可启动 vLLM 容器，获得可通过 HF token 认证的公共访问 URL，",
+    "event_type": "infrastructure_update",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [
+        "Hugging Face"
+      ],
+      "technologies": [
+        "vLLM",
+        "OpenAI API"
+      ],
+      "key_people": []
+    },
+    "key_logic_flow": [
+      "Hugging Face 推出了通过一条命令在 HF Jobs 上运行 vLLM 服务器的功能，使用 hf jobs run 命令搭配官方 vllm/vllm-openai Docker 镜像即可启动。",
+      "用户需指定 GPU flavor（如 a10g-large）、暴露端口（8000）和超时时间（如 2h），HF Jobs 自动分配 GPU 资源并启动容器。",
+      "启动后，HF Jobs 通过公共代理为暴露端口生成可访问 URL（格式为 https://<job_id>--8000.hf.jobs），需使用 Hugging Face token 作为 Bearer token 认证。",
+      "vLLM 服务器兼容 OpenAI API 格式，支持 chat completions 和 models 等标准端点，可通过 curl 或 OpenAI Python SDK 调用。",
+      "该方案适用于快速测试、评估和批量推理场景，生产环境应使用 Hugging Face Inference Endpoints 托管服务。"
+    ],
+    "extract_result": "success"
+  },
+  {
+    "source_dir": "huggingface-blog",
+    "title": "Which tokens does a hybrid model predict better?",
+    "source": "https://huggingface.co/blog/allenai/hybrid-token-prediction",
+    "author": [],
+    "published": "2026-06-25",
+    "created": "2026-06-26",
+    "description": "",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "6a95b493803eeb37",
+    "source_type": "tech_blog",
+    "tldr": "混合模型在语义性token上优于Transformer，但在重复性token上不如Transformer。",
+    "objective_summary": "Allen AI 在技术报告中比较了 Olmo Hybrid（混合模型）与 Olmo 3（Transformer）在7B参数规模下的token级预测差异。实验控制数据、分词器和训练策略一致，发现混合模型在名词、动词、形容词等语义性token上优势明显，但Transformer在直接复制输入内容的重复",
+    "event_type": "infrastructure_update",
+    "epistemic_status": "theoretical_claim",
+    "entities": {
+      "companies": [
+        "Allen AI"
+      ],
+      "technologies": [
+        "Hybrid",
+        "Transformer",
+        "Olmo 3",
+        "Olmo Hybrid"
+      ],
+      "key_people": []
+    },
+    "key_logic_flow": [
+      "Allen AI 通过控制变量实验，对比了7B参数的 Olmo 3（Transformer）和 Olmo Hybrid（混合模型）在token级预测上的差异。",
+      "混合模型在名词、动词、形容词等承载语义信息的token上预测准确率更高。",
+      "混合模型在需要跟踪上下文逻辑的token（如代词指代）上表现更强。",
+      "Transformer 在重复性token（直接从输入中复制的词或短语）上优势明显，因为其注意力机制擅长精确回溯早期输入信息。",
+      "Transformer 每层都使用注意力机制，能直接访问所有前置token，优势在于精确召回但随输入长度增长计算成本陡增。",
+      "混合模型与Transformer在标准基准测试上表现相当或更优，但细粒度token分析揭示了二者不同的优势领域。"
+    ],
+    "extract_result": "success"
+  }
+]

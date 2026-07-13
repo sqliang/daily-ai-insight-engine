@@ -200,7 +200,7 @@ def build_github_project_user_prompt(
     返回：
         格式化的用户提示词字符串
     """
-    truncated_body = body[:6000] if body else ""
+    truncated_body = body if body else ""
 
     tags_str = "无（Stage 2 未提取到标注）"
     if specialized_tags:

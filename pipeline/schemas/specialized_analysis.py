@@ -14,58 +14,6 @@ from .fact_extraction import AiDetail
 
 
 # =============================================================================
-# 共享枚举（Phase 1-3 共用）
-# =============================================================================
-
-
-class TechStackQuality(str):
-    """技术栈质量枚举。"""
-    PRODUCTION_GRADE = "production_grade"
-    PROMISING = "promising"
-    EXPERIMENTAL = "experimental"
-    TOY = "toy"
-
-
-class DocumentationLevel(str):
-    """文档质量枚举。"""
-    COMPREHENSIVE = "comprehensive"
-    ADEQUATE = "adequate"
-    MINIMAL = "minimal"
-    NONE = "none"
-
-
-class ContributorActivity(str):
-    """贡献者活跃度枚举。"""
-    VERY_ACTIVE = "very_active"
-    ACTIVE = "active"
-    MODERATE = "moderate"
-    LOW = "low"
-    STAGNANT = "stagnant"
-
-
-class ResponseTime(str):
-    """Issue 响应速度枚举。"""
-    FAST = "fast"
-    NORMAL = "normal"
-    SLOW = "slow"
-
-
-class MergeVelocity(str):
-    """PR 合并速度枚举。"""
-    HIGH = "high"
-    MEDIUM = "medium"
-    LOW = "low"
-
-
-class TimeToProduction(str):
-    """生产就绪时间评估枚举。"""
-    READY_NOW = "ready_now"
-    NEEDS_1_3_MONTHS = "needs_1_3_months"
-    NEEDS_6_PLUS_MONTHS = "needs_6_plus_months"
-    NOT_RECOMMENDED = "not_recommended"
-
-
-# =============================================================================
 # GitHubProjectAnalysis 嵌套模型
 # =============================================================================
 
