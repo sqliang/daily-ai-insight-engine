@@ -236,12 +236,22 @@ class GithubBrief(BaseModel):
 class ProductBrief(BaseModel):
     """产品专题简报——Phase 2 实现。"""
 
-    summary: str = ""
+    summary: str = Field(
+        default="",
+        description="一句话总结今日产品趋势（中文）",
+    )
+
     notable_products: list[str] = Field(
         default_factory=list,
         alias="notableProducts",
+        description="值得关注的产品名列表",
     )
-    article_count: int = Field(default=0, alias="articleCount")
+
+    article_count: int = Field(
+        default=0,
+        alias="articleCount",
+        description="当日产品类文章总数",
+    )
 
     class Config:
         populate_by_name = True
@@ -250,10 +260,28 @@ class ProductBrief(BaseModel):
 class PaperBrief(BaseModel):
     """论文专题简报——Phase 2 实现。"""
 
-    summary: str = ""
-    key_papers: list[str] = Field(default_factory=list, alias="keyPapers")
-    research_areas: list[str] = Field(default_factory=list, alias="researchAreas")
-    article_count: int = Field(default=0, alias="articleCount")
+    summary: str = Field(
+        default="",
+        description="一句话总结今日论文趋势（中文）",
+    )
+
+    key_papers: list[str] = Field(
+        default_factory=list,
+        alias="keyPapers",
+        description="关键论文标题列表",
+    )
+
+    research_areas: list[str] = Field(
+        default_factory=list,
+        alias="researchAreas",
+        description="涉及的研究领域列表",
+    )
+
+    article_count: int = Field(
+        default=0,
+        alias="articleCount",
+        description="当日论文类文章总数",
+    )
 
     class Config:
         populate_by_name = True
