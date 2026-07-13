@@ -63,7 +63,7 @@ export interface GithubProjectEntry {
  *    GithubProjectEntry 数组，无数据时返回空数组
  */
 export async function loadGithubArticles(
-  date: string,
+  _date: string,
 ): Promise<GithubProjectEntry[]> {
   const allArticlesPath = join(
     process.cwd(),
@@ -76,8 +76,8 @@ export async function loadGithubArticles(
     const articles = (data.articles || []) as StructuredArticle[];
 
     return articles
-      .filter((a: any) => a.source_dir === "github-trending")
-      .map((a: any) => {
+      .filter((a: Record<string, unknown>) => a.source_dir === "github-trending")
+      .map((a: Record<string, unknown>) => {
         const gh = a.specialized_tags?.github || {};
 
         return {
