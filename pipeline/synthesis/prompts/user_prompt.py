@@ -65,6 +65,15 @@ def _compute_statistics(articles: list[dict]) -> dict:
                 area = pp.get("research_area") or pp.get("researchArea") or "unknown"
                 paper_areas[area] += 1
 
+    # --- 产品专题统计 ---
+    product_count = 0
+    for a in articles:
+        spec_tags = a.get("specialized_tags", {})
+        if isinstance(spec_tags, dict):
+            pp = spec_tags.get("product")
+            if isinstance(pp, dict):
+                product_count += 1
+
     return {
         "event_type_distribution": dict(event_type_dist),
         "sentiment_distribution": dict(sentiment_dist),
@@ -84,6 +93,9 @@ def _compute_statistics(articles: list[dict]) -> dict:
             "paper": {
                 "count": paper_count,
                 "research_areas": dict(paper_areas),
+            },
+            "product": {
+                "count": product_count,
             },
         },
     }
@@ -253,6 +265,13 @@ def build_user_prompt(all_articles: list[dict], max_detail: int = 30, target_dat
             f"  Research areas: {_format_distribution(paper_stats.get('research_areas', {}))}",
         ])
 
+    product_stats = spec_stats.get("product", {})
+    if product_stats.get("count", 0) > 0:
+        sections.extend([
+            "",
+            f"### 产品扫描 ({product_stats['count']} 个产品)",
+        ])
+
     sections.extend([
         "",
         f"## 2. TOP {len(top_articles)} ARTICLES BY IMPACT SCORE (FULL ANALYSIS)",
@@ -287,6 +306,7 @@ def build_user_prompt(all_articles: list[dict], max_detail: int = 30, target_dat
         f"- entityFrequency: merge companies, technologies, and keyPeople from entities field across ALL articles",
         f"- specializedBrief: if specialized_stats shows github projects, output githubHighlights with summary, topProjects, domainDistribution, and aiCategoryDistribution from the stats",
         f"- specializedBrief: if specialized_stats.paper.count > 0, output paperHighlights with summary, keyPapers list, researchAreas list, and articleCount",
+        f"- specializedBrief: if specialized_stats.product.count > 0, output productHighlights with summary, notableProducts list, and articleCount",
         f"- Language: Chinese for all text fields, English for enum values",
         f"- Output ONLY valid JSON, no markdown wrappers",
     ])

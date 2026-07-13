@@ -117,7 +117,9 @@ export async function listReports(dateRange?: DateRange): Promise<ReportSummary[
                 domains: sb.githubHighlights.domainDistribution || {},
               }
             : null,
-          product: null,
+          product: sb?.productHighlights?.articleCount
+            ? { count: sb.productHighlights.articleCount }
+            : null,
           paper: sb?.paperHighlights?.articleCount
             ? { count: sb.paperHighlights.articleCount }
             : null,

@@ -304,6 +304,114 @@ export function computeResearchAreaDistribution(
 }
 
 // ---------------------------------------------------------------------------
+// 产品类型定义
+// ---------------------------------------------------------------------------
+
+export interface ProductEntry {
+  articleId: string;
+  title: string;
+  url: string;
+  // Stage 2 产品标注字段 (specialized_tags.product)
+  productName: string;
+  productUrl: string;
+  companyTeam: string;
+  launchContext: string;
+  pricingModel: string;
+  productCategory: string;
+  targetUsers: string[];
+  // Stage 3 产品分析字段
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  productAssessment?: Record<string, any>;
+  // 标准 Stage 2/3 字段（回退展示）
+  tldr: string;
+  objectiveSummary: string;
+}
+
+// ---------------------------------------------------------------------------
+// 产品数据加载
+// ---------------------------------------------------------------------------
+
+/**
+ * 加载指定日期的产品专题文章。
+ *
+ * 从 all_articles.json 中筛选 source_dir == "producthunt" 或 "whytryai" 的文章，
+ * 提取 specialized_tags.product（Stage 2 标注）和 Stage 3 产品分析字段。
+ *
+ * 参数：
+ *    _date: 目标日期，格式 YYYY-MM-DD（当前未强制过滤，预留接口）
+ *
+ * 返回：
+ *    ProductEntry 数组，无数据时返回空数组
+ */
+export async function loadProductArticles(
+  _date: string,
+): Promise<ProductEntry[]> {
+  const allArticlesPath = join(
+    process.cwd(),
+    "data/04_structured/all_articles.json",
+  );
+
+  try {
+    const raw = await readFile(allArticlesPath, "utf8");
+    const data = JSON.parse(raw);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const articles = (data.articles || []) as any[];
+
+    return articles
+      .filter(
+        (a) =>
+          a.source_dir === "producthunt" || a.source_dir === "whytryai",
+      )
+      .map((a) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const productTags: any = a.specialized_tags?.product || {};
+
+        // 产品分析字段（以 snake_case/camelCase 存储在 frontmatter 中）
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const pa: any = a.product_assessment || {};
+
+        return {
+          articleId: a.id || "",
+          title: a.title || "",
+          url: a.url || "",
+          // Stage 2 标注字段
+          productName:
+            productTags.product_name ||
+            productTags.productName ||
+            a.title ||
+            "",
+          productUrl:
+            productTags.product_url || productTags.productUrl || "",
+          companyTeam:
+            productTags.company_team || productTags.companyTeam || "",
+          launchContext:
+            productTags.launch_context ||
+            productTags.launchContext ||
+            "",
+          pricingModel:
+            productTags.pricing_model ||
+            productTags.pricingModel ||
+            "unknown",
+          productCategory:
+            productTags.product_category ||
+            productTags.productCategory ||
+            "",
+          targetUsers:
+            productTags.target_users || productTags.targetUsers || [],
+          // Stage 3 产品分析字段
+          productAssessment: Object.keys(pa).length > 0 ? pa : undefined,
+          // 标准字段
+          tldr: a.tldr || "",
+          objectiveSummary:
+            a.objective_summary || a.objectiveSummary || "",
+        };
+      });
+  } catch {
+    return [];
+  }
+}
+
+// ---------------------------------------------------------------------------
 // 聚合统计
 // ---------------------------------------------------------------------------
 

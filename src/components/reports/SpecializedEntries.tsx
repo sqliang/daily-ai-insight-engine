@@ -120,7 +120,7 @@ function EntryRow({ icon, label, href, stat, detail, enabled }: EntryProps) {
  * 专题报告子条目列表。
  *
  * 在日报卡片内展示该日期可用的专题报告入口。
- * 当前 Phase 1 仅 GitHub 可用，Product/Paper 显示为"即将上线"占位。
+ * 已完成的专题：GitHub (Phase 1)、Paper (Phase 2)、Product (Phase 3)。
  */
 export function SpecializedEntries({
   specialized,
@@ -157,7 +157,7 @@ export function SpecializedEntries({
           icon="📦"
           label="产品扫描"
           href=""
-          stat="即将上线"
+          stat="暂无数据"
           enabled={false}
         />
       </div>
@@ -195,7 +195,6 @@ export function SpecializedEntries({
     );
   })();
 
-  // Phase 2/3 占位
   const productEntry = specialized.product ? (
     <EntryRow
       icon="📦"
@@ -209,7 +208,7 @@ export function SpecializedEntries({
       icon="📦"
       label="产品扫描"
       href=""
-      stat="即将上线"
+      stat="暂无数据"
       enabled={false}
     />
   );
