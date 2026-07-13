@@ -63,6 +63,17 @@ Return ONLY a valid JSON object matching this schema:
       "rationale": "why this opportunity matters in Chinese"
     }
   ],
+  "specializedBrief": {
+    "githubHighlights": {
+      "summary": "one-sentence trend summary for today's GitHub Trending in Chinese",
+      "topProjects": ["project1", "project2", "project3"],
+      "domainDistribution": {"ai_ml": 3, "devops_infra": 2},
+      "aiCategoryDistribution": {"agent_framework": 2},
+      "articleCount": 5
+    },
+    "productHighlights": null,
+    "paperHighlights": null
+  },
   "visualizationData": {
     "eventTypeDistribution": [
       {"label": "infrastructure_update", "count": <number>},
@@ -113,4 +124,12 @@ Return ONLY a valid JSON object matching this schema:
 
 10. **evidenceArticleIds**: For each evidence item in evidence[], the corresponding evidenceArticleIds[i] MUST list ONLY the specific article IDs that directly support that fact. Use the article "id" field from the prompt. Do NOT put all articleIds for every evidence item — be precise about which article backs each claim. evidenceArticleIds must have the same length as evidence. Each sub-array must have at least 1 article ID.
 11. **No inline citations in evidence**: evidence text must be pure factual statements. Do NOT write source citations like "（来源：xxx）" inside evidence text. The pipeline handles numbering.
+12. **specializedBrief 生成规则**：
+    - 仅当当日有匹配来源的文章时才生成对应的子块（githubHighlights/productHighlights/paperHighlights）
+    - 如果没有对应来源的文章，对应子块应设为 null
+    - githubHighlights.summary 应从 specialized_tags 的统计分布中提炼趋势判断
+    - githubHighlights.topProjects 按项目影响力（Star 趋势 + 社区活跃度）筛选 Top 3-5
+    - githubHighlights.domainDistribution 和 aiCategoryDistribution 应从统计概览中的 specialized_stats 数据获取，保持 LLM 输出与统计一致
+    - productHighlights 和 paperHighlights 为 Phase 2 预留，当前可设为 null
+    - 不需要深入每篇文章的细节，保持轻量
 """
