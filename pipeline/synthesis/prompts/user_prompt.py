@@ -53,6 +53,18 @@ def _compute_statistics(articles: list[dict]) -> dict:
                     for cat in ai_detail.get("primaryCategories", []) or []:
                         github_ai_cats[cat] += 1
 
+    # --- 论文专题统计 ---
+    paper_count = 0
+    paper_areas: Counter = Counter()
+    for a in articles:
+        spec_tags = a.get("specialized_tags", {})
+        if isinstance(spec_tags, dict):
+            pp = spec_tags.get("paper")
+            if isinstance(pp, dict):
+                paper_count += 1
+                area = pp.get("research_area") or pp.get("researchArea") or "unknown"
+                paper_areas[area] += 1
+
     return {
         "event_type_distribution": dict(event_type_dist),
         "sentiment_distribution": dict(sentiment_dist),
@@ -68,6 +80,10 @@ def _compute_statistics(articles: list[dict]) -> dict:
                 "count": github_count,
                 "domain_distribution": dict(github_domains),
                 "ai_category_distribution": dict(github_ai_cats) if github_ai_cats else None,
+            },
+            "paper": {
+                "count": paper_count,
+                "research_areas": dict(paper_areas),
             },
         },
     }
@@ -228,6 +244,15 @@ def build_user_prompt(all_articles: list[dict], max_detail: int = 30, target_dat
         if gh_stats.get("ai_category_distribution"):
             sections.append(f"  AI sub-category distribution: {_format_distribution(gh_stats['ai_category_distribution'])}")
 
+    paper_stats = spec_stats.get("paper", {})
+    if paper_stats.get("count", 0) > 0:
+        sections.extend([
+            "",
+            "### Specialized Tags: arXiv Papers",
+            f"  Total papers: {paper_stats['count']}",
+            f"  Research areas: {_format_distribution(paper_stats.get('research_areas', {}))}",
+        ])
+
     sections.extend([
         "",
         f"## 2. TOP {len(top_articles)} ARTICLES BY IMPACT SCORE (FULL ANALYSIS)",
@@ -261,6 +286,7 @@ def build_user_prompt(all_articles: list[dict], max_detail: int = 30, target_dat
         f"- riskSignals/opportunitySignals: 4-7 each, grounded in source articles' risk_matrix and market_opportunities",
         f"- entityFrequency: merge companies, technologies, and keyPeople from entities field across ALL articles",
         f"- specializedBrief: if specialized_stats shows github projects, output githubHighlights with summary, topProjects, domainDistribution, and aiCategoryDistribution from the stats",
+        f"- specializedBrief: if specialized_stats.paper.count > 0, output paperHighlights with summary, keyPapers list, researchAreas list, and articleCount",
         f"- Language: Chinese for all text fields, English for enum values",
         f"- Output ONLY valid JSON, no markdown wrappers",
     ])

@@ -72,7 +72,12 @@ Return ONLY a valid JSON object matching this schema:
       "articleCount": 5
     },
     "productHighlights": null,
-    "paperHighlights": null
+    "paperHighlights": {
+      "summary": "one-sentence trend summary for today's arXiv papers in Chinese",
+      "keyPapers": ["paper title 1", "paper title 2", "paper title 3"],
+      "researchAreas": ["NLP", "CV", "RL"],
+      "articleCount": 3
+    }
   },
   "visualizationData": {
     "eventTypeDistribution": [
@@ -130,6 +135,10 @@ Return ONLY a valid JSON object matching this schema:
     - githubHighlights.summary 应从 specialized_tags 的统计分布中提炼趋势判断
     - githubHighlights.topProjects 按项目影响力（Star 趋势 + 社区活跃度）筛选 Top 3-5
     - githubHighlights.domainDistribution 和 aiCategoryDistribution 应从统计概览中的 specialized_stats 数据获取，保持 LLM 输出与统计一致
-    - productHighlights 和 paperHighlights 为 Phase 2 预留，当前可设为 null
+    - paperHighlights.summary 应从 specialized_tags 的统计分布中提炼趋势判断
+    - paperHighlights.keyPapers 按论文研究影响力筛选 Top 3-5 篇论文标题
+    - paperHighlights.researchAreas 应从统计概览中的 specialized_stats.paper.research_areas 数据获取，保持 LLM 输出与统计一致
+    - paperHighlights.articleCount 应与统计概览中的 paper.count 一致
+    - productHighlights 为 Phase 2 预留，当前可设为 null
     - 不需要深入每篇文章的细节，保持轻量
 """
