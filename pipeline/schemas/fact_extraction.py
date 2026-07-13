@@ -134,3 +134,139 @@ class FactExtraction(BaseModel):
 
     class Config:
         populate_by_name = True
+
+
+# =============================================================================
+# 专题标注模型 — Stage 2 来源感知的轻量标注
+# =============================================================================
+
+
+class AiDetail(BaseModel):
+    """
+    AI 专项标注——仅当 GitHub 项目的 domain == "ai_ml" 时存在。
+
+    为 AI/ML 领域的开源项目提供细粒度子领域分类，
+    支撑前端按 AI 子领域筛选和聚合分析。
+    """
+
+    primary_categories: List[str] = Field(
+        default_factory=list,
+        description="AI 一级子分类（可多选）。可选值: agent_framework, llm_infra, "
+                    "model_training, model_serving, rag_pipeline, prompt_engineering, "
+                    "multimodal, code_gen, ai_testing, ai_observability, ai_security, "
+                    "ai_ui_ux, dataset_tooling, other",
+    )
+
+    agent_subcategory: Optional[List[str]] = Field(
+        default=None,
+        description="Agent 子领域（仅当 primary_categories 包含 agent_framework 时存在）。"
+                    "可选值: orchestration, tool_use, memory_management, planning, "
+                    "reflection, multi_modal_agent, browser_agent, coding_agent, general_framework",
+    )
+
+    tech_tags: List[str] = Field(
+        default_factory=list,
+        description="AI 关键技术标签（如 RAG, vector-db, function-calling, RLHF, MoE）",
+    )
+
+
+class GitHubTags(BaseModel):
+    """
+    GitHub 项目基础标注——Stage 2 从原始文章中提取的结构化元数据。
+
+    两层分类：
+        - 第一层 domain + cross_tags：所有项目必填，支持跨领域趋势观察
+        - 第二层 ai_detail：仅 domain == "ai_ml" 时存在，AI 生态内精准筛选
+    """
+
+    project_name: str = Field(
+        ...,
+        description="项目名称（GitHub 仓库名，如 'crewAI/crewAI'）",
+    )
+
+    project_url: str = Field(
+        ...,
+        description="GitHub 仓库完整 URL",
+    )
+
+    primary_language: str = Field(
+        ...,
+        description="主要编程语言（如 Python, TypeScript, Rust）",
+    )
+
+    license_type: str = Field(
+        ...,
+        description="开源协议类型（如 MIT, Apache 2.0, GPLv3, 无）",
+    )
+
+    # 第一层：通用领域分类（所有项目）
+    domain: str = Field(
+        ...,
+        description="项目所属技术领域。可选值: ai_ml, web_frontend, web_backend, "
+                    "devops_infra, database_storage, programming_languages, developer_tools, "
+                    "security, mobile, blockchain, data_engineering, game_development, "
+                    "documentation, iot_embedded, other",
+    )
+
+    cross_tags: List[str] = Field(
+        default_factory=list,
+        description="跨领域标签（如 open-source-alternative, devtool, cli-tool, "
+                    "api-service, self-hosted, saas）",
+    )
+
+    # 第二层：AI 专项（可选）
+    ai_detail: Optional[AiDetail] = Field(
+        default=None,
+        description="AI 专项标注。仅当 domain == 'ai_ml' 时存在",
+    )
+
+
+class ProductTags(BaseModel):
+    """产品基础标注——Stage 2 从原始文章中提取的结构化元数据。"""
+
+    product_name: str = Field(..., description="产品名称")
+    product_url: str = Field(..., description="产品 URL")
+    company_team: Optional[str] = Field(default=None, description="背后的公司/团队")
+    launch_context: str = Field(..., description="发布上下文。可选值: new_launch, major_update, pivot, funding_announcement")
+    pricing_model: str = Field(..., description="定价模式。可选值: freemium, subscription, usage_based, open_source, free, enterprise, unknown")
+    product_category: str = Field(..., description="产品所属品类")
+    target_users: List[str] = Field(default_factory=list, description="目标用户画像")
+
+
+class PaperTags(BaseModel):
+    """论文基础标注——Stage 2 从原始文章中提取的结构化元数据。"""
+
+    paper_title: str = Field(..., description="论文标题")
+    authors: List[str] = Field(default_factory=list, description="作者列表")
+    affiliations: List[str] = Field(default_factory=list, description="作者所属机构")
+    venue: Optional[str] = Field(default=None, description="发表会议/期刊")
+    code_url: Optional[str] = Field(default=None, description="配套代码仓库 URL")
+    dataset_url: Optional[str] = Field(default=None, description="配套数据集 URL")
+    research_area: str = Field(..., description="研究领域（如 NLP, CV, RL, Systems）")
+    method_type: str = Field(..., description="方法类型（如 transformer, diffusion, RL-based）")
+
+
+class SpecializedTags(BaseModel):
+    """
+    按来源类型分派的专题标注——Stage 2 产出，Stage 3 消费。
+
+    设计理由：
+        - 来源感知：根据 source 名分派不同的子 schema
+        - 降本增效：轻量级分类标注在 Stage 2（temperature 0.1）完成，
+          Stage 3 专题分析直接消费标注结果，专注于深度推理
+    """
+
+    github: Optional[GitHubTags] = Field(
+        default=None,
+        description="GitHub 项目标注（仅 source == 'github-trending' 时填充）",
+    )
+
+    product: Optional[ProductTags] = Field(
+        default=None,
+        description="产品标注（仅 source 匹配产品类源时填充）",
+    )
+
+    paper: Optional[PaperTags] = Field(
+        default=None,
+        description="论文标注（仅 source 匹配论文学术源时填充）",
+    )
