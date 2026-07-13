@@ -7,6 +7,7 @@ pipeline/schemas/specialized_analysis.py — 专题分析 Pydantic 模型
 Phase 1 实现 GitHubProjectAnalysis，Phase 2/3 追加 ProductAnalysis 和 PaperAnalysis。
 """
 
+from enum import Enum
 from typing import List, Optional
 from pydantic import BaseModel, Field
 
@@ -235,4 +236,222 @@ class GitHubProjectAnalysis(BaseModel):
         populate_by_name = True
 
 
-# Phase 2/3 占位：ProductAnalysis, PaperAnalysis 后续追加
+# =============================================================================
+# 共享枚举（PaperAnalysis 使用）
+# =============================================================================
+
+
+class TechnicalDepth(str, Enum):
+    """技术深度枚举。"""
+    DEEPLY_TECHNICAL = "deeply_technical"
+    MODERATE = "moderate"
+    ACCESSIBLE = "accessible"
+
+
+class NoveltyType(str, Enum):
+    """方法创新类型枚举。"""
+    ARCHITECTURAL = "architectural"
+    ALGORITHMIC = "algorithmic"
+    TRAINING_METHOD = "training_method"
+    DATA_CENTRIC = "data_centric"
+    THEORETICAL = "theoretical"
+    BENCHMARK = "benchmark"
+
+
+class Significance(str, Enum):
+    """研究意义枚举。"""
+    FUNDAMENTAL = "fundamental"
+    PRACTICAL = "practical"
+    INCREMENTAL = "incremental"
+    NICHE = "niche"
+
+
+class BaselineComparison(str, Enum):
+    """基线对比质量枚举。"""
+    COMPREHENSIVE = "comprehensive"
+    ADEQUATE = "adequate"
+    SELECTIVE = "selective"
+    WEAK = "weak"
+
+
+class AblationQuality(str, Enum):
+    """消融实验质量枚举。"""
+    THOROUGH = "thorough"
+    ADEQUATE = "adequate"
+    MINIMAL = "minimal"
+    ABSENT = "absent"
+
+
+class ReproducibilityLevel(str, Enum):
+    """可复现性枚举。"""
+    FULLY = "fully_reproducible"
+    MOSTLY = "mostly_reproducible"
+    PARTIALLY = "partially"
+    NOT = "not_reproducible"
+
+
+class OverclaimingAssessment(str, Enum):
+    """过度宣称评估枚举。"""
+    HONEST = "honest"
+    MILD = "mild_overclaim"
+    SIGNIFICANT = "significant_overclaim"
+
+
+class ComputeRequirements(str, Enum):
+    """算力需求枚举。"""
+    COMMODITY = "commodity"
+    DATACENTER = "datacenter"
+    SUPERCOMPUTER = "supercomputer"
+    PROHIBITIVE = "prohibitive"
+
+
+class IntegrationReadiness(str, Enum):
+    """集成就绪度枚举。"""
+    READY = "ready_to_integrate"
+    NEEDS_ENGINEERING = "needs_engineering"
+    NEEDS_RESEARCH = "needs_research"
+    DISTANT = "distant"
+
+
+# =============================================================================
+# PaperAnalysis 嵌套模型
+# =============================================================================
+
+
+class PaperMetadata(BaseModel):
+    """论文元信息。"""
+
+    title: str = Field(..., alias="title", description="论文标题")
+    authors: List[str] = Field(default_factory=list, description="作者列表")
+    affiliations: List[str] = Field(default_factory=list, description="作者所属机构")
+    venue: Optional[str] = Field(default=None, description="发表会议/期刊（如 NeurIPS 2025, arXiv preprint）")
+    paper_url: str = Field(..., alias="paperUrl", description="论文 URL")
+    code_url: Optional[str] = Field(default=None, alias="codeUrl", description="配套代码仓库 URL")
+    dataset_url: Optional[str] = Field(default=None, alias="datasetUrl", description="配套数据集 URL")
+
+    class Config:
+        populate_by_name = True
+
+
+class ResearchProblem(BaseModel):
+    """研究问题与动机。"""
+
+    core_question: str = Field(..., alias="coreQuestion", description="核心研究问题（一句话）")
+    motivation: str = Field(..., description="研究动机与背景")
+    significance: str = Field(..., description="研究意义。可选值: fundamental, practical, incremental, niche")
+    gap_addressed: str = Field(..., alias="gapAddressed", description="填补了什么研究空白")
+
+    class Config:
+        populate_by_name = True
+
+
+class Methodology(BaseModel):
+    """方法创新。"""
+
+    approach_summary: str = Field(..., alias="approachSummary", description="方法概述（200 字以内）")
+    novelty_type: str = Field(..., alias="noveltyType", description="创新类型。可选值: architectural, algorithmic, training_method, data_centric, theoretical, benchmark")
+    key_innovations: List[str] = Field(default_factory=list, alias="keyInnovations", description="关键创新点（2-4 条）")
+    inspiration_sources: List[str] = Field(default_factory=list, alias="inspirationSources", description="方法的启发来源")
+    technical_depth: str = Field(..., alias="technicalDepth", description="技术深度。可选值: deeply_technical, moderate, accessible")
+
+    class Config:
+        populate_by_name = True
+
+
+class ExperimentalRigor(BaseModel):
+    """实验与验证。"""
+
+    benchmark_coverage: str = Field(..., alias="benchmarkCoverage", description="评测基准覆盖描述")
+    baseline_comparison: str = Field(..., alias="baselineComparison", description="基线对比质量。可选值: comprehensive, adequate, selective, weak")
+    ablation_quality: str = Field(..., alias="ablationQuality", description="消融实验质量。可选值: thorough, adequate, minimal, absent")
+    reproducibility_level: str = Field(..., alias="reproducibilityLevel", description="可复现性。可选值: fully_reproducible, mostly_reproducible, partially, not_reproducible")
+    claimed_improvement: str = Field(..., alias="claimedImprovement", description="论文声称的提升")
+
+    class Config:
+        populate_by_name = True
+
+
+class LimitationsAndHonesty(BaseModel):
+    """局限性与诚实度。"""
+
+    stated_limitations: List[str] = Field(default_factory=list, alias="statedLimitations", description="论文自身承认的局限性")
+    reviewer_concerns: List[str] = Field(default_factory=list, alias="reviewerConcerns", description="审稿人会提出的担忧")
+    overclaiming_assessment: str = Field(..., alias="overclaimingAssessment", description="过度宣称评估。可选值: honest, mild_overclaim, significant_overclaim")
+    generalization_concern: str = Field(..., alias="generalizationConcern", description="泛化性担忧")
+
+    class Config:
+        populate_by_name = True
+
+
+class IndustrialRelevance(BaseModel):
+    """工业落地潜力。"""
+
+    applicable_domains: List[str] = Field(default_factory=list, alias="applicableDomains", description="可应用领域")
+    compute_requirements: str = Field(..., alias="computeRequirements", description="算力需求。可选值: commodity, datacenter, supercomputer, prohibitive")
+    integration_readiness: str = Field(..., alias="integrationReadiness", description="集成就绪度。可选值: ready_to_integrate, needs_engineering, needs_research, distant")
+    cost_efficiency_analysis: str = Field(..., alias="costEfficiencyAnalysis", description="成本效益分析")
+
+    class Config:
+        populate_by_name = True
+
+
+class RelatedWorkContext(BaseModel):
+    """与相关工作的关系。"""
+
+    closest_prior_works: List[str] = Field(default_factory=list, alias="closestPriorWorks", description="最接近的先前工作")
+    advancement_over_prior: str = Field(..., alias="advancementOverPrior", description="相比之前工作的实质进步")
+    opens_new_direction: bool = Field(..., alias="opensNewDirection", description="是否开辟了新方向")
+    potential_follow_ups: List[str] = Field(default_factory=list, alias="potentialFollowUps", description="可能的后续研究方向")
+
+    class Config:
+        populate_by_name = True
+
+
+class PaperAnalysis(BaseModel):
+    """
+    论文深度分析——Stage 3 专题分析产出。
+
+    设计理念：
+        学术研究评估——帮助技术团队判断论文的学术价值、技术可行性与工业落地潜力。
+    """
+
+    paper_metadata: PaperMetadata = Field(
+        ...,
+        alias="paperMetadata",
+        description="论文元信息",
+    )
+    research_problem: ResearchProblem = Field(
+        ...,
+        alias="researchProblem",
+        description="研究问题与动机",
+    )
+    methodology: Methodology = Field(
+        ...,
+        description="方法创新",
+    )
+    experimental_rigor: ExperimentalRigor = Field(
+        ...,
+        alias="experimentalRigor",
+        description="实验与验证",
+    )
+    limitations_and_honesty: LimitationsAndHonesty = Field(
+        ...,
+        alias="limitationsAndHonesty",
+        description="局限性与诚实度",
+    )
+    industrial_relevance: IndustrialRelevance = Field(
+        ...,
+        alias="industrialRelevance",
+        description="工业落地潜力",
+    )
+    related_work_context: RelatedWorkContext = Field(
+        ...,
+        alias="relatedWorkContext",
+        description="与相关工作的关系",
+    )
+
+    class Config:
+        populate_by_name = True
+
+
+# Phase 3 占位：ProductAnalysis 后续追加

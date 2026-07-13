@@ -36,57 +36,56 @@
       "该项目当前为早期预览阶段，安全策略存在过度宽松的情况，官方明确表示当前版本不应被视为安全边界。",
       "构建依赖 Rust 1.93 工具链和 Node.js ≥ 18，支持 Windows、Linux 和 macOS 原生构建。"
     ],
+    "extract_result": "success",
     "impact_score": {
       "score": 6.5,
-      "reason": "微软开源 MXC 解决的是 AI 行业当前最痛的痛点之一——安全运行 AI Agent 生成/调用的不可信代码。目前业界缺乏标准化方案，各家自行造轮子（如 sandboxed-python、deno、e2b），MXC 以统一 JSON Schema + TypeScript SDK 覆盖从 OS 级沙盒到完整虚拟机的多重隔离后端，方向正确且具备平台级影响力。但项目明确标注为早期预览版，安全策略尚存过度宽松问题，官方声明 '不应被视为安全边界'，短期内无法直接用于生产，短期内对竞争格局的实际冲击有限，属于基础设施布局期的信号释放。综合评估 6.5 分。"
+      "reason": "MXC 解决了 AI agent 工具调用和插件执行中安全沙盒这一关键基础设施缺失问题，微软的品牌背书和跨平台多后端设计具有重要的行业信号价值。但项目处于 early preview 阶段，官方明确声明当前版本不应被视为安全边界，安全策略存在过度宽松情况，短期内无法直接用于生产环境。该发布更多是技术方向确认和生态布局，而非即战力冲击，因此评分中等偏上。"
     },
     "sentiment": "positive",
     "developer_sentiment": {
       "tone": "excited",
-      "primary_focus": "跨平台统一沙盒 API 能否真正成为 AI Agent 代码执行的安全标准"
+      "primary_focus": "统一 JSON Schema 管理多种隔离后端的跨平台沙盒能力，以及 SDK 易用性与安全边界的实际可信度"
     },
     "hype_assessment": {
       "level": "low",
-      "reason": "项目 README 非常诚实，没有使用 '颠覆'、'革命性' 等 PR 修辞。明确标注是 'early preview'，主动承认已知存在过度宽松的安全策略，并声明当前版本不应被视为安全边界。这种程度的自我披露在微软开源项目中较为少见，炒作成分极低。"
+      "reason": "微软在 README 中明确标注了 early preview、overly permissive、not security boundaries 等限制性说明，没有使用颠覆性、革命性等 PR 词汇，发布调性务实克制。内容多为技术架构和构建说明，不存在概念炒作。"
     },
     "information_entropy": "high",
     "domain_disruption": {
-      "technical_innovation": "在统一抽象层下聚合 ProcessContainer、Bubblewrap、Seatbelt、LXC、Windows Sandbox、MicroVM、Hyperlight 等十余种隔离后端，通过版本化 JSON Schema 统一定义文件系统策略、网络策略、UI 策略，并提供 TypeScript SDK 封装有状态生命周期管理。这套抽象架构本身并非全新理论，但将操作系统级沙盒到完整虚拟机纳入同一配置体系并面向前端生态输出 SDK，在工程整合度上是行业首次。",
-      "business_model": "对微软而言，MXC 是 Azure AI Agent 生态的关键基础设施拼图——一旦成熟，可将安全代码执行作为 Azure 的托管服务（Sandbox-as-a-Service）变现，并绑定 AI SDK 和云资源消费。对 SaaS 生态而言，标准化沙盒接口有望降低 Agent 平台的构建门槛，催生新的 'AI 沙盒即服务' 商业模式。"
+      "technical_innovation": "通过统一版本化 JSON Schema 抽象进程容器、Bubblewrap、LXC、Windows Sandbox、MicroVM、Hyperlight 等 9 种隔离后端，实现跨平台一致的安全策略管理（文件系统、网络、UI）。将容器抽象层从配置到生命周期标准化，降低了安全沙盒的集成门槛。",
+      "business_model": "微软通过开源 MXC 为 Azure AI / Copilot 生态建立 agent 安全执行的事实标准，TypeScript SDK 降低了 AI 应用开发者的接入成本，潜在推动 Azure 成为 agent 工作负载的首选托管平台，形成平台锁定效应。"
     },
     "engineering_complexity": "prototype",
     "compound_value": {
-      "score": 7.5,
-      "reason": "MXC 定位在 AI Agent 执行基础设施层，解决的是模型生成代码安全执行这一关键瓶颈。其核心价值在于提供了一个统一的多后端隔离抽象层（进程容器 → 完整 VM），让开发者无需关心底层沙盒实现。这种抽象具有平台效应：后端越多、策略越丰富 → 采用率越高 → 生态越强，形成正向循环。随着 AI Agent 自主性持续提升（代码生成、工具调用、插件执行），安全沙盒执行需求将指数级增长。微软通过开源 MXC 有望在该层建立事实标准，类似于 Docker 对容器编排的贡献。复利效应显著：每多一个后端支持，就多一个使用场景；每多一个使用场景，就多一批开发者绑入 MXC 生态。风险在于：1）当前为早期预览，安全边界尚未成熟；2）微软历史上存在开源项目维护不稳定的先例；3）竞品（如 Modal、E2B、Firecracker 生态）可能形成替代标准。综合判断，这是 3-5 年后大概率仍存在的行业基础组件，但验证期仍需 12-18 个月。"
+      "score": 8.3,
+      "reason": "MXC 定位为 AI Agent 时代的安全代码执行基础设施层，通过统一 JSON Schema 和 TypeScript SDK 屏蔽多平台多后端差异。其核心价值在于解决 Agent 规模化落地中不可信代码安全执行的刚性需求——这在模型能力溢出到工具调用的产业阶段是必然爆发的瓶颈。若 MXC 成为行业标准接口（类似 Docker 之于容器），则具备极强的网络效应和迁移成本护城河。微软作为主导方+开源策略既有生态号召力又能通过 Azure/Windows 深度变现。当前早期预览阶段安全策略不成熟是已知风险，但不改变长期战略方向。评分 8.3 反映高天花板与当前执行阶段（early preview）之间的合理折中。"
     },
     "value_capture_layer": "agent_middleware",
-    "moat_impact": "democratizes_access",
+    "moat_impact": "creates_new_moat",
     "key_beneficiaries": [
       "Microsoft",
       "LangChain",
-      "AutoGPT",
-      "OpenAI",
-      "Anthropic"
+      "Vercel",
+      "OpenAI"
     ],
     "competitive_casualty": [
-      "Modal",
-      "E2B",
-      "RunCode",
-      "专有沙盒安全厂商",
-      "云平台锁定型隔离方案"
+      "gVisor",
+      "Firecracker",
+      "Kata Containers",
+      "商业沙盒即服务平台"
     ],
     "market_opportunities": [
-      "AI Agent 开发者可基于 MXC 的统一沙盒 API 快速集成安全代码执行能力，避免从零构建多平台隔离环境的高昂技术成本，尤其适合需要运行 LLM 模型输出和第三方插件的工作流",
-      "企业级 AI 平台可参考 MXC 的多层隔离后端架构（进程级到虚拟机级）设计插件系统安全执行环境，文件系统/网络/UI 三级策略控制模式可作为行业参考范式",
-      "围绕 MXC 的安全审计与策略硬化工具链存在创业机会——官方明确承认当前策略过度宽松，意味着第三方安全加固、合规扫描和策略推荐工具将有市场需求"
+      "AI Agent 平台可集成 MXC 作为默认的模型输出执行沙箱，解决不可信代码运行的安全痛点，尤其适用于 code interpreter、tool use 等场景",
+      "企业级低代码/无代码平台的插件系统可基于 MXC 构建统一隔离执行层，降低第三方扩展引入的安全风险",
+      "安全厂商可围绕 MXC 开发策略审计、合规扫描与安全加固工具，弥补其早期版本策略过度宽松带来的缺口"
     ],
     "risk_matrix": {
-      "regulatory": "MXC 当前为早期预览版且官方明确声明安全策略存在过度宽松问题，企业若提前用于处理受监管数据（如金融、医疗、政务）可能面临合规审查风险，需等待正式版安全边界确认后再投入敏感场景",
-      "technological": "沙盒执行领域已有 gVisor、Firecracker、nsjail、Docker 等成熟方案，MXC 需证明其跨平台统一 API 和多重后端架构的差异化优势；当前 Rust 1.93 特定版本和 Node.js ≥ 18 的构建依赖可能带来兼容性障碍",
-      "competitive": "微软开源 MXC 可能挤压独立沙盒创业公司的市场空间；AWS（Firecracker）、Google（gVisor）等云巨头已有类似产品，生态竞争激烈且切换成本较低",
-      "ethical": "若开发者忽视官方安全警告而过早将 MXC 投入生产环境，宽松策略可能导致沙盒逃逸和数据泄露；被用于执行不可信代码的特性在未充分硬化时存在被恶意利用的风险",
+      "regulatory": "沙盒执行环境涉及代码和数据在隔离层的处理，若与云服务捆绑可能触发数据驻留合规要求（如 GDPR、中国数据安全法），需关注微软跨区域部署策略",
+      "technological": "MXC 处于早期预览阶段，官方明确承认当前安全策略存在过度宽松情况，不应视为安全边界；各后端（MicroVM、IsolationSession）成熟度和性能差异大，需持续验证",
+      "competitive": "AWS Firecracker、Google gVisor、Firejail 等既有隔离方案已形成生态，MXC 面临开发者迁移成本高和跨平台后端碎片化的双重挑战",
+      "ethical": "无显著伦理风险；沙盒技术本质是安全增强工具，但需防范被用于反检测或恶意代码行为分析等灰色用途",
       "additional": [
-        "多后端架构增加了运维复杂度，不同平台默认后端和行为差异（如 Windows 上 denied paths 尚不支持）可能导致开发与生产环境行为不一致"
+        "与微软 Azure 生态深度绑定可能降低跨云和本地部署的采用意愿，TypeScript SDK 优先的设计不满足纯 Rust/C 运维场景需求"
       ]
     },
     "confidence": {
@@ -94,7 +93,82 @@
       "compound": "medium",
       "hype": "medium"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "monitor",
+    "project_profile": {
+      "name": "microsoft/mxc",
+      "url": "https://github.com/microsoft/mxc",
+      "primary_language": "Rust",
+      "license": "MIT",
+      "description": "跨平台沙盒化代码执行系统，用于安全运行不受信任代码（AI 模型输出、插件、工具等）"
+    },
+    "project_classification": {
+      "domain": "security",
+      "cross_tags": [
+        "sandbox",
+        "security",
+        "cross-platform",
+        "code-execution",
+        "container-isolation",
+        "microsoft",
+        "rust",
+        "typescript-sdk",
+        "ai-safety"
+      ],
+      "ai_detail": {
+        "primary_categories": [],
+        "tech_tags": []
+      }
+    },
+    "tech_assessment": {
+      "architecture_highlights": "采用统一 JSON 配置策略驱动沙箱构建，提供从进程级隔离到完整虚拟机的多重后端（ProcessContainer、Bubblewrap、LXC、Hyperlight、Windows Sandbox、Seatbelt 等），通过状态感知生命周期管理（provision→start→exec→stop→deprovision）支持一次性与会话型工作负载。TypeScript SDK 封装底层 Native Runtime，并针对 AI Agent 等非信任代码执行场景预设策略模板。整体架构设计为后端无关的抽象层，允许用户按安全需求与运行时环境灵活切换隔离级别。",
+      "tech_stack_quality": "experimental",
+      "code_quality_indicators": {
+        "has_tests": true,
+        "has_ci_cd": true,
+        "documentation_level": "adequate"
+      },
+      "dependencies_analysis": "核心依赖栈：底层 Native Runtime 使用 Rust 编写的各后端适配器（bwrap_common、lxc_common、wxc_common、hyperlight、NanVix 等），上层通过 TypeScript SDK 对外暴露统一 API。运行时依赖外部工具：Linux 依赖 Bubblewrap（bwrap）或 LXC 工具集，Windows 原生依赖 ProcessContainer/Windows Sandbox 等 OS 能力，macOS 依赖 Seatbelt 沙箱。实验性后端还需 Hyperlight、NanVix MicroVM 等组件。各后端通过通用策略层解耦，新增后端只需实现统一接口，耦合度适中。"
+    },
+    "community_health": {
+      "stars_trend": "项目处于早期预览阶段，具体 Star 增长数据未知，但作为微软出品的安全基础设施项目有望获得开发者关注。",
+      "contributor_activity": "moderate",
+      "issue_response_time": "normal",
+      "pr_merge_velocity": "low",
+      "bus_factor_assessment": "核心贡献者集中在微软内部团队，外部社区参与度较低。项目尚处早期，若微软调整优先度可能导致维护停滞，存在中等偏高的总线风险。"
+    },
+    "competitive_landscape": {
+      "direct_alternatives": [
+        "gVisor",
+        "Firecracker",
+        "Kata Containers",
+        "nsjail",
+        "E2B",
+        "Fly Machines",
+        "Modal Sandbox",
+        "Sandboxie",
+        "Firejail"
+      ],
+      "differentiation": "MXC 的核心差异化在于跨平台三重支持（Windows/Linux/macOS）和统一的 JSON 配置策略体系，用户无需针对不同平台学习不同沙箱接口；同时提供从进程隔离到完整虚拟机的多种可切换后端，覆盖不同隔离等级需求。TypeScript SDK 天然适配 Node.js/AI Agent 生态，对比 gVisor/Firecracker 仅限 Linux、E2B/Modal 偏云端托管，MXC 更强调本地跨平台统一执行体验。",
+      "moat_analysis": "护城河主要来自微软生态锁定：与 Windows 深度集成（ProcessContainer、IsolationSession 等原生能力）是竞品难以复制的优势；跨平台统一配置接口降低多环境开发成本；Microsoft 品牌信任度和 Azure 云原生集成潜力。技术层面多后端可组合架构设计有一定壁垒，但现阶段尚未形成社区网络效应和市场锁定。"
+    },
+    "adoption_guidance": {
+      "maturity_score": 4.0,
+      "recommended_for": [
+        "AI Agent 输出代码的沙箱执行环境",
+        "插件系统的安全隔离运行（Plugin Runtime）",
+        "跨平台开发测试需要统一沙箱 API 的团队",
+        "Windows 生态中需要沙箱执行能力的应用",
+        "研究和评估多种沙箱后端的技术方案对比"
+      ],
+      "caution_for": [
+        "生产环境的强安全隔离需求（安全边界尚未确认，仅限预览）",
+        "Linux-only 场景（有更成熟 Linux 原生方案如 gVisor）",
+        "需要长期稳定 API 的生产系统（仍在早期迭代，API 可能变更）",
+        "资源受限的嵌入式环境（多种后端体积较大）",
+        "未投入微软生态的组织（Windows 集成优势无法发挥）"
+      ],
+      "time_to_production": "needs_6_plus_months"
+    }
   },
   {
     "source_dir": "github-trending",
@@ -149,28 +223,29 @@
       "PaddleOCR 3.5.0 版本（2026.04.21）新增 HuggingFace Transformers 推理后端、Office 文档（Word/Excel/PowerPoint）转 Markdown、DOCX 格式导出，以及浏览器端推理 SDK PaddleOCR.js。",
       "PaddleOCR 已被 Dify、RAGFlow、Cherry Studio 等主流 AI Agent 生态项目集成，支持 NVIDIA GPU、Intel CPU、昆仑芯 XPU 等多种硬件后端。"
     ],
+    "extract_result": "success",
     "impact_score": {
-      "score": 6.5,
-      "reason": "PaddleOCR 3.5.0 是百度开源 OCR 工具的一次重要增量更新，并非范式级突破。但其带来的三个关键变化——HuggingFace Transformers 推理后端支持（降低非 PaddlePaddle 用户的集成门槛）、PaddleOCR.js 浏览器端推理 SDK（将 OCR 能力下沉到客户端）、以及 Office 文档转 Markdown（Word/Excel/PowerPoint 直接解析）——显著拓展了该工具的适用场景。PP-OCRv5 单模型支持 100+ 语言混合识别并提升 13% 准确率，PaddleOCR-VL-1.6 在 OmniDocBench v1.6 上达 96.3%，这些指标在文档解析领域具备竞争力。结合 70k+ GitHub Stars 和被 Dify、RAGFlow 等主流 AI Agent 项目集成的生态位，该版本会加强 PaddleOCR 在文档预处理管线中的市场地位，但不足以改变行业整体格局。评分 6.5 分：重要的产品迭代，局部竞争格局变化。"
+      "score": 6.3,
+      "reason": "该版本是PaddleOCR的常规大版本迭代而非范式突破，但影响面不小。核心增量价值在于三点：1) Office文档(Word/Excel/PPT)直转Markdown和浏览器端推理SDK(PaddleOCR.js)显著降低了RAG/Agent应用的文档解析集成门槛，这是实质性工程进步；2) PaddleOCR-VL-1.6以0.9B参数在OmniDocBench上达到96.3%准确率，在同参数量级中表现突出，但OmniDocBench以中文文档为主，泛化能力待第三方验证；3) 新增HuggingFace Transformers推理后端扩大了生态兼容性，有助于吸引非PaddlePaddle用户。OCR赛道已非常成熟，竞品众多（Azure OCR、Google Cloud Vision、Tesseract、MinerU等），且文章源自官方README存在自评偏差。综合评估属于重要的局部竞争格局变化，不足以构成行业范式转移，评分6.3。"
     },
     "sentiment": "positive",
     "developer_sentiment": {
       "tone": "excited",
-      "primary_focus": "HuggingFace Transformers 推理后端兼容性及浏览器端 PaddleOCR.js 的本地部署能力"
+      "primary_focus": "浏览器端推理SDK(PaddleOCR.js)和Office文档直接转Markdown，大幅降低了RAG流水线的文档预处理集成成本"
     },
     "hype_assessment": {
       "level": "medium",
-      "reason": "文章中存在一定程度的 PR 包装，如 'industry-leading'、'SOTA'、'gold standard' 等营销词汇反复出现。但核心指标有公开基准（OmniDocBench）支撑，版本演进路线清晰（3.3.0→3.4.0→3.5.0），功能特性均有具体实现说明而非空洞承诺。PP-OCRv5 的 13% 准确率提升和 96.3% 基准分数均为可验证的量化指标。综合判断并非概念炒作，但存在适度的市场宣传包装，判定为 medium 级别。"
+      "reason": "文章来自PaddleOCR官方GitHub README，天然带有营销包装色彩，大量使用'SOTA'、'全球金标准'、'工业级'等PR用语，且Stage 2将其认识论状态标记为'pr_statement'。但技术指标有具体基准数据集和版本号支撑（OmniDocBench v1.6/v1.5、13%准确率提升、3.5.0版本），并非空洞炒作。需警惕的是OmniDocBench以中文文档为主，96.3%准确率在英文/多语言混合场景下的泛化能力有待独立第三方验证，不能直接等同于通用文档解析能力。"
     },
     "information_entropy": "high",
     "domain_disruption": {
-      "technical_innovation": "PP-OCRv5 以单模型方案支持 100+ 语言混合文本识别并提升 13% 准确率，同时保持极小资源占用，这是 OCR 工程落地的重要进步。PaddleOCR-VL-1.6 将 NaViT 风格动态分辨率视觉编码器与 ERNIE-4.5-0.3B 语言模型融合，以 0.9B 参数在文档解析基准上达到 96.3% 准确率，在古籍、生僻字、印章等复杂场景有显著增强。PP-DocLayoutV3 引入的不规则形状定位算法（应对倾斜、弯曲、扫描、光照、屏幕拍摄五类场景）也具有实用工程价值。PaddleOCR.js 浏览器端推理 SDK 将 OCR 能力延伸到客户端，减少了云端依赖。",
-      "business_model": "PaddleOCR 正从单纯的 OCR 工具演变为 RAG/Agentic 应用的关键基础设施层。被 Dify、RAGFlow、Cherry Studio、Pathway 等主流 AI Agent 平台深度集成，使其成为 LLM 数据处理管线的事实标准之一。Office 文档转 Markdown 和 DOCX 导出功能进一步降低了企业文档数字化门槛，可能推动更多企业采用该工具链构建自有数据飞轮。HuggingFace 推理后端支持减少了对百度 PaddlePaddle 框架的绑定，有助于打破生态壁垒、吸引更广泛的开发者社区。"
+      "technical_innovation": "PaddleOCR-VL-1.6以0.9B轻量参数在OmniDocBench上达96.3%准确率，架构采用NaViT动态分辨率视觉编码器+ERNIE-4.5-0.3B语言模型组合，在极低参数量下实现文档级解析。PP-DocLayoutV3支持倾斜、扭曲、光照不均等不规则场景定位，PP-OCRv5以单模型覆盖100+语言混合文本且准确率提升13%。PaddleOCR.js在浏览器端直接运行OCR推理是工程亮点。",
+      "business_model": "作为Apache 2.0开源工具，被Dify、RAGFlow、Cherry Studio等主流AI Agent平台深度集成为默认文档解析引擎，实质成为RAG流水线的基础设施层之一，对Azure Document Intelligence等商业文档解析SaaS形成开源替代压力，降低了AI应用开发者接入文档结构化能力的成本门槛。"
     },
     "engineering_complexity": "production_ready",
     "compound_value": {
-      "score": 7.0,
-      "reason": "PaddleOCR 正在成为 AI Agent 和 RAG 生态中文档结构化处理的默认基础设施层。70K+ GitHub Stars 与 Dify、RAGFlow、Cherry Studio、Pathway 等主流 AI 应用平台的深度集成已形成显著的生态网络效应——新项目更倾向于选择已被广泛集成的方案，这种选择偏好会自我强化，构成切换成本。PP-OCRv5 的 100+ 语言混合文本识别和 PaddleOCR-VL-1.6 的 0.9B 参数 SOTA 效率（96.3% 准确率）创造了技术护城河，3.5.0 版本新增的 HuggingFace Transformers 后端、Office 转 Markdown 和浏览器端 PaddleOCR.js SDK 进一步拓宽了适用场景的广度。其轻量化设计意味着在边端和云端的部署成本远低于调用通用多模态大模型，这在成本和延迟敏感的 AI 工作流中具有明确的经济优势。主要风险在于：(1) 百度作为大厂项目存在战略优先级转向风险；(2) 多模态大模型端到端能力的持续提升可能蚕食独立 OCR 层的价值主张；(3) Marker、docling 等竞品开源方案同样在快速迭代。综合来看，PaddleOCR 有潜力成为 AI 文档处理赛道的基石性基础设施，但需持续验证其相对多模态大模型的价值分化能力。"
+      "score": 8.0,
+      "reason": "PaddleOCR 正处于从'优秀的开源 OCR 工具'向'LLM 时代的文档解析基础设施'跃迁的关键阶段。96.3%的 OmniDocBench 准确率已超越多数闭源商业方案，而 PP-OCRv5 单模型支持 100+ 语言混合识别的能力使其在全球化场景中极具复用性。更深层的复利来自生态锁定效应：已被 Dify、RAGFlow、Cherry Studio 等主流 Agent/RAG 框架深度集成，意味着每一款基于这些框架构建的应用都在加固 PaddleOCR 的数据管道地位。3.5.0 版本新增 HuggingFace Transformers 后端和 Office 文档转 Markdown 能力，进一步降低了集成门槛，从'百度生态内工具'向'框架无关的通用文档解析层'演进。浏览器端 PaddleOCR.js 的发布则打开了边缘计算场景。风险点在于核心引擎仍绑定 PaddlePaddle 框架（虽已支持 Transformers 后端），以及百度作为主导方的治理风险。综合评估：在 AI 数据预处理这一刚需赛道中，PaddleOCR 具备成为行业默认文档解析层的潜力，具备 8 分以上的长期复利价值。"
     },
     "value_capture_layer": "agent_middleware",
     "moat_impact": "democratizes_access",
@@ -179,34 +254,35 @@
       "Dify",
       "RAGFlow",
       "Cherry Studio",
-      "HuggingFace"
+      "HuggingFace",
+      "Pathway"
     ],
     "competitive_casualty": [
-      "Azure Document Intelligence",
-      "AWS Textract",
+      "Azure AI Document Intelligence",
       "Google Document AI",
-      "小型商业 OCR 厂商"
+      "AWS Textract",
+      "ABBYY",
+      "Tesseract",
+      "商业闭源文档解析 SaaS"
     ],
     "market_opportunities": [
-      "基于 PaddleOCR-VL 的高精度文档解析能力（96.3% 准确率），可构建面向 RAG 和 AI Agent 场景的文档预处理中间件服务，降低 PDF/图片转结构化数据的门槛",
-      "利用 PaddleOCR.js 浏览器端推理 SDK，开发面向隐私敏感场景（如医疗、金融）的本地化文档识别与转换工具，实现数据不出域的端侧处理",
-      "面向企业知识管理场景，基于 Office 文档转 Markdown 新能力打造非结构化数据治理方案，解决 Word/Excel/PPT 到知识库的自动转化痛点"
+      "PaddleOCR 3.5.0 新增 Office 文档（Word/Excel/PowerPoint）转 Markdown 及浏览器端推理 SDK（PaddleOCR.js），开发者可基于此快速构建轻量级企业文档智能解析 SaaS 工具或浏览器插件，与 RAG/知识管理系统深度集成",
+      "开源 OCR-VL 模型在 OmniDocBench 上达 96.3% 准确率且仅 0.9B 参数，创业团队可面向古籍数字化、财务报表识别、医疗单据结构化等垂直场景开发定制化微调方案，降低文档预处理成本",
+      "PaddleOCR 已被 Dify、RAGFlow、Cherry Studio 等主流 AI Agent 生态深度集成，生态技术服务商可提供基于 PaddleOCR 的企业级文档预处理中间件，打通文档输入到 LLM 推理的全链路"
     ],
     "risk_matrix": {
-      "regulatory": "文档处理涉及跨境数据合规问题（GDPR、中国个人信息保护法），尤其是企业级文档中转发的敏感信息可能触发监管审查；PaddlePaddle 作为百度旗下项目，在部分地区的技术采购中可能面临地缘政治背景审查",
-      "technological": "PaddleOCR 深度绑定飞桨（PaddlePaddle）框架，与主流 PyTorch/ONNX 生态的迁移成本较高；多模态大模型（GPT-4o、Claude 等）的内嵌 OCR 及文档理解能力快速进化，可能逐步侵蚀专用 OCR 工具的生存空间",
-      "competitive": "OCR 赛道竞争白热化：国外有 Tesseract、Surya、Marker、MathPix 等开源/商业方案，国内有阿里、腾讯等竞品；大模型厂商将文档解析能力内置于 API 中，对独立 OCR 工具的差异化优势构成挤压",
-      "ethical": "OCR 偏差可能导致古籍、少数民族文字等文化遗产数字化过程中的信息失真；高精度文档识别技术被滥用时可能用于伪造合同、证件或发票等欺诈行为",
-      "additional": [
-        "PaddlePaddle 国际社区活跃度有限，长期维护和演进依赖百度战略投入，存在生态可持续性风险"
-      ]
+      "regulatory": "PaddlePaddle 作为百度主导的开源框架，若百度被纳入美国出口管制实体清单，可能限制海外 HuggingFace 用户下载和使用相关模型；OCR 文本提取技术在欧盟 AI Act 下可能被归类为高风险应用场景，需关注合规成本",
+      "technological": "基于 PaddlePaddle 框架存在生态锁定风险，与 PyTorch/TensorFlow 社区之间的迁移成本较高；OCR-VL（0.9B）作为小参数专用模型，面临 GPT-4V、Gemini 等通用多模态大模型文档理解能力的持续替代威胁",
+      "competitive": "开源 OCR 领域竞争激烈（Tesseract、EasyOCR、docling、Marker、Surya 等），闭源商业 API（Google Cloud Vision、Azure AI Document Intelligence）和超大规模多模态模型持续挤压专用 OCR 工具的市场空间",
+      "ethical": "OCR 技术可能被滥用于大规模爬取敏感文档、隐私数据窃取和盗版内容数字化；印章识别能力的增强可能被用于伪造文件验证或绕过数字签名审查",
+      "additional": []
     },
     "confidence": {
       "impact": "high",
       "compound": "medium",
-      "hype": "medium"
+      "hype": "low"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "monitor"
   },
   {
     "source_dir": "github-trending",
