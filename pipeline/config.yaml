@@ -121,14 +121,14 @@ sources:
     tier: A
     enabled: true
     priority: 4
-    display_name: "Google AI Blog"
-    description: "Google AI Blog (含 DeepMind)"
-    display_description: "Google 与 DeepMind 的官方 AI 研究博客，涵盖基础模型（Gemini 系列）、强化学习、多模态 AI、科学 AI（AlphaFold 等）方向的突破性研究成果，是追踪前沿研究的风向标。"
-    url: "https://blog.google/technology/ai/rss/"
+    display_name: "DeepMind Blog"
+    description: "DeepMind 官方博客"
+    display_description: "Google DeepMind 官方研究博客，发布 Gemini 系列模型、强化学习、多模态 AI、科学 AI（AlphaFold、AlphaEvolve 等）方向的突破性研究成果，是追踪前沿 AI 研究的风向标。"
+    url: "https://deepmind.google/blog/rss.xml"
     language: en
     fetch_strategy: rss
     filter:
-      keywords: []  # Google AI blog 内容广泛, 不过滤关键词
+      keywords: []  # DeepMind 博客内容全部与 AI 相关，无需关键词过滤
       max_age_hours: 72
     truncation:
       mode: first_n_chars
@@ -720,6 +720,10 @@ stages:
       - name: "risk-assessor"
         description: "风控专家视角"
         schema: "pipeline/schemas/deep_analysis.py::ForesightAndActionability"
+      - name: "github-project-analyst"
+        description: "GitHub 开源项目深度分析"
+        schema: "pipeline/schemas/specialized_analysis.py::GitHubProjectAnalysis"
+        source_match: ["github-trending"]
     concurrency: 3
     skip_existing: true
 
@@ -756,6 +760,7 @@ stages:
       - "trend_insights"
       - "risk_signals"
       - "opportunity_signals"
+      - "specialized_brief"
 
 # =============================================================================
 # 配额分配
