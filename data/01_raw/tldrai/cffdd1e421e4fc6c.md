@@ -1,0 +1,30 @@
+---
+title: Gemini's personalized AI image generation is now free for US users (2 minute
+  read)
+source: https://techcrunch.com/2026/06/29/geminis-personalized-ai-image-generation-is-now-free-for-u-s-users/?utm_source=tldrai
+author: []
+published: ''
+created: '2026-07-01'
+description: TLDR AI 每日头条
+tags:
+- clippings
+extraction_status: success
+pipeline_stage: ingested
+id: cffdd1e421e4fc6c
+---
+
+Google announced on Monday that the Gemini app is now offering its personalized Nano Banana-powered image generation feature to a broader audience. Starting today, all eligible users in the U.S. can access the feature for free, a service that was previously only available to Plus, Pro, and Ultra subscribers.
+
+Google initially announced that Gemini’s Personal Intelligence feature would get Nano Banana-powered image generation back in April, allowing users to create images that reflect their unique interests. This means that images can be generated based on Gemini’s understanding of your likes and preferences without you having to specify them in your prompt. Gemini utilizes data from your Google account connections — such as Gmail, Google Photos, YouTube, and Search — to achieve this.
+
+For example, instead of saying, “Create an illustration of me and my favorite things, such as coffee and baking,” you can simply request, “Create an illustration of me and my favorite things.”
+
+Gemini can also pull actual images of you from Google Photos, so you don’t need to manually upload photos.
+
+Google initially rolled out the Personal Intelligence feature earlier this year, making it widely available to all U.S. users in March. The company recently expanded this functionality to users in India and Japan.
+
+Personal Intelligence is an opt-in feature, allowing you to decide which apps Gemini can access. Once enabled, it is set as the default for every prompt, but you can disable it using a new toggle in the Tools menu.
+
+Additionally, last month, Google announced several upcoming updates for the Gemini app, including a new “Daily Brief” feature, a revamped interface, access to AI video model Gemini Omni, and a personal AI agent named Gemini Spark.
+
+Notably, Google’s AI chatbot Gemini surpassed 750 million monthly active users (MAUs) earlier this year, reinforcing its position as a major player in the AI space.

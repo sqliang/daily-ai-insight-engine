@@ -13,7 +13,7 @@ from pathlib import Path
 
 from pipeline.core.config_loader import resolve_data_dir
 from pipeline.core.browser_utils import BrowserSession
-from pipeline.core.web_utils import extract_article_content
+from pipeline.core.web_utils import extract_article_content, is_bot_challenge_html
 from pipeline.utils.frontmatter import read_frontmatter, write_frontmatter
 
 logger = logging.getLogger(__name__)
@@ -90,8 +90,18 @@ def repair_failed_articles(target_date: date | None = None) -> dict:
                 url, timeout=60000, wait_until="domcontentloaded", wait_ms=5000
             )
             if html and len(html) > 500:
+                # 先检查是否为反爬页面，避免把反爬文本当正文
+                if is_bot_challenge_html(html):
+                    print(f"  ❌ 仍被反爬拦截: {title[:60]}")
+                    still_failed += 1
+                    continue
                 content = extract_article_content(html, url)
                 if content and len(content) > 100:
+                    # 对提取的正文做二次检查，防止反爬文本被 trafilatura 误提取
+                    if is_bot_challenge_html(content):
+                        print(f"  ❌ 提取内容仍含反爬文本: {title[:60]}")
+                        still_failed += 1
+                        continue
                     fm["extraction_status"] = "success"
                     write_frontmatter(fp, fm, content)
                     repaired += 1
