@@ -15,6 +15,7 @@ from .value_system import get_value_system_prompt
 from .foresight_system import get_foresight_system_prompt
 from .github_project_system import get_github_project_system_prompt
 from .paper_system import get_paper_system_prompt
+from .product_system import get_product_system_prompt
 
 from .user_prompts import (
     build_qualitative_user_prompt,
@@ -22,6 +23,7 @@ from .user_prompts import (
     build_foresight_user_prompt,
     build_github_project_user_prompt,
     build_paper_user_prompt,
+    build_product_user_prompt,
 )
 
 __all__ = [
@@ -35,4 +37,6 @@ __all__ = [
     "build_github_project_user_prompt",
     "get_paper_system_prompt",
     "build_paper_user_prompt",
+    "get_product_system_prompt",
+    "build_product_user_prompt",
 ]
