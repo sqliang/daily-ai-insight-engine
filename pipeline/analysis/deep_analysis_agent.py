@@ -44,9 +44,11 @@ from .prompts import (
     build_foresight_user_prompt,
     get_github_project_system_prompt,
     build_github_project_user_prompt,
+    get_paper_system_prompt,
+    build_paper_user_prompt,
 )
-from .validators import validate_qualitative, validate_value, validate_foresight, validate_github_project
-from ..schemas.specialized_analysis import GitHubProjectAnalysis
+from .validators import validate_qualitative, validate_value, validate_foresight, validate_github_project, validate_paper
+from ..schemas.specialized_analysis import GitHubProjectAnalysis, PaperAnalysis
 
 # ---------------------------------------------------------------------------
 # 日志
@@ -64,12 +66,16 @@ _FORESIGHT_FIELDS: set[str] = set(ForesightAndActionability.model_fields.keys())
 # GitHub 项目分析的字段名集合（用于 skip_existing 检查）
 _GITHUB_PROJECT_FIELDS: set[str] = set(GitHubProjectAnalysis.model_fields.keys())
 
+# 论文分析的字段名集合（用于 skip_existing 检查）
+_PAPER_FIELDS: set[str] = set(PaperAnalysis.model_fields.keys())
+
 # 三个维度的字段名 → 显示标签
 _ASSESSMENT_LABELS: dict[str, str] = {
     "qualitative": "定性研判",
     "value": "价值评估",
     "foresight": "前瞻预测",
     "github_project": "GitHub 项目分析",
+    "paper_analysis": "论文分析",
 }
 
 # 每个维度对应的字段集合（用于跳过检查）
@@ -78,6 +84,7 @@ _ASSESSMENT_FIELD_SETS: dict[str, set[str]] = {
     "value": _VALUE_FIELDS,
     "foresight": _FORESIGHT_FIELDS,
     "github_project": _GITHUB_PROJECT_FIELDS,
+    "paper_analysis": _PAPER_FIELDS,
 }
 
 
@@ -134,7 +141,7 @@ async def analyze_one_file(
     if output_path.exists():
         try:
             out_fm, _ = read_frontmatter(output_path)
-            _all_stage3_fields = _QUALITATIVE_FIELDS | _VALUE_FIELDS | _FORESIGHT_FIELDS | _GITHUB_PROJECT_FIELDS
+            _all_stage3_fields = _QUALITATIVE_FIELDS | _VALUE_FIELDS | _FORESIGHT_FIELDS | _GITHUB_PROJECT_FIELDS | _PAPER_FIELDS
             for key, value in out_fm.items():
                 if key in _all_stage3_fields:
                     existing_fm[key] = value
@@ -217,6 +224,21 @@ async def analyze_one_file(
                 specialized_tags=specialized_tags,
             ),
             "validate_fn": validate_github_project,
+        })
+
+    # Phase 2: 论文分析（仅 arxiv-cs-ai）
+    if pipeline_source_name == "arxiv-cs-ai":
+        specialized_configs.append({
+            "dim_name": "paper_analysis",
+            "field_set": _PAPER_FIELDS,
+            "label": "论文分析",
+            "get_sys_prompt": get_paper_system_prompt,
+            "build_usr_prompt": lambda **ctx: build_paper_user_prompt(
+                title=ctx["title"], source=ctx["source"],
+                body=ctx["body"][:6000],
+                specialized_tags=specialized_tags,
+            ),
+            "validate_fn": validate_paper,
         })
 
     # 从 to_run 中移除已完成的专题维度，追加需要的

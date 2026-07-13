@@ -478,3 +478,181 @@ def validate_github_project(data: dict):
             raise ValueError(
                 f"GitHubProjectAnalysis 校验失败（模糊匹配后仍失败）: {second_err}"
             ) from second_err
+
+
+# =============================================================================
+# PaperAnalysis 校验
+# =============================================================================
+
+
+def validate_paper(data: dict):
+    """
+    验证并构造 PaperAnalysis 实例。
+
+    处理流程：
+        1. 自动修复常见的 LLM 格式错误（嵌套模型简化等）
+        2. Pydantic 严格校验
+        3. 校验失败 → 模糊匹配修正枚举值
+        4. 确保列表字段存在
+        5. 修复后重新校验
+
+    参数：
+        data: LLM 返回的原始 dict
+
+    返回：
+        PaperAnalysis 实例
+
+    异常：
+        ValueError: 模糊匹配后仍无法通过 Pydantic 校验
+    """
+    from ..schemas.specialized_analysis import PaperAnalysis
+    from .fuzzy_maps import (
+        NOVELTY_TYPE_FUZZY,
+        SIGNIFICANCE_FUZZY,
+        BASELINE_COMPARISON_FUZZY,
+        ABLATION_QUALITY_FUZZY,
+        REPRODUCIBILITY_FUZZY,
+        OVERCLAIMING_FUZZY,
+        COMPUTE_REQUIREMENTS_FUZZY,
+        INTEGRATION_READINESS_FUZZY,
+        TECHNICAL_DEPTH_FUZZY,
+    )
+
+    repaired = dict(data)
+
+    # --- 预处理：自动修复常见格式错误 ---
+
+    # researchProblem: 如果是字符串 → 包装为 {coreQuestion}
+    if "researchProblem" in repaired and isinstance(repaired["researchProblem"], str):
+        repaired["researchProblem"] = {"coreQuestion": repaired["researchProblem"], "motivation": "", "significance": "incremental", "gapAddressed": ""}
+        logger.info("researchProblem 自动包装: str → {coreQuestion, ...}")
+
+    # methodology: 如果是字符串 → 包装
+    if "methodology" in repaired and isinstance(repaired["methodology"], str):
+        repaired["methodology"] = {"approachSummary": repaired["methodology"], "noveltyType": "algorithmic", "keyInnovations": [], "inspirationSources": [], "technicalDepth": "moderate"}
+        logger.info("methodology 自动包装: str → {approachSummary, ...}")
+
+    # experimentalRigor: 如果是字符串 → 包装
+    if "experimentalRigor" in repaired and isinstance(repaired["experimentalRigor"], str):
+        repaired["experimentalRigor"] = {"benchmarkCoverage": repaired["experimentalRigor"], "baselineComparison": "adequate", "ablationQuality": "adequate", "reproducibilityLevel": "partially", "claimedImprovement": ""}
+        logger.info("experimentalRigor 自动包装: str → {benchmarkCoverage, ...}")
+
+    # --- 尝试严格校验 ---
+    try:
+        return PaperAnalysis.model_validate(repaired)
+    except ValidationError as pydantic_err:
+        errors = pydantic_err.errors()
+        logger.warning("PaperAnalysis 严格校验失败: %s", errors)
+
+        for error in errors:
+            loc = error.get("loc", [])
+            if not loc:
+                continue
+            raw_value = _get_nested(repaired, loc)
+            if not isinstance(raw_value, str):
+                continue
+
+            field_path = loc[0]
+            # 修复 researchProblem 枚举
+            if field_path == "researchProblem" and len(loc) > 1:
+                if loc[1] == "significance":
+                    matched = fuzzy_match_enum(raw_value, SIGNIFICANCE_FUZZY, "researchProblem.significance")
+                    if matched and isinstance(repaired.get("researchProblem"), dict):
+                        repaired["researchProblem"]["significance"] = matched
+            # 修复 methodology 枚举
+            elif field_path == "methodology" and len(loc) > 1:
+                if loc[1] == "noveltyType":
+                    matched = fuzzy_match_enum(raw_value, NOVELTY_TYPE_FUZZY, "methodology.noveltyType")
+                    if matched and isinstance(repaired.get("methodology"), dict):
+                        repaired["methodology"]["noveltyType"] = matched
+                elif loc[1] == "technicalDepth":
+                    matched = fuzzy_match_enum(raw_value, TECHNICAL_DEPTH_FUZZY, "methodology.technicalDepth")
+                    if matched and isinstance(repaired.get("methodology"), dict):
+                        repaired["methodology"]["technicalDepth"] = matched
+            # 修复 experimentalRigor 枚举
+            elif field_path == "experimentalRigor" and len(loc) > 1:
+                if loc[1] == "baselineComparison":
+                    matched = fuzzy_match_enum(raw_value, BASELINE_COMPARISON_FUZZY, "experimentalRigor.baselineComparison")
+                    if matched and isinstance(repaired.get("experimentalRigor"), dict):
+                        repaired["experimentalRigor"]["baselineComparison"] = matched
+                elif loc[1] == "ablationQuality":
+                    matched = fuzzy_match_enum(raw_value, ABLATION_QUALITY_FUZZY, "experimentalRigor.ablationQuality")
+                    if matched and isinstance(repaired.get("experimentalRigor"), dict):
+                        repaired["experimentalRigor"]["ablationQuality"] = matched
+                elif loc[1] == "reproducibilityLevel":
+                    matched = fuzzy_match_enum(raw_value, REPRODUCIBILITY_FUZZY, "experimentalRigor.reproducibilityLevel")
+                    if matched and isinstance(repaired.get("experimentalRigor"), dict):
+                        repaired["experimentalRigor"]["reproducibilityLevel"] = matched
+            # 修复 limitationsAndHonesty 枚举
+            elif field_path == "limitationsAndHonesty" and len(loc) > 1:
+                if loc[1] == "overclaimingAssessment":
+                    matched = fuzzy_match_enum(raw_value, OVERCLAIMING_FUZZY, "limitationsAndHonesty.overclaimingAssessment")
+                    if matched and isinstance(repaired.get("limitationsAndHonesty"), dict):
+                        repaired["limitationsAndHonesty"]["overclaimingAssessment"] = matched
+            # 修复 industrialRelevance 枚举
+            elif field_path == "industrialRelevance" and len(loc) > 1:
+                if loc[1] == "computeRequirements":
+                    matched = fuzzy_match_enum(raw_value, COMPUTE_REQUIREMENTS_FUZZY, "industrialRelevance.computeRequirements")
+                    if matched and isinstance(repaired.get("industrialRelevance"), dict):
+                        repaired["industrialRelevance"]["computeRequirements"] = matched
+                elif loc[1] == "integrationReadiness":
+                    matched = fuzzy_match_enum(raw_value, INTEGRATION_READINESS_FUZZY, "industrialRelevance.integrationReadiness")
+                    if matched and isinstance(repaired.get("industrialRelevance"), dict):
+                        repaired["industrialRelevance"]["integrationReadiness"] = matched
+
+        # --- 确保必要字段存在 ---
+        if "paperMetadata" not in repaired:
+            repaired["paperMetadata"] = {
+                "title": "未知", "authors": [], "affiliations": [],
+                "venue": None, "paperUrl": "", "codeUrl": None, "datasetUrl": None,
+            }
+        if "researchProblem" not in repaired or not isinstance(repaired.get("researchProblem"), dict):
+            repaired["researchProblem"] = {
+                "coreQuestion": "", "motivation": "", "significance": "incremental", "gapAddressed": "",
+            }
+        if "methodology" not in repaired or not isinstance(repaired.get("methodology"), dict):
+            repaired["methodology"] = {
+                "approachSummary": "", "noveltyType": "algorithmic",
+                "keyInnovations": [], "inspirationSources": [], "technicalDepth": "moderate",
+            }
+        if "experimentalRigor" not in repaired or not isinstance(repaired.get("experimentalRigor"), dict):
+            repaired["experimentalRigor"] = {
+                "benchmarkCoverage": "", "baselineComparison": "adequate",
+                "ablationQuality": "adequate", "reproducibilityLevel": "partially",
+                "claimedImprovement": "",
+            }
+        if "limitationsAndHonesty" not in repaired or not isinstance(repaired.get("limitationsAndHonesty"), dict):
+            repaired["limitationsAndHonesty"] = {
+                "statedLimitations": [], "reviewerConcerns": [],
+                "overclaimingAssessment": "honest", "generalizationConcern": "",
+            }
+        if "industrialRelevance" not in repaired or not isinstance(repaired.get("industrialRelevance"), dict):
+            repaired["industrialRelevance"] = {
+                "applicableDomains": [], "computeRequirements": "datacenter",
+                "integrationReadiness": "needs_engineering", "costEfficiencyAnalysis": "",
+            }
+        if "relatedWorkContext" not in repaired or not isinstance(repaired.get("relatedWorkContext"), dict):
+            repaired["relatedWorkContext"] = {
+                "closestPriorWorks": [], "advancementOverPrior": "",
+                "opensNewDirection": False, "potentialFollowUps": [],
+            }
+
+        # 确保嵌套列表字段存在
+        for parent, fields in [
+            ("paperMetadata", ["authors", "affiliations"]),
+            ("methodology", ["keyInnovations", "inspirationSources"]),
+            ("limitationsAndHonesty", ["statedLimitations", "reviewerConcerns"]),
+            ("industrialRelevance", ["applicableDomains"]),
+            ("relatedWorkContext", ["closestPriorWorks", "potentialFollowUps"]),
+        ]:
+            if isinstance(repaired.get(parent), dict):
+                for field in fields:
+                    if field not in repaired[parent]:
+                        repaired[parent][field] = []
+
+        try:
+            return PaperAnalysis.model_validate(repaired)
+        except ValidationError as second_err:
+            raise ValueError(
+                f"PaperAnalysis 校验失败（模糊匹配后仍失败）: {second_err}"
+            ) from second_err
