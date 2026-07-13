@@ -4,14 +4,17 @@ pipeline/analysis/deep_analysis_agent.py — Stage 3: 深度分析 Agent
 功能：
     - 针对单篇文章，并行调用 3 个独立 Agent 完成 QualitativeAssessment、
       ValueAssessment、ForesightAndActionability 三个维度的深度研判
+    - 支持 source_match 派发：根据文章 source 自动匹配专题分析 Agent
+      （如 github-trending → GitHubProjectAnalysis）
     - 每个维度有独立的 Pydantic 校验 + 模糊枚举匹配回退
-    - analyze_one_file(): 单文件处理——读取、3 路并行 Agent 调用、合并、写入
+    - analyze_one_file(): 单文件处理——读取、N 路并行 Agent 调用、合并、写入
     - run_deep_analysis_stage(): 批量并行调度入口
 
 设计决策：
-    - 三个评估维度完全独立（不同 system prompt、不同输出字段），
+    - 三个基础评估维度完全独立（不同 system prompt、不同输出字段），
       通过 asyncio.gather 在单文件内并行执行
-    - 部分成功策略：2/3 评估通过时仍写入成功的部分，失败维度下次重试
+    - 专题分析维度通过 source_match 机制自动追加，不影响基础维度
+    - 部分成功策略：N 个评估中部分通过时仍写入成功的部分，失败维度下次重试
     - 跳过检查按评估维度粒度进行（per-assessment skip），节省 token
     - 所有 Stage 2 提取结果（tldr、entities、keyLogicFlow 等）作为上下文传入
 """
@@ -39,8 +42,11 @@ from .prompts import (
     build_value_user_prompt,
     get_foresight_system_prompt,
     build_foresight_user_prompt,
+    get_github_project_system_prompt,
+    build_github_project_user_prompt,
 )
-from .validators import validate_qualitative, validate_value, validate_foresight
+from .validators import validate_qualitative, validate_value, validate_foresight, validate_github_project
+from ..schemas.specialized_analysis import GitHubProjectAnalysis
 
 # ---------------------------------------------------------------------------
 # 日志
@@ -55,11 +61,15 @@ _QUALITATIVE_FIELDS: set[str] = set(QualitativeAssessment.model_fields.keys())
 _VALUE_FIELDS: set[str] = set(ValueAssessment.model_fields.keys())
 _FORESIGHT_FIELDS: set[str] = set(ForesightAndActionability.model_fields.keys())
 
+# GitHub 项目分析的字段名集合（用于 skip_existing 检查）
+_GITHUB_PROJECT_FIELDS: set[str] = set(GitHubProjectAnalysis.model_fields.keys())
+
 # 三个维度的字段名 → 显示标签
 _ASSESSMENT_LABELS: dict[str, str] = {
     "qualitative": "定性研判",
     "value": "价值评估",
     "foresight": "前瞻预测",
+    "github_project": "GitHub 项目分析",
 }
 
 # 每个维度对应的字段集合（用于跳过检查）
@@ -67,6 +77,7 @@ _ASSESSMENT_FIELD_SETS: dict[str, set[str]] = {
     "qualitative": _QUALITATIVE_FIELDS,
     "value": _VALUE_FIELDS,
     "foresight": _FORESIGHT_FIELDS,
+    "github_project": _GITHUB_PROJECT_FIELDS,
 }
 
 
@@ -83,23 +94,25 @@ async def analyze_one_file(
     stages: str = "all",
 ) -> StageResult:
     """
-    对单个 .md 文件执行深度分析（3 个评估维度并行）。
+    对单个 .md 文件执行深度分析（3 个基础评估维度 + source_match 专题维度并行）。
 
     处理流程：
         1. read_frontmatter(input_path) → (existing_fm, body)
         2. 提取 Stage 2 上下文（title, source, tldr, entities 等）
         3. skip_existing 检查：按评估维度粒度判断哪些维度需要运行
-        4. body 为空 → 跳过
-        5. 通过 asyncio.gather 并行调用 3 个 Agent（仅运行需要的维度）
-        6. 合并成功维度结果到 existing_fm
-        7. write_frontmatter(output_path, merged_fm, body)
+        4. source_match 派发：根据 source 自动追加专题分析维度（如 github-trending → github_project）
+        5. body 为空 → 跳过
+        6. 通过 asyncio.gather 并行调用 N 个 Agent（仅运行需要的维度）
+        7. 合并成功维度结果到 existing_fm
+        8. write_frontmatter(output_path, merged_fm, body)
 
     参数：
         input_path: 输入 .md 文件路径（来自 data/02_extracted/）
         output_path: 输出 .md 文件路径（data/03_analyzed/ 下，保持子目录结构）
         model: LLM 模型名称
         skip_existing: 是否跳过已有分析结果的文件
-        stages: 要运行的评估维度 ("all" | "qualitative" | "value" | "foresight")
+        stages: 要运行的基础评估维度 ("all" | "qualitative" | "value" | "foresight")。
+                专题分析维度由 source_match 自动追加，不受 stages 参数控制。
 
     返回：
         StageResult 记录分析结果
@@ -121,7 +134,7 @@ async def analyze_one_file(
     if output_path.exists():
         try:
             out_fm, _ = read_frontmatter(output_path)
-            _all_stage3_fields = _QUALITATIVE_FIELDS | _VALUE_FIELDS | _FORESIGHT_FIELDS
+            _all_stage3_fields = _QUALITATIVE_FIELDS | _VALUE_FIELDS | _FORESIGHT_FIELDS | _GITHUB_PROJECT_FIELDS
             for key, value in out_fm.items():
                 if key in _all_stage3_fields:
                     existing_fm[key] = value
@@ -177,18 +190,61 @@ async def analyze_one_file(
     epistemic_status = existing_fm.get("epistemic_status", "")
     entities = existing_fm.get("entities", {})
     key_logic_flow = existing_fm.get("key_logic_flow", [])
+    specialized_tags = existing_fm.get("specialized_tags", {})
 
     # --- 并行调用 Agent ---
     all_fields_written: list[str] = []
     has_error = False
     error_messages: list[str] = []
 
-    # 每个维度的配置：(维度名, system_prompt_getter, user_prompt_builder, validate_fn, 显示标签)
+    # --- 确定 source 是否匹配专题分析 ---
+    # 从文件路径提取 pipeline source name（如 github-trending），
+    # 而非 frontmatter 中的 article URL。
+    # 数据目录结构: data/02_extracted/{source_name}/{article_id}.md
+    pipeline_source_name = input_path.parent.name
+    specialized_configs: list[dict] = []
+
+    # Phase 1: GitHub 项目分析（仅 github-trending）
+    if pipeline_source_name == "github-trending":
+        specialized_configs.append({
+            "dim_name": "github_project",
+            "field_set": _GITHUB_PROJECT_FIELDS,
+            "label": "GitHub 项目分析",
+            "get_sys_prompt": get_github_project_system_prompt,
+            "build_usr_prompt": lambda **ctx: build_github_project_user_prompt(
+                title=ctx["title"], source=ctx["source"],
+                body=ctx["body"][:6000],
+                specialized_tags=specialized_tags,
+            ),
+            "validate_fn": validate_github_project,
+        })
+
+    # 从 to_run 中移除已完成的专题维度，追加需要的
+    for sc in specialized_configs:
+        if sc["dim_name"] not in to_run:
+            if skip_existing and output_path.exists():
+                try:
+                    out_fm, _ = read_frontmatter(output_path)
+                    if not sc["field_set"].issubset(set(out_fm.keys())):
+                        to_run.append(sc["dim_name"])
+                except Exception:
+                    to_run.append(sc["dim_name"])
+            else:
+                to_run.append(sc["dim_name"])
+
+    # 每个维度的配置：(维度名, system_prompt_getter, user_prompt_builder, validate_fn)
     _dimension_configs = [
         ("qualitative", get_qualitative_system_prompt, build_qualitative_user_prompt, validate_qualitative),
         ("value", get_value_system_prompt, build_value_user_prompt, validate_value),
         ("foresight", get_foresight_system_prompt, build_foresight_user_prompt, validate_foresight),
     ]
+
+    # 构建 specialized 维度的任务配置映射
+    _all_configs = {item[0]: item for item in _dimension_configs}
+    for sc in specialized_configs:
+        _all_configs[sc["dim_name"]] = (
+            sc["dim_name"], sc["get_sys_prompt"], sc["build_usr_prompt"], sc["validate_fn"]
+        )
 
     async def _run_assessment(
         dim_name: str,
@@ -211,11 +267,12 @@ async def analyze_one_file(
         validated = validate_fn(data)
         return (dim_name, validated.model_dump(mode="json", by_alias=False))
 
-    # 构建任务列表（仅运行需要的维度）
+    # 构建任务列表（仅运行需要的维度，包括 specialized 维度）
     tasks = [
         _run_assessment(dim, get_sys, build_usr, vfn)
-        for dim, get_sys, build_usr, vfn in _dimension_configs
-        if dim in to_run
+        for dim, get_sys, build_usr, vfn in [
+            _all_configs[dim] for dim in to_run if dim in _all_configs
+        ]
     ]
 
     # 并行执行所有需要的评估
@@ -278,7 +335,7 @@ async def run_deep_analysis_stage(
 
     并行控制：
         - 外层：asyncio.Semaphore 限制同时处理的文件数
-        - 内层：asyncio.gather 在单个文件内并行调用 3 个 Agent
+        - 内层：asyncio.gather 在单个文件内并行调用 N 个 Agent（基础 3 维度 + source_match 专题维度）
 
     参数：
         file_paths: 待处理的 .md 文件路径列表
@@ -287,7 +344,8 @@ async def run_deep_analysis_stage(
         semaphore: 并发控制信号量
         model: LLM 模型名称
         skip_existing: 是否跳过已处理的文件
-        stages: 要运行的评估维度 ("all" | "qualitative" | "value" | "foresight")
+        stages: 要运行的基础评估维度 ("all" | "qualitative" | "value" | "foresight")。
+                专题分析维度由 source_match 自动追加。
 
     返回：
         StageResult 列表
