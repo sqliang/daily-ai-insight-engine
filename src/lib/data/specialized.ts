@@ -7,13 +7,11 @@
 
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import type { StructuredArticle } from "./status";
 
 // ---------------------------------------------------------------------------
 // 类型定义
 // ---------------------------------------------------------------------------
 
-/** GitHub 专题报告中的项目条目 */
 export interface GithubProjectEntry {
   articleId: string;
   title: string;
@@ -73,11 +71,12 @@ export async function loadGithubArticles(
   try {
     const raw = await readFile(allArticlesPath, "utf8");
     const data = JSON.parse(raw);
-    const articles = (data.articles || []) as StructuredArticle[];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const articles = (data.articles || []) as any[];
 
     return articles
-      .filter((a: Record<string, unknown>) => a.source_dir === "github-trending")
-      .map((a: Record<string, unknown>) => {
+      .filter((a) => a.source_dir === "github-trending")
+      .map((a) => {
         const gh = a.specialized_tags?.github || {};
 
         return {
