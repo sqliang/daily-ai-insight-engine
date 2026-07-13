@@ -118,7 +118,9 @@ export async function listReports(dateRange?: DateRange): Promise<ReportSummary[
               }
             : null,
           product: null,
-          paper: null,
+          paper: sb?.paperHighlights?.articleCount
+            ? { count: sb.paperHighlights.articleCount }
+            : null,
         },
       });
     } catch {

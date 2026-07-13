@@ -7,6 +7,7 @@
 
 import Link from 'next/link';
 import { DOMAIN_LABELS } from '@/components/sources/GitHubProjectCard';
+import { RESEARCH_AREA_LABELS } from '@/components/sources/PaperCard';
 
 // ---------------------------------------------------------------------------
 // 类型定义（匹配 Stage 4b 输出的 specializedBrief 字段形状）
@@ -20,12 +21,18 @@ interface GithubHighlights {
   articleCount: number;
 }
 
+interface PaperHighlights {
+  summary: string;
+  keyPapers: string[];
+  researchAreas: string[];
+  articleCount: number;
+}
+
 interface SpecializedBrief {
   githubHighlights?: GithubHighlights | null;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   productHighlights?: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  paperHighlights?: any;
+  paperHighlights?: PaperHighlights | null;
 }
 
 interface SpecializedBriefSectionProps {
@@ -68,12 +75,7 @@ export function SpecializedBriefSection({ data, date }: SpecializedBriefSectionP
           />
         )}
         {data.paperHighlights && (
-          <BriefCardPlaceholder
-            icon="📄"
-            title="论文速递"
-            summary={data.paperHighlights.summary}
-            count={data.paperHighlights.articleCount}
-          />
+          <PaperBriefCard data={data.paperHighlights} date={date} />
         )}
       </div>
     </section>
@@ -149,7 +151,72 @@ function GithubBriefCard({ data, date }: { data: GithubHighlights; date: string 
 }
 
 // ---------------------------------------------------------------------------
-// 占位卡片（产品扫描 / 论文速递 — 专题页尚未上线）
+// 论文简报卡片
+// ---------------------------------------------------------------------------
+
+function PaperBriefCard({ data, date }: { data: PaperHighlights; date: string }) {
+  return (
+    <Link
+      href={`/specialized/paper/${date}`}
+      className="block rounded-xl border border-purple-200 dark:border-purple-800 bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-purple-950/20 dark:to-indigo-950/20 p-5 hover:shadow-md hover:border-purple-300 dark:hover:border-purple-700 transition-all group"
+    >
+      <div className="flex items-center gap-2 mb-2">
+        <span className="text-2xl">📄</span>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+          论文速递
+        </h3>
+        <span className="ml-auto inline-flex items-center rounded-full bg-purple-100 dark:bg-purple-900/30 px-2 py-0.5 text-xs font-medium text-purple-700 dark:text-purple-300">
+          {data.articleCount} 篇论文
+        </span>
+      </div>
+
+      <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
+        {data.summary}
+      </p>
+
+      {/* 重点论文列表 */}
+      {data.keyPapers?.length > 0 && (
+        <div className="space-y-1 mb-3">
+          {data.keyPapers.slice(0, 3).map((name, i) => (
+            <div key={name} className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+              <span className="text-purple-400 text-xs font-mono">{i + 1}.</span>
+              <span className="truncate">{name}</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* 研究领域分布预览 */}
+      {data.researchAreas?.length > 0 && (
+        <div className="flex flex-wrap gap-1">
+          {data.researchAreas.slice(0, 4).map((area) => (
+            <span
+              key={area}
+              className="inline-flex items-center rounded-full bg-white/60 dark:bg-gray-800/60 px-2 py-0.5 text-xs text-gray-600 dark:text-gray-400"
+            >
+              {RESEARCH_AREA_LABELS[area] || area}
+            </span>
+          ))}
+          {data.researchAreas.length > 4 && (
+            <span className="text-xs text-gray-400">
+              +{data.researchAreas.length - 4}
+            </span>
+          )}
+        </div>
+      )}
+
+      <div className="mt-3 flex items-center text-sm text-purple-600 dark:text-purple-400 group-hover:underline">
+        查看完整报告
+        <svg className="w-4 h-4 ml-1 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+        </svg>
+      </div>
+    </Link>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 占位卡片（产品扫描 — 专题页尚未上线）
 // ---------------------------------------------------------------------------
 
 function BriefCardPlaceholder({
