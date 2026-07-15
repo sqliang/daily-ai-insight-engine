@@ -387,3 +387,17 @@ stages:
 `config.yaml` also includes UI-facing metadata consumed by the Next.js frontend:
 - `tiers_meta` — per-tier labels, subtitles, and rationale for the Sources page hero banner
 - `display_name` / `display_description` — human-readable Chinese names and descriptions for source cards
+
+## Playwright MCP debug output convention
+
+When using Playwright MCP tools (`browser_snapshot`, `browser_take_screenshot`) during debugging or exploration, always write output files under `debug-output/`:
+
+```
+# snapshot
+filename: "debug-output/producthunt-snapshot.md"
+
+# screenshot  
+filename: "debug-output/page-screenshot.png"
+```
+
+The `debug-output/` directory is gitignored. Files written to the project root will pollute the working tree.
