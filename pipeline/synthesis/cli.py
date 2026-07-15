@@ -43,8 +43,8 @@ def _add_aggregate_arguments(parser):
     )
     parser.add_argument(
         "--target-date", type=str, default=None,
-        help="精确日期过滤 (YYYY-MM-DD)。仅保留 created == 指定日期的文章到 all_articles.json。"
-             "与 --lookback-days 互斥。用于回溯历史日报。",
+        help="精确日期过滤 (YYYY-MM-DD)。仅保留 created == 指定日期的新增文章到 all_articles.json。"
+             "与 --lookback-days 互斥。重复出现在当天 manifest 的旧文章不重复进入日报。",
     )
     parser.add_argument(
         "--hot-days", type=int, default=None,
@@ -163,8 +163,8 @@ def _add_synthesize_arguments(parser):
     )
     parser.add_argument(
         "--target-date", type=str, default=None,
-        help="精确日期过滤 (YYYY-MM-DD)。先按指定日期重新聚合 all_articles.json，再合成日报。"
-             "与 --lookback-days 互斥。用于回溯历史日报。",
+        help="精确日期过滤 (YYYY-MM-DD)。先按 created == 指定日期聚合新增文章，再合成日报。"
+             "与 --lookback-days 互斥。重复出现在当天 manifest 的旧文章不重复进入日报。",
     )
 
 

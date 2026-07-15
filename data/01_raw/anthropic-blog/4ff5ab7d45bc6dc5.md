@@ -2,14 +2,17 @@
 title: Golden Gate Claude
 source: https://www.anthropic.com/news/golden-gate-claude
 author: []
-published: '2026-07-08'
-created: '2026-07-09'
+published: '2026-07-09'
+created: '2026-07-14'
 description: ''
 tags:
 - clippings
 extraction_status: success
 pipeline_stage: ingested
 id: 4ff5ab7d45bc6dc5
+manifest_dates:
+- '2026-07-14'
+- '2026-07-15'
 ---
 
 # Golden Gate Claude
@@ -31,5 +34,3 @@ For a short time, we’re making this model available for everyone to interact w
 Our goal is to let people see the impact our interpretability work can have. The fact that we can find and alter these features within Claude makes us more confident that we’re beginning to understand how large language models really work. This isn’t a matter of asking the model verbally to do some play-acting, or of adding a new “system prompt” that attaches extra text to every input, telling Claude to pretend it’s a bridge. Nor is it traditional “fine-tuning,” where we use extra training data to create a new black box that tweaks the behavior of the old black box. This is a precise, surgical change to some of the most basic aspects of the model’s internal activations.
 
 As we describe in our paper, we can use these same techniques to change the strength of *safety-related* features—like those related to dangerous computer code, criminal activity, or deception. With further research, we believe this work could help make AI models safer.
-
-## Related content

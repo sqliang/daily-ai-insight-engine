@@ -11,12 +11,11 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: f429dc7eeb13cc3a
 source_type: community_discussion
-tldr: Ben's Bites 报道 Claude Tag 上线、Gemini 3.5 Flash 具备 computer use、OpenAI 首款芯片
-objective_summary: Ben's Bites 汇总多项 AI 产品动态：Claude Tag 允许在 Slack 中@提及共享 Claude Code
-  实例进行任务委派；Google 为 Gemini 3.5 Flash 增加 computer use 能力；OpenAI 与 Broadcom 合作打造首款 AI
-  芯片
+tldr: Claude Tag 让 Claude Code 可在 Slack 中被 @ 提及并协作
+objective_summary: Ben's Bites 日报汇总多项 AI 新闻：Anthropic 发布 Claude Tag 功能使 Claude Code
+  集成到 Slack 协作；Google 为 Gemini 3.5 Flash 增加计算机使用能力；Figma Config 发布多项新工具；Notion 推出支持外部
 event_type: application_landing
-epistemic_status: pr_statement
+epistemic_status: verified_fact
 entities:
   companies:
   - Anthropic
@@ -28,33 +27,25 @@ entities:
   - DeepMind
   - Runpod
   - AssemblyAI
-  - Modal
-  - Harvey Labs
-  - Perplexity
-  - Exa
   - Rippling
-  - Box
   technologies:
   - Claude Code
   - Claude Tag
-  - Codex
   - Gemini 3.5 Flash
-  - Image Gen
-  - Jalapeño
   - GPT-5.5 Instant
-  - AlphaFold
-  - Universal-3.5 Pro Realtime
+  - Jalapeño
+  - Computer Use
   key_people:
   - Keshav
-  - Ben Kus
   - John Jumper
+  - Ben Kus
 key_logic_flow:
-- 文章分享了使用 Codex 的 Image Gen 技能自动生成 UI 图片的技巧，可提升网页视觉效果。
-- Claude Tag 功能上线，允许用户在 Slack 中@提及共享的 Claude Code 实例，保持上下文并委派任务。
-- Google 为 Gemini 3.5 Flash 增加了 computer use 能力，可控制浏览器、桌面和移动端环境，并提供 GitHub 仓库用于本地体验。
-- Figma Config 大会发布了多项新功能：设计层转代码、Figma Motion 动效设计工具、可编辑着色器生成以及 Figma Agent 的第三方连接等。
-- Notion 新开发者平台支持运行代码工作流，并允许 Claude Code、Cursor、Codex 等外部 AI 代理从共享文档和任务面板中工作。
-- OpenAI 与 Broadcom 合作打造了首款 AI 芯片 Jalapeño，专为 ChatGPT、Codex 和未来代理产品的 LLM 推理任务设计。
+- Claude Tag 是 Anthropic 推出的新功能，允许用户在 Slack 中 @ 提及共享的 Claude Code 实例，使其保持对话上下文并委派任务
+- Google 为 Gemini 3.5 Flash 增加了计算机使用能力，可控制浏览器、移动和桌面环境
+- OpenAI 与 Broadcom 合作制造了其首款 AI 芯片 Jalapeño，专为 ChatGPT、Codex、API 及未来代理产品设计
+- Figma Config 大会上发布了从设计图层生成代码、Figma Motion 动效工具、可编辑着色器以及 Figma Agent 第三方连接等新功能
+- Notion 新开发者平台支持运行基于代码的工作流，并可集成 Claude Code、Cursor、Codex 等外部 AI 代理
+- AlphaFold 负责人 John Jumper 离开 DeepMind 加入 Anthropic
 extract_result: success
 ---
 

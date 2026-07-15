@@ -12,6 +12,9 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: f2d80cf59fc8ddd6
+manifest_dates:
+- '2026-07-02'
+- '2026-07-03'
 ---
 
 # 😺 Fable 5 is back baby

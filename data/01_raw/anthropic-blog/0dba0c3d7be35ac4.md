@@ -2,7 +2,7 @@
 title: Claude Design Anthropic Labs
 source: https://www.anthropic.com/news/claude-design-anthropic-labs
 author: []
-published: '2026-05-28'
+published: '2026-07-13'
 created: '2026-06-01'
 description: ''
 tags:
@@ -10,6 +10,10 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: 0dba0c3d7be35ac4
+manifest_dates:
+- '2026-06-01'
+- '2026-07-14'
+- '2026-07-15'
 ---
 
 # Introducing Claude Design by Anthropic Labs

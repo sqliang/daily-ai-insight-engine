@@ -5,7 +5,11 @@ author:
 - '[[Vincent Koc]]'
 published: '2026-06-30'
 created: '2026-07-02'
-description: Your company’s AI adoption and upskilling platform Discussion | Link
+manifest_dates:
+- '2026-07-02'
+- '2026-07-03'
+description: 'Title: Build Club: The Most Collaborative AI Community in the World
+  | Product Hunt'
 tags:
 - clippings
 extraction_status: success
@@ -13,10 +17,26 @@ pipeline_stage: ingested
 id: c4da007acea1beaf
 ---
 
-# www.producthunt.com
+# Solaris
 
-## 正在进行安全验证
+Product Hunt product page for Solaris.
 
-本网站使用安全服务防护恶意自动程序。在验证您不是自动程序期间，将显示此页面。
+Tagline: Your company’s AI adoption and upskilling platform
 
-本网站使用安全服务防护恶意自动程序。在验证您不是自动程序期间，将显示此页面。
+Description: Title: Build Club: The Most Collaborative AI Community in the World | Product Hunt
+
+Website: URL Source: https://www.producthunt.com/products/build-club
+
+Launch timing: Launched on July 2nd, 2026
+
+Community signal: 639 followers
+
+Forum: p/build-club
+
+Maker or submitter: Vincent Koc
+
+Feed published date: 2026-06-30
+
+Source URL: https://www.producthunt.com/products/build-club
+
+Ingestion note: this content was extracted from Product Hunt product-page metadata after anti-bot fallback handling. It intentionally focuses on the product description, launch metadata, category tags, and community signals available on the public product page.

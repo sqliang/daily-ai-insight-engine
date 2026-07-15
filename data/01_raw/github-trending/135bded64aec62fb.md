@@ -241,6 +241,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: 135bded64aec62fb
+manifest_dates:
+- '2026-07-02'
 ---
 
 AI 驱动的渗透测试 CLI 工具 — 说人话，打漏洞。

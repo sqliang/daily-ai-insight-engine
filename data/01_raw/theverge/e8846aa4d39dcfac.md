@@ -15,6 +15,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: e8846aa4d39dcfac
+manifest_dates:
+- '2026-06-30'
 ---
 
 OpenAI is releasing some sort of device related to its AI-powered coding tool, Codex, on July 15th. In a video posted to X on Monday, OpenAI shows a square-shaped device with several buttons, alongside the caption, “Your favorite Codex shortcuts are getting an upgrade.”

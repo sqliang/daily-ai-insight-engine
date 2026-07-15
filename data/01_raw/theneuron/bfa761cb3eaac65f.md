@@ -12,6 +12,9 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: bfa761cb3eaac65f
+manifest_dates:
+- '2026-07-03'
+- '2026-07-04'
 ---
 
 # 😺 We're LIVE now (talking Fable & GPT 5.6)

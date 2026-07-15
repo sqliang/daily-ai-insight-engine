@@ -4,7 +4,7 @@ source: https://www.therundown.ai/p/meet-your-new-slack-coworker-claude
 author:
 - '[[Zach Mink]]'
 published: '2026-06-24'
-created: '2026-06-24'
+created: '2026-06-26'
 description: 'PLUS: Build a Clippy-like desktop pet for Codex'
 tags:
 - clippings
@@ -13,44 +13,48 @@ pipeline_stage: ingested
 id: dbdce0f8b0fb62b6
 ---
 
-Good morning, AI enthusiasts. Your Slack workspace has a new coworker — Claude.
+Title: Meet your new Slack coworker — Claude
+
+URL Source: https://www.therundown.ai/p/meet-your-new-slack-coworker-claude
+
+Published Time: 2026-06-24T09:00:00.000Z
+
+Markdown Content:
+[![Image 1](https://media.beehiiv.com/cdn-cgi/image/fit=scale-down,quality=80,format=auto,onerror=redirect/uploads/asset/file/f6a99b1e-73ea-4b69-a7d3-e1b636a6a7ec/hubspot-NEW.jpg)](https://offers.hubspot.com/using-chatgpt-at-work?utm_medium=email-media-newsletter&utm_source=the-rundown-ai&utm_campaign=creator&utm_content=paid&utm_term=6-24-2026)
+
+**Good morning, AI enthusiasts.** Your Slack workspace has a new coworker — Claude.
 
 Anthropic just debuted Claude Tag, which brings the agentic capabilities previously limited to Claude Code and Cowork into Slack channels, enabling entire teams to simply tag the AI to handle tasks ranging from engineering to marketing.
 
-The Rundown: Anthropic just launched Claude Tag, a new way to make its AI assistant available inside Slack, letting teams tag it like a teammate to handle tasks asynchronously and build context across channels, codebases, and tools over time.
+**In today’s AI rundown:**
 
-The details:
+*   Claude joins Slack as an agentic coworker
 
-While Claude Code brought agentic capabilities to individuals, Claude Tag takes it to teams, with the AI handling tasks for members in a Slack channel.
+*   Meta doubles down on AI smart glasses
 
-You just have to tag @Claude with the task, and the AI will break it into stages, work through them using approved tools and data, and respond when done.
+*   Build a Clippy-like desktop pet for Codex
 
-Claude learns over time, builds context about the work being done, and can even take action across different channels — but only where it has access.
+*   Programming language for AI-driven biology
 
-It also uses an ambient mode, where Claude fetches information from relevant channels and follows up on tasks that have gone quiet and may need attention.
+*   4 new AI tools, community workflows, and more
 
-Why it matters: Andrej Karpathy calls Claude Tag the “3rd major redesign of LLM UI UX,” and it’s hard to disagree. Going from chat and desktop to Slack — where most business context and tools live — is a natural next step. With Anthropic already rolling it out today, this release will surely hurt more than a few “agentic coworker” startups.
+**LATEST DEVELOPMENTS**
 
-The Rundown: HubSpot’s free, comprehensive “How to Use ChatGPT at Work” guide provides 100+ ready-to-use prompts to help professionals boost efficiency and adopt AI-driven workflows.
+###### ANTHROPIC
 
-Inside, you’ll find:
+#### 🤖[**Claude joins Slack as an agentic coworker**](https://www.anthropic.com/news/introducing-claude-tag?utm_campaign=meet-your-new-slack-coworker-claude&utm_medium=referral&utm_source=www.therundown.ai)
 
-A quick crash course to master ChatGPT in under 30 minutes
+![Image 2](https://media.beehiiv.com/cdn-cgi/image/fit=scale-down,quality=80,format=auto,onerror=redirect/uploads/asset/file/18e13a55-7649-4e65-9f5b-db8a15874b9c/HLg4WfjWwAAIy2a.jpeg)
+Image source: Anthropic
 
-Practical industry use cases to spark real-world inspiration
+**The Rundown:**Anthropic just [launched](https://www.anthropic.com/news/introducing-claude-tag?utm_campaign=meet-your-new-slack-coworker-claude&utm_medium=referral&utm_source=www.therundown.ai) Claude Tag, a new way to make its AI assistant available inside Slack, letting teams tag it like a teammate to handle tasks asynchronously and build context across channels, codebases, and tools over time.
 
-100+ prompts to streamline tasks and accelerate productivity
+**The details:**
 
-Expert tips to tackle common AI roadblocks with confidence
+*   While Claude Code brought agentic capabilities to individuals, Claude Tag takes it to teams, with the AI handling tasks for members in a Slack channel.
 
-The Rundown: Meta is doubling down on the AI wearable space with the launch of “Meta Glasses,” a new $299 line of smart glasses built in partnership with EssilorLuxottica and powered by its Muse Spark AI out of the box.
+*   You just have to tag @Claude with the task, and the AI will break it into stages, work through them using approved tools and data, and respond when done.
 
-The details:
+*   Claude learns over time, builds context about the work being done, and can even take action across different channels — but only where it has access.
 
-Meta Glasses come in three designs — Meta Adventurer, Meta Fury, and Meta Glasses by Kylie — spanning 26 styles across colors, lenses, and frames.
-
-The Kylie variant, at $399, is designed to be a fan-favorite with an embedded gem, a custom chime, and the option to use Kylie Jenner’s voice for Meta AI.
-
-The glasses use Meta’s Muse Spark AI, promising smarter answers, better visual understanding, turn-by-turn navigation, and live translation.
-
-While the hardware remains the same as previous models, the price is the highlight, with Meta ditching the Ray-Ban/Oakley branding for affordability.
+*   It also uses an ambient mode, where Claude fetches information from relevant channels and follows up on tasks that have gone quiet and may need attention.

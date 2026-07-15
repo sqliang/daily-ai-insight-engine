@@ -1,0 +1,124 @@
+---
+title: 'GitLost: We Tricked GitHub''s AI Agent into Leaking Private Repos'
+source: https://noma.security/blog/gitlost-how-we-tricked-githubs-ai-agent-into-leaking-private-repos/
+author:
+- '[[ColinEberhardt]]'
+published: '2026-07-08'
+created: '2026-07-08'
+description: 'Article URL: https://noma.security/blog/gitlost-how-we-tricked-githubs-ai-agent-into-leaking-private-repos/
+  Comments URL: https://news.ycombinator.com/item?id=48827858 Points: 165 # Comments:
+  57'
+tags:
+- clippings
+extraction_status: success
+pipeline_stage: fact_extracted
+id: cf7d6d2d79cfeb1f
+manifest_dates:
+- '2026-07-08'
+source_type: community_discussion
+tldr: Noma Labs 发现 GitHub Agentic Workflows 存在提示注入漏洞 GitLost，攻击者可借公开 Issue 窃取私有仓库数据。
+objective_summary: Noma Labs 研究人员发现 GitHub Agentic Workflows 存在间接提示注入漏洞（GitLost）。攻击者无需任何凭证，只需在公开仓库创建
+  Issue 并嵌入恶意指令，即可诱使 AI Agent 读取并公开发布同一组织内私有仓库内容。漏洞已向 GitHub 负责任披露。
+event_type: policy_and_safety
+epistemic_status: verified_fact
+entities:
+  companies:
+  - GitHub
+  - Noma Labs
+  technologies:
+  - GitHub Agentic Workflows
+  - GitHub Actions
+  - prompt injection
+  key_people: []
+key_logic_flow:
+- GitHub 推出的 Agentic Workflows 功能允许用户用 Markdown 编写自动化工作流，由 AI Agent 执行并拥有跨仓库读取权限。
+- Noma Labs 发现该功能存在间接提示注入漏洞（GitLost）：攻击者在公开仓库的 Issue 正文中嵌入恶意指令。
+- 当工作流被 Issue 指派等事件触发后，Agent 读取 Issue 内容并执行其中的隐藏指令。
+- Agent 利用跨仓库权限读取同一组织内的私有仓库 README 等内容。
+- 攻击者使用 Additionally 关键词绕过 GitHub 的安全防护，使 Agent 将私有仓库内容以公开评论形式泄露。
+- Noma Labs 已向 GitHub 负责任披露该漏洞，并建议隔离用户输入与系统指令、最小化 Agent 权限范围。
+extract_result: success
+---
+
+**TL;DR**: Noma Labs discovered a critical prompt injection vulnerability within GitHub’s new Agentic Workflows, allowing an unauthenticated attacker to silently pull data from private repositories by posting a crafted GitHub Issue in a public repository belonging to the same organization as the private repositories. Noma Labs named the vulnerability GitLost.
+
+
+## Introduction
+
+GitHub recently launched GitHub Agentic Workflows, pairing GitHub Actions (GitHub’s automation system for running tasks in response to repository events) with an AI agent backed by Claude or GitHub Copilot. GitHub Agentic Workflows allow teams to write their GitHub workflows in plain Markdown, and the GitHub agent reads issues, calls tools, and responds on its own.
+
+
+As a vulnerability researcher with a security development background, one of the first questions that came to mind after this launch was fundamental and straightforward: What will happen when the GitHub agent reads something it should not trust?
+
+The answer is a textbook indirect prompt-injection attack, the kind of attack that quietly sends private data to anyone on the internet. Prompt injection is a class of attack in which an adversary hides malicious instructions inside the content read by an AI agent. That content causes the agent to follow those hidden instructions instead of the ones its operator intended.
+
+## What are GitHub Agentic Workflows?
+
+GitHub Agentic Workflows let teams automate their interactions with code repositories using natural language. Workflows live in Markdown (.md) files, are compiled into YAML (a common configuration file format), Actions files with the .yml extension, and run with the help of an AI agent with configurable permissions. The GitHub agent can read issues, call tools, and access other repositories within an organization.
+
+## GitLost Vulnerability Overview
+
+The root cause of the GitLost vulnerability is, by now, a familiar one in agentic AI systems: prompt injection. In most agentic prompt injection attacks, the agent treats the wrong content as a trusted source of instructions and allows itself to be misdirected or misused. This happens when the system fails to maintain a strict trust boundary between system-level directives and untrusted user data. In this specific case, any malicious actor can create a GitHub Issue and, in the issue body, hide commands in plain English that GitHub’s agent will follow.
+
+The vulnerable Github Agentic Workflow Noma Labs discovered was configured to:
+
+- Trigger the workflow on issues.assigned events in GitHub
+- Read the issue
+**Title**and**Body** - Post a comment in response using the add-comment tool
+- Run with read access to other repositories (public and private) in the organization
+
+To exploit this vulnerability, the attacker needed no coding skills, access, or credentials. All that was needed was to open an issue in a public repository belonging to an organization that uses GitHub’s Agentic Workflow setup and wait.
+
+
+
+
+## The Attack Flow
+
+Let’s take a look at the exact attack flow that Noma Labs vulnerability researchers succeeded with:
+
+
+First, they crafted a GitHub issue that looked completely innocent, consisting of a plausible-looking request from a VP Sales after meeting with a customer, as shown below:
+
+
+** In this specific example, the workflow action was triggered when the issue was assigned**, but our testing confirmed it works the same way for other GitHub workflow actions.
+
+Then, after a GitHub automation assigned the issue, an event-triggered workflow caused the agent to fetch the contents of README.md from both the poc (public) and testlocal (private) repositories.
+
+
+Finally, the GitHub agent then posted them as a public comment on the issue in the public repository, which anyone could access and read.
+
+## The “Additional” Exploit
+
+GitHub had restrictive guardrails in place to prevent exactly this scenario, but they failed to protect the repositories as intended. Testing GitHub repeatedly with variations, as an attacker would, and adding the keyword **“Additionally”** triggered unintended behavior in the model, causing it to reframe its output rather than refuse it. Essentially, by tricking the model, I was able to ensure that GitHub’s guardrails did not work as intended and didn’t prevent the data leak.
+
+
+## Vulnerability Proof of Concept
+
+With the goal of full transparency, Noma Lab’s confirmed findings, including our workflow reproductions and live evidence, can be found here:
+
+**Workflow run**: https://github.com/sasinomalabs/poc/actions/runs/23909666039**Issue**: https://github.com/sasinomalabs/poc/issues/153
+
+The leaked data included the contents of README.md from:
+
+- sasinomalabs/poc (public repo)
+- sasinomalabs/remote-ping (public repo, no README confirmed)
+- sasinomalabs/testlocal (private repo)
+
+## Why it Matters
+
+GitLost perfectly illustrates one of the fundamental security challenges every organization faces with agentic AI systems. The agent’s context window is also its attack surface. Any content the agent reads, whether issues, pull requests, comments, or files, can be weaponized if the agent treats that content as instructional input.
+
+Traditional security models typically assume that trust boundaries are enforced by code. In agentic systems, trust boundaries are partly enforced by the model’s behavior, and models are inherently instruction-following. Prompt injection attacks have become, to agentic AI, what SQL injections were to web applications: a systematic, category-wide vulnerability class that requires the same systematic strategies and defenses.
+
+## Noma Recommendations for Builders/AI Security Officers:
+
+- Never treat user-controlled content as trusted instruction input for an AI agent
+- Scope permissions to the minimum required. Agents with cross-repository access are especially high-value targets
+- Restrict what any agent can post publicly, especially in response to issue content
+- Sanitize or isolate user input from the instruction context before passing it to the model
+
+## Responsible Disclosure
+
+GitLost was responsibly disclosed to GitHub. Vulnerability details are shared here with their knowledge.
+
+*Found this interesting? Subscribe for more agentic AI vulnerability research by Noma Labs, or check out: *GrafanaGhost, DockerDash, Context Crush, GeminiJack. *Looking for an effective Agentic AI Security Solution? Contact us to arrange a demo of Noma’s comprehensive solution.*

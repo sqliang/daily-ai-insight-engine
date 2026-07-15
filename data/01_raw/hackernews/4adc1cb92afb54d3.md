@@ -12,6 +12,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: 4adc1cb92afb54d3
+manifest_dates:
+- '2026-07-02'
 ---
 
 Shop worker owned businesses online

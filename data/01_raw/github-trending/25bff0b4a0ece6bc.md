@@ -3,7 +3,7 @@ title: davila7/claude-code-templates
 source: https://github.com/davila7/claude-code-templates
 author: []
 published: ''
-created: '2026-07-11'
+created: '2026-07-13'
 description: 'CLI tool for configuring and monitoring Claude Code &nbsp;&nbsp; &nbsp;&nbsp;
   🧪 NEW: Dashboard — Explore components, manage collections, and track installations
   at www.aitmpl.com. Currently in beta — feedback welcome! Claude Code Templates (aitmpl.com)

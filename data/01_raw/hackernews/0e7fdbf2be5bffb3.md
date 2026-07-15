@@ -13,6 +13,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: 0e7fdbf2be5bffb3
+manifest_dates:
+- '2026-07-03'
 ---
 
 This post is the culmination of over a year of research into how to properly use AI agents to write high-quality software in security-critical systems.

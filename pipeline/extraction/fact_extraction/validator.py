@@ -80,6 +80,42 @@ _EPISTEMIC_FUZZY: dict[str, str] = {
 # 校验 + 修复
 # =============================================================================
 
+def _truncate_string_field(
+    repaired: dict,
+    original: dict,
+    field_names: tuple[str, ...],
+    max_len: int,
+) -> None:
+    """
+    对可能使用别名或 snake_case 的文本字段做长度兜底。
+
+    参数：
+        repaired: 待修复的 Agent 返回字典
+        original: 原始 Agent 返回字典，用于日志记录原始长度
+        field_names: 同一语义字段的可接受键名列表
+        max_len: Pydantic schema 允许的最大字符数
+
+    设计理由：
+        Pydantic 允许 objectiveSummary/objective_summary 双写法，但 Agent 偶尔会返回
+        snake_case。截断逻辑必须覆盖两种键名，否则历史文章重跑会被同一个长度错误反复阻塞。
+    """
+    for field_name in field_names:
+        value = repaired.get(field_name)
+        if not isinstance(value, str) or len(value) <= max_len:
+            continue
+
+        truncated = truncate_at_natural_break(value, max_len)
+        if len(truncated) > max_len:
+            truncated = truncated[:max_len].strip()
+
+        repaired[field_name] = truncated
+        logger.info(
+            "%s 截断: %d → %d 字符",
+            field_name,
+            len(original.get(field_name, "")),
+            len(repaired[field_name]),
+        )
+
 def _validate_fact_extraction(data: dict) -> FactExtraction:
     """
     验证并构造 FactExtraction 实例。
@@ -218,19 +254,8 @@ def _validate_fact_extraction(data: dict) -> FactExtraction:
             repaired["keyLogicFlow"] = []
 
         # --- 截断超长文本字段 ---
-        if "tldr" in repaired and isinstance(repaired["tldr"], str):
-            if len(repaired["tldr"]) > 80:
-                truncated = truncate_at_natural_break(repaired["tldr"], 80)
-                repaired["tldr"] = truncated
-                logger.info("tldr 截断: %d → %d 字符",
-                           len(data.get("tldr", "")), len(repaired["tldr"]))
-
-        if "objectiveSummary" in repaired and isinstance(repaired["objectiveSummary"], str):
-            if len(repaired["objectiveSummary"]) > 150:
-                truncated = truncate_at_natural_break(repaired["objectiveSummary"], 150)
-                repaired["objectiveSummary"] = truncated
-                logger.info("objectiveSummary 截断: %d → %d 字符",
-                           len(data.get("objectiveSummary", "")), len(repaired["objectiveSummary"]))
+        _truncate_string_field(repaired, data, ("tldr",), 250)
+        _truncate_string_field(repaired, data, ("objectiveSummary", "objective_summary"), 500)
 
         # --- 修复后重新校验 ---
         try:

@@ -1,7 +1,9 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import type { EnrichedArticle, DateRange } from "@/lib/data/sources";
+import { buildArticleDetailHref } from "@/lib/data/sources/article-route";
 import { ArticleCard } from "./ArticleCard";
 
 type SortMode = null | "impact";
@@ -11,6 +13,7 @@ type ArticleListProps = {
   hasManifest: boolean;
   manifestFound: boolean;
   articleCount: number;
+  sourceName: string;
   dateRange?: DateRange | null;
 };
 
@@ -27,9 +30,12 @@ export function ArticleList({
   hasManifest,
   manifestFound,
   articleCount,
+  sourceName,
   dateRange,
 }: ArticleListProps) {
-  const [sortMode, setSortMode] = useState<SortMode>(null);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const sortMode: SortMode = searchParams.get("sort") === "impact" ? "impact" : null;
 
   const sortedArticles = useMemo(() => {
     if (sortMode !== "impact") return articles;
@@ -37,6 +43,27 @@ export function ArticleList({
   }, [articles, sortMode]);
 
   const isActive = sortMode === "impact";
+  const detailSearchParams = useMemo(() => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (sortMode === "impact") {
+      params.set("sort", "impact");
+    } else {
+      params.delete("sort");
+    }
+    return params;
+  }, [searchParams, sortMode]);
+
+  function toggleSortMode() {
+    const nextMode: SortMode = sortMode === "impact" ? null : "impact";
+    const params = new URLSearchParams(searchParams.toString());
+    if (nextMode === "impact") {
+      params.set("sort", "impact");
+    } else {
+      params.delete("sort");
+    }
+    const qs = params.toString();
+    router.push(qs ? `?${qs}` : window.location.pathname, { scroll: false });
+  }
 
   return (
     <section className="mt-10 min-w-0">
@@ -83,7 +110,7 @@ export function ArticleList({
 
           <button
             type="button"
-            onClick={() => setSortMode((prev) => (prev ? null : "impact"))}
+            onClick={toggleSortMode}
             className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12px] font-semibold
                        transition-all duration-200 shrink-0"
             style={
@@ -138,7 +165,11 @@ export function ArticleList({
       {hasManifest ? (
         <div className="space-y-5">
           {sortedArticles.map((article) => (
-            <ArticleCard key={article.id ?? article.url} article={article} />
+            <ArticleCard
+              key={article.id ?? article.url}
+              article={article}
+              detailHref={buildArticleDetailHref(sourceName, article, detailSearchParams)}
+            />
           ))}
         </div>
       ) : (

@@ -12,6 +12,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: f0eeef1a33ddd3e7
+manifest_dates:
+- '2026-07-07'
 ---
 
 ## How we taught a small LLM to throw away 68% of our RAG context

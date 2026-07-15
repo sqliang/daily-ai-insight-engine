@@ -134,6 +134,15 @@ export interface EnrichedSourceDetail {
   dateRange: DateRange | null;
 }
 
+export interface SourceArticleDetail {
+  source: EnrichedSourceDetail;
+  article: EnrichedArticle;
+  previousArticle: EnrichedArticle | null;
+  nextArticle: EnrichedArticle | null;
+  listHref: string;
+  originalHref: string;
+}
+
 export interface SourcesViewData {
   tiersMeta: Record<string, TierMeta>;
   sources: SourceStatus[];

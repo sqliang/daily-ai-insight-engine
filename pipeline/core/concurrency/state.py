@@ -87,6 +87,11 @@ class IngestState:
         """本次会话新增的已处理数。"""
         return self._new_count
 
+    @property
+    def force_enabled(self) -> bool:
+        """是否处于强制重抓模式。"""
+        return self._force
+
     # --- 内部 ---
 
     def _load_raw_state(self) -> dict:

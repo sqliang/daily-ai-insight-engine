@@ -16,9 +16,9 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 720c8e22feedf2cb
 source_type: news_media
-tldr: 微软宣布8月上调Xbox全线价格，Prime Day推出折扣促销
-objective_summary: 微软因内存价格上涨，宣布将于8月第二次上调Xbox全线价格。涨价前，Xbox Series X（1TB）在Walmart和Target折扣至约573美元，Xbox
-  Series S（512GB）在Dell折扣至349.99美元。
+tldr: 微软宣布8月Xbox全线涨价，Prime Day期间仍有折扣可享
+objective_summary: 微软宣布因内存价格上涨，将在8月上调所有Xbox机型价格，这是不到一年内的第二次涨价。Prime Day促销期间，Xbox Series
+  X（1TB）在沃尔玛和Target售价约573-574美元，Xbox Series S（512GB）在戴尔售价349.99美元，均低于当前常规价格。
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
@@ -30,9 +30,12 @@ entities:
   technologies: []
   key_people: []
 key_logic_flow:
-- 微软宣布将于8月上调所有Xbox型号价格，这是不到一年内的第二次涨价，原因为内存价格持续上涨。
-- 1TB版Xbox Series X（带4K蓝光光驱）当前在Walmart和Target分别折扣至573美元和573.99美元，8月将涨至799.99美元。
-- 无光驱版Xbox Series S（512GB）当前在Dell折扣至349.99美元、在Target折扣至379.99美元，8月将从399.99美元涨至499.99美元。
+- 微软宣布将在2025年8月提高所有Xbox机型的价格，这是不到一年内的第二次涨价
+- 价格上涨的原因是内存价格持续上涨，影响从汽车到计算等多个行业
+- Xbox Series X（1TB版含光驱）当前常规价649.99美元，8月将涨至799.99美元
+- Prime Day促销期间，Xbox Series X在沃尔玛售价573美元，在Target售价573.99美元
+- Xbox Series S（512GB）当前常规价399.99美元，8月将涨至499.99美元
+- 戴尔以349.99美元提供Xbox Series S最佳折扣价，Target售价379.99美元
 extract_result: success
 ---
 
@@ -47,11 +50,3 @@ The 1TB Xbox Series X is discounted to $573 and $573.99 at Walmart and Target re
 If you’re just looking for the disc-free Xbox Series S, which is usually $399.99 but will rise to $499.99 in August, Dell has the 512GB model on sale for $349.99, which is the current best deal. Target isn’t far behind, with the same console listed for $379.99, which may be worth it if you want to pick it up locally or have other discounts at Target like the Circle Card.
 
 **Follow topics and authors**from this story to see more like this in your personalized homepage feed and to receive email updates.
-
-## Most Popular
-
-- I drove the Slate Truck — there’s more to it than EV minimalism
-- Meta launches cheaper smart glasses without Ray-Ban
-- Charlie Kirk’s legacy is a 30-year sentence for moving zines
-- Google is finally opening the Play Store to outside payments
-- Ford had to hire back former engineers to fix mistakes made by its automated systems

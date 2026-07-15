@@ -12,6 +12,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: 83cf8a3ef5bd09ac
+manifest_dates:
+- '2026-07-01'
 ---
 
 *A tool for transforming and moving code between repositories.*

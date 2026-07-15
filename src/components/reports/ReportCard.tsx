@@ -41,11 +41,17 @@ export function ReportCard({ report }: { report: ReportSummary }) {
   const monthDay = report.date.slice(5);
 
   return (
-    <div className="group flex flex-col gap-4 rounded-xl border border-line/50 bg-card p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-line hover:shadow-lg hover:shadow-accent/5 sm:flex-row sm:gap-6">
+    <div
+      className="group flex flex-col gap-4 rounded-xl border border-accent/12 p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/25 hover:shadow-lg hover:shadow-accent/8 sm:flex-row sm:gap-6"
+      style={{
+        background:
+          "linear-gradient(135deg, color-mix(in oklch, var(--accent) 5%, var(--panel)) 0%, var(--panel) 55%, color-mix(in oklch, var(--accent) 2%, var(--panel)) 85%, color-mix(in oklch, var(--cool) 3%, var(--panel)) 100%)",
+      }}
+    >
       {/* 左侧：日期区块 */}
       <Link
         href={`/dashboard/${report.date}`}
-        className="flex shrink-0 flex-row items-center gap-3 sm:w-28 sm:flex-col sm:items-center sm:justify-center sm:border-r sm:border-line/30 sm:pr-4"
+        className="flex shrink-0 flex-row items-center gap-3 sm:w-28 sm:flex-col sm:items-center sm:justify-center sm:border-r sm:border-accent/15 sm:pr-4"
       >
         {/* 月-日 */}
         <time
@@ -79,7 +85,7 @@ export function ReportCard({ report }: { report: ReportSummary }) {
 
           {/* 底部：文章数 + 信源数 + 语言 */}
           <div className="mt-3 flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center rounded-full bg-accent/10 px-2.5 py-0.5 text-xs font-medium text-accent">
+            <span className="inline-flex items-center rounded-full bg-accent/8 px-2.5 py-0.5 text-xs font-medium text-accent">
               {report.totalArticles} 篇文章
             </span>
             <span className="inline-flex items-center gap-1 text-xs text-muted/50">
@@ -123,7 +129,7 @@ export function ReportCard({ report }: { report: ReportSummary }) {
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="text-muted/30 transition-all duration-200 group-hover:translate-x-1 group-hover:text-accent"
+          className="text-muted/30 transition-all duration-200 group-hover:translate-x-1 group-hover:text-accent/60"
         >
           <path d="M5 12h14" />
           <path d="m12 5 7 7-7 7" />

@@ -28,11 +28,3 @@ The 1TB Xbox Series X is discounted to $573 and $573.99 at Walmart and Target re
 If you’re just looking for the disc-free Xbox Series S, which is usually $399.99 but will rise to $499.99 in August, Dell has the 512GB model on sale for $349.99, which is the current best deal. Target isn’t far behind, with the same console listed for $379.99, which may be worth it if you want to pick it up locally or have other discounts at Target like the Circle Card.
 
 **Follow topics and authors**from this story to see more like this in your personalized homepage feed and to receive email updates.
-
-## Most Popular
-
-- I drove the Slate Truck — there’s more to it than EV minimalism
-- Meta launches cheaper smart glasses without Ray-Ban
-- Charlie Kirk’s legacy is a 30-year sentence for moving zines
-- Google is finally opening the Play Store to outside payments
-- Ford had to hire back former engineers to fix mistakes made by its automated systems

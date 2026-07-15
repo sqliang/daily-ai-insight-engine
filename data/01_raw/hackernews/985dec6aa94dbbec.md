@@ -13,6 +13,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: 985dec6aa94dbbec
+manifest_dates:
+- '2026-07-02'
 ---
 
 **Today in Tedium:**Recently, I passed 20,000 followers on Bluesky, which I didn’t really say anything about. Sure, I thought about it, but then I had decided to myself, what’s the point? Soon, there will be another mark I can point to and feel weird about. The thing about social media these days is that the good stuff all too often pulls you in, but at the end of the day, you end up feeling hollow. Perhaps it’s for this reason that, when I spotted a thread asking about what my favorite social network of all time was, my answer wasn’t Twitter or Bluesky or even Tumblr. It was, of all things, a forum for news designers that existed in the mid-2000s called Visual Editors. It barely worked, honestly: It had a chat option that was popular with designers waiting for their pages to get proofed late in the evening, but it would often go down with no warning. But from a community standpoint, it was spectacular. Why don’t many modern social networks feel like that? Today’s Tedium ponders the fate of the web forum.

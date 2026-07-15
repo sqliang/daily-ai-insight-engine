@@ -75,6 +75,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: aaea0027bae21ad5
+manifest_dates:
+- '2026-07-07'
 ---
 
 Karakeep (previously Hoarder) is a self-hostable bookmark-everything app with a touch of AI for the data hoarders out there.

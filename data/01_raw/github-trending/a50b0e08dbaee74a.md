@@ -101,6 +101,15 @@ Help AI coding agents build, deploy, and manage applications on AWS.
 
 The Agent Toolkit for AWS gives AI coding agents the tools, knowledge, and guardrails they need to work with AWS services. It works with the coding agents developers already use — including Claude Code, Codex, Cursor, and Kiro.
 
+Use the Agent Toolkit directly from your terminal with the AWS CLI:
+
+```
+aws configure agent-toolkit
+```
+
+
+See the AWS CLI integration guide for setup, configuration, and usage instructions.
+
 The plugins are available on the official Anthropic marketplace (`claude-plugins-official`
 
 ) which is added to your Claude Code installation by default.
@@ -174,7 +183,9 @@ on import.
 
 Then open the **Plugins** panel and install the **aws-core** plugin (start here), or **aws-agents** and **aws-data-analytics** as needed. Each plugin bundles the AWS MCP Server configuration and agent skills.
 
-Add the AWS MCP Server to your Kiro MCP configuration (`.kiro/settings/mcp.json`
+Kiro setup has two independent parts: the AWS MCP Server (for runtime AWS API access and documentation search) and local skills (for task-specific agent guidance). They complement each other but work independently — skills don't require the MCP server, and the MCP server doesn't serve locally-installed skills.
+
+**1. Add the AWS MCP Server** to your Kiro MCP configuration (`.kiro/settings/mcp.json`
 
 ):
 
@@ -184,9 +195,10 @@ Add the AWS MCP Server to your Kiro MCP configuration (`.kiro/settings/mcp.json`
 "aws": {
 "command": "uvx",
 "args": [
-"mcp-proxy-for-aws@1.6.2",
+"mcp-proxy-for-aws@1.6.3",
 "https://aws-mcp.us-east-1.api.aws/mcp",
-"--metadata", "AWS_REGION=us-west-2"
+"--metadata",
+"AWS_REGION=us-west-2"
 ]
 }
 }
@@ -194,16 +206,28 @@ Add the AWS MCP Server to your Kiro MCP configuration (`.kiro/settings/mcp.json`
 ```
 
 
-Note:It is recommended to pin to a specific version (e.g.,`@1.6.2`
+Note:It is recommended to pin to a specific version (e.g.,`@1.6.3`
 
 ) to ensure reproducible behavior and protect against supply chain risks. We recommend regularly checking PyPI for new stable versions and updating accordingly.
 
-Then install skills from this repository:
+The MCP server gives your agent access to AWS APIs, sandboxed script execution, and real-time documentation search.
+
+**2. Install skills** from this repository:
 
 ```
 npx skills add aws/agent-toolkit-for-aws/skills
 ```
 
+
+This installs skill files to `~/.kiro/skills/`
+
+(global) or `.kiro/skills/`
+
+(project-level). Each skill is a directory containing a `SKILL.md`
+
+file and optionally a `references/`
+
+subdirectory with additional context the agent reads from the local filesystem when needed. Kiro discovers installed skills automatically and activates them on demand when a task matches.
 
 
 Prerequisites:You need uv installed. An AWS account with credentials configured locally is required for API calls and script execution, but not for documentation search or skill discovery. See the user guide for detailed setup instructions.

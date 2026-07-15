@@ -11,6 +11,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: fd93a14ef0eaaad2
+manifest_dates:
+- '2026-07-01'
 ---
 
 Video and podcast recording tool maker Riverside is giving its users a new way to reach their audiences: newsletters.

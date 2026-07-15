@@ -63,26 +63,6 @@ Return ONLY a valid JSON object matching this schema:
       "rationale": "why this opportunity matters in Chinese"
     }
   ],
-  "specializedBrief": {
-    "githubHighlights": {
-      "summary": "one-sentence trend summary for today's GitHub Trending in Chinese",
-      "topProjects": ["project1", "project2", "project3"],
-      "domainDistribution": {"ai_ml": 3, "devops_infra": 2},
-      "aiCategoryDistribution": {"agent_framework": 2},
-      "articleCount": 5
-    },
-    "productHighlights": {
-      "summary": "one-sentence trend summary for today's AI product launches in Chinese",
-      "notableProducts": ["product name 1", "product name 2", "product name 3"],
-      "articleCount": 3
-    },
-    "paperHighlights": {
-      "summary": "one-sentence trend summary for today's arXiv papers in Chinese",
-      "keyPapers": ["paper title 1", "paper title 2", "paper title 3"],
-      "researchAreas": ["NLP", "CV", "RL"],
-      "articleCount": 3
-    }
-  },
   "visualizationData": {
     "eventTypeDistribution": [
       {"label": "infrastructure_update", "count": <number>},
@@ -133,19 +113,5 @@ Return ONLY a valid JSON object matching this schema:
 
 10. **evidenceArticleIds**: For each evidence item in evidence[], the corresponding evidenceArticleIds[i] MUST list ONLY the specific article IDs that directly support that fact. Use the article "id" field from the prompt. Do NOT put all articleIds for every evidence item — be precise about which article backs each claim. evidenceArticleIds must have the same length as evidence. Each sub-array must have at least 1 article ID.
 11. **No inline citations in evidence**: evidence text must be pure factual statements. Do NOT write source citations like "（来源：xxx）" inside evidence text. The pipeline handles numbering.
-12. **specializedBrief 生成规则**：
-    - 仅当当日有匹配来源的文章时才生成对应的子块（githubHighlights/productHighlights/paperHighlights）
-    - 如果没有对应来源的文章，对应子块应设为 null
-    - githubHighlights.summary 应从 specialized_tags 的统计分布中提炼趋势判断
-    - githubHighlights.topProjects 按项目影响力（Star 趋势 + 社区活跃度）筛选 Top 3-5
-    - githubHighlights.domainDistribution 和 aiCategoryDistribution 应从统计概览中的 specialized_stats 数据获取，保持 LLM 输出与统计一致
-    - paperHighlights.summary 应从 specialized_tags 的统计分布中提炼趋势判断
-    - paperHighlights.keyPapers 按论文研究影响力筛选 Top 3-5 篇论文标题
-    - paperHighlights.researchAreas 应从统计概览中的 specialized_stats.paper.research_areas 数据获取，保持 LLM 输出与统计一致
-    - paperHighlights.articleCount 应与统计概览中的 paper.count 一致
-    - 如果 specialized_stats.product.count > 0，必须在 specializedBrief 中输出 productHighlights
-    - productHighlights.summary 应从产品扫描统计中提炼趋势判断
-    - productHighlights.notableProducts 按产品影响力筛选 Top 3-5 产品名称
-    - productHighlights.articleCount 应与统计概览中的 product.count 一致
-    - 不需要深入每篇文章的细节，保持轻量
+12. **专题能力暂时停用**：不要输出 specializedBrief 字段；GitHub 项目、论文速递、产品扫描专题待重新设计后恢复。
 """

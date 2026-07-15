@@ -59,6 +59,36 @@ def _get_nested(data: dict, loc: tuple) -> Any:
     return current
 
 
+def _promote_nested_root_fields(data: dict, root_fields: tuple[str, ...]) -> None:
+    """
+    将 LLM 误塞进嵌套对象的顶层字段提升回根层级。
+
+    部分模型会把完整 schema 包在某个首字段下，例如把 sentiment、
+    developerSentiment 等放进 impactScore。这里只提升已知根字段，避免
+    破坏正常嵌套模型内部结构。
+    """
+    changed = True
+    while changed:
+        changed = False
+        for container_key, container_value in list(data.items()):
+            if not isinstance(container_value, dict):
+                continue
+            for field in root_fields:
+                if field in container_value and field not in data:
+                    data[field] = container_value.pop(field)
+                    changed = True
+                    logger.info("%s 字段提升至根层级: %s", container_key, field)
+
+
+def _ensure_list(value: Any) -> list:
+    """将模型偶尔返回的标量列表字段规范化为 list。"""
+    if value is None:
+        return []
+    if isinstance(value, list):
+        return value
+    return [value]
+
+
 # =============================================================================
 # QualitativeAssessment 校验
 # =============================================================================
@@ -87,11 +117,29 @@ def validate_qualitative(data: dict) -> QualitativeAssessment:
     repaired = dict(data)
 
     # --- 预处理：修复常见的嵌套模型格式错误 ---
+    _promote_nested_root_fields(
+        repaired,
+        (
+            "sentiment",
+            "developerSentiment",
+            "hypeAssessment",
+            "informationEntropy",
+            "domainDisruption",
+            "engineeringComplexity",
+        ),
+    )
 
     # impactScore: 如果是纯数字 → 包装为 {score, reason}
     if "impactScore" in repaired and isinstance(repaired["impactScore"], (int, float)):
         repaired["impactScore"] = {"score": float(repaired["impactScore"]), "reason": "AI 未提供评分依据"}
         logger.info("impactScore 自动包装: %s → {score, reason}", data["impactScore"])
+
+    # impactScore.score: schema 定义为 1-10。低影响内容偶尔会被模型打成 0.x，
+    # 这里钳到最小合法值，保留其"低影响"语义并避免整维度失败。
+    if isinstance(repaired.get("impactScore"), dict):
+        score = repaired["impactScore"].get("score")
+        if isinstance(score, (int, float)):
+            repaired["impactScore"]["score"] = max(1.0, min(10.0, float(score)))
 
     # developerSentiment: 如果是纯字符串 → 包装为 {tone, primaryFocus}
     if "developerSentiment" in repaired and isinstance(repaired["developerSentiment"], str):
@@ -102,6 +150,11 @@ def validate_qualitative(data: dict) -> QualitativeAssessment:
     if "hypeAssessment" in repaired and isinstance(repaired["hypeAssessment"], str):
         repaired["hypeAssessment"] = {"level": repaired["hypeAssessment"], "reason": "AI 未提供判定依据"}
         logger.info("hypeAssessment 自动包装: str → {level, reason}")
+    if isinstance(repaired.get("hypeAssessment"), dict):
+        hype = repaired["hypeAssessment"]
+        if "reason" not in hype and "primaryFocus" in hype:
+            hype["reason"] = hype.pop("primaryFocus")
+            logger.info("hypeAssessment.primaryFocus 修复为 reason")
 
     # domainDisruption: 如果是纯字符串 → 包装
     if "domainDisruption" in repaired and isinstance(repaired["domainDisruption"], str):
@@ -161,6 +214,16 @@ def validate_qualitative(data: dict) -> QualitativeAssessment:
                         logger.info("hypeAssessment.level 修复: '%s' → '%s'", raw_value, matched)
 
         # --- 确保嵌套字段存在 ---
+        if "sentiment" not in repaired:
+            repaired["sentiment"] = "neutral"
+        if "developerSentiment" not in repaired or not isinstance(repaired.get("developerSentiment"), dict):
+            repaired["developerSentiment"] = {"tone": "neutral", "primaryFocus": "未明确"}
+        if "hypeAssessment" not in repaired or not isinstance(repaired.get("hypeAssessment"), dict):
+            repaired["hypeAssessment"] = {"level": "low", "reason": "未明确"}
+        if "informationEntropy" not in repaired:
+            repaired["informationEntropy"] = "medium"
+        if "engineeringComplexity" not in repaired:
+            repaired["engineeringComplexity"] = "conceptual"
         if "domainDisruption" not in repaired or not isinstance(repaired.get("domainDisruption"), dict):
             repaired["domainDisruption"] = {"technicalInnovation": "无", "businessModel": "无"}
 
@@ -243,11 +306,19 @@ def validate_value(data: dict) -> ValueAssessment:
                     repaired["moatImpact"] = matched
                     logger.info("moatImpact 修复: '%s' → '%s'", raw_value, matched)
 
-        # --- 确保列表字段存在 ---
+        # --- 确保缺失字段存在 ---
+        if "valueCaptureLayer" not in repaired:
+            repaired["valueCaptureLayer"] = "agent_middleware"
+        if "moatImpact" not in repaired:
+            repaired["moatImpact"] = "neutral"
         if "keyBeneficiaries" not in repaired:
             repaired["keyBeneficiaries"] = []
+        else:
+            repaired["keyBeneficiaries"] = _ensure_list(repaired["keyBeneficiaries"])
         if "competitiveCasualty" not in repaired:
             repaired["competitiveCasualty"] = []
+        else:
+            repaired["competitiveCasualty"] = _ensure_list(repaired["competitiveCasualty"])
 
         try:
             return ValueAssessment.model_validate(repaired)
@@ -290,6 +361,12 @@ def validate_foresight(data: dict) -> ForesightAndActionability:
         repaired["confidence"] = {"impact": val, "compound": val, "hype": val}
         logger.info("confidence 自动包装: str → {impact, compound, hype}")
 
+    if isinstance(repaired.get("riskMatrix"), dict):
+        risk_matrix = repaired["riskMatrix"]
+        if "regulatory" not in risk_matrix and "regularoty" in risk_matrix:
+            risk_matrix["regulatory"] = risk_matrix.pop("regularoty")
+            logger.info("riskMatrix.regularoty 修复为 regulatory")
+
     # --- 尝试严格校验 ---
     try:
         return ForesightAndActionability.model_validate(repaired)
@@ -330,6 +407,14 @@ def validate_foresight(data: dict) -> ForesightAndActionability:
                 "regulatory": "无", "technological": "无",
                 "competitive": "无", "ethical": "无", "additional": [],
             }
+        else:
+            repaired["riskMatrix"].setdefault("regulatory", "无")
+            repaired["riskMatrix"].setdefault("technological", "无")
+            repaired["riskMatrix"].setdefault("competitive", "无")
+            repaired["riskMatrix"].setdefault("ethical", "无")
+            repaired["riskMatrix"]["additional"] = _ensure_list(
+                repaired["riskMatrix"].get("additional")
+            )
 
         try:
             return ForesightAndActionability.model_validate(repaired)
@@ -383,6 +468,11 @@ def validate_github_project(data: dict):
     if "projectClassification" in repaired and isinstance(repaired["projectClassification"], str):
         repaired["projectClassification"] = {"domain": repaired["projectClassification"], "crossTags": []}
         logger.info("projectClassification 自动包装: str → {domain, crossTags}")
+
+    _promote_nested_root_fields(
+        repaired,
+        ("communityHealth", "competitiveLandscape", "adoptionGuidance"),
+    )
 
     # --- 尝试严格校验 ---
     try:
@@ -526,6 +616,11 @@ def validate_paper(data: dict):
     if "researchProblem" in repaired and isinstance(repaired["researchProblem"], str):
         repaired["researchProblem"] = {"coreQuestion": repaired["researchProblem"], "motivation": "", "significance": "incremental", "gapAddressed": ""}
         logger.info("researchProblem 自动包装: str → {coreQuestion, ...}")
+    if isinstance(repaired.get("researchProblem"), dict):
+        rp = repaired["researchProblem"]
+        if "gapAdressed" in rp and "gapAddressed" not in rp:
+            rp["gapAddressed"] = rp.pop("gapAdressed")
+            logger.info("researchProblem.gapAdressed 拼写修复为 gapAddressed")
 
     # methodology: 如果是字符串 → 包装
     if "methodology" in repaired and isinstance(repaired["methodology"], str):
@@ -649,6 +744,8 @@ def validate_paper(data: dict):
                 for field in fields:
                     if field not in repaired[parent]:
                         repaired[parent][field] = []
+                    else:
+                        repaired[parent][field] = _ensure_list(repaired[parent][field])
 
         try:
             return PaperAnalysis.model_validate(repaired)

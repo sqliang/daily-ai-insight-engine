@@ -4,7 +4,7 @@ source: https://blogs.nvidia.com/blog/nvidia-aws-ai-production-scale/
 author:
 - '[[Josiah Byers]]'
 published: '2026-06-24'
-created: '2026-06-24'
+created: '2026-06-26'
 description: Building AI systems at scale is demanding, requiring low-latency inference,
   fast vector search, strong GPU price-performance and infrastructure that can grow
   without multiplying operational complexity. NVIDIA’s latest work with Amazon Web

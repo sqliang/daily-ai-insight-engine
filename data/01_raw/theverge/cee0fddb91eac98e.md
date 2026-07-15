@@ -14,6 +14,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: cee0fddb91eac98e
+manifest_dates:
+- '2026-07-05'
 ---
 
 Over the past week, a new fanworks movement has kicked off, with the aim to root out authors using generative AI. But the detection methods being implemented are questionable, and any fanfic writer could be caught in the crossfire.

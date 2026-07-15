@@ -256,3 +256,41 @@ def _clean_text(text: str, max_length: Optional[int] = None) -> str:
         text = text[:max_length] + "..."
 
     return text
+
+
+# ============================================================
+# Jina AI Reader 兜底
+# ============================================================
+
+_JINA_READER_URL = "https://r.jina.ai"
+
+
+def fetch_via_jina(url: str, timeout: int = 60) -> Optional[str]:
+    """
+    通过 Jina AI Reader 获取页面的干净 Markdown 内容。
+
+    用于 Product Hunt 等被 Cloudflare 保护的页面，浏览器/curl 无法直接获取正文。
+    Jina 在服务端渲染页面，通常能绕过反爬保护。
+
+    参数：
+        url:   原始文章 URL
+        timeout: 请求超时秒数
+
+    返回：
+        清洗后的 Markdown 正文，失败返回 None
+    """
+    import urllib.request
+
+    try:
+        jina_url = f"{_JINA_READER_URL}/{url}"
+        req = urllib.request.Request(
+            jina_url,
+            headers={"User-Agent": "Googlebot/2.1", "Accept": "text/markdown"},
+        )
+        resp = urllib.request.urlopen(req, timeout=timeout)
+        raw = resp.read().decode("utf-8")
+        if raw and len(raw.strip()) > 200:
+            return raw.strip()
+    except Exception as exc:
+        logger.warning("Jina AI Reader 兜底失败 url=%s: %s", url, exc)
+    return None

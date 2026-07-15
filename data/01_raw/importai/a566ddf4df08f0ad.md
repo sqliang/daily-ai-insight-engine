@@ -12,6 +12,14 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: a566ddf4df08f0ad
+manifest_dates:
+- '2026-06-30'
+- '2026-07-01'
+- '2026-07-02'
+- '2026-07-03'
+- '2026-07-04'
+- '2026-07-05'
+- '2026-07-06'
 ---
 
 # Import AI 463: Self-improving robots; a 10k Chinese GPU cluster; and an elegiac essay for the human era

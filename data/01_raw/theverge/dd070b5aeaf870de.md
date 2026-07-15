@@ -15,6 +15,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: dd070b5aeaf870de
+manifest_dates:
+- '2026-07-01'
 ---
 
 Google’s NotebookLM is adding a new way to catch up on your notes: TikTok-style AI videos. The new feature is rolling out to Google AI Ultra and Pro subscribers, allowing NotebookLM to generate 60-second vertical AI clips based on the sources you upload to the app.

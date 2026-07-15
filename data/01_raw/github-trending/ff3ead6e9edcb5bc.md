@@ -133,6 +133,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: ff3ead6e9edcb5bc
+manifest_dates:
+- '2026-07-08'
 ---
 
 A lightweight text-to-speech (TTS) application designed to run efficiently on CPUs. Forget about the hassle of using GPUs and web APIs serving TTS models. With Kyutai's Pocket TTS, generating audio is just a pip install and a function call away.

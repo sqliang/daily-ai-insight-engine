@@ -12,6 +12,9 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: 85afafbbb341e6d7
+manifest_dates:
+- '2026-07-05'
+- '2026-07-06'
 ---
 
 As part of an ongoing legal dispute with three Hollywood studios, AI startup Midjourney is seeking to compel those studios to reveal how they use AI themselves.

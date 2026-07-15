@@ -4,7 +4,7 @@ title: '🤖 AI Agents Weekly: GPT-5.6 Family, Meta Muse Spark 1.1, Grok 4.5, SW
 source: https://nlp.elvissaravia.com/p/ai-agents-weekly-gpt-56-family-meta
 author: []
 published: '2026-07-11'
-created: '2026-07-12'
+created: '2026-07-14'
 description: GPT-5.6 Family, Meta Muse Spark 1.1, Grok 4.5, SWE-1.7, Robostral Navigate,
   The Harness Effect, and More
 tags:
@@ -12,6 +12,9 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: 5d9bcda5ffff8971
+manifest_dates:
+- '2026-07-14'
+- '2026-07-15'
 ---
 
 # 🤖 AI Agents Weekly: GPT-5.6 Family, Meta Muse Spark 1.1, Grok 4.5, SWE-1.7, Robostral Navigate, The Harness Effect, and More

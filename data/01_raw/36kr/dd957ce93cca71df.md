@@ -28,6 +28,9 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: dd957ce93cca71df
+manifest_dates:
+- '2026-07-02'
+- '2026-07-03'
 ---
 
 作者 | 张帆

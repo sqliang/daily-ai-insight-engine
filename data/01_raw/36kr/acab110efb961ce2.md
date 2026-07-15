@@ -40,6 +40,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: acab110efb961ce2
+manifest_dates:
+- '2026-07-05'
 ---
 
 作者 | 邱晓芬

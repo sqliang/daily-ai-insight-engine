@@ -12,6 +12,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: 2783ddb1c4c5abed
+manifest_dates:
+- '2026-06-30'
 ---
 
 When AI agents begin working for people — and increasingly for one another — they will need a way to find jobs, pay for services, and build trust. Crypto exchange OKX is betting that future is closer than many expect, launching a marketplace where AI agents can hire one another, settle payments autonomously, and build portable on-chain reputations.

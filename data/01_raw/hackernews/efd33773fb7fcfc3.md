@@ -13,6 +13,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: efd33773fb7fcfc3
+manifest_dates:
+- '2026-07-04'
 ---
 
 The world’s tallest tropical trees have no trouble pumping water to their topmost branches, new research reveals.

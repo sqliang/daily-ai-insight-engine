@@ -10,6 +10,15 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: e11fcea9cd94bb20
+manifest_dates:
+- '2026-06-10'
+- '2026-07-02'
+- '2026-07-03'
+- '2026-07-04'
+- '2026-07-05'
+- '2026-07-06'
+- '2026-07-07'
+- '2026-07-08'
 ---
 
 # Claude Fable 5 and Claude Mythos 5

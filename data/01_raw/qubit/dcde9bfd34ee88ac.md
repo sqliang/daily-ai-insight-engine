@@ -11,6 +11,9 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: dcde9bfd34ee88ac
+manifest_dates:
+- '2026-06-29'
+- '2026-06-30'
 ---
 
 # OceanBase发布AI数据库：以一套引擎融合湖库与多模态数据

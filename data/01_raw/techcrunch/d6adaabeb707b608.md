@@ -12,6 +12,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: d6adaabeb707b608
+manifest_dates:
+- '2026-07-01'
 ---
 
 As companies struggle to integrate AI, they’re increasingly ready to bring in outside help — and service providers are launching new purpose-built groups to make sure they get it.

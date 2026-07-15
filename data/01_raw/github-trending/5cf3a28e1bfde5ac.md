@@ -60,6 +60,10 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: 5cf3a28e1bfde5ac
+manifest_dates:
+- '2026-07-05'
+- '2026-07-06'
+- '2026-07-08'
 ---
 
 This repository contains the .NET team's curated set of core skills and custom agents for coding agents. For information about the Agent Skills standard, see agentskills.io.

@@ -3,6 +3,7 @@
 //
 // 展示指定日期的 GitHub Trending 项目分析结果。
 // 支持按领域和 AI 子领域筛选。
+// TODO: 专题分析能力暂时停用，待重新设计后恢复。
 // ============================================================================
 
 import Link from 'next/link';
@@ -130,7 +131,7 @@ export default async function GithubSpecializedPage({ params, searchParams }: Pr
 // 项目卡片子组件
 // ---------------------------------------------------------------------------
 
-function ProjectCard({ project, date }: { project: GithubProjectEntry; date: string }) {
+function ProjectCard({ project, date: _date }: { project: GithubProjectEntry; date: string }) {
   const colors = DOMAIN_COLORS[project.domain] || DOMAIN_COLORS.other;
   const domainLabel = DOMAIN_LABELS[project.domain] || project.domain;
 

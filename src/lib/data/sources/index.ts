@@ -23,6 +23,7 @@ import type {
   EnrichedArticle,
   DateRange,
   EnrichedSourceDetail,
+  SourceArticleDetail,
   SourcesViewData,
 } from "./types";
 import { manifestSchema } from "./types";
@@ -34,6 +35,7 @@ import {
   normalizeUrl,
 } from "./manifests";
 import { loadStructuredData } from "./structured-data";
+import { decodeUrlSlug, normalizeArticleUrl } from "./article-route";
 
 // ============================================================================
 // Barrel re-exports — 类型
@@ -44,6 +46,7 @@ export type {
   EnrichedArticle,
   DateRange,
   EnrichedSourceDetail,
+  SourceArticleDetail,
   SourcesViewData,
 };
 
@@ -52,6 +55,24 @@ export type {
 // ============================================================================
 
 export { getTiersMeta };
+
+function buildSourceListHref(sourceName: string, dateRange?: DateRange, sort?: string): string {
+  const params = new URLSearchParams();
+  if (dateRange?.from) params.set("from", dateRange.from);
+  if (dateRange?.to) params.set("to", dateRange.to);
+  if (!dateRange?.from && !dateRange?.to) params.set("preset", "latest");
+  if (sort === "impact") params.set("sort", "impact");
+  const qs = params.toString();
+  return qs ? `/sources/${sourceName}?${qs}` : `/sources/${sourceName}`;
+}
+
+function getImpactScore(article: EnrichedArticle): number {
+  return (
+    article.enriched?.impact_score?.score ??
+    article.enriched?.compound_value?.score ??
+    0
+  );
+}
 
 // ============================================================================
 // 纯转换函数：SourceConfig → SourceStatus
@@ -289,6 +310,49 @@ export async function getSourceDetailEnriched(
     stageCounts,
     availableDates,
     dateRange: dateRange ?? null,
+  };
+}
+
+/**
+ * 获取单篇 source 文章详情。
+ *
+ * 文章定位优先使用 manifest 中的 article.id；缺 ID 的历史文章使用 url-* slug。
+ * previous/next 基于当前日期筛选后的文章列表，并可按影响力排序。
+ */
+export async function getSourceArticleDetail(
+  sourceName: string,
+  articleIdOrSlug: string,
+  dateRange?: DateRange,
+  sort?: "impact" | null,
+): Promise<SourceArticleDetail | null> {
+  const source = await getSourceDetailEnriched(sourceName, dateRange);
+  if (!source) return null;
+
+  const articles =
+    sort === "impact"
+      ? [...source.articles].sort((a, b) => getImpactScore(b) - getImpactScore(a))
+      : source.articles;
+
+  const fallbackUrl = articleIdOrSlug.startsWith("url-")
+    ? decodeUrlSlug(articleIdOrSlug.slice(4))
+    : null;
+  const fallbackKey = fallbackUrl ? normalizeUrl(fallbackUrl) : null;
+
+  const index = articles.findIndex((article) => {
+    if (article.id && article.id === articleIdOrSlug) return true;
+    return fallbackKey !== null && normalizeArticleUrl(article.url) === fallbackKey;
+  });
+
+  if (index < 0) return null;
+
+  const article = articles[index];
+  return {
+    source,
+    article,
+    previousArticle: articles[index - 1] ?? null,
+    nextArticle: articles[index + 1] ?? null,
+    listHref: buildSourceListHref(sourceName, dateRange, sort ?? undefined),
+    originalHref: article.url,
   };
 }
 

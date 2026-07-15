@@ -98,15 +98,15 @@ class FactExtraction(BaseModel):
 
     tldr: str = Field(
         ...,
-        max_length=80,
+        max_length=250,
         description="极简一句话总结 (TLDR)。剔除所有修饰语，只讲核心事实。列表页的最强锚点。",
     )
 
     objective_summary: str = Field(
         ...,
-        max_length=150,
+        max_length=500,
         alias="objectiveSummary",
-        description="极简客观事实。剥离一切主观形容词，只用最冷峻的语言描述 5W1H（谁、什么时候、做了什么、结果如何）。对抗信息过载的'第一道防线'。",
+        description="客观事实摘要。剥离一切主观形容词，只用最冷峻的语言描述 5W1H（谁、什么时候、做了什么、结果如何）。对抗信息过载的'第一道防线'。",
     )
 
     event_type: EventType = Field(

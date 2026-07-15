@@ -27,6 +27,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: 64ff4ee3adee9e29
+manifest_dates:
+- '2026-07-02'
 ---
 
 # Computer Science > Artificial Intelligence
