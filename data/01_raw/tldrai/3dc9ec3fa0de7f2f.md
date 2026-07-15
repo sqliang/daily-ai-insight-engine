@@ -10,6 +10,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: 3dc9ec3fa0de7f2f
+manifest_dates:
+- '2026-07-02'
 ---
 
 # Introducing GeneBench-Pro

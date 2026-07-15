@@ -12,6 +12,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: cb2b299cfff1edd8
+manifest_dates:
+- '2026-07-03'
 ---
 
 @nixos_org @leah @identical9213 Announcing experimental secure suspend-to-RAM for NixOS

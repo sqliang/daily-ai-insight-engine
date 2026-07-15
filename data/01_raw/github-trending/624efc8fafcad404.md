@@ -3,7 +3,7 @@ title: JCodesMore/ai-website-cloner-template
 source: https://github.com/JCodesMore/ai-website-cloner-template
 author: []
 published: ''
-created: '2026-06-24'
+created: '2026-06-26'
 description: 'Clone any website with one command using AI coding agentsAI Website
   Cloner Template A reusable template for reverse-engineering any website into a clean,
   modern Next.js codebase using AI coding agents. Recommended: Claude Code with Opus
@@ -75,11 +75,14 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: 624efc8fafcad404
+manifest_dates:
+- '2026-06-26'
+- '2026-06-28'
 ---
 
 A reusable template for reverse-engineering any website into a clean, modern Next.js codebase using AI coding agents.
 
-**Recommended: Claude Code with Opus 4.7 for best results** — but works with a variety of AI coding agents.
+**Recommended: Claude Code with Opus 4.8 for best results** — but works with a variety of AI coding agents.
 
 Point it at a URL, run `/clone-website`
 
@@ -125,7 +128,7 @@ for project instructions — most agents pick it up automatically.
 
 | Agent | Status |
 |---|---|
-| Claude Code | Recommended — Opus 4.7 |
+| Claude Code | Recommended — Opus 4.8 |
 | Codex CLI | Supported |
 | OpenCode | Supported |
 | GitHub Copilot | Supported |

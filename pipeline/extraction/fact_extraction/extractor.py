@@ -186,30 +186,8 @@ async def extract_fact_extraction(
         existing_fm[field_name] = value
         fields_written.append(field_name)
 
-    # --- 提取 specialized_tags（如果 LLM 输出了） ---
-    # 从文件路径的父目录名推导来源名称（如 github-trending），
-    # 而非 frontmatter.source（后者是文章 URL）
-    source_name = input_path.parent.name
-    # 当前 Phase 1 仅处理 github-trending，后续 Phase 扩展更多源
-    SPECIALIZED_SOURCES = {
-        "github-trending": "github",
-        "producthunt": "product",
-        "whytryai": "product",
-        "arxiv-cs-ai": "paper",
-    }
-
-    tag_key = SPECIALIZED_SOURCES.get(source_name)
-    if tag_key:
-        raw_tags = extracted_data.get("specializedTags", {})
-        if isinstance(raw_tags, dict) and tag_key in raw_tags:
-            tag_value = raw_tags[tag_key]
-            # 仅当有实际内容时才写入（非空 dict）
-            if isinstance(tag_value, dict) and tag_value:
-                existing_fm["specialized_tags"] = {tag_key: tag_value}
-                fields_written.append("specialized_tags")
-                logger.info(
-                    "specialized_tags.%s 提取成功: %s", tag_key, input_str,
-                )
+    # TODO: 专题分析能力暂时停用，待重新设计后恢复。
+    # 即使旧提示词或模型意外返回 specializedTags，也不再写入 specialized_tags。
 
     existing_fm["pipeline_stage"] = "fact_extracted"
     fields_written.append("pipeline_stage")

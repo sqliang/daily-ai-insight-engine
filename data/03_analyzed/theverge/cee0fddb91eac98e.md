@@ -1,0 +1,101 @@
+---
+title: The fanfiction community is at war with AI — and itself
+source: https://www.theverge.com/tech/960854/ai-fanfiction-ao3-claude-detector
+author:
+- '[[Jess Weatherbed]]'
+published: '2026-07-04'
+created: '2026-07-05'
+description: Over the past week, a new fanworks movement has kicked off, with the
+  aim to root out authors using generative AI. But the detection methods being implemented
+  are questionable, and any fanfic writer could be caught in the crossfire. Broad
+  distaste around the use of Claude, ChatGPT, and other AI tools has long been a [&#8230;]
+tags:
+- clippings
+extraction_status: success
+pipeline_stage: fact_extracted
+id: cee0fddb91eac98e
+manifest_dates:
+- '2026-07-05'
+source_type: news_media
+tldr: 同人小说社群发布AO3皮肤插件检测Claude生成的文本，引发点名羞辱争议
+objective_summary: 2025年6月29日，匿名X账号@heatedrivalryai发布了一款AO3皮肤插件，通过检测Claude注入的代码标识符来识别AI生成的同人作品。该插件被用于公开点名和羞辱被标记的作者，引发对检测方法有效性和伦理的争议。
+event_type: policy_and_safety
+epistemic_status: verified_fact
+entities:
+  companies:
+  - Anthropic
+  - Archive of Our Own (AO3)
+  technologies:
+  - Claude
+  - ChatGPT
+  key_people:
+  - '@heatedrivalryai'
+key_logic_flow:
+- 2025年6月29日，匿名X账号@heatedrivalryai发布了一款AO3皮肤插件，通过检测Anthropic Claude注入的HTML代码标识符'font-claude-response-body'来识别AI直接粘贴的同人作品。
+- 该皮肤插件在检测到Claude生成的文本痕迹时将整个页面背景变为红色，以此做出视觉警示。
+- 经验证，该工具仅能检测直接从Claude聊天界面复制粘贴到AO3编辑器的文本，改写后或使用ChatGPT等其他AI工具生成的内容无法被识别。
+- 同人小说社群迅速围绕该工具展开行动，对被标记的作者进行公开点名和羞辱，尽管工具创建者声称其意图是展示系统有效而非制造不信任环境。
+- 该事件揭示了同人创作社群对生成式AI的强烈抵触情绪，以及AI使用检测手段在准确性和伦理上引发的深层分歧。
+extract_result: success
+impact_score:
+  score: 3.0
+  reason: 该事件本质上是同人创作社群内部的AI使用争议和文化摩擦。技术层面仅涉及检测Claude注入的'font-claude-response-body'HTML类名字符串，工程实现极简单（CSS皮肤规则），绕过方法也非常容易（改写后粘贴或用ChatGPT生成）。虽在AO3社群内部引发轩然大波，涉及公开点名羞辱等伦理争议，但对整个AI行业的技术路线、竞争格局或商业模式无实质影响，属于小圈层文化事件。
+sentiment: negative
+developer_sentiment:
+  tone: skeptical
+  primary_focus: 检测方法极其脆弱且可被轻易绕过，但用于公开羞辱的伦理风险远大于实际效用
+hype_assessment:
+  level: low
+  reason: The Verge的报道风格保持客观克制，没有使用'颠覆''革命性'等PR夸大词汇。工具创建者也坦诚说明了检测原理和局限性（仅能检测直接从Claude聊天框粘贴的内容），没有过度承诺或虚假宣传。
+information_entropy: medium
+domain_disruption:
+  technical_innovation: 无。该工具仅是基于AO3皮肤系统的一个CSS规则检查器，检测Claude注入的'font-claude-response-body'类名字符串，没有任何技术创新或工程突破。任何有基本HTML/CSS知识的人都能实现。
+  business_model: 无。这是一个社群自发的非商业化行为，不涉及任何商业模式、产品发布或生态重塑。
+engineering_complexity: production_ready
+compound_value:
+  score: 2.5
+  reason: 该事件本身不具备长期复利价值。检测手段极其原始——仅通过检查Claude注入的'font-claude-response-body' CSS类名来标记AI文本，属于表层字符串匹配，一旦用户知晓即可通过简单改写或更换模型轻松绕过。这是一种社区情绪的应激反应，而非可持续的技术方案。没有构建起任何可扩展、可防御的检测基础设施，也不形成网络效应或数据飞轮。长期看，同人创作社群对AI的抵制情绪会持续存在，但该插件作为具体工具的生命周期极短，不具备投资意义上的复利效应。
+value_capture_layer: foundation_model
+moat_impact: democratizes_access
+key_beneficiaries:
+- Originality.ai
+- GPTZero
+- Archive of Our Own (AO3)
+competitive_casualty:
+- Anthropic (在创作者社群中的品牌声誉)
+- AI辅助写作工具（Sudowrite等面向创意写作的赛道）
+- 基于闭源模型粘贴式写作的工作流
+market_opportunities:
+- AI公司可在产品层面减少或标识生成内容的可追踪痕迹，避免被社区反AI工具误伤，同时建立AI辅助创作的透明度标准
+- 创意内容平台可开发官方的AI贡献声明功能（如标签化标注），让创作者主动声明AI使用程度，缓解社区内的猜忌对立
+- 第三方可开发更准确且伦理合规的AI生成内容检测工具，服务于需要内容审核的平台而非用于社区羞辱
+risk_matrix:
+  regulatory: 工具通过公开点名标记作者的方式可能引发网络骚扰与隐私侵权争议，AO3等平台若坐视社区自行执法可能面临内容审核不力的监管压力
+  technological: 检测手段仅依赖Claude注入的单一CSS标识符（font-claude-response-body），改写文本后即完全失效，且无法检测ChatGPT等其他AI工具生成的内容，技术可靠性极低
+  competitive: 生成式AI在创意社群中的信任危机持续加深，可能阻碍AI写作工具在创作者群体的市场渗透，Anthropic等公司的品牌形象在该群体中受到直接冲击
+  ethical: 工具引发的公开点名和羞辱行为加剧了社群对立，被错误标记或误伤的风险真实存在，同人创作的信任基石和心理健康受到破坏
+  additional: []
+confidence:
+  impact: high
+  compound: medium
+  hype: medium
+actionable_insight: monitor
+---
+
+Over the past week, a new fanworks movement has kicked off, with the aim to root out authors using generative AI. But the detection methods being implemented are questionable, and any fanfic writer could be caught in the crossfire.
+
+# The fanfiction community is at war with AI — and itself
+
+Readers are scrambling to develop ways to detect whether generative AI was used to write fanworks. The results are questionable.
+
+# The fanfiction community is at war with AI — and itself
+
+Readers are scrambling to develop ways to detect whether generative AI was used to write fanworks. The results are questionable.
+
+Broad distaste around the use of Claude, ChatGPT, and other AI tools has long been *a thing* in creative communities, including the world of fanfiction. Readers and writers have passed around tips for spotting supposedly AI-generated works, citing anything from em dashes to the broad concept of purple prose. But on June 29th, an anonymous X account called @heatedrivalryai promised a seemingly more reliable solution. It posted a skin — similar to an extension — for the popular fanfic repository Archive of Our Own (AO3) that would purportedly identify coding artifacts left behind by Anthropic’s Claude bot.
+
+“When a Claude-generated response is pasted directly into AO3 from Claude, the text is wrapped by a Claude-injected code ‘font-claude-response-body,’” said the @heatedrivalryai account. “Its presence indicates the use of Claude definitively.” When a user visits a page (like a work of fanfic) with this code, the skin turns the entire background red.
+
+Several test posts have been published to AO3 that allow users to check if it works. The screen immediately turned red when I tested the skin against these examples myself, and I published a Claude-generated short story to run my own experiment just in case. The red screen appeared when I directly pasted from the chatbot into the editor and vanished if I pasted text (including the exact same generated story) that didn’t come straight from Claude.
+
+The Claude detector post was accompanied by examples of fanfic where the artifacts were spotted, which the anonymous creator said was meant to demonstrate the system works, not “create an environment of mistrust or accuse particular users.” But fanfic communities have quickly mobilized to publicly name and shame writers whose published works were flagged by the tool, and its creator certainly doesn’t consider AI a positive thing. “Fandom is a uniquely connective, collaborative space. It thrives on the human element and the creative spark which drives it and feeds off it,” they said. “If we unknowingly allow AI to corrupt these spaces, what will be left of them?”

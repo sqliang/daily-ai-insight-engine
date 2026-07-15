@@ -10,6 +10,9 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: 5ad8f0bc5bfec4f6
+manifest_dates:
+- '2026-07-04'
+- '2026-07-05'
 ---
 
 Meta's superintelligence chief **Alexandr Wang** told employees in a town hall that the company's upcoming model, codenamed **Watermelon**, has "caught up" with OpenAI's **GPT-5.5** on closely followed AI benchmarks, according to Business Insider, which cited two people familiar with the matter. Wang reportedly said Watermelon is still in training and uses "an order of magnitude more compute" than **Muse Spark** (Meta's April model, internally codenamed Avocado), which had trailed rival models despite solid benchmark scores. Business Insider notes it was not clear which benchmarks Wang cited, and neither Meta nor OpenAI has confirmed the claim. For practitioners, an internal, single-sourced benchmark claim is not equivalent to a published, reproducible evaluation and should be treated as an early signal, not a verified result, until Meta releases the model publicly.

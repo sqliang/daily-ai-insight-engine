@@ -10,6 +10,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: ef72afff07f58f4d
+manifest_dates:
+- '2026-07-01'
 ---
 
 Engineering teams are lighting money on fire.

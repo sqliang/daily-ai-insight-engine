@@ -12,6 +12,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: 7a2f4d3bf3ef0de3
+manifest_dates:
+- '2026-07-08'
 ---
 
 ### Overview

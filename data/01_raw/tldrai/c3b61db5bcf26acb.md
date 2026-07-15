@@ -11,6 +11,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: c3b61db5bcf26acb
+manifest_dates:
+- '2026-07-07'
 ---
 
 ByteDance appears close to releasing Dreamina Seedance 2.5, with current rumors pointing to a **possible July 9 launch**. Public Dreamina and CapCut pages already reference the model, while third-party reports suggest an early-July rollout window rather than a confirmed date. Availability is expected across Dreamina, CapCut, and partner platforms that already work with ByteDance’s video stack.

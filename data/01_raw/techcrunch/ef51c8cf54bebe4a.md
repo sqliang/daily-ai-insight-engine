@@ -12,6 +12,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: ef51c8cf54bebe4a
+manifest_dates:
+- '2026-07-01'
 ---
 
 Wayve, a U.K.-based self-driving tech startup, is allowing its employees to sell a portion of their vested equity. The $85 million tender offer — essentially a structured opportunity for employees to sell shares back to investors — is being led by the company’s existing and new investors at the company’s latest valuation of $8.5 billion.

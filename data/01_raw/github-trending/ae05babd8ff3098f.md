@@ -183,6 +183,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: ae05babd8ff3098f
+manifest_dates:
+- '2026-07-02'
 ---
 
 A toolkit for converting PDFs and other image-based document formats into clean, readable, plain text format.

@@ -13,6 +13,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: dc57ab8dfd78afc1
+manifest_dates:
+- '2026-07-08'
 ---
 
 These twenty video lectures by Hal Abelson and Gerald Jay Sussman are a complete presentation of the course, given in July 1986 for Hewlett-Packard employees, and professionally produced by Hewlett-Packard Television. These videos are also available here under a Creative Commons license compatible with commercial use.

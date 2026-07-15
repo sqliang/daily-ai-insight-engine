@@ -3,7 +3,7 @@ title: JCodesMore/ai-website-cloner-template
 source: https://github.com/JCodesMore/ai-website-cloner-template
 author: []
 published: ''
-created: '2026-06-24'
+created: '2026-06-26'
 description: 'Clone any website with one command using AI coding agentsAI Website
   Cloner Template A reusable template for reverse-engineering any website into a clean,
   modern Next.js codebase using AI coding agents. Recommended: Claude Code with Opus
@@ -76,41 +76,61 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 624efc8fafcad404
 source_type: community_discussion
-tldr: JCodesMore 发布 AI 网站克隆模板，用 AI 编码代理将任意网站逆向工程为 Next.js 代码库
-objective_summary: JCodesMore 在 GitHub 发布 ai-website-cloner-template，一个基于 AI 编码代理的网页逆向工程模板。用户提供目标
-  URL 后，AI 代理自动执行侦察、设计令牌提取、组件规格编写和并行构建，最终生成 Next.js 16 代码库。
+tldr: JCodesMore 发布 AI 网站克隆模板，可用 AI 编码代理将任意网站逆向工程为 Next.js 代码库
+objective_summary: JCodesMore 在 GitHub 发布 ai-website-cloner-template 开源模板，使用 Claude
+  Code 等 AI 编码代理对任意网站进行逆向工程，经过侦察、设计提取、组件规格编写、并行构建和组装质检五个阶段，生成基于 Next.
 event_type: framework_tools
 epistemic_status: verified_fact
 entities:
   companies:
-  - GitHub
-  - Anthropic
+  - JCodesMore
   technologies:
-  - Next.js 16
-  - React 19
-  - TypeScript
+  - Next.js
   - shadcn/ui
-  - Tailwind CSS v4
+  - Tailwind CSS
   - Lucide React
-  - Claude Code
-  - AI coding agents
+  - React
+  - TypeScript
   key_people: []
 key_logic_flow:
-- JCodesMore 创建了一个 GitHub 模板仓库 ai-website-cloner-template，用于逆向工程任意网站并生成现代化 Next.js
-  代码库。
-- 用户使用 `Use this template` 按钮创建自己的仓库副本，安装依赖后运行 `/clone-website <目标URL>` 命令启动克隆流程。
-- 克隆流程分为五个阶段：侦察（截图、设计令牌提取、交互扫描）、基础设置（字体、颜色、全局样式、资源下载）、组件规格编写、并行构建（使用 git worktree
-  每个组件独立构建）、组装与质量检查（合并、页面拼接、视觉差异对比）。
-- 模板技术栈为 Next.js 16 + shadcn/ui + Tailwind CSS v4 + Lucide React，推荐使用 Claude Code
-  (Opus 4.7)，同时支持 Codex CLI、Cursor、Windsurf 等十余种 AI 编码代理。
-- 项目声明伦理限制：禁止用于钓鱼/冒充、冒用他人设计、违反服务条款等行为。
-- 项目通过 AGENTS.md 和 .claude/skills/clone-website/SKILL.md 两个源文件驱动所有平台支持，使用同步脚本自动生成各平台专属配置。
+- JCodesMore 发布 ai-website-cloner-template 模板，用于将任意网站逆向工程转换为 Next.js 代码库
+- 该模板使用 AI 编码代理（推荐 Claude Code + Opus 4.8）执行五阶段流水线：侦察（截图、设计令牌提取、交互扫描）、基础设置（字体/颜色/全局样式/资源下载）、组件规格编写（精确
+  CSS 计算值说明）、并行构建（使用 git worktree 分派多个构建代理）、组装与质量检测（合并 worktree 并运行视觉差异对比）
+- 项目支持多种 AI 编码代理，包括 Claude Code、Codex CLI、Cursor、Windsurf、GitHub Copilot、Cline 等 13
+  种平台
+- 使用方式为点击 GitHub 'Use this template' 创建独立仓库，安装依赖后运行 /clone-website <target-url> 命令
+- 项目明确禁止用于钓鱼、仿冒、盗用他人设计或违反服务条款等恶意用途
+- 采用 MIT 开源协议，包含自动同步脚本（sync-agent-rules.sh 和 sync-skills.mjs）以维护跨平台代理指令文件
+specialized_tags:
+  github:
+    projectName: JCodesMore/ai-website-cloner-template
+    projectUrl: https://github.com/JCodesMore/ai-website-cloner-template
+    primaryLanguage: TypeScript
+    licenseType: MIT
+    domain: ai_ml
+    crossTags:
+    - reverse-engineering
+    - website-cloning
+    - template
+    aiDetail:
+      primaryCategories:
+      - code_gen
+      agentSubcategory:
+      - orchestration
+      - tool_use
+      - coding_agent
+      techTags:
+      - Next.js
+      - TypeScript
+      - Tailwind-CSS
+      - shadcn-ui
+      - React
 extract_result: success
 ---
 
 A reusable template for reverse-engineering any website into a clean, modern Next.js codebase using AI coding agents.
 
-**Recommended: Claude Code with Opus 4.7 for best results** — but works with a variety of AI coding agents.
+**Recommended: Claude Code with Opus 4.8 for best results** — but works with a variety of AI coding agents.
 
 Point it at a URL, run `/clone-website`
 
@@ -156,7 +176,7 @@ for project instructions — most agents pick it up automatically.
 
 | Agent | Status |
 |---|---|
-| Claude Code | Recommended — Opus 4.7 |
+| Claude Code | Recommended — Opus 4.8 |
 | Codex CLI | Supported |
 | OpenCode | Supported |
 | GitHub Copilot | Supported |

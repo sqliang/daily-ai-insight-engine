@@ -12,6 +12,9 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: cfe20f2dcccb3de4
+manifest_dates:
+- '2026-06-30'
+- '2026-07-01'
 ---
 
 # 😺 Apple's brain drain continues 🍎

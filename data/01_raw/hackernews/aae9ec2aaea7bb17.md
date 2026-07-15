@@ -13,6 +13,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: aae9ec2aaea7bb17
+manifest_dates:
+- '2026-07-01'
 ---
 
 **On July 1, 2026, arXiv will spin out from Cornell University, its home for the past 25 years, to become an independent nonprofit organization.** With this next phase in arXiv’s journey quickly approaching, you can read more about arXiv’s history and the decision to spin out from Cornell in this recent article in the Cornell Chronicle.

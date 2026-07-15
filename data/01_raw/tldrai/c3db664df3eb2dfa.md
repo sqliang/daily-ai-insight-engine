@@ -10,6 +10,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: c3db664df3eb2dfa
+manifest_dates:
+- '2026-07-02'
 ---
 
 # Introducing Claude Sonnet 5

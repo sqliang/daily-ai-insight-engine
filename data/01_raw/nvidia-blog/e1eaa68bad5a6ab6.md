@@ -15,6 +15,10 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: e1eaa68bad5a6ab6
+manifest_dates:
+- '2026-07-01'
+- '2026-07-02'
+- '2026-07-03'
 ---
 
 As organizations move from AI pilots to production AI factories, infrastructure decisions have shifted from peak chip specifications to cost per token: how many useful tokens they can deliver per dollar, per watt and within required latency targets.

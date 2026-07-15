@@ -42,20 +42,71 @@ from pipeline.ingestion.ingest.worker import ingest_article, ingest_browser_arti
 
 def _needs_ingest(article: Dict[str, Any], target_dir: Path, state: IngestState) -> bool:
     """
-    判断文章是否需要抓取：未见过，或 state 认为已处理但 .md 文件已不存于磁盘。
+    判断文章是否需要抓取：force 模式或磁盘 raw 文件不存在。
 
-    仅靠 state.is_seen() 会因 state 与磁盘不一致而永久跳过文章，
-    需要文件存在性作为二级验证。
+    设计理由：
+        raw 文件是 ingest 阶段的事实来源。state 只是加速去重的缓存，可能因为
+        历史迁移、手动修复或清理而缺失记录。非 force 模式下只要 .md 已存在，
+        就不能重抓覆盖 created；否则会破坏“首次入库日期”的日报口径。
     """
     from pipeline.utils.id_utils import generate_id
 
     article_id = article.get("id") or generate_id(article.get("url", ""))
-    if not state.is_seen(article_id):
-        return True
     md_path = target_dir / f"{article_id}.md"
+    if md_path.exists() and not state.force_enabled:
+        return False
+    if state.is_seen(article_id):
+        return False
     if not md_path.exists():
         return True
-    return False
+    return True
+
+
+def _record_manifest_date_for_existing(
+    article: Dict[str, Any],
+    target_dir: Path,
+    manifest_date: Optional[str],
+) -> None:
+    """
+    为已存在且跳过抓取的 raw 文件补记 manifest 日期。
+
+    同一篇文章可能连续多天出现在不同日期的 manifest 中。正文只需抓取一次，
+    manifest_dates 只作为审计和后续专题分析线索；默认日报仍按 created 选择
+    新增文章。因此跳过下载时只补记 manifest_dates，不覆盖 created。
+    """
+    if not manifest_date:
+        return
+
+    from pipeline.utils.frontmatter import read_frontmatter, write_frontmatter
+    from pipeline.utils.id_utils import generate_id
+
+    article_id = article.get("id") or generate_id(article.get("url", ""))
+    if not article_id:
+        return
+
+    md_path = target_dir / f"{article_id}.md"
+    if not md_path.exists():
+        return
+
+    try:
+        fm, body = read_frontmatter(md_path)
+        existing_dates = fm.get("manifest_dates", [])
+        if isinstance(existing_dates, str):
+            existing_dates = [existing_dates]
+        elif not isinstance(existing_dates, list):
+            existing_dates = []
+
+        created = fm.get("created")
+        if created:
+            existing_dates.append(str(created)[:10])
+        existing_dates.append(str(manifest_date)[:10])
+
+        normalized = sorted({d for d in existing_dates if d})
+        if normalized != fm.get("manifest_dates"):
+            fm["manifest_dates"] = normalized
+            write_frontmatter(md_path, fm, body)
+    except Exception as exc:
+        logger.warning("补记 manifest 日期失败 path=%s date=%s error=%s", md_path, manifest_date, exc)
 
 
 def _write_fallback_md(
@@ -64,12 +115,15 @@ def _write_fallback_md(
     target_dir: Path,
     state: IngestState,
     reason: str = "",
+    created: Optional[str] = None,
 ) -> Optional[Path]:
     """
     为抓取完全失败的文章写入兜底 .md 文件，确保 downstream 阶段可见。
 
     当浏览器重试也无法获取正文时调用，写入 extraction_status: failed，
     防止下次 ingest 运行重复尝试同一篇注定失败的文章。
+
+    created: manifest 日期。历史清单重跑时用于保留原批次日期。
     """
     from pipeline.core.frontmatter_utils import build_ingestion_frontmatter
     from pipeline.utils.frontmatter import write_frontmatter
@@ -87,6 +141,7 @@ def _write_fallback_md(
         source_name=source_name,
         article_id=article_id,
         extraction_status="failed",
+        created=created,
     )
 
     reason_line = f"\n原因：{reason}" if reason else ""
@@ -174,8 +229,8 @@ def run_ingest(
     # ------------------------------------------------------------------
     # 3. 分类文章：常规 vs browser
     # ------------------------------------------------------------------
-    regular_items: List[Tuple[Dict[str, Any], str, Path]] = []
-    browser_items: List[Tuple[Dict[str, Any], str, Path]] = []
+    regular_items: List[Tuple[Dict[str, Any], str, Path, Optional[str]]] = []
+    browser_items: List[Tuple[Dict[str, Any], str, Path, Optional[str]]] = []
 
     for manifest_path in manifest_paths:
         manifest = read_json(manifest_path)
@@ -189,9 +244,10 @@ def run_ingest(
 
         strategy = source_config.get("fetch_strategy", "rss")
         articles = manifest.get("articles", [])
+        manifest_date = manifest.get("date")
 
         for article in articles:
-            item = (article, source_name, target_dir)
+            item = (article, source_name, target_dir, manifest_date)
             if strategy == "browser":
                 browser_items.append(item)
             else:
@@ -202,14 +258,21 @@ def run_ingest(
     # ------------------------------------------------------------------
     total_in_manifests = len(regular_items) + len(browser_items)
 
-    regular_items = [
-        item for item in regular_items
-        if _needs_ingest(item[0], item[2], state)
-    ]
-    browser_items = [
-        item for item in browser_items
-        if _needs_ingest(item[0], item[2], state)
-    ]
+    pending_regular: List[Tuple[Dict[str, Any], str, Path, Optional[str]]] = []
+    for item in regular_items:
+        if _needs_ingest(item[0], item[2], state):
+            pending_regular.append(item)
+        else:
+            _record_manifest_date_for_existing(item[0], item[2], item[3])
+    regular_items = pending_regular
+
+    pending_browser: List[Tuple[Dict[str, Any], str, Path, Optional[str]]] = []
+    for item in browser_items:
+        if _needs_ingest(item[0], item[2], state):
+            pending_browser.append(item)
+        else:
+            _record_manifest_date_for_existing(item[0], item[2], item[3])
+    browser_items = pending_browser
 
     total_articles = len(regular_items) + len(browser_items)
     if total_articles == 0:
@@ -239,21 +302,22 @@ def run_ingest(
 
         # --- 提交常规文章到线程池（立即开始执行） ---
         future_to_info: dict = {}
-        for article, source_name, target_dir in regular_items:
+        for article, source_name, target_dir, manifest_date in regular_items:
             future = executor.submit(
-                ingest_article, article, source_name, target_dir, state
+                ingest_article, article, source_name, target_dir, state, manifest_date
             )
-            future_to_info[future] = (article, source_name, target_dir)
+            future_to_info[future] = (article, source_name, target_dir, manifest_date)
 
         # --- 主线程同时处理 browser 文章（与线程池并行） ---
         if browser_items and browser_session:
             print(f"\n[browser] 开始处理 {len(browser_items)} 篇...")
-            for article, source_name, target_dir in browser_items:
+            for article, source_name, target_dir, manifest_date in browser_items:
                 url = article.get("url", "")
                 title = article.get("title", url)[:60]
                 print(f"  [browser] {title}...")
                 result = ingest_browser_article(
-                    article, source_name, target_dir, state, browser_session
+                    article, source_name, target_dir, state, browser_session,
+                    created=manifest_date,
                 )
                 if result:
                     output_files.append(result)
@@ -266,14 +330,14 @@ def run_ingest(
         if future_to_info:
             print(f"\n[thread] 等待 {len(future_to_info)} 篇常规文章完成...")
             for future in as_completed(future_to_info):
-                article, source_name, target_dir = future_to_info[future]
+                article, source_name, target_dir, manifest_date = future_to_info[future]
                 url = article.get("url", "")
                 title = article.get("title", url)[:60]
                 try:
                     result = future.result()
                     if result is BOT_BLOCKED:
                         # 反爬页面：不写 .md 文件，加入浏览器重试队列
-                        bot_blocked_queue.append((article, source_name, target_dir))
+                        bot_blocked_queue.append((article, source_name, target_dir, manifest_date))
                         print(f"  [反爬] {title} → 加入浏览器重试队列")
                     elif result:
                         output_files.append(result)
@@ -293,13 +357,14 @@ def run_ingest(
                 from pipeline.core.browser_utils import BrowserSession
                 browser_session = stack.enter_context(BrowserSession())
 
-            for article, source_name, target_dir in bot_blocked_queue:
+            for article, source_name, target_dir, manifest_date in bot_blocked_queue:
                 url = article.get("url", "")
                 title = article.get("title", url)[:60]
                 print(f"  [browser-retry] {title}...")
                 try:
                     result = ingest_browser_article(
-                        article, source_name, target_dir, state, browser_session
+                        article, source_name, target_dir, state, browser_session,
+                        created=manifest_date,
                     )
                     if result:
                         output_files.append(result)
@@ -309,6 +374,7 @@ def run_ingest(
                         result = _write_fallback_md(
                             article, source_name, target_dir, state,
                             reason="URL 缺失，无法进行浏览器重试",
+                            created=manifest_date,
                         )
                         if result:
                             output_files.append(result)
@@ -320,6 +386,7 @@ def run_ingest(
                     result = _write_fallback_md(
                         article, source_name, target_dir, state,
                         reason=f"浏览器重试异常: {exc}",
+                        created=manifest_date,
                     )
                     if result:
                         output_files.append(result)

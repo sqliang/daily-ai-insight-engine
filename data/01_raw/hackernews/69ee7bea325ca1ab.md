@@ -6,6 +6,8 @@ author:
 - '[[sambellll]]'
 published: '2026-06-29'
 created: '2026-06-29'
+manifest_dates:
+- '2026-06-29'
 description: 'Article URL: https://danunparsed.com/p/hackerrank-open-source-ats Comments
   URL: https://news.ycombinator.com/item?id=48713832 Points: 400 # Comments: 139'
 tags:
@@ -108,3 +110,9 @@ The 65% weighting on open source + projects doesn’t help either. I’d take th
 If you’re an engineer with any say in how your company handles resume screening: please be very careful with AI-screening tools. A tool that can’t differentiate isn’t filtering for quality — it’s just filtering. You might as well throw out half the resumes and tell the the applicants you don’t fuck with bad luck.
 
 *Correction (June 28): A reader flagged that the resume_evaluation_criteria.jinja template says “Software Intern” on line 1 — nowhere documented, nowhere else referenced in the repo. The same template that later gives bonus points for “founder roles, co-founder positions, or early-stage engineer roles.” I re-ran with an explicit Senior SWE prompt and got identical results — the scoring dimensions are position-agnostic.*
+
+*Update (June 30): This blew up on Hacker News, if you’re curious to see that thread — here it is.*
+
+*A few people noted that frontier models do not have this problem. I checked out one of the GitHub PRs that introduced support for Claude and ran Opus 4.8 in a loop until my credits ran out.*
+
+*The range has tightened slightly — the score has gone down from 48-64 to 49-63, and projects from 12-25 down to 13-23. At its core, the point is the same: projects inconsistent, skills perfect.*

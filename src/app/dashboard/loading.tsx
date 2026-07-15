@@ -36,7 +36,7 @@ export default function Loading() {
           {[1, 2].map((i) => (
             <div
               key={i}
-              className="flex flex-col gap-4 rounded-xl border border-line/50 bg-card p-6 sm:flex-row sm:gap-6"
+              className="flex flex-col gap-4 rounded-xl border border-accent/12 bg-panel/80 p-6 sm:flex-row sm:gap-6"
             >
               {/* 左侧日期区块 */}
               <div className="flex shrink-0 flex-row items-center gap-3 sm:w-28 sm:flex-col sm:items-center sm:justify-center sm:border-r sm:border-line/30 sm:pr-4">

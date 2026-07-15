@@ -10,6 +10,9 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: f429dc7eeb13cc3a
+manifest_dates:
+- '2026-06-26'
+- '2026-06-28'
 ---
 
 # Claude Code in Slack

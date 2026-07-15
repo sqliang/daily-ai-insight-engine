@@ -48,6 +48,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: ff2fee7b79f9cdf4
+manifest_dates:
+- '2026-06-30'
 ---
 
 ## 今日热点导览

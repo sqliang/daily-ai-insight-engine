@@ -11,9 +11,11 @@ pipeline/ingestion/ingest/worker.py — 单篇文章抓取 worker
 """
 
 import logging
+import re
 import sys
 from pathlib import Path
 from typing import Optional
+from urllib.parse import urlparse
 
 from pipeline.ingestion.ingest.truncation import apply_truncation
 
@@ -29,6 +31,7 @@ def ingest_article(
     source_name: str,
     target_dir: Path,
     state: "IngestState",
+    created: Optional[str] = None,
 ) -> Optional[Path]:
     """
     抓取单篇非 browser 策略文章：curl 获取 HTML → trafilatura 提取正文 → 写入 .md。
@@ -48,6 +51,7 @@ def ingest_article(
         source_name: 数据源名称（用于查 config）
         target_dir: 输出目录
         state: 线程安全 IngestState
+        created: manifest 日期。历史清单重跑时用于保留原批次日期
 
     返回：
         Path          — 写入的 .md 文件路径
@@ -59,7 +63,7 @@ def ingest_article(
     from pipeline.core.frontmatter_utils import build_ingestion_frontmatter
     from pipeline.utils.frontmatter import write_frontmatter
     from pipeline.utils.id_utils import generate_id
-    from pipeline.core.web_utils import extract_article_content, extract_metadata, fetch_url, is_bot_challenge_html
+    from pipeline.core.web_utils import extract_article_content, extract_metadata, fetch_url, fetch_via_jina, is_bot_challenge_html
 
     url = article.get("url", "")
     if not url:
@@ -70,13 +74,61 @@ def ingest_article(
     source_config = get_source_by_name(source_name) or {}
     timeout = source_config.get("timeout", 30)
 
+    if source_name == "producthunt":
+        producthunt_path = _try_producthunt_ingest(
+            article=article,
+            source_name=source_name,
+            target_dir=target_dir,
+            state=state,
+            source_config=source_config,
+            article_id=article_id,
+            created=created,
+        )
+        if producthunt_path:
+            return producthunt_path
+
+    if source_name == "hackernews":
+        hackernews_path = _try_hackernews_ingest(
+            article=article,
+            source_name=source_name,
+            target_dir=target_dir,
+            state=state,
+            source_config=source_config,
+            article_id=article_id,
+            created=created,
+        )
+        if hackernews_path:
+            return hackernews_path
+
     # curl 获取 HTML（阻塞 I/O，在 worker 线程中安全）
     html = fetch_url(url, timeout=timeout)
 
     # 检测反爬页面：HTML 获取成功但内容是 Cloudflare / JS challenge
-    # 返回 BOT_BLOCKED 标记让 orchestrator 用 Playwright 重试
+    # 先尝试 Jina AI Reader 兜底，失败后再返回 BOT_BLOCKED 让 Playwright 重试
     if html and is_bot_challenge_html(html):
-        logger.info("检测到反爬页面，标记为浏览器重试 source=%s url=%s", source_name, url)
+        logger.info("检测到反爬页面，尝试 Jina AI Reader 兜底 source=%s url=%s", source_name, url)
+        jina_body = fetch_via_jina(url)
+        if jina_body:
+            # Jina 成功获取真实内容，直接写入文件（无需 Playwright）
+            meta = extract_metadata(html, url)  # 元数据从原始 HTML 提取（标题等）
+            fm = build_ingestion_frontmatter(
+                title=meta.get("title") or article.get("title", ""),
+                url=url,
+                published=meta.get("date") or article.get("published", ""),
+                author=meta.get("author") or article.get("author", ""),
+                description=meta.get("description") or article.get("summary", ""),
+                source_name=source_name,
+                article_id=article_id,
+                extraction_status="success",
+                created=created,
+            )
+            output_path = target_dir / f"{article_id}.md"
+            write_frontmatter(output_path, fm, apply_truncation(jina_body, source_config))
+            state.mark_seen(article_id)
+            logger.info("Jina AI Reader 兜底成功 source=%s url=%s", source_name, url)
+            return output_path
+        # Jina 也失败，走现有兜底链：BOT_BLOCKED → Playwright → failed
+        logger.info("Jina AI Reader 兜底失败，标记为浏览器重试 source=%s url=%s", source_name, url)
         return BOT_BLOCKED
 
     if html:
@@ -117,6 +169,7 @@ def ingest_article(
         source_name=source_name,
         article_id=article_id,
         extraction_status=extraction_status,
+        created=created,
     )
 
     output_path = target_dir / f"{article_id}.md"
@@ -134,6 +187,7 @@ def ingest_browser_article(
     target_dir: Path,
     state: "IngestState",
     session: "BrowserSession",
+    created: Optional[str] = None,
 ) -> Optional[Path]:
     """
     抓取单篇 browser 策略文章：Playwright 渲染 → trafilatura 提取正文 → 写入 .md。
@@ -156,6 +210,7 @@ def ingest_browser_article(
         target_dir:  输出目录
         state:       线程安全 IngestState
         session:     已创建的 BrowserSession 实例
+        created:     manifest 日期。历史清单重跑时用于保留原批次日期
 
     返回：
         Path  — 写入的 .md 文件路径
@@ -186,6 +241,20 @@ def ingest_browser_article(
     wait_ms = source_config.get("wait_ms", 2000)
     wait_until = source_config.get("wait_until", "domcontentloaded")
     wait_for_fn = source_config.get("wait_for_fn")
+
+    if source_name == "producthunt":
+        producthunt_path = _try_producthunt_ingest(
+            article=article,
+            source_name=source_name,
+            target_dir=target_dir,
+            state=state,
+            source_config=source_config,
+            article_id=article_id,
+            created=created,
+            session=session,
+        )
+        if producthunt_path:
+            return producthunt_path
 
     # Playwright 渲染获取 HTML
     html = session.fetch_page_html(
@@ -261,6 +330,7 @@ def ingest_browser_article(
         source_name=source_name,
         article_id=article_id,
         extraction_status=extraction_status,
+        created=created,
     )
 
     output_path = target_dir / f"{article_id}.md"
@@ -270,3 +340,175 @@ def ingest_browser_article(
     state.mark_seen(article_id)
 
     return output_path
+
+
+def _try_producthunt_ingest(
+    article: dict,
+    source_name: str,
+    target_dir: Path,
+    state: "IngestState",
+    source_config: dict,
+    article_id: str,
+    created: Optional[str] = None,
+    session: Optional["BrowserSession"] = None,
+) -> Optional[Path]:
+    """
+    使用 Product Hunt 专用兜底抓取产品页。
+
+    设计理由：
+        Product Hunt 产品页会把通用 curl/Playwright 引向反爬页。专用逻辑
+        会把产品页可公开读取的核心字段整理成稳定 Markdown，避免失败摘要
+        流入后续 LLM 阶段。
+    """
+    from pipeline.core.frontmatter_utils import build_ingestion_frontmatter
+    from pipeline.ingestion.ingest.producthunt import fetch_producthunt_article
+    from pipeline.utils.frontmatter import write_frontmatter
+
+    result = fetch_producthunt_article(article, source_config, session=session)
+    if result is None:
+        return None
+
+    url = article.get("url", "")
+    fm = build_ingestion_frontmatter(
+        title=result.title or article.get("title", ""),
+        url=url,
+        published=article.get("published", ""),
+        author=article.get("author", ""),
+        description=result.description or article.get("summary", ""),
+        source_name=source_name,
+        article_id=article_id,
+        extraction_status="success",
+        created=created,
+    )
+
+    output_path = target_dir / f"{article_id}.md"
+    write_frontmatter(output_path, fm, apply_truncation(result.content, source_config))
+    state.mark_seen(article_id)
+    logger.info("Product Hunt 专用兜底成功 source=%s url=%s", source_name, url)
+    return output_path
+
+
+def _try_hackernews_ingest(
+    article: dict,
+    source_name: str,
+    target_dir: Path,
+    state: "IngestState",
+    source_config: dict,
+    article_id: str,
+    created: Optional[str] = None,
+) -> Optional[Path]:
+    """
+    使用 Hacker News 条目的备用链接修复少数高价值文章的抓取失败。
+
+    设计理由：
+        HN manifest 的 summary 经常包含 archive.ph/archive.md 备份链接；
+        StackExchange 页面也可通过官方 StackPrinter 输出绕过前端安全验证。
+        这些备用入口只在 HN 源内使用，避免改变其他数据源的抓取语义。
+    """
+    from pipeline.core.frontmatter_utils import build_ingestion_frontmatter
+    from pipeline.core.web_utils import extract_article_content, extract_metadata, fetch_url, is_bot_challenge_html
+    from pipeline.utils.frontmatter import write_frontmatter
+
+    original_url = article.get("url", "")
+    candidates = _build_hackernews_candidate_urls(article)
+    if len(candidates) <= 1:
+        return None
+
+    timeout = source_config.get("timeout", 30)
+    for candidate_url in candidates[1:]:
+        html = fetch_url(candidate_url, timeout=timeout)
+        if not html or is_bot_challenge_html(html):
+            continue
+
+        meta = extract_metadata(html, candidate_url)
+        content = extract_article_content(html, candidate_url)
+        if not content or _is_hackernews_fallback_error(content):
+            continue
+
+        fm = build_ingestion_frontmatter(
+            title=meta.get("title") or article.get("title", ""),
+            url=original_url,
+            published=meta.get("date") or article.get("published", ""),
+            author=meta.get("author") or article.get("author", ""),
+            description=meta.get("description") or article.get("summary", ""),
+            source_name=source_name,
+            article_id=article_id,
+            extraction_status="success",
+            created=created,
+        )
+        output_path = target_dir / f"{article_id}.md"
+        body = (
+            f"> 备用抓取来源：{candidate_url}\n\n"
+            f"{apply_truncation(content, source_config)}"
+        )
+        write_frontmatter(output_path, fm, body)
+        state.mark_seen(article_id)
+        logger.info("Hacker News 备用链接抓取成功 source=%s url=%s fallback=%s", source_name, original_url, candidate_url)
+        return output_path
+
+    return None
+
+
+def _build_hackernews_candidate_urls(article: dict) -> list[str]:
+    """
+    为 HN 条目构造按优先级排列的抓取 URL。
+
+    返回值始终以原始 URL 开头，后续才是 archive/StackPrinter 等备用入口。
+    """
+    url = article.get("url", "")
+    summary = article.get("summary", "")
+    candidates = [url] if url else []
+
+    for match in re.finditer(r"https?://(?:archive\.(?:ph|md|is|today))/[^\s<>)]+", summary):
+        candidates.append(match.group(0))
+
+    stackprinter_url = _build_stackprinter_url(url)
+    if stackprinter_url:
+        candidates.append(stackprinter_url)
+
+    seen: set[str] = set()
+    unique_candidates: list[str] = []
+    for candidate in candidates:
+        if candidate and candidate not in seen:
+            unique_candidates.append(candidate)
+            seen.add(candidate)
+    return unique_candidates
+
+
+def _build_stackprinter_url(url: str) -> Optional[str]:
+    """
+    将 StackExchange 问题页转换为 StackPrinter 导出 URL。
+
+    StackPrinter 是 StackExchange 官方提供的轻量 HTML 输出，比常规页面
+    更适合离线抓取，也能避开部分前端安全验证页面。
+    """
+    parsed = urlparse(url)
+    if not parsed.netloc.endswith("stackexchange.com"):
+        return None
+
+    match = re.search(r"/questions/(\d+)", parsed.path)
+    if not match:
+        return None
+
+    question_id = match.group(1)
+    service = parsed.netloc.removesuffix(".com")
+    return (
+        "https://stackprinter.appspot.com/export"
+        f"?question={question_id}"
+        f"&service={service}"
+        "&language=en"
+        "&hideAnswers=false"
+        "&showAll=true"
+        "&width=700"
+    )
+
+
+def _is_hackernews_fallback_error(content: str) -> bool:
+    """
+    判断 HN 备用入口是否返回了工具错误页。
+
+    StackPrinter 参数错误时也会返回可提取文本，必须显式拒绝，避免把
+    "Unsupported service" 这类错误页写成 success。
+    """
+    lowered = content.lower()
+    return "unsupported service" in lowered or "server too busy" in lowered

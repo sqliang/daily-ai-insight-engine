@@ -11,6 +11,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: cffdd1e421e4fc6c
+manifest_dates:
+- '2026-07-01'
 ---
 
 Google announced on Monday that the Gemini app is now offering its personalized Nano Banana-powered image generation feature to a broader audience. Starting today, all eligible users in the U.S. can access the feature for free, a service that was previously only available to Plus, Pro, and Ultra subscribers.

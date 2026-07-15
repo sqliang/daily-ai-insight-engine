@@ -3,6 +3,7 @@
 //
 // 在 ReportCard 内部渲染，展示该日期可用的专题报告类型。
 // 每个条目是一个可点击的链接（有数据时）或灰显占位（无数据/即将上线）。
+// TODO: 专题分析能力暂时停用，待重新设计后恢复。
 // ============================================================================
 
 import Link from "next/link";
@@ -130,38 +131,8 @@ export function SpecializedEntries({
   const hasAnyContent =
     specialized.github || specialized.product || specialized.paper;
   if (!hasAnyContent) {
-    // 仅渲染"即将上线"占位（Phase 2/3 预告）
-    return (
-      <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-800">
-        <div className="flex items-center gap-2 text-xs text-gray-400 dark:text-gray-500 mb-2">
-          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-          </svg>
-          <span className="font-medium">专题报告</span>
-        </div>
-        <EntryRow
-          icon="🐙"
-          label="GitHub 项目"
-          href=""
-          stat="暂无数据"
-          enabled={false}
-        />
-        <EntryRow
-          icon="📄"
-          label="论文速递"
-          href=""
-          stat="暂无数据"
-          enabled={false}
-        />
-        <EntryRow
-          icon="📦"
-          label="产品扫描"
-          href=""
-          stat="暂无数据"
-          enabled={false}
-        />
-      </div>
-    );
+    // TODO: 专题分析能力暂时停用，待重新设计后恢复。
+    return null;
   }
 
   // GitHub 条目

@@ -18,8 +18,8 @@ pipeline/aggregation/aggregate_frontmatter.py — Stage 4a: Frontmatter 聚合
     - 跳过空正文文件和 frontmatter 解析失败的文件
     - per-source JSON 仅保留最近 hot_days 天热数据（默认 7 天），供前端快速读取
     - 冷数据按 created 日期分片写入 archive/{source}/{source}_{date}.json
-    - all_articles.json 按 lookback_days 过滤（仅时间窗口内文章，作为日报输入）
-    - 时间切片基于 frontmatter.created 字段，兼容 YAML 解析出的 date 对象和字符串
+    - all_articles.json 按 lookback_days 或 target_date 过滤（仅新增文章，作为日报输入）
+    - 时间切片基于 frontmatter.created 字段，重复出现在 manifest 的旧文章不重复进日报
     - 显式传 input_dir 时保持单目录行为（向后兼容）
     - archive 分片每次 aggregate 覆盖写（文章可能被后续阶段更新）
 """
@@ -143,6 +143,25 @@ def _matches_target_date(record: dict, target_date: date) -> bool:
         return False
 
 
+def _is_report_ready(record: dict) -> bool:
+    """
+    判断文章是否具备进入日报合成输入的最低处理质量。
+
+    per-source JSON 需要保留 raw/extract 失败记录供前端和审计查看；
+    all_articles.json 则是 synthesize 的直接输入，必须避免把未提取或
+    明确提取失败的文章交给主编 Agent，防止日报引用半成品。
+    """
+    if record.get("extraction_status") == "failed":
+        return False
+    if record.get("extract_result") == "failed":
+        return False
+    return bool(
+        record.get("tldr")
+        or record.get("objective_summary")
+        or record.get("objectiveSummary")
+    )
+
+
 def _cleanup_expired_archives(archive_dir: Path, source: str, max_history_days: Optional[int]) -> int:
     """
     清理 source 目录下超出 max_history_days 的归档分片。
@@ -179,21 +198,59 @@ def _cleanup_expired_archives(archive_dir: Path, source: str, max_history_days: 
     return removed
 
 
-# 多阶段扫描目录，按优先级排序（先扫描的优先 — 即最完整版本）
+# 多阶段扫描目录，按优先级排序（仅作为字段完整度相同时的兜底优先级）
 _AGGREGATE_STAGE_DIRS = ("analyzed", "extracted", "raw")
+_AGGREGATE_STAGE_RANK = {"raw": 0, "extracted": 1, "analyzed": 2}
+_FACT_EXTRACTION_FIELDS = ("tldr", "objective_summary", "event_type", "epistemic_status")
+_ANALYSIS_FIELDS = ("impact_score", "sentiment")
 
 
-def _discover_all_stages() -> tuple[list[Path], list[str]]:
+def _candidate_selection_score(
+    filepath: Path,
+    stage_key: str,
+    target_date: Optional[date],
+) -> tuple[int, int, int, int]:
+    """
+    为多阶段去重候选文件计算选择分数。
+
+    设计理由：
+        目录阶段并不总能代表内容完整度。历史 analyzed 文件可能因旧流程保留
+        pipeline_stage=ingested 且缺少 FactExtraction 字段；此时应优先选择新近
+        生成的 02_extracted 文件，避免回溯日报输入缺少 Stage 2 结果。
+        target_date 只匹配 created，manifest_dates 仅作为审计信息，不决定日报纳入。
+
+    返回：
+        tuple: (是否匹配目标日期, FactExtraction 字段数, Analysis 字段数, 阶段优先级)
+    """
+    try:
+        fm, _ = read_frontmatter(filepath)
+    except Exception:
+        return (0, 0, 0, _AGGREGATE_STAGE_RANK.get(stage_key, 0))
+
+    target_score = 1 if target_date is not None and _matches_target_date(fm, target_date) else 0
+    fact_score = sum(1 for field in _FACT_EXTRACTION_FIELDS if fm.get(field))
+    analysis_score = sum(1 for field in _ANALYSIS_FIELDS if fm.get(field))
+    stage_score = _AGGREGATE_STAGE_RANK.get(stage_key, 0)
+    return (target_score, fact_score, analysis_score, stage_score)
+
+
+def _discover_all_stages(
+    target_date: Optional[date] = None,
+) -> tuple[list[Path], list[str]]:
     """
     扫描所有 pipeline 阶段目录中的 .md 文件，按 (source, article_id) 去重。
 
-    优先级：analyzed > extracted > raw — 先扫描的胜出，
-    自然保留最完整的文章版本。
+    选择优先级：target_date 匹配 > FactExtraction 字段完整度 > Analysis 字段完整度
+    > 阶段目录优先级。这样既保留高阶段结果，也避免旧 analyzed 文件压过新抽取结果。
+
+    target_date 模式下，若高阶段版本 created 不匹配目标日期，而低阶段版本匹配，
+    则选择低阶段版本，确保历史 manifest 重跑后的 raw 修复能进入对应日报窗口。
+    manifest_dates 仅记录重复命中历史，不参与默认日报选择。
 
     返回：
         (去重后的文件路径列表, 实际扫描的阶段 key 列表)
     """
-    seen: dict[tuple[str, str], Path] = {}  # (source, article_id) -> filepath
+    seen: dict[tuple[str, str], tuple[Path, tuple[int, int, int, int]]] = {}
     active_stages: list[str] = []
 
     for stage_key in _AGGREGATE_STAGE_DIRS:
@@ -216,10 +273,16 @@ def _discover_all_stages() -> tuple[list[Path], list[str]]:
                 continue
             article_id = fp.stem
             key = (source, article_id)
+            current_score = _candidate_selection_score(fp, stage_key, target_date)
             if key not in seen:
-                seen[key] = fp
+                seen[key] = (fp, current_score)
+                continue
 
-    return sorted(seen.values()), active_stages
+            _, existing_score = seen[key]
+            if current_score > existing_score:
+                seen[key] = (fp, current_score)
+
+    return sorted(path for path, _ in seen.values()), active_stages
 
 
 def _group_by_source(file_paths: list[Path]) -> dict[str, list[Path]]:
@@ -297,7 +360,7 @@ def aggregate_frontmatter(
 
     时间过滤模式（互斥）：
         - lookback_days（默认）：created >= today - lookback_days 的文章
-        - target_date（精确模式）：仅 created == target_date 的文章（用于回溯历史日报）
+        - target_date（精确模式）：仅 created == target_date 的新增文章（用于回溯历史日报）
         - 两者均为 None 时，从 config 读取 lookback_days 默认值
 
     参数：
@@ -307,7 +370,7 @@ def aggregate_frontmatter(
         lookback_days: all_articles.json 时间窗口（天）。None 时从 config 读取
         hot_days: per-source JSON 热数据窗口（天）。None 时从 config 读取，默认 7
         max_history_days: archive 最大保留天数。None 时从 config 读取，默认 365（0 = 不限）
-        target_date: 精确日期过滤（YYYY-MM-DD）。指定后仅保留 created == target_date 的文章。
+        target_date: 精确日期过滤（YYYY-MM-DD）。指定后仅保留 created == target_date 的新增文章。
                      与 lookback_days 互斥（target_date 优先）。不影响 per-source JSON 热冷分离。
 
     返回：
@@ -346,14 +409,14 @@ def aggregate_frontmatter(
         aggregated_stages = [str(input_dir)]
     else:
         # 默认：多阶段扫描
-        all_files, aggregated_stages = _discover_all_stages()
+        all_files, aggregated_stages = _discover_all_stages(target_date=target_date)
         source_groups = _group_by_source(all_files)
 
     stage_label = " > ".join(aggregated_stages)
     print(f"\n发现 {len(all_files)} 个 .md 文件，来自 {len(source_groups)} 个数据源")
     print(f"  扫描阶段: {stage_label}")
     if target_date:
-        print(f"  日报窗口: 精确匹配 created == {target_date.isoformat()} (target_date 模式)")
+        print(f"  日报窗口: 仅保留 created == {target_date.isoformat()} 的新增文章 (target_date 模式)")
     elif lookback_cutoff:
         print(f"  日报窗口: 仅保留 created >= {lookback_cutoff.isoformat()} (lookback_days={lookback_days})")
     if hot_cutoff:
@@ -393,6 +456,9 @@ def aggregate_frontmatter(
                 errors += 1
                 continue
             all_source_articles.append(record)
+            if not _is_report_ready(record):
+                skipped_old += 1
+                continue
             # all_articles.json 时间过滤：target_date 精确匹配优先于 lookback 窗口
             if target_date is not None:
                 if _matches_target_date(record, target_date):
@@ -512,7 +578,3 @@ def aggregate_frontmatter(
         "aggregated_stages": aggregated_stages,
         "archived_articles": total_archived,
     }
-
-
-
-

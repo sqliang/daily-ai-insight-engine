@@ -235,6 +235,7 @@ export default async function SourceDetailPage({
           hasManifest={hasManifest}
           manifestFound={source.manifestFound}
           articleCount={source.articleCount}
+          sourceName={source.name}
           dateRange={source.dateRange}
         />
       </div>

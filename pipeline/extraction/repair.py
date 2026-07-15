@@ -28,36 +28,14 @@ logger = logging.getLogger(__name__)
 # Jina AI 兜底
 # ---------------------------------------------------------------------------
 
-_JINA_READER_URL = "https://r.jina.ai"
-
 
 def _try_jina_fallback(url: str) -> str | None:
     """
     使用 Jina AI Reader 获取干净的 Markdown 内容。
-
-    用于 Product Hunt 等被 Cloudflare 保护的页面，浏览器/curl 无法直接获取正文。
-
-    参数：
-        url: 原始文章 URL
-
-    返回：
-        清洗后的 Markdown 正文，失败返回 None
+    委托给 pipeline.core.web_utils.fetch_via_jina()，方便 Stage 1b 和 Stage 2c 共用。
     """
-    import urllib.request
-
-    try:
-        jina_url = f"{_JINA_READER_URL}/{url}"
-        req = urllib.request.Request(
-            jina_url,
-            headers={"User-Agent": "Googlebot/2.1", "Accept": "text/markdown"},
-        )
-        resp = urllib.request.urlopen(req, timeout=60)
-        raw = resp.read().decode("utf-8")
-        if raw and len(raw.strip()) > 200:
-            return raw.strip()
-    except Exception as exc:
-        logger.warning("Jina AI 兜底失败 url=%s: %s", url, exc)
-    return None
+    from pipeline.core.web_utils import fetch_via_jina
+    return fetch_via_jina(url)
 
 
 def _body_looks_like_antibot(body: str) -> bool:

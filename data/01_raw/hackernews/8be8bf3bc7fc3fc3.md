@@ -17,6 +17,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: 8be8bf3bc7fc3fc3
+manifest_dates:
+- '2026-07-02'
 ---
 
 Share your information if you are looking for work. Please use this format:

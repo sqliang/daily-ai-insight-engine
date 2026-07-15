@@ -1,354 +1,209 @@
 "use client";
 
-import { useState } from "react";
+// ============================================================================
+// ArticleCard.tsx — 数据源文章索引卡片
+//
+// 在 SourceDetailPage 的文章列表中渲染精简摘要卡片。
+// 主点击进入站内文章详情页，原文链接作为次要操作保留。
+// ============================================================================
+
+import Link from "next/link";
 import type { EnrichedArticle } from "@/lib/data/sources";
+import {
+  ACTIONABLE_INSIGHT_LABELS,
+  EVENT_TYPE_LABELS,
+} from "@/lib/data/status";
 import { StatusBadge } from "./StatusBadge";
-import { ArticleCardBasic } from "./ArticleCardBasic";
-import { ArticleCardExtraction } from "./ArticleCardExtraction";
-import { ArticleCardAnalysis } from "./ArticleCardAnalysis";
-import { ArticleCardSpecialized } from "./ArticleCardSpecialized";
-import { ImpactScoreBar } from "./ImpactScoreBar";
 import { SentimentIndicator } from "./SentimentIndicator";
-import { ACTIONABLE_INSIGHT_LABELS } from "@/lib/data/status";
 
 type ArticleCardProps = {
   article: EnrichedArticle;
+  detailHref: string;
 };
 
-function getImpactBorderColor(
-  enriched: EnrichedArticle["enriched"],
-): string {
-  const score =
-    enriched?.impact_score?.score ?? enriched?.compound_value?.score;
+function getDomain(url: string): string {
+  try {
+    return new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return url;
+  }
+}
+
+function getImpactColor(enriched: EnrichedArticle["enriched"]): string {
+  const score = enriched?.impact_score?.score ?? enriched?.compound_value?.score;
   if (score === undefined) return "var(--line)";
   if (score >= 7) return "var(--cool)";
   if (score >= 4) return "var(--warm)";
   return "var(--muted)";
 }
 
-function CollapsedPreview({
-  article,
-}: {
-  article: EnrichedArticle;
-}) {
-  const { enriched, title, url, status } = article;
-  const isProcessed = status !== "scout" && enriched;
-  const displayTldr = isProcessed ? enriched.tldr : undefined;
-  const displaySummary = isProcessed
-    ? enriched.objective_summary
-    : article.summary;
-  const hasMetrics =
-    enriched?.impact_score || enriched?.sentiment || enriched?.actionable_insight;
+function MetricPill({ article }: { article: EnrichedArticle }) {
+  const { enriched } = article;
+  const score = enriched?.impact_score?.score ?? enriched?.compound_value?.score;
+  if (score === undefined) {
+    return (
+      <span className="rounded-lg border border-line/50 px-3 py-1.5 font-mono text-[12px] font-semibold text-muted/35">
+        no score
+      </span>
+    );
+  }
 
+  const color = getImpactColor(enriched);
   return (
-    <div className="flex items-start gap-5">
-      <div className="flex-1 min-w-0">
-        <a
-          href={url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block"
-        >
-          <h3
-            className="text-[17px] font-bold leading-snug text-foreground
-                       group-hover:text-accent transition-colors duration-200 truncate"
-          >
-            {title || "无标题"}
-          </h3>
-        </a>
-        {displayTldr && (
-          <p className="mt-2.5 text-[15px] font-semibold leading-[1.6] text-foreground/80 line-clamp-2">
-            {displayTldr}
-          </p>
-        )}
-        {displaySummary && (
-          <p className={`text-[14px] leading-[1.7] text-foreground/55 line-clamp-2 ${displayTldr ? "mt-1.5" : "mt-2"}`}>
-            {displaySummary}
-          </p>
-        )}
-      </div>
-
-      {hasMetrics && enriched && (
-        <div className="flex items-center gap-3 shrink-0 pt-0.5">
-          {enriched.impact_score && (
-            <span
-              className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[14px] font-bold font-mono tabular-nums"
-              style={{
-                backgroundColor: `${getImpactBorderColor(enriched)} / 0.08`,
-                color: getImpactBorderColor(enriched),
-              }}
-            >
-              {enriched.impact_score.score.toFixed(1)}
-            </span>
-          )}
-          {enriched.sentiment && enriched.sentiment in
-            ({ positive: 1, negative: 1, neutral: 1, mixed: 1 } as Record<string, unknown>) && (
-            <SentimentIndicator sentiment={enriched.sentiment} />
-          )}
-          {enriched.actionable_insight &&
-            enriched.actionable_insight in ACTIONABLE_INSIGHT_LABELS && (
-              <span
-                className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[13px] font-bold"
-                style={{
-                  backgroundColor: `${ACTIONABLE_INSIGHT_LABELS[enriched.actionable_insight].color} / 0.1`,
-                  color: ACTIONABLE_INSIGHT_LABELS[enriched.actionable_insight].color,
-                }}
-              >
-                ◆ {ACTIONABLE_INSIGHT_LABELS[enriched.actionable_insight].label}
-              </span>
-            )}
-        </div>
-      )}
-    </div>
+    <span
+      className="inline-flex min-w-16 items-center justify-center rounded-xl px-3 py-2 font-mono text-[17px] font-bold tabular-nums"
+      style={{
+        backgroundColor: `${color} / 0.08`,
+        color,
+        boxShadow: `inset 0 0 0 1px ${color} / 0.14`,
+      }}
+      title="影响力评分"
+    >
+      {score.toFixed(1)}
+    </span>
   );
 }
 
-function HeroStrip({
-  enriched,
-}: {
-  enriched: NonNullable<EnrichedArticle["enriched"]>;
-}) {
-  const hasImpact = enriched.impact_score !== undefined;
-  const hasSentiment =
-    enriched.sentiment !== undefined && enriched.sentiment !== "";
-  const hasInsight =
-    enriched.actionable_insight !== undefined &&
-    enriched.actionable_insight !== "" &&
-    enriched.actionable_insight in ACTIONABLE_INSIGHT_LABELS;
-
-  if (!hasImpact && !hasSentiment && !hasInsight) return null;
+function SecondaryTags({ article }: { article: EnrichedArticle }) {
+  const { enriched } = article;
+  const eventType = enriched?.event_type;
+  const actionableInsight = enriched?.actionable_insight;
 
   return (
-    <div
-      className="flex flex-wrap items-center gap-x-5 gap-y-3 mb-6 px-4 py-3 rounded-lg"
-      style={{ backgroundColor: "var(--surface)" }}
-    >
-      {hasImpact && (
-        <ImpactScoreBar
-          score={enriched.impact_score!.score}
-          label="影响力"
-          compact
-        />
-      )}
-      {hasSentiment && <SentimentIndicator sentiment={enriched.sentiment} />}
-      {hasInsight && (
+    <div className="flex flex-wrap items-center gap-2">
+      {eventType && eventType in EVENT_TYPE_LABELS && (
         <span
-          className="inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[13px] font-bold"
+          className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[12px] font-semibold"
           style={{
-            backgroundColor: `${ACTIONABLE_INSIGHT_LABELS[enriched.actionable_insight!].color} / 0.1`,
-            color: ACTIONABLE_INSIGHT_LABELS[enriched.actionable_insight!].color,
+            backgroundColor: `${EVENT_TYPE_LABELS[eventType].color} / 0.08`,
+            color: EVENT_TYPE_LABELS[eventType].color,
           }}
         >
-          ◆ {ACTIONABLE_INSIGHT_LABELS[enriched.actionable_insight!].label}
+          <span
+            className="h-1.5 w-1.5 rounded-full"
+            style={{ backgroundColor: EVENT_TYPE_LABELS[eventType].color }}
+          />
+          {EVENT_TYPE_LABELS[eventType].label}
         </span>
       )}
+      {actionableInsight && actionableInsight in ACTIONABLE_INSIGHT_LABELS && (
+        <span
+          className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[12px] font-bold"
+          style={{
+            backgroundColor: `${ACTIONABLE_INSIGHT_LABELS[actionableInsight].color} / 0.08`,
+            color: ACTIONABLE_INSIGHT_LABELS[actionableInsight].color,
+          }}
+        >
+          ◆ {ACTIONABLE_INSIGHT_LABELS[actionableInsight].label}
+        </span>
+      )}
+      {enriched?.sentiment && <SentimentIndicator sentiment={enriched.sentiment} />}
     </div>
   );
 }
 
-function StepCircle({
-  stage,
-  color,
-}: {
-  stage: number;
-  color: string;
-}) {
-  return (
-    <div
-      className="flex items-center justify-center w-9 h-9 rounded-full text-[15px] font-bold shrink-0"
-      style={{
-        backgroundColor: `${color} / 0.1`,
-        color,
-        boxShadow: `0 0 0 3px ${color} / 0.06, inset 0 0 0 1px ${color} / 0.12`,
-      }}
-    >
-      {stage}
-    </div>
-  );
-}
-
-function StageBanner({
-  stage,
-  title,
-  subtitle,
-  accentColor,
-}: {
-  stage: number;
-  title: string;
-  subtitle: string;
-  accentColor: string;
-}) {
-  return (
-    <div
-      className="flex items-center gap-4 px-4 py-3 rounded-xl"
-      style={{ backgroundColor: `${accentColor} / 0.04` }}
-    >
-      <StepCircle stage={stage} color={accentColor} />
-      <div className="min-w-0">
-        <div className="text-[16px] font-bold text-foreground/90 leading-tight">{title}</div>
-        <div className="text-[12px] text-muted/50 mt-0.5">{subtitle}</div>
-      </div>
-    </div>
-  );
-}
-
-export function ArticleCard({ article }: ArticleCardProps) {
-  const { enriched, status } = article;
-  const [collapsed, setCollapsed] = useState(true);
-  const hasAnalysis = status === "analyzed" && enriched;
-  const hasExtraction = status !== "scout" && enriched;
-  const hasRichContent = hasExtraction || hasAnalysis;
+/**
+ * 数据源文章索引卡片。
+ *
+ * 保持列表扫描效率：仅展示标题、摘要和少量核心指标；完整指标进入详情页查看。
+ */
+export function ArticleCard({ article, detailHref }: ArticleCardProps) {
+  const { enriched, title, url, status } = article;
+  const displayTldr = status !== "scout" ? enriched?.tldr : undefined;
+  const displaySummary =
+    status !== "scout" ? enriched?.objective_summary : article.summary;
+  const borderColor = getImpactColor(enriched);
 
   return (
     <article
-      className="group rounded-2xl border border-line/60 bg-panel/80 backdrop-blur-sm
-                 transition-all duration-300 ease-out overflow-hidden
-                 hover:shadow-lg hover:-translate-y-0.5 hover:border-accent/20"
-      style={{
-        borderLeft: `4px solid ${getImpactBorderColor(enriched)}`,
-        boxShadow: "var(--shadow-sm)",
-      }}
+      className="group relative overflow-hidden rounded-2xl border border-line/60 bg-panel/85 shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/25 hover:shadow-lg"
+      style={{ borderLeft: `4px solid ${borderColor}` }}
     >
-      <div className="p-7">
-        <div className="flex items-center justify-between mb-4">
-          <StatusBadge status={status} />
-          {hasRichContent && (
-            <button
-              type="button"
-              onClick={() => setCollapsed((p) => !p)}
-              className="inline-flex items-center gap-2 rounded-lg px-3.5 py-1.5
-                         text-[13px] font-semibold
-                         transition-all duration-200
-                         hover:bg-surface"
-              style={{ color: collapsed ? "var(--accent)" : "var(--muted)" }}
-            >
-              {collapsed ? (
-                <>
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                  >
-                    <polyline points="4 10 8 6 12 10" />
-                  </svg>
-                  展开详情
-                  {enriched?.impact_score && (
-                    <span className="font-mono font-bold tabular-nums text-[12px]" style={{ color: getImpactBorderColor(enriched) }}>
-                      {enriched.impact_score.score.toFixed(1)}
-                    </span>
-                  )}
-                </>
-              ) : (
-                <>
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                  >
-                    <polyline points="4 6 8 10 12 6" />
-                  </svg>
-                  收起
-                </>
+      <Link
+        href={detailHref}
+        className="block p-5 outline-none transition-colors focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background md:p-6"
+        aria-label={`查看文章详情：${title || "无标题"}`}
+      >
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-start">
+          <div className="flex min-w-0 flex-1 flex-col gap-3">
+            <div className="flex flex-wrap items-center gap-2.5">
+              <StatusBadge status={status} />
+              <span className="inline-flex items-center gap-1.5 text-[12px] font-mono text-muted/45">
+                {getDomain(url)}
+              </span>
+              {article.published && (
+                <span className="text-[12px] text-muted/35">
+                  {article.published}
+                </span>
               )}
-            </button>
-          )}
+            </div>
+
+            <div>
+              <h3 className="text-[18px] font-bold leading-snug text-foreground transition-colors duration-200 group-hover:text-accent md:text-[19px]">
+                {title || "无标题"}
+              </h3>
+              {displayTldr && (
+                <p className="mt-2.5 line-clamp-2 text-[15px] font-semibold leading-[1.65] text-foreground/78">
+                  {displayTldr}
+                </p>
+              )}
+              {displaySummary && (
+                <p className={`line-clamp-2 text-[14px] leading-[1.75] text-foreground/55 ${displayTldr ? "mt-1.5" : "mt-2.5"}`}>
+                  {displaySummary}
+                </p>
+              )}
+            </div>
+
+            <SecondaryTags article={article} />
+          </div>
+
+          <div className="flex shrink-0 items-center justify-between gap-4 border-t border-line/50 pt-4 lg:w-44 lg:flex-col lg:items-end lg:border-t-0 lg:pt-0 lg:pr-12">
+            <MetricPill article={article} />
+            <span className="inline-flex items-center gap-2 text-[13px] font-bold text-accent transition-transform duration-200 group-hover:translate-x-1">
+              查看详情
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M3 8h10" />
+                <path d="M9 4l4 4-4 4" />
+              </svg>
+            </span>
+          </div>
         </div>
+      </Link>
 
-        {collapsed ? (
-          <CollapsedPreview article={article} />
-        ) : (
-          <>
-            {enriched && <HeroStrip enriched={enriched} />}
-
-            <ArticleCardBasic
-              title={article.title}
-              url={article.url}
-              published={article.published}
-              author={article.author}
-              summary={article.summary}
-              id={article.id}
-            />
-
-            {hasRichContent && (
-              <div className="relative mt-8">
-                <div
-                  className="absolute left-[18px] top-[52px] bottom-[18px] w-[2px] rounded-full"
-                  style={{
-                    background: hasAnalysis
-                      ? "linear-gradient(to bottom, var(--accent) / 0.25, var(--warm) / 0.25)"
-                      : "var(--accent) / 0.2",
-                  }}
-                />
-
-                <div className="space-y-8">
-                  {hasExtraction && (
-                    <div>
-                      <StageBanner
-                        stage={1}
-                        title="信息提取"
-                        subtitle="LLM 结构化提取 · 关键信息摘要与实体识别"
-                        accentColor="var(--accent)"
-                      />
-                      <div className="mt-4 pl-2">
-                        <ArticleCardExtraction
-                          tldr={enriched!.tldr}
-                          objectiveSummary={enriched!.objective_summary}
-                          eventType={enriched!.event_type}
-                          sourceType={enriched!.source_type}
-                          entities={enriched!.entities}
-                          keyLogicFlow={enriched!.key_logic_flow}
-                          epistemicStatus={enriched!.epistemic_status}
-                        />
-                      </div>
-                    </div>
-                  )}
-
-                  {hasAnalysis && (
-                    <div>
-                      <StageBanner
-                        stage={2}
-                        title="深度分析"
-                        subtitle="多维度定性评估 · 价值网络与前瞻研判"
-                        accentColor="var(--warm)"
-                      />
-                      <div className="mt-4 pl-2">
-                        <ArticleCardAnalysis
-                          impactScore={enriched!.impact_score}
-                          compoundValue={enriched!.compound_value}
-                          sentiment={enriched!.sentiment}
-                          hypeAssessment={enriched!.hype_assessment}
-                          domainDisruption={enriched!.domain_disruption}
-                          developerSentiment={enriched!.developer_sentiment}
-                          riskMatrix={enriched!.risk_matrix}
-                          confidence={enriched!.confidence}
-                          actionableInsight={enriched!.actionable_insight}
-                          keyBeneficiaries={enriched!.key_beneficiaries}
-                          competitiveCasualty={enriched!.competitive_casualty}
-                          marketOpportunities={enriched!.market_opportunities}
-                        />
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* 专题分析（按来源类型匹配） */}
-                <ArticleCardSpecialized
-                  source={article.enriched?.source ?? ''}
-                  enriched={article.enriched}
-                />
-              </div>
-            )}
-          </>
-        )}
-      </div>
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="absolute right-4 top-4 inline-flex h-9 w-9 items-center justify-center rounded-full border border-line/60 bg-panel/90 text-muted/45 shadow-sm backdrop-blur transition-colors hover:border-accent/30 hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background lg:right-6 lg:top-6"
+        aria-label="打开原文"
+        title="打开原文"
+      >
+        <svg
+          width="15"
+          height="15"
+          viewBox="0 0 16 16"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.6"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M6 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1v-3" />
+          <path d="M9 2h5v5" />
+          <path d="M8 8l6-6" />
+        </svg>
+      </a>
     </article>
   );
 }

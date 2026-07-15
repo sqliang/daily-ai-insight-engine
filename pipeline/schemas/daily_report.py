@@ -182,6 +182,7 @@ class DailyReport(BaseModel):
     risk_signals: list[Signal] = Field(default_factory=list, alias="riskSignals", description="风险信号")
     opportunity_signals: list[Signal] = Field(default_factory=list, alias="opportunitySignals", description="机会信号")
     visualization_data: VisualizationData = Field(..., alias="visualizationData", description="可视化数据")
+    # TODO: 专题分析能力暂时停用，待重新设计后恢复；字段保留用于兼容历史报告。
     specialized_brief: Optional["SpecializedBrief"] = Field(
         default=None,
         alias="specializedBrief",

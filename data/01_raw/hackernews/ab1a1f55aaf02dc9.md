@@ -13,6 +13,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: ab1a1f55aaf02dc9
+manifest_dates:
+- '2026-06-30'
 ---
 
 ### Apple should end their prohibition on shapes in MacOS app icons

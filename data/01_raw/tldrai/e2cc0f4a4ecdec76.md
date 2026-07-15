@@ -10,6 +10,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: e2cc0f4a4ecdec76
+manifest_dates:
+- '2026-07-02'
 ---
 
 AI has the potential to dramatically accelerate the pace of scientific discovery and the development of healthcare interventions. Since launching our efforts in the life sciences last fall, we’ve worked to improve our model capabilities, make connections to the scientific ecosystem via MCPs and skills, and launch partnerships in an effort to realize this potential.

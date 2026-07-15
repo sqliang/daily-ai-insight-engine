@@ -25,6 +25,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: b2dff2e6ca6095bb
+manifest_dates:
+- '2026-07-02'
 ---
 
 **硬氪获悉，近期，航墨科技完成由中投万方、三贤科技、北航天汇、诚美资本、三合投资、常州金控的近亿元天使轮投资，德太资本担任长期战略融资顾问，此次融资主要用来产品研发和市场推广。**

@@ -14,6 +14,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: ce297b0dfa3ddd52
+manifest_dates:
+- '2026-07-07'
 ---
 
 Last week, researchers at cloud security firm Sysdig said they’d documented the first known case of “agentic ransomware.” It was an extortion operation, dubbed JadePuffer, in which an AI agent — not a human — handled the technical execution of a real-world cyberattack from start to finish. The agent broke into a vulnerable server, stole credentials, moved through the target’s network, encrypted files, and even wrote its own ransom note, adapting to obstacles along the way like a human hacker would. Coverage of the funding described it as run “without any human oversight,” with “no human at the keyboard.”

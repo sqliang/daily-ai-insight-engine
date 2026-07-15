@@ -187,6 +187,9 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: e9dbf459bd01dca3
+manifest_dates:
+- '2026-06-24'
+- '2026-07-07'
 ---
 
 **The API to search, scrape, and interact with the web at scale. 🔥** The web context API to find sources, extract content, and turn it into clean Markdown or structured data your agents can ship with. Open source and available as a hosted service.

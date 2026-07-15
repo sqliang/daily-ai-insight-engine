@@ -51,6 +51,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: ac748e1a0effe1fa
+manifest_dates:
+- '2026-07-01'
 ---
 
 2025年6月30日，继红魔电竞平板 3 Pro 开创OLED 小平板赛道后，红魔再度突破技术边界，正式发布红魔游戏平板 5 Pro。作为行业首款搭载主动水冷散热+RGB 可视化水冷灯效的游戏平板，红魔游戏平板 5 Pro以「水冷散热、透明美学、跨端 3A、全能 AI 生产力」四大核心革新，实现小尺寸机身、PC级散热、极致电竞视效、全场景多设备融合，重新定义游戏平板的性能与体验上限。

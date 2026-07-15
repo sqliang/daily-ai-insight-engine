@@ -224,6 +224,10 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: 3cb7ff1cdcf97c6b
+manifest_dates:
+- '2026-07-05'
+- '2026-07-06'
+- '2026-07-07'
 ---
 
 **354 production-ready Claude Code skills, plugins, and agent skills for 13 AI coding tools.**

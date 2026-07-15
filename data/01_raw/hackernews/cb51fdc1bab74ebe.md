@@ -12,6 +12,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: cb51fdc1bab74ebe
+manifest_dates:
+- '2026-07-02'
 ---
 
 Today, we are announcing the Cloudflare Monetization Gateway, an engine that will give Cloudflare customers the ability to charge for any asset protected by Cloudflare: web pages, datasets, APIs, or MCP tools.

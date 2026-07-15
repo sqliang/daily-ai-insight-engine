@@ -11,6 +11,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: bb2db71ddcc0ac3d
+manifest_dates:
+- '2026-07-06'
 ---
 
 # Meta也来卖铲子了！小扎：模型可以慢，GPU必须赚

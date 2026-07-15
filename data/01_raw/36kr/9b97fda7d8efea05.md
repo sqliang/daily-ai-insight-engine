@@ -27,6 +27,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: 9b97fda7d8efea05
+manifest_dates:
+- '2026-07-03'
 ---
 
 ## 大公司：

@@ -12,6 +12,8 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: ef9ac98c9d795aaf
+manifest_dates:
+- '2026-06-30'
 ---
 
 Jay Li doesn’t recommend getting sued by Tesla if you’re trying to get a startup off the ground. But he does think his company, Proception, might be better off for having endured the experience.

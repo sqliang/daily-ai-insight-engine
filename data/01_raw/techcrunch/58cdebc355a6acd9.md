@@ -14,6 +14,11 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: 58cdebc355a6acd9
+manifest_dates:
+- '2026-07-03'
+- '2026-07-04'
+- '2026-07-05'
+- '2026-07-06'
 ---
 
 Every startup has a moment that changes everything.

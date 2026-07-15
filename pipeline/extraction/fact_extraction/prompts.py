@@ -37,12 +37,14 @@ def get_fact_extraction_system_prompt() -> str:
 ## 提取字段说明
 
 ### 1. tldr
-极简一句话总结（最多 80 中文/英文字符）。剔除所有修饰语，只讲核心事实。列表页的扫描锚点。
+极简中文总结（1-2 句，约 100-200 字符）。剔除修饰语，只讲核心事实。列表页的扫描锚点。
+**务必保证每句话都完整收尾，绝对不要在词语或列表中途截断。如果实在无法精简，可稍微超出建议范围，但不能牺牲可读性。**
 **必须用中文输出。**
 
 ### 2. objectiveSummary
-客观事实摘要（最多 150 个中文字符）。5W1H 格式：谁、什么时候、做了什么、怎么做的、结果如何。
+客观事实摘要（2-4 句中文，约 200-400 字符）。5W1H 格式：谁、什么时候、做了什么、怎么做的、结果如何。
 剥离一切主观形容词（"惊艳"、"革命性"等），只用冷峻语言描述。
+**务必保证每句话都完整收尾，绝对不要在列举项或专有名词中途截断。优先保证完整性，超出建议范围可以接受。**
 **必须用中文输出。**
 
 ### 3. eventType
@@ -84,79 +86,15 @@ def get_fact_extraction_system_prompt() -> str:
     "technologies": ["GPT-5"],
     "keyPeople": ["Sam Altman"]
   },
-  "keyLogicFlow": ["第一条中文关键事实", "第二条中文关键事实"],
-  "specializedTags": {
-    "github": {
-      "projectName": "crewAI/crewAI",
-      "projectUrl": "https://github.com/crewAI/crewAI",
-      "primaryLanguage": "Python",
-      "licenseType": "MIT",
-      "domain": "ai_ml",
-      "crossTags": ["open-source-alternative"],
-      "aiDetail": {
-        "primaryCategories": ["agent_framework"],
-        "agentSubcategory": ["orchestration", "tool_use"],
-        "techTags": ["RAG", "function-calling"]
-      }
-    }
-  }
+  "keyLogicFlow": ["第一条中文关键事实", "第二条中文关键事实"]
 }
 
-## 专题标注（新增）
-当文章来源 URL 匹配特定域名时，提取以下专题字段。
+## 重要提醒
+所有文本字段（tldr、objectiveSummary、keyLogicFlow）必须以完整句子结束。
+字符数建议为软性参考，优先保证语义完整——宁可超出也不要截断。
 
-### specializedTags.github（来源 URL 为 github.com 时输出）
-对象包含：
-- **projectName**: 项目名称（如 "crewAI/crewAI"）
-- **projectUrl**: GitHub 仓库完整 URL
-- **primaryLanguage**: 主要编程语言
-- **licenseType**: 开源协议类型（MIT, Apache 2.0, GPLv3 等，如有）
-- **domain**: 项目所属技术领域，必须是以下之一：
-    ai_ml, web_frontend, web_backend, devops_infra, database_storage,
-    programming_languages, developer_tools, security, mobile, blockchain,
-    data_engineering, game_development, documentation, iot_embedded, other
-- **crossTags**: 跨领域标签列表，如 ["open-source-alternative", "cli-tool", "self-hosted"]
-- **aiDetail**: AI 专项标注对象（仅当 domain == "ai_ml" 时输出，否则为 null）
-    - **primaryCategories**: AI 一级子分类列表，可选值：agent_framework, llm_infra, model_training, model_serving, rag_pipeline, prompt_engineering, multimodal, code_gen, ai_testing, ai_observability, ai_security, ai_ui_ux, dataset_tooling, other
-    - **agentSubcategory**: Agent 子领域列表（仅当 primaryCategories 包含 agent_framework 时），可选值：orchestration, tool_use, memory_management, planning, reflection, multi_modal_agent, browser_agent, coding_agent, general_framework
-    - **techTags**: AI 关键技术标签列表，如 ["RAG", "function-calling", "vector-db"]
-
-重要规则：
-- 所有项目都必须填写 domain，即使是 non-AI 项目
-- aiDetail 只有 domain == "ai_ml" 时才输出，非 AI 项目省略此字段
-- 标签尽量准确，不确定时宁缺毋滥
-- 如果来源 URL 不是 github.com，将 specializedTags 设为 null
-
-### specializedTags.paper（来源为 arxiv.org 时输出）
-对象包含：
-- **paperTitle**: 论文标题
-- **authors**: 作者列表（字符串数组）
-- **affiliations**: 作者所属机构列表
-- **venue**: 发表会议/期刊（如 "NeurIPS 2025"，若为 arXiv 预印本则填 "arXiv preprint"）
-- **codeUrl**: 配套代码仓库 URL（如有，否则为 null）
-- **datasetUrl**: 配套数据集 URL（如有，否则为 null）
-- **researchArea**: 研究领域，如 NLP, CV, RL, Systems, Theory, Robotics, Speech, Graph, Security, Bioinformatics, Other
-- **methodType**: 方法类型，如 transformer, diffusion, RL-based, GNN, LLM-based, theoretical, empirical, benchmark
-
-重要规则：
-- 仅当来源 URL 为 arxiv.org 时输出此字段
-- 作者和机构从文章信息中提取，无法确定时留空数组
-- researchArea 从论文标题和摘要中推断
-
-### specializedTags.product（来源为 producthunt.com 或产品评测类网站时输出）
-对象包含：
-- **productName**: 产品名称
-- **productUrl**: 产品 URL
-- **companyTeam**: 背后的公司/团队名称（如有）
-- **launchContext**: 发布上下文，可选值：new_launch, major_update, pivot, funding_announcement
-- **pricingModel**: 定价模式，可选值：freemium, subscription, usage_based, open_source, free, enterprise, unknown
-- **productCategory**: 产品所属品类（如 "AI 开发工具", "设计协作", "数据分析"）
-- **targetUsers**: 目标用户画像列表，如 ["全栈开发者", "产品经理"]
-
-重要规则：
-- 仅当来源为产品类网站（producthunt.com、whytryai 等）时输出
-- 定价和发布上下文无法确定时使用 "unknown"
-- targetUsers 从文章描述的目标受众中推断"""
+## 专题标注
+专题分析能力暂时停用，待重新设计后恢复。不要输出 specializedTags 字段。"""
 
 
 

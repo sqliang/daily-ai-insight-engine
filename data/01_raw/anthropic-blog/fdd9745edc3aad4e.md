@@ -10,6 +10,15 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: fdd9745edc3aad4e
+manifest_dates:
+- '2026-07-01'
+- '2026-07-02'
+- '2026-07-03'
+- '2026-07-04'
+- '2026-07-05'
+- '2026-07-06'
+- '2026-07-07'
+- '2026-07-08'
 ---
 
 # Redeploying Fable 5

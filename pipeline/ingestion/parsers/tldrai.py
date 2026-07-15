@@ -13,6 +13,21 @@ from pipeline.core.web_utils import fetch_url
 from pipeline.ingestion.html_utils import clean_html_text, extract_section
 
 
+def _is_ad_link(article_url: str, title: str) -> bool:
+    """
+    判断 TLDR 条目是否为广告跳转。
+
+    TLDR 正文板块偶尔会混入 Sponsor / DoubleClick 点击跟踪链接。它们不是
+    可抓取的文章正文，进入 manifest 后只会在 ingest 阶段形成稳定失败文件。
+    """
+    lowered_url = article_url.lower()
+    lowered_title = title.lower()
+    return (
+        "sponsor" in lowered_title
+        or "ad.doubleclick.net" in lowered_url
+    )
+
+
 def parse_tldrai(source: dict) -> List[dict]:
     url = source.get("url", "https://tldr.tech/api/latest/ai")
     html = fetch_url(url)
@@ -28,6 +43,8 @@ def parse_tldrai(source: dict) -> List[dict]:
     if headlines_section:
         pattern = r'<a class="font-bold" href="([^"]+)"[^>]*><h3>([^<]+)</h3></a>'
         for article_url, title in re.findall(pattern, headlines_section)[:5]:
+            if _is_ad_link(article_url, title):
+                continue
             results.append({
                 "url": article_url,
                 "title": clean_html_text(title),
@@ -43,6 +60,8 @@ def parse_tldrai(source: dict) -> List[dict]:
     if research_section:
         pattern = r'<a class="font-bold" href="([^"]+)"[^>]*><h3>([^<]+)</h3></a>'
         for article_url, title in re.findall(pattern, research_section)[:3]:
+            if _is_ad_link(article_url, title):
+                continue
             results.append({
                 "url": article_url,
                 "title": clean_html_text(title),
@@ -59,7 +78,7 @@ def parse_tldrai(source: dict) -> List[dict]:
             r'<h3>([^<]+)</h3></a>'
         )
         for article_url, title in re.findall(pattern, html)[:10]:
-            if "utm_source=tldr" in article_url or "Sponsor" in title:
+            if _is_ad_link(article_url, title):
                 continue
             results.append({
                 "url": article_url,
