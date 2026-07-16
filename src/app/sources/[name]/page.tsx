@@ -15,11 +15,19 @@ import { formatGeneratedAt } from "@/lib/utils/date";
 
 export const dynamic = "force-dynamic";
 
+/**
+ * 生成数据源详情页面的元数据
+ * 
+ * @param params 数据源名称参数
+ * 
+ * @returns 页面元数据
+ */
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ name: string }>;
 }): Promise<Metadata> {
+  // name 从 URL 中提取的数据源名称
   const { name } = await params;
   return { title: `${name} - 数据源详情` };
 }

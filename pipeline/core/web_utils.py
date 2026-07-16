@@ -9,6 +9,7 @@ RSS 使用 feedparser, 正文抽取使用 trafilatura。
 import logging
 import re
 import subprocess
+import tempfile
 from datetime import datetime, timezone
 from typing import List, Optional
 
@@ -95,10 +96,15 @@ def is_bot_challenge_html(html: str) -> bool:
     返回：
         bool:  True 表示 HTML 很可能是反爬页面，需要浏览器渲染
     """
-    if not html or len(html.strip()) < 100:
+    if not html:
         return False
 
     html_lower = html.lower()
+
+    # 部分站点直接返回极短的反爬提示文本，不包含标准 HTML / noscript 结构。
+    # 例如 Reuters 会返回 "Please enable JS and disable any ad blocker"。
+    if is_blocked_extracted_content(html):
+        return True
 
     # Cloudflare managed challenge
     if "_cf_chl_opt" in html:
@@ -118,6 +124,107 @@ def is_bot_challenge_html(html: str) -> bool:
         return True
 
     return False
+
+
+def is_blocked_extracted_content(content: str) -> bool:
+    """
+    判断已提取正文是否其实是反爬、付费墙或工具错误占位。
+
+    参数：
+        content: trafilatura / Jina / Playwright 已提取出的正文文本
+
+    返回：
+        bool: True 表示正文不可用于后续提取和分析
+
+    设计理由：
+        少数站点会把反爬提示伪装成普通短文本，导致上游误判为 success。
+        这里做内容层二次检查，防止无意义占位进入 extraction / analysis。
+    """
+    if not content:
+        return False
+
+    normalized = re.sub(r"\s+", " ", content).strip().lower()
+    blocked_markers = (
+        "please enable js and disable any ad blocker",
+        "please enable javascript and disable any ad blocker",
+        "please enable javascript",
+        "access denied",
+        "just a moment",
+        "checking your browser",
+        "subscribe to unlock this article",
+        "error submitting the form",
+    )
+    return any(marker in normalized for marker in blocked_markers)
+
+
+def fetch_pdf_text(url: str, timeout: int = 30) -> Optional[str]:
+    """
+    下载 PDF 并用 pdftotext 提取正文。
+
+    参数：
+        url: PDF 文件 URL
+        timeout: 下载和解析超时时间（秒）
+
+    返回：
+        提取出的纯文本；失败时返回 None
+
+    设计理由：
+        HN / 论文 / 基金会来源经常直接指向 PDF。HTML 抽取链路无法处理这类
+        URL，若不单独解析会被错误写成 Playwright 失败兜底。
+    """
+    try:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            pdf_path = f"{tmpdir}/article.pdf"
+            text_path = f"{tmpdir}/article.txt"
+            curl_result = subprocess.run(
+                [
+                    "curl", "-s", "-L",
+                    "--max-time", str(timeout),
+                    "-H", "User-Agent: DailyAIInsightEngine/1.0",
+                    "-o", pdf_path,
+                    url,
+                ],
+                capture_output=True,
+                text=True,
+                timeout=timeout + 5,
+            )
+            if curl_result.returncode != 0:
+                logger.warning(
+                    "PDF 下载失败 url=%s code=%d stderr=%s",
+                    url,
+                    curl_result.returncode,
+                    curl_result.stderr.strip()[:200],
+                )
+                return None
+
+            text_result = subprocess.run(
+                ["pdftotext", "-layout", pdf_path, text_path],
+                capture_output=True,
+                text=True,
+                timeout=timeout + 5,
+            )
+            if text_result.returncode != 0:
+                logger.warning(
+                    "PDF 文本提取失败 url=%s code=%d stderr=%s",
+                    url,
+                    text_result.returncode,
+                    text_result.stderr.strip()[:200],
+                )
+                return None
+
+            with open(text_path, "r", encoding="utf-8", errors="ignore") as f:
+                text = f.read().strip()
+
+            return text if len(text) >= 200 else None
+    except FileNotFoundError:
+        logger.warning("pdftotext 不存在，无法解析 PDF url=%s", url)
+        return None
+    except subprocess.TimeoutExpired:
+        logger.warning("PDF 抓取或解析超时 url=%s timeout=%d", url, timeout)
+        return None
+    except Exception as exc:
+        logger.warning("PDF 抓取异常 url=%s error=%s", url, exc)
+        return None
 
 
 def fetch_rss_items(feed_url: str, timeout: int = 30) -> List[dict]:

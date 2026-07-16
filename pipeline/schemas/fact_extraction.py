@@ -14,7 +14,7 @@
 """
 
 from enum import Enum
-from typing import List, Optional
+from typing import List, Literal, Optional
 from pydantic import BaseModel, Field
 
 
@@ -89,6 +89,65 @@ class Entities(BaseModel):
         populate_by_name = True
 
 
+class ObjectMention(BaseModel):
+    """
+    当日文章中出现的项目/产品等对象候选。
+
+    设计理由：
+        专题洞察不应绑定 GitHub 或 Product Hunt 单一来源，而应从所有文章中识别
+        值得继续跟踪的具象对象。该模型只承载事实级识别与证据片段，深度判断放到
+        Stage 3 的 objectInsights 中完成。
+    """
+
+    object_type: Literal["project", "product", "paper", "model", "dataset", "company"] = Field(
+        ...,
+        alias="objectType",
+        description="对象类型。v1 专题洞察只展示 project/product，其余类型作为后续扩展预留。",
+    )
+
+    name: str = Field(
+        ...,
+        description="原文中出现的对象名称。",
+    )
+
+    canonical_name: str = Field(
+        ...,
+        alias="canonicalName",
+        description="归一化名称，用于跨文章合并同一对象。",
+    )
+
+    url: Optional[str] = Field(
+        default=None,
+        description="对象官网、仓库或产品页 URL。原文没有明确 URL 时为 null。",
+    )
+
+    confidence: Literal["high", "medium", "low"] = Field(
+        ...,
+        description="识别置信度。只有有明确证据支撑时才能标 high/medium。",
+    )
+
+    article_role: Literal["primary_subject", "mentioned_reference", "ecosystem_context"] = Field(
+        ...,
+        alias="articleRole",
+        description="对象在文章中的角色：主角、被引用对象或生态上下文。",
+    )
+
+    evidence_snippets: List[str] = Field(
+        default_factory=list,
+        alias="evidenceSnippets",
+        description="支撑该对象识别的原文证据片段或中文转述，1-3 条。每条建议 40-140 个中文字符，需表达完整事实并保留句末标点。",
+    )
+
+    article_id: Optional[str] = Field(
+        default=None,
+        alias="articleId",
+        description="文章来源 ID。Stage 2 可能尚不知道该字段时允许为空，聚合/合成阶段会回填。",
+    )
+
+    class Config:
+        populate_by_name = True
+
+
 class FactExtraction(BaseModel):
     """
     事实提炼与浓缩模型
@@ -130,6 +189,12 @@ class FactExtraction(BaseModel):
         ...,
         alias="keyLogicFlow",
         description="核心逻辑脉络/关键事实清单 (3-6 条)。文章骨架的 X 光片。'结构化思维还原'，将线性的长文本还原为树状或步骤状的逻辑块。",
+    )
+
+    object_mentions: List[ObjectMention] = Field(
+        default_factory=list,
+        alias="objectMentions",
+        description="文章中出现的项目/产品等对象候选，用于后续专题洞察合并与引用。",
     )
 
     class Config:
