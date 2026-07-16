@@ -1,4 +1,4 @@
-import type { DailyReport } from "@/lib/agent/schema";
+import type { DailyReport, EvidenceSource, TopEvent } from "@/lib/agent/schema";
 import { eventTypeLabels, severityLabels } from "@/lib/report/labels";
 
 const dimensionLabels: Record<string, string> = {
@@ -41,7 +41,7 @@ export function generateMarkdown(report: DailyReport): string {
   // Top Events
   lines.push("## 今日 Top 事件");
   lines.push("");
-  report.topEvents.forEach((event, i) => {
+  report.topEvents.forEach((event: TopEvent, i) => {
     lines.push(`### #${i + 1} ${event.title}`);
     lines.push("");
     lines.push(`- **事件类型**: ${eventTypeLabels[event.eventType]}`);
@@ -54,10 +54,10 @@ export function generateMarkdown(report: DailyReport): string {
       lines.push(`- ${e}`);
     });
     // 参考来源
-    const srcList = (event as any).evidenceSources;
+    const srcList = event.evidenceSources;
     if (srcList && srcList.length > 0) {
       lines.push("");
-      srcList.forEach((s: any, i: number) => {
+      srcList.forEach((s: EvidenceSource, i: number) => {
         lines.push(`*${i + 1}.* [${s.sourceDir}](${s.url}) — ${s.title}`);
       });
     }
