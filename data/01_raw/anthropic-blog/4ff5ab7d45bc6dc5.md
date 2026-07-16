@@ -13,6 +13,7 @@ id: 4ff5ab7d45bc6dc5
 manifest_dates:
 - '2026-07-14'
 - '2026-07-15'
+- '2026-07-16'
 ---
 
 # Golden Gate Claude
