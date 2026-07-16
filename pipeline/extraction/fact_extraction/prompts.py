@@ -74,6 +74,24 @@ def get_fact_extraction_system_prompt() -> str:
 文章骨架的 X 光片：将线性文本还原为树状或步骤状的逻辑块。
 **每条必须用完整的中文句子表达，即使原文是英文也要翻译成中文。**
 
+### 7. objectMentions
+从文章中尽可能识别值得进入专题洞察的项目与产品对象。不要局限于 GitHub 或 Product Hunt：
+- objectType: project | product | paper | model | dataset | company。v1 重点识别 project/product；其他类型仅在文章明确出现时输出。
+- name: 原文名称。
+- canonicalName: 归一化名称，用于跨文章合并。例如 "OpenAI Codex" 与 "Codex" 应尽量统一。
+- url: 对象官网、仓库或产品页 URL；没有明确 URL 返回 null。
+- confidence: high | medium | low。只有有明确证据片段时才能标 high/medium。
+- articleRole: primary_subject | mentioned_reference | ecosystem_context。
+- evidenceSnippets: 1-3 条支撑识别的证据片段或中文转述。每条建议 40-140 个中文字符，必须是完整句子或完整分句，保留句末标点，不要在逗号、顿号、括号或专有名词中途截断。
+- articleId: 返回 null，后续 pipeline 会用 frontmatter id 回填。
+
+识别原则：
+- 产品：面向用户交付的应用、SaaS、工具、平台能力或商业化功能。
+- 项目：开源项目、开发框架、SDK、研究/工程项目、可被采用或持续跟踪的技术实现。
+- 如果只是普通公司名、概念词、宽泛技术类别，不要强行当作 project/product。
+- 宁可输出低置信度对象，也不要漏掉文章明确讨论的项目/产品；但每个对象必须有 evidenceSnippets。
+- evidenceSnippets 优先摘录原文中最能证明该对象存在和角色的一句；如需转述，必须保持事实完整，不能只输出对象名称、短标签或半句话。
+
 ## 输出格式
 只返回一个 JSON 对象，不要输出任何其他内容：
 {
@@ -86,15 +104,28 @@ def get_fact_extraction_system_prompt() -> str:
     "technologies": ["GPT-5"],
     "keyPeople": ["Sam Altman"]
   },
-  "keyLogicFlow": ["第一条中文关键事实", "第二条中文关键事实"]
+  "keyLogicFlow": ["第一条中文关键事实", "第二条中文关键事实"],
+  "objectMentions": [
+    {
+      "objectType": "project",
+      "name": "owner/repo",
+      "canonicalName": "owner/repo",
+      "url": "https://github.com/owner/repo",
+      "confidence": "high",
+      "articleRole": "primary_subject",
+      "evidenceSnippets": ["文章明确介绍该 GitHub 仓库的功能和使用场景。"],
+      "articleId": null
+    }
+  ]
 }
 
 ## 重要提醒
 所有文本字段（tldr、objectiveSummary、keyLogicFlow）必须以完整句子结束。
 字符数建议为软性参考，优先保证语义完整——宁可超出也不要截断。
+objectMentions.evidenceSnippets 也必须以完整句子或完整分句结束；目标长度 40-140 个中文字符，不能为了压缩而丢掉后半句或句末标点。
 
 ## 专题标注
-专题分析能力暂时停用，待重新设计后恢复。不要输出 specializedTags 字段。"""
+不要输出 specializedTags 字段；新的专题洞察只使用 objectMentions。"""
 
 
 
@@ -129,4 +160,6 @@ def build_fact_extraction_user_prompt(title: str, source: str, body: str) -> str
 重要提醒：
 - tldr、objectiveSummary、keyLogicFlow 必须使用中文输出
 - 即使原文是英文，也要翻译或归纳为流畅的中文
-- entities 中的公司名、技术名、人名保持原文"""
+- entities 中的公司名、技术名、人名保持原文
+- objectMentions 要尽可能识别文章中的项目和产品，并为每个对象提供 evidenceSnippets
+- evidenceSnippets 每条目标长度 40-140 个中文字符，必须表达完整事实并保留句末标点，不能在逗号或半句处截断"""

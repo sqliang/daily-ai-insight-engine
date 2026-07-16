@@ -8,10 +8,87 @@ Phase 1 实现 GitHubProjectAnalysis，Phase 2/3 追加 ProductAnalysis 和 Pape
 """
 
 from enum import Enum
-from typing import List, Optional
-from pydantic import BaseModel, Field
+from typing import List, Literal, Optional
+from pydantic import BaseModel, Field, field_validator
 
 from .fact_extraction import AiDetail
+
+
+# =============================================================================
+# 统一对象洞察模型
+# =============================================================================
+
+
+class ObjectInsight(BaseModel):
+    """
+    项目/产品统一对象洞察——Stage 3 专题洞察 v1 产出。
+
+    设计理念：
+        从所有文章中识别具象对象后，用统一轻量结构承载“为什么值得关注”，
+        避免旧 GitHub/Product 专项 schema 过重且绑定来源。
+    """
+
+    object_type: Literal["project", "product"] = Field(
+        ...,
+        alias="objectType",
+        description="对象类型。v1 仅分析 project/product。",
+    )
+    name: str = Field(..., description="对象名称")
+    canonical_name: str = Field(..., alias="canonicalName", description="归一化名称")
+    url: Optional[str] = Field(default=None, description="对象 URL")
+    positioning: str = Field(..., description="对象定位，用中文说明它解决什么问题。建议 30-90 个中文字符，需完整收尾。")
+    technical_signal: Optional[str] = Field(default=None, alias="technicalSignal", description="项目技术信号。建议 25-90 个中文字符，需完整收尾。")
+    adoption_signal: Optional[str] = Field(default=None, alias="adoptionSignal", description="项目采用信号。建议 25-90 个中文字符，需完整收尾。")
+    ecosystem_relevance: Optional[str] = Field(default=None, alias="ecosystemRelevance", description="项目生态相关性。建议 25-90 个中文字符，需完整收尾。")
+    target_users: List[str] = Field(default_factory=list, alias="targetUsers", description="产品目标用户")
+    product_signal: Optional[str] = Field(default=None, alias="productSignal", description="产品能力或体验信号。建议 25-90 个中文字符，需完整收尾。")
+    market_signal: Optional[str] = Field(default=None, alias="marketSignal", description="市场或商业化信号。建议 25-90 个中文字符，需完整收尾。")
+    differentiation: Optional[str] = Field(default=None, description="差异化判断。建议 25-90 个中文字符，需完整收尾。")
+    watch_reason: str = Field(..., alias="watchReason", description="为什么值得持续关注。建议 60-160 个中文字符，需完整收尾。")
+    risk_notes: List[str] = Field(default_factory=list, alias="riskNotes", description="主要风险或不确定性。每条建议 25-90 个中文字符，需完整收尾。")
+    score: float = Field(..., ge=1, le=10, description="专题关注评分 1-10")
+    article_ids: List[str] = Field(default_factory=list, alias="articleIds", description="支撑该洞察的文章 ID")
+    evidence_snippets: List[str] = Field(
+        default_factory=list,
+        alias="evidenceSnippets",
+        description="支撑证据片段。每条建议 40-140 个中文字符，需表达完整事实并保留句末标点。",
+    )
+
+    @field_validator("positioning", mode="before")
+    @classmethod
+    def _normalize_required_text(cls, value: object) -> str:
+        """模型偶发返回 null 时保留对象洞察，避免整篇专题分析被丢弃。"""
+        if value is None:
+            return "未提供明确定位"
+        if isinstance(value, str) and not value.strip():
+            return "未提供明确定位"
+        return str(value)
+
+    @field_validator("target_users", "risk_notes", "article_ids", "evidence_snippets", mode="before")
+    @classmethod
+    def _normalize_list_fields(cls, value: object) -> list[object]:
+        """列表字段兼容模型返回 null 或单个字符串的情况。"""
+        if value is None:
+            return []
+        if isinstance(value, list):
+            return value
+        return [value]
+
+    class Config:
+        populate_by_name = True
+
+
+class ObjectInsightBundle(BaseModel):
+    """单篇文章的统一对象洞察集合。"""
+
+    object_insights: List[ObjectInsight] = Field(
+        default_factory=list,
+        alias="objectInsights",
+        description="本篇文章中高置信项目/产品对象的轻量洞察。",
+    )
+
+    class Config:
+        populate_by_name = True
 
 
 # =============================================================================

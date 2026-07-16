@@ -34,7 +34,7 @@ def _add_arguments(parser):
     )
     parser.add_argument(
         "--stage",
-        choices=["qualitative", "value", "foresight", "all"],
+        choices=["qualitative", "value", "foresight", "object", "all"],
         default="all",
         help="只运行指定评估维度 (默认: all)",
     )

@@ -50,9 +50,8 @@ export interface SpecializedAvailability {
 /**
  * 从日报数据中提取各专题报告的可用性。
  *
- * GitHub 与产品专题已恢复，论文专题仍保持关闭（恒为 null）。
- * GitHub 可用性基于 specializedBrief.githubHighlights.articleCount 和
- * domainDistribution 计算；产品可用性基于 productHighlights.articleCount。
+ * 项目与产品洞察优先读取新 projectInsights/productInsights。
+ * 历史报告没有新字段时，回退到 githubHighlights/productHighlights。
  *
  * 参数：
  *    report: 已解析的 DailyReport
@@ -63,16 +62,27 @@ export interface SpecializedAvailability {
 export function detectSpecializedAvailability(
   report: DailyReport,
 ): SpecializedAvailability {
+  const projectInsights = report.specializedBrief?.projectInsights;
   const gh = report.specializedBrief?.githubHighlights;
-  const github = gh
+  const github = projectInsights
+    ? {
+        count: projectInsights.items.length,
+        domains: projectInsights.distribution,
+      }
+    : gh
     ? {
         count: gh.articleCount,
         domains: gh.domainDistribution,
       }
     : null;
 
+  const productInsights = report.specializedBrief?.productInsights;
   const ph = report.specializedBrief?.productHighlights;
-  const product = ph
+  const product = productInsights
+    ? {
+        count: productInsights.items.length,
+      }
+    : ph
     ? {
         count: ph.articleCount,
       }

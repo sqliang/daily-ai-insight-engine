@@ -118,7 +118,7 @@ async def run_analysis(
     参数：
         input_path: 输入文件或目录（默认 data/02_extracted/）
         concurrency: 并发文件数（默认从 config 读取，3）
-        stages: 要运行的维度（"all" | "qualitative" | "value" | "foresight"）
+        stages: 要运行的维度（"all" | "qualitative" | "value" | "foresight" | "object"）
         skip_existing: 是否跳过已分析的文件
         force: 强制重新分析（忽略 skip_existing）
         dry_run: 仅列出文件，不实际调用 LLM
@@ -212,7 +212,7 @@ def _print_summary(results: list, stages: str) -> None:
 
     total_fields = sum(len(r.fields_extracted) for r in success)
 
-    label_map = {"qualitative": "定性研判", "value": "价值评估", "foresight": "前瞻预测", "all": "Deep Analysis"}
+    label_map = {"qualitative": "定性研判", "value": "价值评估", "foresight": "前瞻预测", "object": "对象洞察", "all": "Deep Analysis"}
     stage_label = label_map.get(stages, stages)
 
     print(f"\n{'='*60}")
@@ -229,5 +229,4 @@ def _print_summary(results: list, stages: str) -> None:
     print(f"\n{'='*60}")
     print(f"  分析完成")
     print(f"{'='*60}")
-
 

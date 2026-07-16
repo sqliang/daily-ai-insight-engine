@@ -63,7 +63,15 @@ def ingest_article(
     from pipeline.core.frontmatter_utils import build_ingestion_frontmatter
     from pipeline.utils.frontmatter import write_frontmatter
     from pipeline.utils.id_utils import generate_id
-    from pipeline.core.web_utils import extract_article_content, extract_metadata, fetch_url, fetch_via_jina, is_bot_challenge_html
+    from pipeline.core.web_utils import (
+        extract_article_content,
+        extract_metadata,
+        fetch_pdf_text,
+        fetch_url,
+        fetch_via_jina,
+        is_blocked_extracted_content,
+        is_bot_challenge_html,
+    )
 
     url = article.get("url", "")
     if not url:
@@ -73,6 +81,29 @@ def ingest_article(
 
     source_config = get_source_by_name(source_name) or {}
     timeout = source_config.get("timeout", 30)
+
+    if _is_pdf_url(url):
+        pdf_text = fetch_pdf_text(url, timeout=timeout)
+        if not pdf_text:
+            logger.info("PDF 文本抓取失败，标记为浏览器重试 source=%s url=%s", source_name, url)
+            return BOT_BLOCKED
+
+        fm = build_ingestion_frontmatter(
+            title=article.get("title", ""),
+            url=url,
+            published=article.get("published", ""),
+            author=article.get("author", ""),
+            description=article.get("summary", ""),
+            source_name=source_name,
+            article_id=article_id,
+            extraction_status="success",
+            created=created,
+        )
+        output_path = target_dir / f"{article_id}.md"
+        write_frontmatter(output_path, fm, apply_truncation(pdf_text, source_config))
+        state.mark_seen(article_id)
+        logger.info("PDF 文本抓取成功 source=%s url=%s", source_name, url)
+        return output_path
 
     if source_name == "producthunt":
         producthunt_path = _try_producthunt_ingest(
@@ -108,7 +139,7 @@ def ingest_article(
     if html and is_bot_challenge_html(html):
         logger.info("检测到反爬页面，尝试 Jina AI Reader 兜底 source=%s url=%s", source_name, url)
         jina_body = fetch_via_jina(url)
-        if jina_body:
+        if jina_body and not is_blocked_extracted_content(jina_body):
             # Jina 成功获取真实内容，直接写入文件（无需 Playwright）
             meta = extract_metadata(html, url)  # 元数据从原始 HTML 提取（标题等）
             fm = build_ingestion_frontmatter(
@@ -136,10 +167,13 @@ def ingest_article(
         meta = extract_metadata(html, url)
         content = extract_article_content(html, url)
 
-        if content:
+        if content and not is_blocked_extracted_content(content):
             # 正文提取成功
             extraction_status = "success"
             content = apply_truncation(content, source_config)
+        elif content and is_blocked_extracted_content(content):
+            logger.info("正文疑似反爬占位，标记为浏览器重试 source=%s url=%s", source_name, url)
+            return BOT_BLOCKED
         else:
             # HTML 拿到了但 trafilatura 无法提取正文，用 manifest summary 兜底
             extraction_status = "partial"
@@ -220,7 +254,12 @@ def ingest_browser_article(
     from pipeline.core.frontmatter_utils import build_ingestion_frontmatter
     from pipeline.utils.frontmatter import write_frontmatter
     from pipeline.utils.id_utils import generate_id
-    from pipeline.core.web_utils import extract_article_content, extract_metadata, is_bot_challenge_html
+    from pipeline.core.web_utils import (
+        extract_article_content,
+        extract_metadata,
+        is_blocked_extracted_content,
+        is_bot_challenge_html,
+    )
 
     url = article.get("url", "")
     if not url:
@@ -290,6 +329,9 @@ def ingest_browser_article(
                     # 残余 Cloudflare 标记不影响正文质量，以 trafilatura 结果为准
                     extraction_status = "success"
                     content = apply_truncation(content, source_config)
+            elif is_blocked_extracted_content(content):
+                extraction_status = "failed"
+                content = article.get("summary", "")
             else:
                 # 正文提取成功且无反爬标记，正常成功路径
                 extraction_status = "success"
@@ -475,6 +517,16 @@ def _build_hackernews_candidate_urls(article: dict) -> list[str]:
     return unique_candidates
 
 
+def _is_pdf_url(url: str) -> bool:
+    """
+    判断 URL 是否指向 PDF 文件。
+
+    查询参数中的下载链接仍保留原始路径判断，避免误伤普通 HTML 页面。
+    """
+    parsed = urlparse(url)
+    return parsed.path.lower().endswith(".pdf")
+
+
 def _build_stackprinter_url(url: str) -> Optional[str]:
     """
     将 StackExchange 问题页转换为 StackPrinter 导出 URL。
@@ -510,5 +562,11 @@ def _is_hackernews_fallback_error(content: str) -> bool:
     StackPrinter 参数错误时也会返回可提取文本，必须显式拒绝，避免把
     "Unsupported service" 这类错误页写成 success。
     """
+    from pipeline.core.web_utils import is_blocked_extracted_content
+
     lowered = content.lower()
-    return "unsupported service" in lowered or "server too busy" in lowered
+    return (
+        "unsupported service" in lowered
+        or "server too busy" in lowered
+        or is_blocked_extracted_content(content)
+    )

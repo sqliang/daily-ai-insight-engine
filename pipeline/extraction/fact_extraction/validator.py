@@ -75,6 +75,16 @@ _EPISTEMIC_FUZZY: dict[str, str] = {
     "speculation": "rumor_leak",
 }
 
+_OBJECT_TYPES: set[str] = {"project", "product", "paper", "model", "dataset", "company"}
+_OBJECT_CONFIDENCES: set[str] = {"high", "medium", "low"}
+_OBJECT_ARTICLE_ROLES: set[str] = {
+    "primary_subject",
+    "mentioned_reference",
+    "ecosystem_context",
+}
+_EVIDENCE_SNIPPET_MAX_CHARS = 140
+_EVIDENCE_TERMINAL_PUNCTUATION = "。！？.!?」』”’）)]"
+
 
 # =============================================================================
 # 校验 + 修复
@@ -116,6 +126,153 @@ def _truncate_string_field(
             len(repaired[field_name]),
         )
 
+
+def _coerce_string_list(value: object) -> list[str]:
+    """
+    将 Agent 返回的片段字段规整为非空字符串数组。
+
+    参数：
+        value: 可能为字符串、字符串数组或其他类型的原始值
+
+    返回：
+        清洗后的非空字符串数组
+
+    设计理由：
+        objectMentions 的 evidenceSnippets 是专题洞察可信度的最低证据门槛。
+        单个对象字段脏掉时应丢弃该对象，而不是让整篇文章的事实提取失败。
+    """
+    if isinstance(value, str):
+        normalized = _normalize_evidence_snippet(value)
+        return [normalized] if normalized else []
+
+    if isinstance(value, list):
+        normalized_items = [
+            _normalize_evidence_snippet(item)
+            for item in value
+            if isinstance(item, str)
+        ]
+        return [item for item in normalized_items if item]
+
+    return []
+
+
+def _normalize_evidence_snippet(value: str) -> str:
+    """
+    规整证据片段的长度和句末完整性。
+
+    参数：
+        value: Agent 返回的证据片段
+
+    返回：
+        适合进入后续专题洞察链路的证据片段
+
+    设计理由：
+        证据片段会直接进入专题详情页。它既不能长到像正文，也不能短成标签；
+        这里对超长片段做自然边界截断，并补齐缺失的句末标点，避免 UI 中出现
+        “半句话”的观感。
+    """
+    snippet = " ".join(value.strip().split())
+    if not snippet:
+        return ""
+
+    if len(snippet) > _EVIDENCE_SNIPPET_MAX_CHARS:
+        snippet = truncate_at_natural_break(snippet, _EVIDENCE_SNIPPET_MAX_CHARS)
+        if len(snippet) > _EVIDENCE_SNIPPET_MAX_CHARS:
+            snippet = snippet[:_EVIDENCE_SNIPPET_MAX_CHARS].rstrip("，,、；;：:")
+        logger.info(
+            "evidenceSnippets 截断至 %d 字符以内",
+            _EVIDENCE_SNIPPET_MAX_CHARS,
+        )
+
+    if snippet and snippet[-1] not in _EVIDENCE_TERMINAL_PUNCTUATION:
+        snippet = f"{snippet}。"
+
+    return snippet
+
+
+def _sanitize_object_mentions(repaired: dict) -> None:
+    """
+    清洗 objectMentions，丢弃缺少基本证据或类型非法的对象条目。
+
+    参数：
+        repaired: 待修复的 Agent 返回字典，会被原地更新
+
+    设计理由：
+        专题洞察需要尽可能多识别项目和产品，但不能因为单个候选对象格式异常
+        导致整篇文章提取失败。这里保留有名称、有类型、有证据的对象，
+        其余对象确定性丢弃，后续合成阶段再根据 articleIds 做来源约束。
+    """
+    raw_mentions = repaired.get("objectMentions", repaired.get("object_mentions", []))
+    if not isinstance(raw_mentions, list):
+        raw_mentions = []
+
+    sanitized: list[dict] = []
+    dropped_count = 0
+
+    for raw in raw_mentions:
+        if not isinstance(raw, dict):
+            dropped_count += 1
+            continue
+
+        object_type = raw.get("objectType") or raw.get("object_type")
+        name = raw.get("name")
+        evidence_snippets = _coerce_string_list(
+            raw.get("evidenceSnippets", raw.get("evidence_snippets", []))
+        )
+
+        if object_type not in _OBJECT_TYPES or not isinstance(name, str) or not name.strip():
+            dropped_count += 1
+            continue
+
+        # 没有证据片段的对象不进入后续链路，避免“看起来像洞察”的无来源猜测。
+        if not evidence_snippets:
+            dropped_count += 1
+            continue
+
+        confidence = raw.get("confidence")
+        if confidence not in _OBJECT_CONFIDENCES:
+            confidence = "medium"
+
+        article_role = raw.get("articleRole") or raw.get("article_role")
+        if article_role not in _OBJECT_ARTICLE_ROLES:
+            article_role = "mentioned_reference"
+
+        canonical_name = raw.get("canonicalName") or raw.get("canonical_name") or name
+        article_id = raw.get("articleId") or raw.get("article_id")
+        url = raw.get("url")
+        normalized_canonical_name = (
+            canonical_name.strip()
+            if isinstance(canonical_name, str)
+            else name.strip()
+        )
+        normalized_article_id = (
+            article_id.strip()
+            if isinstance(article_id, str) and article_id.strip()
+            else None
+        )
+
+        sanitized.append({
+            "objectType": object_type,
+            "name": name.strip(),
+            "canonicalName": normalized_canonical_name,
+            "url": url.strip() if isinstance(url, str) and url.strip() else None,
+            "confidence": confidence,
+            "articleRole": article_role,
+            "evidenceSnippets": evidence_snippets,
+            "articleId": normalized_article_id,
+        })
+
+    repaired["objectMentions"] = sanitized
+    repaired.pop("object_mentions", None)
+
+    if dropped_count:
+        logger.info(
+            "objectMentions 清洗完成: 保留 %d 条, 丢弃 %d 条",
+            len(sanitized),
+            dropped_count,
+        )
+
+
 def _validate_fact_extraction(data: dict) -> FactExtraction:
     """
     验证并构造 FactExtraction 实例。
@@ -126,8 +283,9 @@ def _validate_fact_extraction(data: dict) -> FactExtraction:
         3. 检测 enum 交叉互换（eventType ↔ epistemicStatus）
         4. 单向字段修复
         5. 确保 entities / keyLogicFlow 存在
-        6. 截断超长文本字段
-        7. 修复后重新校验
+        6. 清洗 objectMentions，避免单个坏对象拖垮整篇文章
+        7. 截断超长文本字段
+        8. 修复后重新校验
 
     参数：
         data: Agent 返回的原始 JSON 字典
@@ -252,6 +410,11 @@ def _validate_fact_extraction(data: dict) -> FactExtraction:
         # --- 确保 keyLogicFlow 存在 ---
         if "keyLogicFlow" not in repaired:
             repaired["keyLogicFlow"] = []
+
+        # --- 确保 objectMentions 存在 ---
+        if "objectMentions" not in repaired and "object_mentions" not in repaired:
+            repaired["objectMentions"] = []
+        _sanitize_object_mentions(repaired)
 
         # --- 截断超长文本字段 ---
         _truncate_string_field(repaired, data, ("tldr",), 250)
