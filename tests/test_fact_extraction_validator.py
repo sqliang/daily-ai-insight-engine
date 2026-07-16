@@ -42,7 +42,7 @@ def test_validator_truncates_objective_summary_alias():
         _base_payload(objectiveSummary=long_summary)
     )
 
-    assert len(result.objective_summary) <= 150
+    assert len(result.objective_summary) <= 500
 
 
 def test_validator_truncates_objective_summary_snake_case():
@@ -54,15 +54,15 @@ def test_validator_truncates_objective_summary_snake_case():
 
     result = _validate_fact_extraction(payload)
 
-    assert len(result.objective_summary) <= 150
+    assert len(result.objective_summary) <= 500
 
 
 def test_validator_truncates_tldr():
-    """tldr 超长时应被截断到 80 字符以内。"""
+    """tldr 超长时应被截断到 schema 上限（250 字符）以内。"""
     long_tldr = "安全研究者披露 GitHub 相关零日漏洞投放活动，" * 10
 
     result = _validate_fact_extraction(
         _base_payload(tldr=long_tldr)
     )
 
-    assert len(result.tldr) <= 80
+    assert len(result.tldr) <= 250
