@@ -13,7 +13,7 @@ allowed-tools:
 license: MIT
 metadata:
   author: sqliang
-  version: "1.4.0"
+  version: "1.4.1"
 ---
 
 # Git Workflow
@@ -311,7 +311,17 @@ Label it appropriately. The issue captures the problem and context before any co
 Use the issue body template from `references/issue-template.md`.
 
 ```bash
-gh issue create --title "<type>: <brief description>" --body "..."
+# 同样使用 body-file 避免 \\n 转义问题
+cat > /tmp/issue-body.md << 'EOF'
+## Problem
+<清晰描述问题或需求>
+
+## Acceptance Criteria
+- [ ] <验收标准 1>
+- [ ] <验收标准 2>
+EOF
+
+gh issue create --title "<type>: <brief description>" --body-file /tmp/issue-body.md
 ```
 
 ### 2. Create a Branch
@@ -333,16 +343,34 @@ pnpm build
 uv run python -m pytest tests/
 ```
 
-Then push and create the PR:
+Then push and create the PR. **Always use `--body-file` instead of inline `--body`** — inline shell strings preserve literal `\n` characters, which render as broken newlines on GitHub.
 
 ```bash
 git push --set-upstream origin <branch-name>
-gh pr create --title "<type>(<scope>): <description>" --body "<PR body>"
+
+# 1. 按 references/pr-template.md 填充 PR 正文，保存为文件
+cat > /tmp/pr-body.md << 'EOF'
+## Summary
+<1-2 sentences on what this does and why>
+
+## Changes
+- <bullet list of key changes>
+
+## Verification
+- ✅ <check 1>
+- ✅ <check 2>
+EOF
+
+# 2. 创建 PR
+gh pr create --title "<type>(<scope>): <description>" --body-file /tmp/pr-body.md
 ```
 
 Use the PR body template from `references/pr-template.md` exactly — do not use a different format even if the repository has a `.github/PULL_REQUEST_TEMPLATE.md`. Reference the issue with `Closes #N` — GitHub will auto-link and auto-close the issue when the PR merges.
 
-After creating the PR, verify that CI checks (GitHub Actions + Vercel) pass. If any fail, fix locally and push again.
+After creating the PR, verify two things:
+
+1. **Rendered body**: run `gh pr view <number> --json body` and confirm the JSON contains real newlines (`\n`) rather than escaped `\\n`. If you see `\\n`, the body was passed incorrectly — edit it with `gh pr edit <number> --body-file /tmp/pr-body.md`.
+2. **CI checks**: confirm GitHub Actions + Vercel all pass. If any fail, fix locally and push again.
 
 ## 7. Code Review Best Practices
 

@@ -36,5 +36,19 @@ missing 5 of 9 sections causing large layout shift.
 ```
 
 ```bash
-gh issue create --title "<type>: <brief description>" --body "..."
+# 使用 body-file 避免 \\n 被原样写入正文
+cat > /tmp/issue-body.md << 'EOF'
+## Problem
+<What's broken or missing? What triggered this task?>
+
+## Scope
+- <Bullet list of what needs to change>
+- <Include specific files/components if known>
+
+## Acceptance
+- [ ] <Verifiable condition 1>
+- [ ] <Verifiable condition 2>
+EOF
+
+gh issue create --title "<type>: <brief description>" --body-file /tmp/issue-body.md
 ```
