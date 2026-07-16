@@ -8,7 +8,7 @@ pipeline/synthesis/editor_in_chief_agent.py — Stage 4b: Editor-in-Chief LLM Ag
     - 解析、校验、返回日报 dict
 
 设计原则：
-    - 单次 Claude Opus 调用，处理全部 200+ 篇文章的合成
+    - 单次 LLM 调用，处理全部 200+ 篇文章的合成
     - user prompt 包含预计算的统计摘要 + Top-N 完整 frontmatter + 剩余文章标题
     - system prompt 定义角色、输出 schema 和 9 条质控规则
 """
@@ -16,6 +16,8 @@ pipeline/synthesis/editor_in_chief_agent.py — Stage 4b: Editor-in-Chief LLM Ag
 import asyncio
 import json
 import logging
+import os
+from datetime import date, timedelta
 from pathlib import Path
 from typing import Optional
 
@@ -23,16 +25,246 @@ from pydantic import ValidationError
 
 from ..core.agent import call_agent_with_retry, parse_json_response
 from pipeline.utils.file_utils import read_json, ensure_dir
+from ..core.config_loader import resolve_data_dir, get_llm_config
 from .prompts.system_prompt import EDITOR_IN_CHIEF_SYSTEM_PROMPT
 from .prompts.user_prompt import build_user_prompt
 from ..schemas.daily_report import validate_daily_report
 
 logger = logging.getLogger(__name__)
 
-# 默认配置（与 config.yaml llm.synthesize 对齐）
+# 默认配置（与 config.yaml llm.synthesize 对齐；env 中 ANTHROPIC_MODEL 可作为兜底）
 DEFAULT_SYNTHESIS_MODEL = "claude-opus-4-7"
 DEFAULT_MAX_DETAIL = 30
 DEFAULT_MAX_TOKENS = 16384
+
+
+def _resolve_default_synthesis_model() -> str:
+    """
+    解析 synthesize 阶段的默认模型名称。
+
+    优先级：
+        1. config.yaml llm.synthesize.name
+        2. 环境变量 ANTHROPIC_MODEL
+        3. 硬编码兜底 DEFAULT_SYNTHESIS_MODEL
+
+    设计理由：
+        保持与 extract / analyze 阶段一致的配置语义，避免 synthesis 阶段
+        硬编码模型名而忽略用户在 .env / config.yaml 中的配置。
+    """
+    config_model = get_llm_config("synthesize").get("name")
+    if config_model:
+        return config_model
+
+    env_model = os.environ.get("ANTHROPIC_MODEL")
+    if env_model:
+        return env_model
+
+    return DEFAULT_SYNTHESIS_MODEL
+
+
+def _extract_github_articles(articles: list[dict]) -> list[dict]:
+    """
+    从 all_articles.json 的文章列表中提取 GitHub Trending 文章。
+
+    参数：
+        articles: all_articles.json 中的 articles 列表
+
+    返回：
+        source_dir == "github-trending" 的文章列表
+    """
+    return [a for a in articles if a.get("source_dir") == "github-trending"]
+
+
+def _extract_product_articles(articles: list[dict]) -> list[dict]:
+    """
+    从 all_articles.json 的文章列表中提取产品类文章。
+
+    参数：
+        articles: all_articles.json 中的 articles 列表
+
+    返回：
+        source_dir == "producthunt" 或 "whytryai" 的文章列表
+    """
+    return [
+        a for a in articles
+        if a.get("source_dir") in ("producthunt", "whytryai")
+    ]
+
+
+def _load_yesterday_github_keys(target_date: Optional[str]) -> set[str]:
+    """
+    读取昨日日报归档，获取已展示的 GitHub 项目去重键集合。
+
+    当前使用 topProjects 中的 project_name 作为去重键（日报中未保存 project_url）。
+    若昨日日报不存在或解析失败，返回空集合。
+
+    参数：
+        target_date: 目标报告日期（YYYY-MM-DD），None 时使用今天
+
+    返回：
+        昨日已展示的 GitHub 项目名集合
+    """
+    try:
+        if target_date:
+            yesterday = date.fromisoformat(target_date) - timedelta(days=1)
+        else:
+            yesterday = date.today() - timedelta(days=1)
+    except (ValueError, TypeError):
+        return set()
+
+    yesterday_str = yesterday.isoformat()
+    reports_dir = resolve_data_dir("reports")
+    report_path = reports_dir / f"daily-report-{yesterday_str}.json"
+
+    if not report_path.exists():
+        return set()
+
+    try:
+        data = read_json(report_path) or {}
+        gh = (data.get("specializedBrief") or {}).get("githubHighlights")
+        if not gh:
+            return set()
+        return set(gh.get("topProjects", []))
+    except Exception as exc:
+        logger.warning("读取昨日日报失败 %s: %s", report_path, exc)
+        return set()
+
+
+def _dedup_github_articles(
+    github_articles: list[dict],
+    yesterday_keys: set[str],
+) -> list[dict]:
+    """
+    对 GitHub 文章做跨天去重：剔除昨日已展示的项目。
+
+    去重键优先级：
+        1. specialized_tags.github.project_url（如果存在）
+        2. specialized_tags.github.project_name / 文章 title
+    同时检查 project_name 是否在昨日 topProjects 列表中。
+
+    参数：
+        github_articles: 当日 GitHub 文章候选列表
+        yesterday_keys: 昨日已展示项目名集合
+
+    返回：
+        去重后的当日 GitHub 文章列表
+    """
+    result: list[dict] = []
+    seen: set[str] = set()
+
+    for a in github_articles:
+        gh = {}
+        specialized_tags = a.get("specialized_tags")
+        if isinstance(specialized_tags, dict):
+            gh = specialized_tags.get("github", {}) or {}
+
+        project_url = gh.get("project_url") or gh.get("projectUrl", "")
+        project_name = gh.get("project_name") or gh.get("projectName") or a.get("title", "")
+
+        # 优先用 project_url 作为去重键，无 URL 时退回到 project_name
+        key = project_url if project_url else project_name
+        if not key:
+            continue
+
+        # 同时用 project_name 匹配昨日 topProjects（兼容无 URL 场景）
+        if project_name in yesterday_keys or key in yesterday_keys:
+            continue
+
+        if key in seen:
+            continue
+
+        seen.add(key)
+        result.append(a)
+
+    return result
+
+
+def _load_yesterday_product_keys(target_date: Optional[str]) -> set[str]:
+    """
+    读取昨日日报归档，获取已展示的产品去重键集合。
+
+    当前使用 productHighlights.notableProducts 中的 product_name 作为去重键。
+    若昨日日报不存在或解析失败，返回空集合。
+
+    参数：
+        target_date: 目标报告日期（YYYY-MM-DD），None 时使用今天
+
+    返回：
+        昨日已展示的产品名集合
+    """
+    try:
+        if target_date:
+            yesterday = date.fromisoformat(target_date) - timedelta(days=1)
+        else:
+            yesterday = date.today() - timedelta(days=1)
+    except (ValueError, TypeError):
+        return set()
+
+    yesterday_str = yesterday.isoformat()
+    reports_dir = resolve_data_dir("reports")
+    report_path = reports_dir / f"daily-report-{yesterday_str}.json"
+
+    if not report_path.exists():
+        return set()
+
+    try:
+        data = read_json(report_path) or {}
+        ph = (data.get("specializedBrief") or {}).get("productHighlights")
+        if not ph:
+            return set()
+        return set(ph.get("notableProducts", []))
+    except Exception as exc:
+        logger.warning("读取昨日日报失败 %s: %s", report_path, exc)
+        return set()
+
+
+def _dedup_product_articles(
+    product_articles: list[dict],
+    yesterday_keys: set[str],
+) -> list[dict]:
+    """
+    对产品文章做跨天去重：剔除昨日已展示的产品。
+
+    去重键优先级：
+        1. specialized_tags.product.product_url（如果存在）
+        2. specialized_tags.product.product_name / 文章 title
+    同时检查 product_name 是否在昨日 notableProducts 列表中。
+
+    参数：
+        product_articles: 当日产品文章候选列表
+        yesterday_keys: 昨日已展示产品名集合
+
+    返回：
+        去重后的当日产品文章列表
+    """
+    result: list[dict] = []
+    seen: set[str] = set()
+
+    for a in product_articles:
+        product = {}
+        specialized_tags = a.get("specialized_tags")
+        if isinstance(specialized_tags, dict):
+            product = specialized_tags.get("product", {}) or {}
+
+        product_url = product.get("product_url") or product.get("productUrl", "")
+        product_name = product.get("product_name") or product.get("productName") or a.get("title", "")
+
+        # 优先用 product_url 作为去重键，无 URL 时退回到 product_name
+        key = product_url if product_url else product_name
+        if not key:
+            continue
+
+        # 同时用 product_name 匹配昨日 notableProducts（兼容无 URL 场景）
+        if product_name in yesterday_keys or key in yesterday_keys:
+            continue
+
+        if key in seen:
+            continue
+
+        seen.add(key)
+        result.append(a)
+
+    return result
 
 
 def _apply_cjk_spacing(report: dict) -> None:
@@ -168,6 +400,9 @@ def _build_prompts(
     """
     读取 all_articles.json 并构造 system + user prompts。
 
+    Phase 1 新增：对 GitHub Trending 文章做跨天去重，并将去重后的 GitHub 统计
+    注入 user prompt，供主编 Agent 生成 specializedBrief.githubHighlights。
+
     参数：
         all_articles_path: all_articles.json 路径
         max_detail: 包含完整 frontmatter 的文章数上限
@@ -184,8 +419,43 @@ def _build_prompts(
     if not articles:
         raise ValueError("all_articles.json 的 articles 列表为空")
 
-    logger.info("构建 prompt — 总文章: %d, 详细展示: %d, target_date=%s", len(articles), max_detail, target_date)
-    user_prompt = build_user_prompt(articles, max_detail=max_detail, target_date=target_date)
+    # GitHub 专题文章提取 + 跨天去重
+    github_articles = _extract_github_articles(articles)
+    yesterday_github_keys = _load_yesterday_github_keys(target_date)
+    deduped_github = _dedup_github_articles(github_articles, yesterday_github_keys)
+    logger.info(
+        "GitHub 专题去重 — 原始: %d, 昨日已展示: %d, 剩余: %d",
+        len(github_articles),
+        len(yesterday_github_keys),
+        len(deduped_github),
+    )
+
+    # 产品专题文章提取 + 跨天去重
+    product_articles = _extract_product_articles(articles)
+    yesterday_product_keys = _load_yesterday_product_keys(target_date)
+    deduped_product = _dedup_product_articles(product_articles, yesterday_product_keys)
+    logger.info(
+        "产品专题去重 — 原始: %d, 昨日已展示: %d, 剩余: %d",
+        len(product_articles),
+        len(yesterday_product_keys),
+        len(deduped_product),
+    )
+
+    logger.info(
+        "构建 prompt — 总文章: %d, GitHub: %d, 产品: %d, 详细展示: %d, target_date=%s",
+        len(articles),
+        len(deduped_github),
+        len(deduped_product),
+        max_detail,
+        target_date,
+    )
+    user_prompt = build_user_prompt(
+        articles,
+        max_detail=max_detail,
+        target_date=target_date,
+        github_articles=deduped_github,
+        product_articles=deduped_product,
+    )
     return EDITOR_IN_CHIEF_SYSTEM_PROMPT, user_prompt
 
 
@@ -210,7 +480,7 @@ async def run_editor_in_chief(
 
     参数：
         all_articles_path: all_articles.json 文件路径
-        model: LLM 模型名称（默认 claude-opus-4-7）
+        model: LLM 模型名称（默认从 config.yaml / ANTHROPIC_MODEL 环境变量读取）
         max_detail: user prompt 中完整展示的文章数
         max_tokens: Agent max_tokens
         target_date: 目标报告日期（YYYY-MM-DD），None 时由 LLM 自主决定
@@ -218,7 +488,7 @@ async def run_editor_in_chief(
     返回：
         日报 dict（符合 dailyReportSchema 结构）
     """
-    model = model or DEFAULT_SYNTHESIS_MODEL
+    model = model or _resolve_default_synthesis_model()
 
     system_prompt, user_prompt = _build_prompts(
         all_articles_path, max_detail=max_detail, target_date=target_date

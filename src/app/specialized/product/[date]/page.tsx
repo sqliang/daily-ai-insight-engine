@@ -1,28 +1,36 @@
 // ============================================================================
 // /specialized/product/[date] — 产品扫描专题报告页
 //
-// 展示指定日期的 AI 产品分析结果。
-// TODO: 专题分析能力暂时停用，待重新设计后恢复。
+// 展示指定日期的 AI 产品当日简报。
+// Phase 2 改为从日报 JSON 的 specializedBrief.productHighlights 读取，
+// 保持与日报卡片口径一致；不再直接聚合 all_articles.json。
 // ============================================================================
 
-import Link from 'next/link';
-import { loadProductArticles } from '@/lib/data/specialized';
-import type { ProductEntry } from '@/lib/data/specialized';
-import { PageShell } from '@/components/layout/PageShell';
+import Link from "next/link";
+import type { ReactNode } from "react";
+import { loadProductBrief } from "@/lib/data/specialized";
+import { PageShell } from "@/components/layout/PageShell";
+import { SpecializedReportHero } from "@/components/reports/SpecializedReportHero";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 interface Props {
   params: Promise<{ date: string }>;
 }
 
+const LAUNCH_CONTEXT_LABELS: Record<string, string> = {
+  new_launch: "新产品",
+  major_update: "重大更新",
+  pivot: "战略转型",
+  funding_announcement: "融资发布",
+};
+
 export default async function ProductSpecializedPage({ params }: Props) {
   const { date } = await params;
+  const brief = await loadProductBrief(date);
 
-  const products = await loadProductArticles(date);
-
-  // 当日无数据 → 空状态页
-  if (products.length === 0) {
+  // 当日无产品简报 → 空状态页
+  if (!brief || brief.articleCount === 0) {
     return (
       <PageShell>
         <div className="py-20 text-center">
@@ -30,9 +38,12 @@ export default async function ProductSpecializedPage({ params }: Props) {
             {date} 产品扫描专题报告
           </h1>
           <p className="text-gray-500 dark:text-gray-400">
-            当日没有产品数据。
+            当日没有新的 AI 产品动态。
           </p>
-          <Link href="/dashboard" className="text-blue-600 hover:underline mt-4 inline-block">
+          <Link
+            href="/dashboard"
+            className="text-blue-600 hover:underline mt-4 inline-block"
+          >
             ← 回到日报列表
           </Link>
         </div>
@@ -42,218 +53,168 @@ export default async function ProductSpecializedPage({ params }: Props) {
 
   return (
     <PageShell>
-      {/* Hero Banner */}
-      <div className="mb-8 p-6 rounded-xl bg-gradient-to-br from-orange-50 to-amber-50 dark:from-orange-950/30 dark:to-amber-950/30 border border-orange-200 dark:border-orange-800">
-        <Link
-          href={`/dashboard/${date}`}
-          className="text-sm text-orange-600 dark:text-orange-400 hover:underline mb-2 inline-block"
-        >
-          ← 回到日报
-        </Link>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-2">
-          {date} 产品扫描专题报告
-        </h1>
-        <p className="text-gray-600 dark:text-gray-400 mt-1">
-          共 {products.length} 个产品
-        </p>
-      </div>
+      <SpecializedReportHero
+        date={date}
+        title="产品扫描"
+        eyebrow="Product Brief"
+        summary={brief.summary}
+        stats={[
+          { label: "个产品", value: `${brief.articleCount}` },
+          {
+            label: "种发布类型",
+            value: `${Object.keys(brief.launchContextDistribution).length}`,
+          },
+          { label: "项推荐", value: `${brief.notableProducts.length}` },
+        ]}
+      >
+        {Object.keys(brief.launchContextDistribution).length > 0 && (
+          <TagGroup label="发布上下文">
+            {Object.entries(brief.launchContextDistribution)
+              .sort((a, b) => b[1] - a[1])
+              .map(([context, count]) => (
+                <DistributionTag
+                  key={context}
+                  label={LAUNCH_CONTEXT_LABELS[context] || context}
+                  count={count}
+                />
+              ))}
+          </TagGroup>
+        )}
+      </SpecializedReportHero>
 
-      {/* 产品列表 */}
-      <div className="space-y-4">
-        {products.map((product) => (
-          <ProductCardItem key={product.articleId} product={product} date={date} />
-        ))}
-      </div>
+      <section className="mt-10 min-w-0">
+        <div className="mb-6 flex items-center justify-between border-b border-line pb-3.5">
+          <div className="flex items-center gap-2.5">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="var(--accent)"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <rect x="3" y="3" width="7" height="7" rx="1" />
+              <rect x="14" y="3" width="7" height="7" rx="1" />
+              <rect x="3" y="14" width="7" height="7" rx="1" />
+              <rect x="14" y="14" width="7" height="7" rx="1" />
+            </svg>
+            <h2 className="text-[15px] font-bold text-foreground">重点产品</h2>
+            <span
+              className="rounded-md px-2 py-0.5 text-[12px] font-semibold"
+              style={{
+                color: "var(--accent)",
+                backgroundColor:
+                  "color-mix(in oklch, var(--accent) 10%, transparent)",
+              }}
+            >
+              {brief.notableProducts.length} 项
+            </span>
+          </div>
+        </div>
+
+        <div className="space-y-5">
+          {brief.notableProducts.map((productName, index) => (
+            <ProductRow
+              key={productName}
+              rank={index + 1}
+              productName={productName}
+            />
+          ))}
+        </div>
+      </section>
+
+      {brief.notableProducts.length === 0 && (
+        <p className="text-center text-gray-500 py-12">当日无重点推荐产品。</p>
+      )}
     </PageShell>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 产品卡片子组件（列表项渲染）
+// 产品行子组件
 // ---------------------------------------------------------------------------
 
-function ProductCardItem({ product }: { product: ProductEntry; date: string }) {
-  // 检查是否有 Stage 3 产品分析数据
-  const hasAnalysis = !!product.productAssessment;
-
+function TagGroup({
+  label,
+  children,
+}: {
+  label: string;
+  children: ReactNode;
+}) {
   return (
-    <Link
-      href={product.productUrl || `/sources/producthunt`}
-      className="block rounded-lg border border-gray-200 dark:border-gray-700 p-4 hover:border-orange-300 dark:hover:border-orange-700 transition-colors"
+    <div className="flex flex-col gap-2 sm:flex-row sm:items-start">
+      <span className="w-20 shrink-0 text-[11px] font-semibold uppercase tracking-wider text-white/40">
+        {label}
+      </span>
+      <div className="flex flex-wrap gap-1.5">{children}</div>
+    </div>
+  );
+}
+
+function DistributionTag({ label, count }: { label: string; count: number }) {
+  return (
+    <span className="inline-flex items-center rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-xs font-medium text-white/65">
+      {label}
+      <span className="ml-1 text-accent-light">×{count}</span>
+    </span>
+  );
+}
+
+function ProductRow({ rank, productName }: { rank: number; productName: string }) {
+  return (
+    <article
+      className="group relative overflow-hidden rounded-2xl border border-line/60 bg-panel/85 shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/25 hover:shadow-lg"
+      style={{ borderLeft: "4px solid var(--warm)" }}
     >
-      <div className="flex items-start justify-between gap-4">
-        <div className="min-w-0 flex-1">
-          {/* 产品名称 + 分类标签 */}
-          <div className="flex items-center gap-2 flex-wrap mb-1">
-            <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100 truncate">
-              {product.productName || product.title}
-            </h3>
-            {product.launchContext && (
-              <LaunchContextPill context={product.launchContext} />
-            )}
-            {product.pricingModel && (
-              <PricingPill model={product.pricingModel} />
-            )}
+      <div className="block p-5 outline-none transition-colors md:p-6">
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-start">
+          <div className="flex min-w-0 flex-1 flex-col gap-3">
+            <div className="flex flex-wrap items-center gap-2.5">
+              <span className="inline-flex items-center rounded-full bg-accent/8 px-3 py-1 text-[12px] font-semibold text-accent">
+                Product Brief
+              </span>
+              <span className="font-mono text-[12px] text-muted/45">
+                #{rank}
+              </span>
+            </div>
+
+            <div>
+              <h3 className="text-[18px] font-bold leading-snug text-foreground transition-colors duration-200 group-hover:text-accent md:text-[19px]">
+                {productName}
+              </h3>
+              <p className="mt-2.5 line-clamp-2 text-[14px] leading-[1.75] text-foreground/55">
+                今日产品专题简报选出的重点产品，可用于快速观察新品方向、用户场景与产品化信号。
+              </p>
+            </div>
           </div>
 
-          {/* 公司信息 */}
-          {product.companyTeam && (
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-              {product.companyTeam}
-              {product.productCategory && (
-                <span className="ml-2 text-orange-600 dark:text-orange-400">
-                  {product.productCategory}
-                </span>
-              )}
-            </p>
-          )}
-
-          {/* 价值主张摘要 */}
-          {hasAnalysis && product.productAssessment?.positioning?.valueProposition && (
-            <p className="mt-2 text-sm text-gray-700 dark:text-gray-300">
-              <span className="text-orange-500 dark:text-orange-400 font-medium">价值主张: </span>
-              {product.productAssessment.positioning.valueProposition}
-            </p>
-          )}
-
-          {/* 核心功能预览 */}
-          {hasAnalysis && (product.productAssessment?.featureBreakdown?.coreFeatures?.length > 0) && (
-            <div className="mt-2 flex flex-wrap gap-1">
-              {product.productAssessment?.featureBreakdown?.coreFeatures
-                .slice(0, 3)
-                .map((f: { name: string; innovationLevel: string }) => (
-                  <span
-                    key={f.name}
-                    className="inline-flex items-center rounded bg-amber-50 dark:bg-amber-900/20 px-2 py-0.5 text-xs text-amber-700 dark:text-amber-400"
-                  >
-                    {f.name}
-                    {f.innovationLevel === 'breakthrough' && ' ★'}
-                  </span>
-                ))}
-            </div>
-          )}
-
-          {/* 用户情绪 + PMF 信号 */}
-          {hasAnalysis && (
-            <div className="mt-2 flex flex-wrap items-center gap-2 text-xs">
-              {product.productAssessment?.userSentimentSynthesis?.overallSentiment && (
-                <SentimentLabel sentiment={product.productAssessment.userSentimentSynthesis.overallSentiment} />
-              )}
-              {product.productAssessment?.marketAssessment?.pmfSignal && (
-                <PmfLabel signal={product.productAssessment.marketAssessment.pmfSignal} />
-              )}
-              {product.productAssessment?.businessModelAnalysis?.growthSignals && (
-                <GrowthLabel signal={product.productAssessment.businessModelAnalysis.growthSignals} />
-              )}
-            </div>
-          )}
-
-          {/* TLDR 回退（无 Stage 3 分析时显示） */}
-          {!hasAnalysis && product.tldr && (
-            <p className="mt-2 text-xs text-gray-500 dark:text-gray-400 line-clamp-2">
-              {product.tldr}
-            </p>
-          )}
+          <div className="flex shrink-0 items-center justify-between gap-4 border-t border-line/50 pt-4 lg:w-44 lg:flex-col lg:items-end lg:border-t-0 lg:pt-0 lg:pr-12">
+            <span className="inline-flex min-w-16 items-center justify-center rounded-xl bg-accent/8 px-3 py-2 font-mono text-[17px] font-bold tabular-nums text-accent ring-1 ring-accent/15">
+              {rank}
+            </span>
+            <span className="inline-flex items-center gap-2 text-[13px] font-bold text-accent transition-transform duration-200 group-hover:translate-x-1">
+              查看摘要
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M3 8h10" />
+                <path d="m9 4 4 4-4 4" />
+              </svg>
+            </span>
+          </div>
         </div>
-
-        {/* 箭头指示 */}
-        <svg className="w-5 h-5 text-gray-400 flex-shrink-0 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-        </svg>
       </div>
-    </Link>
+    </article>
   );
-}
-
-// ---------------------------------------------------------------------------
-// 子组件 Inline Badges
-// ---------------------------------------------------------------------------
-
-const LAUNCH_CONTEXT_LABELS: Record<string, string> = {
-  new_launch: '新产品',
-  major_update: '重大更新',
-  pivot: '战略转型',
-  funding_announcement: '融资发布',
-};
-
-const PRICING_LABELS: Record<string, string> = {
-  freemium: 'Freemium',
-  subscription: '订阅制',
-  usage_based: '按量计费',
-  open_source: '开源',
-  free: '免费',
-  enterprise: '企业版',
-  unknown: '未公布',
-};
-
-const SENTIMENT_LABELS: Record<string, string> = {
-  overwhelmingly_positive: '极度好评',
-  mostly_positive: '多数好评',
-  mixed: '褒贬不一',
-  mostly_negative: '多数差评',
-};
-
-const PMF_LABELS: Record<string, string> = {
-  strong_pmf: '强 PMF',
-  finding_pmf: '寻找 PMF',
-  too_early_to_tell: '为时过早',
-  no_signal: '暂无信号',
-};
-
-const GROWTH_LABELS: Record<string, string> = {
-  strong: '强劲增长',
-  moderate: '稳定增长',
-  early: '早期阶段',
-  unclear: '信号不明',
-};
-
-function LaunchContextPill({ context }: { context: string }) {
-  const label = LAUNCH_CONTEXT_LABELS[context] || context;
-  return (
-    <span className="inline-flex items-center rounded-full bg-orange-100 dark:bg-orange-900/30 px-2 py-0.5 text-xs font-medium text-orange-700 dark:text-orange-300">
-      {label}
-    </span>
-  );
-}
-
-function PricingPill({ model }: { model: string }) {
-  const label = PRICING_LABELS[model] || model;
-  return (
-    <span className="inline-flex items-center rounded-full bg-amber-100 dark:bg-amber-900/30 px-2 py-0.5 text-xs font-medium text-amber-700 dark:text-amber-300">
-      {label}
-    </span>
-  );
-}
-
-function SentimentLabel({ sentiment }: { sentiment: string }) {
-  const label = SENTIMENT_LABELS[sentiment] || sentiment;
-  const color =
-    sentiment === 'overwhelmingly_positive' || sentiment === 'mostly_positive'
-      ? 'text-green-600 dark:text-green-400'
-      : sentiment === 'mixed'
-        ? 'text-yellow-600 dark:text-yellow-400'
-        : 'text-red-600 dark:text-red-400';
-  return <span className={`text-xs ${color}`}>{label}</span>;
-}
-
-function PmfLabel({ signal }: { signal: string }) {
-  const label = PMF_LABELS[signal] || signal;
-  const color =
-    signal === 'strong_pmf'
-      ? 'text-green-600 dark:text-green-400'
-      : signal === 'finding_pmf'
-        ? 'text-blue-600 dark:text-blue-400'
-        : 'text-gray-400';
-  return <span className={`text-xs ${color}`}>{label}</span>;
-}
-
-function GrowthLabel({ signal }: { signal: string }) {
-  const label = GROWTH_LABELS[signal] || signal;
-  const color =
-    signal === 'strong'
-      ? 'text-green-600 dark:text-green-400'
-      : signal === 'moderate'
-        ? 'text-blue-600 dark:text-blue-400'
-        : 'text-gray-400';
-  return <span className={`text-xs ${color}`}>{label}</span>;
 }

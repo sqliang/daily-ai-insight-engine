@@ -1,14 +1,13 @@
 // ============================================================================
-// SpecializedBriefSection.tsx — 日报专题简报入口 Section
+// SpecializedBriefSection.tsx — 日报专题洞察入口 Section
 //
 // 从 dailyReport.specializedBrief 读取可选子块，
-// 渲染为入口卡片，点击进入专题报告详情页。
-// TODO: 专题分析能力暂时停用，待重新设计后恢复。
+// 渲染为总洞察报告下的轻量延伸入口。
+// 这里不展开专题摘要和对象列表，避免打断 /dashboard/[date] 的主报告阅读链路。
+// GitHub 与 Product 已恢复；Paper 当前保持关闭，未来有数据后可自然加入入口。
 // ============================================================================
 
 import Link from 'next/link';
-import { DOMAIN_LABELS } from '@/components/sources/GitHubProjectCard';
-import { RESEARCH_AREA_LABELS } from '@/components/sources/PaperCard';
 
 // ---------------------------------------------------------------------------
 // 类型定义（匹配 Stage 4b 输出的 specializedBrief 字段形状）
@@ -32,6 +31,7 @@ interface PaperHighlights {
 interface ProductHighlights {
   summary: string;
   notableProducts: string[];
+  launchContextDistribution?: Record<string, number>;
   articleCount: number;
 }
 
@@ -44,6 +44,14 @@ interface SpecializedBrief {
 interface SpecializedBriefSectionProps {
   data: SpecializedBrief | null | undefined;
   date: string;
+  /** 渲染场景：banner 用于深色 ReportHeader 内，surface 用于普通页面背景 */
+  variant?: "surface" | "banner";
+}
+
+interface InsightLink {
+  label: string;
+  href: string;
+  tone: "accent" | "warm" | "cool";
 }
 
 // ---------------------------------------------------------------------------
@@ -51,212 +59,147 @@ interface SpecializedBriefSectionProps {
 // ---------------------------------------------------------------------------
 
 /**
- * 日报专题简报入口 Section。
+ * 日报专题洞察入口 Section。
  *
- * 在 DashboardContent 中渲染，展示 GitHub/Product/Paper 三个专题的摘要卡片。
+ * 在 DashboardContent 头部之后渲染，作为主报告的轻量延伸导航。
  * 当 specializedBrief 为空或所有子块均为 null 时，不渲染任何内容。
  */
-export function SpecializedBriefSection({ data, date }: SpecializedBriefSectionProps) {
+export function SpecializedBriefSection({
+  data,
+  date,
+  variant = "surface",
+}: SpecializedBriefSectionProps) {
   if (!data) return null;
 
-  const hasContent = data.githubHighlights || data.productHighlights || data.paperHighlights;
-  if (!hasContent) return null;
+  const links: InsightLink[] = [];
+
+  if (data.githubHighlights) {
+    links.push({
+      label: "项目洞察",
+      href: `/specialized/github/${date}`,
+      tone: "accent",
+    });
+  }
+
+  if (data.productHighlights) {
+    links.push({
+      label: "产品洞察",
+      href: `/specialized/product/${date}`,
+      tone: "warm",
+    });
+  }
+
+  if (data.paperHighlights) {
+    links.push({
+      label: "论文洞察",
+      href: `/specialized/paper/${date}`,
+      tone: "cool",
+    });
+  }
+
+  if (links.length === 0) return null;
+
+  const isBanner = variant === "banner";
+  const sectionClass = isBanner
+    ? "rounded-xl border border-white/10 bg-white/[0.055] px-4 py-3 backdrop-blur md:px-5"
+    : "mt-4 rounded-2xl border border-line/70 bg-panel/75 px-4 py-3 shadow-sm backdrop-blur sm:px-5";
+  const titleClass = isBanner
+    ? "text-sm font-bold text-white"
+    : "text-sm font-bold text-foreground";
+  const descriptionClass = isBanner
+    ? "mt-1 max-w-3xl text-xs leading-5 text-white/68 md:text-[13px] md:leading-6"
+    : "mt-1 max-w-3xl text-xs leading-5 text-foreground/66 md:text-[13px] md:leading-6";
 
   return (
-    <section className="mt-8">
-      <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-        专题洞察
-      </h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {data.githubHighlights && (
-          <GithubBriefCard data={data.githubHighlights} date={date} />
-        )}
-        {data.productHighlights && (
-          <ProductBriefCard data={data.productHighlights} date={date} />
-        )}
-        {data.paperHighlights && (
-          <PaperBriefCard data={data.paperHighlights} date={date} />
-        )}
+    <section
+      className={sectionClass}
+      aria-labelledby="specialized-insight-title"
+    >
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex min-w-0 items-start gap-3">
+          <span
+            className="mt-1 h-8 w-1 shrink-0 rounded-full bg-gradient-to-b from-accent via-warm to-cool"
+            aria-hidden="true"
+          />
+          <div className="min-w-0">
+            <h2
+              id="specialized-insight-title"
+              className={titleClass}
+            >
+              专题洞察
+            </h2>
+            <p className={descriptionClass}>
+              在总览趋势之外，进一步识别值得持续跟踪的项目与产品线索，从宏观判断下钻到具体对象，捕捉技术演进与产品化机会。
+            </p>
+          </div>
+        </div>
+
+        <nav
+          className="flex flex-wrap items-center gap-2 sm:justify-end"
+          aria-label="专题洞察入口"
+        >
+          {links.map((link) => (
+            <InsightLinkChip
+              key={link.href}
+              link={link}
+              variant={variant}
+            />
+          ))}
+        </nav>
       </div>
     </section>
   );
 }
 
 // ---------------------------------------------------------------------------
-// GitHub 简报卡片
+// 入口 Chip
 // ---------------------------------------------------------------------------
 
-function GithubBriefCard({ data, date }: { data: GithubHighlights; date: string }) {
+function InsightLinkChip({
+  link,
+  variant,
+}: {
+  link: InsightLink;
+  variant: "surface" | "banner";
+}) {
+  const toneClass =
+    variant === "banner"
+      ? {
+          accent:
+            "border-accent-light/35 bg-accent-light/10 text-accent-light hover:border-accent-light/60 hover:bg-accent-light/16",
+          warm:
+            "border-warm/45 bg-warm/12 text-warm-light hover:border-warm/70 hover:bg-warm/18",
+          cool:
+            "border-cool/45 bg-cool/12 text-cool-light hover:border-cool/70 hover:bg-cool/18",
+        }[link.tone]
+      : {
+          accent:
+            "border-accent/25 bg-accent/8 text-accent hover:border-accent/45 hover:bg-accent/12",
+          warm:
+            "border-warm/25 bg-warm/8 text-warm hover:border-warm/45 hover:bg-warm/12",
+          cool:
+            "border-cool/25 bg-cool/8 text-cool hover:border-cool/45 hover:bg-cool/12",
+        }[link.tone];
+
   return (
     <Link
-      href={`/specialized/github/${date}`}
-      className="block rounded-xl border border-purple-200 dark:border-purple-800 bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-purple-950/20 dark:to-indigo-950/20 p-5 hover:shadow-md hover:border-purple-300 dark:hover:border-purple-700 transition-all group"
+      href={link.href}
+      className={`inline-flex min-h-8 items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent ${toneClass}`}
     >
-      <div className="flex items-center gap-2 mb-2">
-        <span className="text-2xl">🐙</span>
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-          GitHub 开源项目
-        </h3>
-        <span className="ml-auto inline-flex items-center rounded-full bg-purple-100 dark:bg-purple-900/30 px-2 py-0.5 text-xs font-medium text-purple-700 dark:text-purple-300">
-          {data.articleCount} 个项目
-        </span>
-      </div>
-
-      <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
-        {data.summary}
-      </p>
-
-      {/* Top 项目列表 */}
-      {data.topProjects?.length > 0 && (
-        <div className="space-y-1 mb-3">
-          {data.topProjects.slice(0, 3).map((name, i) => (
-            <div key={name} className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
-              <span className="text-purple-400 text-xs font-mono">{i + 1}.</span>
-              <span className="truncate">{name}</span>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* 领域分布预览 */}
-      {data.domainDistribution && Object.keys(data.domainDistribution).length > 0 && (
-        <div className="flex flex-wrap gap-1">
-          {Object.entries(data.domainDistribution)
-            .sort((a, b) => b[1] - a[1])
-            .slice(0, 4)
-            .map(([domain, count]) => (
-              <span
-                key={domain}
-                className="inline-flex items-center rounded-full bg-white/60 dark:bg-gray-800/60 px-2 py-0.5 text-xs text-gray-600 dark:text-gray-400"
-              >
-                {DOMAIN_LABELS[domain] || domain} ×{count}
-              </span>
-            ))}
-          {Object.keys(data.domainDistribution).length > 4 && (
-            <span className="text-xs text-gray-400">
-              +{Object.keys(data.domainDistribution).length - 4}
-            </span>
-          )}
-        </div>
-      )}
-
-      <div className="mt-3 flex items-center text-sm text-purple-600 dark:text-purple-400 group-hover:underline">
-        查看完整报告
-        <svg className="w-4 h-4 ml-1 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-        </svg>
-      </div>
-    </Link>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// 论文简报卡片
-// ---------------------------------------------------------------------------
-
-function PaperBriefCard({ data, date }: { data: PaperHighlights; date: string }) {
-  return (
-    <Link
-      href={`/specialized/paper/${date}`}
-      className="block rounded-xl border border-purple-200 dark:border-purple-800 bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-purple-950/20 dark:to-indigo-950/20 p-5 hover:shadow-md hover:border-purple-300 dark:hover:border-purple-700 transition-all group"
-    >
-      <div className="flex items-center gap-2 mb-2">
-        <span className="text-2xl">📄</span>
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-          论文速递
-        </h3>
-        <span className="ml-auto inline-flex items-center rounded-full bg-purple-100 dark:bg-purple-900/30 px-2 py-0.5 text-xs font-medium text-purple-700 dark:text-purple-300">
-          {data.articleCount} 篇论文
-        </span>
-      </div>
-
-      <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
-        {data.summary}
-      </p>
-
-      {/* 重点论文列表 */}
-      {data.keyPapers?.length > 0 && (
-        <div className="space-y-1 mb-3">
-          {data.keyPapers.slice(0, 3).map((name, i) => (
-            <div key={name} className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
-              <span className="text-purple-400 text-xs font-mono">{i + 1}.</span>
-              <span className="truncate">{name}</span>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* 研究领域分布预览 */}
-      {data.researchAreas?.length > 0 && (
-        <div className="flex flex-wrap gap-1">
-          {data.researchAreas.slice(0, 4).map((area) => (
-            <span
-              key={area}
-              className="inline-flex items-center rounded-full bg-white/60 dark:bg-gray-800/60 px-2 py-0.5 text-xs text-gray-600 dark:text-gray-400"
-            >
-              {RESEARCH_AREA_LABELS[area] || area}
-            </span>
-          ))}
-          {data.researchAreas.length > 4 && (
-            <span className="text-xs text-gray-400">
-              +{data.researchAreas.length - 4}
-            </span>
-          )}
-        </div>
-      )}
-
-      <div className="mt-3 flex items-center text-sm text-purple-600 dark:text-purple-400 group-hover:underline">
-        查看完整报告
-        <svg className="w-4 h-4 ml-1 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-        </svg>
-      </div>
-    </Link>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// 产品简报卡片
-// ---------------------------------------------------------------------------
-
-function ProductBriefCard({ data, date }: { data: ProductHighlights; date: string }) {
-  return (
-    <Link
-      href={`/specialized/product/${date}`}
-      className="block rounded-xl border border-orange-200 dark:border-orange-800 bg-gradient-to-br from-orange-50 to-amber-50 dark:from-orange-950/20 dark:to-amber-950/20 p-5 hover:shadow-md hover:border-orange-300 dark:hover:border-orange-700 transition-all group"
-    >
-      <div className="flex items-center gap-2 mb-2">
-        <span className="text-2xl">📦</span>
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-          产品扫描
-        </h3>
-        <span className="ml-auto inline-flex items-center rounded-full bg-orange-100 dark:bg-orange-900/30 px-2 py-0.5 text-xs font-medium text-orange-700 dark:text-orange-300">
-          {data.articleCount} 个产品
-        </span>
-      </div>
-
-      <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
-        {data.summary}
-      </p>
-
-      {/* 重点产品列表 */}
-      {data.notableProducts?.length > 0 && (
-        <div className="space-y-1 mb-3">
-          {data.notableProducts.slice(0, 3).map((name, i) => (
-            <div key={name} className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
-              <span className="text-orange-400 text-xs font-mono">{i + 1}.</span>
-              <span className="truncate">{name}</span>
-            </div>
-          ))}
-        </div>
-      )}
-
-      <div className="mt-3 flex items-center text-sm text-orange-600 dark:text-orange-400 group-hover:underline">
-        查看完整报告
-        <svg className="w-4 h-4 ml-1 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-        </svg>
-      </div>
+      {link.label}
+      <svg
+        className="h-3.5 w-3.5 text-current/60"
+        viewBox="0 0 16 16"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M3 8h9" />
+        <path d="m9 4 4 4-4 4" />
+      </svg>
     </Link>
   );
 }

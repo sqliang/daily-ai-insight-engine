@@ -6,6 +6,7 @@
 // ============================================================================
 
 import Link from "next/link";
+import type { ReactNode } from "react";
 import type { DailyReport } from "@/lib/agent/schema";
 import { formatGeneratedAt } from "@/lib/utils/date";
 
@@ -21,6 +22,8 @@ type ReportHeaderProps = {
   actionLabel?: string;
   /** 是否展示执行摘要玻璃面板；全文页正文已含摘要时可关闭以避免重复 */
   showExecutiveSummary?: boolean;
+  /** Banner 底部扩展区域，用于承载与本报告强关联的轻量入口 */
+  footerSlot?: ReactNode;
 };
 
 export function ReportHeader({
@@ -30,6 +33,7 @@ export function ReportHeader({
   actionHref,
   actionLabel = "完整报告",
   showExecutiveSummary = true,
+  footerSlot,
 }: ReportHeaderProps) {
   const primaryActionHref = actionHref ?? `/report/${report.date}`;
   return (
@@ -172,6 +176,8 @@ export function ReportHeader({
             </p>
           </div>
         )}
+
+        {footerSlot && <div className="mt-4">{footerSlot}</div>}
       </div>
     </header>
   );
