@@ -1,8 +1,10 @@
 // ============================================================================
-// src/app/specialized/github/[date]/page.tsx — GitHub 开源项目专题报告页
+// src/app/specialized/github/[date]/page.tsx — 项目洞察页
 //
-// 展示指定日期的 GitHub Trending 专题简报，是“专题洞察”三页面之一。
-// 数据源为日报 JSON 的 specializedBrief.projectInsights（新版完整洞察结构），
+// 展示指定日期的项目洞察简报，是”专题洞察”三页面之一。
+// 数据基于 Stage 2 specialized_tags.github 与 Stage 3 github_assessment 识别出的
+// 开源项目与技术方案，经 Stage 4b 主编 Agent 跨天去重后写入日报 JSON。
+// 优先使用 specializedBrief.projectInsights（新版完整洞察结构），
 // 不存在时回退到 githubHighlights（旧版轻量列表），保持与 /dashboard/{date}
 // 卡片口径一致。
 //
@@ -56,16 +58,16 @@ export default async function GithubSpecializedPage({ params }: Props) {
     .filter(([, count]) => count > 0)
     .sort((a, b) => b[1] - a[1]);
 
-  // 当日无 GitHub 简报 → 空状态页
+  // 当日无项目简报 → 空状态页
   if (!brief || brief.articleCount === 0) {
     return (
       <PageShell>
         <div className="py-20 text-center">
           <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-            {date} GitHub 项目专题报告
+            {date} 项目洞察报告
           </h1>
           <p className="text-gray-500 dark:text-gray-400">
-            当日没有新的 GitHub Trending 项目。
+            当日没有新的项目洞察对象。
           </p>
           <Link
             href="/dashboard"

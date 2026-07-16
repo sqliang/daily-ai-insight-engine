@@ -1,13 +1,14 @@
 // ============================================================================
-// src/app/specialized/product/[date]/page.tsx — AI 产品专题报告页
+// src/app/specialized/product/[date]/page.tsx — 产品洞察页
 //
-// 展示指定日期的 AI 产品专题简报，是“专题洞察”三页面之一。
+// 展示基于 Stage 2 specialized_tags.product 与 Stage 3 product_assessment 识别的
+// AI 产品洞察简报，是”专题洞察”三页面之一。
 // 数据源为日报 JSON 的 specializedBrief.productInsights（新版完整洞察结构），
 // 不存在时回退到 productHighlights（旧版轻量列表），保持与 /dashboard/{date}
 // 卡片口径一致。
 //
 // 设计理由：
-//   产品洞察与 GitHub 洞察共享 ObjectInsightBrief 结构，便于复用
+//   产品洞察与项目洞察共享 ObjectInsightBrief 结构，便于复用
 //   SpecializedReportHero、SpecializedEntries 等展示组件。Stage 4b 已完成跨天去重
 //   和来源补齐，前端只需渲染即可。
 // ============================================================================
@@ -48,7 +49,7 @@ export default async function ProductSpecializedPage({ params }: Props) {
       <PageShell>
         <div className="py-20 text-center">
           <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-            {date} 产品扫描专题报告
+            {date} 产品扫描洞察报告
           </h1>
           <p className="text-gray-500 dark:text-gray-400">
             当日没有新的 AI 产品动态。

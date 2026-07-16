@@ -5,13 +5,15 @@ pipeline/synthesis/prompts/user_prompt.py — Stage 4b Editor-in-Chief user prom
     - 统计摘要（文章数、信源覆盖、语言分布、实体频次）
     - Top-N 文章的完整 frontmatter
     - 剩余文章标题列表
-    - GitHub / 产品专题文章的统计概览与候选对象
+    - 项目 / 产品洞察候选文章的统计概览与候选对象
 
 专题洞察上下文：
-    针对 github-trending、producthunt、whytryai 源，单独提取并去重后注入 prompt，
-    供主编 Agent 生成 specializedBrief.githubHighlights / productHighlights /
-    projectInsights / productInsights。论文专题当前由 Agent 直接基于 arxiv-cs-ai
-    文章归纳，不单独构造候选区。
+    项目洞察候选主要来自 source_dir == "github-trending" 且带有 specialized_tags.github
+    的文章；产品洞察候选主要来自 producthunt / whytryai 且带有 specialized_tags.product
+    的文章。候选对象经去重后注入 prompt，供主编 Agent 生成 specializedBrief 中的
+    githubHighlights / projectInsights / productHighlights / productInsights。
+    论文洞察当前由 Agent 基于 arxiv-cs-ai 及 specialized_tags.paper 文章归纳，
+    不单独构造候选区。
 """
 
 from collections import Counter
@@ -97,7 +99,7 @@ def _compute_statistics(articles: list[dict]) -> dict:
 
 def _compute_github_statistics(github_articles: list[dict]) -> dict:
     """
-    从 GitHub 专题文章中计算当日简报所需的统计分布。
+    从项目洞察候选文章中计算当日简报所需的统计分布。
 
     统计项：
         - total: 项目总数（已跨天去重后）
@@ -138,7 +140,7 @@ def _compute_github_statistics(github_articles: list[dict]) -> dict:
 
 
 def _format_github_statistics(stats: dict) -> str:
-    """格式化 GitHub 专题统计为 prompt 文本。"""
+    """格式化项目洞察统计为 prompt 文本。"""
     lines = [
         f"Total GitHub projects today: {stats['total']}",
         "",
@@ -169,7 +171,7 @@ def _format_github_statistics(stats: dict) -> str:
 
 def _compute_product_statistics(product_articles: list[dict]) -> dict:
     """
-    从产品专题文章中计算当日简报所需的统计分布。
+    从产品洞察候选文章中计算当日简报所需的统计分布。
 
     统计项：
         - total: 产品总数（已跨天去重后）
@@ -208,7 +210,7 @@ def _compute_product_statistics(product_articles: list[dict]) -> dict:
 
 
 def _format_product_statistics(stats: dict) -> str:
-    """格式化产品专题统计为 prompt 文本。"""
+    """格式化产品洞察统计为 prompt 文本。"""
     lines = [
         f"Total AI products today: {stats['total']}",
         "",
@@ -462,8 +464,8 @@ def build_user_prompt(
     结构：
         0. 报告日期（当指定 target_date 时）
         1. 统计概览（全部文章）
-        2. GitHub 专题统计（Phase 1 恢复）
-        3. 产品专题统计（Phase 2 恢复）
+        2. 项目洞察统计（Phase 1 恢复）
+        3. 产品洞察统计（Phase 2 恢复）
         4. Top-N 文章完整 frontmatter
         5. 剩余文章标题列表
 
@@ -471,8 +473,8 @@ def build_user_prompt(
         all_articles: 所有文章记录列表
         max_detail: 包含完整 frontmatter 的文章数上限
         target_date: 目标报告日期（YYYY-MM-DD），None 时使用 today
-        github_articles: 当日 GitHub 专题文章列表（已跨天去重），None 或空时不生成 GitHub 统计
-        product_articles: 当日产品专题文章列表（已跨天去重），None 或空时不生成产品统计
+        github_articles: 当日项目洞察候选文章列表（已跨天去重），None 或空时不生成项目统计
+        product_articles: 当日产品洞察候选文章列表（已跨天去重），None 或空时不生成产品统计
     """
     # 按 impactScore 降序排列
     def _impact_score(a: dict) -> float:
@@ -522,7 +524,7 @@ def build_user_prompt(
     for item in stats["entity_frequencies"][:50]:
         sections.append(f"  {item['entity']} ({item['type']}): {item['count']}")
 
-    # GitHub 专题统计（Phase 1 恢复）
+    # 项目洞察统计（Phase 1 恢复）
     if github_articles:
         gh_stats = _compute_github_statistics(github_articles)
         sections.extend([
@@ -532,7 +534,7 @@ def build_user_prompt(
             _format_github_statistics(gh_stats),
         ])
 
-    # 产品专题统计（Phase 2 恢复）
+    # 产品洞察统计（Phase 2 恢复）
     if product_articles:
         product_stats = _compute_product_statistics(product_articles)
         sections.extend([

@@ -721,14 +721,14 @@ stages:
         description: "风控专家视角"
         schema: "pipeline/schemas/deep_analysis.py::ForesightAndActionability"
       # 专题分析 Agent 注释说明：
-      #   早期设计曾为 github-trending / arxiv-cs-ai / producthunt / whytryai 配置独立的
-      #   Stage 3 专题分析 Agent（GitHubProjectAnalysis / PaperAnalysis / ProductAnalysis）。
+      #   早期设计曾为项目/论文/产品配置独立的 Stage 3 专题分析 Agent，按 source_match
+      #   硬匹配特定信源（github-trending / arxiv-cs-ai / producthunt / whytryai）。
       #   当前版本把专题洞察收敛到 Stage 4b 主编合成：由 Editor-in-Chief Agent 基于
-      #   Stage 2 的 objectMentions 和 Stage 3 的 objectInsights 统一生成
+      #   Stage 2 的 specialized_tags 和 Stage 3 的 objectInsights 统一生成
       #   specializedBrief。这样减少了额外 LLM 调用，同时让专题判断与综合日报保持
       #   一致的叙事口径。如需恢复独立 Stage 3 专题 Agent，可取消下列注释。
       # - name: "github-project-analyst"
-      #   description: "GitHub 开源项目深度分析"
+      #   description: "开源项目深度分析"
       #   schema: "pipeline/schemas/specialized_analysis.py::GitHubProjectAnalysis"
       #   source_match: ["github-trending"]
       # - name: "paper-analyst"
@@ -775,7 +775,7 @@ stages:
       - "trend_insights"
       - "risk_signals"
       - "opportunity_signals"
-      - "specialized_brief"  # GitHub / 论文 / 产品专题洞察，由 Stage 4b 主编 Agent 生成
+      - "specialized_brief"  # 项目 / 论文 / 产品洞察，由 Stage 4b 主编 Agent 生成
 
 # =============================================================================
 # 配额分配

@@ -10,11 +10,15 @@ pipeline/synthesis/editor_in_chief_agent.py — Stage 4b: Editor-in-Chief LLM Ag
 专题洞察（Specialized Briefs）：
     除通用日报（topEvents / trendInsights / riskSignals 等）外，主编 Agent 还负责生成
     三类垂直专题简报：
-        - GitHub 项目洞察：从 github-trending 源中筛选、跨天去重、提炼项目价值与风险
-        - 论文洞察：从 arxiv-cs-ai 源中聚合当日论文，解读研究问题与方法创新
-        - 产品洞察：从 producthunt / whytryai 源中筛选新产品，分析定位与商业信号
-    专题文章在 _build_prompts() 中单独提取并注入 user prompt；生成的 specializedBrief
-    在 _enrich_specialized_sources() 中补齐来源、规整文本，确保前端可稳定追溯原文。
+        - 项目洞察（projectInsights）：基于 Stage 2 specialized_tags.github 与
+          Stage 3 github_assessment 识别的开源项目/技术方案，跨天去重、提炼价值与风险。
+        - 论文洞察（paperHighlights / paperInsights）：基于 Stage 2 specialized_tags.paper
+          与 Stage 3 paper_assessment 识别的学术论文，解读研究问题与方法创新。
+        - 产品洞察（productInsights）：基于 Stage 2 specialized_tags.product 与
+          Stage 3 product_assessment 识别的产品动态，分析定位与商业信号。
+    专题候选在 _build_prompts() 中按 source_dir 与 specialized_tags 双重筛选并注入 user
+    prompt；生成的 specializedBrief 在 _enrich_specialized_sources() 中补齐来源、规整文本，
+    确保前端可稳定追溯原文。
 
 设计原则：
     - 单次 LLM 调用，处理全部 200+ 篇文章的合成
@@ -74,7 +78,11 @@ def _resolve_default_synthesis_model() -> str:
 
 def _extract_github_articles(articles: list[dict]) -> list[dict]:
     """
-    从 all_articles.json 的文章列表中提取 GitHub Trending 文章。
+    从 all_articles.json 的文章列表中提取项目洞察候选文章。
+
+    当前以 source_dir == "github-trending" 为主，同时保留 specialized_tags.github
+    作为对象级特征。候选文章将在 prompt 中交给主编 Agent，与昨日 projectInsights
+    做跨天去重后生成最终项目洞察。
 
     参数：
         articles: all_articles.json 中的 articles 列表
@@ -87,7 +95,11 @@ def _extract_github_articles(articles: list[dict]) -> list[dict]:
 
 def _extract_product_articles(articles: list[dict]) -> list[dict]:
     """
-    从 all_articles.json 的文章列表中提取产品类文章。
+    从 all_articles.json 的文章列表中提取产品洞察候选文章。
+
+    当前以 source_dir 属于 producthunt / whytryai 为主。这些文章在 Stage 2 已被标注
+    specialized_tags.product，Stage 3 生成 product_assessment；prompt 中把候选对象
+    注入主编 Agent，与昨日 productInsights 做跨天去重后生成最终产品洞察。
 
     参数：
         articles: all_articles.json 中的 articles 列表
@@ -624,10 +636,11 @@ def _build_prompts(
     读取 all_articles.json 并构造 system + user prompts。
 
     专题洞察预处理：
-        在把文章交给主编 Agent 前，先按 source_dir 拆出 GitHub / 产品两类专题候选，
-        并与昨日日报做跨天去重（避免同一项目/产品连续多日重复出现）。去重后的专题文章
-        作为独立上下文注入 user prompt，让 Agent 在生成综合日报的同时，输出
-        specializedBrief 块。论文专题目前由 Agent 直接基于 arxiv-cs-ai 文章归纳。
+        在把文章交给主编 Agent 前，先按 source_dir 与 specialized_tags 拆出项目 / 产品
+        两类洞察候选，并与昨日日报做跨天去重（避免同一项目/产品连续多日重复出现）。去重后
+        的候选文章作为独立上下文注入 user prompt，让 Agent 在生成综合日报的同时，输出
+        specializedBrief 块。论文洞察目前由 Agent 基于 arxiv-cs-ai 及
+        specialized_tags.paper 文章归纳。
 
     参数：
         all_articles_path: all_articles.json 路径
@@ -645,30 +658,30 @@ def _build_prompts(
     if not articles:
         raise ValueError("all_articles.json 的 articles 列表为空")
 
-    # GitHub 专题文章提取 + 跨天去重
+    # 项目洞察候选文章提取 + 跨天去重
     github_articles = _extract_github_articles(articles)
     yesterday_github_keys = _load_yesterday_github_keys(target_date)
     deduped_github = _dedup_github_articles(github_articles, yesterday_github_keys)
     logger.info(
-        "GitHub 专题去重 — 原始: %d, 昨日已展示: %d, 剩余: %d",
+        "项目洞察去重 — 原始: %d, 昨日已展示: %d, 剩余: %d",
         len(github_articles),
         len(yesterday_github_keys),
         len(deduped_github),
     )
 
-    # 产品专题文章提取 + 跨天去重
+    # 产品洞察候选文章提取 + 跨天去重
     product_articles = _extract_product_articles(articles)
     yesterday_product_keys = _load_yesterday_product_keys(target_date)
     deduped_product = _dedup_product_articles(product_articles, yesterday_product_keys)
     logger.info(
-        "产品专题去重 — 原始: %d, 昨日已展示: %d, 剩余: %d",
+        "产品洞察去重 — 原始: %d, 昨日已展示: %d, 剩余: %d",
         len(product_articles),
         len(yesterday_product_keys),
         len(deduped_product),
     )
 
     logger.info(
-        "构建 prompt — 总文章: %d, GitHub: %d, 产品: %d, 详细展示: %d, target_date=%s",
+        "构建 prompt — 总文章: %d, 项目: %d, 产品: %d, 详细展示: %d, target_date=%s",
         len(articles),
         len(deduped_github),
         len(deduped_product),

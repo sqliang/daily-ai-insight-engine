@@ -91,7 +91,7 @@ export function detectSpecializedAvailability(
   return {
     github,
     product,
-    // 论文专题暂不恢复
+    // 论文洞察暂不恢复
     paper: null,
   };
 }

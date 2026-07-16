@@ -2,15 +2,15 @@
 // src/lib/data/specialized.ts — 专题洞察数据加载层
 //
 // 职责：
-//   - 定义 GitHub / 论文 / 产品三类专题洞察的 TypeScript 类型
+//   - 定义项目 / 论文 / 产品三类洞察的 TypeScript 类型
 //   - 从 daily-report-{date}.json 的 specializedBrief 块加载当日简报
 //   - 保留从 all_articles.json 加载原始专题文章的回退能力
 //
 // 设计理由：
 //   专题洞察与综合日报在 Stage 4b 由主编 Agent 统一生成，前端不应再次聚合原始文章。
-//   因此 GitHub / 产品详情页优先读取日报 JSON 中的 projectInsights / productInsights；
-//   论文专题目前仍直接读取 all_articles.json 中的 arxiv-cs-ai 文章（等待 Stage 4b
-//   论文简报稳定后迁移）。
+//   因此项目 / 产品详情页优先读取日报 JSON 中的 projectInsights / productInsights；
+//   论文洞察目前仍直接读取 all_articles.json 中带有 specialized_tags.paper 的文章（等待
+//   Stage 4b 论文简报稳定后迁移）。
 //
 // 消费方：
 //   - src/app/specialized/github/[date]/page.tsx
@@ -102,10 +102,11 @@ export interface GithubBrief {
 // ---------------------------------------------------------------------------
 
 /**
- * 加载指定日期的 GitHub 专题文章。
+ * 加载指定日期的项目洞察文章。
  *
- * 从 all_articles.json 中筛选 source_dir == "github-trending" 的文章，
- * 提取 specialized_tags.github（Stage 2 标注）和 Stage 3 分析字段。
+ * 从 all_articles.json 中筛选带有 specialized_tags.github 或 Stage 3
+ * github_assessment 的文章（Stage 2 标注 + Stage 3 深度分析），
+ * 提取项目标注字段与分析结果。
  *
  * 参数：
  *    date: 目标日期，格式 YYYY-MM-DD（当前未强制过滤，预留接口）
@@ -315,10 +316,11 @@ export interface PaperEntry {
 // ---------------------------------------------------------------------------
 
 /**
- * 加载指定日期的论文专题文章。
+ * 加载指定日期的论文洞察文章。
  *
- * 从 all_articles.json 中筛选 source_dir == "arxiv-cs-ai" 的文章，
- * 提取 specialized_tags.paper（Stage 2 标注）和 Stage 3 论文分析字段。
+ * 从 all_articles.json 中筛选带有 specialized_tags.paper 或 Stage 3
+ * paper_assessment 的文章（Stage 2 标注 + Stage 3 深度分析），
+ * 提取论文标注字段与分析结果。
  *
  * 参数：
  *    _date: 目标日期，格式 YYYY-MM-DD（当前未强制过滤，预留接口）
@@ -478,10 +480,11 @@ export interface ProductBrief {
 // ---------------------------------------------------------------------------
 
 /**
- * 加载指定日期的产品专题文章。
+ * 加载指定日期的产品洞察文章。
  *
- * 从 all_articles.json 中筛选 source_dir == "producthunt" 或 "whytryai" 的文章，
- * 提取 specialized_tags.product（Stage 2 标注）和 Stage 3 产品分析字段。
+ * 从 all_articles.json 中筛选带有 specialized_tags.product 或 Stage 3
+ * product_assessment 的文章（Stage 2 标注 + Stage 3 深度分析），
+ * 提取产品标注字段与分析结果。
  *
  * 参数：
  *    _date: 目标日期，格式 YYYY-MM-DD（当前未强制过滤，预留接口）

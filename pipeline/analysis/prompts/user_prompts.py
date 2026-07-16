@@ -189,13 +189,13 @@ def build_github_project_user_prompt(
     specialized_tags: dict | None = None,
 ) -> str:
     """
-    构建 GitHub 项目分析 Agent 的用户提示词。
+    构建项目分析 Agent 的用户提示词。
 
     参数：
         title: 文章标题
-        source: 数据源名（应为 "github-trending"）
+        source: 文章来源（通常为 "github-trending"，用于信息溯源）
         body: 文章正文（截断至 6000 字符）
-        specialized_tags: Stage 2 提取的 GitHubTags（已包含分类标注）
+        specialized_tags: Stage 2 提取的 GitHubTags（项目识别结果，是触发分析的主要依据）
 
     返回：
         格式化的用户提示词字符串
@@ -245,7 +245,7 @@ def build_paper_user_prompt(
 
     参数：
         title: 文章标题
-        source: 数据源名（应为 "arxiv-cs-ai"）
+        source: 文章来源（通常为 "arxiv-cs-ai"，用于信息溯源）
         body: 文章正文（截断至 6000 字符）
         specialized_tags: Stage 2 提取的 PaperTags（已包含基础标注）
 
@@ -297,7 +297,7 @@ def build_product_user_prompt(
 
     参数：
         title: 文章标题
-        source: 数据源名（应为 "producthunt" 或 "whytryai"）
+        source: 文章来源（通常为 "producthunt" 或 "whytryai"，用于信息溯源）
         body: 文章正文（截断至 6000 字符）
         specialized_tags: Stage 2 提取的 ProductTags（已包含基础标注）
 
