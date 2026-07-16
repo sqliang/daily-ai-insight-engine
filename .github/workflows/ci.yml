@@ -1,0 +1,68 @@
+# ---------------------------------------------------------------------------
+# CI / CD 基础检查
+# ---------------------------------------------------------------------------
+# 在每次 push 和 pull_request 时运行前端类型检查、构建、Lint 以及 Python 测试。
+# 作为 Vercel 部署之外的第二道防线：Vercel 只验证 production build，
+# 本工作流额外保证 typecheck、lint、pytest 在干净环境中全部通过。
+# ---------------------------------------------------------------------------
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  frontend:
+    name: Frontend Checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      - name: Install frontend dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: TypeScript type check
+        run: pnpm typecheck
+
+      - name: ESLint
+        run: pnpm lint
+
+      - name: Production build
+        run: pnpm build
+
+  pipeline:
+    name: Pipeline Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: "latest"
+
+      - name: Install Python dependencies
+        run: uv pip install -r pipeline/requirements.txt --system
+
+      - name: Run pytest
+        run: uv run python -m pytest tests/ -q

@@ -1,0 +1,16 @@
+#!/bin/sh
+# 提交前类型检查：先 stash 未 staged 的改动（含未跟踪文件），再对 staged 文件跑 typecheck。
+# 这样如果 staged 文件 import 了一个忘记 add 的新文件，本地就能立即发现，而不是等 CI 报错。
+
+before=$(git stash list --format='%H' | head -n 1)
+git stash push --keep-index --include-untracked -m "pre-commit-$(date +%s)" >/dev/null 2>&1
+after=$(git stash list --format='%H' | head -n 1)
+
+pnpm typecheck
+status=$?
+
+if [ "$before" != "$after" ]; then
+  git stash pop >/dev/null 2>&1
+fi
+
+exit $status

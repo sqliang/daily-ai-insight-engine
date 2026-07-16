@@ -13,7 +13,7 @@ allowed-tools:
 license: MIT
 metadata:
   author: sqliang
-  version: "1.3.0"
+  version: "1.4.0"
 ---
 
 # Git Workflow
@@ -67,8 +67,9 @@ Proceed normally. The safety gate is satisfied.
 - **Feature Branches**: Each task gets its own branch. No exceptions — even "small fixes" deserve a branch.
 - **Conventional Commits**: All commit messages follow the Conventional Commits specification.
 - **Linear History**: Use rebase, never merge commits. `git pull --rebase` is the default sync method.
-- **Push Safety**: Run local build and type-check before pushing. Never force-push to main.
+- **Push Safety**: Run local build, type-check, and tests before pushing. Never force-push to main.
 - **Specific Staging**: Stage files by name (`git add <file> <file>`), never use `git add .` or `git add -A`. This prevents accidentally staging secrets, large binaries, or unrelated changes.
+- **Local Checks First**: GitHub CI is the safety net, not the primary validation. Pre-commit hooks and explicit local verification must pass before any push or PR creation.
 
 ## 1. Branch Management & Stash Workflow
 
@@ -194,7 +195,7 @@ Before committing, verify these in order. If any check fails, stop and fix befor
 3. **Type check**: Does the commit type match the actual changes? (`feat` for features, `fix` for bugs, `chore` for maintenance, etc.)
 4. **Message check**: Is the description in imperative mood ("add" not "added", "fix" not "fixed")?
 
-If the project has commitlint hooks configured, they will auto-validate on commit.
+If the project has pre-commit hooks (e.g., husky), they will run automatically. Do not bypass them with `--no-verify` unless the failure is unrelated to your changes and you have explicitly informed the user.
 
 ## 3. Synchronization & Conflict Resolution
 
@@ -240,9 +241,13 @@ If conflicts occur:
 3. If on a feature branch: proceed with the checks below.
 
 ### Before Pushing
-1. Run the project's build and type-check commands (check CLAUDE.md for the exact commands — e.g., `pnpm typecheck && pnpm build`)
+1. Run the project's full local check commands (check CLAUDE.md for the exact commands — typically `pnpm typecheck && pnpm build && uv run python -m pytest tests/`)
 2. Verify all checks pass
-3. Do a final `git status` to confirm the right changes are committed
+3. Do a final `git status --short` to confirm:
+   - The right changes are committed
+   - No intended new files are left untracked (`??`)
+   - No unexpected modified files remain unstaged
+4. If pre-push hooks are configured, they will run automatically. Do not bypass them.
 
 ### First Push (new branch)
 ```bash
@@ -268,6 +273,21 @@ git push origin <current-branch-name>
 git push --force-with-lease origin <current-branch-name>
 ```
 `--force-with-lease` is the safe force-push: it will refuse if someone else pushed to the same branch. **Never use raw `--force`.**
+
+## 4.5 Local Verification & CI Gate
+
+Local verification is the first line of defense; CI is the second. The project should have:
+
+- **Pre-commit hook** (e.g., husky): runs `pnpm typecheck` against staged files, catching missing imports and type errors before the commit is even created.
+- **Pre-push hook** (e.g., husky): runs the full local check suite (`pnpm typecheck && pnpm build && uv run python -m pytest tests/`) before allowing a push.
+- **GitHub Actions CI**: runs the same checks in a clean environment on every PR and push to `main`.
+
+When using this skill, assume these hooks exist. If a hook fails:
+1. Fix the underlying issue — do not bypass with `--no-verify` or `--force`.
+2. Re-stage affected files and re-commit.
+3. Re-run the failing check locally to confirm it passes before pushing again.
+
+If the project does not yet have hooks configured and you are creating a PR, manually run the full check suite before `gh pr create`.
 
 ## 5. Post-Review Commit Hygiene
 
@@ -304,12 +324,25 @@ Closes #3
 ```
 
 ### 4. Push & Create a PR
+
+Before creating the PR, ensure all local checks have passed:
+
+```bash
+pnpm typecheck
+pnpm build
+uv run python -m pytest tests/
+```
+
+Then push and create the PR:
+
 ```bash
 git push --set-upstream origin <branch-name>
 gh pr create --title "<type>(<scope>): <description>" --body "<PR body>"
 ```
 
-Use the PR body template from `references/pr-template.md`. Reference the issue with `Closes #N` — GitHub will auto-link and auto-close the issue when the PR merges.
+Use the PR body template from `references/pr-template.md` exactly — do not use a different format even if the repository has a `.github/PULL_REQUEST_TEMPLATE.md`. Reference the issue with `Closes #N` — GitHub will auto-link and auto-close the issue when the PR merges.
+
+After creating the PR, verify that CI checks (GitHub Actions + Vercel) pass. If any fail, fix locally and push again.
 
 ## 7. Code Review Best Practices
 
