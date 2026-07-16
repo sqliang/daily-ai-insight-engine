@@ -90,7 +90,14 @@ export const visualizationDataSchema = z.object({
 
 // ============================================================================
 // 专题简报 Schema — Stage 4b 日报中的轻量专题摘要
-// TODO: 专题分析能力暂时停用，待重新设计后恢复；Schema 仅用于兼容历史报告。
+//
+// 与 pipeline/schemas/daily_report.py 的 SpecializedBrief 对齐，描述日报 JSON 中
+// specializedBrief 块的结构。前端 /specialized/* 页面和 /dashboard/{date} 顶部
+// 专题入口均依赖此 Schema 消费数据。
+//
+// 注意：githubBriefSchema / productBriefSchema / paperBriefSchema 是 Phase 1/2 早期
+// 轻量格式；projectInsights / productInsights（ObjectInsightBrief）是新版完整洞察
+// 结构，优先被前端读取。
 // ============================================================================
 
 const githubBriefSchema = z.object({
@@ -115,10 +122,42 @@ const paperBriefSchema = z.object({
   articleCount: z.number().int().nonnegative(),
 });
 
+export const specializedSourceSchema = z.object({
+  articleId: z.string(),
+  title: z.string(),
+  sourceDir: z.string(),
+  url: z.string().optional().default(""),
+});
+
+export const specializedInsightItemSchema = z.object({
+  name: z.string(),
+  canonicalName: z.string(),
+  url: z.string().nullable().optional(),
+  oneLine: z.string(),
+  whyItMatters: z.string(),
+  signals: z.array(z.string()).default([]),
+  risks: z.array(z.string()).default([]),
+  score: z.number().min(1).max(10),
+  articleIds: z.array(z.string()).default([]),
+  sources: z.array(specializedSourceSchema).default([]),
+  evidenceSnippets: z.array(z.string()).default([]),
+});
+
+export const objectInsightBriefSchema = z.object({
+  summary: z.string().default(""),
+  keyJudgment: z.string().default(""),
+  watchSignals: z.array(z.string()).default([]),
+  items: z.array(specializedInsightItemSchema).default([]),
+  distribution: z.record(z.string(), z.number()).default({}),
+  sourceCoverage: z.array(z.string()).default([]),
+});
+
 export const specializedBriefSchema = z.object({
   githubHighlights: githubBriefSchema.nullable().optional(),
   productHighlights: productBriefSchema.nullable().optional(),
   paperHighlights: paperBriefSchema.nullable().optional(),
+  projectInsights: objectInsightBriefSchema.nullable().optional(),
+  productInsights: objectInsightBriefSchema.nullable().optional(),
 });
 
 export const dailyReportSchema = z.object({
@@ -146,6 +185,8 @@ export const dailyReportSchema = z.object({
 
 export type DailyReport = z.infer<typeof dailyReportSchema>;
 export type SpecializedBrief = z.infer<typeof specializedBriefSchema>;
+export type SpecializedInsightItem = z.infer<typeof specializedInsightItemSchema>;
+export type ObjectInsightBrief = z.infer<typeof objectInsightBriefSchema>;
 export type EvidenceSource = z.infer<typeof evidenceSourceSchema>;
 export type EventType = z.infer<typeof eventTypeSchema>;
 export type Sentiment = z.infer<typeof sentimentSchema>;

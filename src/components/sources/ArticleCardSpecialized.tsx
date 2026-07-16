@@ -1,9 +1,15 @@
 // ============================================================================
-// ArticleCardSpecialized.tsx — 专题分析容器
+// ArticleCardSpecialized.tsx — 文章卡片内嵌专题分析容器（当前为占位实现）
 //
-// 按文章来源类型派发对应的专题分析卡片。
-// 在 ArticleCard 展开态中，渲染于黄金三角分析下方。
-// TODO: 专题分析能力暂时停用，待重新设计后恢复。
+// 设计意图：
+//   按文章来源类型（github-trending / producthunt / arxiv-cs-ai）在文章卡片展开态中
+//   渲染对应的迷你专题分析，作为黄金三角分析的补充。
+//
+// 当前状态：
+//   专题洞察已在 /specialized/* 独立页面和 /dashboard/{date} 顶部入口完整实现。
+//   文章卡片内嵌的迷你专题视图尚未实现，因此本组件返回 null，避免在卡片展开态中
+//   展示与专题页重复但信息密度不足的内容。后续如需在卡片中展示项目/产品/论文快照，
+//   可在此组件中复用 src/components/reports/SpecializedEntries 的渲染逻辑。
 // ============================================================================
 
 // ---------------------------------------------------------------------------
@@ -29,6 +35,6 @@ interface ArticleCardSpecializedProps {
 export function ArticleCardSpecialized({ source, enriched }: ArticleCardSpecializedProps) {
   void source;
   void enriched;
-  // TODO: 专题分析能力暂时停用，待重新设计后恢复。
+  // 文章卡片内嵌专题视图尚未实现；完整的专题洞察请查看 /specialized/* 页面。
   return null;
 }

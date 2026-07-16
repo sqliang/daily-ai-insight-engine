@@ -1,16 +1,29 @@
 // ============================================================================
-// /specialized/product/[date] — 产品扫描专题报告页
+// src/app/specialized/product/[date]/page.tsx — AI 产品专题报告页
 //
-// 展示指定日期的 AI 产品当日简报。
-// Phase 2 改为从日报 JSON 的 specializedBrief.productHighlights 读取，
-// 保持与日报卡片口径一致；不再直接聚合 all_articles.json。
+// 展示指定日期的 AI 产品专题简报，是“专题洞察”三页面之一。
+// 数据源为日报 JSON 的 specializedBrief.productInsights（新版完整洞察结构），
+// 不存在时回退到 productHighlights（旧版轻量列表），保持与 /dashboard/{date}
+// 卡片口径一致。
+//
+// 设计理由：
+//   产品洞察与 GitHub 洞察共享 ObjectInsightBrief 结构，便于复用
+//   SpecializedReportHero、SpecializedEntries 等展示组件。Stage 4b 已完成跨天去重
+//   和来源补齐，前端只需渲染即可。
 // ============================================================================
 
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { loadProductBrief } from "@/lib/data/specialized";
+import {
+  loadProductBrief,
+  type SpecializedInsightItem,
+} from "@/lib/data/specialized";
 import { PageShell } from "@/components/layout/PageShell";
 import { SpecializedReportHero } from "@/components/reports/SpecializedReportHero";
+import {
+  ensureSentencePunctuation,
+  ensureSentencePunctuationList,
+} from "@/lib/utils/text";
 
 export const dynamic = "force-dynamic";
 
@@ -55,16 +68,16 @@ export default async function ProductSpecializedPage({ params }: Props) {
     <PageShell>
       <SpecializedReportHero
         date={date}
-        title="产品扫描"
-        eyebrow="Product Brief"
+        title="产品洞察"
+        eyebrow="Product Insights"
         summary={brief.summary}
         stats={[
-          { label: "个产品", value: `${brief.articleCount}` },
+          { label: "个产品", value: `${brief.items.length || brief.articleCount}` },
           {
             label: "种发布类型",
             value: `${Object.keys(brief.launchContextDistribution).length}`,
           },
-          { label: "项推荐", value: `${brief.notableProducts.length}` },
+          { label: "个来源", value: `${brief.sourceCoverage?.length || 0}` },
         ]}
       >
         {Object.keys(brief.launchContextDistribution).length > 0 && (
@@ -81,6 +94,26 @@ export default async function ProductSpecializedPage({ params }: Props) {
           </TagGroup>
         )}
       </SpecializedReportHero>
+
+      {(brief.keyJudgment || (brief.watchSignals && brief.watchSignals.length > 0)) && (
+        <section className="mt-8 grid gap-4 lg:grid-cols-[minmax(0,1.15fr)_minmax(360px,0.85fr)]">
+          {brief.keyJudgment && (
+            <InsightPanel
+              eyebrow="Judgment"
+              title="关键判断"
+              body={brief.keyJudgment}
+              accent="var(--warm)"
+            />
+          )}
+          {brief.watchSignals && brief.watchSignals.length > 0 && (
+            <SignalPanel
+              title="后续关注"
+              signals={brief.watchSignals}
+              accent="var(--warm)"
+            />
+          )}
+        </section>
+      )}
 
       <section className="mt-10 min-w-0">
         <div className="mb-6 flex items-center justify-between border-b border-line pb-3.5">
@@ -101,7 +134,7 @@ export default async function ProductSpecializedPage({ params }: Props) {
               <rect x="3" y="14" width="7" height="7" rx="1" />
               <rect x="14" y="14" width="7" height="7" rx="1" />
             </svg>
-            <h2 className="text-[15px] font-bold text-foreground">重点产品</h2>
+            <h2 className="text-[15px] font-bold text-foreground">产品洞察对象</h2>
             <span
               className="rounded-md px-2 py-0.5 text-[12px] font-semibold"
               style={{
@@ -110,23 +143,23 @@ export default async function ProductSpecializedPage({ params }: Props) {
                   "color-mix(in oklch, var(--accent) 10%, transparent)",
               }}
             >
-              {brief.notableProducts.length} 项
+              {brief.items.length} 项
             </span>
           </div>
         </div>
 
         <div className="space-y-5">
-          {brief.notableProducts.map((productName, index) => (
+          {brief.items.map((item, index) => (
             <ProductRow
-              key={productName}
+              key={`${item.canonicalName}-${index}`}
               rank={index + 1}
-              productName={productName}
+              item={item}
             />
           ))}
         </div>
       </section>
 
-      {brief.notableProducts.length === 0 && (
+      {brief.items.length === 0 && (
         <p className="text-center text-gray-500 py-12">当日无重点推荐产品。</p>
       )}
     </PageShell>
@@ -163,58 +196,304 @@ function DistributionTag({ label, count }: { label: string; count: number }) {
   );
 }
 
-function ProductRow({ rank, productName }: { rank: number; productName: string }) {
+function InsightPanel({
+  eyebrow,
+  title,
+  body,
+  accent,
+}: {
+  eyebrow: string;
+  title: string;
+  body: string;
+  accent: string;
+}) {
+  return (
+    <section
+      className="relative overflow-hidden rounded-lg bg-panel/95 p-6 shadow-md shadow-black/5 ring-1 ring-black/5"
+      style={{
+        background: `linear-gradient(135deg, color-mix(in oklch, ${accent} 14%, transparent), var(--panel) 58%)`,
+      }}
+    >
+      <div className="flex items-center gap-3">
+        <span
+          className="inline-flex h-9 w-9 items-center justify-center rounded-md text-[15px] font-black text-white shadow-sm"
+          style={{ backgroundColor: accent }}
+        >
+          !
+        </span>
+        <div>
+          <p className="text-[11px] font-black uppercase tracking-wider text-foreground/45">
+            {eyebrow}
+          </p>
+          <h2 className="text-[17px] font-black text-foreground">{title}</h2>
+        </div>
+      </div>
+      <p className="mt-5 max-w-4xl text-[16px] font-medium leading-8 text-foreground/78">
+        {ensureSentencePunctuation(body)}
+      </p>
+    </section>
+  );
+}
+
+function SignalPanel({
+  title,
+  signals,
+  accent,
+}: {
+  title: string;
+  signals: string[];
+  accent: string;
+}) {
+  return (
+    <section
+      className="rounded-lg bg-panel/95 p-6 shadow-md shadow-black/5 ring-1 ring-black/5"
+      style={{
+        background: `linear-gradient(135deg, color-mix(in oklch, ${accent} 10%, transparent), var(--panel) 64%)`,
+      }}
+    >
+      <div className="flex items-center justify-between gap-3">
+        <h2 className="text-[17px] font-black text-foreground">{title}</h2>
+        <span
+          className="rounded-md px-2.5 py-1 font-mono text-[12px] font-black"
+          style={{
+            color: accent,
+            backgroundColor: `color-mix(in oklch, ${accent} 10%, transparent)`,
+          }}
+        >
+          {signals.length} signals
+        </span>
+      </div>
+      <div className="mt-4 space-y-2.5">
+        {ensureSentencePunctuationList(signals).slice(0, 5).map((signal, index) => (
+          <div
+            key={signal}
+            className="flex items-start gap-3 rounded-md bg-white/60 p-3 shadow-sm shadow-black/4 dark:bg-white/[0.04]"
+          >
+            <span
+              className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-md font-mono text-[11px] font-black text-white"
+              style={{ backgroundColor: accent }}
+            >
+              {index + 1}
+            </span>
+            <p className="text-[14px] font-bold leading-6 text-foreground/78">
+              {signal}
+            </p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function ProductRow({ rank, item }: { rank: number; item: SpecializedInsightItem }) {
+  const href = item.url || undefined;
+  const accent = "var(--warm)";
+  const displayName = item.canonicalName || item.name;
+  const host = href ? href.replace(/^https?:\/\//, "").replace(/\/$/, "") : "";
+
   return (
     <article
-      className="group relative overflow-hidden rounded-2xl border border-line/60 bg-panel/85 shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/25 hover:shadow-lg"
-      style={{ borderLeft: "4px solid var(--warm)" }}
+      className="group relative overflow-hidden rounded-lg bg-panel/95 shadow-md shadow-black/6 ring-1 ring-black/5 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-black/8 motion-reduce:transition-none"
+      style={{
+        background: `linear-gradient(180deg, color-mix(in oklch, ${accent} 10%, transparent), var(--panel) 32%)`,
+      }}
     >
-      <div className="block p-5 outline-none transition-colors md:p-6">
-        <div className="flex flex-col gap-5 lg:flex-row lg:items-start">
-          <div className="flex min-w-0 flex-1 flex-col gap-3">
-            <div className="flex flex-wrap items-center gap-2.5">
-              <span className="inline-flex items-center rounded-full bg-accent/8 px-3 py-1 text-[12px] font-semibold text-accent">
-                Product Brief
+      <div
+        className="h-1.5 w-full"
+        style={{ backgroundColor: accent }}
+        aria-hidden="true"
+      />
+      <div className="p-5 md:p-6">
+        <div className="grid gap-5 lg:grid-cols-[1fr_160px]">
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <span
+                className="inline-flex h-9 min-w-9 items-center justify-center rounded-md px-2 font-mono text-[12px] font-black tabular-nums text-white shadow-sm"
+                style={{ backgroundColor: accent }}
+              >
+                {String(rank).padStart(2, "0")}
               </span>
-              <span className="font-mono text-[12px] text-muted/45">
-                #{rank}
+              <span className="inline-flex items-center rounded-md border border-warm/25 bg-warm/10 px-2.5 py-1 text-[12px] font-black text-warm">
+                产品洞察
               </span>
+              {host && (
+                <span className="max-w-full truncate font-mono text-[12px] font-semibold text-foreground/50">
+                  {host}
+                </span>
+              )}
             </div>
 
-            <div>
-              <h3 className="text-[18px] font-bold leading-snug text-foreground transition-colors duration-200 group-hover:text-accent md:text-[19px]">
-                {productName}
+            <div className="mt-4">
+              <h3 className="text-[20px] font-black leading-tight text-foreground transition-colors duration-200 group-hover:text-warm md:text-[22px]">
+                {displayName}
               </h3>
-              <p className="mt-2.5 line-clamp-2 text-[14px] leading-[1.75] text-foreground/55">
-                今日产品专题简报选出的重点产品，可用于快速观察新品方向、用户场景与产品化信号。
+              <p className="mt-3 max-w-5xl text-[15px] font-medium leading-7 text-foreground/72">
+                {ensureSentencePunctuation(item.oneLine || item.whyItMatters)}
               </p>
             </div>
           </div>
 
-          <div className="flex shrink-0 items-center justify-between gap-4 border-t border-line/50 pt-4 lg:w-44 lg:flex-col lg:items-end lg:border-t-0 lg:pt-0 lg:pr-12">
-            <span className="inline-flex min-w-16 items-center justify-center rounded-xl bg-accent/8 px-3 py-2 font-mono text-[17px] font-bold tabular-nums text-accent ring-1 ring-accent/15">
-              {rank}
-            </span>
-            <span className="inline-flex items-center gap-2 text-[13px] font-bold text-accent transition-transform duration-200 group-hover:translate-x-1">
-              查看摘要
-              <svg
-                width="15"
-                height="15"
-                viewBox="0 0 16 16"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
+          <div className="flex items-center justify-between gap-4 rounded-lg bg-white/55 p-4 shadow-sm shadow-black/4 dark:bg-white/[0.04] lg:flex-col lg:items-end lg:justify-start">
+            <div className="text-left lg:text-right">
+              <p className="text-[11px] font-black uppercase tracking-wider text-foreground/55">
+                关注评分
+              </p>
+              <p className="mt-1 font-mono text-[34px] font-black leading-none tabular-nums text-warm">
+                {item.score.toFixed(1)}
+              </p>
+            </div>
+            {href ? (
+              <Link
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-10 items-center gap-2 rounded-md bg-warm px-3 text-[13px] font-black text-white shadow-sm transition-transform hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-warm/40 motion-reduce:transition-none"
               >
-                <path d="M3 8h10" />
-                <path d="m9 4 4 4-4 4" />
-              </svg>
-            </span>
+                打开对象
+                <ArrowIcon />
+              </Link>
+            ) : (
+              <span className="inline-flex min-h-10 items-center rounded-md bg-white/55 px-3 text-[13px] font-bold text-foreground/60 shadow-sm shadow-black/4 dark:bg-white/[0.04]">
+                无外部链接
+              </span>
+            )}
           </div>
         </div>
+
+        <div className="mt-5 grid gap-3 lg:grid-cols-2">
+          <MiniBlock
+            title="关注理由"
+            items={ensureSentencePunctuationList([item.whyItMatters])}
+            accent={accent}
+          />
+          <MiniBlock
+            title="机会信号"
+            items={ensureSentencePunctuationList(item.signals)}
+            accent={accent}
+          />
+          {item.risks.length > 0 && (
+            <MiniBlock
+              title="风险提示"
+              items={ensureSentencePunctuationList(item.risks)}
+              accent={accent}
+            />
+          )}
+          {item.sources.length > 0 && (
+            <SourceBlock sources={item.sources} accent={accent} />
+          )}
+        </div>
+
+        {item.evidenceSnippets.length > 0 && (
+          <div className="mt-5">
+            <p className="text-[11px] font-black uppercase tracking-wider text-foreground/55">
+              证据片段
+            </p>
+            <p className="mt-2 line-clamp-2 rounded-md bg-white/55 px-3 py-2 text-[13px] font-semibold leading-6 text-foreground/74 shadow-sm shadow-black/4 dark:bg-white/[0.04]">
+              {ensureSentencePunctuation(item.evidenceSnippets[0])}
+            </p>
+          </div>
+        )}
       </div>
     </article>
+  );
+}
+
+function ArrowIcon() {
+  return (
+    <svg
+      width="15"
+      height="15"
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M6 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1v-3" />
+      <path d="M9 2h5v5" />
+      <path d="M8 8l6-6" />
+    </svg>
+  );
+}
+
+function MiniBlock({
+  title,
+  items,
+  accent,
+}: {
+  title: string;
+  items: string[];
+  accent: string;
+}) {
+  if (items.length === 0) return null;
+  return (
+    <div
+      className="min-w-0 rounded-md p-4 shadow-sm shadow-black/4"
+      style={{
+        backgroundColor: `color-mix(in oklch, ${accent} 8%, var(--surface))`,
+      }}
+    >
+      <p className="flex items-center gap-2 text-[12px] font-black text-foreground/82">
+        <span
+          className="h-1.5 w-1.5 rounded-full"
+          style={{ backgroundColor: accent }}
+          aria-hidden="true"
+        />
+        {title}
+      </p>
+      <ul className="mt-3 space-y-2.5 text-[13px] font-medium leading-6 text-foreground/76">
+        {items.slice(0, 3).map((item) => (
+          <li key={item} className="relative pl-3 before:absolute before:left-0 before:top-2.5 before:h-1.5 before:w-1.5 before:rounded-full before:bg-current before:text-foreground/35">
+            {item}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function SourceBlock({
+  sources,
+  accent,
+}: {
+  sources: SpecializedInsightItem["sources"];
+  accent: string;
+}) {
+  return (
+    <div
+      className="min-w-0 rounded-md p-4 shadow-sm shadow-black/4"
+      style={{
+        backgroundColor: `color-mix(in oklch, ${accent} 8%, var(--surface))`,
+      }}
+    >
+      <p className="flex items-center gap-2 text-[12px] font-black text-foreground/82">
+        <span
+          className="h-1.5 w-1.5 rounded-full"
+          style={{ backgroundColor: accent }}
+          aria-hidden="true"
+        />
+        文章来源
+      </p>
+      <div className="mt-2.5 flex flex-wrap gap-1.5">
+        {sources.slice(0, 4).map((source) => (
+          <Link
+            key={`${source.articleId}-${source.url}`}
+            href={source.url || "#"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="max-w-full rounded-md bg-panel/90 px-2.5 py-1 text-[12px] font-bold text-foreground/76 shadow-sm shadow-black/4 transition-colors hover:text-warm focus:outline-none focus-visible:ring-2 focus-visible:ring-warm/35"
+          >
+            <span className="font-mono">{source.sourceDir || "source"}</span>
+            {source.title && (
+              <span className="ml-1 text-foreground/52">
+                · {source.title.slice(0, 28)}
+              </span>
+            )}
+          </Link>
+        ))}
+      </div>
+    </div>
   );
 }

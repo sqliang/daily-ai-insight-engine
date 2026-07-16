@@ -1,9 +1,15 @@
 // ============================================================================
-// /specialized/paper/[date] — 论文速递专题报告页
+// src/app/specialized/paper/[date]/page.tsx — 学术论文专题报告页
 //
-// 展示指定日期的学术论文分析结果。
-// 支持按研究领域筛选。
-// TODO: 专题分析能力暂时停用，待重新设计后恢复。
+// 展示指定日期的 arXiv CS.AI 论文分析结果，是“专题洞察”三页面之一。
+// 目前直接从 all_articles.json 加载论文文章并做领域分布统计；待 Stage 4b 论文简报
+//（specializedBrief.paperHighlights 或 paperInsights）稳定后，可迁移到与
+// GitHub / 产品页面一致的日报 JSON 读取模式。
+//
+// 设计理由：
+//   论文专题需要展示每篇论文的元数据、研究问题、方法创新、实验严谨度等细粒度信息，
+//   当前由 Stage 2/3 直接写入文章 frontmatter，因此页面直接读取 all_articles.json。
+//   未来演进为 paperInsights 后，可复用 SpecializedReportHero 等组件做更聚合的展示。
 // ============================================================================
 
 import Link from 'next/link';
