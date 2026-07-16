@@ -2,7 +2,7 @@
 // ArticleCardSpecialized.tsx — 文章卡片内嵌专题分析容器（当前为占位实现）
 //
 // 设计意图：
-//   按文章来源类型（github-trending / producthunt / arxiv-cs-ai）在文章卡片展开态中
+//   按 Stage 2/3 识别出的专题对象类型（项目/论文/产品）在文章卡片展开态中
 //   渲染对应的迷你专题分析，作为黄金三角分析的补充。
 //
 // 当前状态：
@@ -29,8 +29,8 @@ interface ArticleCardSpecializedProps {
 /**
  * 专题分析容器组件。
  *
- * 按文章来源类型（github-trending / producthunt / arxiv-cs-ai）派发对应的
- * 专题分析卡片，渲染于黄金三角分析下方。
+ * 按 Stage 2/3 专题对象类型（项目/论文/产品）派发对应的
+ * 分析卡片，渲染于黄金三角分析下方。
  */
 export function ArticleCardSpecialized({ source, enriched }: ArticleCardSpecializedProps) {
   void source;

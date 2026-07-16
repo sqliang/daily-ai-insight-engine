@@ -400,7 +400,7 @@ class SpecializedTags(BaseModel):
 
     github: Optional[GitHubTags] = Field(
         default=None,
-        description="GitHub 项目标注（仅 source == 'github-trending' 时填充）",
+        description="项目标注（Stage 2 从文章中识别开源项目/技术方案时填充）",
     )
 
     product: Optional[ProductTags] = Field(

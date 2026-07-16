@@ -6,11 +6,11 @@
 
 更进一步，系统在海量日报之上，针对三类高价值受众自动生成**专题洞察（Specialized Briefs）**：
 
-- **GitHub 专题** —— 为开发者筛选当日最值得关注的开源项目，跨天去重、按 AI 子领域聚合，回答“这个项目值不值得看、适合谁用、风险在哪”。
-- **论文专题** —— 为研究者提炼 arXiv 关键论文的研究问题、方法创新、实验严谨度与工业落地价值。
-- **产品专题** —— 为产品经理和创业者追踪 Product Hunt / WhyTryAI 上的新产品，分析定位、商业模式、目标用户与市场信号。
+- **项目洞察（Project Insights）** —— 为开发者筛选当日最值得关注的开源项目与技术方案。系统在 Stage 2 从全量文章中识别并提取项目级标签与字段，Stage 3 再由项目分析人格做深度评估，最终由主编 Agent 跨天去重、按 AI 子领域聚合，回答“这个项目值不值得看、适合谁用、风险在哪”。
+- **论文洞察（Paper Insights）** —— 为研究者提炼当日关键 AI 论文的研究问题、方法创新、实验严谨度与工业落地价值。系统在 Stage 2 识别论文元数据，Stage 3 由论文分析人格完成细粒度学术评估，前端直接读取结构化 frontmatter 做深度展示。
+- **产品洞察（Product Insights）** —— 为产品经理和创业者追踪当日 AI 产品动态。系统基于 Stage 2 提取的产品级标签（发布类型、定价模式、目标人群等）和 Stage 3 产品分析人格的评估，由主编 Agent 归类、跨天去重，分析定位、商业模式、目标用户与市场信号。
 
-专题洞察与综合日报共用同一套流水线产物，但由主编 Agent 单独归类、去重、提炼，确保每一页都是“少即是多”的决策辅助。
+专题洞察并非简单按信源分类，而是跨 Stage 的**特征识别 → 字段提取 → 深度分析 → 主编合成**结果。它与综合日报共用同一套流水线产物，由主编 Agent 单独归类、去重、提炼，确保每一页都是“少即是多”的决策辅助。
 
 ---
 
@@ -25,9 +25,9 @@
 | 输入 | 标题 + 摘要 | 清洗后的全文 |
 | 加工 | 无 | 事实提取 → 三人格并行分析 → 主编合成 |
 | 视角 | 单一来源 | 技术架构师 × 资本分析师 × 风险评估师 三方交叉验证 |
-| 输出 | 时间线列表 | 5 个 Top 事件 + 4 维趋势判断 + 风险/机会信号 + 影响力排名 + 三大专题洞察 |
-| 可消费性 | 需要一篇篇读 | 执行摘要 30 秒了解全局，深读可按专题钻取（GitHub / 论文 / 产品） |
-| 链路可追溯 | 无 | 从日报事件 → 文章 → 提取事实 → 原文 URL 完整回溯；专题条目同样保留来源引用 |
+| 输出 | 时间线列表 | 5 个 Top 事件 + 4 维趋势判断 + 风险/机会信号 + 影响力排名 + 项目/论文/产品三大专题洞察 |
+| 可消费性 | 需要一篇篇读 | 执行摘要 30 秒了解全局，深读可按专题钻取（项目 / 论文 / 产品） |
+| 链路可追溯 | 无 | 从日报事件 → 文章 → 提取事实 → 原文 URL 完整回溯；专题条目同样保留来源引用与证据片段 |
 
 **核心主张：少花时间筛信息，多花时间理解与学习。**
 
@@ -78,16 +78,16 @@
 <table>
 <tr>
 <td width="33%" valign="top">
-  <h4>GitHub 专题&nbsp;&nbsp;<code>/specialized/github/:date</code></h4>
-  <p><kbd>开发者端</kbd>&nbsp; 跨天去重后的开源项目精选，含 AI 子领域分布、项目评分、适用人群与风险信号</p>
+  <h4>项目洞察&nbsp;&nbsp;<code>/specialized/github/:date</code></h4>
+  <p><kbd>开发者端</kbd>&nbsp; 跨 Stage 识别并深度评估的开源项目与技术方案，含 AI 子领域分布、项目评分、适用人群与风险信号</p>
 </td>
 <td width="33%" valign="top">
-  <h4>论文专题&nbsp;&nbsp;<code>/specialized/paper/:date</code></h4>
-  <p><kbd>研究者端</kbd>&nbsp; arXiv 当日论文深度解读，覆盖研究问题、方法创新、实验严谨度与产业相关性</p>
+  <h4>论文洞察&nbsp;&nbsp;<code>/specialized/paper/:date</code></h4>
+  <p><kbd>研究者端</kbd>&nbsp; 当日关键 AI 论文深度解读，覆盖研究问题、方法创新、实验严谨度与产业相关性</p>
 </td>
 <td width="33%" valign="top">
-  <h4>产品专题&nbsp;&nbsp;<code>/specialized/product/:date</code></h4>
-  <p><kbd>产品端</kbd>&nbsp; Product Hunt / WhyTryAI 新产品聚合，分析定位、商业模式、目标用户与值得关注的信号</p>
+  <h4>产品洞察&nbsp;&nbsp;<code>/specialized/product/:date</code></h4>
+  <p><kbd>产品端</kbd>&nbsp; 当日 AI 产品动态聚合，基于产品级标签与深度评估分析定位、商业模式、目标用户与市场信号</p>
 </td>
 </tr>
 </table>
@@ -178,9 +178,9 @@ pnpm dev
 | `http://localhost:3000/dashboard` | 日报归档卡片列表 |
 | `http://localhost:3000/dashboard/{date}` | 交互式可视化仪表盘 |
 | `http://localhost:3000/report/{date}` | Markdown 全文报告 |
-| `http://localhost:3000/specialized/github/{date}` | GitHub 专题洞察 |
-| `http://localhost:3000/specialized/paper/{date}` | 论文专题洞察 |
-| `http://localhost:3000/specialized/product/{date}` | 产品专题洞察 |
+| `http://localhost:3000/specialized/github/{date}` | 项目洞察（开源项目与技术方案） |
+| `http://localhost:3000/specialized/paper/{date}` | 论文洞察（AI 学术论文） |
+| `http://localhost:3000/specialized/product/{date}` | 产品洞察（AI 产品动态） |
 
 ---
 
@@ -205,11 +205,11 @@ pnpm dev
 
 **数据源探索**（`/`、`/sources/[name]`）—— 按黄金三角分层浏览所有信源，钻取到每篇文章在各阶段的提取与分析结果，理解 Agent 的分析链路。
 
-**交互看板**（`/dashboard/[date]`）—— 零后端架构，Server Component 直接 `readFile` 读取 JSON。KPI 指标、事件分布 & 情绪分布双饼图、影响力 Top 10 柱状图、四维趋势卡片、深度解读面板、风险/机会信号双列表，并在顶部提供 GitHub / 论文 / 产品三大专题入口。
+**交互看板**（`/dashboard/[date]`）—— 零后端架构，Server Component 直接 `readFile` 读取 JSON。KPI 指标、事件分布 & 情绪分布双饼图、影响力 Top 10 柱状图、四维趋势卡片、深度解读面板、风险/机会信号双列表，并在顶部提供项目 / 论文 / 产品三大专题入口。
 
 **可读报告**（`/report/[date]`）—— Markdown 全文，含执行摘要、数据概览、Top 事件与支撑证据、深度分析、趋势判断、风险与机会信号表格。适合阅读、分享、归档。
 
-**专题洞察**（`/specialized/github/[date]`、`/specialized/paper/[date]`、`/specialized/product/[date]`）—— 面向特定角色的垂直深度页。主编 Agent 在 Stage 4b 对 GitHub Trending、arXiv、Product Hunt / WhyTryAI 文章单独归类、跨天去重、提炼关键判断与 watch signals，每一页都是可直接用于决策的简报。
+**专题洞察**（`/specialized/github/[date]`、`/specialized/paper/[date]`、`/specialized/product/[date]`）—— 面向特定角色的垂直深度页。系统在 Stage 2 识别项目/论文/产品对象并提取专用标签与字段，Stage 3 由对应分析人格完成深度评估，Stage 4b 再由主编 Agent 归类、跨天去重、提炼关键判断与 watch signals，每一页都是可直接用于决策的简报。
 
 ---
 
@@ -238,13 +238,13 @@ pnpm dev
 | QualitativeAssessment | Stage 3 | `sentiment`、`developer_sentiment`、`hype_assessment`、`information_entropy`、`engineering_complexity` |
 | ValueAssessment + Foresight | Stage 3 | `compound_value`、`value_capture_layer`、`moat_impact`、`risk_matrix`、`market_opportunities`、`actionable_insight` |
 
-在 Stage 4b 主编合成阶段，日报还会额外输出 **`specializedBrief`** 专题洞察块：
+在 Stage 4b 主编合成阶段，日报还会额外输出 **`specializedBrief`** 专题洞察块。该块不是简单按信源分类，而是基于 Stage 2 识别的对象标签与 Stage 3 深度分析结果，由主编 Agent 做最终归类、去重与合成：
 
-| 专题 | 来源 | 输出结构 |
-|------|------|----------|
-| `githubHighlights` / `projectInsights` | GitHub Trending | 跨天去重后的项目列表，含 `keyJudgment`、`watchSignals`、`items`（每个项目含 `oneLine`、`whyItMatters`、`signals`、`risks`、`sources`） |
-| `paperHighlights` | arXiv CS.AI | 当日论文聚合与解读 |
-| `productHighlights` / `productInsights` | Product Hunt / WhyTryAI | 跨天去重后的产品列表，结构与 GitHub 专题对齐 |
+| 专题 | 识别与输入 | 输出结构 |
+|------|------------|----------|
+| `githubHighlights` / `projectInsights` | Stage 2 `specialized_tags.github` + Stage 3 `github_assessment` | 跨天去重后的项目列表，含 `keyJudgment`、`watchSignals`、`items`（每个项目含 `oneLine`、`whyItMatters`、`signals`、`risks`、`sources`、`evidenceSnippets`） |
+| `paperHighlights` / `paperInsights` | Stage 2 `specialized_tags.paper` + Stage 3 `paper_assessment` | 当日论文聚合与解读，含研究问题、方法、实验、产业相关性等字段 |
+| `productHighlights` / `productInsights` | Stage 2 `specialized_tags.product` + Stage 3 `product_assessment` | 跨天去重后的产品列表，结构与项目洞察对齐 |
 
 专题块与 Top 事件、趋势信号等一同写入 `data/05_reports/daily-report.json`，前端通过 `src/lib/data/specialized.ts` 读取并渲染。
 
@@ -277,7 +277,7 @@ daily-ai-insight-engine/
 
 ├── src/                               # Next.js 16 前端
 │   ├── app/                           #   App Router（/ /dashboard /report /sources /specialized/*）
-│   │   └── specialized/               #     GitHub / 论文 / 产品专题页面
+│   │   └── specialized/               #     项目 / 论文 / 产品专题洞察页面
 │   ├── components/                    #   UI 组件（dashboard/ charts/ sources/ reports/）
 │   │   └── reports/                   #     SpecializedReportHero、SpecializedEntries、ReportCard
 │   └── lib/                           #   工具库（Zod Schema、数据 I/O、标签映射）

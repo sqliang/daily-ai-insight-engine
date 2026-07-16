@@ -208,7 +208,7 @@ class DailyReport(BaseModel):
 
 class GithubBrief(BaseModel):
     """
-    GitHub 项目专题简报——日报中的轻量摘要（Phase 1 早期格式）。
+    项目洞察简报——日报中的轻量摘要（Phase 1 早期格式）。
 
     设计理由：
         新版专题洞察已演进为 ObjectInsightBrief（projectInsights），包含完整项目条目、
@@ -251,7 +251,7 @@ class GithubBrief(BaseModel):
 
 class ProductBrief(BaseModel):
     """
-    产品专题简报——日报中的轻量摘要（Phase 2 早期格式）。
+    产品洞察简报——日报中的轻量摘要（Phase 2 早期格式）。
 
     与 GithubBrief 类似，新版使用 ObjectInsightBrief（productInsights）承载完整产品洞察。
     保留本模型以兼容历史日报 JSON。
@@ -286,9 +286,9 @@ class ProductBrief(BaseModel):
 
 class PaperBrief(BaseModel):
     """
-    论文专题简报——日报中的轻量摘要（Phase 2 实现）。
+    论文洞察简报——日报中的轻量摘要（Phase 2 实现）。
 
-    目前论文专题仍以摘要形式呈现，未来可像 GitHub / 产品一样演进为
+    目前论文洞察仍以摘要形式呈现，未来可像项目 / 产品一样演进为
     ObjectInsightBrief 以支撑更细粒度的论文条目分析。
     """
 
@@ -340,7 +340,7 @@ class SpecializedSource(BaseModel):
 
 class SpecializedInsightItem(BaseModel):
     """
-    项目/产品专题洞察对象条目。
+    项目/产品洞察对象条目。
 
     一个条目对应一个具体的开源项目或产品，包含：
         - 定位与价值判断（oneLine / whyItMatters）
@@ -376,7 +376,7 @@ class SpecializedInsightItem(BaseModel):
 
 class ObjectInsightBrief(BaseModel):
     """
-    项目/产品专题洞察聚合简报。
+    项目/产品洞察聚合简报。
 
     这是新版专题洞察的核心结构，把多个 SpecializedInsightItem 聚合为一份完整简报：
         - summary / keyJudgment：主编 Agent 对当日专题的整体判断
@@ -418,7 +418,7 @@ class SpecializedBrief(BaseModel):
     github_highlights: Optional[GithubBrief] = Field(
         default=None,
         alias="githubHighlights",
-        description="今日 GitHub 项目亮点（仅当有 github-trending 文章时，旧版轻量格式）",
+        description="今日项目亮点（仅当有项目类文章时，旧版轻量格式）",
     )
 
     product_highlights: Optional[ProductBrief] = Field(
@@ -436,13 +436,13 @@ class SpecializedBrief(BaseModel):
     project_insights: Optional[ObjectInsightBrief] = Field(
         default=None,
         alias="projectInsights",
-        description="新版 GitHub 项目专题洞察（含完整条目、来源引用、分布统计）",
+        description="新版项目洞察（含完整条目、来源引用、分布统计）",
     )
 
     product_insights: Optional[ObjectInsightBrief] = Field(
         default=None,
         alias="productInsights",
-        description="新版产品专题洞察（含完整条目、来源引用、分布统计）",
+        description="新版产品洞察（含完整条目、来源引用、分布统计）",
     )
 
     class Config:

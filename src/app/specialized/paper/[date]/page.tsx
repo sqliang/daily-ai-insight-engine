@@ -1,13 +1,14 @@
 // ============================================================================
-// src/app/specialized/paper/[date]/page.tsx — 学术论文专题报告页
+// src/app/specialized/paper/[date]/page.tsx — 论文洞察页
 //
-// 展示指定日期的 arXiv CS.AI 论文分析结果，是“专题洞察”三页面之一。
+// 展示基于 Stage 2 specialized_tags.paper 与 Stage 3 paper_assessment 识别的
+// AI 论文分析结果，是”专题洞察”三页面之一。
 // 目前直接从 all_articles.json 加载论文文章并做领域分布统计；待 Stage 4b 论文简报
 //（specializedBrief.paperHighlights 或 paperInsights）稳定后，可迁移到与
-// GitHub / 产品页面一致的日报 JSON 读取模式。
+// 项目 / 产品页面一致的日报 JSON 读取模式。
 //
 // 设计理由：
-//   论文专题需要展示每篇论文的元数据、研究问题、方法创新、实验严谨度等细粒度信息，
+//   论文洞察需要展示每篇论文的元数据、研究问题、方法创新、实验严谨度等细粒度信息，
 //   当前由 Stage 2/3 直接写入文章 frontmatter，因此页面直接读取 all_articles.json。
 //   未来演进为 paperInsights 后，可复用 SpecializedReportHero 等组件做更聚合的展示。
 // ============================================================================
@@ -65,7 +66,7 @@ export default async function PaperSpecializedPage({ params, searchParams }: Pro
             论文速递
           </h1>
           <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-muted/75">
-            {date} 暂无可展示的论文专题简报。Paper 专题入口当前保持关闭，后续恢复后会在这里展示当日研究摘要。
+            {date} 暂无可展示的论文洞察简报。Paper 洞察入口当前保持关闭，后续恢复后会在这里展示当日研究摘要。
           </p>
         </div>
       </PageShell>
@@ -90,7 +91,7 @@ export default async function PaperSpecializedPage({ params, searchParams }: Pro
           ← 回到日报
         </Link>
         <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-2">
-          {date} 论文速递专题报告
+          {date} 论文速递洞察报告
         </h1>
         <p className="text-gray-600 dark:text-gray-400 mt-1">
           共 {papers.length} 篇论文 · {Object.keys(areaDist).length} 个研究领域
