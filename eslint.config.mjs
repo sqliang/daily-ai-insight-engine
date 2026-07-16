@@ -16,7 +16,7 @@ export default [
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
-    ignores: [".next/**", "node_modules/**", "out/**", ".claude/**", ".venv/**"],
+    ignores: [".next/**", "node_modules/**", "out/**", ".claude/**", ".venv/**", ".understand-anything/**"],
   },
   {
     files: ["**/*.{ts,tsx}"],

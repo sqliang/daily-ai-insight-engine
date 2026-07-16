@@ -184,6 +184,7 @@ export const dailyReportSchema = z.object({
 });
 
 export type DailyReport = z.infer<typeof dailyReportSchema>;
+export type TopEvent = z.infer<typeof topEventSchema>;
 export type SpecializedBrief = z.infer<typeof specializedBriefSchema>;
 export type SpecializedInsightItem = z.infer<typeof specializedInsightItemSchema>;
 export type ObjectInsightBrief = z.infer<typeof objectInsightBriefSchema>;
