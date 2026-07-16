@@ -147,7 +147,7 @@ def _add_synthesize_arguments(parser):
     )
     parser.add_argument(
         "--model", "-m", type=str, default=None,
-        help="LLM 模型名称 (默认: claude-opus-4-7)",
+        help="LLM 模型名称 (默认: config.yaml llm.synthesize.name > ANTHROPIC_MODEL 环境变量 > claude-opus-4-7)",
     )
     parser.add_argument(
         "--max-detail", type=int, default=30,

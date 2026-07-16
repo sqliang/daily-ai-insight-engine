@@ -80,18 +80,19 @@ def synthesize_report(
     print(f"  完整展示: 前 {min(max_detail, total)} 篇")
 
     if dry_run:
-        from .prompts.user_prompt import build_user_prompt
-        from .prompts.system_prompt import EDITOR_IN_CHIEF_SYSTEM_PROMPT
+        from .editor_in_chief_agent import _build_prompts
 
-        user_prompt = build_user_prompt(articles, max_detail=max_detail)
+        system_prompt, user_prompt = _build_prompts(
+            input_path, max_detail=max_detail, target_date=target_date
+        )
         print(f"\n  >>> DRY RUN — 不调用 LLM <<<")
-        print(f"  System prompt:  {len(EDITOR_IN_CHIEF_SYSTEM_PROMPT)} chars")
+        print(f"  System prompt:  {len(system_prompt)} chars")
         print(f"  User prompt:    {len(user_prompt)} chars")
         print(f"  估算 tokens:    ~{len(user_prompt) // 3} tokens (rough estimate)")
         print(f"  输出目录:       {output_dir}")
         return {}
 
-    print(f"  模型: {model or 'claude-opus-4-7 (默认)'}")
+    print(f"  模型: {model or '从 config.yaml / ANTHROPIC_MODEL 环境变量解析'}")
     print(f"\n  调用 Editor-in-Chief Agent...")
 
     report = run_editor_in_chief_sync(

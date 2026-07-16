@@ -32,7 +32,7 @@ export interface ReportSummary {
   sourceCount: number;
   /** 覆盖的语言种类 */
   languages: string[];
-  /** 当日专题报告可用性（专题能力暂时停用时恒为空） */
+  /** 当日专题报告可用性 */
   specialized: SpecializedAvailability;
 }
 
@@ -48,11 +48,44 @@ export interface SpecializedAvailability {
 }
 
 /**
- * 检测指定日期是否有专题数据。
+ * 从日报数据中提取各专题报告的可用性。
  *
- * TODO: 专题分析能力暂时停用，待重新设计后恢复。
- * 当前返回的专题入口恒为空，但保留类型以兼容历史日报结构。
+ * GitHub 与产品专题已恢复，论文专题仍保持关闭（恒为 null）。
+ * GitHub 可用性基于 specializedBrief.githubHighlights.articleCount 和
+ * domainDistribution 计算；产品可用性基于 productHighlights.articleCount。
+ *
+ * 参数：
+ *    report: 已解析的 DailyReport
+ *
+ * 返回：
+ *    SpecializedAvailability 对象
  */
+export function detectSpecializedAvailability(
+  report: DailyReport,
+): SpecializedAvailability {
+  const gh = report.specializedBrief?.githubHighlights;
+  const github = gh
+    ? {
+        count: gh.articleCount,
+        domains: gh.domainDistribution,
+      }
+    : null;
+
+  const ph = report.specializedBrief?.productHighlights;
+  const product = ph
+    ? {
+        count: ph.articleCount,
+      }
+    : null;
+
+  return {
+    github,
+    product,
+    // 论文专题暂不恢复
+    paper: null,
+  };
+}
+
 // ============================================================================
 // 数据读取
 // ============================================================================
@@ -108,13 +141,7 @@ export async function listReports(dateRange?: DateRange): Promise<ReportSummary[
         totalArticles: report.dataSourceSummary.totalArticles,
         sourceCount: report.dataSourceSummary.sources.length,
         languages: report.dataSourceSummary.languages,
-        // TODO: 专题分析能力暂时停用，待重新设计后恢复。
-        // 即使历史日报包含 specializedBrief，也不再在日报列表暴露专题入口。
-        specialized: {
-          github: null,
-          product: null,
-          paper: null,
-        },
+        specialized: detectSpecializedAvailability(report),
       });
     } catch {
       // 跳过解析失败的文件（数据损坏或格式不兼容）

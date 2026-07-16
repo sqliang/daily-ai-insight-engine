@@ -1,8 +1,12 @@
 // ============================================================================
 // src/lib/data/specialized.ts — 专题分析数据加载
 //
-// 从 all_articles.json 中加载、过滤、聚合专题分析相关的文章数据。
+// 从 daily-report-{date}.json 或 all_articles.json 中加载专题分析数据。
 // 供 GitHub/Product/Paper 专题看板页面消费。
+//
+// Phase 1/2 变更：GitHub 与产品专题详情页均改为从日报 JSON 的 specializedBrief
+// 读取，保持与 /dashboard/{date} 卡片口径一致；Paper 仍保留 all_articles.json
+// 加载逻辑（待后续实现）。
 // ============================================================================
 
 import { readFile } from "node:fs/promises";
@@ -42,6 +46,20 @@ export interface GithubProjectEntry {
     cautionFor: string[];
     timeToProduction: string;
   };
+}
+
+/**
+ * GitHub 当日简报数据结构。
+ *
+ * 与日报 JSON 中的 specializedBrief.githubHighlights 字段对齐，
+ * 用于 /specialized/github/{date} 页面渲染。
+ */
+export interface GithubBrief {
+  summary: string;
+  articleCount: number;
+  topProjects: string[];
+  domainDistribution: Record<string, number>;
+  aiCategoryDistribution?: Record<string, number> | null;
 }
 
 // ---------------------------------------------------------------------------
@@ -108,6 +126,45 @@ export async function loadGithubArticles(
       });
   } catch {
     return [];
+  }
+}
+
+// ---------------------------------------------------------------------------
+// GitHub 当日简报加载（从日报 JSON 读取）
+// ---------------------------------------------------------------------------
+
+/**
+ * 从日报归档 JSON 中加载指定日期的 GitHub 当日简报。
+ *
+ * Phase 1 采用此函数替代 loadGithubArticles，原因：
+ *   - 与 /dashboard/{date} 卡片上的专题数据口径一致
+ *   - 专题简报已经过 Stage 4b 跨天去重和汇总，无需前端再次聚合 all_articles.json
+ *   - 当日报尚未生成或不含 githubHighlights 时自然降级为空
+ *
+ * 参数：
+ *    date: 目标日期，格式 YYYY-MM-DD
+ *
+ * 返回：
+ *    GithubBrief 或 null（该日期无日报或无 GitHub 简报）
+ */
+export async function loadGithubBrief(date: string): Promise<GithubBrief | null> {
+  const reportPath = join(process.cwd(), "data/05_reports", `daily-report-${date}.json`);
+
+  try {
+    const raw = await readFile(reportPath, "utf8");
+    const data = JSON.parse(raw);
+    const gh = data?.specializedBrief?.githubHighlights;
+    if (!gh) return null;
+
+    return {
+      summary: gh.summary || "",
+      articleCount: gh.articleCount || 0,
+      topProjects: gh.topProjects || [],
+      domainDistribution: gh.domainDistribution || {},
+      aiCategoryDistribution: gh.aiCategoryDistribution || null,
+    };
+  } catch {
+    return null;
   }
 }
 
@@ -327,6 +384,19 @@ export interface ProductEntry {
   objectiveSummary: string;
 }
 
+/**
+ * 产品当日简报数据结构。
+ *
+ * 与日报 JSON 中的 specializedBrief.productHighlights 字段对齐，
+ * 用于 /specialized/product/{date} 页面渲染。
+ */
+export interface ProductBrief {
+  summary: string;
+  articleCount: number;
+  notableProducts: string[];
+  launchContextDistribution: Record<string, number>;
+}
+
 // ---------------------------------------------------------------------------
 // 产品数据加载
 // ---------------------------------------------------------------------------
@@ -408,6 +478,43 @@ export async function loadProductArticles(
       });
   } catch {
     return [];
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 产品当日简报加载（从日报 JSON 读取）
+// ---------------------------------------------------------------------------
+
+/**
+ * 从日报归档 JSON 中加载指定日期的产品当日简报。
+ *
+ * Phase 2 采用此函数替代 loadProductArticles，原因与 loadGithubBrief 一致：
+ *   - 与 /dashboard/{date} 卡片上的专题数据口径一致
+ *   - 专题简报已经过 Stage 4b 跨天去重和汇总
+ *
+ * 参数：
+ *    date: 目标日期，格式 YYYY-MM-DD
+ *
+ * 返回：
+ *    ProductBrief 或 null（该日期无日报或无产品简报）
+ */
+export async function loadProductBrief(date: string): Promise<ProductBrief | null> {
+  const reportPath = join(process.cwd(), "data/05_reports", `daily-report-${date}.json`);
+
+  try {
+    const raw = await readFile(reportPath, "utf8");
+    const data = JSON.parse(raw);
+    const ph = data?.specializedBrief?.productHighlights;
+    if (!ph) return null;
+
+    return {
+      summary: ph.summary || "",
+      articleCount: ph.articleCount || 0,
+      notableProducts: ph.notableProducts || [],
+      launchContextDistribution: ph.launchContextDistribution || {},
+    };
+  } catch {
+    return null;
   }
 }
 

@@ -84,6 +84,21 @@ Return ONLY a valid JSON object matching this schema:
       {"entity": "OpenAI", "count": 15, "type": "company"},
       {"entity": "Transformer", "count": 12, "type": "technology"}
     ]
+  },
+  "specializedBrief": {
+    "githubHighlights": {
+      "summary": "one sentence summary of today's GitHub Trending trend in Chinese",
+      "articleCount": <number of github-trending articles today>,
+      "topProjects": ["owner/repo1", "owner/repo2", "owner/repo3"],
+      "domainDistribution": {"ai_ml": 3, "developer_tools": 2},
+      "aiCategoryDistribution": {"agent_framework": 2, "llm_infra": 1}
+    },
+    "productHighlights": {
+      "summary": "one sentence summary of today's AI product launches in Chinese",
+      "articleCount": <number of product articles today>,
+      "notableProducts": ["Product A", "Product B", "Product C"],
+      "launchContextDistribution": {"new_launch": 2, "major_update": 1}
+    }
   }
 }
 
@@ -113,5 +128,7 @@ Return ONLY a valid JSON object matching this schema:
 
 10. **evidenceArticleIds**: For each evidence item in evidence[], the corresponding evidenceArticleIds[i] MUST list ONLY the specific article IDs that directly support that fact. Use the article "id" field from the prompt. Do NOT put all articleIds for every evidence item — be precise about which article backs each claim. evidenceArticleIds must have the same length as evidence. Each sub-array must have at least 1 article ID.
 11. **No inline citations in evidence**: evidence text must be pure factual statements. Do NOT write source citations like "（来源：xxx）" inside evidence text. The pipeline handles numbering.
-12. **专题能力暂时停用**：不要输出 specializedBrief 字段；GitHub 项目、论文速递、产品扫描专题待重新设计后恢复。
+12. **specializedBrief.githubHighlights**: ONLY when there are github-trending articles in the input. Use the GitHub statistics provided in the user prompt. Do NOT fabricate project names or domain distributions. `articleCount` must match the actual number of deduplicated GitHub articles provided. `topProjects` should list 3-5 notable project names (owner/repo format preferred). `summary` must be one sentence in Chinese.
+13. **specializedBrief.productHighlights**: ONLY when there are product articles (source_dir == "producthunt" or "whytryai") in the input. Use the product statistics provided in the user prompt. Do NOT fabricate product names. `articleCount` must match the actual number of deduplicated product articles provided. `notableProducts` should list 3-5 notable product names. `summary` must be one sentence in Chinese.
+14. **Paper brief**: Do NOT output paperHighlights. The paper specialized brief remains disabled.
 """

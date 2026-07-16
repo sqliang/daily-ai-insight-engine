@@ -104,6 +104,7 @@ const githubBriefSchema = z.object({
 const productBriefSchema = z.object({
   summary: z.string(),
   notableProducts: z.array(z.string()),
+  launchContextDistribution: z.record(z.string(), z.number()).optional().default({}),
   articleCount: z.number().int().nonnegative(),
 });
 

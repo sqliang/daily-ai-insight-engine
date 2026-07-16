@@ -15,6 +15,7 @@ import { RankingsSection } from "@/components/dashboard/RankingsSection";
 import { ReportFooter } from "@/components/dashboard/ReportFooter";
 import { ReportHeader } from "@/components/dashboard/ReportHeader";
 import { SignalList } from "@/components/dashboard/SignalList";
+import { SpecializedBriefSection } from "@/components/dashboard/SpecializedBriefSection";
 import { TopEventsSection } from "@/components/dashboard/TopEventsSection";
 import { TrendInsightsSection } from "@/components/dashboard/TrendInsightsSection";
 import { ErrorBoundary } from "@/components/charts/ErrorBoundary";
@@ -46,6 +47,15 @@ export function DashboardContent({ report, backHref, backLabel }: DashboardConte
         }}
         backHref={backHref}
         backLabel={backLabel}
+        footerSlot={
+          <ErrorBoundary sectionName="专题洞察">
+            <SpecializedBriefSection
+              data={report.specializedBrief}
+              date={report.date}
+              variant="banner"
+            />
+          </ErrorBoundary>
+        }
       />
 
       <KPISection dataSourceSummary={report.dataSourceSummary} />
@@ -73,8 +83,6 @@ export function DashboardContent({ report, backHref, backLabel }: DashboardConte
       <ErrorBoundary sectionName="深度分析">
         <DeepDivesSection deepDives={report.deepDives} />
       </ErrorBoundary>
-
-      {/* TODO: 专题分析能力暂时停用，待重新设计后恢复。 */}
 
       <section className="mt-6 grid gap-5 lg:grid-cols-2">
         <ErrorBoundary sectionName="风险提示">

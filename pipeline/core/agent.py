@@ -17,7 +17,9 @@ pipeline/core/agent.py — Claude Agent SDK 共享传输层
 import asyncio
 import json
 import logging
+import os
 import re
+import tempfile
 from dataclasses import dataclass, field
 from typing import Optional
 
@@ -103,15 +105,33 @@ async def call_agent(
     异常：
         AgentCallError: 当 Agent 返回错误或未产生任何文本时抛出
     """
+    # 使用临时文件捕获 Claude CLI 的 stderr，便于诊断 "Command failed with exit code 1"
+    stderr_fd, stderr_path = tempfile.mkstemp(suffix=".log", prefix="claude_agent_stderr_")
+    stderr_file = os.fdopen(stderr_fd, "w")
+
     options = build_agent_options(
         system_prompt=system_prompt,
         model=model,
         max_turns=max_turns,
+        stderr=stderr_file,
     )
 
     collected_text: list[str] = []
     has_error = False
     error_messages: list[str] = []
+
+    def _read_stderr() -> str:
+        """读取已写入的 stderr 内容并清理临时文件。"""
+        try:
+            stderr_file.flush()
+            with open(stderr_path, "r", encoding="utf-8") as f:
+                content = f.read()
+            return content
+        finally:
+            try:
+                os.unlink(stderr_path)
+            except OSError:
+                pass
 
     try:
         async for message in query(prompt=prompt, options=options):
@@ -127,15 +147,21 @@ async def call_agent(
                         error_messages.extend(message.errors)
 
     except Exception as exc:
+        stderr_content = _read_stderr()
+        detail = f"\nClaude CLI stderr:\n{stderr_content}" if stderr_content else ""
         raise AgentCallError(
-            message=f"Agent SDK 调用异常: {exc}",
+            message=f"Agent SDK 调用异常: {exc}{detail}",
             retryable=True,
         ) from exc
+    finally:
+        stderr_file.close()
 
     if has_error:
+        stderr_content = _read_stderr()
         error_text = "; ".join(error_messages) if error_messages else "未知错误"
+        detail = f"\nClaude CLI stderr:\n{stderr_content}" if stderr_content else ""
         raise AgentCallError(
-            message=f"Agent 返回错误: {error_text}",
+            message=f"Agent 返回错误: {error_text}{detail}",
             retryable=True,
         )
 
@@ -510,6 +536,7 @@ def build_agent_options(
     *,
     model: Optional[str] = None,
     max_turns: int = 3,
+    stderr: Optional[object] = None,
 ) -> ClaudeAgentOptions:
     """
     构造标准 ClaudeAgentOptions。
@@ -519,11 +546,13 @@ def build_agent_options(
         - allowed_tools=[]: Agent 无需文件系统工具，只做思考→输出文本
         - tools=[]: 禁用所有内置工具，减少不必要的 tool_use 消耗
         - max_turns: 控制最大对话轮数（提取任务 1 轮即可完成）
+        - stderr: 捕获 Claude CLI 子进程 stderr，用于诊断底层错误
 
     参数：
         system_prompt: 系统提示词
         model: 模型名称
         max_turns: 最大对话轮数
+        stderr: 文件对象，用于接收 CLI stderr
 
     返回：
         配置好的 ClaudeAgentOptions 实例
@@ -535,4 +564,5 @@ def build_agent_options(
         permission_mode="bypassPermissions",
         allowed_tools=[],
         tools=[],
+        stderr=stderr,
     )

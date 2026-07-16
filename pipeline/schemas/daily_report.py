@@ -248,6 +248,12 @@ class ProductBrief(BaseModel):
         description="值得关注的产品名列表",
     )
 
+    launch_context_distribution: dict = Field(
+        default_factory=dict,
+        alias="launchContextDistribution",
+        description="产品发布上下文分布（如 {'new_launch': 2, 'major_update': 1}）",
+    )
+
     article_count: int = Field(
         default=0,
         alias="articleCount",

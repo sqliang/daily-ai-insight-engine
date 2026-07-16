@@ -8,6 +8,45 @@ from collections import Counter
 from typing import Optional
 
 
+# GitHub 项目领域中文标签映射（仅用于 prompt 展示）
+_GITHUB_DOMAIN_LABELS = {
+    "ai_ml": "AI/ML",
+    "web_frontend": "Web 前端",
+    "web_backend": "Web 后端",
+    "devops_infra": "DevOps",
+    "database_storage": "数据库",
+    "programming_languages": "编程语言",
+    "developer_tools": "开发者工具",
+    "security": "安全",
+    "mobile": "移动端",
+    "blockchain": "区块链",
+    "data_engineering": "数据工程",
+    "game_development": "游戏开发",
+    "documentation": "文档",
+    "iot_embedded": "IoT/嵌入式",
+    "other": "其他",
+}
+
+# 产品发布上下文中文标签映射（仅用于 prompt 展示）
+_PRODUCT_LAUNCH_LABELS = {
+    "new_launch": "新产品",
+    "major_update": "重大更新",
+    "pivot": "战略转型",
+    "funding_announcement": "融资发布",
+}
+
+# 产品定价模式中文标签映射（仅用于 prompt 展示）
+_PRODUCT_PRICING_LABELS = {
+    "freemium": "Freemium",
+    "subscription": "订阅制",
+    "usage_based": "按量计费",
+    "open_source": "开源",
+    "free": "免费",
+    "enterprise": "企业版",
+    "unknown": "未公布",
+}
+
+
 def _compute_statistics(articles: list[dict]) -> dict:
     """从所有文章中计算统计分布。"""
     event_type_dist = Counter()
@@ -43,9 +82,152 @@ def _compute_statistics(articles: list[dict]) -> dict:
             {"entity": entity, "count": count, "type": etype}
             for (entity, etype), count in entity_freq.most_common(50)
         ],
-        # TODO: 专题分析能力暂时停用，待重新设计后恢复。
-        # 日报合成不再基于 specialized_tags 构造 specialized_stats。
     }
+
+
+def _compute_github_statistics(github_articles: list[dict]) -> dict:
+    """
+    从 GitHub 专题文章中计算当日简报所需的统计分布。
+
+    统计项：
+        - total: 项目总数（已跨天去重后）
+        - domain_distribution: 通用领域分布
+        - ai_category_distribution: AI 子领域分布（仅汇总 ai_detail.primary_categories）
+        - top_projects: 项目名列表，按原始顺序保留
+
+    参数：
+        github_articles: source_dir == "github-trending" 的文章列表
+
+    返回：
+        dict: {total, domain_distribution, ai_category_distribution, top_projects}
+    """
+    domain_dist: Counter = Counter()
+    ai_cat_dist: Counter = Counter()
+    top_projects: list[str] = []
+
+    for a in github_articles:
+        gh = a.get("specialized_tags", {}).get("github", {}) if isinstance(a.get("specialized_tags"), dict) else {}
+        project_name = gh.get("project_name") or gh.get("projectName") or a.get("title", "")
+        if project_name:
+            top_projects.append(project_name)
+
+        domain = gh.get("domain") or "other"
+        domain_dist[domain] += 1
+
+        ai_detail = gh.get("ai_detail") or gh.get("aiDetail")
+        if isinstance(ai_detail, dict):
+            for cat in ai_detail.get("primary_categories") or ai_detail.get("primaryCategories") or []:
+                ai_cat_dist[cat] += 1
+
+    return {
+        "total": len(github_articles),
+        "domain_distribution": dict(domain_dist),
+        "ai_category_distribution": dict(ai_cat_dist),
+        "top_projects": top_projects,
+    }
+
+
+def _format_github_statistics(stats: dict) -> str:
+    """格式化 GitHub 专题统计为 prompt 文本。"""
+    lines = [
+        f"Total GitHub projects today: {stats['total']}",
+        "",
+        "### Domain Distribution",
+        _format_distribution(
+            stats["domain_distribution"],
+            label_map=_GITHUB_DOMAIN_LABELS,
+        ) if stats["domain_distribution"] else "  (no domain data)",
+    ]
+
+    if stats["ai_category_distribution"]:
+        lines.extend([
+            "",
+            "### AI Category Distribution",
+            _format_distribution(stats["ai_category_distribution"]),
+        ])
+
+    if stats["top_projects"]:
+        lines.extend([
+            "",
+            "### Notable Projects",
+        ])
+        for i, name in enumerate(stats["top_projects"][:10], 1):
+            lines.append(f"  {i}. {name}")
+
+    return "\n".join(lines)
+
+
+def _compute_product_statistics(product_articles: list[dict]) -> dict:
+    """
+    从产品专题文章中计算当日简报所需的统计分布。
+
+    统计项：
+        - total: 产品总数（已跨天去重后）
+        - launch_context_distribution: 发布上下文分布
+        - pricing_model_distribution: 定价模式分布
+        - top_products: 产品名列表，按原始顺序保留
+
+    参数：
+        product_articles: source_dir == "producthunt" 或 "whytryai" 的文章列表
+
+    返回：
+        dict: {total, launch_context_distribution, pricing_model_distribution, top_products}
+    """
+    launch_dist: Counter = Counter()
+    pricing_dist: Counter = Counter()
+    top_products: list[str] = []
+
+    for a in product_articles:
+        product = a.get("specialized_tags", {}).get("product", {}) if isinstance(a.get("specialized_tags"), dict) else {}
+        product_name = product.get("product_name") or product.get("productName") or a.get("title", "")
+        if product_name:
+            top_products.append(product_name)
+
+        launch_context = product.get("launch_context") or product.get("launchContext") or "unknown"
+        launch_dist[launch_context] += 1
+
+        pricing_model = product.get("pricing_model") or product.get("pricingModel") or "unknown"
+        pricing_dist[pricing_model] += 1
+
+    return {
+        "total": len(product_articles),
+        "launch_context_distribution": dict(launch_dist),
+        "pricing_model_distribution": dict(pricing_dist),
+        "top_products": top_products,
+    }
+
+
+def _format_product_statistics(stats: dict) -> str:
+    """格式化产品专题统计为 prompt 文本。"""
+    lines = [
+        f"Total AI products today: {stats['total']}",
+        "",
+        "### Launch Context Distribution",
+        _format_distribution(
+            stats["launch_context_distribution"],
+            label_map=_PRODUCT_LAUNCH_LABELS,
+        ) if stats["launch_context_distribution"] else "  (no launch context data)",
+    ]
+
+    if stats["pricing_model_distribution"]:
+        lines.extend([
+            "",
+            "### Pricing Model Distribution",
+            _format_distribution(
+                stats["pricing_model_distribution"],
+                label_map=_PRODUCT_PRICING_LABELS,
+            ),
+        ])
+
+    if stats["top_products"]:
+        lines.extend([
+            "",
+            "### Notable Products",
+        ])
+        for i, name in enumerate(stats["top_products"][:10], 1):
+            lines.append(f"  {i}. {name}")
+
+    return "\n".join(lines)
 
 
 def _format_distribution(dist: dict, label_map: dict = None) -> str:
@@ -129,20 +311,30 @@ def _format_article_detail(article: dict, index: int) -> str:
     return "\n".join(fields)
 
 
-def build_user_prompt(all_articles: list[dict], max_detail: int = 30, target_date: Optional[str] = None) -> str:
+def build_user_prompt(
+    all_articles: list[dict],
+    max_detail: int = 30,
+    target_date: Optional[str] = None,
+    github_articles: Optional[list[dict]] = None,
+    product_articles: Optional[list[dict]] = None,
+) -> str:
     """
     构造 Editor-in-Chief 的用户提示词。
 
     结构：
         0. 报告日期（当指定 target_date 时）
         1. 统计概览（全部文章）
-        2. Top-N 文章完整 frontmatter
-        3. 剩余文章标题列表
+        2. GitHub 专题统计（Phase 1 恢复）
+        3. 产品专题统计（Phase 2 恢复）
+        4. Top-N 文章完整 frontmatter
+        5. 剩余文章标题列表
 
     参数：
         all_articles: 所有文章记录列表
         max_detail: 包含完整 frontmatter 的文章数上限
         target_date: 目标报告日期（YYYY-MM-DD），None 时使用 today
+        github_articles: 当日 GitHub 专题文章列表（已跨天去重），None 或空时不生成 GitHub 统计
+        product_articles: 当日产品专题文章列表（已跨天去重），None 或空时不生成产品统计
     """
     # 按 impactScore 降序排列
     def _impact_score(a: dict) -> float:
@@ -190,12 +382,29 @@ def build_user_prompt(all_articles: list[dict], max_detail: int = 30, target_dat
     for item in stats["entity_frequencies"][:50]:
         sections.append(f"  {item['entity']} ({item['type']}): {item['count']}")
 
-    # TODO: 专题分析能力暂时停用，待重新设计后恢复。
-    # 暂不向日报 Agent 传递 GitHub/论文/产品专题统计，避免生成 specializedBrief。
+    # GitHub 专题统计（Phase 1 恢复）
+    if github_articles:
+        gh_stats = _compute_github_statistics(github_articles)
+        sections.extend([
+            "",
+            "## 2. GITHUB SPECIALIZED OVERVIEW (DEDUPLICATED DAILY BRIEF)",
+            "",
+            _format_github_statistics(gh_stats),
+        ])
+
+    # 产品专题统计（Phase 2 恢复）
+    if product_articles:
+        product_stats = _compute_product_statistics(product_articles)
+        sections.extend([
+            "",
+            "## 3. PRODUCT SPECIALIZED OVERVIEW (DEDUPLICATED DAILY BRIEF)",
+            "",
+            _format_product_statistics(product_stats),
+        ])
 
     sections.extend([
         "",
-        f"## 2. TOP {len(top_articles)} ARTICLES BY IMPACT SCORE (FULL ANALYSIS)",
+        f"## 4. TOP {len(top_articles)} ARTICLES BY IMPACT SCORE (FULL ANALYSIS)",
         "",
     ])
     for i, article in enumerate(top_articles, 1):
@@ -203,7 +412,7 @@ def build_user_prompt(all_articles: list[dict], max_detail: int = 30, target_dat
         sections.append("")
 
     sections.extend([
-        f"## 3. REMAINING {len(remaining)} ARTICLES (TITLES + KEY STATS ONLY)",
+        f"## 5. REMAINING {len(remaining)} ARTICLES (TITLES + KEY STATS ONLY)",
         "",
     ])
     for i, article in enumerate(remaining, 1):
@@ -216,7 +425,7 @@ def build_user_prompt(all_articles: list[dict], max_detail: int = 30, target_dat
 
     sections.extend([
         "",
-        "## 4. INSTRUCTIONS",
+        "## 6. INSTRUCTIONS",
         "",
         f"Generate the daily report JSON based on the data above. Key reminders:",
         f"- eventTypeDistribution and sentimentDistribution must aggregate from ALL {len(sorted_articles)} articles using the statistical overview",
@@ -225,7 +434,9 @@ def build_user_prompt(all_articles: list[dict], max_detail: int = 30, target_dat
         f"- trendInsights: cover all 4 dimensions (technology, application, policy, capital)",
         f"- riskSignals/opportunitySignals: 4-7 each, grounded in source articles' risk_matrix and market_opportunities",
         f"- entityFrequency: merge companies, technologies, and keyPeople from entities field across ALL articles",
-        f"- Do not output specializedBrief; GitHub/project, paper, and product specialized briefs are temporarily disabled",
+        f"- specializedBrief.githubHighlights: ONLY output when GitHub statistics are provided above. Use the exact articleCount, domainDistribution, and topProjects from the GitHub overview. Do NOT fabricate.",
+        f"- specializedBrief.productHighlights: ONLY output when product statistics are provided above. Use the exact articleCount, launchContextDistribution, and notableProducts from the product overview. Do NOT fabricate.",
+        f"- Do NOT output paperHighlights.",
         f"- Language: Chinese for all text fields, English for enum values",
         f"- Output ONLY valid JSON, no markdown wrappers",
     ])

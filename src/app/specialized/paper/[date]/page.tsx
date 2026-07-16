@@ -33,16 +33,34 @@ export default async function PaperSpecializedPage({ params, searchParams }: Pro
   if (papers.length === 0) {
     return (
       <PageShell>
-        <div className="py-20 text-center">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-            {date} 论文速递专题报告
-          </h1>
-          <p className="text-gray-500 dark:text-gray-400">
-            当日没有论文数据。
-          </p>
-          <Link href="/dashboard" className="text-blue-600 hover:underline mt-4 inline-block">
-            ← 回到日报列表
+        <div className="rounded-xl border border-line bg-panel p-8 text-center shadow-sm">
+          <Link
+            href={`/dashboard/${date}`}
+            className="mb-5 inline-flex items-center gap-1.5 text-xs font-medium text-muted transition-colors hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          >
+            <svg
+              className="h-3.5 w-3.5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="m15 18-6-6 6-6" />
+            </svg>
+            回到日报
           </Link>
+          <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-accent">
+            Specialized Brief
+          </p>
+          <h1 className="mt-2 text-2xl font-bold text-foreground">
+            论文速递
+          </h1>
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-muted/75">
+            {date} 暂无可展示的论文专题简报。Paper 专题入口当前保持关闭，后续恢复后会在这里展示当日研究摘要。
+          </p>
         </div>
       </PageShell>
     );
