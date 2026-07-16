@@ -1,0 +1,5 @@
+#!/bin/sh
+# 推送前完整检查：typecheck + build + pytest。
+# 作为推送前的最后一道本地闸门，避免把明知会失败的状态推上去。
+
+pnpm typecheck && pnpm build && uv run python -m pytest tests/ -q
