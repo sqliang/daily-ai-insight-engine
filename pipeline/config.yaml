@@ -134,6 +134,34 @@ sources:
       mode: first_n_chars
       limit: 3000
 
+  - name: "huggingface-blog"
+    type: tech_blog
+    tier: A
+    enabled: true
+    priority: 5
+    display_name: "Hugging Face Blog"
+    description: "Hugging Face 官方博客"
+    display_description: "Hugging Face 官方博客，发布开源模型、数据集、训练框架与推理优化等内容。作为开源 AI 社区的核心枢纽，其发布往往代表开源生态的技术方向。"
+    url: "https://huggingface.co/blog/feed.xml"
+    language: en
+    fetch_strategy: rss
+    filter:
+      keywords:
+        - "model"
+        - "LLM"
+        - "dataset"
+        - "benchmark"
+        - "training"
+        - "agent"
+        - "RL"
+        - "fine-tun"
+        - "vLLM"
+        - "open source"
+      max_age_hours: 72
+    truncation:
+      mode: first_n_chars
+      limit: 3000
+
   - name: "nvidia-blog"
     type: tech_blog
     tier: A
@@ -205,83 +233,15 @@ sources:
       mode: first_n_chars
       limit: 3000
 
-  - name: "huggingface-blog"
-    type: tech_blog
-    tier: A
-    enabled: true
-    priority: 5
-    display_name: "Hugging Face Blog"
-    description: "Hugging Face 官方博客"
-    display_description: "Hugging Face 官方博客，发布开源模型、数据集、训练框架与推理优化等内容。作为开源 AI 社区的核心枢纽，其发布往往代表开源生态的技术方向。"
-    url: "https://huggingface.co/blog/feed.xml"
-    language: en
-    fetch_strategy: rss
-    filter:
-      keywords:
-        - "model"
-        - "LLM"
-        - "dataset"
-        - "benchmark"
-        - "training"
-        - "agent"
-        - "RL"
-        - "fine-tun"
-        - "vLLM"
-        - "open source"
-      max_age_hours: 72
-    truncation:
-      mode: first_n_chars
-      limit: 3000
-
   # ===========================================================================
   # 顶点 B: 产品与开发者情绪 (Product & Developer Sentiment)
   # ===========================================================================
-
-  - name: "hackernews"
-    type: community_discussion
-    tier: B
-    enabled: true
-    priority: 1
-    display_name: "Hacker News"
-    description: "Hacker News (hnrss.org, points >= 100)"
-    display_description: "Hacker News 科技板块高质量讨论，通过 hnrss.org 预过滤 score ≥ 100 的热门话题。全球开发者社区的实时情绪风向标，技术采纳趋势的领先指标。"
-    url: "https://hnrss.org/frontpage?points=100"
-    language: en
-    fetch_strategy: rss
-    filter:
-      keywords: []  # hnrss 已按 points>=100 过滤
-      max_age_hours: 72
-    truncation:
-      mode: none
-
-  - name: "producthunt"
-    type: community_discussion
-    tier: B
-    enabled: true
-    priority: 3
-    display_name: "Product Hunt"
-    description: "Product Hunt 热门产品"
-    display_description: "Product Hunt 热门产品榜单，通过关键词过滤 AI/LLM/Agent/Copilot 相关产品。发现新兴 AI 工具与 SaaS 产品，捕捉 AI 产品化的早期信号。"
-    url: "https://www.producthunt.com/feed"
-    language: en
-    fetch_strategy: rss
-    filter:
-      keywords:
-        - "AI"
-        - "LLM"
-        - "agent"
-        - "copilot"
-      max_age_hours: 72
-      min_upvotes: 50
-    truncation:
-      mode: first_n_chars
-      limit: 2000
 
   - name: "github-trending"
     type: community_discussion
     tier: B
     enabled: true
-    priority: 2
+    priority: 1
     display_name: "GitHub Trending"
     description: "GitHub Trending (每日热门仓库)"
     display_description: "GitHub 每日热门开源仓库，过滤 AI/LLM/Agent/MCP 相关项目。追踪开发者社区关注的开源基础设施与框架变化，是技术选型的重要参考。"
@@ -300,6 +260,46 @@ sources:
         - "transformer"
         - "diffusion"
         - "chat"
+      max_age_hours: 72
+    truncation:
+      mode: none
+
+  - name: "producthunt"
+    type: community_discussion
+    tier: B
+    enabled: true
+    priority: 2
+    display_name: "Product Hunt"
+    description: "Product Hunt 热门产品"
+    display_description: "Product Hunt 热门产品榜单，通过关键词过滤 AI/LLM/Agent/Copilot 相关产品。发现新兴 AI 工具与 SaaS 产品，捕捉 AI 产品化的早期信号。"
+    url: "https://www.producthunt.com/feed"
+    language: en
+    fetch_strategy: rss
+    filter:
+      keywords:
+        - "AI"
+        - "LLM"
+        - "agent"
+        - "copilot"
+      max_age_hours: 72
+      min_upvotes: 50
+    truncation:
+      mode: first_n_chars
+      limit: 2000
+
+  - name: "hackernews"
+    type: community_discussion
+    tier: B
+    enabled: true
+    priority: 3
+    display_name: "Hacker News"
+    description: "Hacker News (hnrss.org, points >= 100)"
+    display_description: "Hacker News 科技板块高质量讨论，通过 hnrss.org 预过滤 score ≥ 100 的热门话题。全球开发者社区的实时情绪风向标，技术采纳趋势的领先指标。"
+    url: "https://hnrss.org/frontpage?points=100"
+    language: en
+    fetch_strategy: rss
+    filter:
+      keywords: []  # hnrss 已按 points>=100 过滤
       max_age_hours: 72
     truncation:
       mode: none
@@ -720,7 +720,13 @@ stages:
       - name: "risk-assessor"
         description: "风控专家视角"
         schema: "pipeline/schemas/deep_analysis.py::ForesightAndActionability"
-      # TODO: 专题分析能力暂时停用，待重新设计后恢复。
+      # 专题分析 Agent 注释说明：
+      #   早期设计曾为 github-trending / arxiv-cs-ai / producthunt / whytryai 配置独立的
+      #   Stage 3 专题分析 Agent（GitHubProjectAnalysis / PaperAnalysis / ProductAnalysis）。
+      #   当前版本把专题洞察收敛到 Stage 4b 主编合成：由 Editor-in-Chief Agent 基于
+      #   Stage 2 的 objectMentions 和 Stage 3 的 objectInsights 统一生成
+      #   specializedBrief。这样减少了额外 LLM 调用，同时让专题判断与综合日报保持
+      #   一致的叙事口径。如需恢复独立 Stage 3 专题 Agent，可取消下列注释。
       # - name: "github-project-analyst"
       #   description: "GitHub 开源项目深度分析"
       #   schema: "pipeline/schemas/specialized_analysis.py::GitHubProjectAnalysis"
@@ -769,8 +775,7 @@ stages:
       - "trend_insights"
       - "risk_signals"
       - "opportunity_signals"
-      # TODO: 专题分析能力暂时停用，待重新设计后恢复。
-      # - "specialized_brief"
+      - "specialized_brief"  # GitHub / 论文 / 产品专题洞察，由 Stage 4b 主编 Agent 生成
 
 # =============================================================================
 # 配额分配

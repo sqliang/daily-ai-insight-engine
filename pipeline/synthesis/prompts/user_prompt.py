@@ -1,7 +1,17 @@
 """
-Stage 4b Editor-in-Chief user prompt builder
+pipeline/synthesis/prompts/user_prompt.py — Stage 4b Editor-in-Chief user prompt builder
 
-从 all_articles.json 构建包含统计摘要 + Top-N 文章详情 + 剩余文章列表的用户提示词。
+从 all_articles.json 构建用户提示词，包含：
+    - 统计摘要（文章数、信源覆盖、语言分布、实体频次）
+    - Top-N 文章的完整 frontmatter
+    - 剩余文章标题列表
+    - GitHub / 产品专题文章的统计概览与候选对象
+
+专题洞察上下文：
+    针对 github-trending、producthunt、whytryai 源，单独提取并去重后注入 prompt，
+    供主编 Agent 生成 specializedBrief.githubHighlights / productHighlights /
+    projectInsights / productInsights。论文专题当前由 Agent 直接基于 arxiv-cs-ai
+    文章归纳，不单独构造候选区。
 """
 
 from collections import Counter
@@ -230,6 +240,134 @@ def _format_product_statistics(stats: dict) -> str:
     return "\n".join(lines)
 
 
+def _object_type_value(item: dict) -> str:
+    """兼容 snake_case/camelCase 的 objectType 读取。"""
+    return item.get("object_type") or item.get("objectType") or ""
+
+
+def _object_key(item: dict) -> str:
+    """为跨文章对象合并生成稳定 key。"""
+    canonical = item.get("canonical_name") or item.get("canonicalName") or item.get("name") or ""
+    url = item.get("url") or ""
+    return f"{str(canonical).strip().lower()}|{str(url).strip().lower()}"
+
+
+def _source_payload(article: dict) -> dict:
+    """构造专题对象引用来源。"""
+    return {
+        "articleId": article.get("id", ""),
+        "title": article.get("title", ""),
+        "sourceDir": article.get("source_dir", ""),
+        "url": article.get("source", ""),
+    }
+
+
+def _collect_object_candidates(articles: list[dict], object_type: str) -> list[dict]:
+    """
+    从所有文章聚合项目/产品对象候选。
+
+    优先使用 Stage 3 object_insights；没有洞察时使用 Stage 2 object_mentions 兜底。
+    同一对象按 canonicalName + url 合并，并保留所有 articleIds/sources/evidence。
+    """
+    merged: dict[str, dict] = {}
+
+    for article in articles:
+        source = _source_payload(article)
+        article_id = source["articleId"]
+
+        for insight in article.get("object_insights", []) or article.get("objectInsights", []) or []:
+            if not isinstance(insight, dict) or _object_type_value(insight) != object_type:
+                continue
+            key = _object_key(insight)
+            if not key.strip("|"):
+                continue
+            entry = merged.setdefault(key, {
+                "name": insight.get("name") or insight.get("canonicalName") or insight.get("canonical_name", ""),
+                "canonicalName": insight.get("canonical_name") or insight.get("canonicalName") or insight.get("name", ""),
+                "url": insight.get("url"),
+                "insights": [],
+                "mentions": [],
+                "articleIds": [],
+                "sources": [],
+                "evidenceSnippets": [],
+            })
+            entry["insights"].append(insight)
+            for aid in insight.get("article_ids") or insight.get("articleIds") or [article_id]:
+                if aid and aid not in entry["articleIds"]:
+                    entry["articleIds"].append(aid)
+            if source["url"] and source not in entry["sources"]:
+                entry["sources"].append(source)
+            for ev in insight.get("evidence_snippets") or insight.get("evidenceSnippets") or []:
+                if ev and ev not in entry["evidenceSnippets"]:
+                    entry["evidenceSnippets"].append(ev)
+
+        for mention in article.get("object_mentions", []) or article.get("objectMentions", []) or []:
+            if not isinstance(mention, dict) or _object_type_value(mention) != object_type:
+                continue
+            key = _object_key(mention)
+            if not key.strip("|"):
+                continue
+            entry = merged.setdefault(key, {
+                "name": mention.get("name") or mention.get("canonicalName") or mention.get("canonical_name", ""),
+                "canonicalName": mention.get("canonical_name") or mention.get("canonicalName") or mention.get("name", ""),
+                "url": mention.get("url"),
+                "insights": [],
+                "mentions": [],
+                "articleIds": [],
+                "sources": [],
+                "evidenceSnippets": [],
+            })
+            entry["mentions"].append(mention)
+            if article_id and article_id not in entry["articleIds"]:
+                entry["articleIds"].append(article_id)
+            if source["url"] and source not in entry["sources"]:
+                entry["sources"].append(source)
+            for ev in mention.get("evidence_snippets") or mention.get("evidenceSnippets") or []:
+                if ev and ev not in entry["evidenceSnippets"]:
+                    entry["evidenceSnippets"].append(ev)
+
+    return sorted(
+        merged.values(),
+        key=lambda item: (
+            -len(item["sources"]),
+            -max([float(i.get("score", 0) or 0) for i in item["insights"]] or [0]),
+            item["canonicalName"],
+        ),
+    )
+
+
+def _format_object_candidates(title: str, candidates: list[dict]) -> str:
+    """格式化对象候选，供主编 Agent 生成专题洞察。"""
+    if not candidates:
+        return f"## {title}\n\n(no object candidates)"
+
+    lines = [f"## {title}", ""]
+    for i, item in enumerate(candidates[:20], 1):
+        lines.extend([
+            f"### {i}. {item['canonicalName'] or item['name']}",
+            f"URL: {item.get('url') or 'N/A'}",
+            f"Article IDs: {', '.join(item['articleIds'])}",
+            f"Sources: {json_like_sources(item['sources'])}",
+            f"Evidence: {'; '.join(item['evidenceSnippets'][:5]) or 'N/A'}",
+        ])
+        if item["insights"]:
+            lines.append("Stage 3 objectInsights:")
+            for insight in item["insights"][:3]:
+                lines.append(f"  - {insight}")
+        else:
+            lines.append("Stage 3 objectInsights: N/A")
+        lines.append("")
+    return "\n".join(lines)
+
+
+def json_like_sources(sources: list[dict]) -> str:
+    """压缩来源列表，避免 prompt 中出现过长 JSON。"""
+    return "; ".join(
+        f"{s.get('articleId')}|{s.get('sourceDir')}|{s.get('title')}"
+        for s in sources[:6]
+    )
+
+
 def _format_distribution(dist: dict, label_map: dict = None) -> str:
     """格式化分布字典为文本。"""
     items = sorted(dist.items(), key=lambda x: x[1], reverse=True)
@@ -348,6 +486,8 @@ def build_user_prompt(
     remaining = sorted_articles[max_detail:]
 
     stats = _compute_statistics(sorted_articles)
+    project_candidates = _collect_object_candidates(sorted_articles, "project")
+    product_candidates = _collect_object_candidates(sorted_articles, "product")
 
     # 确定报告日期：target_date 优先，否则用今天
     from datetime import date as _date
@@ -404,6 +544,17 @@ def build_user_prompt(
 
     sections.extend([
         "",
+        "## 3A. PROJECT OBJECT CANDIDATES (ALL ARTICLES, MERGED BY CANONICAL NAME + URL)",
+        "",
+        _format_object_candidates("Project candidates", project_candidates),
+        "",
+        "## 3B. PRODUCT OBJECT CANDIDATES (ALL ARTICLES, MERGED BY CANONICAL NAME + URL)",
+        "",
+        _format_object_candidates("Product candidates", product_candidates),
+    ])
+
+    sections.extend([
+        "",
         f"## 4. TOP {len(top_articles)} ARTICLES BY IMPACT SCORE (FULL ANALYSIS)",
         "",
     ])
@@ -436,6 +587,9 @@ def build_user_prompt(
         f"- entityFrequency: merge companies, technologies, and keyPeople from entities field across ALL articles",
         f"- specializedBrief.githubHighlights: ONLY output when GitHub statistics are provided above. Use the exact articleCount, domainDistribution, and topProjects from the GitHub overview. Do NOT fabricate.",
         f"- specializedBrief.productHighlights: ONLY output when product statistics are provided above. Use the exact articleCount, launchContextDistribution, and notableProducts from the product overview. Do NOT fabricate.",
+        f"- specializedBrief.projectInsights: output when Project candidates are provided above. Merge duplicate objects by canonicalName + url. Every item must include at least one articleIds entry and sources entry.",
+        f"- specializedBrief.productInsights: output when Product candidates are provided above. Merge duplicate objects by canonicalName + url. Every item must include at least one articleIds entry and sources entry.",
+        f"- For projectInsights/productInsights, prioritize objectInsights when available and use objectMentions as fallback evidence. Do NOT create objects that are absent from the candidate sections.",
         f"- Do NOT output paperHighlights.",
         f"- Language: Chinese for all text fields, English for enum values",
         f"- Output ONLY valid JSON, no markdown wrappers",

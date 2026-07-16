@@ -7,10 +7,20 @@ pipeline/synthesis/editor_in_chief_agent.py — Stage 4b: Editor-in-Chief LLM Ag
     - 调用 call_agent_with_retry() 生成日报 JSON
     - 解析、校验、返回日报 dict
 
+专题洞察（Specialized Briefs）：
+    除通用日报（topEvents / trendInsights / riskSignals 等）外，主编 Agent 还负责生成
+    三类垂直专题简报：
+        - GitHub 项目洞察：从 github-trending 源中筛选、跨天去重、提炼项目价值与风险
+        - 论文洞察：从 arxiv-cs-ai 源中聚合当日论文，解读研究问题与方法创新
+        - 产品洞察：从 producthunt / whytryai 源中筛选新产品，分析定位与商业信号
+    专题文章在 _build_prompts() 中单独提取并注入 user prompt；生成的 specializedBrief
+    在 _enrich_specialized_sources() 中补齐来源、规整文本，确保前端可稳定追溯原文。
+
 设计原则：
     - 单次 LLM 调用，处理全部 200+ 篇文章的合成
     - user prompt 包含预计算的统计摘要 + Top-N 完整 frontmatter + 剩余文章标题
     - system prompt 定义角色、输出 schema 和 9 条质控规则
+    - 专题洞察与综合日报共用一次 LLM 调用，但由独立 schema 约束，避免彼此干扰
 """
 
 import asyncio
@@ -392,6 +402,219 @@ def _enrich_evidence_sources(report: dict) -> None:
     )
 
 
+_SPECIALIZED_TEXT_MAX_CHARS: dict[str, int] = {
+    "keyJudgment": 220,
+    "watchSignals": 90,
+    "oneLine": 90,
+    "whyItMatters": 220,
+    "signals": 90,
+    "risks": 90,
+    "evidenceSnippets": 140,
+}
+
+
+def _normalize_specialized_sentence(value: str, max_chars: int) -> str:
+    """
+    规整专题洞察最终报告中的展示句子。
+
+    参数：
+        value: 主编 Agent 输出的文本字段
+        max_chars: 该字段允许的最大展示长度
+
+    返回：
+        适合前端展示的完整句子
+
+    设计理由：
+        Stage 4 负责最终报告表达，LLM 偶发会输出半句话或缺少句末标点。
+        这里做最后一层确定性兜底：清理空白、限制长度、补齐句末标点。
+    """
+    from pipeline.utils.text_utils import truncate_at_natural_break
+
+    sentence = " ".join(value.strip().split())
+    if not sentence:
+        return ""
+
+    if len(sentence) > max_chars:
+        sentence = truncate_at_natural_break(sentence, max_chars)
+        if len(sentence) > max_chars:
+            sentence = sentence[:max_chars].rstrip("，,、；;：:")
+
+    if sentence[-1] not in "。！？.!?」』”’）)]":
+        sentence = f"{sentence}。"
+
+    return sentence
+
+
+def _normalize_specialized_string_list(value: object, max_chars: int, limit: int | None = None) -> list[str]:
+    """
+    规整专题洞察字符串数组。
+
+    参数：
+        value: 可能为字符串或字符串数组的原始值
+        max_chars: 单条最大字符数
+        limit: 最多保留条数
+
+    返回：
+        规整后的字符串数组
+    """
+    if isinstance(value, str):
+        raw_values = [value]
+    elif isinstance(value, list):
+        raw_values = value
+    else:
+        raw_values = []
+
+    normalized: list[str] = []
+    for item in raw_values:
+        if not isinstance(item, str):
+            continue
+        cleaned = _normalize_specialized_sentence(item, max_chars)
+        if cleaned and cleaned not in normalized:
+            normalized.append(cleaned)
+
+    return normalized[:limit] if limit else normalized
+
+
+def _normalize_specialized_item_text(item: dict) -> None:
+    """
+    规整单个专题对象的展示文本字段。
+
+    参数：
+        item: projectInsights/productInsights 中的对象条目
+    """
+    for field_name in ("oneLine", "whyItMatters"):
+        value = item.get(field_name)
+        if isinstance(value, str):
+            item[field_name] = _normalize_specialized_sentence(
+                value,
+                _SPECIALIZED_TEXT_MAX_CHARS[field_name],
+            )
+
+    item["signals"] = _normalize_specialized_string_list(
+        item.get("signals"),
+        _SPECIALIZED_TEXT_MAX_CHARS["signals"],
+    )
+    item["risks"] = _normalize_specialized_string_list(
+        item.get("risks"),
+        _SPECIALIZED_TEXT_MAX_CHARS["risks"],
+    )
+    item["evidenceSnippets"] = _normalize_specialized_string_list(
+        item.get("evidenceSnippets") or item.get("evidence_snippets"),
+        _SPECIALIZED_TEXT_MAX_CHARS["evidenceSnippets"],
+        limit=3,
+    )
+    item.pop("evidence_snippets", None)
+
+
+def _enrich_specialized_sources(report: dict) -> None:
+    """
+    从 articleIds 补齐专题洞察 items 的 sources，并剔除无有效来源对象。
+
+    设计理由：
+        LLM 负责判断和归纳，但来源解析应由 pipeline 做确定性处理。这样即使模型只返回
+        articleIds，前端仍能稳定展示标题、信源和原文 URL。专题对象必须能追溯到至少
+        一篇文章；补不到来源的条目会被丢弃，避免前端展示无引用洞察。
+    """
+    all_articles_path = resolve_data_dir("synthesize_structured") / "all_articles.json"
+    if not all_articles_path.exists():
+        logger.warning("无法解析专题 sources: all_articles.json 不存在")
+        return
+
+    data = read_json(all_articles_path)
+    if not data:
+        return
+
+    id_map: dict[str, dict] = {}
+    for article in data.get("articles", []):
+        aid = article.get("id", "")
+        if not aid:
+            continue
+        id_map[aid] = {
+            "articleId": aid,
+            "title": article.get("title", ""),
+            "sourceDir": article.get("source_dir", ""),
+            "url": article.get("source", ""),
+        }
+
+    specialized = report.get("specializedBrief")
+    if not isinstance(specialized, dict):
+        return
+
+    enriched_count = 0
+    dropped_count = 0
+    for section_key in ("projectInsights", "productInsights"):
+        section = specialized.get(section_key)
+        if not isinstance(section, dict):
+            continue
+        key_judgment = section.get("keyJudgment") or section.get("key_judgment")
+        if isinstance(key_judgment, str):
+            section["keyJudgment"] = _normalize_specialized_sentence(
+                key_judgment,
+                _SPECIALIZED_TEXT_MAX_CHARS["keyJudgment"],
+            )
+            section.pop("key_judgment", None)
+        section["watchSignals"] = _normalize_specialized_string_list(
+            section.get("watchSignals") or section.get("watch_signals"),
+            _SPECIALIZED_TEXT_MAX_CHARS["watchSignals"],
+        )
+        section.pop("watch_signals", None)
+
+        items = section.get("items") or []
+        if not isinstance(items, list):
+            continue
+
+        valid_items: list[dict] = []
+        coverage: set[str] = set()
+        for item in items:
+            if not isinstance(item, dict):
+                dropped_count += 1
+                continue
+            raw_article_ids = item.get("articleIds") or item.get("article_ids") or []
+            article_ids = [
+                aid.strip()
+                for aid in raw_article_ids
+                if isinstance(aid, str) and aid.strip()
+            ] if isinstance(raw_article_ids, list) else []
+
+            if not article_ids:
+                dropped_count += 1
+                continue
+
+            sources = []
+            seen: set[str] = set()
+            for aid in article_ids:
+                source = id_map.get(aid)
+                if not source:
+                    continue
+                dedup_key = source.get("url") or source.get("articleId")
+                if dedup_key in seen:
+                    continue
+                seen.add(dedup_key)
+                sources.append(source)
+                if source.get("sourceDir"):
+                    coverage.add(source["sourceDir"])
+
+            if not sources:
+                dropped_count += 1
+                continue
+
+            item["articleIds"] = article_ids
+            item.pop("article_ids", None)
+            item["sources"] = sources
+            _normalize_specialized_item_text(item)
+            valid_items.append(item)
+            enriched_count += 1
+
+        section["items"] = valid_items
+        section["sourceCoverage"] = sorted(coverage)
+
+    logger.info(
+        "专题 sources 已解析: 保留 %d 个对象条目, 丢弃 %d 个无来源条目",
+        enriched_count,
+        dropped_count,
+    )
+
+
 def _build_prompts(
     all_articles_path: Path,
     max_detail: int = DEFAULT_MAX_DETAIL,
@@ -400,8 +623,11 @@ def _build_prompts(
     """
     读取 all_articles.json 并构造 system + user prompts。
 
-    Phase 1 新增：对 GitHub Trending 文章做跨天去重，并将去重后的 GitHub 统计
-    注入 user prompt，供主编 Agent 生成 specializedBrief.githubHighlights。
+    专题洞察预处理：
+        在把文章交给主编 Agent 前，先按 source_dir 拆出 GitHub / 产品两类专题候选，
+        并与昨日日报做跨天去重（避免同一项目/产品连续多日重复出现）。去重后的专题文章
+        作为独立上下文注入 user prompt，让 Agent 在生成综合日报的同时，输出
+        specializedBrief 块。论文专题目前由 Agent 直接基于 arxiv-cs-ai 文章归纳。
 
     参数：
         all_articles_path: all_articles.json 路径
@@ -471,12 +697,14 @@ async def run_editor_in_chief(
     执行 Editor-in-Chief 合成。
 
     流程：
-        1. 读取 all_articles.json 并构造 prompts
+        1. 读取 all_articles.json 并构造 prompts（含专题洞察预处理）
         2. 调用 Claude Opus Agent（带重试）
         3. 从响应中解析 JSON
         4. 校验 JSON 结构完整性
-        5. 若指定 target_date，覆盖报告日期字段
-        6. 返回日报 dict
+        5. 为中英文混排文本应用 CJK-Latin 间距规范化
+        6. 为 Top 事件和专题洞察条目补齐 evidenceSources / sources（确定性解析）
+        7. 若指定 target_date，覆盖报告日期字段
+        8. 返回日报 dict
 
     参数：
         all_articles_path: all_articles.json 文件路径
@@ -486,7 +714,7 @@ async def run_editor_in_chief(
         target_date: 目标报告日期（YYYY-MM-DD），None 时由 LLM 自主决定
 
     返回：
-        日报 dict（符合 dailyReportSchema 结构）
+        日报 dict（符合 dailyReportSchema 结构，含 specializedBrief）
     """
     model = model or _resolve_default_synthesis_model()
 
@@ -524,6 +752,7 @@ async def run_editor_in_chief(
 
     # 来源 URL 解析：从 articleIds 查 all_articles.json 获取原文 URL
     _enrich_evidence_sources(report)
+    _enrich_specialized_sources(report)
 
     # 若指定 target_date，覆盖 LLM 输出的日期字段，确保报告日期和文件命名一致
     if target_date:

@@ -1,9 +1,14 @@
 // ============================================================================
-// SpecializedReportHero.tsx — 专题详情页统一 Hero 横幅
+// src/components/reports/SpecializedReportHero.tsx — 专题详情页统一 Hero 横幅
 //
 // 被 /specialized/github/[date]、/specialized/product/[date] 等专题详情页消费。
 // 视觉语言与 SourcesHero / DashboardHero 保持一致：深色渐变、几何装饰、
 // 轻量面包屑、分区标题与玻璃态统计说明。
+//
+// 组件职责：
+//   - 提供专题页顶部的一致性视觉入口
+//   - 展示关键统计（如项目数、领域分布、覆盖信源）
+//   - 通过 breadcrumb 返回对应日期的日报仪表盘
 // ============================================================================
 
 import Link from "next/link";
@@ -117,7 +122,7 @@ export function SpecializedReportHero({
         </h1>
 
         {summary && (
-          <p className="mt-3 max-w-4xl text-sm leading-relaxed text-white/55 md:text-[15px] md:leading-7">
+          <p className="mt-3 max-w-7xl text-sm leading-relaxed text-white/55 md:text-[15px] md:leading-7">
             {summary}
           </p>
         )}

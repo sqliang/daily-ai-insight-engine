@@ -181,13 +181,20 @@ async def extract_fact_extraction(
     # --- 合并 FactExtraction 字段到 frontmatter ---
     fields_written: list[str] = []
     fe_dict = fact_extraction.model_dump(mode="json", by_alias=False)
+    article_id = existing_fm.get("id")
+
+    # Stage 2 Agent 不一定知道 frontmatter id，这里统一回填，保证后续引用可追溯。
+    for mention in fe_dict.get("object_mentions", []):
+        if isinstance(mention, dict) and not mention.get("article_id"):
+            mention["article_id"] = article_id
 
     for field_name, value in fe_dict.items():
         existing_fm[field_name] = value
         fields_written.append(field_name)
 
-    # TODO: 专题分析能力暂时停用，待重新设计后恢复。
-    # 即使旧提示词或模型意外返回 specializedTags，也不再写入 specialized_tags。
+    # 专题对象现在统一通过 objectMentions 表达（见 prompts.py），不再使用旧版
+    # specializedTags 字段。若旧提示词或模型意外返回 specializedTags，此处忽略，
+    # 以保证前端专题洞察的数据源口径一致。
 
     existing_fm["pipeline_stage"] = "fact_extracted"
     fields_written.append("pipeline_stage")

@@ -19,6 +19,7 @@ pipeline/analysis/deep_analysis_agent.py — Stage 3: 深度分析 Agent
 """
 
 import asyncio
+import json
 import logging
 from pathlib import Path
 from typing import Optional
@@ -43,7 +44,12 @@ from .prompts import (
     build_foresight_user_prompt,
 )
 from .validators import validate_qualitative, validate_value, validate_foresight
-from ..schemas.specialized_analysis import GitHubProjectAnalysis, PaperAnalysis, ProductAnalysis
+from ..schemas.specialized_analysis import (
+    GitHubProjectAnalysis,
+    ObjectInsightBundle,
+    PaperAnalysis,
+    ProductAnalysis,
+)
 
 # ---------------------------------------------------------------------------
 # 日志
@@ -57,9 +63,13 @@ logger = logging.getLogger(__name__)
 _QUALITATIVE_FIELDS: set[str] = set(QualitativeAssessment.model_fields.keys())
 _VALUE_FIELDS: set[str] = set(ValueAssessment.model_fields.keys())
 _FORESIGHT_FIELDS: set[str] = set(ForesightAndActionability.model_fields.keys())
+_OBJECT_INSIGHT_FIELDS: set[str] = {"object_insights"}
 
-# TODO: 专题分析能力暂时停用，待重新设计后恢复。
-# 下列字段集合只用于保留已有输出文件中的历史专题字段，当前不再触发专题 Agent。
+# 专题分析字段集合。
+#
+# 这些字段在 Stage 3 深度分析阶段仍会被写入文章 frontmatter（如 github_assessment、
+# paper_assessment、product_assessment），供 Stage 4b 合成时参考。同时，在重新分析
+# 或部分维度重跑时，需要把这些字段与通用评估字段一起保留，避免覆盖已有专题分析结果。
 _GITHUB_PROJECT_FIELDS: set[str] = set(GitHubProjectAnalysis.model_fields.keys())
 
 _PAPER_FIELDS: set[str] = set(PaperAnalysis.model_fields.keys())
@@ -71,6 +81,7 @@ _ASSESSMENT_LABELS: dict[str, str] = {
     "qualitative": "定性研判",
     "value": "价值评估",
     "foresight": "前瞻预测",
+    "object": "对象洞察",
 }
 
 # 每个维度对应的字段集合（用于跳过检查）
@@ -78,7 +89,112 @@ _ASSESSMENT_FIELD_SETS: dict[str, set[str]] = {
     "qualitative": _QUALITATIVE_FIELDS,
     "value": _VALUE_FIELDS,
     "foresight": _FORESIGHT_FIELDS,
+    "object": _OBJECT_INSIGHT_FIELDS,
 }
+
+
+def _object_insight_system_prompt() -> str:
+    """返回项目/产品统一对象洞察 Agent 的系统提示词。"""
+    return """你是 Daily AI Insight Engine 的专题洞察分析师，负责把文章中识别出的项目和产品转化为可跟踪的对象洞察。
+
+## 任务
+基于文章事实、Stage 2 objectMentions 和已有三维分析上下文，输出 objectInsights。
+
+## 输出要求
+- 只分析 objectType 为 project 或 product 的对象。
+- 只分析 confidence 为 high/medium 且 articleRole 不是 ecosystem_context 的对象。
+- 每个对象都必须保留 articleIds 和 evidenceSnippets，不能输出没有来源证据的对象。
+- evidenceSnippets 必须优先原样保留 Stage 2 objectMentions 中的证据句；每条目标长度 40-140 个中文字符，必须是完整句子或完整分句，保留句末标点，不要压缩成短标签，也不要在逗号、顿号或半句处截断。
+- 所有人类可读字段使用中文。
+- positioning: 30-90 个中文字符，完整说明对象定位并以句末标点结束。
+- technicalSignal/adoptionSignal/ecosystemRelevance/productSignal/marketSignal/differentiation: 每项 25-90 个中文字符，必须表达完整事实或判断并以句末标点结束；没有依据时返回 null。
+- watchReason: 60-160 个中文字符，必须是完整判断并以句末标点结束。
+- riskNotes: 每条 25-90 个中文字符，必须是完整风险表述并以句末标点结束。
+- score 为 1-10，表示专题关注优先级。
+
+## 输出格式
+只返回 JSON：
+{
+  "objectInsights": [
+    {
+      "objectType": "project",
+      "name": "对象名称",
+      "canonicalName": "归一化名称",
+      "url": "https://example.com",
+      "positioning": "对象定位",
+      "technicalSignal": "项目技术信号，产品对象可为 null",
+      "adoptionSignal": "项目采用信号，产品对象可为 null",
+      "ecosystemRelevance": "项目生态相关性，产品对象可为 null",
+      "targetUsers": ["产品目标用户，项目对象可为空数组"],
+      "productSignal": "产品能力信号，项目对象可为 null",
+      "marketSignal": "市场信号，项目对象可为 null",
+      "differentiation": "差异化判断，项目对象可为 null",
+      "watchReason": "为什么值得持续跟踪",
+      "riskNotes": ["风险或不确定性"],
+      "score": 7,
+      "articleIds": ["article-id"],
+      "evidenceSnippets": ["证据片段"]
+    }
+  ]
+}
+"""
+
+
+def _eligible_object_mentions(object_mentions: list) -> list[dict]:
+    """筛选适合进入 Stage 3 对象洞察的项目/产品 mention。"""
+    eligible: list[dict] = []
+    for mention in object_mentions:
+        if not isinstance(mention, dict):
+            continue
+        object_type = mention.get("object_type") or mention.get("objectType")
+        confidence = mention.get("confidence")
+        role = mention.get("article_role") or mention.get("articleRole")
+        evidence = mention.get("evidence_snippets") or mention.get("evidenceSnippets") or []
+        if object_type not in ("project", "product"):
+            continue
+        if confidence not in ("high", "medium"):
+            continue
+        if role == "ecosystem_context":
+            continue
+        if not evidence:
+            continue
+        eligible.append(mention)
+    return eligible
+
+
+def _build_object_insight_user_prompt(
+    *,
+    article_id: str,
+    title: str,
+    source: str,
+    tldr: str,
+    objective_summary: str,
+    key_logic_flow: list,
+    object_mentions: list[dict],
+    body: str,
+) -> str:
+    """构造对象洞察 Agent 的用户提示词。"""
+    return f"""## 文章信息
+ID：{article_id}
+标题：{title}
+来源：{source}
+
+## Stage 2 摘要
+TLDR：{tldr}
+客观摘要：{objective_summary}
+关键逻辑：
+{json.dumps(key_logic_flow, ensure_ascii=False, indent=2)}
+
+## 待分析对象
+{json.dumps(object_mentions, ensure_ascii=False, indent=2)}
+
+## 文章正文
+{body[:6000]}
+
+## 指令
+请为待分析对象生成 objectInsights。必须保留 articleIds=[文章 ID] 和对应 evidenceSnippets。
+evidenceSnippets 优先复制“待分析对象”中的原证据；如需改写，必须保持 40-140 个中文字符左右、事实完整、句末有标点，不能输出半句话。
+"""
 
 
 
@@ -133,7 +249,7 @@ async def analyze_one_file(
     if output_path.exists():
         try:
             out_fm, _ = read_frontmatter(output_path)
-            _all_stage3_fields = _QUALITATIVE_FIELDS | _VALUE_FIELDS | _FORESIGHT_FIELDS | _GITHUB_PROJECT_FIELDS | _PAPER_FIELDS | _PRODUCT_FIELDS
+            _all_stage3_fields = _QUALITATIVE_FIELDS | _VALUE_FIELDS | _FORESIGHT_FIELDS | _OBJECT_INSIGHT_FIELDS | _GITHUB_PROJECT_FIELDS | _PAPER_FIELDS | _PRODUCT_FIELDS
             for key, value in out_fm.items():
                 if key in _all_stage3_fields:
                     existing_fm[key] = value
@@ -180,13 +296,18 @@ async def analyze_one_file(
     epistemic_status = existing_fm.get("epistemic_status", "")
     entities = existing_fm.get("entities", {})
     key_logic_flow = existing_fm.get("key_logic_flow", [])
+    object_mentions = existing_fm.get("object_mentions") or existing_fm.get("objectMentions") or []
+    eligible_mentions = _eligible_object_mentions(object_mentions if isinstance(object_mentions, list) else [])
+    if stages == "all" and eligible_mentions and "object" not in to_run:
+        if not (skip_existing and output_path.exists() and "object_insights" in existing_fm):
+            to_run.append("object")
+    if stages == "object" and not eligible_mentions:
+        to_run = []
+
     # --- 并行调用 Agent ---
     all_fields_written: list[str] = []
     has_error = False
     error_messages: list[str] = []
-
-    # TODO: 专题分析能力暂时停用，待重新设计后恢复。
-    # analyze --stage all 只运行 qualitative/value/foresight 三个主维度。
 
     if not to_run:
         logger.info("跳过（id=%s 已分析）: %s", existing_fm.get("id"), input_str)
@@ -227,6 +348,28 @@ async def analyze_one_file(
         validated = validate_fn(data)
         return (dim_name, validated.model_dump(mode="json", by_alias=False))
 
+    async def _run_object_insight() -> tuple[str, dict]:
+        """运行统一对象洞察 Agent。"""
+        usr_prompt = _build_object_insight_user_prompt(
+            article_id=existing_fm.get("id", ""),
+            title=title,
+            source=source,
+            tldr=tldr,
+            objective_summary=objective_summary,
+            key_logic_flow=key_logic_flow,
+            object_mentions=eligible_mentions,
+            body=body,
+        )
+        response = await call_agent_with_retry(
+            prompt=usr_prompt,
+            system_prompt=_object_insight_system_prompt(),
+            model=model,
+            max_turns=3,
+        )
+        data = parse_json_response(response)
+        validated = ObjectInsightBundle.model_validate(data)
+        return ("object", validated.model_dump(mode="json", by_alias=False))
+
     # 构建任务列表（仅运行需要的主分析维度）
     tasks = [
         _run_assessment(dim, get_sys, build_usr, vfn)
@@ -234,6 +377,17 @@ async def analyze_one_file(
             _all_configs[dim] for dim in to_run if dim in _all_configs
         ]
     ]
+    if "object" in to_run and eligible_mentions:
+        tasks.append(_run_object_insight())
+    if not tasks:
+        logger.info("跳过（无可分析对象）: %s", input_str)
+        return StageResult(
+            input_path=input_str,
+            output_path=output_str,
+            success=True,
+            fields_extracted=[],
+            skipped=True,
+        )
 
     # 并行执行所有需要的评估
     results = await asyncio.gather(*tasks, return_exceptions=True)

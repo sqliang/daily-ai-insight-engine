@@ -1,12 +1,22 @@
 // ============================================================================
-// src/lib/data/specialized.ts — 专题分析数据加载
+// src/lib/data/specialized.ts — 专题洞察数据加载层
 //
-// 从 daily-report-{date}.json 或 all_articles.json 中加载专题分析数据。
-// 供 GitHub/Product/Paper 专题看板页面消费。
+// 职责：
+//   - 定义 GitHub / 论文 / 产品三类专题洞察的 TypeScript 类型
+//   - 从 daily-report-{date}.json 的 specializedBrief 块加载当日简报
+//   - 保留从 all_articles.json 加载原始专题文章的回退能力
 //
-// Phase 1/2 变更：GitHub 与产品专题详情页均改为从日报 JSON 的 specializedBrief
-// 读取，保持与 /dashboard/{date} 卡片口径一致；Paper 仍保留 all_articles.json
-// 加载逻辑（待后续实现）。
+// 设计理由：
+//   专题洞察与综合日报在 Stage 4b 由主编 Agent 统一生成，前端不应再次聚合原始文章。
+//   因此 GitHub / 产品详情页优先读取日报 JSON 中的 projectInsights / productInsights；
+//   论文专题目前仍直接读取 all_articles.json 中的 arxiv-cs-ai 文章（等待 Stage 4b
+//   论文简报稳定后迁移）。
+//
+// 消费方：
+//   - src/app/specialized/github/[date]/page.tsx
+//   - src/app/specialized/product/[date]/page.tsx
+//   - src/app/specialized/paper/[date]/page.tsx
+//   - src/components/dashboard/SpecializedBriefSection.tsx
 // ============================================================================
 
 import { readFile } from "node:fs/promises";
@@ -48,6 +58,27 @@ export interface GithubProjectEntry {
   };
 }
 
+export interface SpecializedSourceRef {
+  articleId: string;
+  title: string;
+  sourceDir: string;
+  url: string;
+}
+
+export interface SpecializedInsightItem {
+  name: string;
+  canonicalName: string;
+  url?: string | null;
+  oneLine: string;
+  whyItMatters: string;
+  signals: string[];
+  risks: string[];
+  score: number;
+  articleIds: string[];
+  sources: SpecializedSourceRef[];
+  evidenceSnippets: string[];
+}
+
 /**
  * GitHub 当日简报数据结构。
  *
@@ -60,6 +91,10 @@ export interface GithubBrief {
   topProjects: string[];
   domainDistribution: Record<string, number>;
   aiCategoryDistribution?: Record<string, number> | null;
+  keyJudgment?: string;
+  watchSignals?: string[];
+  sourceCoverage?: string[];
+  items: SpecializedInsightItem[];
 }
 
 // ---------------------------------------------------------------------------
@@ -136,10 +171,16 @@ export async function loadGithubArticles(
 /**
  * 从日报归档 JSON 中加载指定日期的 GitHub 当日简报。
  *
- * Phase 1 采用此函数替代 loadGithubArticles，原因：
+ * 这是 /specialized/github/{date} 页面的主要数据源。与 loadGithubArticles 不同：
+ *   - 数据来自 Stage 4b 生成的 specializedBrief.projectInsights / githubHighlights
+ *   - 已做跨天去重和汇总，前端无需再次处理原始文章
  *   - 与 /dashboard/{date} 卡片上的专题数据口径一致
- *   - 专题简报已经过 Stage 4b 跨天去重和汇总，无需前端再次聚合 all_articles.json
- *   - 当日报尚未生成或不含 githubHighlights 时自然降级为空
+ *   - 当日报缺失或不含 GitHub 简报时自然降级为 null
+ *
+ * 兼容性处理：
+ *   旧版日报使用 githubHighlights（只有 topProjects 列表），新版使用 projectInsights
+ *   （含完整 items）。本函数优先读取 projectInsights，不存在时再回退到 githubHighlights
+ *   并构造占位 items，保证历史报告也能渲染。
  *
  * 参数：
  *    date: 目标日期，格式 YYYY-MM-DD
@@ -153,6 +194,24 @@ export async function loadGithubBrief(date: string): Promise<GithubBrief | null>
   try {
     const raw = await readFile(reportPath, "utf8");
     const data = JSON.parse(raw);
+    const projectInsights = data?.specializedBrief?.projectInsights;
+    if (projectInsights) {
+      return {
+        summary: projectInsights.summary || "",
+        articleCount: projectInsights.items?.length || 0,
+        topProjects: (projectInsights.items || []).map(
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (item: any) => item.canonicalName || item.name,
+        ),
+        domainDistribution: projectInsights.distribution || {},
+        aiCategoryDistribution: null,
+        keyJudgment: projectInsights.keyJudgment || "",
+        watchSignals: projectInsights.watchSignals || [],
+        sourceCoverage: projectInsights.sourceCoverage || [],
+        items: projectInsights.items || [],
+      };
+    }
+
     const gh = data?.specializedBrief?.githubHighlights;
     if (!gh) return null;
 
@@ -162,6 +221,19 @@ export async function loadGithubBrief(date: string): Promise<GithubBrief | null>
       topProjects: gh.topProjects || [],
       domainDistribution: gh.domainDistribution || {},
       aiCategoryDistribution: gh.aiCategoryDistribution || null,
+      items: (gh.topProjects || []).map((name: string, index: number) => ({
+        name,
+        canonicalName: name,
+        url: /^[\w.-]+\/[\w.-]+$/.test(name) ? `https://github.com/${name}` : null,
+        oneLine: "历史报告中的项目简报条目。",
+        whyItMatters: "该项目出现在历史专题简报中，可作为当日项目线索继续查看。",
+        signals: [],
+        risks: [],
+        score: Math.max(1, 8 - index * 0.5),
+        articleIds: [],
+        sources: [],
+        evidenceSnippets: [],
+      })),
     };
   } catch {
     return null;
@@ -395,6 +467,10 @@ export interface ProductBrief {
   articleCount: number;
   notableProducts: string[];
   launchContextDistribution: Record<string, number>;
+  keyJudgment?: string;
+  watchSignals?: string[];
+  sourceCoverage?: string[];
+  items: SpecializedInsightItem[];
 }
 
 // ---------------------------------------------------------------------------
@@ -488,9 +564,16 @@ export async function loadProductArticles(
 /**
  * 从日报归档 JSON 中加载指定日期的产品当日简报。
  *
- * Phase 2 采用此函数替代 loadProductArticles，原因与 loadGithubBrief 一致：
+ * 这是 /specialized/product/{date} 页面的主要数据源。与 loadProductArticles 不同：
+ *   - 数据来自 Stage 4b 生成的 specializedBrief.productInsights / productHighlights
+ *   - 已做跨天去重和汇总，前端无需再次处理原始文章
  *   - 与 /dashboard/{date} 卡片上的专题数据口径一致
- *   - 专题简报已经过 Stage 4b 跨天去重和汇总
+ *   - 当日报缺失或不含产品简报时自然降级为 null
+ *
+ * 兼容性处理：
+ *   旧版日报使用 productHighlights（只有 notableProducts 列表），新版使用 productInsights
+ *   （含完整 items）。本函数优先读取 productInsights，不存在时再回退到 productHighlights
+ *   并构造占位 items。
  *
  * 参数：
  *    date: 目标日期，格式 YYYY-MM-DD
@@ -504,6 +587,23 @@ export async function loadProductBrief(date: string): Promise<ProductBrief | nul
   try {
     const raw = await readFile(reportPath, "utf8");
     const data = JSON.parse(raw);
+    const productInsights = data?.specializedBrief?.productInsights;
+    if (productInsights) {
+      return {
+        summary: productInsights.summary || "",
+        articleCount: productInsights.items?.length || 0,
+        notableProducts: (productInsights.items || []).map(
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (item: any) => item.canonicalName || item.name,
+        ),
+        launchContextDistribution: productInsights.distribution || {},
+        keyJudgment: productInsights.keyJudgment || "",
+        watchSignals: productInsights.watchSignals || [],
+        sourceCoverage: productInsights.sourceCoverage || [],
+        items: productInsights.items || [],
+      };
+    }
+
     const ph = data?.specializedBrief?.productHighlights;
     if (!ph) return null;
 
@@ -512,6 +612,19 @@ export async function loadProductBrief(date: string): Promise<ProductBrief | nul
       articleCount: ph.articleCount || 0,
       notableProducts: ph.notableProducts || [],
       launchContextDistribution: ph.launchContextDistribution || {},
+      items: (ph.notableProducts || []).map((name: string, index: number) => ({
+        name,
+        canonicalName: name,
+        url: null,
+        oneLine: "历史报告中的产品简报条目。",
+        whyItMatters: "该产品出现在历史专题简报中，可作为当日产品化线索继续查看。",
+        signals: [],
+        risks: [],
+        score: Math.max(1, 8 - index * 0.5),
+        articleIds: [],
+        sources: [],
+        evidenceSnippets: [],
+      })),
     };
   } catch {
     return null;

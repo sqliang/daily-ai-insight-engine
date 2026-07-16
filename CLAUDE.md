@@ -6,7 +6,7 @@ This file provides guidance to AI coding agents (Claude Code, Cursor, Copilot, e
 
 This is a **dual-language** project: a Python offline pipeline ingests 26 AI information sources (23 active) through a 6-stage Map/Reduce process (5 runnable commands — aggregate auto-executes after extract and analyze), and a Next.js 16 App Router dashboard renders the final daily report as interactive charts.
 
-**Data flow:** `26 RSS/scrape/browser sources → Stage 1a (scout URL manifests) → Stage 1b (ingest content download, with browser fallback for anti-bot pages) → Stage 2 (extract facts) → Stage 3 (3-dimension analysis × concurrency) → Stage 4a (aggregate frontmatter JSON + hot/cold split) → Stage 4b (Editor-in-Chief synthesis) → Next.js reads JSON directly from disk`
+**Data flow:** `26 RSS/scrape/browser sources → Stage 1a (scout URL manifests) → Stage 1b (ingest content download, with browser fallback for anti-bot pages) → Stage 2 (extract facts + source-aware specialized tags) → Stage 3 (3-dimension analysis × concurrency + GitHub/paper/product deep analysis) → Stage 4a (aggregate frontmatter JSON + hot/cold split) → Stage 4b (Editor-in-Chief synthesis: daily report + specialized briefs) → Next.js reads JSON directly from disk`
 
 **Key design:**
 - The pipeline and frontend are **decoupled by JSON files on disk**. The Next.js server reads `data/05_reports/daily-report.json` via `node:fs` at request time — no database, no API layer. Sources page reads `pipeline/config.yaml` + `data/00_manifest/*.json` via `src/lib/data/sources.ts`.
@@ -18,6 +18,7 @@ This is a **dual-language** project: a Python offline pipeline ingests 26 AI inf
 - **Report archival:** Stage 4b writes both `daily-report-{date}.json` (archive) and `daily-report.json` (latest copy for frontend). The `/dashboard` page scans all `daily-report-*.json` files and displays a card list. `/dashboard/[date]` shows the visualization dashboard, `/report/[date]` shows the full markdown.
 - The pipeline uses `claude-agent-sdk` (Anthropic) with streaming, exponential backoff retry (3 attempts), and a 5-level JSON recovery parser for truncated LLM output.
 - Agent calls have `allowed_tools=[]` — the SDK agents are pure thinkers, no file system access.
+- **Specialized briefs:** Stage 4b generates three topic-specific briefs (`githubHighlights`/`projectInsights`, `paperHighlights`, `productHighlights`/`productInsights`) alongside the general daily report. These briefs classify articles by source type, deduplicate against yesterday's report, and produce normalized insight items with traceable `sources`. They are stored in the same `daily-report.json` and consumed by `/specialized/*` pages.
 
 **Styling:** Tailwind CSS v4.1+ is the **primary styling method**. Always prefer utility classes over CSS Modules, inline styles, or custom CSS. CSS Modules are a last resort — only when Tailwind genuinely cannot achieve the result (complex `@keyframes`, `::-webkit-scrollbar`, etc.). See `.claude/skills/tailwind-css-patterns/SKILL.md` for patterns and conventions.
 
@@ -29,6 +30,9 @@ This is a **dual-language** project: a Python offline pipeline ingests 26 AI inf
 - `/dashboard/[date]` — 指定日期的可视化仪表盘（KPI + 图表 + 事件 + 信号），含 "完整报告" 入口
 - `/report` — 重定向到 `/dashboard`
 - `/report/[date]` — 指定日期的 Markdown 全文（react-markdown + remark-gfm），降级为 JSON → Markdown 转换
+- `/specialized/github/[date]` — GitHub 专题洞察页：跨天去重后的开源项目精选，含 AI 子领域分布、项目评分、适用人群与风险信号
+- `/specialized/paper/[date]` — 论文专题洞察页：arXiv 当日论文深度解读
+- `/specialized/product/[date]` — 产品专题洞察页：Product Hunt / WhyTryAI 新产品聚合与分析
 
 ## Comment conventions
 
@@ -191,17 +195,17 @@ pipeline/
     schema_utils.py         #   Flat ↔ nested frontmatter conversion
     enum_utils.py           #   Enum helpers
     frontmatter.py          #   Frontmatter parsing
-  schemas/                  # Pydantic v2 models (4 schema files for 4 data blocks)
+  schemas/                  # Pydantic v2 models（含 BaseInfo / FactExtraction / DeepAnalysis / DailyReport / SpecializedAnalysis）
   ingestion/                # Stage 1: RSS scraping, HTML parsing, browser rendering (Playwright)
     scout/                  #   Stage 1a: URL manifest generation
     ingest/                 #   Stage 1b: Content download + cleaning
     backfill_ids/           #   Article ID backfill utility
     parsers/                #   Source-specific parsers (zhihu, tldrai, machine_heart, anthropic)
-  extraction/               # Stage 2: BaseInfo + FactExtraction agents
-  analysis/                 # Stage 3: 3 persona agents (tech-architect, capital-analyst, risk-assessor)
+  extraction/               # Stage 2: BaseInfo + FactExtraction agents（含 source-aware specialized tags）
+  analysis/                 # Stage 3: 3 persona agents（tech-architect / capital-analyst / risk-assessor）+ GitHub/paper/product specialized analysis
     prompts/                #   System prompts for each analysis dimension
   aggregation/              # Stage 4a: Frontmatter aggregation + hot/cold split
-  synthesis/                # Stage 4b: Editor-in-Chief report generation
+  synthesis/                # Stage 4b: Editor-in-Chief report generation（daily report + specialized briefs）
     prompts/                #   System + user prompts for report synthesis
 
 src/
@@ -221,6 +225,13 @@ src/
       page.tsx              # Redirects to /
       [name]/
         page.tsx            # Source detail page with hero + ArticleList (impact-score sort)
+    specialized/
+      github/[date]/
+        page.tsx            # GitHub 专题洞察页
+      paper/[date]/
+        page.tsx            # 论文专题洞察页
+      product/[date]/
+        page.tsx            # 产品专题洞察页
   lib/
     agent/
       schema.ts             # Zod schemas — the single source of truth for TypeScript types
@@ -233,6 +244,7 @@ src/
       status.ts             # Processing status types, StructuredArticle schema
       tiers.ts              # Tier colors, labels, type labels, language labels
       reports.ts            # 日报列表扫描 + 按日期读取（listReports / getReport / getReportMarkdown）
+      specialized.ts        # 专题洞察数据加载（loadGithubBrief / loadPaperArticles / loadProductBrief）
       cleaner.ts            # Text cleaning utilities
     report/
       labels.ts             # Chinese label mappings (event types, sentiments, severities)
@@ -244,7 +256,7 @@ src/
     dashboard/              # DashboardContent (完整仪表盘布局) + KPI/图表/事件/信号区块
     charts/                 # Recharts wrappers (DonutChart, HorizontalBarChart, RadarChart)
     sources/                # Source cards, hero, article cards, analysis sub-cards
-    reports/                # ReportCard (日报卡片，用于 /dashboard 列表页)
+    reports/                # ReportCard (日报卡片，用于 /dashboard 列表页) + SpecializedReportHero + SpecializedEntries
     report/                 # MarkdownRenderer (react-markdown + remark-gfm)
 ```
 
@@ -262,9 +274,9 @@ src/
 - `data/04_structured/{source}.json` — per-source JSON array: recent `hot_days` (default: 7) articles at their latest processing stage. Consumed by frontend source detail page for enrichment via `loadStructuredData()`
 - `data/04_structured/all_articles.json` — time-window filtered merge (controlled by `lookback_days`). Includes metadata: `aggregated_stages`, `lookback_days`, `coverage_period`, `skipped_old`, `sources`. Input to Stage 4b synthesize
 - `data/04_structured/archive/{source}/{source}_{YYYY-MM-DD}.json` — cold data date shards. Contains articles older than `hot_days`, grouped by `created` date. Loaded on-demand by frontend when `dateRange` query param is active. Shards are overwritten each aggregate run (articles may have been further processed). Expired shards (older than `max_history_days`, default 365) are cleaned up automatically
-- `data/05_reports/daily-report.json` + `daily-report.md` — latest report for frontend consumption. Archive copies `daily-report-{date}.json` / `.md` are written alongside
+- `data/05_reports/daily-report.json` + `daily-report.md` — latest report for frontend consumption，包含 `specializedBrief` 专题洞察块。Archive copies `daily-report-{date}.json` / `.md` are written alongside
 
-Each `.md` file has YAML frontmatter that accumulates fields across pipeline stages. Key fields: `id` (SHA-256 hash of source URL), `created` (ingestion date, set to `date.today()` at Stage 1b), `published` (original publication date), `tldr` / `objective_summary` (Stage 2 fields), `impact_score` / `sentiment` (Stage 3 fields).
+Each `.md` file has YAML frontmatter that accumulates fields across pipeline stages. Key fields: `id` (SHA-256 hash of source URL), `created` (ingestion date, set to `date.today()` at Stage 1b), `published` (original publication date), `tldr` / `objective_summary` (Stage 2 fields), `impact_score` / `sentiment` (Stage 3 fields), `specialized_tags` / `github_assessment` / `paper_assessment` / `product_assessment` (source-aware 专题标注与分析字段)。
 
 ## Aggregate Stage Design
 
