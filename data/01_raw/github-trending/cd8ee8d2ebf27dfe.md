@@ -1193,6 +1193,7 @@ id: cd8ee8d2ebf27dfe
 manifest_dates:
 - '2026-07-13'
 - '2026-07-15'
+- '2026-07-16'
 ---
 
 A high-performance hook for AI coding agents that blocks destructive commands before they execute, protecting your work from accidental deletion across Claude Code, Codex CLI, Gemini CLI, Copilot CLI, VS Code Copilot Chat, Cursor, Hermes Agent, Grok (xAI), and related tools.

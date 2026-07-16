@@ -23,26 +23,63 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 330fcefb5d7a78ec
 source_type: news_media
-tldr: 美国政府强制Anthropic全球下架Claude Fable 5和Mythos 5，距上线仅72小时
-objective_summary: 2026年6月11日，美国政府以国家安全为由向Anthropic发出出口管制指令，要求暂停所有外国人对Claude Fable
-  5和Mythos 5的访问。Anthropic随即全面停服这两款模型，距其6月9日发布仅72小时。
+tldr: 美国政府在 Claude Fable 5 发布 72 小时后，以国家安全为由强制 Anthropic 禁止外国人访问该模型。Anthropic 选择一刀切，对全球所有用户禁用
+  Fable 5 和 Mythos 5，这是 AI 史上首次商业大模型被政府强制召回。
+objective_summary: 2026 年 6 月 9 日，Anthropic 正式发布 Claude Fable 5 和 Mythos 5。6 月 11
+  日下午，美国政府发函援引国家安全权限，要求暂停所有外国人对 Fable 5 和 Mythos 5 的访问，包括 Anthropic 外籍员工。Anthropic
+  随即对全球所有用户禁用这两个模型，其他 Claude 模型不受影响。政府未提供具体的国家安全顾虑细节，Anthropic 推测其理由是存在绕过或越狱模型的方法。
 event_type: policy_and_safety
 epistemic_status: verified_fact
 entities:
   companies:
   - Anthropic
+  - 美国政府
   technologies:
   - Claude Fable 5
-  - Claude Mythos 5
+  - Mythos 5
   - Opus 4.8
   key_people: []
 key_logic_flow:
-- 美国政府于2026年6月11日向Anthropic发出出口管制指令，引用国家安全权限要求暂停所有外国人对Claude Fable 5和Mythos 5的访问，包括Anthropic的外籍员工。
-- Anthropic在收到指令后立即对Fable 5和Mythos 5进行全面停服，距模型6月9日发布仅过去72小时，这是AI史上首个已部署的商业大模型被美国政府强制召回。
-- 美国政府未提供具体的国家安全顾虑细节，Anthropic推测政府已掌握绕过或越狱Fable 5的方法。
-- 其他Claude模型（包括Opus 4.8）暂时不受影响，用户新建会话将使用默认模型或Opus 4.8，现有Fable 5会话将报错中止。
-- Anthropic在官方声明中表示正在努力尽快恢复访问权限。
+- 2026 年 6 月 9 日，Anthropic 正式发布了 Claude Fable 5 和 Mythos 5 模型。
+- 2026 年 6 月 11 日下午 5 点 21 分，美国政府致函 Anthropic，援引国家安全权限发布出口管制指令，要求暂停所有外国人对 Fable 5
+  和 Mythos 5 的访问。
+- 该禁令覆盖美国境内外所有外国人，包括 Anthropic 的外籍员工，但政府未提供具体的国家安全顾虑细节。
+- Anthropic 选择一刀切策略，对全球所有用户禁用 Fable 5 和 Mythos 5，而非仅限制外国人访问。
+- 已建立的 Fable 5 会话将报错中止，新建会话将回退至默认模型或 Opus 4.8，API 调用同样返回错误。
+- 这是 AI 历史上首个已部署给数亿用户的商业大模型被美国政府强制召回的事件。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Claude Fable 5
+  canonical_name: Claude Fable 5
+  url: https://www.anthropic.com/news/fable-mythos-access
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 6月9日，Anthropic正式发布Claude Fable 5。从发布到召回，也就72小时。
+  - 全球禁用外籍人士对Claude Fable 5和Mythos 5的所有访问权限。
+  - Claude官方推文中表示，所有Claude产品中，新建的会话将使用默认模型、或Opus 4.8运行，而现有的Fable 5会话将会报错中止。
+  article_id: 330fcefb5d7a78ec
+- object_type: product
+  name: Mythos 5
+  canonical_name: Mythos 5
+  url: https://www.anthropic.com/news/fable-mythos-access
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 全球禁用外籍人士对Claude Fable 5和Mythos 5的所有访问权限。
+  - 当晚，Fable 5和Mythos 5对所有用户全面停服。
+  - 美国政府引用国家安全权限，发布出口管制指令，要求暂停所有外国人对Fable 5和Mythos 5的访问。
+  article_id: 330fcefb5d7a78ec
+- object_type: product
+  name: Opus 4.8
+  canonical_name: Opus 4.8
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 所有Claude产品中，新建的会话将使用默认模型、或Opus 4.8运行。
+  article_id: 330fcefb5d7a78ec
 ---
 
 究竟为何，Anthropic突然下线了地表最强Claude？

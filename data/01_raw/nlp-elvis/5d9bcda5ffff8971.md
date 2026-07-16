@@ -15,6 +15,7 @@ id: 5d9bcda5ffff8971
 manifest_dates:
 - '2026-07-14'
 - '2026-07-15'
+- '2026-07-16'
 ---
 
 # 🤖 AI Agents Weekly: GPT-5.6 Family, Meta Muse Spark 1.1, Grok 4.5, SWE-1.7, Robostral Navigate, The Harness Effect, and More

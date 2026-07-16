@@ -214,6 +214,7 @@ manifest_dates:
 - '2026-07-03'
 - '2026-07-14'
 - '2026-07-15'
+- '2026-07-16'
 ---
 
 **A comprehensive, ready-to-use fitness exercise dataset with 1,324 exercises — each with an animation GIF, 180×180 thumbnail image, category, body-part, equipment, target and muscle-group data, and step-by-step instructions in 9 languages (English, Spanish, Italian, Turkish, Russian, Chinese, Hindi, Polish, Korean).**
