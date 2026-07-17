@@ -11,8 +11,10 @@ import { PageShell } from "@/components/layout/PageShell";
 import { DashboardHero } from "@/components/dashboard/DashboardHero";
 import { ReportCard } from "@/components/reports/ReportCard";
 import { DateFilterBar } from "@/components/sources/DateFilterBar";
+import { Pagination } from "@/components/ui/Pagination";
 import { listReports } from "@/lib/data/reports";
 import type { DateRange } from "@/lib/data/types";
+import { PAGE_SIZE_REPORTS, parsePageParam } from "@/lib/utils/pagination";
 
 export const dynamic = "force-dynamic";
 
@@ -24,6 +26,7 @@ interface DashboardSearchParams {
   from?: string;
   to?: string;
   preset?: string;
+  page?: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -56,7 +59,12 @@ export default async function DashboardPage({
   }
   // preset=latest → dateRange=undefined，显示全部
 
-  const reports = await listReports(dateRange);
+  // 服务端分页：仅解析当前页命中的日报 JSON，避免全量 parse 导致卡顿
+  const { reports, totalCount, page, totalPages, oldestDate, latestDate } =
+    await listReports(dateRange, {
+      page: parsePageParam(sp.page),
+      pageSize: PAGE_SIZE_REPORTS,
+    });
 
   // 空状态：尚无任何日报数据
   if (reports.length === 0) {
@@ -92,15 +100,10 @@ export default async function DashboardPage({
     );
   }
 
-  const totalArticles = reports.reduce((sum, r) => sum + r.totalArticles, 0);
-  const latestDate = reports[0]?.date ?? null;
-  const oldestDate = reports[reports.length - 1]?.date ?? null;
-
   return (
     <PageShell>
       <DashboardHero
-        reportCount={reports.length}
-        totalArticles={totalArticles}
+        reportCount={totalCount}
         oldestDate={oldestDate}
         latestDate={latestDate}
       />
@@ -110,11 +113,18 @@ export default async function DashboardPage({
       </div>
 
       {/* ====== 卡片列表：全宽横向，垂直排列 ====== */}
-      <div className="mt-6 flex flex-col gap-4">
+      <div id="report-list" className="mt-6 flex scroll-mt-20 flex-col gap-4">
         {reports.map((report) => (
           <ReportCard key={report.date} report={report} />
         ))}
       </div>
+
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        totalItems={totalCount}
+        anchorId="report-list"
+      />
     </PageShell>
   );
 }

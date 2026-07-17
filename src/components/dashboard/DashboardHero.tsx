@@ -6,10 +6,8 @@
 // ============================================================================
 
 export type DashboardHeroProps = {
-  /** 历史日报份数 */
+  /** 范围内日报份数（文件名计数，分页后仍为全量口径） */
   reportCount: number;
-  /** 累计解读文章篇数 */
-  totalArticles: number;
   /** 最早日报日期（YYYY-MM-DD） */
   oldestDate: string | null;
   /** 最新日报日期（YYYY-MM-DD） */
@@ -21,7 +19,6 @@ export type DashboardHeroProps = {
  */
 export function DashboardHero({
   reportCount,
-  totalArticles,
   oldestDate,
   latestDate,
 }: DashboardHeroProps) {
@@ -109,19 +106,19 @@ export function DashboardHero({
         </div>
 
         {/* 归档规模 — 数字集中展示，避免与正文重复 */}
+        {/* 说明：不再展示"累计解读篇数" —— 该指标需解析范围内全部日报 JSON，
+            与列表页"只解析当前页"的分页优化目标冲突；日报份数与日期跨度
+            从文件名即可精确得出，零解析成本 */}
         <div
           className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1 md:mt-6"
           role="separator"
-          aria-label={`归档规模 ${reportCount} 份日报，覆盖 ${totalArticles} 篇文章`}
+          aria-label={`归档规模 ${reportCount} 份日报`}
         >
           <span className="shrink-0 text-[11px] font-semibold uppercase tracking-wider text-white/45">
             归档规模
             <span className="mx-1.5 text-white/25">·</span>
             <span className="tabular-nums text-accent-light/90">{reportCount}</span>
             {" "}份日报
-            <span className="mx-1.5 text-white/25">·</span>
-            <span className="tabular-nums text-accent-light/90">{totalArticles}</span>
-            {" "}篇解读
             {dateRangeLabel && (
               <>
                 <span className="mx-1.5 text-white/25">·</span>

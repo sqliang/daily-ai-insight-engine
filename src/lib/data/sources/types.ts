@@ -105,6 +105,7 @@ export interface EnrichedArticle {
 }
 
 import type { DateRange } from "../types";
+import type { PaginationMeta } from "@/lib/utils/pagination";
 
 export type { DateRange };
 
@@ -125,13 +126,17 @@ export interface EnrichedSourceDetail {
   truncation: { mode: string; limit?: number };
   target_dir?: string;
   manifestFound: boolean;
+  /** 范围内文章总数（切片前口径），hero 统计与列表徽标使用 */
   articleCount: number;
+  /** 当前页文章切片；未传分页参数时为完整列表 */
   articles: EnrichedArticle[];
   manifestDate: string | null;
   manifestGeneratedAt: string | null;
   stageCounts: Record<ProcessingStatus, number>;
   availableDates: string[];
   dateRange: DateRange | null;
+  /** 分页元信息；未传分页参数时为 null（如文章详情页的全量列表场景） */
+  pagination: PaginationMeta | null;
 }
 
 export interface SourceArticleDetail {

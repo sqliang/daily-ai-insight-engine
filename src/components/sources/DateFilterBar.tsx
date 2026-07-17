@@ -59,6 +59,8 @@ export function DateFilterBar() {
 
   const resolvePreset = useCallback((key: Preset) => {
     const params = new URLSearchParams(searchParams.toString());
+    // 日期范围变化后原页码失去意义，重置回第 1 页
+    params.delete("page");
 
     switch (key) {
       case "latest":

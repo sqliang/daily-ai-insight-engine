@@ -6,6 +6,8 @@ import { getSourceDetailEnriched, type DateRange } from "@/lib/data/sources";
 import { PageShell } from "@/components/layout/PageShell";
 import { ArticleList } from "@/components/sources/ArticleList";
 import { DateFilterBar } from "@/components/sources/DateFilterBar";
+import { Pagination } from "@/components/ui/Pagination";
+import { PAGE_SIZE_ARTICLES, parsePageParam } from "@/lib/utils/pagination";
 import {
   TIER_SHORT_LABELS,
   SOURCE_TYPE_LABELS,
@@ -37,7 +39,7 @@ export default async function SourceDetailPage({
   searchParams,
 }: {
   params: Promise<{ name: string }>;
-  searchParams: Promise<{ from?: string; to?: string; preset?: string }>;
+  searchParams: Promise<{ from?: string; to?: string; preset?: string; page?: string; sort?: string }>;
 }) {
   const { name } = await params;
   const sp = await searchParams;
@@ -59,7 +61,12 @@ export default async function SourceDetailPage({
     return { from, to };
   })();
 
-  const source = await getSourceDetailEnriched(name, dateRange);
+  // 分页 + 排序均在服务端完成：排序必须先于切片，否则跨页顺序错乱
+  const source = await getSourceDetailEnriched(name, dateRange, {
+    page: parsePageParam(sp.page),
+    pageSize: PAGE_SIZE_ARTICLES,
+    sort: sp.sort === "impact" ? "impact" : null,
+  });
   if (!source) notFound();
 
   const hasManifest = source.manifestFound && source.articleCount > 0;
@@ -246,6 +253,14 @@ export default async function SourceDetailPage({
           sourceName={source.name}
           dateRange={source.dateRange}
         />
+        {source.pagination && (
+          <Pagination
+            currentPage={source.pagination.page}
+            totalPages={source.pagination.totalPages}
+            totalItems={source.articleCount}
+            anchorId="article-list"
+          />
+        )}
       </div>
     </PageShell>
   );
