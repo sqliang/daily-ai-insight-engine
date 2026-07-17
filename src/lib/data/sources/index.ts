@@ -36,6 +36,7 @@ import {
 } from "./manifests";
 import { loadStructuredData } from "./structured-data";
 import { decodeUrlSlug, normalizeArticleUrl } from "./article-route";
+import { paginate, PAGE_SIZE_ARTICLES } from "@/lib/utils/pagination";
 
 // ============================================================================
 // Barrel re-exports — 类型
@@ -72,6 +73,17 @@ function getImpactScore(article: EnrichedArticle): number {
     article.enriched?.compound_value?.score ??
     0
   );
+}
+
+/**
+ * 按影响力分数降序排序（返回新数组，不改原数组）。
+ *
+ * 共享 helper：getSourceDetailEnriched（服务端排序上移）与
+ * getSourceArticleDetail（详情页 prev/next 排序）必须使用同一套
+ * 排序逻辑，否则列表页与详情页的文章顺序会不一致。
+ */
+function sortArticlesByImpact(articles: EnrichedArticle[]): EnrichedArticle[] {
+  return [...articles].sort((a, b) => getImpactScore(b) - getImpactScore(a));
 }
 
 // ============================================================================
@@ -176,6 +188,25 @@ export async function getSourceDetail(
 // ============================================================================
 
 /**
+ * getSourceDetailEnriched 的可选查询参数。
+ *
+ * page/pageSize 同时缺省时返回完整列表（分页元信息为 null），
+ * 供文章详情页等需要全量 prev/next 的场景使用。
+ */
+export interface SourceDetailQueryOptions {
+  /** 目标页码（1-based），越界由 paginate() clamp */
+  page?: number;
+  /** 每页条数，缺省 PAGE_SIZE_ARTICLES */
+  pageSize?: number;
+  /**
+   * 排序方式："impact" 时按影响力分数降序（服务端排序）。
+   * 排序必须在分页切片之前完成，否则跨页顺序会错乱 —— 这正是
+   * 排序从客户端上移到数据层的原因。
+   */
+  sort?: "impact" | null;
+}
+
+/**
  * 获取 source 详情，包含结构化 enrichment 数据。
  *
  * 这是 source 详情页（/sources/[name]）的主要数据获取函数。
@@ -185,17 +216,21 @@ export async function getSourceDetail(
  *   3. 通过 loadStructuredData 加载 enrichment（含 archive 分片）
  *   4. 将 manifest articles 与 enrichment 数据合并
  *   5. 计算处理阶段分布和可用日期列表
+ *   6. （可选）按影响力排序并分页切片 —— articleCount 始终保持
+ *      切片前的总数口径，articles 为当前页数据
  *
  * 参数：
  *     name:      source 名称
  *     dateRange: 可选的日期范围筛选
+ *     options:   可选的分页与排序参数
  *
  * 返回：
- *     带 enrichment 的完整 source 详情，不存在时返回 null
+ *     带 enrichment 的 source 详情，不存在时返回 null
  */
 export async function getSourceDetailEnriched(
   name: string,
   dateRange?: DateRange,
+  options?: SourceDetailQueryOptions,
 ): Promise<EnrichedSourceDetail | null> {
   const [configs, latestManifests] = await Promise.all([
     getSourceConfigs(),
@@ -286,6 +321,22 @@ export async function getSourceDetailEnriched(
     stageCounts[a.status]++;
   }
 
+  // 排序 → 分页切片：articleCount 保持切片前总数口径（hero 统计、
+  // 列表徽标依赖），articles 仅为当前页数据，避免全量渲染导致卡顿
+  const sortedArticles =
+    options?.sort === "impact"
+      ? sortArticlesByImpact(enrichedArticles)
+      : enrichedArticles;
+
+  const paginated =
+    options?.page !== undefined || options?.pageSize !== undefined
+      ? paginate(
+          sortedArticles,
+          options.page ?? 1,
+          options.pageSize ?? PAGE_SIZE_ARTICLES,
+        )
+      : null;
+
   return {
     name: config.name,
     type: config.type,
@@ -304,12 +355,20 @@ export async function getSourceDetailEnriched(
     target_dir: config.target_dir,
     manifestFound: manifestArticles.length > 0,
     articleCount: enrichedArticles.length,
-    articles: enrichedArticles,
+    articles: paginated ? paginated.items : sortedArticles,
     manifestDate,
     manifestGeneratedAt,
     stageCounts,
     availableDates,
     dateRange: dateRange ?? null,
+    pagination: paginated
+      ? {
+          page: paginated.page,
+          pageSize: paginated.pageSize,
+          totalItems: paginated.totalItems,
+          totalPages: paginated.totalPages,
+        }
+      : null,
   };
 }
 
@@ -329,9 +388,7 @@ export async function getSourceArticleDetail(
   if (!source) return null;
 
   const articles =
-    sort === "impact"
-      ? [...source.articles].sort((a, b) => getImpactScore(b) - getImpactScore(a))
-      : source.articles;
+    sort === "impact" ? sortArticlesByImpact(source.articles) : source.articles;
 
   const fallbackUrl = articleIdOrSlug.startsWith("url-")
     ? decodeUrlSlug(articleIdOrSlug.slice(4))

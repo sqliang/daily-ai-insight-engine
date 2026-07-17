@@ -17,14 +17,6 @@ type ArticleListProps = {
   dateRange?: DateRange | null;
 };
 
-function getImpactScore(article: EnrichedArticle): number {
-  return (
-    article.enriched?.impact_score?.score ??
-    article.enriched?.compound_value?.score ??
-    0
-  );
-}
-
 export function ArticleList({
   articles,
   hasManifest,
@@ -37,11 +29,8 @@ export function ArticleList({
   const searchParams = useSearchParams();
   const sortMode: SortMode = searchParams.get("sort") === "impact" ? "impact" : null;
 
-  const sortedArticles = useMemo(() => {
-    if (sortMode !== "impact") return articles;
-    return [...articles].sort((a, b) => getImpactScore(b) - getImpactScore(a));
-  }, [articles, sortMode]);
-
+  // 排序与分页均在服务端完成，articles 即为当前页的最终顺序，
+  // 客户端不再二次排序（否则跨页的全局排序会被页内重排打乱）
   const isActive = sortMode === "impact";
   const detailSearchParams = useMemo(() => {
     const params = new URLSearchParams(searchParams.toString());
@@ -61,12 +50,14 @@ export function ArticleList({
     } else {
       params.delete("sort");
     }
+    // 排序语义变化后原页码失去意义，重置回第 1 页
+    params.delete("page");
     const qs = params.toString();
     router.push(qs ? `?${qs}` : window.location.pathname, { scroll: false });
   }
 
   return (
-    <section className="mt-10 min-w-0">
+    <section id="article-list" className="mt-10 min-w-0 scroll-mt-20">
       {/* Header row */}
       {hasManifest && (
         <div className="flex items-center justify-between pb-3.5 mb-6 border-b border-line">
@@ -164,7 +155,7 @@ export function ArticleList({
       {/* Article cards */}
       {hasManifest ? (
         <div className="space-y-5">
-          {sortedArticles.map((article) => (
+          {articles.map((article) => (
             <ArticleCard
               key={article.id ?? article.url}
               article={article}
