@@ -60,7 +60,7 @@ export function ReportCard({ report }: { report: ReportSummary }) {
         {/* 左侧：日期区块 */}
         <Link
           href={`/dashboard/${report.date}`}
-          className="flex shrink-0 flex-row items-center gap-3 border-b border-accent/12 px-5 py-5 sm:w-34 sm:flex-col sm:items-center sm:justify-center sm:border-b-0 sm:border-r sm:px-4"
+          className="flex shrink-0 flex-row items-center gap-3 border-b border-accent/12 px-5 py-5 sm:w-36 sm:flex-col sm:items-center sm:justify-center sm:border-b-0 sm:border-r sm:px-4"
           style={{
             background:
               "linear-gradient(180deg, color-mix(in oklch, var(--accent) 12%, transparent), color-mix(in oklch, var(--accent) 4%, transparent))",
@@ -69,7 +69,7 @@ export function ReportCard({ report }: { report: ReportSummary }) {
           {/* 月-日 */}
           <time
             dateTime={report.date}
-            className="text-3xl font-black tracking-tight text-foreground sm:text-4xl"
+            className="whitespace-nowrap text-3xl font-black tracking-tight text-foreground sm:text-4xl"
           >
             {monthDay}
           </time>
