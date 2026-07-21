@@ -180,9 +180,12 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 45cdd53b5fdff45a
 source_type: community_discussion
-tldr: Clypra 是一个基于 Tauri/React/Rust 的免费开源专业视频编辑器，采用 MIT 协议。
-objective_summary: AIEraDev 团队发布了 Clypra，一个基于 Tauri v2、React 19 和 Rust 构建的免费开源视频编辑器。支持
-  macOS、Windows、Linux 桌面端及 iOS、Android 移动端，核心功能永久免费，提供可选的 AI 增强 Pro 功能。
+tldr: Clypra 是一个基于 Tauri v2、React 19 和 Rust 构建的免费开源专业视频编辑器，支持桌面端（macOS/Windows/Linux）和移动端（iOS/Android），采用硬件加速的
+  FFmpeg 后端处理，可选 AI 增强的 Pro 功能通过 Open Core 模式收费。
+objective_summary: AIEraDev 开发并发布了 Clypra，一个基于 MIT 许可证的开源视频编辑器。其核心编辑器、特效引擎和 UI 组件完全免费且无水印、无功能限制。Clypra
+  使用 Rust 的 FFmpeg 后端实现硬件加速解码（VideoToolbox/D3D11VA/VAAPI），前端采用 React 19 + TypeScript
+  + Zustand 状态管理，通过 Tauri v2 提供原生桌面性能，并通过 Capacitor 支持 iOS 和 Android 移动端。可选 Pro 功能提供自然语言编辑、自动字幕、智能重帧等
+  AI 能力。项目采用 Open Core 商业模式，核心免费 + Pro 付费。
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
@@ -193,19 +196,28 @@ entities:
   - React 19
   - Rust
   - FFmpeg
-  - Capacitor
   - Zustand
+  - Vite
+  - Capacitor
   - VideoToolbox
   - D3D11VA
   - VAAPI
+  - H.264
+  - H.265
+  - ProRes
+  - SQLite
+  - DashMap
+  - shadcn/ui
   key_people: []
 key_logic_flow:
-- Clypra 是一个基于 Tauri v2、React 19 和 Rust 构建的免费开源专业视频编辑器，采用 MIT 协议授权。
-- 核心编辑器、特效引擎和所有 UI 组件永久免费，无水印、无功能限制、无订阅要求。
-- 可选 Pro 功能提供自然语言编辑、自动字幕、智能重构图等 AI 增强特性。
-- 支持桌面端（macOS Apple Silicon 和 Intel、Windows、Linux）和移动端（iOS 和 Android）。
-- 硬件加速通过 FFmpeg 原生 GPU 解码器实现，支持 VideoToolbox、D3D11VA 和 VAAPI，可实现亚 10 毫秒首帧延迟。
-- 采用 Open Core 商业模式，免费开源核心引擎配合付费高级功能。
+- Clypra 是一个基于 MIT 许可证的免费开源视频编辑器，核心编辑器、特效引擎和 UI 组件永久免费，无水印和功能限制。
+- 技术架构采用 Rust + Tauri v2 后端配合 React 19 前端，通过 FFmpeg 实现原生 GPU 硬件加速解码，支持 VideoToolbox、D3D11VA
+  和 VAAPI。
+- 支持桌面端（macOS、Windows、Linux）和移动端（iOS 通过 Capacitor、Android 通过 Capacitor）多平台部署。
+- 可选 Pro 功能提供自然语言编辑、自动字幕、智能重帧等 AI 增强能力，采用 Open Core 商业模式。
+- 核心性能优化包括解码器预预热（首帧延迟降至 5-10ms）、基于 LRU 的 20 并发解码器池、Web Worker 线程池缩略图生成和基于 GOP 边界的智能跳帧策略。
+- 项目使用 Zustand 按领域分离状态管理（timelineStore、playbackStore、projectStore、historyStore、uiStore、settingsStore），并内置
+  30+ 项性能指标实时监控。
 specialized_tags:
   github:
     projectName: AIEraDev/Clypra
@@ -219,6 +231,19 @@ specialized_tags:
     - video-editor
     aiDetail: null
 extract_result: success
+object_mentions:
+- object_type: project
+  name: AIEraDev/Clypra
+  canonical_name: AIEraDev/Clypra
+  url: https://github.com/AIEraDev/Clypra
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Clypra 是一个基于 MIT 许可证的免费开源视频编辑器，其核心编辑器、特效引擎和所有 UI 组件永久免费，无水印和功能限制。
+  - 技术架构采用 Rust + Tauri v2 后端和 React 19 前端，通过 FFmpeg 实现原生 GPU 硬件加速解码，支持 VideoToolbox、D3D11VA
+    和 VAAPI。
+  - 支持 macOS、Windows、Linux 桌面端以及 iOS 和 Android 移动端，可选 Pro 功能提供自然语言编辑和自动字幕等 AI 能力。
+  article_id: 45cdd53b5fdff45a
 ---
 
 **Professional video editing—free and open source forever.**

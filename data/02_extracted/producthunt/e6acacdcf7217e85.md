@@ -17,9 +17,10 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: e6acacdcf7217e85
 source_type: community_discussion
-tldr: Astryx 是一个可定制的、面向 Agent 的开源设计系统，于 2026 年 7 月 6 日在 Product Hunt 发布。
-objective_summary: Zac Zuo 于 2026 年 7 月 6 日在 Product Hunt 上发布 Astryx，一个可定制、支持 Agent
-  集成的开源设计系统，发布后获得 2800 名关注者。
+tldr: Astryx 是一个可定制、面向 AI 代理的开源设计系统，于 2026 年 7 月 6 日在 Product Hunt 上发布，由 Zac Zuo 提交，获得
+  2800 名关注者。
+objective_summary: Astryx 是一个开源设计系统，主打可定制性和对 AI 代理（agent）的兼容支持。该产品由 Zac Zuo 于 2026
+  年 7 月 6 日在 Product Hunt 平台发布，截至页面抓取时获得了约 2800 名社区关注者。产品页面标榜其定位为下一代数字连接体验的构建基础。
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
@@ -28,9 +29,10 @@ entities:
   key_people:
   - Zac Zuo
 key_logic_flow:
-- Astryx 被定位为一个可定制的、面向 Agent 的开源设计系统。
-- 该产品于 2026 年 7 月 6 日在 Product Hunt 发布，提交者为 Zac Zuo。
-- 发布后获得 2800 名社区关注者的追踪。
+- Astryx 是一个开源设计系统，核心属性为可定制性（customizable）和 AI 代理就绪（agent-ready）。
+- 该产品于 2026 年 7 月 6 日在 Product Hunt 上正式发布。
+- 产品的提交者（Maker）为 Zac Zuo。
+- 截至页面抓取时，Astryx 在 Product Hunt 上获得了约 2800 名关注者的社区信号。
 specialized_tags:
   product:
     productName: Astryx
@@ -44,6 +46,17 @@ specialized_tags:
     - UI 设计师
     - AI Agent 开发者
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Astryx
+  canonical_name: Astryx
+  url: null
+  confidence: medium
+  article_role: primary_subject
+  evidence_snippets:
+  - Astryx 的产品标语为 'A customizable, agent-ready open-source design system'。
+  - 该产品于 2026 年 7 月 6 日由 Zac Zuo 在 Product Hunt 上发布，获得约 2800 名关注者。
+  article_id: e6acacdcf7217e85
 ---
 
 # Astryx

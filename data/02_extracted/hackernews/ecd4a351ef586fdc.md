@@ -14,30 +14,56 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: ecd4a351ef586fdc
 source_type: community_discussion
-tldr: Mitchell Hashimoto 访谈：关于终端模拟器 Ghostty、Zig 语言及开源哲学
-objective_summary: Mitchell Hashimoto 在访谈中分享了离开 HashiCorp 后为磨砺 GPU 编程、桌面系统编程和 Zig
-  技能而开发终端模拟器 Ghostty 的经历，讨论了终端生态的局限性并提出 n-screen API 和按钮协议两项改进方案，同时阐述了他对开源维护者无义务、用户应自行
-event_type: framework_tools
+tldr: Mitchell Hashimoto 在采访中分享了他使用 Zig 语言构建 Ghostty 终端模拟器的动机与历程，提出了 n-screen 多屏 API
+  和按钮协议等终端协议改进方案，并阐述了他对开源维护者义务和用户期望的本质看法。
+objective_summary: Mitchell Hashimoto（HashiCorp 联合创始人，曾开发 Vagrant、Terraform 等工具）在采访中表示，离开
+  HashiCorp 后为重新磨练技术技能，他选择使用 Zig 语言构建 Ghostty 终端模拟器，借此深入学习 GPU 编程、桌面系统编程和 Zig 语言。他提出当前终端协议缺乏标准化机构，过去
+  20 年的标准化仅取决于流行终端的行为，并呼吁引入 n-screen API（无限多屏渲染）和按钮协议（可滚动历史的可点击控件）以从根本上提升终端应用的能力。他还强调开源维护者对用户没有任何义务，许可证明确声明软件按原样提供且无担保，用户如不满意应
+  fork 项目自行维护而非向维护者施压。
+event_type: application_landing
 epistemic_status: verified_fact
 entities:
   companies:
   - HashiCorp
   technologies:
+  - Ghostty
   - Zig
+  - Vouch
   - Wayland
   - PTY
-  - GPU
+  - OSC 8
   key_people:
   - Mitchell Hashimoto
 key_logic_flow:
-- Mitchell Hashimoto 离开 HashiCorp 后为重新磨砺 GPU 编程、桌面系统编程和 Zig 三方面技术技能，选择开发终端模拟器 Ghostty
-  作为学习项目。
-- Ghostty 最初仅以运行 vim 和编译器并能自举构建为目标，后因朋友在 Discord 中实际日常使用而转向公开，经历了长期私密测试阶段。
-- 终端生态目前缺乏权威标准制定机构，过去 20 年的标准化基于流行终端的行为演变，导致功能混杂且缺乏统一的审美愿景。
-- Mitchell 提出两项终端协议改进：n-screen API（支持创建无限数量屏幕、叠加和独立窗口渲染）和按钮协议（类似 OSC 8 超链接的点击交互，历史滚动中仍可注册）。
-- Mitchell 认为开源维护者对用户没有义务，许可证明确声明'按现状、无担保'，用户应通过 fork 自行解决问题而非要求维护者满足需求。
-- Ghostty 的设计哲学是功能丰富但不臃肿，通过架构设计确保未使用的功能不会消耗执行资源，同时支持高度可定制化。
+- Mitchell Hashimoto 离开 HashiCorp 后为磨练 GPU 编程、桌面系统编程和 Zig 语言三项技能，选择构建 Ghostty 终端模拟器。
+- Ghostty 最初只是个人学习项目，目标仅为运行 vim 和编译器并实现自举构建，后因朋友开始日常使用才转向公开。
+- Hashimoto 认为终端协议缺乏标准化机构，过去 20 年的功能标准化仅取决于最流行终端的行为，而非统一规范的推动。
+- Hashimoto 提出 n-screen API 概念，允许在终端中创建无限数量的后台屏幕并支持独立窗口渲染，以突破当前主屏/备屏双屏限制。
+- Hashimoto 设计了按钮协议规范，让终端应用能在滚动历史中注册可点击控件，解决 OSC 8 超链接在内容移出可视区域后失效的问题。
+- Hashimoto 坚持开源软件许可证中按原样提供且无担保的条款，认为维护者对用户没有义务，用户可以 fork 项目自行维护。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Ghostty
+  canonical_name: Ghostty
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Mitchell Hashimoto 在离开 HashiCorp 后选择使用 Zig 语言构建 Ghostty 终端模拟器，以此深入学习 GPU 编程、桌面系统编程和
+    Zig 语言三个方向。
+  - Ghostty 最初仅为满足个人学习需求，目标是在其中运行 vim 和编译器并实现自举构建，后因朋友开始日常使用才转向公开发布。
+  - Hashimoto 将 Ghostty 定位为快速、功能丰富且原生跨平台的终端模拟器，并强调其功能丰富不意味着臃肿，不使用的功能不会被执行。
+  article_id: ecd4a351ef586fdc
+- object_type: product
+  name: Vouch
+  canonical_name: Vouch
+  url: null
+  confidence: low
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Mitchell Hashimoto 在采访引言中被介绍目前正在构建 Ghostty 和 Vouch 两个产品，但采访中未对 Vouch 展开讨论。
+  article_id: ecd4a351ef586fdc
 ---
 
 Mitchell Hashimoto was behind Vagrant, Packer, Consul, Terraform, Vault, Nomad, Waypoint and now builds Ghostty and Vouch.

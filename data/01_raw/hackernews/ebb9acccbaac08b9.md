@@ -1,0 +1,151 @@
+---
+title: Pebble Mega Update – July 2026
+source: https://repebble.com/blog/pebble-mega-update-july-2026
+author:
+- '[[crazysaem]]'
+published: '2026-07-17'
+created: '2026-07-17'
+manifest_dates:
+- '2026-07-17'
+description: 'Article URL: https://repebble.com/blog/pebble-mega-update-july-2026
+  Comments URL: https://news.ycombinator.com/item?id=48943174 Points: 112 # Comments:
+  32'
+tags:
+- clippings
+extraction_status: success
+pipeline_stage: ingested
+id: ebb9acccbaac08b9
+---
+
+TL:DR;
+
+- Pebble Time 2 Shipping Status
+- Pebble Software Updates
+- PT2 - Issues You’ve Reported
+- Pebble Round 2 Production Update
+- Index 01 Production Update
+
+
+Since we started mass production in late March, we’ve built over 23,000 Pebble Time 2 watches. We’re over 80% of the way through fulfilling all the pre-orders we’ve received! But that means there are still some ultra patient folks who haven’t received their watches yet. If you’ve placed an pre-order for PT2 and haven’t received it yet (including Batch 6 - August), here’s when we expect to ship your watch out:
+
+- Pebble Time 2 - Black → July 31
+- Pebble Time 2 - Red → July 31
+- Pebble Time 2 - Grey → July 28
+- Pebble Time 2 - Blue → July 28
+
+Coincidentally, this means that we’ll be ‘in-stock’ with no wait very soon! If you’ve been holding off placing an order because you didn’t want to wait, now is the time to jump on it. This won’t last forever - first-come first serve. As soon as the current inventory is sold out, we’ll be back in pre-order mode waiting for the next shipment.
+
+Order today on rePebble.com/watch.
+
+Major props to our three person customer support and logistics team! Claudio, Trevor and Colin have answered thousands of your questions and helped ship watches safely onto your wrist in 93 countries. Have a question? Please check out our Help site first. If that doesn’t have an answer, please email us at [email protected].
+
+Want an extra Pebble charger? shop.repebble.com now carries accessories - full selection of straps coming soon.
+
+Over the last 6 months, the core four person Pebble software team built and shipped a metric ton of new Pebble open source software! Our improvements were centered around these areas:
+
+**Battery life**
+
+We’ve (well, mostly Gerard 🙂) worked extraordinarily hard over the last few months, optimizing and reducing power consumption in PebbleOS. As predicted, we boosted the median battery life of Pebble 2 Duo from 17 days (last summer) to over 30 days. Pebble Time 2 median is currently around 21 days - more improvements in the works here too! The biggest consumers of power are backlight, watchfaces with a lot of animations and health tracking. If you want to ‘hypermile’ your Pebble, try switching to a low-animation watchface and the new *Battery Saver* backlight mode (Settings → Display → Backlight).
+
+**Apps and SDK**
+
+**T**ogether with the Moddable team, we’ve published several Pebble SDK updates introducing new features like:
+
+- Touch Screen API (Calculator on your wrist anyone?)
+- Speaker API (useful for tuning your guitar, or feeding your Tamagotchi)
+- RGB Backlight API (try it in this wild little app Chinese Toy Phone)
+- Apps can now determine how they were quick launched (ie by single press, long press)
+- Alloy (native JS apps)
+- FFI - run C code within Alloy JS apps (similar to Android NDK) and js debugger
+- A bunch of new JS APIs
+`pebble build --debug`
+
+now defines PBL_DEBUG and launches XSBUG, a powerful JS debugger
+
+
+Developers in the Pebble community have created 2,120 apps and watchfaces for Pebble Time 2 and Pebble Round 2 already!
+
+**Index 01**
+
+The first version of all Index 01 functionality is up and running inside the Pebble mobile app. Don’t have an Index 01 yet? You can check out how it works and try the software interface in the Pebble app, just go to Settings → General → Enable Index feed.
+
+All the main features are in, including syncing to iOS Reminders, Obsidian, Google Tasks, Calendar, Android music control, MCPs and sending recordings or transcriptions to your own server or app via Webhook. Optional encryption (you own the keys) protects optional cloud backup. And of course, it’s all open source (github.com/coredevices/mobileapp). We even built a little webapp that you can use to access your Index information from anywhere → index.rePebble.com. Watch the podcast or read the blog post to learn more.
+
+**Stability**
+
+Thanks to helpful bug reports from y’all, we’ve made hundreds of small improvements to PebbleOS and the Pebble mobile app. Please keep it coming!
+
+I’ll dive into one specific (and ultra technical) topic - reverse PPoGATT (Pebble Protocol over GATT). Quick history: during the first Pebble era, we configured the Pebble mobile app to expose a PPoGATT service, as means to work around the lack of IPC between iOS apps. This setup is the opposite of how Bluetooth accessories normally connect to phones and caused a number of weird problems! Also this setup blocks us from using iOS AccessorySetupKit (ASK), which is a prerequisite for us to implement the new Notification Forwarding feature (EU only) that will finally enable you to reply to notifications. Enabling ASK is going to be tough - our iOS app must either use ASK or not, meaning that we need to upgrade the recovery firmware on all Pebble watches in the field to reverse PPoGATT before we can switch ASK on. Anyways, we have the first piece of the puzzle in place (Pebble Round 2’s recovery firmware already has the upgrade). This saga will take a while.
+
+**Community Contributions**
+
+Thank you to the dozens of developers from the broader Pebble community who have contributed huge improvements to PebbleOS and the mobile app, including Apple HealthKit and Google health sync, improved light sensor algorithms, notification filtering, many new language packs, and so many bug fixes. It’s so fun and very energizing to see so many talented hackers push PRs! See the full list and thank you devs! Some exciting new community built features are on the horizon: HRV, SP02, exposing HRM via BLE, mic API, multiple BLE clients and more
+
+**Software Roadmap**
+
+We keep improving Pebble software primarily because *we* are Pebble users. We love using the products we make and continually want to make them better! Here’s some of the things we’re excited to work on next:
+
+- Send text app (Android only)
+- Find my phone
+- Beautiful new weather app for PT2 and PR2 (created by grim, a winner of the Spring Developer Contest)
+- Tweaking PebbleOS UI for Round 2
+- Improving the Pebble mobile app UI
+- WYSIWYG watchface editor - spiritual successor to Pebble Canvas
+- Continue transition to fully reverse PPoGATT role to enable ASK and (eventually) replies to notifications for iOS users (in EU)
+- See below for index roadmap
+
+Thank you all for reporting any bugs or issues you’ve spotted! We test each watch at the factory before it’s shipped out, and we test each software release internally and with a growing team of beta testers (want to join? Sign up at rePebble.com/account). But these tests are not infallible and we will make mistakes. We appreciate your reports as they help us get more information to help us fix problems!
+
+**Software Issues**
+
+We’re tracking three big software issues with PebbleOS, and a multitude of smaller problems. While we are actively working on fixing these with a future software , we don’t have an ETA on when these will be fixed.
+
+- Step and sleep tracking metrics are not accurate for some people
+- Accelerometer sometimes stops working
+- Touch screen sometimes stops working or registers touches in wrong location
+
+It would be tough to list here the long-tail of software issues we’ve had reported. But please note that while we don’t reply to everyone, we do read every single report and look for patterns and clues that help us fix many issues with each software update (see the changelog for PebbleOS and Pebble mobile app).
+
+**Hardware Issues**
+
+You’ve all demonstrated incredible patience waiting for your PT2 to ship. You’re excited to try the first brand new Pebble in the last 10 years. That’s why we understand how painful and difficult it could be if you unbox your brand new watch and discover manufacturing flaw, or use it for a few weeks and find the battery is dying too quickly or accidentally crack the glass. It sucks!
+
+We feel your pain, even more than you can possibly imagine. That’s why everyone who has reported a hardware issue to our support team has received a free replacement (with free worldwide shipping) regardless of whether their device is under warranty or not.
+
+To date, we’ve replaced 330 PT2s (out of 17.82 million hours of usage from 19,000+ watches in the field).
+
+Mass producing a consumer electronic product is labour intensive. Making stuff is still a very human-centric process. We make mistakes. A worker may not assemble a part correctly. A test may be accidentally skipped. The test result could be read incorrectly. Procedures can be put in place to minimize mistakes, but the cost will rise. As with all of hardware product development - it’s a tradeoff 🤷.
+
+The most frequent hardware issue we’re seeing is very high power consumption (less than ~3 day battery life). We’ve taken apart some units and found a variety of issues. To combat this, we’ve implemented more stringent power consumption testing on the assembly line. If you encounter this issue (regardless of your warranty eligibility), please send us a bug report in the Pebble app and we can help you out!
+
+Next most frequent are problems with the touch panel. At first, we thought this could be a hardware problem and replaced around 70 watches. After reviewing the units with our factory, we now believe this could be a software bug. We’re working to fix these issues with a software update - if we can’t, we’ll replace the affected watches (regardless of your warranty eligibility).
+
+Next up is the front glass cracking. We’ve had 51 reports so far, and we’ve sent a free replacement to each person affected. If your glass has cracked, send us a video (preferably, picture is ok) in a bug report in the Pebble app. During the lead up to mass production, we performed extensive environmental testing - including drop testing, tumble testing, button press, strap stretch and bend, thermal cycling and many other tests. All test results showed normal durability compared to similar smartwatches. But if your watch glass cracks, do you care what the factory test results were? Or that this has happened to just 0.25% of all PT2s - or once every 30+ years of usage? Of course not - your watch just broke. That’s why we will continue replacing reasonable reports of glass cracking for free as long as we can. At some point, we will shift to offering a replacement at a highly discounted amount. We are also looking into sourcing extra LCM modules (the entire front assembly - glass, touch panel, display, metal top cover and backlight) and making them available for folks who choose to fix their watch themselves.
+
+The final big category of hardware issue are reports of button problems (32 so far). In some cases, a small interior clip is improperly assembled, causing the button to pop off. We’ve addressed this issue with changes to the production line process and hope that it becomes much less frequent as watches assembled after the change start making their way out into the world. If you encounter this issue (regardless of your warranty eligibility), please send us a bug report in the Pebble app and we can help you out!
+
+Then we’ve had a long tail of smaller issues that I’m moderately embarrassed by, like a report of the watch missing screws on the bottom, or the front falling off. I guess these things do happen!
+
+
+*My current favourite watchface -* *Chronology II* *by Nicholas Jitkoff*
+
+I posted a mini-update on Pebble Round 2 in June - we weren’t able to start mass production in May because of a cosmetic problem with the stainless steel bottom case (an extra indentation made by the CNC milling machine). Since then the factory has received a new version of the bottom case and things are looking much better! In parallel, we’ve been running extensive environmental testing (including drop testing).
+
+At the beginning of July, we shipped out more Pebble Round 2 watches to lucky folks who signed up for the beta test. Thanks for your help finding and testing fixes for bugs in PebbleOS!
+
+Our plan (as of today July 14 - subject to change) is to start mass producing Round 2 watches during last week of July. We’ll start ramping up production slowly and carefully. Roughly 14,000 people have pre-ordered Round 2. It will take us about 2 months to build all pre-ordered watches. We expect to finish shipping out all pre-ordered Round 2 watches by the end of September.
+
+If you preordered Round 2 on rePebble.com/watch, we’ll send you an email roughly 2 weeks before your watch is ready to ship asking you to confirm your address, add optional accessories to your order and pay any additional taxes due. If you haven’t already selected your watch colour, please do so on orders.rePebble.com.
+
+Each Round 2 pre-order includes a silicone watch strap and charger. We’ve also created beautiful custom leather straps for PR2 ($20-30), including brown or black soft leather straps that feel very similar to the straps we made for the original Pebble Time Round.
+
+
+Since our last update, we expanded our beta test and learned a lot from the hundreds of willing test subjects. Thank you for your service and bug reports!
+
+Index 01 is now officially in mass production! We’ve assembled several thousand rings so far, and have gradually begun shipping them out. Schedule has slipped slightly from our last estimate (early August), we’re now aiming to ship out nearly all pre-orders by the end of August, except for a few unlucky size/color variants that will ship in September.
+
+We’ve received reports from testers that Index 01 may feel every so slightly smaller than the ring sizers. Please take the time now to recheck your ring size with the ring sizer kit. If the ring sizer feels tight on your finger, is hard to get on/off, or if you cannot easily clench your hand with the sizer on, **please change your size to the next larger size.** When in doubt, order a larger size. You can always adjust a larger Index 01 to feel smaller with a foam adhesive or clip but you can’t make it larger!
+
+If you preordered Index 01 on rePebble.com/index, we’ll send you an email roughly 2 weeks before your ring is ready to ship asking you to confirm your address and pay any additional taxes due. If you haven’t already selected your Index 01 size and colour, please do so on orders.rePebble.com.
+
+Index 01 has changed my life. There’s no way I could go back to a world without external memory for my brain. And this is just the beginning, Index 01 software is improving every single day. I excited to hear what you think of it!

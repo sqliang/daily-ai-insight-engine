@@ -119,48 +119,49 @@ manifest_dates:
 - '2026-07-14'
 - '2026-07-15'
 source_type: community_discussion
-tldr: GitHub 上的 awesome-llm-apps 仓库收录了 100 多个开源 AI 智能体、智能体技能和 RAG 应用模板，基于 Apache-2.0
-  许可，支持 Claude、Gemini、GPT、DeepSeek、Llama、Qwen 等多种大语言模型，用户可自由克隆、部署和商业化使用。
-objective_summary: Shubhamsaboo 在 GitHub 上维护了 awesome-llm-apps 开源项目，收录了 100 多个经过端到端测试的
-  AI 智能体、技能组件和 RAG 应用模板。该项目采用 Apache-2.0 开源协议，支持 Claude、Gemini、GPT、DeepSeek、Llama、Qwen
-  等多种大语言模型。项目按功能分为智能体技能、单文件智能体、生产级智能体、多智能体团队、语音智能体、RAG 管道、记忆系统、生成式 UI 等多个类别，并提供通过
-  npx skills add 一键安装到编码助手的技能组件。项目模板每周更新，并配有 Unwind AI 的逐步教程。
+tldr: GitHub 仓库 Shubhamsaboo/awesome-llm-apps 收录了 100 多个开源的 AI Agent、技能组件和 RAG 应用模板，采用
+  Apache-2.0 许可，支持 Claude、Gemini、GPT、DeepSeek、Llama、Qwen 等多种模型。项目涵盖单文件 Agent、生产级多工具
+  Agent、定时后台 Agent、多 Agent 协作团队、语音交互、生成式 UI、游戏 Agent、MCP 集成、RAG 检索管道、记忆持久化、Token
+objective_summary: Shubhamsaboo 于 GitHub 上发布了 awesome-llm-apps 开源仓库，包含 100 多个经端到端测试的
+  AI Agent 和 RAG 应用模板。该项目采用 Apache-2.0 许可证，允许用户自由克隆、部署和商业化。仓库按功能划分为 Agent Skills（可直接注入编码
+  Agent 的技能）、单文件 Agent、生产级 Agent、后台定时 Agent、多 Agent 协作团队、语音 Agent、生成式 UI Agent、游戏
+  Agent、MCP 集成 Agent、RAG 检索管道、带记忆的聊天机器人、数据源 Chat 接口、Token 优化方案以及模型微调配方等类别，每个子项目均为独立可运行模板。项目还附带了
+  Unwind AI 平台的分步教程和每周更新的新模板。
 event_type: framework_tools
 epistemic_status: verified_fact
 entities:
   companies:
-  - OpenAI
-  - Anthropic
-  - Google
-  - DeepSeek
-  - Meta
-  - Alibaba
-  - Cohere
   - Unwind AI
-  - CrewAI
   technologies:
-  - LLM
   - RAG
   - MCP
-  - ADK
-  - LoRA
-  - CRAG
-  - Multi-Agent
-  - Generative UI
-  - Agentic RAG
-  - Voice RAG
-  - Knowledge Graph
   - LangGraph
+  - CrewAI
+  - AG2
+  - Google ADK
+  - OpenAI Agents SDK
   - Streamlit
+  - Gemini
+  - DeepSeek R1
+  - Qwen
+  - Llama
+  - Claude
+  - GPT
+  - Firecrawl
+  - Yahoo Finance
+  - Qdrant
+  - Cohere
+  - EvoAgentX
   key_people:
   - Shubhamsaboo
 key_logic_flow:
-- awesome-llm-apps 是一个由 Shubhamsaboo 维护的 GitHub 开源项目，收录了 100 多个可运行的 AI 智能体模板。
-- 项目采用 Apache-2.0 开源协议，允许用户自由克隆、部署和商业化使用，无需任何使用限制。
-- 项目支持 Claude、Gemini、GPT、DeepSeek、Llama、Qwen 等多种大语言模型，覆盖多个主流 AI 模型提供商。
-- 项目提供通过 npx skills add 命令一键安装智能体技能到编码助手（如 Claude Code、Cursor）的能力，降低使用门槛。
-- 项目按技术复杂度分为智能体技能、单文件智能体、生产级智能体、多智能体团队、语音智能体、RAG 管道、记忆系统、生成式 UI 等多个层级，覆盖从入门到生产的全场景。
-- 项目包含从基础 RAG 链到多智能体协作系统的完整示例，每周更新新模板，并配有 Unwind AI 的逐步教程作为学习资源。
+- Shubhamsaboo/awesome-llm-apps 是一个收录了 100 多个开源 AI Agent 和 RAG 应用的 GitHub 仓库，所有模板采用
+  Apache-2.0 许可证可自由使用和商业化。
+- 该仓库支持通过 npx skills add 命令将 Agent Skills 直接注入 Claude Code、Codex、Cursor 等编码 Agent
+  中，每个技能经过安全和评估 CI 门控。
+- 仓库包含单文件 Agent（如旅行规划、医疗影像分析、音乐生成等），只需 API Key 即可运行，适合快速上手。
+- 仓库还提供生产级 Agent（如欺诈调查、深度研究、投资分析、系统架构评审等）以及多 Agent 协作团队（如竞争情报、法律研究、招聘流程等）。
+- 技术栈覆盖 RAG 检索管道、MCP 模型上下文协议集成、生成式 UI 渲染、语音对话、Token 优化和 Gemma/Llama 模型微调配方等多个 AI 开发领域。
 specialized_tags:
   github:
     projectName: Shubhamsaboo/awesome-llm-apps
@@ -193,6 +194,66 @@ specialized_tags:
       - multi-modal
       - memory-management
 extract_result: success
+object_mentions:
+- object_type: project
+  name: Shubhamsaboo/awesome-llm-apps
+  canonical_name: Shubhamsaboo/awesome-llm-apps
+  url: https://github.com/Shubhamsaboo/awesome-llm-apps
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 该仓库收录了 100 多个开源的 AI Agent、Agent Skills 和 RAG 应用，全部经过端到端测试并采用 Apache-2.0 许可。
+  - 项目支持通过 npx skills add 命令将技能注入编码 Agent，也可直接 git clone 后运行单文件模板。
+  - 仓库按功能划分为 Agent Skills、单文件 Agent、生产级 Agent、多 Agent 团队、语音 Agent 等十余个类别。
+  article_id: fae31da6c227cfde
+- object_type: project
+  name: Agent Skills - Project Graveyard
+  canonical_name: Shubhamsaboo/awesome-llm-apps/tree/main/agent_skills/project-graveyard
+  url: https://github.com/Shubhamsaboo/awesome-llm-apps/tree/main/agent_skills/project-graveyard
+  confidence: medium
+  article_role: primary_subject
+  evidence_snippets:
+  - Project Graveyard 技能可以找到用户所有废弃的业余项目并分析每个项目失败的原因。
+  - 该技能可通过 npx skills add 命令一键安装到编码 Agent 中使用。
+  article_id: fae31da6c227cfde
+- object_type: project
+  name: AI Travel Agent
+  canonical_name: Shubhamsaboo/awesome-llm-apps/starter_ai_agents/ai_travel_agent
+  url: https://github.com/Shubhamsaboo/awesome-llm-apps/tree/main/starter_ai_agents/ai_travel_agent
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - AI Travel Agent 是一个单文件 Agent，可以为用户生成个性化的逐日旅行行程。
+  - 该项目可通过 git clone 后执行 pip install 和 streamlit run 在 30 秒内快速启动。
+  article_id: fae31da6c227cfde
+- object_type: project
+  name: AI Deep Research Agent
+  canonical_name: Shubhamsaboo/awesome-llm-apps/ai_deep_research_agent
+  url: https://github.com/Shubhamsaboo/awesome-llm-apps
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - AI Deep Research Agent 使用 OpenAI Agents SDK 和 Firecrawl 进行全面的网络研究。
+  - 该 Agent 的每次工具调用都会渲染为实时工作区卡片，属于生成式 UI 类别。
+  article_id: fae31da6c227cfde
+- object_type: project
+  name: Openwork - Open Browser Automation Agent
+  canonical_name: Shubhamsaboo/awesome-llm-apps/openwork
+  url: https://github.com/Shubhamsaboo/awesome-llm-apps
+  confidence: low
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Openwork 是一个开源的浏览器自动化 Agent，能够操作真实浏览器执行任务。
+  article_id: fae31da6c227cfde
+- object_type: project
+  name: Agentic RAG with Embedding Gemma
+  canonical_name: Shubhamsaboo/awesome-llm-apps/agentic_rag
+  url: https://github.com/Shubhamsaboo/awesome-llm-apps
+  confidence: low
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 该模板实现了完全本地的 Agentic RAG 系统，使用 EmbeddingGemma 和 Llama 3.2 进行检索增强生成。
+  article_id: fae31da6c227cfde
 impact_score:
   score: 3.5
   reason: 该仓库汇集了100+开源AI agent模板和技能包，为开发者提供了实用的参考资源和可复用组件，降低了AI应用开发门槛。其创新点在于'npx skills
@@ -242,9 +303,104 @@ confidence:
   compound: medium
   hype: medium
 actionable_insight: deep_dive
+object_insights:
+- object_type: project
+  name: Shubhamsaboo/awesome-llm-apps
+  canonical_name: Shubhamsaboo/awesome-llm-apps
+  url: https://github.com/Shubhamsaboo/awesome-llm-apps
+  positioning: 一个收录了 100 多个开源 AI Agent、Agent Skills 和 RAG 应用模板的 GitHub 仓库，采用 Apache-2.0
+    许可，支持 Claude、Gemini、GPT 等多种大语言模型。
+  technical_signal: 仓库按单文件 Agent、生产级 Agent、多 Agent 协作团队、MCP 集成、RAG 检索管道等十余个类别组织，每个模板均可独立运行。
+  adoption_signal: 项目支持通过 npx skills add 命令将技能注入编码 Agent 工作流，也支持直接 git clone 后快速运行单文件模板。
+  ecosystem_relevance: 兼容多种主流大模型，涵盖 MCP 协议集成、生成式 UI 渲染、语音对话等当前 AI Agent 社区的热点技术方向。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: 该仓库以极低的上手门槛汇集了从单文件原型到生产级多 Agent 系统的完整模板生态，持续追踪其增长和社区采纳情况可以观察 AI Agent
+    开发范式从手动搭建向模板化复用的演进趋势。
+  risk_notes:
+  - 模板质量取决于个人维护者的持续投入，长期可持续性存在不确定性。
+  - 部分 Agent 依赖第三方 API 和外部服务，功能稳定性受上游服务变动影响。
+  score: 7.0
+  article_ids:
+  - fae31da6c227cfde
+  evidence_snippets:
+  - 该仓库收录了 100 多个开源的 AI Agent、Agent Skills 和 RAG 应用，全部经过端到端测试并采用 Apache-2.0 许可。
+  - 项目支持通过 npx skills add 命令将技能注入编码 Agent，也可直接 git clone 后运行单文件模板。
+  - 仓库按功能划分为 Agent Skills、单文件 Agent、生产级 Agent、多 Agent 团队、语音 Agent 等十余个类别。
+- object_type: project
+  name: Agent Skills - Project Graveyard
+  canonical_name: Shubhamsaboo/awesome-llm-apps/tree/main/agent_skills/project-graveyard
+  url: https://github.com/Shubhamsaboo/awesome-llm-apps/tree/main/agent_skills/project-graveyard
+  positioning: 一个可一键注入编码 Agent 使用的技能组件，能够扫描用户所有废弃的业余项目并逐一分析每个项目失败的原因。
+  technical_signal: 技能可通过 npx skills add 命令安装到 Claude Code、Codex、Cursor 等编码 Agent
+    中，经过安全和评估 CI 门控后使用。
+  adoption_signal: 作为 awesome-llm-apps 仓库中 Agent Skills 类别的代表性示例，展示了一键扩展编码 Agent 能力的标准化分发模式。
+  ecosystem_relevance: 体现了编码 Agent 生态中"技能市场"的发展趋势，通过轻量级技能注入机制扩展 Agent 能力边界，无需修改底层工具链。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: Project Graveyard 作为 Agent Skills 分发模式的典型代表，展示了如何通过标准化技能注入大幅提升编码 Agent
+    实用性的路径，值得关注这一扩展模式的推广效果和社区接受度。
+  risk_notes:
+  - 技能功能执行依赖于宿主编码 Agent 的安全沙箱和权限模型。
+  - 作为单人维护项目的一个子组件，长期兼容性和更新节奏不确定。
+  score: 5.0
+  article_ids:
+  - fae31da6c227cfde
+  evidence_snippets:
+  - Project Graveyard 技能可以找到用户所有废弃的业余项目并分析每个项目失败的原因。
+  - 该技能可通过 npx skills add 命令一键安装到编码 Agent 中使用。
+- object_type: project
+  name: AI Travel Agent
+  canonical_name: Shubhamsaboo/awesome-llm-apps/starter_ai_agents/ai_travel_agent
+  url: https://github.com/Shubhamsaboo/awesome-llm-apps/tree/main/starter_ai_agents/ai_travel_agent
+  positioning: 一款单文件架构的 AI 旅行规划 Agent，可根据用户偏好生成个性化的逐日旅行行程，通过简单命令即可在 30 秒内快速启动。
+  technical_signal: 采用单文件架构设计，通过 git clone 后执行 pip install 和 streamlit run 两步命令即可启动交互式
+    Streamlit 界面。
+  adoption_signal: 作为仓库中入门级单文件 Agent 的典型示例，展示了最低配置要求下的 AI 应用快速部署范式。
+  ecosystem_relevance: 体现了 AI Agent 在消费端旅行规划场景的低门槛应用趋势，配合 Streamlit 工具链大幅降低开发者的上手成本。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: AI Travel Agent 作为单文件 Agent 模式的典型代表，展示了极低上手门槛下 AI 应用的可能性，持续关注其迭代方向有助于观察
+    AI Agent 开发民主化和模板化的发展节奏。
+  risk_notes:
+  - 依赖第三方 API Key，实际旅行信息的准确性和时效性受限于底层模型能力。
+  - 单文件架构在功能扩展性和模块化维护方面存在天然局限。
+  score: 4.0
+  article_ids:
+  - fae31da6c227cfde
+  evidence_snippets:
+  - AI Travel Agent 是一个单文件 Agent，可以为用户生成个性化的逐日旅行行程。
+  - 该项目可通过 git clone 后执行 pip install 和 streamlit run 在 30 秒内快速启动。
+- object_type: project
+  name: AI Deep Research Agent
+  canonical_name: Shubhamsaboo/awesome-llm-apps/ai_deep_research_agent
+  url: https://github.com/Shubhamsaboo/awesome-llm-apps
+  positioning: 一款使用 OpenAI Agents SDK 和 Firecrawl 构建的生产级网络深度研究 Agent，每次工具调用都会渲染为实时工作区卡片。
+  technical_signal: 基于 OpenAI Agents SDK 和 Firecrawl 搜索引擎构建，采用生成式 UI 机制将每次工具调用过程实时渲染为交互式工作区卡片。
+  adoption_signal: 作为仓库中生产级 Agent 类别的代表，展示了 Agent 工具调用可视化和透明化协作的产品化方向。
+  ecosystem_relevance: 深度研究（Deep Research）是当前 AI Agent 领域的热门赛道，该项目顺应社区趋势并采用最新 SDK
+    和搜索工具栈。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: 该 Agent 展示了生产级 AI Agent 中工具调用可视化与实时工作区渲染的重要交互模式，反映了 Agent 产品化从黑盒执行向透明协作方向转变的趋势，值得持续关注。
+  risk_notes:
+  - 功能实现严重依赖 Firecrawl 和 OpenAI SDK 两个外部服务，存在供应商锁定风险。
+  - 研究结果的准确性和深度受限于底层搜索引擎覆盖范围和模型推理能力。
+  score: 5.0
+  article_ids:
+  - fae31da6c227cfde
+  evidence_snippets:
+  - AI Deep Research Agent 使用 OpenAI Agents SDK 和 Firecrawl 进行全面的网络研究。
+  - 该 Agent 的每次工具调用都会渲染为实时工作区卡片，属于生成式 UI 类别。
 ---
-
-
 
 **100+ open-source AI agents, agent skills, and RAG apps. Hand-built, tested end-to-end, Apache-2.0.**
 

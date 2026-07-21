@@ -14,27 +14,28 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: ad2788bfe4edda0c
 source_type: community_discussion
-tldr: 美国救护车费用高昂的根本原因是1965年Medicare按次付费制度未匹配待命成本结构
-objective_summary: 2023年旧金山一名叫Jagdish Whitten的25岁男子因车祸被救护车转运6英里，收到12,873美元的账单，其中基础费率就占11,670美元。2024年民调显示23%的美国人因费用问题放弃叫救护车。2020年美国国会禁止全医疗系统的意外账单，但地面救护车是唯一例外。
+tldr: 本文通过Jagdish Whitten收到12,873美元救护车账单的真实案例，剖析美国救护车费用高昂的结构性原因：1965年Medicare将救护车按次计费的决定与救护车服务'待命成本占绝大部分'的经济本质不匹配，导致账单高企且无法预测，而2020年反意外账单法案偏偏豁免了地面救护车。
+objective_summary: 2023年7月，旧金山居民Jagdish Whitten遭遇车祸后被救护车转运6英里，收到12,873美元的账单（基础费率11,670美元），保险报销后仍自付约2,900美元。文章指出，美国每年约300万私人医保参保者使用紧急救护车，约半数收到网络外意外账单，比例居全医疗系统之首。2020年国会禁止全医疗系统意外账单时，地面救护车被明确豁免。根本矛盾在于：1965年Medicare将救护车作为按次计费的医疗服务定价，但现代救护车服务的绝大部分成本来自全天候待命而非实际运输次数。
 event_type: policy_and_safety
 epistemic_status: verified_fact
 entities:
   companies:
-  - American Medical Response
+  - American Medical Response (AMR)
   - San Francisco Fire Department
-  - Johns Hopkins
-  technologies:
-  - CPR
+  - Medicare
+  - Medicaid
+  technologies: []
   key_people:
   - Jagdish Whitten
 key_logic_flow:
-- 美国救护车费用极其昂贵，约一半的私保患者每次紧急叫车都会收到意外账单（surprise bill），2024年民调显示23%的美国人曾因费用问题放弃叫救护车。
-- 2020年国会通过《无意外账单法案》禁止全医疗系统的意外账单，但地面救护车是唯一被豁免的领域。
-- 1965年Medicare将救护车运输按单次运输收费纳入报销体系，商业保险公司随后效仿，锁定了"按次付费"模式。
-- 救护车服务的经济本质是"救援期权"（option on rescue），大部分成本用于全天候待命（站场、车辆、轮班人员），而非单次运输本身，但付费方式从未反映这一成本结构。
-- 20世纪初救护车由殡仪馆用灵车兼营，成本极低且作为葬礼业务的引流手段，这使得1960年代的按次付费在当时是合理的。
-- 1960年代Johns Hopkins开发CPR技术后急救医学成本急剧上升，但1965年锁定的按次付费制度未能随之调整，造成制度性错配。
+- 2023年7月旧金山居民Jagdish Whitten被救护车转运6英里后收到12,873美元账单，基础费率高达11,670美元，远超其他医疗费用。
+- 美国每年约300万私人医保参保者使用紧急救护车，其中约一半收到网络外意外账单，比例在全医疗系统中最高。
+- 2020年美国国会通过《无意外法案》禁止全医疗系统意外账单，但地面救护车被明确豁免，成为该法案的唯一例外。
+- 救护车服务的经济本质类似'期权卖方'——大部分成本来自全天候待命（站点、车辆、人员），而非实际运输过程本身。
+- 1965年Medicare将救护车运输列为按次计费的医疗服务项目，商业保险公司随后效仿，这一定价模式延续至今。
+- 20世纪大部分时间里美国救护车由殡仪馆运营，作为殡葬服务的引流手段，费用低廉甚至免费，与今天成本结构截然不同。
 extract_result: success
+object_mentions: []
 ---
 
 # Why American ambulance rides are so expensive

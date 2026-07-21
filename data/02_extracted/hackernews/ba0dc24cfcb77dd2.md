@@ -13,10 +13,10 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: ba0dc24cfcb77dd2
 source_type: community_discussion
-tldr: Apple 起诉 OpenAI，指控前员工窃取商业机密以助 OpenAI 硬件业务
-objective_summary: Apple 于 2026 年 7 月 10 日向美国加州北区联邦地区法院起诉 OpenAI，指控前产品设计副总裁 Tang Tan
-  和前高级工程师 Chang Liu 窃取商业机密用于 OpenAI 的硬件业务。Apple 称 OpenAI 利用内部情报获取苹果未公开的硬件设计信息，
-event_type: policy_and_safety
+tldr: 苹果起诉OpenAI，指控其前员工为OpenAI窃取商业机密，涉及前产品设计副总裁Tang Tan和前工程师Chang Liu，苹果寻求禁令和损害赔偿。
+objective_summary: 2026年7月10日，苹果向美国加州北区联邦法院提起诉讼，指控OpenAI通过挖角苹果员工系统性地窃取商业机密。前产品设计副总裁Tang
+  Tan被指控在面试中利用苹果内部机密信息获取更多情报，并指示在职苹果员工携带实际硬件组件参加面试。前高级系统电气工程师Chang Liu被指控在离职后利用安全漏洞下载超千页机密工程文件。OpenAI还被指控通过苹果的受信任合作伙伴执行苹果专有金属表面处理工艺。苹果称已于2026年2月向OpenAI提出关切但未获回应，目前超过400名前苹果员工在OpenAI工作。
+event_type: application_landing
 epistemic_status: verified_fact
 entities:
   companies:
@@ -25,19 +25,49 @@ entities:
   - io Products
   technologies: []
   key_people:
-  - Tang Tan
   - Chang Liu
+  - Tang Tan
   - Jony Ive
   - Evans Hankey
   - Scott Cannon
 key_logic_flow:
-- Apple 于 2026 年 7 月 10 日向美国加州北区联邦地区法院提起诉讼，指控 OpenAI、前产品设计副总裁 Tang Tan 和前高级工程师 Chang
-  Liu 窃取商业机密。
-- Apple 声称 Tan 在面试苹果员工时利用内部项目代号等机密信息套取情报，并直接要求候选人携带苹果硬件零部件和原型进行「展示」。
-- Apple 指控 Liu 离职后利用安全漏洞下载超过一千页的机密工程文件，未归还公司配发笔记本电脑，还指导其他被招募者准备窃密。
-- Apple 称 OpenAI 通过一家受信任的苹果合作伙伴非法实施苹果专有的金属表面处理工艺，并向另一家长期供应商进行针对性询问。
-- Apple 表示早在 2026 年 2 月就向 OpenAI 提出关切但未获回应，目前已有超过 400 名前苹果员工在 OpenAI 工作。
+- 苹果向美国加州北区联邦法院提起诉讼，指控OpenAI系统性窃取苹果商业机密，寻求禁令和损害赔偿。
+- 苹果前产品设计副总裁Tang Tan被指控在OpenAI面试中使用苹果内部项目代号获取更多机密信息，并指示候选人在职员工携带苹果实际硬件组件进行演示。
+- 苹果前高级系统电气工程师Chang Liu被指控在离职后利用安全漏洞下载超千页机密工程文件，且未归还苹果发放的笔记本电脑。
+- OpenAI被指控通过一家受苹果信任的合作伙伴执行苹果专有的金属表面处理工艺，并误导该合作伙伴以为获得了苹果许可。
+- 苹果于2026年2月首次向OpenAI提出关切，但OpenAI从未回应，苹果称已发现的违规行为只是冰山一角。
+- 目前共有超过400名前苹果员工在OpenAI工作，部分人在离职前采取了规避苹果安全流程的步骤。
 extract_result: success
+object_mentions:
+- object_type: company
+  name: io Products
+  canonical_name: io Products
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 苹果的诉讼将OpenAI和io Products一同列为被告。
+  - OpenAI以65亿美元收购了Jony Ive创立的初创公司io，交易包含超过50名工程师和开发人员。
+  - OpenAI原公告称Jony Ive与Scott Cannon、Evans Hankey和Tang Tan共同创立了io。
+  article_id: ba0dc24cfcb77dd2
+- object_type: product
+  name: OpenAI smartphone
+  canonical_name: OpenAI smartphone
+  url: null
+  confidence: low
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 天风国际分析师郭明錤报道称OpenAI正在开发自有智能手机，可能于2028年发布。
+  article_id: ba0dc24cfcb77dd2
+- object_type: product
+  name: OpenAI smart speaker
+  canonical_name: OpenAI smart speaker
+  url: null
+  confidence: low
+  article_role: mentioned_reference
+  evidence_snippets:
+  - The Information报道了OpenAI正在开发类似HomePod风格的智能音箱。
+  article_id: ba0dc24cfcb77dd2
 ---
 
 Apple has filed a lawsuit against OpenAI today, accusing the company of trade secret theft. Specifically, Apple alleges that its former employees have stolen trade secrets “for the benefit of OpenAI.”

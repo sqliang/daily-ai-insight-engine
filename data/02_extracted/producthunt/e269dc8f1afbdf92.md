@@ -15,21 +15,23 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: e269dc8f1afbdf92
 source_type: community_discussion
-tldr: Pennen 是一款每日一页手写日记应用，主打无信息流、无 AI 的纯净体验。
-objective_summary: Pennen 于 2026 年 7 月 3 日在 Product Hunt 上线，由 Ishaan Rawat 开发，获得 122
-  票支持和 112 个关注。产品被归类为健康与健身、冥想、苹果生态应用，核心定位是每日一页的手写日记，刻意排除了信息流和 AI 功能。
+tldr: Pennen 是一款极简手写应用，核心理念是每天写一页安静的手写内容，无信息流、无 AI 干扰。该产品在 Product Hunt 上线 10 天获得
+  122 个点赞和 112 名关注者，归类于健康与健身、冥想和 Apple 平台。
+objective_summary: Pennen 是一款于 2026 年 7 月 3 日在 Product Hunt 发布的产品，定位于健康与健身、冥想和 Apple
+  平台。该产品提倡每日一页手写内容，明确排除信息流和 AI 功能。发布方为 Ishaan Rawat，上线 10 天后获得 122 个点赞和 112 名关注者。
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
-  companies: []
+  companies:
+  - Product Hunt
   technologies: []
   key_people:
   - Ishaan Rawat
 key_logic_flow:
-- Pennen 是一款手写日记应用，于 2026 年 7 月 3 日上线 Product Hunt。
-- 产品核心理念为「每日一页手写」，明确强调无信息流、无 AI 功能。
-- 产品被归类为健康与健身、冥想、苹果生态三个标签类别。
-- Pennen 由独立开发者 Ishaan Rawat 提交发布，获得 122 个 Product Hunt 支持和 112 个关注者。
+- Pennen 是一款手写产品，核心设计理念是每天只写一页手写内容，刻意排除信息流和 AI 功能。
+- 该产品在 Product Hunt 平台上线，标签为健康与健身、冥想和 Apple 平台。
+- 产品由 Ishaan Rawat 提交发布，上线 10 天后获得 122 个点赞数。
+- 该产品在社区中获得 112 名关注者关注。
 specialized_tags:
   product:
     productName: Pennen
@@ -43,6 +45,18 @@ specialized_tags:
     - 数字极简主义者
     - 苹果生态用户
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Pennen
+  canonical_name: Pennen
+  url: https://www.producthunt.com/products/pennen
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Pennen 是一款在 Product Hunt 上线的产品，其标语为每天一页安静的手写内容，不含信息流和 AI 功能。
+  - 该产品被归类于健康与健身、冥想和 Apple 平台，由 Ishaan Rawat 提交发布。
+  - 上线 10 天后，Pennen 获得 122 个点赞和 112 名社区关注者。
+  article_id: e269dc8f1afbdf92
 ---
 
 # Pennen

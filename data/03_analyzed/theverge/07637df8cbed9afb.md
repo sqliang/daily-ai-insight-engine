@@ -19,9 +19,11 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 07637df8cbed9afb
 source_type: news_media
-tldr: SpaceXAI的Grok Build工具被曝自动上传用户完整代码库至云端
-objective_summary: 安全研究机构Cereblab发现SpaceXAI的Grok Build CLI工具在用户不知情时将完整代码仓库打包上传至Google
-  Cloud，数据量远超同类工具。问题曝光后SpaceXAI关闭了该功能，Elon Musk承诺删除所有已上传数据。
+tldr: SpaceXAI的Grok Build AI编码工具被发现将用户完整代码仓库上传至Google Cloud存储，包括被指示忽略的文件和已删除的密钥，该功能被曝光后已关闭，Elon
+  Musk声称所有已上传数据将被彻底删除。
+objective_summary: Cereblab于周一发布研究结果，发现SpaceXAI的Grok Build CLI工具将用户完整代码仓库打包并上传至Google
+  Cloud，其数据保留量远超同类工具。SpaceXAI随后在服务器端返回disable_codebase_upload:true标志并关闭上传功能。Elon Musk在X平台回应称所有已上传数据将被彻底删除，同时请求用户允许保留数据以便调试。独立安全研究员Lukasz
+  Olejnik确认此数据保留量已构成过度收集。
 event_type: policy_and_safety
 epistemic_status: verified_fact
 entities:
@@ -35,16 +37,27 @@ entities:
   - CLI
   key_people:
   - Elon Musk
-  - Lukasz Olejnik
+  - Dr. Lukasz Olejnik
 key_logic_flow:
-- Cereblab研究发现SpaceXAI的Grok Build CLI工具会自动打包并上传用户完整代码仓库至Google Cloud，数据保留量远超Claude
-  Code等同类工具。
-- 上传内容包括被明确告知不要打开的文件以及已从Git历史记录中删除的密钥等敏感信息。
-- '问题曝光后SpaceXAI禁用了代码库上传功能，服务器返回disable_codebase_upload: true标志，代码库上传不再触发。'
-- Elon Musk在X平台回应称所有此前上传的数据将被"完全彻底删除"，同时要求用户允许保留数据以"帮助调试问题"。
-- 独立安全研究员Lukasz Olejnik确认此类数据保留属于"过度"行为，可能泄露专有源代码、安全漏洞信息、个人数据和凭证。
-- SpaceXAI最初将/privacy命令定位为解决方案，但Cereblab指出该命令是会话级保留开关，并非修复此问题的控制项。
+- Cereblab发布研究结果，显示SpaceXAI的Grok Build CLI工具会将用户的完整代码仓库打包并上传至Google Cloud存储。
+- 该工具上传的数据包括被明确指示不要打开的文件以及已从版本历史中删除的密钥，数据保留量远超类似工具如Claude Code。
+- SpaceXAI在问题曝光后关闭了该功能，服务器端返回disable_codebase_upload:true标志，代码库上传功能不再触发。
+- Elon Musk在X平台回应称所有已上传数据将被彻底删除，但同时请求用户允许保留数据，称其有助于调试问题。
+- 独立安全研究员Lukasz Olejnik确认此数据保留量属于过度收集，可能泄露专有源代码、安全漏洞信息、个人数据、基础设施详情和凭证。
+- SpaceXAI最初建议用户通过/privacy命令关闭数据保留，但Cereblab指出该命令仅为会话级保留开关，并非真正修复此问题的控制项。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Grok Build
+  canonical_name: SpaceXAI Grok Build
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - SpaceXAI的Grok Build CLI工具被发现将用户完整代码仓库打包并上传至Google Cloud存储，包括被指示不要打开的文件和已从历史记录中删除的密钥。
+  - Cereblab的测试显示，SpaceXAI的服务器在问题曝光后返回disable_codebase_upload:true标志，代码库上传功能已不再触发。
+  - Elon Musk回应称Grok Build之前上传的所有数据将被彻底删除，但他同时请求用户允许SpaceXAI保留数据以用于调试。
+  article_id: 07637df8cbed9afb
 impact_score:
   score: 6.5
   reason: 该事件曝光了AI编程工具在用户不知情下自动上传完整代码库至云端的安全隐患，特别是上传了用户明确排除的文件和已从Git历史中删除的密钥，触及开发者最核心的代码安全红线。虽然SpaceXAI/Grok
@@ -93,6 +106,33 @@ confidence:
   compound: medium
   hype: high
 actionable_insight: deep_dive
+object_insights:
+- object_type: product
+  name: Grok Build
+  canonical_name: SpaceXAI Grok Build
+  url: null
+  positioning: SpaceXAI面向开发者推出的AI编码辅助CLI工具，通过Grok模型提供智能代码生成与调试能力。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users:
+  - AI辅助编码工具的使用开发者
+  - SpaceXAI及Grok生态的技术团队
+  product_signal: Grok Build被曝将用户完整代码仓库打包上传至Google Cloud存储，包括被指示忽略的文件和已从版本历史中删除的密钥。
+  market_signal: 问题曝光后SpaceXAI服务器端关闭了上传功能，Elon Musk回应称所有已上传数据将被彻底删除，但又请求用户允许保留数据用于调试。
+  differentiation: 与Claude Code等同类AI编码工具相比，Grok Build的数据保留量显著更大，引发了更严重的数据安全担忧。
+  watch_reason: SpaceXAI是Elon Musk旗下与OpenAI直接竞争的AI公司，其编程工具的隐私安全实践将直接影响开发者对其AI生态的信任程度，后续数据策略调整与行业监管反应值得持续跟踪。
+  risk_notes:
+  - 将完整代码仓库无差别上传至云存储的做法存在严重的数据泄露和合规风险。
+  - 被指示忽略的文件和已删除的密钥均被上传，表明该工具的数据采集行为缺乏必要的安全边界。
+  - Elon Musk在数据删除问题上的表态前后矛盾，引发外界对SpaceXAI隐私政策可信度的质疑。
+  score: 8.0
+  article_ids:
+  - 07637df8cbed9afb
+  evidence_snippets:
+  - SpaceXAI的Grok Build CLI工具被发现将用户完整代码仓库打包并上传至Google Cloud存储，包括被指示不要打开的文件和已从历史记录中删除的密钥。
+  - Cereblab的测试显示，SpaceXAI的服务器在问题曝光后返回disable_codebase_upload:true标志，代码库上传功能已不再触发。
+  - Elon Musk回应称Grok Build之前上传的所有数据将被彻底删除，但他同时请求用户允许SpaceXAI保留数据以用于调试。
 ---
 
 SpaceXAI’s Grok Build AI coding tool was spotted uploading users’ entire codebases to Google Cloud before it was reported, and the company turned it off. *The Register* reports that Cereblab published findings on Monday showing how the Grok Build CLI was packaging and uploading entire code repositories, “including files it was told not to open and secrets deleted from history,” significantly more data retention than similar tools like Claude Code.

@@ -7,6 +7,9 @@ published: '2026-07-16'
 created: '2026-07-16'
 manifest_dates:
 - '2026-07-16'
+- '2026-07-17'
+- '2026-07-18'
+- '2026-07-19'
 description: 'Title: River: AI account executives that demo and close B2B deals |
   Product Hunt'
 tags:

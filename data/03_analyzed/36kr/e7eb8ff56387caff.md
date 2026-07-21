@@ -14,27 +14,34 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: e7eb8ff56387caff
 source_type: news_media
-tldr: Xmax AI发布通用实时交互AI视频模型X2.0并开放API
-objective_summary: Xmax AI于今日正式发布新一代通用实时交互AI视频模型Xmax X2.0，同步开放API及产业合作接入。该模型升级了实时重渲能力，支持CharX实时换人、ClothX实时换装、VibeX实时换风格及统一交互架构等功能。
+tldr: Xmax AI 发布通用实时交互AI视频模型 X2.0，支持实时换人、换装、换风格，并开放 API 和产业合作接入。
+objective_summary: 2026年7月17日，Xmax AI 正式发布新一代通用实时交互AI视频模型 Xmax X2.0，同时同步开放 API 及产业合作接入。该模型升级了实时重渲能力，实现了
+  CharX 实时换人、ClothX 实时换装、VibeX 实时换风格等功能。在交互层面，X2.0 的统一交互架构将仅能理解 Prompt 的模型升级为能理解摄像头、视频流与手势行为的全能模型。
 event_type: application_landing
 epistemic_status: pr_statement
 entities:
   companies:
   - Xmax AI
-  technologies:
-  - Xmax X2.0
-  - CharX
-  - ClothX
-  - VibeX
+  technologies: []
   key_people: []
 key_logic_flow:
-- Xmax AI今日正式发布新一代通用实时交互AI视频模型Xmax X2.0
-- X2.0同步开放了API接口及产业合作接入渠道
-- 模型升级了实时重渲能力，实现了CharX实时换人功能
-- 模型具备ClothX实时换装功能，支持服装的实时替换
-- 模型具备VibeX实时换风格功能，支持画面风格的实时切换
-- X2.0采用统一交互架构，将仅理解Prompt的模型升级为能理解摄像头、视频流与手势行为的全能模型
+- Xmax AI 在2026年7月17日正式发布新一代通用实时交互AI视频模型 Xmax X2.0。
+- Xmax X2.0 升级了实时重渲能力，新增 CharX 实时换人、ClothX 实时换装和 VibeX 实时换风格三项功能。
+- X2.0 采用了统一交互架构，将仅能理解文本 Prompt 的模型升级为能理解摄像头、视频流与手势行为的多模态模型。
+- Xmax 同步开放了 X2.0 的 API 及产业合作接入通道。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Xmax X2.0
+  canonical_name: Xmax X2.0
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Xmax AI 正式发布新一代通用实时交互AI视频模型 Xmax X2.0，并同步开放API及产业合作接入。
+  - Xmax X2.0 实时重渲能力升级，实现了CharX实时换人、ClothX实时换装、VibeX实时换风格等多项功能。
+  - Xmax X2.0 统一交互架构把只懂Prompt的模型升级为能理解摄像头、视频流与手势行为的全能模型。
+  article_id: e7eb8ff56387caff
 impact_score:
   score: 5.0
   reason: '该事件是Xmax AI发布实时交互视频模型X2.0，具备实时换人、换装、换风格等能力，属于AI视频生成领域的重要产品发布。然而，信源为PR声明（epistemology:
@@ -85,6 +92,36 @@ confidence:
   compound: medium
   hype: high
 actionable_insight: monitor
+object_insights:
+- object_type: product
+  name: Xmax X2.0
+  canonical_name: Xmax X2.0
+  url: null
+  positioning: Xmax X2.0 是一个通用实时交互AI视频模型，支持实时换人、换装、换风格及多模态交互，定位于视频内容创作与产业应用。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users:
+  - 视频内容创作者
+  - 直播平台
+  - 影视制作公司
+  - 广告营销机构
+  - 虚拟人开发者
+  product_signal: X2.0 实现了CharX实时换人、ClothX实时换装、VibeX实时换风格等功能，统一交互架构可理解摄像头、视频流与手势行为。
+  market_signal: Xmax AI 同步开放了 X2.0 的 API 及产业合作接入通道，表明产品正在积极推动商业化落地。
+  differentiation: X2.0 将仅能理解文本Prompt的模型升级为理解摄像头、视频流与手势行为的全能模型，在实时视频交互领域形成差异化优势。
+  watch_reason: Xmax X2.0 代表了实时AI视频生成领域的重要产品迭代，其多模态交互和实时重渲能力可能重新定义视频内容生产方式，开放API后的产业合作案例值得持续跟踪。
+  risk_notes:
+  - 文章来源为36氪快讯，信息较为简短，缺乏对模型技术架构和训练数据的详细披露。
+  - 实时换人、换装等功能涉及深度伪造伦理风险，可能面临监管合规挑战。
+  - 目前尚未公布具体API定价策略和商业化案例，商业模式成熟度存疑。
+  score: 7.0
+  article_ids:
+  - e7eb8ff56387caff
+  evidence_snippets:
+  - Xmax AI 正式发布新一代通用实时交互AI视频模型 Xmax X2.0，并同步开放API及产业合作接入。
+  - Xmax X2.0 实时重渲能力升级，实现了CharX实时换人、ClothX实时换装、VibeX实时换风格等多项功能。
+  - Xmax X2.0 统一交互架构把只懂Prompt的模型升级为能理解摄像头、视频流与手势行为的全能模型。
 ---
 
 36氪获悉，今日，Xmax AI正式发布新一代通用实时交互AI视频模型Xmax X2.0，并同步开放API及产业合作接入。Xmax X2.0实时重渲能力升级，实现了CharX实时换人、ClothX实时换装、VibeX实时换风格等多项功能。交互层面，Xmax X2.0统一交互架构把只懂Prompt的模型升级为能理解摄像头、视频流与手势行为的全能模型。

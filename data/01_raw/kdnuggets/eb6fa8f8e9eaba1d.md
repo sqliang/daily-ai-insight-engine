@@ -7,6 +7,8 @@ published: '2026-07-15'
 created: '2026-07-16'
 manifest_dates:
 - '2026-07-16'
+- '2026-07-17'
+- '2026-07-18'
 description: Learn a cleaner, more extensible way to dispatch logic in Python.
 tags:
 - clippings

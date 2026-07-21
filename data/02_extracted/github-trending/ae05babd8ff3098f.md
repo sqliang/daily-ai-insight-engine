@@ -186,47 +186,54 @@ id: ae05babd8ff3098f
 manifest_dates:
 - '2026-07-02'
 source_type: community_discussion
-tldr: AI2 开源 olmOCR，基于 7B VLM 将 PDF 转换为 Markdown，基准得分 82.4
-objective_summary: 艾伦人工智能研究所（AI2）发布 olmOCR 工具，基于 7B 参数视觉语言模型将 PDF 及图像文档转换为结构化 Markdown。该工具支持公式、表格、多栏布局等复杂格式，成本低于每百万页
-  200 美元，在自研 olmOCR-Bench 基准上综合得分 82.4。
+tldr: Allen AI 发布了 olmocr 开源工具包，基于 7B 参数视觉语言模型将 PDF 和图像文档转换为干净的 Markdown 文本，支持公式、表格、手写体和多栏布局，每百万页成本低于
+  200 美元。
+objective_summary: Allen Institute for AI (Allen AI) 在 GitHub 上开源了 olmocr 工具包，这是一个基于
+  7B 参数 VLM 的 PDF 与图像文档转文本工具。该工具可将 PDF、PNG、JPEG 文档转换为干净的 Markdown 格式，支持公式、表格、手写体和多栏布局的自然阅读顺序，并自动去除页眉页脚。截至
+  2025 年 10 月已发布 v0.4.0 版本，每百万页转换成本低于 200 美元。同时配套发布了 olmOCR-Bench 基准测试套件，覆盖 7000 多个测试用例和
+  1400 份文档。
 event_type: framework_tools
 epistemic_status: verified_fact
 entities:
   companies:
-  - Allen Institute for AI (AI2)
+  - Allen Institute for AI (Allen AI)
   technologies:
   - VLM
   - OCR
-  - Markdown
+  - vLLM
+  - sglang
+  - FP8
   key_people: []
 key_logic_flow:
-- olmOCR 是 AI2 开发的开源 PDF 转换工具，基于 7B 参数视觉语言模型（VLM），可将 PDF/PNG/JPEG 文档转为结构化 Markdown
-  文本。
-- 该工具支持公式、表格、手写文字、多栏布局等复杂格式，自动去除页眉页脚并保持自然阅读顺序。
-- 自 2025 年 2 月首次发布以来已迭代至 v0.4.0（2025 年 10 月），每版均带来性能提升和 bug 修复。
-- 项目配套发布 olmOCR-Bench 基准，涵盖 7,000+ 测试用例和 1,400+ 文档，v0.4.0 综合得分 82.4，与多家主流 OCR 方案性能相当。
-- 支持本地 GPU（需 ≥12GB 显存）、远程 API、Docker、Beaker 集群及 AWS S3 分布式处理等多种部署方式。
-- 处理成本低于每百万页 200 美元，兼容 Cirrascale、DeepInfra、Parasail 等外部推理提供商。
-specialized_tags:
-  github:
-    projectName: allenai/olmocr
-    projectUrl: https://github.com/allenai/olmocr
-    primaryLanguage: Python
-    licenseType: null
-    domain: ai_ml
-    crossTags:
-    - open-source
-    - document-parsing
-    - pdf-conversion
-    aiDetail:
-      primaryCategories:
-      - multimodal
-      agentSubcategory: []
-      techTags:
-      - VLM
-      - OCR
-      - document-parsing
-      - PDF-conversion
+- Allen AI 发布了 olmocr 工具包，基于 7B 参数视觉语言模型将 PDF 和图像文档转换为干净的 Markdown 纯文本。
+- olmocr 支持公式、表格、手写体和复杂格式排版，能自动去除页眉页脚并保持多栏布局的自然阅读顺序。
+- 该工具转换效率极高，每百万页成本低于 200 美元，支持本地 GPU 推理、远程推理服务器、Docker 和 Beaker 集群等多种部署方式。
+- 截至 2025 年 10 月已迭代至 v0.4.0 版本，通过合成数据和强化学习训练在 olmOCR-Bench 上提升了约 4 个百分点的评分。
+- 配套发布了 olmOCR-Bench 基准测试套件，包含 7000 多个测试用例和 1400 份文档，用于衡量各 OCR 系统的性能表现。
+- olmOCR v0.4.0 在 olmOCR-Bench 整体得分 82.4，在 ArXiv 数学公式、多栏布局等子项上表现优异。
+object_mentions:
+- object_type: project
+  name: allenai/olmocr
+  canonical_name: allenai/olmocr
+  url: https://github.com/allenai/olmocr
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Allen AI 开源的 olmocr 工具包，基于 7B 参数视觉语言模型将 PDF、PNG、JPEG 文档转换为干净的 Markdown 格式。
+  - 支持公式、表格、手写体和复杂排版，自动去除页眉页脚并保持多栏布局的自然阅读顺序。
+  - 转换效率每百万页成本低于 200 美元，支持本地 GPU、远程推理服务器和 Docker 等多种部署方式。
+  article_id: ae05babd8ff3098f
+- object_type: project
+  name: olmOCR-Bench
+  canonical_name: olmOCR-Bench
+  url: null
+  confidence: high
+  article_role: ecosystem_context
+  evidence_snippets:
+  - olmOCR-Bench 是 Allen AI 配套发布的标准基准测试套件，覆盖 7000 多个测试用例和 1400 份文档。
+  - 该基准测试涵盖 ArXiv 论文、数学公式、旧扫描件、表格、多栏布局等多个维度的 OCR 性能评估。
+  - olmOCR v0.4.0 在 olmOCR-Bench 上整体得分为 82.4，在 ArXiv 数学、多栏布局等子项上表现优异。
+  article_id: ae05babd8ff3098f
 extract_result: success
 ---
 

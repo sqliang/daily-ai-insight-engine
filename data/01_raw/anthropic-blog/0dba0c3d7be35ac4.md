@@ -15,6 +15,10 @@ manifest_dates:
 - '2026-07-14'
 - '2026-07-15'
 - '2026-07-16'
+- '2026-07-17'
+- '2026-07-18'
+- '2026-07-19'
+- '2026-07-20'
 ---
 
 # Introducing Claude Design by Anthropic Labs

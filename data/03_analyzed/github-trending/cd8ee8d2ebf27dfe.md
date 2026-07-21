@@ -1191,9 +1191,13 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: cd8ee8d2ebf27dfe
 source_type: community_discussion
-tldr: dcg 是一个高性能钩子，在 AI 编程代理执行前拦截 rm -rf、git reset --hard 等破坏性命令。
-objective_summary: Dicklesworthstone 发布 destructive_command_guard (dcg)，一个用 Rust 编写的
-  AI 代理钩子工具，通过 SIMD 加速模式匹配拦截文件系统、Git、数据库等 50+ 安全包中的破坏性命令，支持 Claude Code、Codex
+tldr: destructive_command_guard（dcg）是一个开源的命令行防护工具，为 AI 编码代理拦截 rm -rf、git reset --hard
+  等破坏性命令。它采用 Rust 编写，支持 Claude Code、Codex CLI、Gemini CLI、GitHub Copilot CLI、Cursor
+  等主流 AI 编码工具，具备 50+ 安全规则包和亚毫秒级延迟。
+objective_summary: Dicklesworthstone 发布了 Rust 编写的 destructive_command_guard（dcg）工具，用于拦截
+  AI 编码代理执行的破坏性命令。该工具源于 Jeffrey Emanuel 的 Python 原型，由 Darin Gordon 完成 Rust 移植，随后 Jeffrey
+  大幅扩展了模块化规则包系统。dcg 通过 SIMD 加速过滤和双正则引擎实现亚毫秒级延迟，支持 50+ 安全规则包覆盖文件系统、Git、数据库、Kubernetes、云平台等场景，并自动检测适配主流
+  AI 编码代理的钩子配置。
 event_type: framework_tools
 epistemic_status: verified_fact
 entities:
@@ -1202,23 +1206,21 @@ entities:
   - OpenAI
   - Google
   - GitHub
+  - Microsoft
   - Cursor
   - xAI
   technologies:
   - SIMD
-  - Rust
   key_people:
   - Jeffrey Emanuel
   - Darin Gordon
 key_logic_flow:
-- dcg 解决了 AI 编码代理偶然执行 git reset --hard、rm -rf ./src 等破坏性命令导致工作丢失的问题。
-- 该项目原为 Jeffrey Emanuel 的 Python 脚本，后由 Darin Gordon 移植为 Rust 版本，再由 Jeffrey 扩展为包含 50+
-  安全包的模块化系统。
-- dcg 使用 SIMD 加速正则过滤实现亚毫秒级延迟，采用三层架构（核心文件系统/Git 包始终开启，系统磁盘包默认开启，其余包需用户手动启用）。
-- 支持 Claude Code、Codex CLI 0.125.0+、Gemini CLI、Copilot CLI、Cursor IDE 等主流 AI 编程工具的钩子集成，自动检测平台并配置。
-- 提供 DCG_BYPASS 环境变量绕过、allow-once 临时放行、永久白名单配置等多种绕过机制，采用故障开放设计确保不会因超时阻塞工作流。
-- 支持 heredoc/内联脚本扫描、智能上下文检测（区分 grep 'rm -rf' 和 rm -rf /）、CI 扫描模式以及 Windows 平台原生 PowerShell/cmd
-  保护。
+- AI 编码代理在操作中偶尔会执行 rm -rf、git reset --hard、DROP TABLE 等破坏性命令，导致用户工作成果丢失。
+- destructive_command_guard（dcg）通过钩子机制在破坏性命令执行前进行拦截，并给出明确的阻断理由和更安全的替代方案。
+- dcg 采用 Rust 编写，利用 SIMD 加速和双正则引擎实现亚毫秒级过滤延迟，支持 Linux、macOS 和 Windows（WSL）平台。
+- dcg 提供 50+ 模块化安全规则包，默认启用核心文件系统和 Git 保护，数据库、Kubernetes、云平台等包需手动启用。
+- 该工具可自动检测 Claude Code、Codex CLI、Gemini CLI、GitHub Copilot CLI、Cursor 等 AI 编码代理，并为不同代理配置差异化的信任级别和规则策略。
+- 用户可通过环境变量 DCG_BYPASS、临时允许码、永久白名单或移除钩子等方式在必要时绕过保护。
 specialized_tags:
   github:
     projectName: Dicklesworthstone/destructive_command_guard
@@ -1240,6 +1242,19 @@ specialized_tags:
       - agent-hook
       - command-guard
 extract_result: success
+object_mentions:
+- object_type: project
+  name: Dicklesworthstone/destructive_command_guard
+  canonical_name: destructive_command_guard
+  url: https://github.com/Dicklesworthstone/destructive_command_guard
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - dcg 是一个采用 Rust 编写的高性能命令行钩子工具，能够在 AI 编码代理执行破坏性命令之前进行拦截并阻断其执行。
+  - 该工具支持 Claude Code、Codex CLI、Gemini CLI、GitHub Copilot CLI、VS Code Copilot Chat
+    以及 Cursor 等主流 AI 编码代理工具，并能自动检测当前代理类型并为其适配相应的规则策略。
+  - dcg 提供 50+ 模块化安全规则包，默认启用核心文件系统和 Git 保护以防止最严重的数据丢失，数据库、Kubernetes 和云平台等其他规则包需手动启用。
+  article_id: cd8ee8d2ebf27dfe
 impact_score:
   score: 5.5
   reason: 该工具精准解决了AI编码代理实际使用中日益突出的痛点——意外执行git reset --hard、rm -rf等破坏性命令导致工作丢失。技术实现扎实（Rust+SIMD加速、50+安全包、智能上下文感知），工程成熟度高（自动检测平台和代理工具、Windows原生支持、CI集成、故障开放设计）。然而其定位为安全辅助工具而非核心范式创新，不改变AI编程领域的基础竞争格局，且类似的安全拦截功能极有可能被主流AI编程平台（Claude
@@ -1294,6 +1309,34 @@ confidence:
   compound: medium
   hype: medium
 actionable_insight: deep_dive
+object_insights:
+- object_type: project
+  name: Dicklesworthstone/destructive_command_guard
+  canonical_name: destructive_command_guard
+  url: https://github.com/Dicklesworthstone/destructive_command_guard
+  positioning: 一款基于 Rust 编写的高性能命令行安全钩子工具，专为 AI 编码代理提供破坏性命令拦截与阻断能力。
+  technical_signal: 采用 Rust 编写，利用 SIMD 加速过滤和双正则引擎实现亚毫秒级延迟，支持 50+ 模块化安全规则包。
+  adoption_signal: 已适配 Claude Code、Codex CLI、Gemini CLI、GitHub Copilot CLI、Cursor
+    等 10 余款主流 AI 编码代理工具。
+  ecosystem_relevance: 填补了 AI 编码代理生态中关键的安全防护空白，随着代理编程普及，该工具的价值和需求将持续增长。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: 随着 AI 编码代理逐步成为主流开发工具，dcg 作为关键安全防护层的需求持续扩大；其跨代理兼容、模块化规则体系使其具备成为 AI
+    开发基础设施核心组件的潜力。
+  risk_notes:
+  - 作为拦截性工具，可能存在误判合法命令导致开发工作流中断的风险，影响开发者使用体验。
+  - 绕过机制（环境变量 DCG_BYPASS、白名单、移除钩子）若被不当利用，可能大幅削弱工具的防护有效性。
+  - 项目尚处早期阶段，Rust 跨平台（Linux/macOS/Windows WSL）维护稳定性及长期社区活跃度仍有待观察。
+  score: 7.0
+  article_ids:
+  - cd8ee8d2ebf27dfe
+  evidence_snippets:
+  - dcg 是一个采用 Rust 编写的高性能命令行钩子工具，能够在 AI 编码代理执行破坏性命令之前进行拦截并阻断其执行。
+  - 该工具支持 Claude Code、Codex CLI、Gemini CLI、GitHub Copilot CLI、VS Code Copilot Chat
+    以及 Cursor 等主流 AI 编码代理工具，并能自动检测当前代理类型并为其适配相应的规则策略。
+  - dcg 提供 50+ 模块化安全规则包，默认启用核心文件系统和 Git 保护以防止最严重的数据丢失，数据库、Kubernetes 和云平台等其他规则包需手动启用。
 ---
 
 A high-performance hook for AI coding agents that blocks destructive commands before they execute, protecting your work from accidental deletion across Claude Code, Codex CLI, Gemini CLI, Copilot CLI, VS Code Copilot Chat, Cursor, Hermes Agent, Grok (xAI), and related tools.

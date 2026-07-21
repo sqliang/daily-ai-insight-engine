@@ -27,22 +27,23 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: e38ea9a7b8acaaee
 source_type: academic_paper
-tldr: LLM医疗推理综述：提出Miller金字塔五级能力框架，评测18个模型，揭示专长差异。
-objective_summary: 该综述论文从临床和计算双重视角审视LLM在医疗推理中的应用。临床侧基于Miller金字塔建立从知识回忆到动态病例管理的五级能力框架，计算侧将演绎、归纳和溯因推理模式与医疗任务关联。论文引入横跨五级医疗推理能力的基准数据集，对18个模型进行评测，发现医疗专家模型在诊断任务中占优，
-event_type: application_landing
+tldr: 一篇综述论文提出五级临床能力框架（基于Miller's Pyramid）和配套基准数据集，评估了18个模型在医学推理任务上的表现，发现专科模型在诊断任务中占优而通用模型在决策支持和对话中领先。
+objective_summary: 该综述论文从临床实践和计算方法双重视角审视大语言模型（LLM）在医学推理中的进展。在临床侧，作者基于Miller's Pyramid建立了从知识回忆到动态病例管理的五级能力体系；在计算侧，将演绎推理、归纳推理和溯因推理模式与医学目标和具体任务相关联。论文引入了一个覆盖五级医学推理能力的基准数据集，并在18个前沿模型上进行了评估，结果显示医学专科模型在诊断类任务中表现优异，而通用模型在决策支持和对话任务中领先。文章最后讨论了数据限制、幻觉问题和系统落地等当前挑战。
+event_type: framework_tools
 epistemic_status: verified_fact
 entities:
   companies: []
   technologies:
   - LLM
+  - Miller's Pyramid
   key_people: []
 key_logic_flow:
-- 该论文采用双视角方法，临床侧基于Miller金字塔建立从知识回忆到动态病例管理的五级能力框架。
-- 计算侧将演绎、归纳和溯因推理模式与常见医疗目标和任务相关联。
-- 论文引入一个横跨五级医疗推理能力的基准数据集用于模型评测。
-- 对18个最先进模型的评测结果显示，医疗专家模型在诊断类任务中表现优异。
-- 通用模型在医疗决策支持和对话任务中表现优于医疗专用模型。
-- 论文讨论了当前开放挑战，包括数据局限性、幻觉问题和接地问题，并指出向更安全可靠的工作流适配系统的方向。
+- 该论文是对大语言模型在医学推理领域应用进展的综述，采用双重视角连接临床实践与计算方法。
+- 在临床侧，论文基于Miller's Pyramid建立了从知识回忆到动态病例管理的五级能力体系。
+- 在计算侧，论文将演绎推理、归纳推理和溯因推理模式与医学目标和具体任务相关联。
+- 论文引入了一个覆盖五级医学推理能力的基准数据集，并在18个前沿模型上进行了评估测试。
+- 测试结果显示，医学专科模型在诊断类任务中表现优异，而通用模型在决策支持和对话任务中领先。
+- 论文指出当前仍面临数据限制、幻觉问题和系统落地等挑战，并提出了未来研究方向。
 specialized_tags:
   paper:
     paperTitle: 'Aligning Clinical Needs and AI Capabilities: A Survey on LLMs for
@@ -55,6 +56,19 @@ specialized_tags:
     researchArea: NLP
     methodType: LLM-based
 extract_result: success
+object_mentions:
+- object_type: paper
+  name: 'Aligning Clinical Needs and AI Capabilities: A Survey on LLMs for Medical
+    Reasoning'
+  canonical_name: '2607.07761'
+  url: https://arxiv.org/abs/2607.07761
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 该综述论文从临床实践和计算方法双重视角审视大语言模型在医学推理中的进展，并建立了基于Miller's Pyramid的五级能力体系。
+  - 论文引入了一个覆盖五级医学推理能力的基准数据集，并在18个前沿模型上进行了评估测试。
+  - 测试结果显示医学专科模型在诊断类任务中表现优异，而通用模型在决策支持和对话任务中领先。
+  article_id: e38ea9a7b8acaaee
 ---
 
 # Computer Science > Artificial Intelligence

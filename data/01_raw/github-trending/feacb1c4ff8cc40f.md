@@ -57,6 +57,9 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: feacb1c4ff8cc40f
+manifest_dates:
+- '2026-06-16'
+- '2026-07-20'
 ---
 
 **Building your own agent?** Start with Cua ·

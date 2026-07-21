@@ -14,8 +14,8 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 77d7ff9dffda7af3
 source_type: community_discussion
-tldr: Brown大学研究证实相对论效应改变重元素化学键结构，sigma与pi键界限模糊
-objective_summary: Brown大学化学家在《Science》发表研究，利用光电子能谱技术直接证明重元素（铋-碳）三键中，相对论导致的自旋-轨道耦合使sigma键与pi键不再严格分离，而是形成杂化键，推翻教科书传统三键模型。
+tldr: 布朗大学研究团队在《科学》杂志发表实验证据，证明爱因斯坦的相对论会改变重元素（如铋）中三键的化学结构，模糊传统sigma键与pi键的界限，可能促使教科书改写。
+objective_summary: 布朗大学化学家Lai-Sheng Wang团队在2026年7月9日发表于《科学》杂志的研究中，利用光电子能谱技术分析了铋与碳形成的分子，首次提供直接光谱证据表明重元素中的三键结构受爱因斯坦相对论影响。在重元素中，原子核质量增加使电子加速到接近光速，产生自旋-轨道耦合效应，导致sigma键与pi键的严格分离被打破，形成杂化键结构。该研究由美国国家科学基金会和美国能源部资助。
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
@@ -29,13 +29,24 @@ entities:
   - Deniz Kahraman
   - Jie Hui
 key_logic_flow:
-- Brown大学化学团队在《Science》发表研究，为爱因斯坦相对论改变重元素化学键结构提供直接光谱证据。
-- 传统教科书将三键描述为1个sigma键加2个pi键，该模型仅在轻元素中成立。
-- 重元素（如铋）中原子核质量使电子加速至近光速，产生自旋-轨道耦合，改变了电子相互作用规则。
-- 研究团队将铋-碳分子冷却至接近绝对零度后，使用光电子能谱分析，发现其三键不符合传统sigma/pi分离模型。
-- 实验数据显示重元素三键实际由1个pi键和2个sigma-pi杂化键组成，sigma与pi的界限被模糊化。
-- 该实验验证可能推动化学教科书重写，对涉及重元素的太阳能电池和量子材料研究具有重要意义。
+- 布朗大学化学团队在《科学》杂志发表研究，首次通过实验证明爱因斯坦相对论对重元素中三键结构的影响。
+- 研究使用光电子能谱技术分析铋和碳形成的分子，将分子冷却到接近绝对零度后用激光击出电子，通过电子飞行距离判断其结合强度。
+- 重元素原子核质量增加导致内层电子加速到接近光速，产生自旋-轨道耦合效应，使电子的自旋和轨道不再独立。
+- 实验结果显示碳-铋键不符合传统教科书描述的一个sigma键加两个pi键的结构，而是呈现一个pi键加两个杂化sigma-pi键的结构。
+- 研究者指出随着重元素（尤其是铋）在太阳能电池、量子材料和量子计算等领域的应用增加，这一发现可能推动教科书更新。
 extract_result: success
+object_mentions:
+- object_type: paper
+  name: Science论文：重元素中相对论效应对三键结构的影响
+  canonical_name: Relativistic effects on triple chemical bonds in heavy elements
+  url: https://www.brown.edu/news/2026-07-09/chemical-bonds-relativity
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 布朗大学化学家发表在《科学》杂志的研究提供了直接证据，表明重原子核引起的相对论效应会改变三键的结构。
+  - 研究使用光电子能谱技术分析铋-碳分子，发现其键合结构呈现一个pi键和两个杂化sigma-pi键，而非传统的一sigma两pi结构。
+  - 该研究由美国国家科学基金会（CHE-2403841）和美国能源部（DE-SC0008501）资助完成。
+  article_id: 77d7ff9dffda7af3
 ---
 
 **PROVIDENCE, R.I.** [Brown University] — Brown University chemists have provided direct evidence that upends the textbook explanation of how triple chemical bonds work in heavy elements.

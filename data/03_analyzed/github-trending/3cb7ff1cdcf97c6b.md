@@ -229,9 +229,13 @@ manifest_dates:
 - '2026-07-06'
 - '2026-07-07'
 source_type: community_discussion
-tldr: alirezarezvani/claude-skills 是目前最全面的开源 AI 编程智能体技能库，含 354 个技能，支持 13 种编码工具。
-objective_summary: alirezarezvani 在 GitHub 上发布了 claude-skills 仓库，包含 354 个生产级技能、593
-  个纯 Python CLI 脚本和 711 份参考文档，覆盖工程、营销、安全、合规、研究等 18 个领域，支持 Claude Code、OpenAI
+tldr: alirezarezvani/claude-skills 是一个包含 354 个生产就绪技能的开源仓库，支持 Claude Code、OpenAI Codex、Gemini
+  CLI、Cursor 等 13 种 AI 编码工具，覆盖工程、营销、产品、合规、C 级顾问、学术研究和商业运营等 18 个领域，已获得 5200+ GitHub
+  Star。
+objective_summary: Alireza Rezvani 在 GitHub 上发布了 claude-skills 开源项目，提供 354 个模块化的 AI
+  编码代理技能包。每个技能包含 SKILL.md 结构化指令、593 个纯标准库 Python 脚本和 711 个参考模板。该项目通过 convert.sh 脚本支持一键转换为
+  13 种 AI 编码工具的本地格式，并提供了预配置的代理人设（Personas）和跨域编排协议（Orchestration），适用于从个人开发者到企业级的多场景
+  AI 辅助编程。
 event_type: framework_tools
 epistemic_status: verified_fact
 entities:
@@ -239,23 +243,24 @@ entities:
   - Anthropic
   - OpenAI
   - Google
+  - Forward Future
   technologies:
-  - RAG
+  - Claude Code
   - MCP
-  - Playwright
+  - RAG
   key_people:
-  - alirezarezvani
+  - Alireza Rezvani
   - Matt Pocock
 key_logic_flow:
-- alirezarezvani 发布了 claude-skills 开源仓库，包含 354 个生产级 AI 编程智能体技能，覆盖工程、营销、安全、合规、学术研究等
-  18 个领域。
-- 该仓库支持 13 种 AI 编程工具，包括 Claude Code、OpenAI Codex、Gemini CLI、Cursor、Aider、Windsurf
-  等，并提供 ./scripts/convert.sh 脚本实现跨平台格式一键转换。
-- 技能库内含 593 个零依赖纯 Python CLI 脚本、711 份参考文档，以及 3 个预配置角色（Startup CTO、Growth Marketer、Solo
-  Founder）。
-- 仓库提供 4 种编排模式（Solo Sprint、Domain Deep-Dive、Multi-Agent Handoff、Skill Chain）用于协调跨领域工作。
-- 25 个 POWERFUL 级别的高级技能提供深度生产级能力，包括 RAG 架构设计、Agent 设计、数据库设计、安全审计等。
-- 该项目在 GitHub 获得 5200+ Star，是当前最全面的 Claude Code 技能与智能体插件开源库。
+- alirezarezvani/claude-skills 是一个开源仓库，提供 354 个生产就绪的 AI 编码代理技能，覆盖 18 个领域。
+- 该项目支持 Claude Code、OpenAI Codex、Gemini CLI、Cursor、Aider、Windsurf 等 13 种 AI 编码工具，通过
+  convert.sh 脚本实现一键格式转换。
+- 每个技能包含 SKILL.md 结构化指令、593 个纯标准库 Python 脚本和 711 个参考文档模板，所有脚本无需 pip 安装即可运行。
+- 项目提供 Skills（如何执行）、Agents（执行什么任务）和 Personas（谁在思考）三层架构，以及 Solo Sprint、Domain Deep-Dive
+  等四种跨域编排模式。
+- 预置了 Startup CTO、Growth Marketer、Solo Founder 等代理人设，以及完整 C 级高管（CEO/CTO/CFO/CMO 等）顾问技能包和
+  21 个斜杠命令。
+- 项目还包含学术研究栈（文献综述、基金申请、专利分析等）、企业研究运营（临床研究、市场研究等）和合规操作系统等专业领域技能。
 specialized_tags:
   github:
     projectName: alirezarezvani/claude-skills
@@ -278,6 +283,30 @@ specialized_tags:
       - MCP
       - function-calling
 extract_result: success
+object_mentions:
+- object_type: project
+  name: alirezarezvani/claude-skills
+  canonical_name: alirezarezvani/claude-skills
+  url: https://github.com/alirezarezvani/claude-skills
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 该仓库包含 354 个生产就绪的 Claude Code 技能，覆盖工程、营销、产品、合规和 C 级顾问等 18 个领域，已获得 5200+ GitHub
+    Star。
+  - 支持 Claude Code、OpenAI Codex、Gemini CLI、Cursor 等 13 种 AI 编码工具，通过单个 convert.sh 脚本即可完成所有格式转换。
+  - 项目包含 593 个纯标准库 Python 脚本和 711 个参考文档模板，所有脚本无需任何 pip 安装即可直接运行。
+  article_id: 3cb7ff1cdcf97c6b
+- object_type: project
+  name: Forward-Future/loop-library
+  canonical_name: Forward-Future/loop-library
+  url: https://github.com/Forward-Future/loop-library
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 该项目的 loop-library 技能直接从 signals.forwardfuture.ai 实时读取目录，并逐字转述自 Forward-Future/loop-library
+    仓库。
+  - loop-library 技能可发现、审计、修复和设计有边界的 AI 代理循环，运行时从 signals.forwardfuture.ai 读取最新目录。
+  article_id: 3cb7ff1cdcf97c6b
 impact_score:
   score: 6.0
   reason: 该项目是当前最全面的 AI 编程智能体技能开源库，354 个技能覆盖 18 个领域，支持 13 种编码工具，并附带 593 个零依赖 Python
@@ -336,6 +365,56 @@ confidence:
   compound: medium
   hype: medium
 actionable_insight: deep_dive
+object_insights:
+- object_type: project
+  name: alirezarezvani/claude-skills
+  canonical_name: alirezarezvani/claude-skills
+  url: https://github.com/alirezarezvani/claude-skills
+  positioning: 开源 AI 编码代理技能库，提供 354 个覆盖 18 领域的模块化技能包，支持 13 种主流 AI 编码工具的一键格式转换。
+  technical_signal: 基于 SKILL.md 结构化指令、593 个纯标准库 Python 脚本和 711 个参考模板的三层架构，所有脚本无需 pip
+    安装即可直接运行。
+  adoption_signal: GitHub 已获得 5200+ Star，支持 Claude Code、OpenAI Codex、Gemini CLI、Cursor
+    等 13 种主流 AI 编码工具的一键格式转换。
+  ecosystem_relevance: 填补了 AI 编码代理缺乏跨工具、跨领域标准化技能包的空白，大幅降低了专业领域知识注入 AI 编码助手的门槛。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: 作为目前最全面的开源 AI 编码代理技能库，其跨 13 种工具的兼容性和 18 个领域的覆盖范围使其可能成为 AI 辅助编程领域的标准化基础组件，值得长期关注其社区增长和生态渗透情况。
+  risk_notes:
+  - 354 个技能的维护负担较大，随 AI 编码工具 API 变更可能导致兼容性问题。
+  - 技能质量依赖社区贡献，不同领域的技能深度和实用性可能存在较大差异。
+  score: 7.0
+  article_ids:
+  - 3cb7ff1cdcf97c6b
+  evidence_snippets:
+  - 该仓库包含 354 个生产就绪的 Claude Code 技能，覆盖工程、营销、产品、合规和 C 级顾问等 18 个领域，已获得 5200+ GitHub
+    Star。
+  - 支持 Claude Code、OpenAI Codex、Gemini CLI、Cursor 等 13 种 AI 编码工具，通过单个 convert.sh 脚本即可完成所有格式转换。
+  - 项目包含 593 个纯标准库 Python 脚本和 711 个参考文档模板，所有脚本无需任何 pip 安装即可直接运行。
+- object_type: project
+  name: Forward-Future/loop-library
+  canonical_name: Forward-Future/loop-library
+  url: https://github.com/Forward-Future/loop-library
+  positioning: 专为 AI 代理循环生命周期管理设计的开源工具库，提供可发现、审计、修复和设计有边界循环的核心能力。
+  technical_signal: 通过 signals.forwardfuture.ai 实时目录服务驱动代理循环管理，可实现动态发现与审计的自动化工作流。
+  adoption_signal: null
+  ecosystem_relevance: 作为 claude-skills 生态中的专业代理循环管理组件，为 AI 代理行为边界控制提供了可复用的工程化工具。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: 作为 AI 代理循环边界管理的专业化工具，其与 claude-skills 的集成表明在代理行为治理领域有独特定位，值得关注其独立发展和生态合作进展。
+  risk_notes:
+  - 当前仅通过 claude-skills 的间接引用获知，缺乏独立的社区活跃度和用户数据支撑。
+  - 依赖外部 signals.forwardfuture.ai 实时服务运行，存在服务可用性和数据源持续性的单点风险。
+  score: 3.0
+  article_ids:
+  - 3cb7ff1cdcf97c6b
+  evidence_snippets:
+  - 该项目的 loop-library 技能直接从 signals.forwardfuture.ai 实时读取目录，并逐字转述自 Forward-Future/loop-library
+    仓库。
+  - loop-library 技能可发现、审计、修复和设计有边界的 AI 代理循环，运行时从 signals.forwardfuture.ai 读取最新目录。
 ---
 
 **354 production-ready Claude Code skills, plugins, and agent skills for 13 AI coding tools.**

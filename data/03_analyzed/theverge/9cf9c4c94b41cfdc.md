@@ -17,9 +17,11 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 9cf9c4c94b41cfdc
 source_type: news_media
-tldr: OpenAI 获政府批准公开发布 GPT-5.6 并推出 ChatGPT Work 智能体
-objective_summary: OpenAI 在获得特朗普政府批准后，公开发布 GPT-5.6 模型套件（Sol、Terra、Luna），同时推出结合 ChatGPT
-  与 Codex 的 AI 智能体产品 ChatGPT Work，支持连接 Slack、Gmail 等工具并生成文档、表格等材料。
+tldr: OpenAI 获美国政府批准公开发布 GPT-5.6 模型，并推出 AI 代理产品 ChatGPT Work，将 ChatGPT 与 Codex 结合，面向所有用户开放桌面端访问。
+objective_summary: OpenAI 获得特朗普政府批准后，正式结束 GPT-5.6 的有限预览期并公开发布该模型全系列（Sol、Terra、Luna）。同日，OpenAI
+  推出 AI 代理产品 ChatGPT Work，将 ChatGPT 与 Codex 能力结合，面向非技术用户，可通过统一插件目录连接 Slack、Gmail、Google
+  Drive 等工具生成文档、表格、演示文稿和网页应用。桌面端对所有用户（含免费用户）立即开放，移动端和网页端向 Pro、Enterprise、Edu 用户先行推送，Plus
+  和 Business 用户随后获得访问权限。该产品直接对标 Anthropic 的 Claude Cowork。
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
@@ -34,20 +36,66 @@ entities:
   - ChatGPT Work
   - Claude Cowork
   - OpenClaw
-  - Sol
-  - Terra
-  - Luna
   key_people:
   - Sam Altman
 key_logic_flow:
-- GPT-5.6 之前仅限政府批准机构使用，现获特朗普政府批准向公众公开发布
-- OpenAI CEO Sam Altman 称 GPT-5.6 是公司迄今最好的模型
-- OpenAI 发布新 AI 智能体 ChatGPT Work，将 ChatGPT 与 Codex 结合，面向非技术用户完成文档、表格、演示文稿和网页应用等任务
-- ChatGPT Work 由 GPT-5.6 模型套件（Sol、Terra、Luna）驱动，配备统一的插件目录，可连接 Slack、Gmail、Google Drive、日历和
-  CRM 等工具
-- Mac/Windows 桌面端所有用户（含免费用户）立即可用，移动端和网页端 Pro/Enterprise/Edu 用户优先，Plus/Business 用户随后逐步开放
-- ChatGPT Work 直接对标 Anthropic 的 Claude Cowork，Sol 模型主打编程、网络安全和科学领域的高性能低成本路线
+- OpenAI 获得美国政府批准，正式结束 GPT-5.6 的有限预览期并面向公众发布该模型。
+- GPT-5.6 模型系列包含 Sol、Terra 和 Luna 三个子模型，其中 Sol 被定位为在编码、网络安全和科学领域设定新智能与效率标准的最强模型。
+- OpenAI 同日推出 AI 代理产品 ChatGPT Work，将 ChatGPT 与 Codex 结合，让非技术用户也能利用 Codex 完成非编码任务。
+- ChatGPT Work 支持通过统一插件目录连接 Slack、Gmail、Google Drive、日历和 CRM 等工具，可生成文档、表格、演示文稿和网页应用。
+- 桌面端对全球所有用户（含免费用户）立即开放访问，移动端和网页端分阶段向不同订阅等级用户推送。
+- ChatGPT Work 直接对标 Anthropic 的 Claude Cowork 产品，后者也是将 Claude 与 Claude Code 结合而成的
+  AI 代理。
 extract_result: success
+object_mentions:
+- object_type: model
+  name: GPT-5.6
+  canonical_name: GPT-5.6
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - OpenAI 获得美国政府批准后正式公开发布 GPT-5.6 模型，CEO Sam Altman 称其为公司有史以来最好的模型。
+  - GPT-5.6 模型系列包含 Sol、Terra 和 Luna 三个子模型，其中 Sol 在编码、网络安全和科学领域设定了新的智能与效率标准。
+  article_id: 9cf9c4c94b41cfdc
+- object_type: product
+  name: ChatGPT Work
+  canonical_name: ChatGPT Work
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - OpenAI 发布 ChatGPT Work 代理产品，将 ChatGPT 与 Codex 结合，让非技术用户也能利用 Codex 完成非编码任务。
+  - ChatGPT Work 可通过统一插件目录连接 Slack、Gmail、Google Drive、日历和 CRM 等工具，生成文档、表格、演示文稿和网页应用。
+  - ChatGPT Work 桌面端对所有用户立即开放，包括免费用户，移动端和网页端则分阶段向不同订阅等级用户推送。
+  article_id: 9cf9c4c94b41cfdc
+- object_type: product
+  name: Codex
+  canonical_name: Codex
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - ChatGPT Work 是 ChatGPT 与 Codex 能力的结合体，使非技术用户能利用 Codex 完成非编码任务。
+  article_id: 9cf9c4c94b41cfdc
+- object_type: product
+  name: Claude Cowork
+  canonical_name: Claude Cowork
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - ChatGPT Work 是 Anthropic 旗下 Claude Cowork（结合 Claude 和 Claude Code）的直接竞争对手。
+  article_id: 9cf9c4c94b41cfdc
+- object_type: project
+  name: OpenClaw
+  canonical_name: OpenClaw
+  url: null
+  confidence: low
+  article_role: mentioned_reference
+  evidence_snippets:
+  - OpenClaw 作为开源 AI 代理走红后，各公司竞相开发对普通用户真正有用的 AI 代理产品。
+  article_id: 9cf9c4c94b41cfdc
 impact_score:
   score: 7.5
   reason: 评分依据：GPT-5.6 从政府专用走向公众开放，本身是预期之内的节点性事件，影响有限；但同日发布的 ChatGPT Work 是更关键的产品信号——将
@@ -107,6 +155,61 @@ confidence:
   compound: medium
   hype: medium
 actionable_insight: deep_dive
+object_insights:
+- object_type: product
+  name: ChatGPT Work
+  canonical_name: ChatGPT Work
+  url: null
+  positioning: OpenAI 推出的 AI 代理产品，将 ChatGPT 对话界面与 Codex 编程能力结合，面向非技术用户提供文档、表格、演示文稿和网页应用等自动化办公生成功能。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users:
+  - 非技术用户
+  - ChatGPT 免费用户
+  - Pro/Enterprise/Edu 订阅用户
+  - Plus/Business 订阅用户
+  product_signal: 通过统一插件目录集成 Slack、Gmail、Google Drive、日历和 CRM 等工具，支持生成多种办公文档和网页应用，由
+    GPT-5.6 模型套件驱动。
+  market_signal: 桌面端向全球所有用户（含免费用户）立即开放，移动端和网页端分阶段推送，直接对标 Anthropic 的 Claude Cowork
+    产品。
+  differentiation: 将 Codex 编程能力包装为面向非技术用户的 AI 代理，相比 Claude Cowork 拥有更大的免费用户基础和更强的底层模型（GPT-5.6
+    Sol）。
+  watch_reason: ChatGPT Work 是 OpenAI 将 Codex 编程能力转化为大众级 AI 代理产品的关键举措，其免费可用策略可能加速
+    AI 代理在普通消费者中的普及，并与 Claude Cowork 形成直接对抗。
+  risk_notes:
+  - 非技术用户对 AI 代理的信任度和使用门槛仍需验证，可能存在可用性和结果准确性问题。
+  - 作为全新产品品类，用户使用习惯尚未养成，OpenAI 需要持续投入教育和市场推广成本。
+  score: 8.0
+  article_ids:
+  - 9cf9c4c94b41cfdc
+  evidence_snippets:
+  - OpenAI 发布 ChatGPT Work 代理产品，将 ChatGPT 与 Codex 结合，让非技术用户也能利用 Codex 完成非编码任务。
+  - ChatGPT Work 可通过统一插件目录连接 Slack、Gmail、Google Drive、日历和 CRM 等工具，生成文档、表格、演示文稿和网页应用。
+  - ChatGPT Work 桌面端对所有用户立即开放，包括免费用户，移动端和网页端则分阶段向不同订阅等级用户推送。
+- object_type: product
+  name: Claude Cowork
+  canonical_name: Claude Cowork
+  url: null
+  positioning: Anthropic 推出的 AI 代理产品，将 Claude 对话模型与 Claude Code 编程能力结合，用于完成文档、应用开发等工作流任务。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users:
+  - Anthropic Claude 用户
+  - Claude Code 现有用户群
+  product_signal: 将 Claude 与 Claude Code 结合为统一 AI 代理，与 OpenAI 的 ChatGPT Work 在产品形态和定位上形成直接竞争关系。
+  market_signal: 作为 Anthropic 对标 ChatGPT Work 的产品，面临 OpenAI 在免费用户规模和品牌认知上的强势竞争压力。
+  differentiation: 与 ChatGPT Work 直接竞争，同为将编程工具转化为消费级 AI 代理的产品策略，但品牌知名度和免费用户基数均小于 OpenAI。
+  watch_reason: Claude Cowork 是 Anthropic 在 AI 代理产品化方向的关键战略布局，其与 ChatGPT Work 的竞争态势将深刻影响消费级
+    AI 代理市场的格局演变，值得持续跟踪。
+  risk_notes:
+  - 在免费用户规模和品牌认知上显著落后于 OpenAI，市场推广面临较大挑战。
+  score: 5.0
+  article_ids:
+  - 9cf9c4c94b41cfdc
+  evidence_snippets:
+  - ChatGPT Work 是 Anthropic 旗下 Claude Cowork（结合 Claude 和 Claude Code）的直接竞争对手。
 ---
 
 About two weeks after OpenAI’s GPT-5.6 was caught up in regulatory drama — rolled out only to government-approved organizations during a “limited preview” period — the company has received the Trump administration’s greenlight for a public rollout of the model. OpenAI CEO Sam Altman called it “the best model we have ever produced.”

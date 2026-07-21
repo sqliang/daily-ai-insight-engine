@@ -136,10 +136,13 @@ id: ff3ead6e9edcb5bc
 manifest_dates:
 - '2026-07-08'
 source_type: community_discussion
-tldr: Kyutai 发布轻量级 CPU 端文本转语音工具 Pocket TTS
-objective_summary: Kyutai 实验室发布了 Pocket TTS，一款专为 CPU 设计的轻量级文本转语音应用，仅 1 亿参数、支持 6 种语言、语音克隆和流式生成。在
-  MacBook Air M4 上达到约 200ms 首音延迟和 6 倍实时速度，可通过 pip 安装或直接命令行使用。
-event_type: framework_tools
+tldr: Kyutai 发布 Pocket TTS，一个轻量级 CPU 文本转语音工具，模型仅 1 亿参数，支持 6 种语言、语音克隆和音频流式输出，在 MacBook
+  Air M4 上可达约 6 倍实时速度。
+objective_summary: Kyutai 实验室于 2026 年 7 月发布了 Pocket TTS，一个专为 CPU 运行设计的轻量级文本转语音应用。该模型参数规模约
+  1 亿，支持英语、法语、德语、葡萄牙语、意大利语和西班牙语六种语言，首段音频延迟约 200 毫秒，可实现约 6 倍实时速度。项目提供了 Python API、CLI
+  和 HTTP 服务器三种使用方式，支持语音克隆、音频流式输出和无限长文本输入。社区已基于 Pocket TTS 开发了多个移植版本，涵盖 WebAssembly、ONNX
+  Runtime、MLX 和 Core ML 等不同后端。
+event_type: application_landing
 epistemic_status: verified_fact
 entities:
   companies:
@@ -148,8 +151,10 @@ entities:
   - TTS
   - PyTorch
   - safetensors
-  - ONNX
   - WebAssembly
+  - ONNX
+  - MLX
+  - Core ML
   key_people:
   - Manu Orsini
   - Simon Rouard
@@ -158,12 +163,12 @@ entities:
   - Neil Zeghidour
   - Alexandre Défossez
 key_logic_flow:
-- Kyutai 实验室发布了 Pocket TTS，一个仅 1 亿参数的轻量级文本转语音应用，专为 CPU 运行设计，无需 GPU。
-- Pocket TTS 支持英语、法语、德语、葡萄牙语、意大利语和西班牙语共 6 种语言，提供 26 种预设语音。
-- 该工具在 MacBook Air M4 上实现约 200ms 首音延迟和 6 倍实时速度，仅使用 2 个 CPU 核心。
-- 支持语音克隆功能，可通过音频文件或 safetensors 嵌入快速加载自定义音色。
-- 提供 Python API、CLI 和 HTTP 服务器三种使用方式，支持无限长文本输入和流式音频生成。
-- 社区已贡献多种移植版本，包括 WebAssembly/JavaScript、Rust、ONNX Runtime、C#、Unity 等平台实现。
+- Kyutai 发布了 Pocket TTS，一个专为 CPU 设计的轻量级文本转语音工具，模型参数量约 1 亿，无需 GPU 即可高效运行。
+- Pocket TTS 支持 Python API、CLI 和 HTTP 服务器三种使用方式，支持语音克隆、音频流式输出和无限长文本输入。
+- 该模型在 MacBook Air M4 上可实现约 6 倍实时速度，首段音频延迟约 200 毫秒，仅使用 2 个 CPU 核心。
+- 项目支持英语、法语、德语、葡萄牙语、意大利语和西班牙语六种语言，并提供了每种语言的预置语音库。
+- 社区已开发了多个移植版本，覆盖 WebAssembly、ONNX Runtime、MLX 和 Core ML 等不同后端平台。
+- 项目明确禁止未经同意的语音克隆和虚假信息传播等使用场景，并要求使用者遵守相关法律法规。
 specialized_tags:
   github:
     projectName: kyutai-labs/pocket-tts
@@ -186,6 +191,85 @@ specialized_tags:
       - speech-synthesis
       - streaming-inference
 extract_result: success
+object_mentions:
+- object_type: project
+  name: kyutai-labs/pocket-tts
+  canonical_name: kyutai-labs/pocket-tts
+  url: https://github.com/kyutai-labs/pocket-tts
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Pocket TTS 是 Kyutai 发布的轻量级文本转语音应用，专为在 CPU 上高效运行而设计，通过 pip install 即可使用。
+  - 模型参数量约 1 亿，在 MacBook Air M4 上可达约 6 倍实时速度，首段音频延迟约 200 毫秒，仅使用 2 个 CPU 核心。
+  - 项目提供了 Python API、CLI 和 HTTP 服务器三种使用方式，支持语音克隆、无限长文本输入和音频流式输出。
+  article_id: ff3ead6e9edcb5bc
+- object_type: project
+  name: wasm-pocket-tts
+  canonical_name: LaurentMazare/wasm-pocket-tts
+  url: null
+  confidence: low
+  article_role: ecosystem_context
+  evidence_snippets:
+  - 社区项目 wasm-pocket-tts 由 @LaurentMazare 开发，是一个将 Pocket TTS 移植到 Rust 并使用 XN 后端的 WebAssembly
+    实现。
+  article_id: ff3ead6e9edcb5bc
+- object_type: project
+  name: PocketTTS.cpp
+  canonical_name: VolgaGerm/PocketTTS.cpp
+  url: null
+  confidence: low
+  article_role: ecosystem_context
+  evidence_snippets:
+  - PocketTTS.cpp 由 @VolgaGerm 开发，是一个单文件 C++ 运行时，使用 ONNX Runtime 并提供了 CLI、HTTP 服务器和
+    FFI C API。
+  article_id: ff3ead6e9edcb5bc
+- object_type: project
+  name: sherpa-onnx
+  canonical_name: csukuangfj/sherpa-onnx
+  url: null
+  confidence: low
+  article_role: ecosystem_context
+  evidence_snippets:
+  - sherpa-onnx 支持在 Windows、macOS、Linux 及嵌入式设备上运行 Pocket TTS，提供了 12 种编程语言的绑定和 WebAssembly
+    支持。
+  article_id: ff3ead6e9edcb5bc
+- object_type: project
+  name: ComfyUI-Pocket-TTS
+  canonical_name: ai-joe-git/ComfyUI-Pocket-TTS
+  url: null
+  confidence: low
+  article_role: ecosystem_context
+  evidence_snippets:
+  - ComfyUI-Pocket-TTS 由 @ai-joe-git 开发，是一个将 Pocket TTS 集成到 ComfyUI 的轻量级 CPU 文本转语音节点。
+  article_id: ff3ead6e9edcb5bc
+- object_type: project
+  name: pocket-tts-server
+  canonical_name: ai-joe-git/pocket-tts-server
+  url: null
+  confidence: low
+  article_role: ecosystem_context
+  evidence_snippets:
+  - pocket-tts-server 由 @ai-joe-git 开发，是一个轻量级实时语音克隆和聊天服务器，提供了与 OpenAI 兼容的 API 接口。
+  article_id: ff3ead6e9edcb5bc
+- object_type: product
+  name: LocalVocal.ai
+  canonical_name: joshwhiton/LocalVocal.ai
+  url: null
+  confidence: low
+  article_role: ecosystem_context
+  evidence_snippets:
+  - LocalVocal.ai 由 @joshwhiton 开发，是一个面向 Apple Silicon Mac 的全本地化语音对话工具，集成了语音克隆和语音活动检测功能。
+  article_id: ff3ead6e9edcb5bc
+- object_type: project
+  name: pocket-tts-openai_streaming_server
+  canonical_name: teddybear082/pocket-tts-openai_streaming_server
+  url: null
+  confidence: low
+  article_role: ecosystem_context
+  evidence_snippets:
+  - pocket-tts-openai_streaming_server 由 @teddybear082 开发，是一个兼容 OpenAI 的流式音频服务器，已提供
+    Docker 和 exe 发布版本。
+  article_id: ff3ead6e9edcb5bc
 ---
 
 A lightweight text-to-speech (TTS) application designed to run efficiently on CPUs. Forget about the hassle of using GPUs and web APIs serving TTS models. With Kyutai's Pocket TTS, generating audio is just a pip install and a function call away.

@@ -16,31 +16,190 @@ manifest_dates:
 - '2026-07-14'
 - '2026-07-15'
 source_type: newsletter_rss
-tldr: OpenAI发布GPT-5.6系列模型，Meta发布Muse Spark 1.1多模态推理模型并开放API。
-objective_summary: OpenAI于2026年7月推出GPT-5.6系列（Sol、Terra、Luna），按能力层级定价并集成至ChatGPT、Codex和API。Meta同步发布Muse
-  Spark 1.1多模态推理模型，首次向开发者开放Meta Model API，在多项Agent基准测试中取得SOTA成绩。
-event_type: infrastructure_update
+tldr: OpenAI 发布 GPT-5.6 系列模型（Sol/Terra/Luna）并推出 ChatGPT Work 智能体；Meta 发布 Muse Spark
+  1.1 多模态推理模型并开放 Meta Model API。xAI、Cognition、Mistral 等公司相继发布编码模型，Google 和 Tencent
+  分别开源了 Gemma 4 和 Hy3 模型。
+objective_summary: 本期 AI Agents Weekly 报道了多项 AI 产品发布与更新。OpenAI 发布了 GPT-5.6 系列模型，包含旗舰版
+  Sol、中端 Terra 和经济型 Luna，已在 ChatGPT、Codex 和 API 上线，同时推出了 ChatGPT Work 智能体和 GPT-Live
+  语音产品。Meta Superintelligence Labs 发布了 Muse Spark 1.1 多模态推理模型，在 MCP Atlas 等智能体基准测试中取得
+  SOTA 成绩，并首次向开发者开放了 Meta Model API。xAI 发布 Grok 4.5、Cognition 发布 SWE-1.7（推理速度 1000
+  tok/s）、Mistral 发布 Robostral Navigate 等编码模型。Google 开源了 Gemma 4 模型，Tencent 开源了 295B
+  参数的 Hy3 模型。
+event_type: application_landing
 epistemic_status: verified_fact
 entities:
   companies:
   - OpenAI
   - Meta
+  - xAI
+  - Cognition
+  - Mistral
+  - Google
+  - Tencent
+  - Nous Research
+  - Microsoft
+  - Ternlight
+  - Databricks
+  - FrontierFinance
+  - Sakana AI
+  - Anthropic
   technologies:
   - GPT-5.6
-  - Sol
-  - Terra
-  - Luna
-  - Muse Spark 1.1
   - MCP
-  - Meta Model API
+  - VLM
   key_people: []
 key_logic_flow:
-- OpenAI开始推出GPT-5.6系列模型，包含Sol、Terra、Luna三个能力层级，Sol面向最困难任务，Terra匹配GPT-5.5性能成本更低，Luna最快最便宜。
-- GPT-5.6系列专为智能体任务优化，定价为Sol每百万输入/输出Token 5/30美元，Terra为2.50/15美元，Luna为1/6美元，已集成至ChatGPT、Codex和API。
-- Meta发布Muse Spark 1.1多模态推理模型，支持原生工具、MCP服务器和自定义技能，可作为主智能体规划并委派任务给并行子智能体。
-- Muse Spark 1.1在MCP Atlas（88.1）、JobBench（54.7）和Humanity's Last Exam with tools（62.1）等基准测试中取得SOTA成绩，支持100万Token上下文窗口。
-- Meta首次向开发者开放Meta Model API，处于公开预览阶段，定价为每百万输入/输出Token 1.25/4.25美元，新账户提供20美元免费额度。
+- OpenAI 发布了 GPT-5.6 系列模型，包含 Sol、Terra 和 Luna 三个能力层级，已在 ChatGPT、Codex 和 API 上线，Sol
+  定价为输入/输出每百万 token 5/30 美元。
+- Meta Superintelligence Labs 发布了 Muse Spark 1.1 多模态推理模型，支持原生工具、MCP 服务器和自定义技能，可作为主智能体规划并委派任务给并行子智能体。
+- Muse Spark 1.1 在 MCP Atlas 基准上取得 88.1 的 SOTA 分数，支持 100 万 token 上下文窗口，Meta Model
+  API 定价为每百万输入/输出 token 1.25/4.25 美元。
+- OpenAI 推出了 ChatGPT Work 智能体产品和 GPT-Live 语音产品，进一步扩展了 AI 代理在工作和语音场景中的应用。
+- xAI 发布 Grok 4.5 编码模型、Cognition 发布 SWE-1.7（推理速度 1000 tok/s）、Mistral 发布 Robostral
+  Navigate，多家公司聚焦编码能力的 AI 模型。
+- Google 开源了 Gemma 4 模型，Tencent 开源了 295B 参数的 Hy3 模型，Microsoft 发布了用于智能体的 Flint 框架。
 extract_result: success
+object_mentions:
+- object_type: model
+  name: GPT-5.6 family (Sol, Terra, Luna)
+  canonical_name: GPT-5.6
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - OpenAI 开始推出 GPT-5.6 系列模型 Sol、Terra 和 Luna，覆盖 ChatGPT、Codex 和 API。
+  - Sol 是旗舰型号，Terra 匹配 GPT-5.5 且成本更低，Luna 速度最快价格最低。
+  - GPT-5.6 是 Codex 和 ChatGPT Work 的默认大脑，针对长时间工具使用和编码进行优化。
+  article_id: 5d9bcda5ffff8971
+- object_type: model
+  name: Muse Spark 1.1
+  canonical_name: Muse Spark
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Meta Superintelligence Labs 发布了 Muse Spark 1.1 多模态推理模型，专为智能体任务设计。
+  - Muse Spark 1.1 在 MCP Atlas（88.1）、JobBench（54.7）等基准测试中取得 SOTA 成绩。
+  - 该模型支持 100 万 token 上下文窗口，适用于长时间多模态工作场景。
+  article_id: 5d9bcda5ffff8971
+- object_type: product
+  name: ChatGPT Work
+  canonical_name: ChatGPT Work
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - OpenAI 推出了 ChatGPT Work 智能体，由 GPT-5.6 作为默认大脑驱动。
+  article_id: 5d9bcda5ffff8971
+- object_type: product
+  name: Meta Model API
+  canonical_name: Meta Model API
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Meta 首次向开发者开放了 Meta Model API，目前处于公开预览阶段。
+  - Meta Model API 定价为每百万输入/输出 token 1.25/4.25 美元，新账户可获 20 美元免费额度。
+  article_id: 5d9bcda5ffff8971
+- object_type: model
+  name: Grok 4.5
+  canonical_name: Grok 4.5
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - xAI 发布了 Grok 4.5 模型，专注于提升编码能力。
+  article_id: 5d9bcda5ffff8971
+- object_type: model
+  name: SWE-1.7
+  canonical_name: SWE-1.7
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Cognition 发布了 SWE-1.7 模型，推理速度达到每秒 1000 个 token。
+  article_id: 5d9bcda5ffff8971
+- object_type: model
+  name: Robostral Navigate
+  canonical_name: Robostral Navigate
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Mistral 发布了 Robostral Navigate 模型，作为新推出的 AI 产品之一。
+  article_id: 5d9bcda5ffff8971
+- object_type: product
+  name: GPT-Live
+  canonical_name: GPT-Live
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - OpenAI 推出了 GPT-Live 语音产品，扩展了 AI 语音交互能力。
+  article_id: 5d9bcda5ffff8971
+- object_type: model
+  name: Gemma 4
+  canonical_name: Gemma 4
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Google 开源了 Gemma 4 模型，供开发者使用。
+  article_id: 5d9bcda5ffff8971
+- object_type: model
+  name: Hy3
+  canonical_name: Hy3
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Tencent 开源了 295B 参数的 Hy3 模型。
+  article_id: 5d9bcda5ffff8971
+- object_type: product
+  name: Codex
+  canonical_name: Codex
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - GPT-5.6 成为 Codex 的默认大脑，Codex 桌面应用将合并到 ChatGPT 的 Windows 和 Mac 应用中。
+  article_id: 5d9bcda5ffff8971
+- object_type: project
+  name: Flint
+  canonical_name: Flint
+  url: null
+  confidence: low
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Microsoft 发布了用于智能体的 Flint 框架和工具。
+  article_id: 5d9bcda5ffff8971
+- object_type: project
+  name: Hermes Agent
+  canonical_name: Hermes Agent
+  url: null
+  confidence: low
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Nous Research 将 Hermes Agent 部署到了云端。
+  article_id: 5d9bcda5ffff8971
+- object_type: product
+  name: Cloud Run sandboxes
+  canonical_name: Cloud Run sandboxes
+  url: null
+  confidence: low
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Google 推出了 Cloud Run sandboxes 沙箱产品。
+  article_id: 5d9bcda5ffff8971
+- object_type: product
+  name: Ternlight
+  canonical_name: Ternlight
+  url: null
+  confidence: low
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Ternlight 实现了在浏览器中运行嵌入向量计算的功能。
+  article_id: 5d9bcda5ffff8971
 impact_score:
   score: 7.0
   reason: 核心事件是OpenAI正式推出GPT-5.6系列（Sol/Terra/Luna三档能力层级）和Meta首次向开发者开放Muse Spark 1.1
@@ -93,6 +252,85 @@ confidence:
   compound: medium
   hype: high
 actionable_insight: deep_dive
+object_insights:
+- object_type: product
+  name: ChatGPT Work
+  canonical_name: ChatGPT Work
+  url: null
+  positioning: OpenAI 推出的 AI 智能体产品，由 GPT-5.6 旗舰模型驱动，面向工作场景的自动化任务处理。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users:
+  - 知识工作者
+  - 开发者
+  - 企业团队
+  product_signal: 作为 OpenAI 首个面向工作场景的专用智能体，深度集成 GPT-5.6 模型，专注于长时程工具使用和编码任务。
+  market_signal: ChatGPT Work 是 GPT-5.6 的首个垂直场景产品，标志着 OpenAI 从对话式 AI 向智能体平台转型的关键一步。
+  differentiation: 与 Codex 和 ChatGPT 深度协同，以 GPT-5.6 旗舰能力为驱动，填补了 OpenAI 在工作场景专用智能体的产品空白。
+  watch_reason: ChatGPT Work 是 OpenAI 从对话式 AI 向主动智能体转型的关键产品，GPT-5.6 系列模型的迭代直接决定了其能力天花板，值得持续跟踪其对企业工作流程的渗透速度和使用场景的扩展方向。
+  risk_notes:
+  - 作为新产品，ChatGPT Work 的实际企业采用率和场景覆盖效果尚无公开数据验证。
+  - 智能体产品的准确性和可靠性在复杂工作场景中仍存在潜在风险。
+  score: 8.0
+  article_ids:
+  - 5d9bcda5ffff8971
+  evidence_snippets:
+  - OpenAI 推出了 ChatGPT Work 智能体，由 GPT-5.6 作为默认大脑驱动。
+- object_type: product
+  name: Meta Model API
+  canonical_name: Meta Model API
+  url: null
+  positioning: Meta 首次向开发者开放的模型 API 服务，基于 Muse Spark 1.1 多模态推理模型，目前处于公开预览阶段。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users:
+  - AI 应用开发者
+  - 企业 AI 团队
+  - 智能体系统开发者
+  product_signal: 支持原生工具、MCP 服务器和自定义技能，可作为主智能体规划并委派任务给并行子智能体，定价为每百万输入/输出 token 1.25/4.25
+    美元。
+  market_signal: 以极具竞争力的定价策略进入 API 市场（约为 GPT-5.6 Sol 的 1/4），新账户提供 20 美元免费额度，直接对标 OpenAI
+    的 API 服务生态。
+  differentiation: 延续 Meta 开源开放战略，Muse Spark 1.1 在 MCP Atlas（88.1）等智能体基准上取得 SOTA，同时支持
+    100 万 token 上下文窗口，在性价比上形成差异化优势。
+  watch_reason: Meta Model API 标志着 Meta 从模型开源向 API 商业服务延伸的战略转型，其定价策略和 Muse Spark 1.1
+    在智能体基准测试中的 SOTA 表现，可能对现有大模型 API 市场竞争格局产生重要影响。
+  risk_notes:
+  - API 目前处于公开预览阶段，生产环境的稳定性、可用性和 SLA 保障尚待验证。
+  - Meta 在面向开发者的 API 平台运营和生态建设方面经验有限，开发者采用率存在不确定性。
+  score: 7.0
+  article_ids:
+  - 5d9bcda5ffff8971
+  evidence_snippets:
+  - Meta 首次向开发者开放了 Meta Model API，目前处于公开预览阶段。
+  - Meta Model API 定价为每百万输入/输出 token 1.25/4.25 美元，新账户可获 20 美元免费额度。
+- object_type: product
+  name: GPT-Live
+  canonical_name: GPT-Live
+  url: null
+  positioning: OpenAI 推出的实时语音交互 AI 产品，扩展了 ChatGPT 生态在语音场景的应用边界。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users:
+  - 语音交互用户
+  - 实时对话场景用户
+  - ChatGPT 现有活跃用户
+  product_signal: 作为 OpenAI 的语音 AI 产品，GPT-Live 借助 GPT-5.6 模型能力扩展了 ChatGPT 生态的实时语音交互场景。
+  market_signal: 语音 AI 交互是 AI 产品的重要增长赛道，OpenAI 通过 GPT-Live 与 ChatGPT Work 形成文本—语音产品矩阵，巩固生态护城河。
+  differentiation: 以 GPT-5.6 模型能力为语音交互底座，与 ChatGPT 生态深度绑定，但当前产品细节有限，差异化程度尚待观察。
+  watch_reason: GPT-Live 代表了 AI 从文本交互向多模态语音交互的重要扩展方向，但产品能力、定价策略和市场竞争定位目前信息有限，需持续关注
+    OpenAI 在该领域的后续产品发布和用户反馈。
+  risk_notes:
+  - GPT-Live 的产品细节、技术架构和商业模式尚未公开，难以全面评估其竞争力。
+  - 语音 AI 交互领域已有多个成熟竞品，GPT-Live 面临激烈的市场竞争和用户预期挑战。
+  score: 6.0
+  article_ids:
+  - 5d9bcda5ffff8971
+  evidence_snippets:
+  - OpenAI 推出了 GPT-Live 语音产品，扩展了 AI 语音交互能力。
 ---
 
 # 🤖 AI Agents Weekly: GPT-5.6 Family, Meta Muse Spark 1.1, Grok 4.5, SWE-1.7, Robostral Navigate, The Harness Effect, and More

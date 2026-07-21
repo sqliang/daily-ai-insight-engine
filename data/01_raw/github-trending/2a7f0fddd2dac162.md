@@ -333,6 +333,9 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: 2a7f0fddd2dac162
+manifest_dates:
+- '2026-06-21'
+- '2026-07-20'
 ---
 
 The next generation coding agent harness to raise the skill ceiling.

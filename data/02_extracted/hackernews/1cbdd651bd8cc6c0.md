@@ -14,13 +14,13 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 1cbdd651bd8cc6c0
 source_type: community_discussion
-tldr: 医生面对绝症时倾向于放弃激进治疗，选择居家安宁疗护，这与普通大众接受过度医疗的做法截然不同。
-objective_summary: 退休家庭医生Ken Murray于2011年发表文章，通过多位医生和病人的真实案例，阐述了医生群体因深知现代医学局限而选择少治疗、有尊严地离世的现象，并分析了患者、医生和按服务收费医疗系统三方共同导致的过度医疗问题。
+tldr: 退休家庭医生 Ken Murray 以亲身经历阐述，医生群体深知激进临终治疗的痛苦与无效，面对绝症时往往选择放弃抢救、回家安详离世，而非接受自己明知无效的过度治疗。
+objective_summary: Ken Murray 是一名退休家庭医生，他在文章中通过多个真实病例（患胰腺癌的导师 Charlie、糖尿病截肢的律师、中风昏迷的
+  Jack、肺癌脑转移的表兄 Torch）说明：医生因亲眼目睹过度治疗带来的痛苦和有限效果，面对绝症时倾向于放弃化疗、手术和心肺复苏等激进手段，选择居家临终关怀。文章指出过度治疗的根源在于家属的恐惧与不切实际的期望、医生的诉讼顾虑以及按服务收费的医疗体系激励机制。
 event_type: policy_and_safety
 epistemic_status: theoretical_claim
 entities:
-  companies:
-  - Medicare
+  companies: []
   technologies: []
   key_people:
   - Ken Murray
@@ -29,13 +29,14 @@ entities:
   - Jack
   - Tom Wicker
 key_logic_flow:
-- 医生Charlie被诊断出胰腺癌后拒绝手术和化疗，选择回家与家人共度最后时光，平静离世。
-- 医生群体普遍了解现代医学的极限，更倾向于在临终时拒绝CPR等抢救措施，避免承受无意义的痛苦。
-- 过度医疗的根源在于：患者家属因恐惧和缺乏医学知识而要求做一切；医生因沟通困难和惧诉心理而顺从；按服务收费的医疗系统激励了不必要的治疗。
-- 安宁疗护能为临终患者提供更好的生活质量和尊严，有研究表明接受安宁疗护的患者比寻求积极治疗的患者活得更久。
-- 作者表兄Torch被诊断为肺癌脑转移后放弃化疗，选择与家人共度最后八个月，在睡梦中安详离世，医疗费用仅约20美元。
-- Jack虽已明确书面拒绝生命支持系统，但在突发中风后仍被医院实施插管抢救，说明即使提前做好规划，医疗系统仍可能违背患者意愿。
+- 退休家庭医生 Ken Murray 通过自身经历观察到，医生面对绝症时往往选择放弃激进治疗，而是回家与家人共度最后时光。
+- 医学界普遍存在无效治疗现象：医生对危重病人使用各种先进技术，让病人在重症监护室承受巨大痛苦，花费高昂却收效甚微。
+- 造成过度治疗的原因包括：家属在紧急情况下难以做出理性选择、医生出于沟通困难和诉讼顾虑而妥协、按服务收费的医疗体系鼓励多做治疗。
+- 医生群体因深知过度治疗的后果，通常提前做好临终规划，拒绝心肺复苏等抢救措施，选择在家中安详离世。
+- 临终关怀能够为绝症患者提供有尊严的末期生活，研究甚至发现接受临终关怀的患者比接受积极治疗的患者活得更长。
+- 作者的表兄 Torch 确诊肺癌脑转移后放弃化疗，选择与家人共度八个月的优质生活，最终在家中安详离世，八个月的医疗费用仅约20美元。
 extract_result: success
+object_mentions: []
 ---
 
 *This hard-hitting blogpost by Ken Murray, a retired Los Angeles family doctor, helped open up discussions about why doctors routinely administer treatments to dying patients that they would adamantly refuse for themselves.*

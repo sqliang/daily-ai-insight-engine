@@ -244,65 +244,56 @@ id: 135bded64aec62fb
 manifest_dates:
 - '2026-07-02'
 source_type: community_discussion
-tldr: VulnClaw 是基于 LLM Agent 的 AI 渗透测试 CLI 工具，支持自然语言驱动的全自动安全测试。
-objective_summary: Unclecheng-li 在 GitHub 开源了 VulnClaw，一款基于 LLM Agent + MCP 工具链的 AI
-  渗透测试 CLI 工具，采用目标驱动求解引擎和证据级反幻觉机制，支持 13 个 LLM Provider 和 21 个渗透 Skill，
+tldr: VulnClaw 是一个基于 LLM Agent 和 MCP 工具链的开源 AI 渗透测试 CLI 工具，支持自然语言驱动完成信息收集、漏洞发现、利用和报告生成全流程，采用目标驱动求解引擎和证据级反幻觉闸门机制。
+objective_summary: Unclecheng-li/VulnClaw 是一个开源 AI 渗透测试 CLI 工具，基于 LLM Agent、MCP 工具链和渗透
+  Skill 编排构建。它将渗透测试重构为目标驱动的状态空间搜索，以目标达成或探索前沿耗尽为终止条件，而非固定轮数循环。该工具内置证据级反幻觉闸门，要求所有声称的
+  flag 必须在真实工具输出中逐字符出现才能被采信。它支持 OpenAI、MiniMax、DeepSeek 等 13 个 LLM Provider，内置 fetch、memory、chrome-devtools、burp
+  四个 MCP 服务，提供 REPL、TUI、Web UI 和 CLI 四种交互方式，适用于已授权的渗透测试、CTF 竞赛和安全教学场景。
 event_type: framework_tools
-epistemic_status: pr_statement
+epistemic_status: verified_fact
 entities:
   companies:
   - OpenAI
   - MiniMax
   - DeepSeek
-  - Zhipu AI
+  - 智谱
   - Moonshot
-  - Alibaba (Qwen)
+  - 千问
   - SiliconFlow
-  - Doubao
-  - Baichuan
-  - Stepfun
-  - SenseTime
-  - 01.AI (Yi)
+  - 豆包
+  - 百川
+  - 阶跃星辰
+  - 商汤
+  - 零一万物
   technologies:
   - LLM Agent
   - MCP
   - Tool Calling
-  - CVE
   - PoC
-  - SQL Injection
-  - JWT
-  key_people:
-  - Unclecheng-li
+  - CVE
+  - CTF
+  key_people: []
 key_logic_flow:
-- VulnClaw 是一个基于 LLM Agent + MCP 工具链的 AI 驱动渗透测试 CLI 工具，由 Unclecheng-li 开发并开源在 GitHub。
-- 该工具采用目标驱动求解引擎，将渗透测试建模为从 origin 向 goal 的状态空间搜索，以目标达成或探索前沿耗尽为终止条件。
-- 内置证据级反幻觉闸门，要求所有声称的漏洞结论必须在真实工具输出中逐字符出现才被采信，拒绝无证据支撑的完成声明。
-- 支持 13 个 LLM Provider（OpenAI、MiniMax、DeepSeek 等）和 21 个渗透 Skill（含 CTF Web/Crypto/Misc
-  等专项），含 180 个参考文档。
-- 支持 CLI、REPL、TUI 终端工作台和 Web UI 四种交互模式，提供一键全流程渗透和持续性渗透测试（周期循环）能力。
-- 具备结构性推理与自适应反思引擎（L0-L4 渐进绕过策略）、漏洞检测插件体系和自动生成结构化 Markdown 报告与 Python PoC 脚本的能力。
-specialized_tags:
-  github:
-    projectName: Unclecheng-li/VulnClaw
-    projectUrl: https://github.com/Unclecheng-li/VulnClaw
-    primaryLanguage: Python
-    licenseType: null
-    domain: ai_ml
-    crossTags:
-    - cli-tool
-    - security
-    - open-source
-    aiDetail:
-      primaryCategories:
-      - agent_framework
-      agentSubcategory:
-      - orchestration
-      - tool_use
-      - planning
-      - reflection
-      techTags:
-      - MCP
-      - function-calling
+- VulnClaw 是一个基于 LLM Agent 和 MCP 工具链的开源 AI 渗透测试 CLI 工具，由 Unclecheng-li 开发并发布在 GitHub
+  上。
+- 该工具采用目标驱动求解引擎，将渗透测试建模为从 origin 向 goal 的状态空间搜索，以目标达成、探索前沿耗尽或安全预算触达为终止条件。
+- 它内置证据级反幻觉闸门，要求所有声称的 flag 或结论必须在真实工具输出中逐字符出现才能被采信，杜绝凭空编造。
+- VulnClaw 支持 13 个 LLM Provider，包括 OpenAI、MiniMax、DeepSeek 等，以及 4 个内置 MCP 服务（fetch、memory、chrome-devtools、burp）。
+- 它提供 REPL、TUI、Web UI 和 CLI 四种交互模式，支持一键全流程渗透、持续渗透、信息收集、漏洞扫描、利用和报告生成等子命令。
+- 该工具包含 21 个渗透 Skill、漏洞检测插件体系、编解码加解密工具和结构化推理反思引擎，适用于授权渗透测试、CTF 竞赛和安全教学场景。
+object_mentions:
+- object_type: project
+  name: Unclecheng-li/VulnClaw
+  canonical_name: Unclecheng-li/VulnClaw
+  url: https://github.com/Unclecheng-li/VulnClaw
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - VulnClaw 是一个基于 LLM Agent + MCP 工具链的 AI 渗透测试 CLI 工具，可独立运行完成信息收集、漏洞发现、漏洞利用和报告生成全流程。
+  - 该项目采用目标驱动求解引擎和证据级反幻觉闸门，将渗透测试建模为从 origin 向 goal 的状态空间搜索，杜绝固定轮数空转。
+  - 它支持 13 个 LLM Provider 和 4 个内置 MCP 服务，提供 REPL、TUI、Web UI 和 CLI 四种交互方式，可从 PyPI 安装或
+    Docker 部署。
+  article_id: 135bded64aec62fb
 extract_result: success
 impact_score:
   score: 5.5
@@ -360,6 +351,38 @@ confidence:
   compound: medium
   hype: medium
 actionable_insight: deep_dive
+object_insights:
+- object_type: project
+  name: Unclecheng-li/VulnClaw
+  canonical_name: Unclecheng-li/VulnClaw
+  url: https://github.com/Unclecheng-li/VulnClaw
+  positioning: 基于 LLM Agent 与 MCP 工具链的开源 AI 渗透测试 CLI 工具，采用目标驱动状态空间搜索重构渗透测试流程，支持自然语言驱动的全自动安全评估。
+  technical_signal: 采用目标驱动求解引擎和状态空间搜索替代固定轮数循环，引入证据级反幻觉闸门确保所有 flag 和结论必须源于真实工具输出，从架构层面杜绝凭空编造。
+  adoption_signal: 可通过 PyPI 安装或 Docker 部署，项目官网已上线，提供 REPL、TUI、Web UI 和 CLI 四种交互方式，降低了
+    AI 渗透测试工具的使用门槛。
+  ecosystem_relevance: 基于 MCP 协议连接 Chrome DevTools 和 Burp Suite 等安全工具，支持 OpenAI 等
+    13 个 LLM Provider，与 AI Agent 和开源安全工具生态紧密关联。
+  target_users:
+  - 授权渗透测试工程师
+  - CTF 竞赛选手
+  - 安全教学人员
+  - 红队演练成员
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: VulnClaw 以目标驱动求解引擎和证据级反幻觉机制解决了传统 AI 渗透工具的空转和幻觉问题，代表了 AI 安全测试从固定轮数到状态空间搜索的范式转变，技术路径值得持续跟踪。
+  risk_notes:
+  - 工具依赖 LLM 模型的推理能力，在弱模型或复杂渗透场景下可能出现推理质量波动。
+  - Python 代码执行能力被明确标注为高风险实验功能，不提供强隔离沙箱，存在安全隐患。
+  - 作为新兴开源项目，社区规模、企业采用量和长期维护可持续性仍需进一步验证。
+  score: 7.0
+  article_ids:
+  - 135bded64aec62fb
+  evidence_snippets:
+  - VulnClaw 是一个基于 LLM Agent + MCP 工具链的 AI 渗透测试 CLI 工具，可独立运行完成信息收集、漏洞发现、漏洞利用和报告生成全流程。
+  - 该项目采用目标驱动求解引擎和证据级反幻觉闸门，将渗透测试建模为从 origin 向 goal 的状态空间搜索，杜绝固定轮数空转。
+  - 它支持 13 个 LLM Provider 和 4 个内置 MCP 服务，提供 REPL、TUI、Web UI 和 CLI 四种交互方式，可从 PyPI 安装或
+    Docker 部署。
 ---
 
 AI 驱动的渗透测试 CLI 工具 — 说人话，打漏洞。

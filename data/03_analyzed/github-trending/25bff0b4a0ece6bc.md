@@ -64,32 +64,38 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 25bff0b4a0ece6bc
 source_type: community_discussion
-tldr: davila7 发布了 Claude Code 模板集合仓库，提供 100+ 免配置的 Agents、Commands、MCPs 及 Skills 模板。
-objective_summary: davila7 于 GitHub 上发布了 claude-code-templates 仓库，这是一个面向 Anthropic
-  Claude Code 的 100+ 模板集合。用户可通过 npx 命令安装包括 Agents、Commands、MCPs、Settings、Hooks 和 Skills
+tldr: davila7/claude-code-templates 是一个 Claude Code 配置模板集合，包含 100 多个 AI 智能体、命令、MCP
+  集成、设置、钩子和技能模板，可通过 npx 一键安装。
+objective_summary: davila7/claude-code-templates 发布了面向 Anthropic Claude Code 的配置模板集合，涵盖智能体、命令、MCP
+  集成、设置、钩子和技能六大组件，用户可通过 npx claude-code-templates@latest 命令安装完整开发栈或单个组件。该项目还提供 aitmpl.com
+  网页界面用于浏览和安装模板，以及 analytics、chats、health-check 和 plugins 等开发工具。项目中包含了来自 K-Dense-AI、Anthropic
+  官方及社区的多项技能和配置，均保留原始许可证和署名。
 event_type: framework_tools
 epistemic_status: verified_fact
 entities:
   companies:
-  - davila7
   - Anthropic
   - K-Dense Inc.
+  - Jesse Obra
+  - Alireza Rezvani
+  - wshobson
+  - NerdyChefsAI
   technologies:
   - MCP
   - Claude Code
   key_people:
+  - davila7
   - Jesse Obra
   - Alireza Rezvani
   - wshobson
 key_logic_flow:
-- davila7 发布了 claude-code-templates，这是一个为 Anthropic Claude Code 提供免配置模板的 GitHub 开源仓库。
-- 模板库涵盖六大组件类型：AI 智能体（Agents）、自定义命令（Commands）、外部集成 MCP（MCPs）、配置设置（Settings）、自动化钩子（Hooks）和可复用技能（Skills），总量超过
-  100 个。
-- 用户可通过 npx claude-code-templates@latest 命令以多种方式安装：交互式浏览、指定组件安装或一键安装完整开发栈。
-- 项目还附带辅助开发工具：实时会话监控（analytics）、移动端聊天界面（chats，支持 Cloudflare Tunnel 远程访问）、安装健康检查（health-check）和插件管理（plugins）。
-- 该仓库整合了 Anthropic 官方技能、K-Dense Inc. 的 139 个科学技能以及多个社区贡献者的模板，各自保留原始许可证和归属。
-- 项目采用 MIT 许可证，提供 aitmpl.com 在线浏览界面、docs.aitmpl.com 文档站以及 GitHub Issues 和 Discussions
-  社区支持。
+- davila7/claude-code-templates 是一个面向 Anthropic Claude Code 的模板集合仓库，提供 100 多个 AI 智能体、命令、MCP
+  集成、设置、钩子和技能的预配置模板。
+- 用户可以通过 npx claude-code-templates@latest 命令交互式浏览和安装模板，也可使用 --agent、--command、--mcp
+  等参数选择性安装特定组件。
+- 该项目提供了 aitmpl.com 网页界面用于在线浏览和安装模板，以及 docs.aitmpl.com 文档站点提供完整的使用指南和 API 参考。
+- 项目还包含了 analytics（实时会话监控）、chats（移动端响应查看）、health-check（诊断工具）和 plugins（插件管理）等附加开发工具。
+- 项目中集成了来自 K-Dense-AI 的科学技能、Anthropic 官方技能、以及社区贡献的多个技能和命令集合，各自保留原始许可证和署名。
 specialized_tags:
   github:
     projectName: davila7/claude-code-templates
@@ -116,6 +122,117 @@ specialized_tags:
       - function-calling
       - CLI
 extract_result: success
+object_mentions:
+- object_type: project
+  name: davila7/claude-code-templates
+  canonical_name: davila7/claude-code-templates
+  url: https://github.com/davila7/claude-code-templates
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 该项目是一个面向 Anthropic Claude Code 的配置模板集合，涵盖 AI 智能体、命令、MCP 集成、设置、钩子和技能等六大组件。
+  - 用户可以通过 npx claude-code-templates@latest 命令交互式浏览和安装模板，或使用 --agent、--command、--mcp
+    等参数进行选择性安装。
+  article_id: 25bff0b4a0ece6bc
+- object_type: product
+  name: aitmpl.com
+  canonical_name: aitmpl.com
+  url: https://www.aitmpl.com
+  confidence: high
+  article_role: ecosystem_context
+  evidence_snippets:
+  - 该网站提供了交互式网页界面，用户可以在此浏览、管理集合和跟踪模板安装情况，当前处于测试阶段。
+  article_id: 25bff0b4a0ece6bc
+- object_type: product
+  name: docs.aitmpl.com
+  canonical_name: docs.aitmpl.com
+  url: https://docs.aitmpl.com
+  confidence: high
+  article_role: ecosystem_context
+  evidence_snippets:
+  - 该网站提供了完整的使用指南、示例和 API 参考，涵盖所有组件和工具的详细文档。
+  article_id: 25bff0b4a0ece6bc
+- object_type: project
+  name: K-Dense-AI/claude-scientific-skills
+  canonical_name: K-Dense-AI/claude-scientific-skills
+  url: https://github.com/K-Dense-AI/claude-scientific-skills
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 该项目由 K-Dense Inc. 开发，采用 MIT 许可证，包含 139 个面向生物学、化学、医学和计算研究的科学技能。
+  article_id: 25bff0b4a0ece6bc
+- object_type: project
+  name: anthropics/skills
+  canonical_name: anthropics/skills
+  url: https://github.com/anthropics/skills
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 该项目是 Anthropic 官方提供的 Claude Code 技能集合，包含 21 个官方技能。
+  article_id: 25bff0b4a0ece6bc
+- object_type: project
+  name: obra/superpowers
+  canonical_name: obra/superpowers
+  url: https://github.com/obra/superpowers
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 该项目由 Jesse Obra 开发，采用 MIT 许可证，包含 14 个工作流程技能。
+  article_id: 25bff0b4a0ece6bc
+- object_type: project
+  name: awesome-claude-code
+  canonical_name: hesreallyhim/awesome-claude-code
+  url: https://github.com/hesreallyhim/awesome-claude-code
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 该项目由 hesreallyhim 维护，采用 CC0 1.0 通用许可证，包含 21 个 Claude Code 命令。
+  article_id: 25bff0b4a0ece6bc
+- object_type: project
+  name: alirezarezvani/claude-skills
+  canonical_name: alirezarezvani/claude-skills
+  url: https://github.com/alirezarezvani/claude-skills
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 该项目由 Alireza Rezvani 开发，采用 MIT 许可证，包含 36 个专业角色技能。
+  article_id: 25bff0b4a0ece6bc
+- object_type: project
+  name: wshobson/agents
+  canonical_name: wshobson/agents
+  url: https://github.com/wshobson/agents
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 该项目由 wshobson 开发，采用 MIT 许可证，包含 48 个 AI 智能体。
+  article_id: 25bff0b4a0ece6bc
+- object_type: product
+  name: claude-code-templates analytics
+  canonical_name: claude-code-templates-analytics
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - 该工具提供实时的 AI 驱动开发会话监控功能，包含实时状态检测和性能指标展示。
+  article_id: 25bff0b4a0ece6bc
+- object_type: product
+  name: claude-code-templates chats
+  canonical_name: claude-code-templates-chats
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - 该工具提供移动端优化的 Claude 响应实时查看界面，并支持通过 Cloudflare Tunnel 实现安全远程访问。
+  article_id: 25bff0b4a0ece6bc
+- object_type: product
+  name: claude-code-templates health-check
+  canonical_name: claude-code-templates-health-check
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - 该诊断工具用于确保 Claude Code 安装配置处于最优状态，提供全面的系统检查功能。
+  article_id: 25bff0b4a0ece6bc
 impact_score:
   score: 3.5
   reason: 该项目是一个 Claude Code 模板集合仓库，提供 100+ 预配置模板（Agents、Commands、MCPs、Settings、Hooks、Skills）的便捷
@@ -169,6 +286,159 @@ confidence:
   compound: medium
   hype: low
 actionable_insight: monitor
+object_insights:
+- object_type: project
+  name: davila7/claude-code-templates
+  canonical_name: davila7/claude-code-templates
+  url: https://github.com/davila7/claude-code-templates
+  positioning: 面向 Anthropic Claude Code 的一站式配置模板集合，提供 100 多个 AI 智能体、命令、MCP 集成、设置、钩子和技能等预配置模板，可通过
+    npx 一键安装或选择性组件安装。
+  technical_signal: 以 Monorepo 架构整合六大组件，并提供 CLI 交互式安装、选择性参数安装及 aitmpl.com 网页界面浏览三种交付方式。
+  adoption_signal: 用户可通过 npx claude-code-templates@latest 命令一键安装完整开发栈，并辅以 aitmpl.com
+    网页界面与 docs.aitmpl.com 文档站点降低使用门槛。
+  ecosystem_relevance: 深度嵌入 Claude Code 生态，集成 K-Dense-AI 科学技能、Anthropic 官方技能及多项社区贡献，并保留原始许可证和署名。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: 作为 Claude Code 生态中规模最大的模板聚合项目（100+ 模板），该项目整合了六大组件和多项第三方资源，随着 Claude
+    Code 用户增长其生态影响力将持续扩大，值得关注其采纳速度、网页平台迭代和社区贡献活跃度。
+  risk_notes:
+  - 模板质量依赖社区贡献，大量第三方来源可能导致质量良莠不齐和兼容性问题。
+  - 项目对 Claude Code 特定版本存在依赖，官方 API 变更可能导致部分模板或组件失效。
+  score: 8.0
+  article_ids:
+  - 25bff0b4a0ece6bc
+  evidence_snippets:
+  - 该项目是一个面向 Anthropic Claude Code 的配置模板集合，涵盖 AI 智能体、命令、MCP 集成、设置、钩子和技能等六大组件。
+  - 用户可以通过 npx claude-code-templates@latest 命令交互式浏览和安装模板，或使用 --agent、--command、--mcp
+    等参数进行选择性安装。
+- object_type: project
+  name: K-Dense-AI/claude-scientific-skills
+  canonical_name: K-Dense-AI/claude-scientific-skills
+  url: https://github.com/K-Dense-AI/claude-scientific-skills
+  positioning: 由 K-Dense Inc. 开发的 139 个面向生物学、化学、医学和计算研究的科学技能集合，采用 MIT 许可证开源。
+  technical_signal: 以 139 个技能的规模覆盖生物、化学、医学和计算研究四大科学领域，是 Claude Code 生态中最大的专业领域技能包。
+  adoption_signal: 被 davila7/claude-code-templates 集成至模板集合的一键安装流程中，借助聚合分发渠道触达更广泛的用户。
+  ecosystem_relevance: 显著补充了 Claude Code 在科学计算和学术研究领域的专业能力，将 AI 编程助手的应用场景从软件开发拓展至科研场景。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: 139 个科学技能使其成为 Claude Code 生态中规模最大的专业领域技能集合，若科研社区验证其有效性，有望成为科研人员使用
+    AI 编程助手的标配工具包。
+  risk_notes:
+  - 科学技能在真实科研场景中的准确性和实用性有待学术社区进一步验证。
+  - 139 个技能的维护工作量较大，可能存在部分技能更新滞后的问题。
+  score: 5.0
+  article_ids:
+  - 25bff0b4a0ece6bc
+  evidence_snippets:
+  - 该项目由 K-Dense Inc. 开发，采用 MIT 许可证，包含 139 个面向生物学、化学、医学和计算研究的科学技能。
+- object_type: project
+  name: anthropics/skills
+  canonical_name: anthropics/skills
+  url: https://github.com/anthropics/skills
+  positioning: Anthropic 官方维护的 Claude Code 技能集合，包含 21 个官方技能，是 Claude Code 生态中最权威的技能参考来源。
+  technical_signal: 由 Anthropic 官方团队直接开发维护，21 个技能代表 Claude Code 能力的官方最佳实践和推荐配置。
+  adoption_signal: 被第三方模板集合如 davila7/claude-code-templates 主动集成，作为上游依赖被纳入一键安装流程。
+  ecosystem_relevance: 作为官方标准仓库，对 Claude Code 技能生态的标准化、最佳实践传播和第三方开发者参考起核心指导作用。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: 官方技能仓库的更新频率和新增技能类型是 Claude Code 平台演进方向和能力边界的重要信号，值得持续跟踪其内容变化。
+  risk_notes:
+  - Anthropic 可能改变技能分发策略，第三方模板的集成方式可能面临兼容性调整。
+  score: 5.0
+  article_ids:
+  - 25bff0b4a0ece6bc
+  evidence_snippets:
+  - 该项目是 Anthropic 官方提供的 Claude Code 技能集合，包含 21 个官方技能。
+- object_type: project
+  name: obra/superpowers
+  canonical_name: obra/superpowers
+  url: https://github.com/obra/superpowers
+  positioning: 由 Jesse Obra 开发的 14 个工作流程技能集合，采用 MIT 许可证，专注于提升 Claude Code 的开发工作流自动化效率。
+  technical_signal: 以 14 个工作流程技能覆盖 Claude Code 自动化场景，聚焦开发效率和流程优化的轻量级技能集合。
+  adoption_signal: 已被 davila7/claude-code-templates 等项目集成，在 Claude Code 社区中具有一定知名度和引用基础。
+  ecosystem_relevance: 作为社区驱动的工作流技能代表，丰富了 Claude Code 在开发流程自动化领域的实用能力。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: 该项目在社区中被作为工作流技能的代表引用，其设计模式和实现思路可能影响后续社区贡献的方向和标准。
+  risk_notes:
+  - 项目维护依赖单一个人开发者，存在维护节奏不稳定的风险。
+  - 14 个技能的覆盖范围有限，对复杂工作流的支持能力有待扩展。
+  score: 4.0
+  article_ids:
+  - 25bff0b4a0ece6bc
+  evidence_snippets:
+  - 该项目由 Jesse Obra 开发，采用 MIT 许可证，包含 14 个工作流程技能。
+- object_type: project
+  name: awesome-claude-code
+  canonical_name: hesreallyhim/awesome-claude-code
+  url: https://github.com/hesreallyhim/awesome-claude-code
+  positioning: 由 hesreallyhim 维护的 Claude Code 精选资源列表，收录 21 个 Claude Code 命令，采用 CC0
+    1.0 通用许可证开放共享。
+  technical_signal: 以 Awesome 风格精选列表组织 Claude Code 生态中的命令资源，采用 CC0 1.0 许可证最大化开放程度。
+  adoption_signal: 作为 Claude Code 生态中的资源发现入口，被 davila7/claude-code-templates 集成至命令组件中。
+  ecosystem_relevance: 以资源聚合器角色服务于 Claude Code 社区，帮助开发者快速发现和筛选优质命令与工具。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: Awesome 列表的新增收录和更新频率是衡量 Claude Code 生态活跃度和工具丰富度的侧面指标。
+  risk_notes:
+  - 作为社区维护的精选列表，可能存在更新不及时或收录标准不够透明的问题。
+  score: 3.0
+  article_ids:
+  - 25bff0b4a0ece6bc
+  evidence_snippets:
+  - 该项目由 hesreallyhim 维护，采用 CC0 1.0 通用许可证，包含 21 个 Claude Code 命令。
+- object_type: project
+  name: alirezarezvani/claude-skills
+  canonical_name: alirezarezvani/claude-skills
+  url: https://github.com/alirezarezvani/claude-skills
+  positioning: 由 Alireza Rezvani 开发的 36 个专业角色技能集合，采用 MIT 许可证，按职业角色分类提供定制化的 Claude
+    Code 交互配置。
+  technical_signal: 以 36 个按专业角色分类的技能模板组织，为不同职业角色（如开发者、设计师等）提供差异化的 Claude Code 交互配置。
+  adoption_signal: 被 davila7/claude-code-templates 集成至技能组件中，借由聚合分发触达更广泛的用户群体。
+  ecosystem_relevance: 拓展了 Claude Code 在专业角色定制化场景的应用边界，丰富了生态中技能的组织方式和多样性。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: 按角色组织技能的设计思路具有创新性，可能代表 Claude Code 技能发展的一个新方向，值得观察其用户接受度。
+  risk_notes:
+  - 角色技能的实用性和边界效果尚未经过大规模用户验证，实际体验可能因人而异。
+  score: 4.0
+  article_ids:
+  - 25bff0b4a0ece6bc
+  evidence_snippets:
+  - 该项目由 Alireza Rezvani 开发，采用 MIT 许可证，包含 36 个专业角色技能。
+- object_type: project
+  name: wshobson/agents
+  canonical_name: wshobson/agents
+  url: https://github.com/wshobson/agents
+  positioning: 由 wshobson 开发的 48 个 AI 智能体集合，采用 MIT 许可证，是 Claude Code 生态中规模最大的第三方智能体资源之一。
+  technical_signal: 提供 48 个面向不同场景的 Claude Code 智能体配置，覆盖广泛的开发需求，是生态中第三方智能体数量最多的集合之一。
+  adoption_signal: 被 davila7/claude-code-templates 集成至智能体组件中，受益于模板集合的分发渠道和安装流程。
+  ecosystem_relevance: 丰富了 Claude Code 智能体生态的供给多样性，展示了社区对 AI 智能体配置的真实需求和偏好方向。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: 48 个智能体的规模使其成为生态中的重要参考，其分类方式和场景覆盖反映了社区对 AI 智能体的真实需求分布。
+  risk_notes:
+  - 智能体配置的质量可能参差不齐，用户在实际使用中可能需要自行调试和优化。
+  - 48 个智能体涉及广泛场景，维护者更新和测试的压力较大。
+  score: 4.0
+  article_ids:
+  - 25bff0b4a0ece6bc
+  evidence_snippets:
+  - 该项目由 wshobson 开发，采用 MIT 许可证，包含 48 个 AI 智能体。
 ---
 
 🧪 NEW: Dashboard— Explore components, manage collections, and track installations atwww.aitmpl.com. Currently in beta — feedback welcome!

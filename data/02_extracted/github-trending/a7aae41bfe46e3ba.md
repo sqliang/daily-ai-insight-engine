@@ -29,9 +29,11 @@ id: a7aae41bfe46e3ba
 manifest_dates:
 - '2026-07-04'
 source_type: community_discussion
-tldr: Apache Maven 是基于 POM 的软件项目管理和构建工具。
-objective_summary: Apache Maven 是一个软件项目管理和理解工具，基于项目对象模型（POM）概念，用于管理项目的构建、报告和文档。构建需要
-  Java 17+ 和 Maven 3.9.0+，采用 Apache License 2.0 许可证。
+tldr: Apache Maven 是一个基于项目对象模型（POM）的软件项目管理和理解工具，可从统一信息中心管理构建、报告和文档。该项目托管在 GitHub 上，使用
+  Apache License 2.0 协议。
+objective_summary: Apache Software Foundation 维护的开源项目 Apache Maven，是一款基于项目对象模型（POM）概念的软件项目管理和理解工具。Maven
+  能够从统一的信息中心管理项目的构建、报告和文档。该项目托管在 GitHub 上，代码采用 Apache License 2.0 协议授权。构建 Maven 需要
+  Java 17 以上版本和 Maven 3.9.0 以上版本。
 event_type: framework_tools
 epistemic_status: verified_fact
 entities:
@@ -39,14 +41,16 @@ entities:
   - Apache Software Foundation
   technologies:
   - Maven
-  - POM (Project Object Model)
+  - POM
+  - Java
   key_people: []
 key_logic_flow:
-- Apache Maven 是一个软件项目管理和理解工具，核心概念是项目对象模型（POM）。
-- Maven 可以从统一的信息中心管理项目的构建、报告和文档生命周期。
-- 构建 Maven 需要 Java 17+ 环境和 Maven 3.9.0 或更高版本的引导。
-- 该项目采用 Apache License 2.0 开源许可证。
-- 用户可通过 Maven Issue Tracker 提交 bug 报告，通过邮件列表参与开发讨论。
+- Apache Maven 是一款基于项目对象模型（POM）概念的软件项目管理和理解工具。
+- Maven 可以从统一的信息中心管理项目的构建、报告和文档。
+- 构建 Maven 需要 Java 17 或以上版本以及 Maven 3.9.0 或以上版本。
+- Maven 的源代码使用 Apache License 2.0 协议进行授权。
+- 用户可以通过 `mvn -DdistributionTargetDir=... clean package` 命令编译生成 Maven 发行版。
+- 项目托管在 GitHub 上，用户可以通过 Issue Tracker 提交 bug 报告。
 specialized_tags:
   github:
     projectName: apache/maven
@@ -59,6 +63,18 @@ specialized_tags:
     - project-management
     - java
 extract_result: success
+object_mentions:
+- object_type: project
+  name: apache/maven
+  canonical_name: apache/maven
+  url: https://github.com/apache/maven
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Apache Maven 是一款基于项目对象模型（POM）概念的软件项目管理和理解工具。
+  - Maven 可以从统一的信息中心管理项目的构建、报告和文档。
+  - 构建 Maven 需要 Java 17 或以上版本以及 Maven 3.9.0 或以上版本。
+  article_id: a7aae41bfe46e3ba
 ---
 
 Apache Maven is a software project management and comprehension tool. Based on the concept of a project object model (POM), Maven can manage a project's build, reporting and documentation from a central piece of information.
