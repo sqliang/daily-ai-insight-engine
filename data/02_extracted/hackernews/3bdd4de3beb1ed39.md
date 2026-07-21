@@ -13,27 +13,30 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 3bdd4de3beb1ed39
 source_type: community_discussion
-tldr: 纽约市通过新规禁止企业利用欺骗性订阅自动续费和隐藏费用陷阱。
-objective_summary: 2026年7月10日，纽约市消费者保护办公室宣布通过新规，禁止企业利用欺骗性订阅自动续费和"垃圾费用"陷阱。新规要求企业提供简便取消方式并明示总价，违规者面临每用户525美元罚款，将于10月1日生效，预计每年为纽约居民节省1.625亿美元。
+tldr: 纽约市通过新规，禁止企业使用欺骗性订阅手段强制用户续费，自2026年10月1日起生效，违规者面临每用户525美元罚款。该市同时提议禁止"垃圾费用"规则，要求所有商品和服务的广告必须标注包含全部强制费用的总价。
+objective_summary: 纽约市消费者和劳工保护局于2026年7月10日宣布通过一项反欺骗订阅新规，要求企业提供简便的取消订阅方式，违者每用户罚款525美元，新规将于10月1日生效。该局同时提议禁止"垃圾费用"规则，要求所有商品和服务的广告必须包含全部强制附加费用，若通过将对纽约租房市场产生广泛影响（约70%居民租房居住）。据罗斯福研究所估计，仅订阅新规每年可为纽约市民节省约1.625亿美元。
 event_type: policy_and_safety
 epistemic_status: verified_fact
 entities:
   companies:
-  - Roosevelt Institute
+  - New York City Consumer and Worker Protection Department
+  - Federal Trade Commission
   - US Chamber of Commerce
-  - FTC
+  - Roosevelt Institute
   technologies: []
   key_people:
   - Samuel AA Levine
   - Zohran Mamdani
+  - Donald Trump
 key_logic_flow:
-- 纽约市通过新规，禁止企业利用欺骗性订阅自动续费手段让消费者持续付费，新规将于2026年10月1日生效。
-- 违规企业若未提供简便取消方式，将面临每用户525美元罚款及附加费用追缴。
-- 纽约市同时提出"垃圾费用"禁令，要求所有商品和服务的广告价格必须包含所有强制性附加费用，涵盖公寓、体育赛事等领域。
-- 纽约市成为全美首个实施此类禁令的城市，罗斯福研究所估计该政策每年可为纽约居民节省1.625亿美元。
-- 针对租房市场的规定要求所有强制费用（含年度费用）必须包含在标明的月租金中，将影响约70%租房居民的住房市场。
-- 全国性"一键取消"规则曾于2025年被联邦法官以程序问题推翻，特朗普政府的FTC计划在未来数月内通过类似规则。
+- 纽约市消费者和劳工保护局通过新规，禁止企业利用欺骗性订阅手段让消费者为健身房会员、流媒体服务等重复付费。
+- 新规自2026年10月1日起生效，不提供简便取消方式的企业将面临每用户525美元罚款及额外追缴费用。
+- 该局同时提议禁止"垃圾费用"规则，要求所有商品和服务的广告必须标注包含全部强制附加费用的总价。
+- 纽约市将是美国第一个实施此类综合禁令的城市，该措施旨在打击企业隐藏真实价格的市场扭曲行为。
+- 消费者和劳工保护局局长Samuel AA Levine批评自里根时代以来放松监管导致40年欺骗性定价盛行。
+- 该市还在考虑禁止"监控定价"——企业根据消费者的消费习惯等算法信息对同一商品或服务收取不同价格，马里兰州已率先禁止此做法。
 extract_result: success
+object_mentions: []
 ---
 
 New York City has adopted a new rule that bans companies from using deceptive subscriptions to trap customers into paying for gym memberships, streaming services and other recurring charges, the city’s consumer protection office said.

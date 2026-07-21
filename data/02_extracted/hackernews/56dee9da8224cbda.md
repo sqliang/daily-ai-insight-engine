@@ -13,30 +13,30 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 56dee9da8224cbda
 source_type: community_discussion
-tldr: Lisp 通过宏和 homoiconicity 实现语言可编程，REPL 提供实时交互开发体验。
-objective_summary: 文章阐述 Lisp 语言三大核心特性：宏（macro）允许程序员扩展语言自身、homoiconicity（代码即数据）使程序能编写程序、REPL
-  驱动的实时开发系统让编程成为演化过程。作者认为这些特性赋予 Lisp 其他语言无法比拟的灵活性和表达力。
+tldr: Lisp 是一门可编程的编程语言，通过宏实现语言扩展性，利用同像性让代码像数据一样被操作，并通过 REPL 驱动开发提供实时编程体验。文章解释了 Blub
+  悖论以及 Lisp 能让程序员以其他语言无法实现的方式思考问题。
+objective_summary: 该文章由开发者 Scott O. 撰写，发表于个人博客，旨在解释 Lisp 编程语言的独特价值。文章阐述了 Lisp 的三大核心特性：宏扩展让程序员能够创建新的语言构造、同像性使代码与数据都用列表表示，以及
+  REPL 驱动的实时开发环境。文章引用 Paul Graham 的 Blub 悖论来说明为什么来自较弱语言的程序员难以理解 Lisp 的优势。作者认为即使最终不使用
+  Lisp，学习它也能让程序员获得关于编程语言能力的全新视角。
 event_type: framework_tools
-epistemic_status: verified_fact
+epistemic_status: theoretical_claim
 entities:
   companies: []
   technologies:
   - Lisp
   - Common Lisp
-  - macro
   - REPL
-  - s-expression
-  - homoiconicity
   key_people:
   - Paul Graham
-  - Louis Armstrong
 key_logic_flow:
-- Lisp 的学习曲线陡峭，但能改变程序员的思维方式，因为 Lisp 允许做其他语言无法实现的事情。
-- Lisp 通过宏实现语言扩展性：宏不同于函数，它不预先求值参数而是将参数作为纯数据对待，因此可以创建新的语言构造。
-- Lisp 具有 homoiconicity（代码即数据）特性，代码和数据都使用列表表示，这使得宏可以像操作数据一样操作源代码，实现编写程序的程序。
-- REPL-driven development 使 Lisp 成为实时系统：程序员在运行中的 Lisp 进程内持续求值代码、重新定义符号，无需停止和重新编译，热更新是语言的原生能力而非额外工具。
-- Lisp 的可扩展性、实时系统和代码即数据三个特性共同使其成为可编程的编程语言，程序员可以先将语言向问题方向演化，再用该语言编写程序。
+- Lisp 的学习曲线陡峭，但它能让程序员做到其他语言无法实现的事情，因为 Lisp 改变了使用代码解决问题的思维方式。
+- Paul Graham 提出的 Blub 悖论指出，只使用过较弱语言的程序员无法感知更强大语言（如 Lisp）的优势，因为他们缺少理解这些优势所需的概念。
+- Lisp 通过宏（macro）实现语言扩展性，宏不同于其他语言的宏，它允许创建成为语言本身一部分的新构造，而不仅仅是消除模板代码。
+- Lisp 具有同像性（homoiconicity），代码和数据都用列表表示，这一特性使宏成为可能——程序员可以像操作数据一样操作代码，实现程序编写程序。
+- Lisp 是一个实时系统，通过 REPL 驱动开发，程序员在运行中的进程内连续评估代码并立即观察输出，无需传统的编写-编译-运行-调试循环。
+- Lisp 的热重载是原生特性而非独立工具，每次重新定义符号（函数、数据或宏）都会在实时环境中自动生效，无需停止和重新编译。
 extract_result: success
+object_mentions: []
 ---
 
 The question that most programmers face when seeing some Lisp code for the first time is, without doubt, “what the hell is this?”. I asked myself the same thing when I first read its unconventional syntax: all those parentheses, the weird indentation, and who thought to use the first argument of `format`

@@ -76,31 +76,34 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 624efc8fafcad404
 source_type: community_discussion
-tldr: JCodesMore 发布 AI 网站克隆模板，可用 AI 编码代理将任意网站逆向工程为 Next.js 代码库
-objective_summary: JCodesMore 在 GitHub 发布 ai-website-cloner-template 开源模板，使用 Claude
-  Code 等 AI 编码代理对任意网站进行逆向工程，经过侦察、设计提取、组件规格编写、并行构建和组装质检五个阶段，生成基于 Next.
+tldr: JCodesMore 在 GitHub 上发布了一个 AI 网站克隆模板项目，可通过 AI 编码代理将任意网站逆向工程为 Next.js 16 现代化代码库。推荐使用
+  Claude Code 与 Opus 4.8，用户只需执行 /clone-website 命令即可触发多阶段自动化流水线。
+objective_summary: JCodesMore 在 GitHub 上发布了 ai-website-cloner-template 模板仓库，用于通过 AI
+  编码代理将任意网站逆向工程为基于 Next.js 16 的代码库。该项目推荐使用 Claude Code 搭配 Opus 4.8 模型，用户需先通过 GitHub
+  的 Use this template 按钮创建自己的仓库，安装依赖后启动 AI 代理并执行 /clone-website 命令。代理自动执行侦察、组件规范编写、并行构建和组装
+  QA 五个阶段，最终输出包含完整组件、图标、图片和设计令牌的 Next.js 项目。项目采用 MIT 许可证，并明确禁止用于钓鱼、冒充或违反服务条款等用途。
 event_type: framework_tools
 epistemic_status: verified_fact
 entities:
   companies:
-  - JCodesMore
+  - GitHub
   technologies:
-  - Next.js
+  - Next.js 16
   - shadcn/ui
-  - Tailwind CSS
+  - Tailwind CSS v4
   - Lucide React
-  - React
-  - TypeScript
+  - React 19
   key_people: []
 key_logic_flow:
-- JCodesMore 发布 ai-website-cloner-template 模板，用于将任意网站逆向工程转换为 Next.js 代码库
-- 该模板使用 AI 编码代理（推荐 Claude Code + Opus 4.8）执行五阶段流水线：侦察（截图、设计令牌提取、交互扫描）、基础设置（字体/颜色/全局样式/资源下载）、组件规格编写（精确
-  CSS 计算值说明）、并行构建（使用 git worktree 分派多个构建代理）、组装与质量检测（合并 worktree 并运行视觉差异对比）
-- 项目支持多种 AI 编码代理，包括 Claude Code、Codex CLI、Cursor、Windsurf、GitHub Copilot、Cline 等 13
-  种平台
-- 使用方式为点击 GitHub 'Use this template' 创建独立仓库，安装依赖后运行 /clone-website <target-url> 命令
-- 项目明确禁止用于钓鱼、仿冒、盗用他人设计或违反服务条款等恶意用途
-- 采用 MIT 开源协议，包含自动同步脚本（sync-agent-rules.sh 和 sync-skills.mjs）以维护跨平台代理指令文件
+- JCodesMore 在 GitHub 上发布了 ai-website-cloner-template 模板项目，用于通过 AI 编码代理将任意网站逆向工程为基于
+  Next.js 16 的现代化代码库。
+- 项目推荐使用 Claude Code 搭配 Opus 4.8 模型以获得最佳效果，同时也兼容 Codex CLI、Cursor、Windsurf 等十余种主流
+  AI 编码代理工具。
+- 用户需先通过 GitHub 的 Use this template 按钮创建自己的仓库副本，然后执行 npm install 安装依赖并启动 AI 代理。
+- /clone-website 命令包含侦察、基础构建、组件规范编写、并行构建和组装 QA 五个阶段的完整流水线，每个构建代理接收完整的组件规格说明。
+- 项目技术栈基于 Next.js 16 App Router、shadcn/ui、Tailwind CSS v4 和 Lucide React，输出目录包含 app
+  路由、组件、图标、图片和设计参考文档。
+- 项目明确声明禁止用于钓鱼、冒充他人身份或违反目标网站服务条款等用途，原始设计和品牌资产归其所有者所有。
 specialized_tags:
   github:
     projectName: JCodesMore/ai-website-cloner-template
@@ -126,6 +129,18 @@ specialized_tags:
       - shadcn-ui
       - React
 extract_result: success
+object_mentions:
+- object_type: project
+  name: JCodesMore/ai-website-cloner-template
+  canonical_name: JCodesMore/ai-website-cloner-template
+  url: https://github.com/JCodesMore/ai-website-cloner-template
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 该模板项目支持通过 AI 编码代理将任意网站逆向工程为基于 Next.js 16 的现代化代码库，用户只需指定目标 URL 即可自动完成重构。
+  - 推荐使用 Claude Code 搭配 Opus 4.8 模型，同时也兼容 Codex CLI、Cursor、Windsurf 等十余种主流 AI 编码代理工具。
+  - /clone-website 命令包含侦察、基础构建、组件规范编写、并行构建和组装 QA 五个阶段的多阶段流水线。
+  article_id: 624efc8fafcad404
 ---
 
 A reusable template for reverse-engineering any website into a clean, modern Next.js codebase using AI coding agents.

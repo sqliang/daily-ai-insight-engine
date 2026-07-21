@@ -8,6 +8,7 @@ created: '2026-07-15'
 manifest_dates:
 - '2026-07-15'
 - '2026-07-16'
+- '2026-07-17'
 description: Scaling LLMs isn’t about adding GPUs. It’s about removing wasted work
   from every request.
 tags:

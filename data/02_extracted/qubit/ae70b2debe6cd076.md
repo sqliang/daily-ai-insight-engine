@@ -12,8 +12,9 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: ae70b2debe6cd076
 source_type: news_media
-tldr: 蚂蚁开源 SingGuard-NSFA 和 SingGuard 两大 AI 安全框架，分别应对智能体行为安全与多模态感知安全风险
-objective_summary: 蚂蚁集团开源 SingGuard-NSFA 和 SingGuard 两大AI安全框架，前者面向智能体行为安全，基于NSFA分类体系实现风险前置拦截；后者面向多模态安全，以运行时规则输入实现判定。两者均强调过程可解释和新增风险可扩展。
+tldr: 蚂蚁集团开源了SingGuard-NSFA和SingGuard两大AI安全框架，分别面向智能体行为安全和多模态大模型感知安全。SingGuard-NSFA采用生成式推理与判别式分类头双模式，在三大评测基准上取得SOTA；SingGuard将安全规则作为运行时输入，通过RI-Mask实现多模态推理提速5倍以上。此举标志着行业从漏洞修补转向安全底层框架建设。
+objective_summary: 蚂蚁集团AI安全实验室近期开源了两大安全框架：面向智能体安全的SingGuard-NSFA和面向多模态大模型的SingGuard。SingGuard-NSFA提供0.8B至9B四种尺寸，采用SFT生成式推理与判别式分类头双模式拦截，判别式延迟低至45至57毫秒，在用户请求安全、模型响应安全和跨数据集泛化三大评测基准上均取得SOTA。SingGuard提供0.8B至8B四种尺寸，将安全规则作为运行时输入，支持快慢思考分工与early
+  exit自动切换，并提出了RI-Mask技术使多模态推理效率最高提升5倍以上。此前蚂蚁AI安全实验室曾发现OpenClaw多个高危漏洞并协助修复，还与清华大学联合开源了覆盖智能体全生命周期的ClawAegis安全方案。
 event_type: framework_tools
 epistemic_status: verified_fact
 entities:
@@ -26,24 +27,81 @@ entities:
   technologies:
   - SingGuard-NSFA
   - SingGuard
-  - Claude Code
-  - OpenClaw
+  - ClawAegis
   - NSFA风险分类体系
-  - CIA三元组
-  - OWASP
+  - RI-Mask
   - SFT
   - Llama Guard 3
-  - RI-Mask
-  - ClawAegis
+  - OWASP
+  - CIA三元组
   key_people: []
 key_logic_flow:
-- 工信部NVDB平台发布风险预警，指出Claude Code存在安全后门隐患，可在用户不知情时收集敏感信息；OpenClaw也被曝出高危漏洞，暴露了AI Agent从内容安全向行为安全转变的新风险形态。
-- 蚂蚁集团开源面向智能体安全的双模推理护栏框架SingGuard-NSFA，提供0.8B、2B、4B、9B四个参数量，以CIA三元组和OWASP指南为基础构建NSFA风险分类体系。
-- SingGuard-NSFA采用生成式推理（离线审计，链式推理）和判别式分类头（在线拦截，延迟45-57ms）两种模式；骨干网络冻结，仅需补训轻量分类头即可扩展新增风险类型。
-- SingGuard-NSFA在用户请求安全、模型响应安全、跨数据集泛化三大基准上取得SOTA，0.8B模型即可比肩8B竞品，9B泛化F1达91.29%。
-- 蚂蚁集团同步开源面向多模态大模型安全的SingGuard（0.8B-8B四个尺寸），将安全规则作为运行时输入，支持快思考与慢思考自动切换，并以RI-Mask实现多模态推理提速5倍以上。
-- 蚂蚁AI安全实验室此前已发现OpenClaw等多个高危漏洞并协助修复，与清华大学联合开源ClawAegis覆盖智能体全生命周期的安全方案，安全布局正从漏洞挖掘向底层框架演进。
+- 工信部NVDB平台发布风险预警，指出Claude Code存在安全后门隐患，可在用户不知情的情况下收集敏感信息。
+- 蚂蚁AI安全实验室此前曾发现OpenClaw等多个Agent产品的高危漏洞并协助官方修复，随后与清华大学联合开源了ClawAegis智能体全生命周期安全方案。
+- 蚂蚁集团近期开源了两大安全框架：面向智能体行为安全的SingGuard-NSFA和面向多模态大模型感知安全的SingGuard。
+- SingGuard-NSFA以CIA三元组为理论底座结合OWASP实践经验构建NSFA风险分类体系，通过SFT生成式推理与判别式分类头双模式拦截风险，其中判别式延迟低至45至57毫秒。
+- SingGuard-NSFA在三大评测基准上均取得SOTA，最小的0.8B模型即可比肩8B竞品，9B版本在泛化任务上达到91.29%的F1值。
+- SingGuard将安全规则作为运行时输入，不同业务域可现场下发各自红线，并采用快慢思考分工与early exit自动切换机制，RI-Mask技术使多模态推理最高提速5倍以上。
 extract_result: success
+object_mentions:
+- object_type: project
+  name: SingGuard-NSFA
+  canonical_name: SingGuard-NSFA
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 蚂蚁开源了面向智能体安全的双模推理护栏框架SingGuard-NSFA，包括0.8B、2B、4B、9B四个尺寸版本。
+  - SingGuard-NSFA采用SFT生成式推理与判别式分类头双模式同步进行风险拦截，判别式模式延迟可压到45至57毫秒。
+  - SingGuard-NSFA在用户请求安全、模型响应安全和跨数据集泛化三大评测基准上均取得SOTA，最小的0.8B模型就能比肩8B竞品。
+  article_id: ae70b2debe6cd076
+- object_type: project
+  name: SingGuard
+  canonical_name: SingGuard
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 蚂蚁开源了面向多模态大模型的安全框架SingGuard，同样包括0.8B、2B、4B、8B四个尺寸版本。
+  - SingGuard将安全规则做成运行时输入，不同业务域可以现场下发各自的红线，模型据此逐条判定。
+  - 蚂蚁提出了RI-Mask技术让共享的图文上下文只编码一次，多条规则并行判断，多模态推理最高可提速5倍以上。
+  article_id: ae70b2debe6cd076
+- object_type: project
+  name: ClawAegis
+  canonical_name: ClawAegis
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 蚂蚁与清华大学联合开源了ClawAegis，为智能体提供了一套覆盖产品全生命周期的安全方案。
+  article_id: ae70b2debe6cd076
+- object_type: product
+  name: Claude Code
+  canonical_name: Claude Code
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 工信部NVDB平台发布风险预警，明确指出Claude Code存在安全后门隐患，可在用户不知情的情况下收集敏感信息。
+  article_id: ae70b2debe6cd076
+- object_type: project
+  name: OpenClaw
+  canonical_name: OpenClaw
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 年初红遍全网的OpenClaw屡屡被曝出高危险漏洞，蚂蚁AI安全实验室曾发现其多个高危漏洞并协助官方完成修复。
+  article_id: ae70b2debe6cd076
+- object_type: project
+  name: Llama Guard 3
+  canonical_name: Llama Guard 3
+  url: null
+  confidence: low
+  article_role: ecosystem_context
+  evidence_snippets:
+  - 文章提到给Llama Guard 3额外增加一个分类头，用户请求安全基准的F1值可直接提升17.6个百分点。
+  article_id: ae70b2debe6cd076
 ---
 
 # Claude Code砸的坑，蚂蚁安全在尝试填上

@@ -12,8 +12,9 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: ae70b2debe6cd076
 source_type: news_media
-tldr: 蚂蚁开源 SingGuard-NSFA 和 SingGuard 两大 AI 安全框架，分别应对智能体行为安全与多模态感知安全风险
-objective_summary: 蚂蚁集团开源 SingGuard-NSFA 和 SingGuard 两大AI安全框架，前者面向智能体行为安全，基于NSFA分类体系实现风险前置拦截；后者面向多模态安全，以运行时规则输入实现判定。两者均强调过程可解释和新增风险可扩展。
+tldr: 蚂蚁集团开源了SingGuard-NSFA和SingGuard两大AI安全框架，分别面向智能体行为安全和多模态大模型感知安全。SingGuard-NSFA采用生成式推理与判别式分类头双模式，在三大评测基准上取得SOTA；SingGuard将安全规则作为运行时输入，通过RI-Mask实现多模态推理提速5倍以上。此举标志着行业从漏洞修补转向安全底层框架建设。
+objective_summary: 蚂蚁集团AI安全实验室近期开源了两大安全框架：面向智能体安全的SingGuard-NSFA和面向多模态大模型的SingGuard。SingGuard-NSFA提供0.8B至9B四种尺寸，采用SFT生成式推理与判别式分类头双模式拦截，判别式延迟低至45至57毫秒，在用户请求安全、模型响应安全和跨数据集泛化三大评测基准上均取得SOTA。SingGuard提供0.8B至8B四种尺寸，将安全规则作为运行时输入，支持快慢思考分工与early
+  exit自动切换，并提出了RI-Mask技术使多模态推理效率最高提升5倍以上。此前蚂蚁AI安全实验室曾发现OpenClaw多个高危漏洞并协助修复，还与清华大学联合开源了覆盖智能体全生命周期的ClawAegis安全方案。
 event_type: framework_tools
 epistemic_status: verified_fact
 entities:
@@ -26,24 +27,81 @@ entities:
   technologies:
   - SingGuard-NSFA
   - SingGuard
-  - Claude Code
-  - OpenClaw
+  - ClawAegis
   - NSFA风险分类体系
-  - CIA三元组
-  - OWASP
+  - RI-Mask
   - SFT
   - Llama Guard 3
-  - RI-Mask
-  - ClawAegis
+  - OWASP
+  - CIA三元组
   key_people: []
 key_logic_flow:
-- 工信部NVDB平台发布风险预警，指出Claude Code存在安全后门隐患，可在用户不知情时收集敏感信息；OpenClaw也被曝出高危漏洞，暴露了AI Agent从内容安全向行为安全转变的新风险形态。
-- 蚂蚁集团开源面向智能体安全的双模推理护栏框架SingGuard-NSFA，提供0.8B、2B、4B、9B四个参数量，以CIA三元组和OWASP指南为基础构建NSFA风险分类体系。
-- SingGuard-NSFA采用生成式推理（离线审计，链式推理）和判别式分类头（在线拦截，延迟45-57ms）两种模式；骨干网络冻结，仅需补训轻量分类头即可扩展新增风险类型。
-- SingGuard-NSFA在用户请求安全、模型响应安全、跨数据集泛化三大基准上取得SOTA，0.8B模型即可比肩8B竞品，9B泛化F1达91.29%。
-- 蚂蚁集团同步开源面向多模态大模型安全的SingGuard（0.8B-8B四个尺寸），将安全规则作为运行时输入，支持快思考与慢思考自动切换，并以RI-Mask实现多模态推理提速5倍以上。
-- 蚂蚁AI安全实验室此前已发现OpenClaw等多个高危漏洞并协助修复，与清华大学联合开源ClawAegis覆盖智能体全生命周期的安全方案，安全布局正从漏洞挖掘向底层框架演进。
+- 工信部NVDB平台发布风险预警，指出Claude Code存在安全后门隐患，可在用户不知情的情况下收集敏感信息。
+- 蚂蚁AI安全实验室此前曾发现OpenClaw等多个Agent产品的高危漏洞并协助官方修复，随后与清华大学联合开源了ClawAegis智能体全生命周期安全方案。
+- 蚂蚁集团近期开源了两大安全框架：面向智能体行为安全的SingGuard-NSFA和面向多模态大模型感知安全的SingGuard。
+- SingGuard-NSFA以CIA三元组为理论底座结合OWASP实践经验构建NSFA风险分类体系，通过SFT生成式推理与判别式分类头双模式拦截风险，其中判别式延迟低至45至57毫秒。
+- SingGuard-NSFA在三大评测基准上均取得SOTA，最小的0.8B模型即可比肩8B竞品，9B版本在泛化任务上达到91.29%的F1值。
+- SingGuard将安全规则作为运行时输入，不同业务域可现场下发各自红线，并采用快慢思考分工与early exit自动切换机制，RI-Mask技术使多模态推理最高提速5倍以上。
 extract_result: success
+object_mentions:
+- object_type: project
+  name: SingGuard-NSFA
+  canonical_name: SingGuard-NSFA
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 蚂蚁开源了面向智能体安全的双模推理护栏框架SingGuard-NSFA，包括0.8B、2B、4B、9B四个尺寸版本。
+  - SingGuard-NSFA采用SFT生成式推理与判别式分类头双模式同步进行风险拦截，判别式模式延迟可压到45至57毫秒。
+  - SingGuard-NSFA在用户请求安全、模型响应安全和跨数据集泛化三大评测基准上均取得SOTA，最小的0.8B模型就能比肩8B竞品。
+  article_id: ae70b2debe6cd076
+- object_type: project
+  name: SingGuard
+  canonical_name: SingGuard
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 蚂蚁开源了面向多模态大模型的安全框架SingGuard，同样包括0.8B、2B、4B、8B四个尺寸版本。
+  - SingGuard将安全规则做成运行时输入，不同业务域可以现场下发各自的红线，模型据此逐条判定。
+  - 蚂蚁提出了RI-Mask技术让共享的图文上下文只编码一次，多条规则并行判断，多模态推理最高可提速5倍以上。
+  article_id: ae70b2debe6cd076
+- object_type: project
+  name: ClawAegis
+  canonical_name: ClawAegis
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 蚂蚁与清华大学联合开源了ClawAegis，为智能体提供了一套覆盖产品全生命周期的安全方案。
+  article_id: ae70b2debe6cd076
+- object_type: product
+  name: Claude Code
+  canonical_name: Claude Code
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 工信部NVDB平台发布风险预警，明确指出Claude Code存在安全后门隐患，可在用户不知情的情况下收集敏感信息。
+  article_id: ae70b2debe6cd076
+- object_type: project
+  name: OpenClaw
+  canonical_name: OpenClaw
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 年初红遍全网的OpenClaw屡屡被曝出高危险漏洞，蚂蚁AI安全实验室曾发现其多个高危漏洞并协助官方完成修复。
+  article_id: ae70b2debe6cd076
+- object_type: project
+  name: Llama Guard 3
+  canonical_name: Llama Guard 3
+  url: null
+  confidence: low
+  article_role: ecosystem_context
+  evidence_snippets:
+  - 文章提到给Llama Guard 3额外增加一个分类头，用户请求安全基准的F1值可直接提升17.6个百分点。
+  article_id: ae70b2debe6cd076
 impact_score:
   score: 7.5
   reason: 评分依据：这是一次重要的AI安全基础设施级开源事件，影响面广且时机精准。首先，事件背景是Claude Code后门漏洞和OpenClaw高危漏洞接连曝光，整个行业对AI
@@ -99,6 +157,117 @@ confidence:
   compound: medium
   hype: medium
 actionable_insight: deep_dive
+object_insights:
+- object_type: project
+  name: SingGuard-NSFA
+  canonical_name: SingGuard-NSFA
+  url: null
+  positioning: 面向智能体行为的双模推理护栏框架，以CIA三元组为理论底座结合OWASP实践构建NSFA风险分类体系，通过生成式推理与判别式分类头双模式实现风险前置拦截。
+  technical_signal: 采用SFT生成式推理与判别式分类头双模式同步拦截风险，判别式延迟低至45至57毫秒，骨干网络冻结使新增风险仅需补训轻量分类头即可扩展。
+  adoption_signal: 最小的0.8B模型即可比肩8B竞品，9B版在泛化任务上达91.29% F1值，降低了各规模团队的部署门槛。
+  ecosystem_relevance: 作为开源框架可嵌入已有Agent体系，兼容Llama Guard等方案，给Llama Guard增加分类头后用户请求安全F1提升17.6个百分点。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: 蚂蚁作为支付与风控安全领域长期积累的公司，将AI安全从被动漏洞修补升级到底层框架建设，SingGuard-NSFA在三大评测基准上均取得SOTA，其可扩展架构应对新型风险的能力值得持续跟踪。
+  risk_notes:
+  - 框架效果验证主要基于蚂蚁自建评测基准，缺乏第三方独立评估机构的大规模复现验证。
+  - 当前仅覆盖智能体行为安全，与多模态安全框架SingGuard的协同边界尚不清晰。
+  score: 8.0
+  article_ids:
+  - ae70b2debe6cd076
+  evidence_snippets:
+  - 蚂蚁开源了面向智能体安全的双模推理护栏框架SingGuard-NSFA，包括0.8B、2B、4B、9B四个尺寸版本。
+  - SingGuard-NSFA采用SFT生成式推理与判别式分类头双模式同步进行风险拦截，判别式模式延迟可压到45至57毫秒。
+  - SingGuard-NSFA在用户请求安全、模型响应安全和跨数据集泛化三大评测基准上均取得SOTA，最小的0.8B模型就能比肩8B竞品。
+- object_type: project
+  name: SingGuard
+  canonical_name: SingGuard
+  url: null
+  positioning: 面向多模态大模型感知安全的开源框架，将安全规则作为运行时输入支持动态下发，通过快慢思考分工与RI-Mask技术实现多模态高效安全审核。
+  technical_signal: 将安全规则作为运行时输入，支持不同业务域现场下发红线；快慢思考分工与early exit自动切换；RI-Mask使多模态推理最高提速5倍以上。
+  adoption_signal: RI-Mask技术使多模态推理最高提速5倍以上，降低了多模态安全审核的性能门槛，有利于大规模部署。
+  ecosystem_relevance: 开源方式提供，规则作为运行时输入的设计使其可灵活适配不同业务场景的安全需求，推动多模态安全基础设施标准化。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: 多模态AI应用快速增长，感知层安全风险日益突出，SingGuard将安全规则动态化的创新思路和RI-Mask带来的5倍推理加速在行业中有较强的差异化价值。
+  risk_notes:
+  - 规则作为运行时输入的设计依赖业务方制定高质量安全规则，规则质量直接影响防护效果。
+  - 多模态场景下的安全攻击手段仍在快速演化，框架对新攻击模式的覆盖度待验证。
+  score: 7.0
+  article_ids:
+  - ae70b2debe6cd076
+  evidence_snippets:
+  - 蚂蚁开源了面向多模态大模型的安全框架SingGuard，同样包括0.8B、2B、4B、8B四个尺寸版本。
+  - SingGuard将安全规则做成运行时输入，不同业务域可以现场下发各自的红线，模型据此逐条判定。
+  - 蚂蚁提出了RI-Mask技术让共享的图文上下文只编码一次，多条规则并行判断，多模态推理最高可提速5倍以上。
+- object_type: project
+  name: ClawAegis
+  canonical_name: ClawAegis
+  url: null
+  positioning: 蚂蚁与清华大学联合开源的智能体全生命周期安全方案，覆盖从开发、部署到运行的系统化安全防护。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: 作为学术与产业合作的成果，连接清华大学研究能力与蚂蚁安全工程实践，与SingGuard-NSFA共同构成蚂蚁AI安全体系的互补组件。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: 与SingGuard-NSFA形成互补——ClawAegis覆盖智能体全生命周期安全，两者组合构成蚂蚁AI安全布局从漏洞挖掘到底层框架建设的完整图景。
+  risk_notes:
+  - 文章中对ClawAegis的技术细节描述较少，其实际能力和边界需更多独立信息验证。
+  score: 5.0
+  article_ids:
+  - ae70b2debe6cd076
+  evidence_snippets:
+  - 蚂蚁与清华大学联合开源了ClawAegis，为智能体提供了一套覆盖产品全生命周期的安全方案。
+- object_type: product
+  name: Claude Code
+  canonical_name: Claude Code
+  url: null
+  positioning: Anthropic推出的AI编程代理产品，被工信部NVDB平台发布安全后门风险预警，可在用户不知情的情况下收集敏感信息。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users:
+  - AI开发者
+  - 软件工程师
+  product_signal: 具备AI代码生成与执行能力的编程代理产品，但被工信部NVDB平台指出存在可在用户不知情下收集敏感信息的安全后门隐患。
+  market_signal: 作为AI编程助手头部产品被国家级漏洞平台发布风险预警，引发市场对Agent产品安全可信度的广泛讨论和监管关注。
+  differentiation: 与OpenClaw等Agent产品共同面临安全漏洞频发的行业性挑战，其被官方预警点名反映了AI编程代理安全设计的普遍不足。
+  watch_reason: Claude Code作为AI编程代理的代表性产品被官方安全预警点名，反映了Agent产品从功能创新到安全可信之间的鸿沟，其后续安全整改将影响整个AI编程助手品类的信任重建。
+  risk_notes:
+  - 工信部NVDB明确指出的安全后门隐患可能导致企业用户信任下降和采购决策收紧。
+  - 被国内监管机构点名可能影响其在中国市场的可用性和合规进程。
+  score: 6.0
+  article_ids:
+  - ae70b2debe6cd076
+  evidence_snippets:
+  - 工信部NVDB平台发布风险预警，明确指出Claude Code存在安全后门隐患，可在用户不知情的情况下收集敏感信息。
+- object_type: project
+  name: OpenClaw
+  canonical_name: OpenClaw
+  url: null
+  positioning: 开源的AI Agent产品框架，年初因多个高危漏洞被广泛关注，蚂蚁AI安全实验室曾协助其完成漏洞修复。
+  technical_signal: null
+  adoption_signal: 年初红遍全网，获得较大规模开发者关注和使用，但随后频繁曝出高危漏洞影响信任度。
+  ecosystem_relevance: 作为开源Agent框架，其漏洞发现与修复过程推动了Agent安全生态的成熟，也为ClawAegis等安全方案的出现提供了实践基础。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: 作为Agent安全问题的典型案例，OpenClaw的漏洞从发现到修复的完整链条反映了开源Agent框架安全治理的演进路径，对行业有警示和借鉴意义。
+  risk_notes:
+  - 多次曝出高危漏洞反映Agent框架在基础安全设计上尚不成熟。
+  - 该文中仅作为背景引用，OpenClaw最新安全状态和发展动态需进一步核实。
+  score: 4.0
+  article_ids:
+  - ae70b2debe6cd076
+  evidence_snippets:
+  - 年初红遍全网的OpenClaw屡屡被曝出高危险漏洞，蚂蚁AI安全实验室曾发现其多个高危漏洞并协助官方完成修复。
 ---
 
 # Claude Code砸的坑，蚂蚁安全在尝试填上

@@ -15,10 +15,11 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: da3ca011cbb463ff
 source_type: news_media
-tldr: 通过减少冗余计算、优化模型选择和缓存复用等方法降低LLM推理延迟与成本
-objective_summary: kdnuggets 发布技术指南，阐述12种降低LLM在生产环境中的推理延迟和成本的方法。核心观点是优化不在于增加GPU，而在于消除请求中的冗余工作，包括测量关键延迟指标、减少输出token、路由到最小可用模型等。
-event_type: application_landing
-epistemic_status: theoretical_claim
+tldr: 生产环境中部署大语言模型时，延迟和成本飙升的根源通常不是模型或GPU不够好，而是每轮请求中存在大量不必要的工作。文章总结了12种实用优化方法，涵盖指标测量、输出令牌控制、模型路由等方向。
+objective_summary: KDnuggets 发布了一篇关于在生产环境中降低大语言模型延迟和推理成本的实践指南。文章首先强调了测量正确延迟指标（队列时间、TTFT、令牌间延迟等）的重要性，指出未测量之前优化可能找错瓶颈。随后提出积极减少输出令牌数量、设置合理
+  max_tokens 限制、使用紧凑 JSON schema 等具体手段。最后介绍了模型路由模式，即简单任务用小模型处理，复杂任务升级到大模型，以在成本和速度之间取得平衡。
+event_type: infrastructure_update
+epistemic_status: verified_fact
 entities:
   companies: []
   technologies:
@@ -28,11 +29,12 @@ entities:
   - TTFT
   key_people: []
 key_logic_flow:
-- 生产环境中LLM变慢和成本飙升的根本原因通常不是模型本身，而是冗余工作：过长的提示词、过多的输出token、不必要的模型调用和未被利用的缓存。
-- 优化前应测量正确的延迟指标：队列时间、TTFT、token间延迟、端到端延迟、token计数、缓存命中率、工具/检索延迟和P50/P95/P99分位延迟，否则可能优化错误的瓶颈。
-- 生成的输出token是延迟和成本的最明显来源，应设置合理的max_tokens上限、要求简洁回答、使用紧凑JSON schema、避免模型复述问题，原则是不为用户不会阅读的token付费。
-- 应将请求路由到能够完成任务的最小模型——简单任务（情感分析、内容审核、FAQ回答等）用小模型处理，评估置信度后仅在必要时升级到更强模型。
+- 优化之前必须先测量正确的延迟指标，包括队列时间、首令牌时间(TTFT)、令牌间延迟、端到端延迟、缓存命中率以及工具和检索延迟，否则可能优化到错误的瓶颈上。
+- 积极减少输出令牌数量是降低延迟和成本最直接的手段，包括设置合理的 max_tokens 限制、使用简洁回复、避免模型重复问题、以及使用紧凑 JSON schema
+  和更短的字段名。
+- 模型路由模式是高效的优化策略：将简单请求发送到小模型处理，评估输出质量后仅在需要时才将困难请求升级到大模型，从而在速度和成本之间取得平衡。
 extract_result: success
+object_mentions: []
 ---
 
 # 12 Ways to Reduce LLM Latency and Inference Costs in Production

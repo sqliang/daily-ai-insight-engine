@@ -119,6 +119,7 @@ manifest_dates:
 - '2026-07-14'
 - '2026-07-15'
 - '2026-07-16'
+- '2026-07-17'
 ---
 
 **100+ open-source AI agents, agent skills, and RAG apps. Hand-built, tested end-to-end, Apache-2.0.**

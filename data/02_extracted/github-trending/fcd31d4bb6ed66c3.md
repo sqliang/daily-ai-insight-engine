@@ -84,28 +84,37 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: fcd31d4bb6ed66c3
 source_type: community_discussion
-tldr: 纯 Go 实现的 Grok API 网关，提供多账号轮询和 OpenAI/Anthropic 兼容接口
-objective_summary: chenyme 开发了 grok2api，一个纯 Go 实现的 Grok API 网关，将 Grok Build、Web 和
-  Console 三种 Provider 账号组织为独立账号池，对外提供 OpenAI 风格和 Anthropic Messages 兼容接口，
+tldr: chenyme/grok2api 是一个纯 Go 实现的多账号 Grok API 网关，将 Grok Build、Grok Web 和 Grok Console
+  组织为独立账号池，对外提供 OpenAI 风格和 Anthropic Messages 兼容接口，并包含完整的账号、模型、密钥、用量和管理后台。
+objective_summary: 开发者 chenyme 在 GitHub 上发布了 grok2api 项目，这是一个基于 Go 语言的 API 网关，支持 Grok
+  Build（OAuth）、Grok Web（SSO）和 Grok Console（SSO）三种 Provider 的独立路由与多账号调度。项目对外提供 OpenAI
+  风格的 Responses、Chat Completions、Images 接口以及 Anthropic Messages 兼容接口，实现了账号接入、额度门控、故障切换、AES-256-GCM
+  凭据加密等功能，支持 SQLite/PostgreSQL 数据库和 Memory/Redis 运行态存储，可通过 Docker Compose 一键部署。
 event_type: framework_tools
 epistemic_status: verified_fact
 entities:
   companies:
   - xAI
+  - OpenAI
+  - Anthropic
   technologies:
-  - Grok API
   - OAuth
   - SSO
   - AES-256-GCM
-  key_people:
-  - chenyme
+  - SQLite
+  - PostgreSQL
+  - Redis
+  - Go
+  key_people: []
 key_logic_flow:
-- grok2api 是一个纯 Go 实现的 Grok API 网关，支持 Grok Build、Web 和 Console 三种 Provider 账号池。
-- 项目对外提供 OpenAI Responses/Chat Completions、Anthropic Messages 等标准接口，以及图片和视频生成能力。
-- 支持多账号调度机制，包括优先级、并发限制、额度门控、会话粘滞和故障切换。
-- 提供包含 Dashboard、账号管理、模型管理、密钥管理和请求审计的完整管理后台。
-- 支持 SQLite/PostgreSQL 数据库和 Memory/Redis 运行态存储，以及 HTTP/SOCKS 代理池。
-- 实现了 AES-256-GCM 凭据加密、客户端密钥哈希、日志脱敏和 SSRF 防护等安全机制。
+- Grok2API 是一个纯 Go 实现的多账号 Grok API 网关，支持 Grok Build、Grok Web 和 Grok Console 三个 Provider
+  的独立路由与账号池管理。
+- 项目对外提供 OpenAI 风格接口（Responses、Chat Completions、Images）和 Anthropic Messages 兼容接口。
+- 网关支持 Device OAuth、OAuth JSON、SSO JSON 等多种账号接入方式，以及 SQLite/PostgreSQL 数据库和 Memory/Redis
+  运行态存储。
+- 项目实现了多账号调度能力，包括优先级、并发限制、额度门控、会话粘滞、冷却与故障切换等特性。
+- 安全方面实现了 AES-256-GCM 凭据加密、客户端密钥哈希、日志脱敏、SSRF 防护和传输上限控制。
+- 项目通过 Docker Compose 一键部署，管理端与 API 由同一个 Go 服务提供，前端基于 React，首次启动后可通过管理后台完成全部配置。
 specialized_tags:
   github:
     projectName: chenyme/grok2api
@@ -128,6 +137,28 @@ specialized_tags:
       - model-routing
       - load-balancing
 extract_result: success
+object_mentions:
+- object_type: project
+  name: chenyme/grok2api
+  canonical_name: chenyme/grok2api
+  url: https://github.com/chenyme/grok2api
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Grok2API 是一个纯 Go 实现的 Grok API 网关，将 Grok Build OAuth、Grok Web SSO 与 Grok Console
+    SSO 组织为独立账号池。
+  - 网关对外提供 OpenAI 风格接口和 Anthropic Messages 兼容接口，以及账号、模型、密钥、用量和代理管理后台。
+  - 项目支持 SQLite/PostgreSQL 数据库、Memory/Redis 运行态存储，可通过 Docker Compose 一键部署启动。
+  article_id: fcd31d4bb6ed66c3
+- object_type: project
+  name: DEEIX-AI
+  canonical_name: DEEIX-AI
+  url: null
+  confidence: low
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 文章在开头提示中推荐个人新项目 DEEIX-AI，称其为 DEEIX-Chat 轻量化 AI 平台，空载运行时仅占用 34 MB。
+  article_id: fcd31d4bb6ed66c3
 ---
 
 **面向 Grok Build、Grok Web 与 Grok Console 的多账号 API 网关**

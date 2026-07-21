@@ -78,32 +78,40 @@ id: aaea0027bae21ad5
 manifest_dates:
 - '2026-07-07'
 source_type: community_discussion
-tldr: Karakeep 是一款自托管书签管理应用，支持 AI 自动标签与全文搜索。
-objective_summary: Karakeep（原 Hoarder）由 Localhost Labs Ltd 开发并采用 AGPL-3.0 许可，是一款自托管的收藏一切应用。支持链接、笔记、图片、PDF
-  收藏，提供 LLM 自动标签与摘要、OCR 文字提取、RSS 自动抓取和多平台客户端。
-event_type: framework_tools
+tldr: Karakeep（原 Hoarder）是一款基于 AGPL-3.0 开源的自托管收藏管理应用，支持链接书签、笔记、图片和 PDF 存储，集成 LLM 自动标签与摘要功能，并提供多平台客户端和浏览器插件。
+objective_summary: Localhost Labs Ltd 开发的 Karakeep（原 Hoarder）是一款自托管优先的"收藏一切"应用，于 2026
+  年 7 月在 GitHub 上公开维护。它支持书签链接、笔记、图片和 PDF 存储，利用 LLM（含 ollama 本地模型）实现自动标签与摘要，提供 Chrome、Firefox、Safari
+  浏览器插件及 iOS、Android 移动端。项目使用 NextJS、Drizzle、tRPC、Puppeteer、Meilisearch 等技术栈构建，并提供了托管云服务
+  cloud.karakeep.app 供不愿自托管的用户使用。
+event_type: application_landing
 epistemic_status: verified_fact
 entities:
   companies:
   - Localhost Labs Ltd
   technologies:
-  - LLM
-  - OCR
+  - NextJS
   - Drizzle
+  - NextAuth
   - tRPC
   - Puppeteer
-  - Meilisearch
   - OpenAI
+  - Meilisearch
+  - OCR
+  - LLM
+  - REST API
+  - SSO
+  - RSS
   - yt-dlp
-  - NextAuth
+  - ollama
+  - AGPL-3.0
   key_people: []
 key_logic_flow:
-- Karakeep（原 Hoarder）是一款自托管的书签管理应用，支持链接、笔记、图片和 PDF 等多种内容的收藏与管理。
-- 该应用集成 LLM 驱动的自动标签与摘要功能，支持通过 ollama 使用本地模型，并提供了 OCR 图片文字提取和全文页面归档能力。
-- 项目基于 NextJS App Router、Drizzle、NextAuth、tRPC、Puppeteer 和 Meilisearch 等技术栈构建，采用 AGPL-3.0
-  开源许可证。
-- Karakeep 提供多平台客户端支持，包括 Chrome、Firefox、Safari 浏览器扩展以及 iOS 和 Android 原生应用。
-- 该项目受 memos 和 mymind 等产品启发，定位为自托管的 Pocket 替代方案，由 Localhost Labs Ltd 拥有和维护。
+- Karakeep 是一款自托管优先的"收藏一切"应用，支持链接书签、笔记、图片和 PDF 存储。
+- 它利用 LLM 实现自动标签和摘要，并支持通过 ollama 使用本地模型运行。
+- 该项目提供 Chrome、Firefox、Safari 浏览器插件以及 iOS 和 Android 移动端应用。
+- Karakeep 支持 RSS 自动收藏、全文搜索、OCR 图片文字提取、全页面归档和视频自动归档功能。
+- 项目使用 NextJS、Drizzle、NextAuth、tRPC、Puppeteer 和 Meilisearch 等技术栈构建。
+- Karakeep 由 Localhost Labs Ltd 所有并采用 AGPL-3.0 开源协议，同时提供托管云服务 cloud.karakeep.app。
 specialized_tags:
   github:
     projectName: karakeep-app/karakeep
@@ -116,6 +124,148 @@ specialized_tags:
     - open-source
     - read-it-later
 extract_result: success
+object_mentions:
+- object_type: project
+  name: karakeep-app/karakeep
+  canonical_name: karakeep-app/karakeep
+  url: https://github.com/karakeep-app/karakeep
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Karakeep（原 Hoarder）是一款自托管优先的"收藏一切"应用，支持链接书签、笔记、图片和 PDF 存储。
+  - 该项目利用 LLM 实现自动标签和摘要，并支持通过 ollama 使用本地模型。
+  - Karakeep 由 Localhost Labs Ltd 所有，采用 AGPL-3.0 开源协议发布。
+  article_id: aaea0027bae21ad5
+- object_type: product
+  name: Karakeep Cloud
+  canonical_name: Karakeep Cloud
+  url: https://cloud.karakeep.app
+  confidence: high
+  article_role: ecosystem_context
+  evidence_snippets:
+  - 如果用户不习惯自托管，可以使用 Karakeep 托管云服务 cloud.karakeep.app。
+  - 云订阅收入用于支持 Karakeep 的持续开发。
+  article_id: aaea0027bae21ad5
+- object_type: product
+  name: Chrome plugin
+  canonical_name: Karakeep Chrome Extension
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - Karakeep 提供 Chrome 浏览器插件用于快速书签收藏。
+  article_id: aaea0027bae21ad5
+- object_type: product
+  name: Firefox addon
+  canonical_name: Karakeep Firefox Addon
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - Karakeep 提供 Firefox 浏览器插件用于快速书签收藏。
+  article_id: aaea0027bae21ad5
+- object_type: product
+  name: Safari extension
+  canonical_name: Karakeep Safari Extension
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - Karakeep 提供 Safari 浏览器插件用于快速书签收藏。
+  article_id: aaea0027bae21ad5
+- object_type: product
+  name: iOS app
+  canonical_name: Karakeep iOS App
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - Karakeep 提供了 iOS 移动端应用。
+  article_id: aaea0027bae21ad5
+- object_type: product
+  name: Android app
+  canonical_name: Karakeep Android App
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - Karakeep 提供了 Android 移动端应用。
+  article_id: aaea0027bae21ad5
+- object_type: project
+  name: memos
+  canonical_name: usememos/memos
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 作者表示他喜欢 memos 并在家庭服务器上运行，但 memos 不支持链接归档或预览。
+  - 作者从 memos 的使用体验中获得了构建 Karakeep 的灵感。
+  article_id: aaea0027bae21ad5
+- object_type: product
+  name: Pocket
+  canonical_name: Pocket
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Pocket 是让作者接触阅读后存应用理念的产品，但 Mozilla 最近宣布关闭 Pocket。
+  - 作者最初使用 Pocket 来收藏和稍后阅读感兴趣的内容。
+  article_id: aaea0027bae21ad5
+- object_type: project
+  name: Linkwarden
+  canonical_name: linkwarden/linkwarden
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Linkwarden 是一款开源可自托管的书签管理器，作者曾在家庭实验室中运行过。
+  - 它主要关注链接管理并支持协作收藏。
+  article_id: aaea0027bae21ad5
+- object_type: project
+  name: ollama
+  canonical_name: ollama/ollama
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - Karakeep 支持通过 ollama 使用本地模型进行 LLM 自动标签和摘要。
+  article_id: aaea0027bae21ad5
+- object_type: project
+  name: floccus
+  canonical_name: floccusaddon/floccus
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - Karakeep 支持通过 floccus 与浏览器书签自动同步。
+  article_id: aaea0027bae21ad5
+- object_type: project
+  name: Weblate
+  canonical_name: Weblate
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - Karakeep 使用 Weblate 管理多语言翻译，社区可通过 Weblate 参与翻译工作。
+  article_id: aaea0027bae21ad5
+- object_type: project
+  name: monolith
+  canonical_name: Y2Z/monolith
+  url: null
+  confidence: low
+  article_role: ecosystem_context
+  evidence_snippets:
+  - Karakeep 使用 monolith 进行全页面归档以防范链接失效。
+  article_id: aaea0027bae21ad5
+- object_type: project
+  name: yt-dlp
+  canonical_name: yt-dlp/yt-dlp
+  url: null
+  confidence: low
+  article_role: ecosystem_context
+  evidence_snippets:
+  - Karakeep 使用 yt-dlp 实现视频自动归档。
+  article_id: aaea0027bae21ad5
 ---
 
 Karakeep (previously Hoarder) is a self-hostable bookmark-everything app with a touch of AI for the data hoarders out there.

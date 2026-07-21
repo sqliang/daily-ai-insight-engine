@@ -96,9 +96,12 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: a50b0e08dbaee74a
 source_type: community_discussion
-tldr: AWS 发布 Agent Toolkit，为 AI 编程助手提供 AWS 服务构建和管理能力
-objective_summary: AWS 发布 Agent Toolkit for AWS，为 Claude Code、Codex、Cursor、Kiro 等
-  AI 编程助手提供统一的 AWS 工具集，包含 MCP 服务器和技能插件，覆盖核心 AWS 服务、Bedrock 代理构建、数据分析和 DevSecOps 领域。
+tldr: AWS 发布 Agent Toolkit for AWS，为 Claude Code、Codex、Cursor 和 Kiro 等 AI 编程助手提供构建、部署和管理
+  AWS 应用的工具、技能与安全防护措施，包含四个核心插件和 AWS MCP Server。
+objective_summary: AWS 发布了 Agent Toolkit for AWS，这是其此前 AWS Labs 项目的继任者，旨在为 AI 编程助手提供
+  AWS 服务集成能力。该工具包包含 aws-core、aws-agents、aws-data-analytics 和 aws-agents-for-devsecops
+  四个插件，并以 AWS MCP Server 作为核心运行时组件，提供 300 多项 AWS 服务的 API 访问、沙箱化脚本执行和实时文档搜索。用户可通过终端命令或各平台插件市场在
+  Claude Code、Codex、Cursor 和 Kiro 上安装使用。
 event_type: framework_tools
 epistemic_status: verified_fact
 entities:
@@ -107,23 +110,25 @@ entities:
   - Anthropic
   technologies:
   - MCP
-  - Amazon Bedrock
-  - AgentCore
   - CDK
   - CloudFormation
+  - Amazon Bedrock
+  - AgentCore
+  - S3 Tables
   - AWS Glue
   - Athena
-  - S3 Tables
+  - IAM
+  - CloudWatch
+  - CloudTrail
   key_people: []
 key_logic_flow:
-- AWS 发布 Agent Toolkit for AWS，为 AI 编程助手提供与 AWS 服务交互的工具、知识库和防护机制。
-- 工具包包含四个插件：aws-core（核心 AWS 技能与 MCP 服务器）、aws-agents（Amazon Bedrock 与 AgentCore 代理构建）、aws-data-analytics（S3
-  Tables、Glue、Athena 数据分析）和 aws-agents-for-devsecops（安全审计与漏洞扫描）。
-- AWS MCP Server 作为核心基础设施，提供 300+ AWS 服务的 API 访问、沙盒 Python 脚本执行和实时文档搜索，并支持 IAM 条件键、CloudWatch
-  指标和 CloudTrail 审计等企业级控制。
-- Agent Toolkit 支持四种编程助手——Claude Code、Codex、Cursor 和 Kiro，各平台通过插件市场、MCP 配置或技能安装方式进行集成。
-- 该工具包是 AWS Labs 之前 MCP 项目和技能的继任者，新增了区分代理与人类操作的 IAM 条件键等企业功能。
-- 项目采用 Apache-2.0 开源协议，所有插件可通过 Anthropic 官方插件市场安装。
+- AWS 发布了 Agent Toolkit for AWS，为 AI 编程助手提供构建、部署和管理 AWS 应用的工具、知识和防护措施。
+- 该工具包包含四个核心插件：aws-core 覆盖核心 AWS 技能，aws-agents 覆盖 AI 代理构建，aws-data-analytics 覆盖数据湖和分析，aws-agents-for-devsecops
+  覆盖安全与合规。
+- AWS MCP Server 是工具包的运行时核心，提供 300 多项 AWS 服务的统一 API 访问、沙箱化脚本执行和实时文档搜索。
+- Agent Toolkit for AWS 支持 Claude Code、Codex、Cursor 和 Kiro 四种主流 AI 编程助手，每个平台各有独立的安装和配置方式。
+- Agent Toolkit for AWS 是 AWS Labs 此前 MCP 服务器和插件的继任者，新增了 IAM 条件键、CloudWatch 监控和 CloudTrail
+  审计日志等企业级功能。
 specialized_tags:
   github:
     projectName: aws/agent-toolkit-for-aws
@@ -144,6 +149,71 @@ specialized_tags:
       - MCP
       - function-calling
 extract_result: success
+object_mentions:
+- object_type: project
+  name: aws/agent-toolkit-for-aws
+  canonical_name: aws/agent-toolkit-for-aws
+  url: https://github.com/aws/agent-toolkit-for-aws
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Agent Toolkit for AWS 为 AI 编程助手提供构建、部署和管理 AWS 应用程序所需的工具、知识和安全防护措施，支持 Claude Code
+    等主流编程助手。
+  - 该工具包是 AWS Labs 此前发布的 MCP 服务器、技能和插件的继任者，新增了 IAM 条件键和 CloudTrail 审计日志等企业级功能。
+  article_id: a50b0e08dbaee74a
+- object_type: product
+  name: AWS MCP Server
+  canonical_name: AWS MCP Server
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - AWS MCP Server 是一个托管服务器，通过模型上下文协议让 AI 助手与 300 多项 AWS 服务交互，提供沙箱化脚本执行和实时文档搜索功能。
+  - 该服务器包含完整 AWS API 覆盖、沙箱化脚本执行、实时文档搜索以及 CloudWatch 指标和 CloudTrail 审计日志等企业级控制功能。
+  article_id: a50b0e08dbaee74a
+- object_type: project
+  name: aws-core
+  canonical_name: aws-core
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - aws-core 插件涵盖服务选择、CDK/CloudFormation、无服务器、容器、存储、可观测性、账单、SDK 使用和部署等核心 AWS 技能。
+  - 用户可通过 /plugin install aws-core@claude-plugins-official 命令在 Claude Code 中安装 aws-core
+    插件。
+  article_id: a50b0e08dbaee74a
+- object_type: project
+  name: aws-agents
+  canonical_name: aws-agents
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - aws-agents 插件涵盖使用 Amazon Bedrock 和 AgentCore 在 AWS 上构建 AI 代理的相关技能。
+  - 用户可通过 /plugin install aws-agents@claude-plugins-official 命令在 Claude Code 中安装该插件。
+  article_id: a50b0e08dbaee74a
+- object_type: project
+  name: aws-data-analytics
+  canonical_name: aws-data-analytics
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - aws-data-analytics 插件涵盖数据湖、分析和 ETL 工作流，支持 S3 Tables、AWS Glue 和 Athena 等服务的集成。
+  - 用户可通过 /plugin install aws-data-analytics@claude-plugins-official 命令在 Claude Code
+    中安装该插件。
+  article_id: a50b0e08dbaee74a
+- object_type: project
+  name: aws-agents-for-devsecops
+  canonical_name: aws-agents-for-devsecops
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - aws-agents-for-devsecops 插件用于调查事件、审查代码、执行 UAT、扫描漏洞以及使用 AWS DevOps Agent 和 AWS
+    Security Agent 运行渗透测试。
+  - 该插件可通过 /plugin install aws-agents-for-devsecops@claude-plugins-official 命令从官方市场安装。
+  article_id: a50b0e08dbaee74a
 ---
 
 Help AI coding agents build, deploy, and manage applications on AWS.

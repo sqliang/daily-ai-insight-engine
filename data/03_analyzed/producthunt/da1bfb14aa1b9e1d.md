@@ -17,24 +17,25 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: da1bfb14aa1b9e1d
 source_type: community_discussion
-tldr: Mozaik 是一个用于自组织 AI Agent 的 TypeScript 运行时，已在 Product Hunt 发布。
-objective_summary: Miodrag Vilotijević 于 2026 年 7 月 5 日在 Product Hunt 上发布了 Mozaik，一个面向自组织
-  AI Agent 的 TypeScript 运行时，获得了 121 个点赞和 134 名关注者。
+tldr: Mozaik 是一个 TypeScript 运行时，用于构建自组织 AI 智能体系统。该产品于 2026 年 7 月 5 日在 Product Hunt
+  上发布，获得 121 个点赞和 134 个关注者，归类为开发者工具、人工智能和 SDK。
+objective_summary: Mozaik 是一个面向自组织 AI 智能体的 TypeScript 运行时，由 Miodrag Vilotijević 开发并于
+  2026 年 7 月 5 日在 Product Hunt 平台发布。产品获 121 个点赞和 134 个关注者，被归类为开发者工具、人工智能和 SDK 类别。
 event_type: application_landing
-epistemic_status: pr_statement
+epistemic_status: verified_fact
 entities:
-  companies: []
+  companies:
+  - Product Hunt
   technologies:
   - TypeScript
-  - AI Agents
   key_people:
   - Miodrag Vilotijević
 key_logic_flow:
-- Mozaik 是一个面向自组织 AI Agent 的 TypeScript 运行时。
-- 该产品于 2026 年 7 月 5 日在 Product Hunt 平台正式发布。
-- 产品标签归类为开发者工具、人工智能和 SDK。
-- 截至收录时获得 121 个点赞和 134 名关注者的社区反馈。
-- 产品的发布者为 Miodrag Vilotijević。
+- Mozaik 是一个 TypeScript 运行时，专门用于构建自组织 AI 智能体系统。
+- 该产品由 Miodrag Vilotijević 开发并在 Product Hunt 平台发布。
+- 产品上线时间为 2026 年 7 月 5 日，约在当前日期 9 天前。
+- 产品在 Product Hunt 上获得 121 个点赞和 134 个关注者。
+- Mozaik 被归类为开发者工具、人工智能和 SDK 三个产品类别。
 specialized_tags:
   product:
     productName: Mozaik
@@ -47,6 +48,18 @@ specialized_tags:
     - AI 开发者
     - Agent 框架开发者
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Mozaik
+  canonical_name: Mozaik
+  url: https://www.producthunt.com/products/mozaik-4
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Mozaik 是一个 TypeScript 运行时，用于构建自组织 AI 智能体系统。
+  - 该产品由 Miodrag Vilotijević 开发并于 2026 年 7 月 5 日在 Product Hunt 平台发布。
+  - 产品获 121 个点赞和 134 个关注者，归类为开发者工具、人工智能和 SDK。
+  article_id: da1bfb14aa1b9e1d
 impact_score:
   score: 2.5
   reason: 该事件仅为 Product Hunt 上的一款 TypeScript Agent 运行时产品发布，获 121 个点赞和 134 名关注者，属于社区层面的中等反响。'自组织
@@ -179,6 +192,33 @@ market_assessment:
   - Semantic Kernel (Microsoft)
   differentiation_quality: meaningful
   pmf_signal: too_early_to_tell
+object_insights:
+- object_type: product
+  name: Mozaik
+  canonical_name: Mozaik
+  url: https://www.producthunt.com/products/mozaik-4
+  positioning: Mozaik 是一个基于 TypeScript 的运行时，专为构建自组织 AI 智能体系统而设计，面向开发者工具和人工智能领域。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users:
+  - AI 智能体应用开发者
+  - TypeScript 技术栈团队
+  - 多智能体系统研究人员
+  product_signal: Mozaik 提供了自组织 AI 智能体系统的 TypeScript 运行时实现，让开发者能够以编程方式编排多智能体协作。
+  market_signal: 产品在 Product Hunt 上线 9 天即获得 121 个点赞和 134 个关注者，归类于开发者工具、人工智能和 SDK 三个热门类别。
+  differentiation: 与传统 AI 框架侧重单点推理不同，Mozaik 聚焦于智能体的自组织协作机制，切入了一个新兴的细分技术方向。
+  watch_reason: Mozaik 定位于自组织 AI 智能体系统这一前沿方向，以 TypeScript 运行时降低开发门槛，值得跟踪其在开发者社区的采用进展、功能迭代和生态建设情况。
+  risk_notes:
+  - 产品上线仅约 9 天，处于极早期阶段，功能完备性和稳定性尚未得到社区验证。
+  - 自组织多智能体系统概念仍处技术探索期，实际落地场景和商业化路径尚不明朗。
+  score: 6.0
+  article_ids:
+  - da1bfb14aa1b9e1d
+  evidence_snippets:
+  - Mozaik 是一个 TypeScript 运行时，用于构建自组织 AI 智能体系统。
+  - 该产品由 Miodrag Vilotijević 开发并于 2026 年 7 月 5 日在 Product Hunt 平台发布。
+  - 产品获 121 个点赞和 134 个关注者，归类为开发者工具、人工智能和 SDK。
 ---
 
 # Mozaik

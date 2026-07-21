@@ -64,32 +64,38 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 25bff0b4a0ece6bc
 source_type: community_discussion
-tldr: davila7 发布了 Claude Code 模板集合仓库，提供 100+ 免配置的 Agents、Commands、MCPs 及 Skills 模板。
-objective_summary: davila7 于 GitHub 上发布了 claude-code-templates 仓库，这是一个面向 Anthropic
-  Claude Code 的 100+ 模板集合。用户可通过 npx 命令安装包括 Agents、Commands、MCPs、Settings、Hooks 和 Skills
+tldr: davila7/claude-code-templates 是一个 Claude Code 配置模板集合，包含 100 多个 AI 智能体、命令、MCP
+  集成、设置、钩子和技能模板，可通过 npx 一键安装。
+objective_summary: davila7/claude-code-templates 发布了面向 Anthropic Claude Code 的配置模板集合，涵盖智能体、命令、MCP
+  集成、设置、钩子和技能六大组件，用户可通过 npx claude-code-templates@latest 命令安装完整开发栈或单个组件。该项目还提供 aitmpl.com
+  网页界面用于浏览和安装模板，以及 analytics、chats、health-check 和 plugins 等开发工具。项目中包含了来自 K-Dense-AI、Anthropic
+  官方及社区的多项技能和配置，均保留原始许可证和署名。
 event_type: framework_tools
 epistemic_status: verified_fact
 entities:
   companies:
-  - davila7
   - Anthropic
   - K-Dense Inc.
+  - Jesse Obra
+  - Alireza Rezvani
+  - wshobson
+  - NerdyChefsAI
   technologies:
   - MCP
   - Claude Code
   key_people:
+  - davila7
   - Jesse Obra
   - Alireza Rezvani
   - wshobson
 key_logic_flow:
-- davila7 发布了 claude-code-templates，这是一个为 Anthropic Claude Code 提供免配置模板的 GitHub 开源仓库。
-- 模板库涵盖六大组件类型：AI 智能体（Agents）、自定义命令（Commands）、外部集成 MCP（MCPs）、配置设置（Settings）、自动化钩子（Hooks）和可复用技能（Skills），总量超过
-  100 个。
-- 用户可通过 npx claude-code-templates@latest 命令以多种方式安装：交互式浏览、指定组件安装或一键安装完整开发栈。
-- 项目还附带辅助开发工具：实时会话监控（analytics）、移动端聊天界面（chats，支持 Cloudflare Tunnel 远程访问）、安装健康检查（health-check）和插件管理（plugins）。
-- 该仓库整合了 Anthropic 官方技能、K-Dense Inc. 的 139 个科学技能以及多个社区贡献者的模板，各自保留原始许可证和归属。
-- 项目采用 MIT 许可证，提供 aitmpl.com 在线浏览界面、docs.aitmpl.com 文档站以及 GitHub Issues 和 Discussions
-  社区支持。
+- davila7/claude-code-templates 是一个面向 Anthropic Claude Code 的模板集合仓库，提供 100 多个 AI 智能体、命令、MCP
+  集成、设置、钩子和技能的预配置模板。
+- 用户可以通过 npx claude-code-templates@latest 命令交互式浏览和安装模板，也可使用 --agent、--command、--mcp
+  等参数选择性安装特定组件。
+- 该项目提供了 aitmpl.com 网页界面用于在线浏览和安装模板，以及 docs.aitmpl.com 文档站点提供完整的使用指南和 API 参考。
+- 项目还包含了 analytics（实时会话监控）、chats（移动端响应查看）、health-check（诊断工具）和 plugins（插件管理）等附加开发工具。
+- 项目中集成了来自 K-Dense-AI 的科学技能、Anthropic 官方技能、以及社区贡献的多个技能和命令集合，各自保留原始许可证和署名。
 specialized_tags:
   github:
     projectName: davila7/claude-code-templates
@@ -116,6 +122,117 @@ specialized_tags:
       - function-calling
       - CLI
 extract_result: success
+object_mentions:
+- object_type: project
+  name: davila7/claude-code-templates
+  canonical_name: davila7/claude-code-templates
+  url: https://github.com/davila7/claude-code-templates
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 该项目是一个面向 Anthropic Claude Code 的配置模板集合，涵盖 AI 智能体、命令、MCP 集成、设置、钩子和技能等六大组件。
+  - 用户可以通过 npx claude-code-templates@latest 命令交互式浏览和安装模板，或使用 --agent、--command、--mcp
+    等参数进行选择性安装。
+  article_id: 25bff0b4a0ece6bc
+- object_type: product
+  name: aitmpl.com
+  canonical_name: aitmpl.com
+  url: https://www.aitmpl.com
+  confidence: high
+  article_role: ecosystem_context
+  evidence_snippets:
+  - 该网站提供了交互式网页界面，用户可以在此浏览、管理集合和跟踪模板安装情况，当前处于测试阶段。
+  article_id: 25bff0b4a0ece6bc
+- object_type: product
+  name: docs.aitmpl.com
+  canonical_name: docs.aitmpl.com
+  url: https://docs.aitmpl.com
+  confidence: high
+  article_role: ecosystem_context
+  evidence_snippets:
+  - 该网站提供了完整的使用指南、示例和 API 参考，涵盖所有组件和工具的详细文档。
+  article_id: 25bff0b4a0ece6bc
+- object_type: project
+  name: K-Dense-AI/claude-scientific-skills
+  canonical_name: K-Dense-AI/claude-scientific-skills
+  url: https://github.com/K-Dense-AI/claude-scientific-skills
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 该项目由 K-Dense Inc. 开发，采用 MIT 许可证，包含 139 个面向生物学、化学、医学和计算研究的科学技能。
+  article_id: 25bff0b4a0ece6bc
+- object_type: project
+  name: anthropics/skills
+  canonical_name: anthropics/skills
+  url: https://github.com/anthropics/skills
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 该项目是 Anthropic 官方提供的 Claude Code 技能集合，包含 21 个官方技能。
+  article_id: 25bff0b4a0ece6bc
+- object_type: project
+  name: obra/superpowers
+  canonical_name: obra/superpowers
+  url: https://github.com/obra/superpowers
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 该项目由 Jesse Obra 开发，采用 MIT 许可证，包含 14 个工作流程技能。
+  article_id: 25bff0b4a0ece6bc
+- object_type: project
+  name: awesome-claude-code
+  canonical_name: hesreallyhim/awesome-claude-code
+  url: https://github.com/hesreallyhim/awesome-claude-code
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 该项目由 hesreallyhim 维护，采用 CC0 1.0 通用许可证，包含 21 个 Claude Code 命令。
+  article_id: 25bff0b4a0ece6bc
+- object_type: project
+  name: alirezarezvani/claude-skills
+  canonical_name: alirezarezvani/claude-skills
+  url: https://github.com/alirezarezvani/claude-skills
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 该项目由 Alireza Rezvani 开发，采用 MIT 许可证，包含 36 个专业角色技能。
+  article_id: 25bff0b4a0ece6bc
+- object_type: project
+  name: wshobson/agents
+  canonical_name: wshobson/agents
+  url: https://github.com/wshobson/agents
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 该项目由 wshobson 开发，采用 MIT 许可证，包含 48 个 AI 智能体。
+  article_id: 25bff0b4a0ece6bc
+- object_type: product
+  name: claude-code-templates analytics
+  canonical_name: claude-code-templates-analytics
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - 该工具提供实时的 AI 驱动开发会话监控功能，包含实时状态检测和性能指标展示。
+  article_id: 25bff0b4a0ece6bc
+- object_type: product
+  name: claude-code-templates chats
+  canonical_name: claude-code-templates-chats
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - 该工具提供移动端优化的 Claude 响应实时查看界面，并支持通过 Cloudflare Tunnel 实现安全远程访问。
+  article_id: 25bff0b4a0ece6bc
+- object_type: product
+  name: claude-code-templates health-check
+  canonical_name: claude-code-templates-health-check
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - 该诊断工具用于确保 Claude Code 安装配置处于最优状态，提供全面的系统检查功能。
+  article_id: 25bff0b4a0ece6bc
 ---
 
 🧪 NEW: Dashboard— Explore components, manage collections, and track installations atwww.aitmpl.com. Currently in beta — feedback welcome!

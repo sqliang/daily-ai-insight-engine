@@ -15,28 +15,57 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 0cb2a7c0c0cba9c6
 source_type: community_discussion
-tldr: Mesh LLM 是一个分布式 AI 推理系统，将多台机器 GPU 池化为一个 OpenAI 兼容 API。
-objective_summary: iroh 公司发布 Mesh LLM，一个基于 iroh 点对点网络的分布式 AI 推理框架。它将用户现有设备的 GPU 和内存池化，以
-  OpenAI 兼容 API 对外暴露，支持本地运行、对等路由和跨机流水线分割三种推理模式，用户无需依赖数据中心即可运行大模型。
+tldr: Mesh LLM 是基于 iroh 的去中心化 AI 计算系统，将用户已有的 GPU 和内存跨机器池化，暴露为兼容 OpenAI API 的 localhost:9337/v1
+  接口，无需中心服务器即可运行 40 多种模型。
+objective_summary: iroh 公司发布了开源项目 Mesh LLM，通过 iroh 的 QUIC 协议在任意机器间建立认证直连，将多台机器的 GPU
+  和内存聚合成单一计算池。Mesh LLM 支持三种推理模式——本地执行、路由到远端节点、或按层范围分片在多个节点间流水执行（Skippy 模式），最大可运行 235B
+  参数的 MoE 模型。系统约 18 MB，用户可加入公共 mesh 或自建私有部署，移动端应用基于 iroh Swift SDK 开发中。
 event_type: framework_tools
 epistemic_status: pr_statement
 entities:
   companies:
   - iroh
+  - n0-computer
   technologies:
   - Mesh LLM
-  - MCP
   - QUIC
   - ALPN
+  - MCP
+  - NAT traversal
   - ACP
+  - iroh
   key_people: []
 key_logic_flow:
-- Mesh LLM 将多台机器的 GPU 和内存池化，以单一 OpenAI 兼容 API（localhost:9337/v1）对外暴露。
-- 推理请求有三种处理方式：本地 GPU 运行、路由到已加载模型的对等节点、或将超大模型按层范围分割到多台机器流水线执行。
-- 每个节点基于 iroh 端点的公钥作为身份标识，通过 QUIC 协议实现 NAT 穿透和中继回退，无需中心服务器。
-- 系统插件架构通过 MCP、HTTP、推理和网格事件暴露能力，已支持 40 余种模型（从 5 亿参数到 235B MoE 模型）。
-- 开发者可加入公共网格或配置私有部署，即将推出的移动端应用基于 iroh 的 Swift SDK 构建，并计划支持 ACP 标准。
+- Mesh LLM 将多台机器上已有的 GPU 和内存资源池化，通过一个兼容 OpenAI API 的接口统一暴露。
+- 系统基于 iroh 端点的 QUIC 协议实现节点间认证直连，无中心服务器，依靠打洞和中继回退穿越 NAT。
+- 请求可通过三种方式处理：本地 GPU 执行、路由到已加载模型的远端节点、或将超大模型按层切分到多台机器流水执行。
+- Skippy 分片模式将模型按层范围分配到不同节点，激活值在节点间流动，使多台普通机器能运行单机装不下的大型模型。
+- Mesh LLM 支持从 5 亿参数到 235B MoE 的 40 多种模型，安装包约 18 MB，用户可加入公共 mesh 或自建私有部署。
+- 移动端应用正在开发中，计划采用 ACP 代理标准，使更多客户端能够接入 mesh。
 extract_result: success
+object_mentions:
+- object_type: project
+  name: Mesh LLM
+  canonical_name: Mesh LLM
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Mesh LLM 将用户已有的 GPU 和内存资源跨机器池化，整体暴露为一个兼容 OpenAI API 的接口。
+  - 请求可通过三种方式处理：本地执行、路由到已加载模型的节点、或将超大模型分层切分到多台机器上流水执行。
+  - Mesh LLM 支持从 5 亿参数小模型到 235B MoE 大模型在内的 40 多种模型，安装包约 18 MB。
+  article_id: 0cb2a7c0c0cba9c6
+- object_type: project
+  name: iroh
+  canonical_name: iroh
+  url: https://www.iroh.computer
+  confidence: high
+  article_role: ecosystem_context
+  evidence_snippets:
+  - Mesh LLM 基于 iroh 端点构建，每个节点启动 iroh 端点作为身份标识（公钥），无中心服务器。
+  - iroh 处理打洞、NAT 穿越和中继回退，使任意两个节点之间建立经过认证的 QUIC 直连。
+  - Mesh LLM 在不同区域运行两个 iroh 中继，确保无法直连的节点始终有备用路径。
+  article_id: 0cb2a7c0c0cba9c6
 ---
 
 When people picture running a large language model, they picture a data center. Racks of GPUs that belong to someone else, a metered API, and a bill that grows every month you succeed. You send your prompts off to a black box and hope the price, the model, and the privacy policy all stay the way they were when you signed up.

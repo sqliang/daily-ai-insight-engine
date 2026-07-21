@@ -215,10 +215,14 @@ manifest_dates:
 - '2026-07-14'
 - '2026-07-15'
 source_type: community_discussion
-tldr: hasaneyldrm 在 GitHub 上发布了包含 1,324 个健身动作的完整数据集，含动画 GIF 和 9 种语言说明。
-objective_summary: 开发者 hasaneyldrm 在 GitHub 发布了 exercises-dataset 项目，包含 1,324 个健身动作的结构化数据，每个动作配有
-  180×180 缩略图与动画 GIF，以及 9 种语言（英、西、意、土、俄、中、印地、波、韩）的分步说明。
-event_type: application_landing
+tldr: hasaneyldrm/exercises-dataset 是一个包含 1,324 个健身动作的综合性开源数据集，每个动作提供动画 GIF、缩略图、分类标签和
+  9 种语言的分步指导。该数据集驱动 LogPress 健身追踪应用，并提供 JSON 数据文件、JSON Schema、交互式浏览器和开发设置指南，代码和数据采用
+  MIT 协议。
+objective_summary: 开发者 hasaneyldrm 于 2026 年 3 月在 GitHub 发布了 exercises-dataset 开源项目，包含
+  1,324 个经过整理的健身动作记录。每个记录包含唯一 ID、动作名称、身体部位分类、目标肌肉、辅助肌肉、所需器械、9 种语言的分步指导（英语、西班牙语、意大利语、土耳其语、俄语、中文、印地语、波兰语、韩语）以及
+  180×180 缩略图和动画 GIF。数据集以 JSON 格式存储并提供 JSON Schema 验证文件，同时附带一个客户端交互式浏览器和集成开发指南。约 25%
+  的动作无需器械，可用于构建健身应用和机器学习项目。
+event_type: framework_tools
 epistemic_status: verified_fact
 entities:
   companies:
@@ -227,12 +231,12 @@ entities:
   key_people:
   - hasaneyldrm
 key_logic_flow:
-- hasaneyldrm 在 GitHub 上发布了 exercises-dataset 项目，提供 1,324 个健身动作的结构化数据集。
-- 每个动作包含分类、身体部位、所需器材、目标肌群、次要肌群等元数据字段。
-- 所有动作均配有 180×180 缩略图（images/）和动画 GIF（videos/），媒体版权归 Gym visual。
-- 分步说明支持 9 种语言（含中文），以字符串和数组两种格式提供。
-- 项目附带客户端交互浏览器（index.html）和开发者集成指南（setup.html），支持多种数据库 SQL 脚本和编程语言的 API 示例。
-- 数据以 JSON 格式提供，附带 JSON Schema（2020-12 Draft）用于验证，代码与数据采用 MIT 协议。
+- hasaneyldrm 在 GitHub 上发布了 exercises-dataset 开源项目，包含 1,324 个健身动作的完整结构化数据。
+- 每个动作记录包含唯一 ID、动作名称、身体部位分类、目标肌肉、辅助肌肉、所需器械、9 种语言的分步指导和英文分步数组。
+- 每个动作附带 180×180 的缩略图和动画 GIF，媒体素材来自 Gym visual 并标注版权归属。
+- 数据文件以 JSON 格式存储于 data/exercises.json，并附带 JSON Schema 验证文件 data/exercises.schema.json。
+- 项目包含一个免服务端的交互式浏览器 index.html 和开发集成指南 setup.html。
+- 该数据集是 LogPress 健身追踪应用的数据层，代码和数据采用 MIT 协议，媒体素材遵循 Gym visual 的使用条款。
 specialized_tags:
   github:
     projectName: hasaneyldrm/exercises-dataset
@@ -246,6 +250,29 @@ specialized_tags:
     - multi-language
     aiDetail: null
 extract_result: success
+object_mentions:
+- object_type: project
+  name: hasaneyldrm/exercises-dataset
+  canonical_name: hasaneyldrm/exercises-dataset
+  url: https://github.com/hasaneyldrm/exercises-dataset
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 该仓库包含 1,324 个健身动作的完整数据集，每个动作带有动画 GIF、180×180 缩略图、分类标签和 9 种语言的分步指导。
+  - 数据集以 data/exercises.json 提供 JSON 格式数据，并附带 data/exercises.schema.json 的 JSON Schema
+    验证文件。
+  - 项目包含客户端交互式浏览器 index.html 和开发集成指南 setup.html，无需服务器即可运行。
+  article_id: afba96f60b5ba9cc
+- object_type: product
+  name: LogPress
+  canonical_name: LogPress
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 该数据集驱动 LogPress 应用，一个 AI 辅助的健身追踪工具，此数据集是其锻炼数据层。
+  - 文章介绍该数据集可直接用于构建自己的健身应用，如同 LogPress 的使用方式一样。
+  article_id: afba96f60b5ba9cc
 impact_score:
   score: 3.0
   reason: 该事件是一个健身动作数据集的发布，虽然数据集结构完整（1,324个动作、9种语言、JSON Schema验证），但其核心价值是面向健身应用开发者的数据资源，而非AI技术创新。对AI行业的竞争格局没有直接影响，属于细分领域的基础设施建设。唯一与AI行业的交叉点在于可作为运动识别/推荐等ML项目的训练数据，但项目本身未提供任何模型或算法创新。
@@ -297,6 +324,57 @@ confidence:
   compound: medium
   hype: low
 actionable_insight: monitor
+object_insights:
+- object_type: project
+  name: hasaneyldrm/exercises-dataset
+  canonical_name: hasaneyldrm/exercises-dataset
+  url: https://github.com/hasaneyldrm/exercises-dataset
+  positioning: 一个包含 1,324 个健身动作的综合开源数据集，提供 JSON 结构化数据、JSON Schema 验证、多语言指导和可视化媒体，适用于健身应用开发和机器学习项目。
+  technical_signal: 数据集采用 JSON Schema (Draft 2020-12) 定义完整的数据结构约束，提供 data/exercises.json
+    和 data/exercises.schema.json 供开发者校验使用。
+  adoption_signal: 该数据集已驱动 LogPress AI 健身追踪应用作为其锻炼数据层，展示了在真实生产环境中的实际应用场景。
+  ecosystem_relevance: 填补了健身领域高质量结构化开源数据集的空白，支持 9 种语言和多种器械与身体部位分类，可广泛用于健身应用开发、ML 动作识别和健康研究。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: 该数据集以 MIT 协议开源代码和数据，覆盖约 25% 无需器械的动作，附交互式浏览器和一键后端生成工具，已驱动真实产品 LogPress，值得持续关注其社区增长和更新节奏。
+  risk_notes:
+  - 媒体素材（缩略图和 GIF）来源于 Gym visual，遵循单独的使用条款而非 MIT 协议，使用时需注意版权合规。
+  - 数据集虽结构完整，但 1,324 个健身动作的准确性和专业性有待社区和领域专家进一步验证。
+  score: 6.0
+  article_ids:
+  - afba96f60b5ba9cc
+  evidence_snippets:
+  - 该仓库包含 1,324 个健身动作的完整数据集，每个动作带有动画 GIF、180×180 缩略图、分类标签和 9 种语言的分步指导。
+  - 数据集以 data/exercises.json 提供 JSON 格式数据，并附带 data/exercises.schema.json 的 JSON Schema
+    验证文件。
+  - 项目包含客户端交互式浏览器 index.html 和开发集成指南 setup.html，无需服务器即可运行。
+- object_type: product
+  name: LogPress
+  canonical_name: LogPress
+  url: null
+  positioning: 一个 AI 辅助的健身追踪工具，以 hasaneyldrm/exercises-dataset 作为其锻炼数据层。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users:
+  - 健身爱好者
+  - 运动追踪用户
+  - 健身应用开发者
+  product_signal: LogPress 直接使用 1,324 个健身动作的结构化数据集作为后台数据层，展示了数据集在真实 AI 健身追踪产品中的集成模式。
+  market_signal: null
+  differentiation: null
+  watch_reason: 作为该结构化健身数据集的首个驱动应用，LogPress 展示了将 1,324 个动作的完整数据集集成到 AI 辅助健身追踪产品中的实际模式，但其独立产品信息目前非常有限。
+  risk_notes:
+  - 该产品仅在文章中作为数据集的引用案例出现，缺乏独立的功能细节、用户规模和市场竞争信息。
+  - LogPress 与数据集之间是单向依赖关系，产品本身的独立价值和创新程度尚不明确。
+  score: 3.0
+  article_ids:
+  - afba96f60b5ba9cc
+  evidence_snippets:
+  - 该数据集驱动 LogPress 应用，一个 AI 辅助的健身追踪工具，此数据集是其锻炼数据层。
+  - 文章介绍该数据集可直接用于构建自己的健身应用，如同 LogPress 的使用方式一样。
 ---
 
 **A comprehensive, ready-to-use fitness exercise dataset with 1,324 exercises — each with an animation GIF, 180×180 thumbnail image, category, body-part, equipment, target and muscle-group data, and step-by-step instructions in 9 languages (English, Spanish, Italian, Turkish, Russian, Chinese, Hindi, Polish, Korean).**
