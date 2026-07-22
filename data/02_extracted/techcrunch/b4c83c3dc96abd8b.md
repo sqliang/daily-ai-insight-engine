@@ -13,10 +13,11 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: b4c83c3dc96abd8b
 source_type: news_media
-tldr: AI行业预测80%工作负载将在12-18个月内迁移到价格便宜99%的小模型
-objective_summary: TechCrunch报道了AI行业从追求最大模型向成本敏感型模型选择的转变趋势。Coinbase联合创始人Brian Armstrong预测80%的AI工作负载将在12-18个月内转向便宜99%的模型。法律AI工具Harvey与Fireworks
-  AI合作测试显示，组合使用Claude
-event_type: capital_movement
+tldr: AI行业长期信奉"模型越大越强"，但成本压力正促使企业转向更便宜的小模型。Coinbase联合创始人Brian Armstrong预测80%的工作负载将在12-18个月内转移到便宜99%的模型上，法律AI工具Harvey的实测已证实成本可降3倍而不牺牲质量。
+objective_summary: TechCrunch报道了AI行业从追求旗舰大模型向经济型小模型转变的趋势，核心驱动力是不断攀升的推理成本。Coinbase联合创始人Brian
+  Armstrong预测未来12-18个月内80%的工作负载将运行在便宜99%的模型上。法律AI工具Harvey与推理平台Fireworks AI合作测试，通过组合Claude
+  Opus和Fireworks的GLM 5.1并仅对最密集任务使用Opus，将推理成本降低3倍且质量未下降。文章指出真正的分界线不在于闭源与开源模型之间，而在于大模型与小模型之间。
+event_type: application_landing
 epistemic_status: verified_fact
 entities:
   companies:
@@ -25,10 +26,11 @@ entities:
   - Fireworks AI
   - OpenAI
   - Anthropic
+  - DeepSeek
   - TechCrunch
   technologies:
-  - Claude Opus
   - GLM 5.1
+  - Claude Opus
   - GPT-5.5
   - DeepSeek V4 Flash
   - GPT-5.4-mini
@@ -36,13 +38,70 @@ entities:
   - Brian Armstrong
   - Gabe Pereyra
 key_logic_flow:
-- AI行业长期以来以"模型越大越强"为基本假设，但不断攀升的成本正迫使企业重新审视更小、更便宜的模型。
-- Coinbase联合创始人Brian Armstrong预测，未来12-18个月内80%的工作负载将运行在价格便宜99%的模型上，仅20%的工作负载继续使用最先进的模型。
-- 若该预测成真，大部分成本节省将来自大型AI实验室，对即将进行IPO的OpenAI和Anthropic造成财务冲击。
-- 法律AI工具Harvey与Fireworks AI合作测试显示，组合使用Claude Opus和Fireworks的GLM 5.1可在不降低质量的情况下将推理成本降低3倍。
-- Harvey联合创始人Gabe Pereyra表示，质量的定义正在从"使用最强大的模型做所有事"演变为"用最合适的模型最高效地得到正确答案"。
-- 真正的分界线不在于专有模型与开源模型之争，而在于大模型与小模型之分，用户可通过选择任一类小型模型来降低成本。
+- AI行业长期以来的假设是模型越大越强、最强大的模型获胜，但成本压力正在打破这一假设并迫使企业重新审视更小更便宜的模型。
+- Coinbase联合创始人Brian Armstrong在X上预测，未来12-18个月内80%的工作负载将运行在便宜99%的模型上，仅20%需要最新旗舰模型。
+- 法律AI工具Harvey与推理平台Fireworks AI合作测试，通过组合Claude Opus和Fireworks的GLM 5.1并对最密集任务使用Opus，将推理成本降低了3倍且未降低质量。
+- Harvey联合创始人Gabe Pereyra表示质量的定义正在从简单的使用最强模型演变为使用能最高效得到正确答案的最佳模型。
+- 真正的行业分界线不在于闭源模型与开源模型之间，而在于大模型与小模型之间，从GPT-5.5切换到DeepSeek V4 Flash或切换到GPT-5.4-mini都能节省成本。
+- 大小模型之间的价格战正在大实验室的内部推理和独立服务的开源权重模型之间激烈进行，但无论哪种小模型胜出都不影响小模型替代大模型的宏观趋势。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Harvey
+  canonical_name: Harvey
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 法律AI工具Harvey与推理平台Fireworks AI合作进行测试，通过组合Claude Opus和Fireworks的GLM 5.1，将推理成本降低了3倍且未降低质量。
+  - Harvey联合创始人Gabe Pereyra对TechCrunch表示，质量的定义正在从为所有任务使用最强模型演变为使用能最高效得到正确答案的最佳模型。
+  article_id: b4c83c3dc96abd8b
+- object_type: company
+  name: Fireworks AI
+  canonical_name: Fireworks AI
+  url: null
+  confidence: high
+  article_role: ecosystem_context
+  evidence_snippets:
+  - 推理平台Fireworks AI与Harvey合作提供GLM 5.1模型，在与Claude Opus组合的测试中帮助Harvey实现了3倍的推理成本降低。
+  - 文章指出独立服务的开源权重模型与各大AI实验室的内部推理之间正在展开一场价格战。
+  article_id: b4c83c3dc96abd8b
+- object_type: model
+  name: Claude Opus
+  canonical_name: Claude Opus
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Harvey在测试中将Claude Opus用于最密集的任务，同时使用Fireworks的GLM 5.1处理常规任务，显著降低了服务端负载和总体成本。
+  article_id: b4c83c3dc96abd8b
+- object_type: model
+  name: GLM 5.1
+  canonical_name: GLM 5.1
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Fireworks AI的GLM 5.1与Claude Opus组合使用，在Harvey的测试中承担非密集型任务，实现了成本降低而不牺牲质量。
+  article_id: b4c83c3dc96abd8b
+- object_type: model
+  name: DeepSeek V4 Flash
+  canonical_name: DeepSeek V4 Flash
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 文章将DeepSeek V4 Flash作为便宜模型的代表，指出从GPT-5.5切换到DeepSeek V4 Flash可以节省推理成本。
+  article_id: b4c83c3dc96abd8b
+- object_type: model
+  name: GPT-5.4-mini
+  canonical_name: GPT-5.4-mini
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 文章指出从GPT-5.5切换到GPT-5.4-mini同样可以节省成本，强调节省的关键在于选择小模型而非区分闭源与开源。
+  article_id: b4c83c3dc96abd8b
 ---
 
 The AI boom has been built on a basic assumption: Bigger models are more powerful, and the most powerful models win. Now, the industry is about to learn what happens if that assumption starts to break.

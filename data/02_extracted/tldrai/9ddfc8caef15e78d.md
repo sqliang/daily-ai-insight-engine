@@ -11,10 +11,12 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 9ddfc8caef15e78d
 source_type: news_media
-tldr: Google DeepMind 发布论文，探讨从 AGI 到 ASI 的四条路径与瓶颈
-objective_summary: Google DeepMind 于 arXiv 发表研究报告，定义 ASI 为超越大型人类组织智能的系统，提出从 AGI 到
-  ASI 的四条潜在路径（扩展、范式转变、递归改进、多智能体集体），并讨论沿途摩擦与开放研究问题。
-event_type: policy_and_safety
+tldr: Google DeepMind 在 arXiv 发表论文《From AGI to ASI》，研究从人类级 AGI 过渡到超级智能（ASI）的四条潜在路径，认为
+  AI 进步可能持续加速，人类社会需为一系列变革性变化做准备。
+objective_summary: Google DeepMind 于 2026 年 6 月在 arXiv 发表论文《From AGI to ASI》，探讨后 AGI
+  时代机器智能发展的连续性。论文将 ASI 定义为比大型人类组织更智能和更具认知能力的系统，并提出四条从 AGI 到 ASI 的路径：AGI 规模扩展、AI 范式转变、递归自我改进以及大规模多智能体集体涌现。论文讨论了沿这些路径可能出现的摩擦和瓶颈，并指出由于预测存在巨大不确定性，不能排除
+  AI 进步在未来几年持续加速的可能性。研究最后呼吁进行大规模跨学科全球合作以迎接这一前景。
+event_type: framework_tools
 epistemic_status: theoretical_claim
 entities:
   companies:
@@ -25,13 +27,25 @@ entities:
   - Universal AI
   key_people: []
 key_logic_flow:
-- Google DeepMind 发布《From AGI to ASI》研究报告，系统探讨从人类级 AGI 到人工通用超级智能（ASI）的演进路径。
-- ASI 被定义为比大型人类组织更智能、认知能力更强的系统，其理论终点是 Universal AI。
-- 报告提出四条从 AGI 到 ASI 的潜在路径：通过扩展现有 AGI 系统、AI 范式转移、递归自我改进、以及大规模多智能体集体涌现。
-- 报告分析了各路径上可能出现的摩擦与瓶颈，并提出了若干具体开放研究问题。
-- 由于预测 ASI 进展存在巨大不确定性，不能排除 AI 进展在未来几年持续加速的可能性。
-- 报告认为，与其将 AGI 视为单一变革性事件，更可能的情景是 AI 驱动的科学和技术突破带来一系列变革性社会变化，需要全球跨学科协作来应对。
+- 论文将 ASI（人工通用超级智能）定义为比大型人类组织更智能和更具认知能力的系统，并以理论上已得到较好理解的通用 AI 作为智能连续体的终点。
+- 论文提出从 AGI 到 ASI 的四条潜在路径：AGI 规模扩展、AI 范式转变、递归自我改进以及大规模多智能体集体涌现。
+- 论文分析了沿这些路径可能出现的摩擦和瓶颈，并指出这些摩擦的影响程度是尚未解决的开放研究问题。
+- 由于预测 ASI 进展存在巨大不确定性，不能排除 AI 进步在未来几年持续加速的可能性。
+- 与 AGI 引入社会后的一次性变革不同，更可能的前景是由 AI 驱动的多领域科学和技术突破引发的一系列变革性社会变化。
+- 为应对这一前景，论文呼吁进行覆盖全球的大规模跨学科合作努力。
 extract_result: success
+object_mentions:
+- object_type: paper
+  name: From AGI to ASI
+  canonical_name: From AGI to ASI
+  url: https://arxiv.org/abs/2606.12683
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 论文由 Google DeepMind 在 arXiv 上发表，标题为《From AGI to ASI》，探讨从人类级 AGI 到超级智能的过渡路径。
+  - 论文提出 AGI 规模扩展、AI 范式转变、递归自我改进以及多智能体集体涌现四条从 AGI 到 ASI 的潜在路径。
+  - 论文指出不能排除 AI 进步持续加速的可能性，并呼吁进行大规模跨学科全球合作以迎接变革前景。
+  article_id: 9ddfc8caef15e78d
 ---
 
 # Computer Science > Artificial Intelligence

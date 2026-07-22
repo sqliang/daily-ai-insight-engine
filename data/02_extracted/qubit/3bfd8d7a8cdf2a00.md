@@ -10,8 +10,9 @@ tags:
 - clippings
 id: 3bfd8d7a8cdf2a00
 source_type: news_media
-tldr: 高德与千问联合开源AGenUI，首个覆盖iOS/安卓/鸿蒙三端的原生A2UI框架
-objective_summary: 高德与阿里千问C端应用团队于2026年5月发布并开源AGenUI，这是基于Google A2UI协议的跨三端（iOS、Android、HarmonyOS）端云一体原生A2UI框架。开发者接入SDK后可将Agent输出直接渲染为可交互原生卡片，无需为各平台单独编写UI代码。
+tldr: 高德与阿里千问C端应用团队开源AGenUI，这是首个覆盖iOS、Android、鸿蒙三端的端云一体原生A2UI框架，基于Google A2UI协议，支持Agent输出直接渲染为可交互原生卡片。
+objective_summary: 高德与阿里千问C端应用团队于2026年5月正式发布并开源AGenUI框架，这是行业首个覆盖iOS、Android、HarmonyOS三端的端云一体原生A2UI开源框架。该框架基于Google
+  A2UI开放协议构建，采用端云一体架构和Streaming-first流式架构，内置22个基础组件和45项CSS属性，支持Design Token主题系统。开发者接入SDK后无需为不同平台分别编写UI代码，即可将Agent输出直接渲染为可交互的原生卡片。
 event_type: framework_tools
 epistemic_status: verified_fact
 entities:
@@ -20,21 +21,43 @@ entities:
   - 阿里巴巴
   - Google
   technologies:
-  - AGenUI
   - A2UI
+  - AGenUI
   - Design Token
-  - Streaming-first
-  - SDK
-  - CSS
+  - Streaming-first流式架构
+  - 端云一体架构
   key_people: []
 key_logic_flow:
-- 高德与阿里千问C端应用团队联合开源AGenUI，这是首个覆盖iOS、Android、HarmonyOS三端的端云一体原生A2UI框架。
-- AGenUI基于Google A2UI开放协议构建，补齐了端侧原生渲染能力，使AI Agent输出可直接渲染为原生组件。
-- 框架采用端云一体架构：云侧通过Agent Skill生成A2UI JSON以降低Token消耗，端侧通过跨平台C++ Core统一处理协议解析、状态管理与布局计算。
-- 核心采用Streaming-first流式架构，支持组件到达即刻挂载实现边生成边呈现，配合最小化节点差分更新与独立线程异步渲染。
-- AGenUI内置22个基础组件和45项CSS属性，Theme系统支持Design Token，模型仅需输出语义描述即可自动映射为品牌规范样式。
-- 高德与千问C端应用团队已完成生成式UI链路的Demo验证，将推动其在真实应用场景中落地上线。
-extract_result: partial
+- 高德与阿里千问C端应用团队联合发布了AGenUI开源框架，这是行业首个覆盖iOS、Android、HarmonyOS三端的端云一体原生A2UI框架。
+- AGenUI基于Google A2UI开放协议构建，补齐了端侧原生渲染能力，推动AI应用从文本式交互走向生成式UI交互。
+- AGenUI采用端云一体架构，云侧通过Agent Skill生成A2UI JSON以降低Token消耗，端侧通过跨平台C++ Core统一处理协议解析、状态管理与布局计算。
+- 其核心采用Streaming-first流式架构，支持组件到达即刻挂载实现边生成边呈现，配合最小化节点差分更新与独立线程异步渲染。
+- AGenUI内置22个基础组件和45项CSS属性，支持组件、功能调用及主题的三维定制，其Theme系统支持Design Token自动映射品牌规范样式。
+- 目前AGenUI已正式开源，开发者可访问官网或GitHub仓库了解详情或参与共建。
+extract_result: success
+object_mentions:
+- object_type: project
+  name: AGenUI
+  canonical_name: AGenUI
+  url: https://github.com/AGenUI/AGenUI
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 高德与阿里千问C端应用团队面向AI Agent开发者发布AGenUI，这是行业首个覆盖iOS、Android、HarmonyOS三端的端云一体原生A2UI开源框架。
+  - AGenUI基于Google A2UI最新开放协议构建，采用端云一体架构和Streaming-first流式架构，支持Agent输出直接渲染为可交互原生卡片。
+  - AGenUI内置22个基础组件和45项CSS属性，支持组件、功能调用及主题的三维定制，其Theme系统支持Design Token自动映射品牌规范样式。
+  article_id: 3bfd8d7a8cdf2a00
+- object_type: project
+  name: Google A2UI
+  canonical_name: Google A2UI
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Google此前开源的A2UI协议定义了模型如何描述界面的标准方式。
+  - AGenUI基于Google A2UI最新开放协议构建，进一步补齐了端侧原生渲染能力。
+  article_id: 3bfd8d7a8cdf2a00
+pipeline_stage: fact_extracted
 ---
 
 # 高德与千问C端应用团队开源AGenUI：首个覆盖iOS、安卓、鸿蒙三端的原生A2UI框架

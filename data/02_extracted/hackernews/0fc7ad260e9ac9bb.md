@@ -14,8 +14,12 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 0fc7ad260e9ac9bb
 source_type: community_discussion
-tldr: 谷歌与加州大学圣地亚哥分校利用废旧手机搭建低碳计算集群，计划部署2000台Pixel手机
-objective_summary: 加州大学圣地亚哥分校研究人员在谷歌支持下，将废旧智能手机主板提取后组成集群，重新部署为通用计算平台。计划部署2000台Pixel手机组成的数据中心，预计2026年秋季启动。
+tldr: UC San Diego 的研究人员在 Google 支持下，通过提取退役智能手机的处理器主板组建通用计算集群，计划部署 2,000 台 Pixel 手机组成的低碳数据中心，预计
+  2026 年秋季上线。
+objective_summary: 2026 年 6 月 12 日，Google 研究员 Jennifer Switzer 和 David Patterson 发表文章介绍加州大学圣迭戈分校在
+  Google 支持下开展的"手机集群计算"研究。该项目将退役消费级智能手机的处理器主板提取出来，去除电池和显示屏等非必要组件后替换为通用 Linux 系统，再组建为通用计算集群。研究计划部署
+  2,000 台 Pixel 手机组成的数据中心，为数百名研究人员和学生提供低成本低碳的云计算服务。早期实验表明 20 台手机可支持 75 人以上班级的峰值作业提交且延迟低于
+  AWS 默认后端，系统预计 2026 年秋季上线。
 event_type: infrastructure_update
 epistemic_status: verified_fact
 entities:
@@ -27,19 +31,33 @@ entities:
   - Kubernetes
   - Android
   - Linux
+  - containerization
+  - SPEC
   key_people:
   - Jennifer Switzer
   - David Patterson
   - Ryan Kastner
   - Patrick Pannuto
 key_logic_flow:
-- 计算机碳足迹由运营碳（使用能耗）和隐含碳（硬件制造）两部分构成，其中制造环节的碳排放更难解决。
-- 加州大学圣地亚哥分校研究人员提出"手机集群计算"方案，将废旧智能手机主板提取后组成集群重新部署为通用计算平台。
-- 现代智能手机单线程性能已媲美甚至超越多核服务器，但内存容量（8-12GB）和核心数量有限，需针对适合的应用场景。
-- 25-50台手机的性能相当于一台现代服务器，项目使用Kubernetes管理容器化应用，将手机组织为自管理集群。
-- 研究团队计划部署2000台Pixel手机的计算集群，预计可同时支持100门计算机科学课程的作业评测需求。
-- 该部署还将作为消费级硬件在持续使用下可靠性的测试平台，完整系统预计2026年秋季上线。
+- UC San Diego 研究人员在 Google 支持下探索"手机集群计算"方案，将退役智能手机的处理器主板提取后组成通用计算集群。
+- 手机主板承载了约 50% 的隐含碳排放，去除显示屏、电池、外壳等非计算组件后可重新部署为云服务节点。
+- 现代智能手机性能核心的单线程性能已达到甚至超过现代多核服务器水平，25-50 台手机即可等效一台服务器。
+- 研究人员将 Android 用户空间替换为通用 Linux 发行版，并使用 Kubernetes 编排容器化工作负载。
+- 早期实验显示 20 台手机的集群即可支持 75 人以上计算机科学课程的峰值作业提交，延迟低于 AWS 默认后端。
+- 项目计划部署 2,000 台 Pixel 手机集群，预计 2026 年秋季上线，将同时作为消费级硬件长期可靠性的研究测试平台。
 extract_result: success
+object_mentions:
+- object_type: project
+  name: Phone Cluster Computing
+  canonical_name: UCSD Phone Cluster Computing
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 加州大学圣迭戈分校的研究人员正在探索"手机集群计算"方案，将退役智能手机的处理器主板提取后组成通用计算集群。
+  - 该项目得到 Google 支持，计划部署 2,000 台 Pixel 手机组成的数据中心，为数百名研究人员提供低成本低碳的云计算服务。
+  - 项目使用 Kubernetes 编排容器化应用，早期实验表明 20 台手机即可支持 75 人以上班级的峰值作业提交且延迟低于 AWS 默认后端。
+  article_id: 0fc7ad260e9ac9bb
 ---
 
 June 12, 2026

@@ -12,8 +12,9 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 3faf03f3af9f1d0d
 source_type: news_media
-tldr: 三星电子平泽P5 Fab 2建设提前约半年，拟7月破土动工
-objective_summary: 三星电子因AI基础设施投资带动存储芯片订单激增，将平泽P5 Fab 2资本投资时间表较原计划提前约六个月。工地已部署多台打桩机，预计7月破土动工。该厂为平泽园区第六座也是最后一条半导体生产线，300mm晶圆月产能20万至30万片，目标2029年首次投产。
+tldr: 三星电子将平泽P5 Fab 2施工时间表提前约半年，拟于7月破土动工，该厂为平泽园区最后一条半导体生产线，月产能20至30万片300mm晶圆，目标2029年首次投产。
+objective_summary: 三星电子因AI基础设施投资浪潮带动存储芯片订单激增，将平泽P5 Fab 2的资本投资时间表较原计划提前约六个月。该工地已部署多台打桩机，预计下月正式破土动工。P5
+  Fab 2是平泽园区内第六座工厂，也是最后一条半导体生产线，基于300mm晶圆计算月产能可达20万至30万片，目标在2029年实现首次投产。
 event_type: infrastructure_update
 epistemic_status: verified_fact
 entities:
@@ -22,12 +23,25 @@ entities:
   technologies: []
   key_people: []
 key_logic_flow:
-- 三星电子将平泽P5 Fab 2的资本投资时间表较原计划提前约六个月。
-- 平泽P5 Fab 2工地已部署多台打桩机，实质性施工即将开始，预计7月破土动工。
-- 进度提前的原因是AI基础设施投资浪潮带动了存储芯片订单的激增。
-- P5 Fab 2是三星平泽园区内将建造的第六座工厂，也是该园区的最后一条半导体生产线。
-- 基于300mm晶圆计算，该工厂月产能预计可达20万至30万片。
-- 三星的目标是在2029年实现P5 Fab 2的首次投产。
+- 三星电子将平泽P5 Fab 2的施工时间表较原计划提前约六个月，拟于7月破土动工。
+- P5 Fab 2工地已新部署多台打桩机，实质性施工即将开始。
+- P5 Fab 2是三星电子平泽园区内将建设的第六座工厂，也是平泽园区的最后一条半导体生产线。
+- 基于300mm晶圆计算，P5 Fab 2的月产能预计可达20万至30万片。
+- AI基础设施投资浪潮带动存储芯片订单激增，是三星加速资本投资的核心驱动因素。
+- P5 Fab 2的目标是在2029年实现首次投产。
+extract_result: success
+object_mentions:
+- object_type: project
+  name: P5 Fab 2
+  canonical_name: Samsung Pyeongtaek P5 Fab 2
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 三星电子已将平泽P5 Fab 2的施工时间表较原计划提前约六个月。
+  - P5 Fab 2是平泽园区内将建设的第六座工厂，也是最后一条半导体生产线。
+  - 基于300mm晶圆计算，P5 Fab 2月产能可达20万至30万片，目标2029年首次投产。
+  article_id: 3faf03f3af9f1d0d
 impact_score:
   score: 5.5
   reason: 三星电子将平泽P5 Fab 2 建设提前约半年，是AI基础设施投资浪潮直接拉动存储芯片需求的典型信号。该厂月产能20万至30万片300mm晶圆，定位为平泽园区最后一条生产线，对全球HBM/DDR5供给有中长期利好。但2029年才首次投产，对短期供需格局影响有限，且三星在先进制程代工领域仍面临台积电竞争压力，因此评分落在'重要但非颠覆性'的中位区间。
@@ -73,6 +87,30 @@ confidence:
   compound: medium
   hype: medium
 actionable_insight: monitor
+object_insights:
+- object_type: project
+  name: P5 Fab 2
+  canonical_name: Samsung Pyeongtaek P5 Fab 2
+  url: null
+  positioning: 三星电子平泽园区第六座也是最后一条半导体生产线，专注300mm晶圆存储芯片制造，月产能规划20至30万片，目标2029年投产。
+  technical_signal: 基于300mm晶圆工艺，月产能达20至30万片，代表先进存储芯片大规模制造基础设施的持续投入。
+  adoption_signal: 因AI基础设施投资浪潮带动存储芯片订单激增，三星将资本投资时间表提前约六个月，拟于7月破土动工。
+  ecosystem_relevance: 作为平泽园区收官产线，将大幅提升三星全球存储芯片供应能力，直接支撑AI基础设施建设带来的存储需求增长。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: 三星提前约半年启动P5 Fab 2建设，反映AI存储芯片需求远超预期；该厂作为平泽园区最后一条产线，其产能释放节奏将直接影响全球存储芯片供需格局。
+  risk_notes:
+  - 2029年才实现首次投产，长达近三年的建设周期中存在市场需求转向的不确定性。
+  - 作为平泽园区最后一条产线，后续扩建空间有限，产能弹性可能受物理空间约束。
+  score: 7.0
+  article_ids:
+  - 3faf03f3af9f1d0d
+  evidence_snippets:
+  - 三星电子已将平泽P5 Fab 2的施工时间表较原计划提前约六个月。
+  - P5 Fab 2是平泽园区内将建设的第六座工厂，也是最后一条半导体生产线。
+  - 基于300mm晶圆计算，P5 Fab 2月产能可达20万至30万片，目标2029年首次投产。
 ---
 
 6月22日消息，据报道，三星电子平泽P5 Fab 2工地近日已新部署了多台打桩机，这意味着P5Fab2的实质性施工即将开始，下个月左右破土动工的可能性很大。随着AI基础设施投资浪潮带动存储芯片订单激增，三星已将资本投资的时间表较原计划提前了约六个月。P5 Fab 2是三星电子平泽园区内将建设的第六座工厂，也是平泽园区的最后一条半导体生产线。基于300mm晶圆计算，预计其月产能可达20万至30万片，目标是在2029年实现首次投产。（界面）原文链接

@@ -14,31 +14,61 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: da0ee3bbeda7b90d
 source_type: community_discussion
-tldr: NVIDIA Rubin 实现 100% 液冷，45°C 冷却液使数据中心水耗接近零
-objective_summary: NVIDIA 发布 Rubin 代 AI 基础设施，首次实现 100% 全液冷闭环设计（无风扇），冷却液温度高达 45°C。采用干冷器方案，年水耗从约
-  260 万加仑/兆瓦降至接近零，50MW 超大规模设施年省超 400 万美元冷却成本。
+tldr: NVIDIA 发布 Rubin 代 AI 基础设施，实现 100% 全液冷无风扇设计，冷却液温度可达 45°C，通过干冷器闭环系统将数据中心水耗降至接近零，并显著降低冷却能耗。
+objective_summary: NVIDIA 在官方博客中介绍了其 Rubin 代 AI 基础设施，采用全球首个 100% 全液冷设计，以 45°C 冷却液温度和干冷器实现闭环循环，几乎完全消除蒸发水耗。据
+  NVIDIA 估算，一个 50 兆瓦的超大规模数据中心每年可节省超过 400 万美元的冷却相关能源和水成本。该设计基于 NVIDIA DSX AI 工厂参考架构，在大部分气候条件下无需开启机械冷冻机。
 event_type: infrastructure_update
 epistemic_status: pr_statement
 entities:
   companies:
   - NVIDIA
-  - Motivair
   - Schneider Electric
   technologies:
-  - Rubin
+  - Liquid Cooling
   - DSX
-  - liquid cooling
+  - Rubin
   key_people:
   - Ali Heydari
   - Richard Whitmore
 key_logic_flow:
-- NVIDIA Rubin 是业界首个实现 100% 全液冷的基础设施平台，每个芯片和网络组件均由闭环液体冷却，完全取消风扇。
-- 冷却液温度最高可达 45°C（113°F），高于热水浴缸温度，使数据中心可在多数气候下无需制冷机组，仅靠室外干冷器散热。
-- 相比于传统冷却塔方案每年每兆瓦约 260 万加仑的水消耗，45°C 液冷方案将水耗降至接近零，降幅达 100%。
-- 冷却液为 75% 水和 25% 丙二醇混合液，通过直接贴合芯片的冷板带走热量，单次注液后闭环运行，设施生命周期内无需补充。
-- 传统冷却占数据中心用电量高达 40%，提高冷却液温度 1°C 可降低约 4% 冷却能耗，50MW 设施年省超 400 万美元。
-- Motivair（Schneider Electric 旗下）与 NVIDIA 合作近十年，随着芯片功率密度超过空气冷却阈值，液冷已成必然选择。
+- NVIDIA Rubin 代 AI 基础设施是全球首个实现 100% 全液冷设计的平台，所有芯片和网络组件均由闭环液体冷却，且系统内不设任何风扇。
+- 冷却液温度可达 45°C，配合干冷器可在大部分气候条件下实现无冷冻机运行，将设施冷却水耗从传统冷却塔系统的每兆瓦每年约 260 万加仑降至接近零。
+- 传统数据中心冷却能耗占整体用电量高达 40%，而液冷架构通过提高冷却液温度显著降低能耗，一个 50 兆瓦设施每年可节省超过 400 万美元的冷却相关成本。
+- 冷却液采用 75% 水与 25% 丙二醇的混合液，通过直接贴合处理器的冷板捕获热量，再经封闭循环回路输送至室外干冷器散热。
+- 全液冷设计使 Rubin 服务器前面板完全封闭无穿孔，机架密度大幅提升，原本需要 6 个机架单元的系统如今仅需 2 个。
+- 液冷架构还支持废热回收，可将 AI 工厂的余热重新利用于附近商业或住宅建筑的供暖。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: NVIDIA Rubin
+  canonical_name: NVIDIA Rubin AI Infrastructure
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - NVIDIA Rubin 代 AI 基础设施是全球首个实现 100% 全液冷设计的计算平台，所有芯片和网络组件均采用闭环液体冷却且不设任何风扇。
+  - Rubin 架构的冷却液温度可达 45°C，使服务器前面板实现完全封闭无穿孔设计，机架密度相比传统风冷服务器大幅提升。
+  article_id: da0ee3bbeda7b90d
+- object_type: project
+  name: NVIDIA DSX AI Factory Reference Design
+  canonical_name: NVIDIA DSX AI Factory Reference Design
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - NVIDIA DSX AI 工厂参考设计概述了设计、建造和运营整个 AI 工厂基础设施栈的最佳实践。
+  - 该参考设计实现了接近零的水消耗，通过基于干冷器的闭环系统消除了蒸发水冷，全年约 99% 的时间无需开启冷冻机。
+  article_id: da0ee3bbeda7b90d
+- object_type: company
+  name: Motivair
+  canonical_name: Motivair
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Motivair 是 Schneider Electric 旗下的先进冷却部门，与 NVIDIA 的产品路线图已保持近十年的紧密合作。
+  - Motivair 总裁 Richard Whitmore 指出，当每芯片功耗突破风冷可行阈值后，液冷成为数据中心基础设施的必选方案。
+  article_id: da0ee3bbeda7b90d
 ---
 
 Hot tubs sit at about 38 to 40 degrees Celsius, warm enough that most people can only soak for about 15 minutes. NVIDIA’s newest AI servers can run their cooling liquid even hotter — up to 45 degrees Celsius, or 113 degrees Fahrenheit. That higher temperature limit is precisely what makes them more energy efficient.

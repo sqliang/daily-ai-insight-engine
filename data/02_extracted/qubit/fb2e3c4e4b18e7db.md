@@ -12,40 +12,84 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: fb2e3c4e4b18e7db
 source_type: news_media
-tldr: OpenAI Codex 团队成员 Jason Liu 公开分享将 Codex 打造为长期运行自主工作系统的完整方法论
-objective_summary: 2026年5月，OpenAI Codex 团队新成员 Jason Liu（开源库 Instructor 作者）在社交平台发布
-  Codex-maxxing 使用心法，展示如何通过跨月存活线程、Heartbeats 定时调度、Obsidian 本地记忆管理等手段将 Codex
+tldr: OpenAI Codex 团队新成员 Jason Liu 公开其 Codex-maxxing 心法，核心是通过跨月巨型线程、Heartbeats 定时任务调度和本地文件记忆管理将
+  Codex 改造成能持续运行的工作系统，OpenAI 同期将 Goal 模式转正并新增 Appshots 截图直喂和锁屏远程工作功能。
+objective_summary: OpenAI Codex 团队新成员 Jason Liu 于 2026 年 5 月在社交平台公开其 Codex 高阶使用心法，核心是将
+  Codex 从单次对话工具改造为能长期运行的工作系统，通过跨月存活线程让 Agent 具备连续性，利用 Heartbeats 定时任务自动扫描 Slack 和
+  Gmail 等渠道推进工作流，并放弃平台内置记忆改用 Obsidian vault 本地文件管理核心知识。他强调任何自动化任务必须有清晰可验证的反馈闭环来判断完成条件。OpenAI
+  同期将 Goal 模式从实验版本转正为正式功能，并新增 Appshots 截图直喂和锁屏后远程继续工作的能力。
 event_type: application_landing
 epistemic_status: pr_statement
 entities:
   companies:
   - OpenAI
-  - Amazon
-  - Slack
-  - GitHub
   technologies:
   - Codex
   - Heartbeats
-  - Goal
-  - Appshots
-  - Chronicle
-  - Connectors
-  - Skills
+  - Goal mode
   - Steering
-  - MCP
-  - Instructor
+  - Chronicle
+  - Appshots
+  - Slack MCP
   - Obsidian
   key_people:
   - Jason Liu
 key_logic_flow:
-- Jason Liu 的核心方法论是将 Codex 会话改造为跨月存活的巨型线程，通过积累对话历史和决策实现 Agent 的连续性工作能力
-- Heartbeats 定时调度机制让 Codex 可每 30 分钟自动扫描 Slack/Gmail 并起草回复，或每 15 分钟检查审阅线程反馈并自动推进任务
-- Jason 强调任务必须建立可验证的反馈闭环（如通过单元测试作为完成标准），否则自动化仅为愿望而非可交付成果
-- Codex Goal 模式已从实验版转正，用户设定最终目标和验收标准后 Agent 可自主持续数小时至数天推进
-- Jason 放弃 Codex 内置记忆系统，将核心记忆数据存放在本地 Obsidian vault 中，通过 AGENTS.md 规则同步更新，实现工具无关的知识库可迁移性
-- Codex 近期更新包括 Appshots 截图直喂、锁屏后远程工作、侧边栏支持 Markdown/PDF/PPT 渲染及内置浏览器 JavaScript 操控能力，周活用户已破
-  400 万
+- Jason Liu 的核心玩法是将 Codex 从单次问答工具改造为能长期运行的工作系统，通过跨月存活的巨型线程让 Agent 积累对话历史、偏好和决策，具备连续性。
+- Jason Liu 使用 Heartbeats 定时任务调度机制，例如让 Chief of Staff 线程每 30 分钟自动扫描 Slack 和 Gmail，判断优先级后起草回复草稿供人确认。
+- Jason Liu 强调验证机制对 Agent 任务至关重要——必须有清晰可验证的反馈闭环（如测试用例是否通过）来判断任务何时完成，否则只是愿望。
+- Jason Liu 放弃 Codex 内置记忆系统 Chronicle，将核心记忆存放在 Obsidian vault 本地文件中，便于手动修改、版本对比和一键回滚。
+- OpenAI 将 Goal 模式从实验版本转正为正式功能，用户设定最终目标和验收标准后 Codex 可自主推进数小时至数天，中途可查进度和调整方向。
+- Codex 新增 Appshots 截图直喂功能、锁屏后继续远程工作的能力，以及手机端实时查看、审批和接管任务的功能。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Codex
+  canonical_name: OpenAI Codex
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Jason Liu，13k星开源库Instructor的作者，刚被OpenAI招进Codex团队没多久，在社交平台写了篇Codex-maxxing，把自己的Codex玩法全抖出来了。
+  - Jason Liu整套玩法的核心，是把Codex改造成了一个能长期运行、持续接管任务的工作系统。
+  - Codex周活用户4月底已经破了400万，这次更新包括Appshots截图直喂、Goal模式正式转正、锁屏后也能远程干活。
+  article_id: fb2e3c4e4b18e7db
+- object_type: project
+  name: Instructor
+  canonical_name: instructor
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Jason Liu，13k星开源库Instructor的作者，刚被OpenAI招进Codex团队没多久。
+  article_id: fb2e3c4e4b18e7db
+- object_type: product
+  name: Goal mode
+  canonical_name: Codex Goal mode
+  url: null
+  confidence: high
+  article_role: ecosystem_context
+  evidence_snippets:
+  - OpenAI已经把Goal模式从实验版本转正了，你只要明确一个最终目标和验收标准，Codex会自主持续推进。
+  article_id: fb2e3c4e4b18e7db
+- object_type: product
+  name: Chronicle
+  canonical_name: Codex Chronicle
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - Jason Liu也提到了Codex自带的记忆功能Chronicle，通过截取屏幕内容来构建上下文，但这是需要手动开启的实验预览功能。
+  article_id: fb2e3c4e4b18e7db
+- object_type: product
+  name: Appshots
+  canonical_name: Codex Appshots
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - Codex又更新了一波：Appshots截图直喂、Goal模式正式转正、锁屏后也能远程干活。
+  article_id: fb2e3c4e4b18e7db
 ---
 
 # OpenAI大神教你如何榨干Codex

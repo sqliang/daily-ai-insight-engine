@@ -15,27 +15,50 @@ id: f0eeef1a33ddd3e7
 manifest_dates:
 - '2026-07-07'
 source_type: community_discussion
-tldr: Kapa 在 RAG 检索与生成之间增加 LLM 裁剪步骤，丢弃 68% 上下文，保留 96% 召回率。
-objective_summary: Kapa 在其 RAG 流水线中新增一个轻量级 LLM 裁剪步骤，位于检索与生成之间。该步骤对检索到的文档块进行五级评分，丢弃约
-  68% 的不相关内容，保留 96% 的召回率，使每次查询成本降低约 34%，延迟增加约 0.7 秒。
+tldr: Kapa.ai 在 RAG 管道中引入了一个轻量 LLM 作为上下文修剪器，在检索器和生成器之间过滤掉约 68% 的检索块，同时保持约 96% 的召回率，每次查询成本降低约
+  34%。
+objective_summary: Kapa.ai 联合创始人 Lars Baltensperger 发表博客文章，介绍了该公司在其 AI 助手的 RAG 管道中新增的第三个步骤：在检索器和生成器之间插入一个小型
+  LLM 作为上下文修剪器。该修剪器同时读取用户问题和所有检索到的文本块，按五级评分体系（ESSENTIAL 到 UNRELATED）对每个块评分，丢弃低于阈值的块。经过标注集评测和真实生产流量回放验证，该方案可丢弃约
+  68% 的检索块，保持约 96% 的召回率，每次查询成本净降低约 34%，延迟增加约 0.7 秒。该功能默认在 Product Agent SDK 的知识库搜索中启用，并在检索
+  API 和 MCP 服务器中可选使用。
 event_type: framework_tools
 epistemic_status: verified_fact
 entities:
   companies:
-  - Kapa
+  - kapa.ai
   technologies:
   - RAG
   - LLM
   key_people:
   - Lars Baltensperger
 key_logic_flow:
-- Kapa 在 RAG 流水线的检索器与生成器之间增加了一个轻量级 LLM 裁剪步骤，用于自动丢弃答案不需要的上下文块。
-- 点式重排器（pointwise cross-encoder）单独评估每个查询-块对，无法判断块之间的集合关系，导致部分相关块因孤立评分而被错误丢弃。
-- 裁剪器使用五级评分体系（ESSENTIAL/CONTRIBUTING/SUPPORTING/TANGENTIAL/UNRELATED），同时查看查询和所有检索块进行集合级判断，解决了点式评分的根本缺陷。
-- 该方案丢弃约 68% 的上下文块，保留约 96% 的召回率，每次查询净成本降低约 34%。
-- 裁剪器使用小型廉价模型，运行时间约 0.7 秒/查询，生成阶段的速度提升不足以抵消该延迟，但在多轮 agent 场景中边际成本较低。
-- 该功能已默认集成到 Kapa 的 Product Agent SDK 知识库搜索中，并在检索 API 和 MCP 服务器中可选启用。
+- Kapa.ai 发现检索到的文本块约占每次查询成本的 2/3，减少上下文块可以直接降低查询成本。
+- 基于重排序分数设定固定截断阈值的方案不可行，因为重排序分数是排序依据而非绝对度量，跨查询无法校准。
+- 基于锚点文档（anchor documents）的校准方案也因重排序器无法判断集合相关性而失败——一个块只有与其他块组合时才显示其价值。
+- Kapa.ai 的解决方案是在重排序器和生成器之间加入一个轻量 LLM 调用，该模型同时查看问题和所有检索块，按五级评分体系对每个块独立评分，使用固定阈值决定保留或丢弃。
+- 该方案在标注测试集上实现约 68% 的上下文压缩率和约 96% 的召回保持率，每次查询成本下降约 34%，延迟增加约 0.7 秒。
+- 修剪功能默认在 Product Agent SDK 的知识库搜索中启用，并在检索 API 和 MCP 服务器中可选使用。
 extract_result: success
+object_mentions:
+- object_type: company
+  name: kapa.ai
+  canonical_name: kapa.ai
+  url: https://www.kapa.ai
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Kapa 构建能够回答涉及大型产品知识库的复杂问题的 AI 助手，涵盖技术文档、API 参考、PDF、论坛和支持线程等多种来源。
+  - Kapa 在检索器和生成器之间加入了一个小型 LLM 作为上下文修剪器，该修剪器同时读取问题和所有检索块并评分。
+  article_id: f0eeef1a33ddd3e7
+- object_type: product
+  name: Product Agent SDK
+  canonical_name: kapa.ai Product Agent SDK
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 修剪功能默认在 Product Agent SDK 的知识库搜索中启用，客户可以在基于 Kapa 检索构建的 Agent 中使用该功能以减少上下文占用。
+  article_id: f0eeef1a33ddd3e7
 ---
 
 ## How we taught a small LLM to throw away 68% of our RAG context

@@ -64,32 +64,83 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 82a901da1b9bedec
 source_type: community_discussion
-tldr: Anthropic 开源了 Claude 的 Skills 系统仓库，包含示例技能和规范文档
-objective_summary: Anthropic 于 GitHub 发布 skills 开源仓库，包含 Claude AI 的技能指令集、Agent Skills
-  规范、技能模板及四大类示例技能（创意设计、开发技术、企业通讯、文档处理），开发者可自由使用或自定义技能。
+tldr: Anthropic 开源了 skills 仓库，包含 Claude 技能实现集合（SKILL.md 指令文件加附属资源），覆盖创意设计、开发技术、企业通信和文档处理四大类别，支持通过
+  Claude Code Plugin 市场安装或通过 API 上传自定义技能。
+objective_summary: Anthropic 在 GitHub 上发布了 anthropics/skills 开源仓库，该仓库是 Claude 技能系统的官方实现集合。仓库包含
+  Agent Skills 规范（./spec）、技能模板（./template）以及四大类示例技能：创意设计、开发技术、企业通信和文档处理。用户可通过 Claude
+  Code 的 /plugin marketplace add 或 /plugin install 命令安装文档技能和示例技能两个插件，也可通过 Claude API
+  上传自定义技能。大部分技能以 Apache 2.0 开源协议发布，文档技能（docx/pdf/pptx/xlsx）以 source-available 许可提供。
 event_type: framework_tools
 epistemic_status: verified_fact
 entities:
   companies:
   - Anthropic
-  - GitHub
-  - Notion
   technologies:
   - Agent Skills
-  - YAML frontmatter
-  - SKILL.md
-  - MCP
-  - Claude API
+  - Claude Code Plugin
   key_people: []
 key_logic_flow:
-- Anthropic 在 GitHub 上开源了 skills 仓库，包含 Claude 的技能系统实现，遵循 Agent Skills 标准（agentskills.io）。
-- 每个 skill 是一个包含 SKILL.md 文件的独立文件夹，通过 YAML 前置元数据（name、description）和 Markdown 指令定义
-  Claude 的行为。
-- 仓库包含四大类示例技能：创意与设计、开发与技术、企业与通讯、文档处理技能（docx/pdf/pptx/xlsx 以源码可用形式提供）。
-- 用户可通过 Claude Code 插件市场或 /plugin install 命令直接安装 document-skills 和 example-skills
-  插件。
-- 开发者可通过 Claude API 调用预置技能或上传自定义技能，并可基于仓库中的 template-skill 创建新技能。
+- Anthropic 在 GitHub 上发布了 anthropics/skills 开源仓库，该仓库包含 Claude 技能系统的完整实现和示例集合，并定义了
+  Agent Skills 规范。
+- Skills 是以 SKILL.md 指令文件为核心的文件夹结构，包含 YAML 前端元数据和 Markdown 指令，用于指导 Claude 以可重复的方式完成特定领域的专业任务。
+- 仓库中的示例技能覆盖创意设计、开发技术、企业通信和文档处理四大类别，大部分以 Apache 2.0 开源协议发布。
+- 文档处理技能（docx、pdf、pptx、xlsx）以 source-available 许可提供，它们是驱动 Claude 文档能力底层的生产级实现。
+- 用户可通过 Claude Code 的 /plugin marketplace add 或 /plugin install 命令安装文档技能和示例技能两个插件，也可通过
+  Claude API 上传自定义技能。
+- 创建自定义技能只需创建一个包含 name 和 description 字段的 SKILL.md 文件，使用仓库中的 template-skill 作为起始模板即可快速上手。
 extract_result: success
+object_mentions:
+- object_type: project
+  name: anthropics/skills
+  canonical_name: anthropics/skills
+  url: https://github.com/anthropics/skills
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 该仓库是 Anthropic 在 GitHub 上发布的 Claude 技能官方实现，包含 SKILL.md 指令文件、Agent Skills 规范和技能模板。
+  - 仓库中的示例技能覆盖创意设计、开发技术、企业通信和文档处理四大类别，大部分以 Apache 2.0 开源协议发布。
+  - 用户可通过 Claude Code 的 /plugin marketplace add anthropics/skills 命令将本仓库注册为插件市场。
+  article_id: 82a901da1b9bedec
+- object_type: project
+  name: Agent Skills
+  canonical_name: Agent Skills
+  url: https://agentskills.io
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - Agent Skills 是定义 Claude 技能加载和行为的标准规范，其规范文档位于该仓库的 ./spec 子目录中。
+  - 关于 Agent Skills 标准的更多信息可在 agentskills.io 网站上查阅。
+  article_id: 82a901da1b9bedec
+- object_type: product
+  name: document-skills
+  canonical_name: document-skills
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 文档技能插件包含驱动 Claude 文档处理能力的 docx、pdf、pptx 和 xlsx 子技能，采用 source-available 许可。
+  - 用户可通过 /plugin install document-skills@anthropic-agent-skills 命令在 Claude Code 中安装文档技能插件。
+  article_id: 82a901da1b9bedec
+- object_type: product
+  name: example-skills
+  canonical_name: example-skills
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 示例技能插件包含仓库中创意、开发和企业通信等类别的所有示例技能，可供学习和参考。
+  - 用户可通过 /plugin install example-skills@anthropic-agent-skills 命令安装示例技能插件。
+  article_id: 82a901da1b9bedec
+- object_type: project
+  name: template-skill
+  canonical_name: template-skill
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 模板技能是创建自定义技能的起始模板，只需填充 name 和 description 字段以及 Markdown 指令即可完成定义。
+  - 模板技能位于仓库的 ./template 子目录中，展示了 SKILL.md 文件的最小必需结构和编写规范。
+  article_id: 82a901da1b9bedec
 ---
 
 Note:This repository contains Anthropic's implementation of skills for Claude. For information about the Agent Skills standard, see agentskills.io.

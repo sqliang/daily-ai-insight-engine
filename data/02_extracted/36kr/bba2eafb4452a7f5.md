@@ -42,43 +42,135 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: bba2eafb4452a7f5
 source_type: news_media
-tldr: 36氪新闻汇总：SpaceX上市市值破2.1万亿美元；Kimi推全球首张AI原生信用卡；OpenAI因用户自杀被诉
-objective_summary: 2026年6月12日的一篇综合新闻汇总。SpaceX在纳斯达克上市，市值达2.1万亿美元；月之暗面Kimi与国有银行合作推出全球首张AI原生信用卡；OpenAI因被指ChatGPT设计缺陷导致用户自杀在美被起诉；谷歌追加5000万美元用于AI基础设施建设技工培训；腾讯云下调两款AI模型价格。
-event_type: policy_and_safety
+tldr: SpaceX在纳斯达克上市，市值突破2.1万亿美元，马斯克成为全球首位万亿富翁；OpenAI被诉ChatGPT设计缺陷致用户自杀；月之暗面推出全球首张AI原生信用卡Kimi信用卡。
+objective_summary: 6月12日，SpaceX在纳斯达克上市，发行价135美元对应市值1.77万亿美元，首日收盘涨19.22%至160.99美元，市值达2.1万亿美元。马斯克个人财富升至约1.05万亿美元，成为全球首位净资产超万亿美元的富翁。同日，一名加拿大女子在美国起诉OpenAI及CEO
+  Sam Altman，称ChatGPT设计缺陷导致其女儿自杀。月之暗面宣布与大型国有银行及国际卡组织合作，推出全球首张AI原生信用卡Kimi信用卡，消费可转化为AI算力额度。
+event_type: capital_movement
 epistemic_status: verified_fact
 entities:
   companies:
   - SpaceX
   - OpenAI
-  - Google
   - SK海力士
-  - 腾讯云
+  - Google
+  - Alphabet
   - 月之暗面
+  - 腾讯云
   - 阿里巴巴
-  - 恒生指数公司
-  - 三星电子
   - 韩美半导体
+  - 滴滴
+  - 胖东来
   - 泡泡玛特
   - 纳斯达克
+  - 恒生指数公司
   technologies:
   - ChatGPT
-  - CoPilot
-  - Microsoft 365
-  - MiniMax-M3
-  - Hy-MT2-Pro
-  - AI原生信用卡
+  - Microsoft 365 Copilot
+  - AI
+  - TokenHub
   key_people:
+  - 马斯克
   - Sam Altman
   - 桑达尔·皮查伊
   - 郭鲁正
+  - 沃伦·巴菲特
 key_logic_flow:
-- SpaceX于6月12日在纳斯达克上市，发行价135美元，收盘报160.99美元，涨幅19.22%，市值达2.1万亿美元。
-- 月之暗面Kimi宣布与一国有银行及国际卡组织合作，推出全球首张AI原生信用卡，消费积分可兑换AI算力额度。
-- 一名加拿大女子在加州起诉OpenAI，称ChatGPT设计缺陷导致其女儿自杀，OpenAI面临多起类似诉讼。
-- 谷歌CEO桑达尔·皮查伊宣布追加5000万美元投资，帮助美国30万人接受AI相关技术职业培训。
-- 腾讯云宣布自6月12日起下调Hy-MT2-Pro模型价格约55-67%，自6月15日起下调MiniMax-M3模型价格50%。
-- SK海力士CEO郭鲁正表示正评估引入ChatGPT和Microsoft 365 Copilot等外部生成式AI模型改造工作流程。
+- SpaceX于6月12日在纳斯达克上市，发行价135美元对应市值1.77万亿美元，首日收盘涨19.22%至160.99美元，总市值突破2.1万亿美元成为美国市值第六大企业。
+- 马斯克个人财富升至约1.05万亿美元，成为全球首位净资产超万亿美元的富翁，约等于巴菲特1450亿美元财富的七倍。
+- 一名加拿大女子在美国起诉OpenAI及CEO Sam Altman，称ChatGPT设计优先考虑用户参与度而非安全性，导致其女儿爱丽丝自杀身亡。
+- 月之暗面宣布与大型国有银行及国际卡组织合作推出全球首张AI原生信用卡Kimi信用卡，持卡人消费可兑换AI算力额度及高级功能权益。
+- 阿里巴巴拟出资15亿美元竞购中国生鲜电商平台朴朴超市，该报价为此前高鑫零售报价的两倍多。
+- 泡泡玛特推出的FIFA联名款拉布布公仔因世界杯开幕走红，搜索量大幅攀升，整体销量环比暴涨超30倍。
 extract_result: success
+object_mentions:
+- object_type: company
+  name: SpaceX
+  canonical_name: SpaceX
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - SpaceX于6月12日在纳斯达克上市，发行价135美元对应市值达1.77万亿美元，是有史以来规模最大的IPO。
+  - 该股首日收盘报160.99美元，涨幅19.22%，总市值达到2.1万亿美元，跻身美国市值第六大企业。
+  - 恒生港美科技指数将新增SpaceX至指定美国成分股名单，与科技七巨头并列。
+  article_id: bba2eafb4452a7f5
+- object_type: product
+  name: Kimi信用卡
+  canonical_name: Kimi信用卡
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 月之暗面宣布全球首张AI原生信用卡Kimi信用卡正式开启预约，持卡人消费可转化为AI算力额度。
+  - Kimi已与一大型国有银行及国际卡组织合作，探索Token和信用卡积分相互流通的全新金融范式。
+  article_id: bba2eafb4452a7f5
+- object_type: product
+  name: ChatGPT
+  canonical_name: ChatGPT
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 一名加拿大女子起诉OpenAI，称ChatGPT设计优先考虑用户参与度而非安全性，导致其女儿爱丽丝自杀。
+  - SK海力士CEO郭鲁正表示正在从安全性和系统架构角度评估ChatGPT在公司内部的潜在应用。
+  article_id: bba2eafb4452a7f5
+- object_type: product
+  name: TokenHub
+  canonical_name: TokenHub
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 腾讯云宣布大模型服务平台TokenHub将于2026年6月15日起下调MiniMax-M3模型价格，推理输入、输出及缓存命中费用均下调50%。
+  - TokenHub将于2026年6月12日起下调Hy-MT2-Pro模型价格，输入价格下调66.67%、输出价格下调55.56%。
+  article_id: bba2eafb4452a7f5
+- object_type: product
+  name: 滴滴
+  canonical_name: 滴滴
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 滴滴出行App 8.0版本正式上线，App名称从'滴滴出行'正式更名为'滴滴'。
+  - 更新后的App新增顶部导航栏、底部'消息'和'行程'入口，用户可通过语音使用AI打车功能。
+  article_id: bba2eafb4452a7f5
+- object_type: model
+  name: MiniMax-M3
+  canonical_name: MiniMax-M3
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 腾讯云TokenHub将于2026年6月15日起下调MiniMax-M3模型价格，推理输入、推理输出及缓存命中费用均下调50%。
+  article_id: bba2eafb4452a7f5
+- object_type: model
+  name: Hy-MT2-Pro
+  canonical_name: Hy-MT2-Pro
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 腾讯云TokenHub将于2026年6月12日起下调Hy-MT2-Pro模型价格，输入价格下调66.67%、输出价格下调55.56%。
+  article_id: bba2eafb4452a7f5
+- object_type: company
+  name: 朴朴超市
+  canonical_name: 朴朴超市
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 阿里巴巴正出资15亿美元竞购中国生鲜电商平台朴朴超市，报价为此前高鑫零售报价的两倍多。
+  article_id: bba2eafb4452a7f5
+- object_type: product
+  name: 拉布布
+  canonical_name: Labubu
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 泡泡玛特推出的FIFA联名款拉布布公仔因世界杯开幕走红，定价599元，整体销量环比暴涨超30倍。
+  - 拉布布是世界杯历史上首个登台的中国潮玩形象，在开幕式上收获满堂喝彩后掀起国内抢购热潮。
+  article_id: bba2eafb4452a7f5
 ---
 
 **今日热点导览**

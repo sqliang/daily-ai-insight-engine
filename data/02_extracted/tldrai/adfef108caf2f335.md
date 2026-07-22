@@ -12,8 +12,9 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: adfef108caf2f335
 source_type: news_media
-tldr: DeepSeek计划自研推理芯片，以应对美国出口管制并减少对华为和英伟达的依赖
-objective_summary: DeepSeek正计划进入芯片业务，专注数据中心推理芯片，已筹备约一年并招聘工程师。此举旨在减少对华为和英伟达的依赖，同时应对美国出口管制。OpenAI和Anthropic也在进行类似的芯片自研计划。
+tldr: 中国 AI 初创公司 DeepSeek 计划自研数据中心推理芯片，以应对美国出口管制并减少对华为和英伟达的依赖。该项目已进行约一年，正在招聘工程师并寻找硬件合作伙伴。
+objective_summary: DeepSeek 正在计划进入芯片制造领域，专注于数据中心推理芯片而非训练芯片。该项目已持续约一年，公司正在与硬件和芯片领域的潜在合作伙伴会面并招聘工程师。此举旨在减少对华为和英伟达的依赖，美国对华芯片出口管制是主要驱动力之一。与此同时，OpenAI
+  与 Broadcom 刚联合发布了其首款推理芯片 Jalapeño，Anthropic 也在探索定制芯片设计。
 event_type: infrastructure_update
 epistemic_status: rumor_leak
 entities:
@@ -21,21 +22,47 @@ entities:
   - DeepSeek
   - OpenAI
   - Anthropic
-  - Nvidia
+  - Broadcom
   - Huawei
+  - Nvidia
   - Alibaba
   - Baidu
-  - Broadcom
-  technologies: []
+  - Reuters
+  technologies:
+  - inference chip
+  - data center chip
+  - large language model
   key_people: []
 key_logic_flow:
-- DeepSeek计划进入芯片业务，已筹备约一年，正在与硬件和硅片领域的潜在合作伙伴会面并招聘工程师。
-- 该公司专注于数据中心推理芯片，而非训练芯片，目标是减少对华为和英伟达的依赖。
-- 美国出口管制阻止了英伟达在中国市场的扩展，华为目前控制着中国约一半的数据中心芯片市场。
-- 中国科技巨头阿里巴巴和百度也在推进自研芯片计划，DeepSeek并非唯一入局者。
-- OpenAI与Broadcom联合发布了其首款推理芯片Jalapeño，旨在减少对英伟达的依赖并获取端到端技术栈控制。
-- Anthropic也在探索定制芯片设计，但尚未有公开可见的里程碑进展。
+- DeepSeek 计划进入芯片制造领域，项目已进行约一年，目前正在与硬件和芯片潜在合作伙伴会面并招聘工程师。
+- 该公司将专注于数据中心推理芯片而非训练芯片，目标之一是减少对华为和英伟达的依赖。
+- 美国对华芯片出口管制是该计划紧迫性的主要原因，华为目前控制着中国约一半的数据中心芯片市场。
+- 中国科技巨头阿里巴巴和百度也在进行类似的芯片自研布局。
+- OpenAI 与 Broadcom 刚联合发布了其首款推理芯片 Jalapeño，旨在减少对英伟达的依赖并实现对技术栈的全面控制。
+- Anthropic 也在探索定制芯片设计，但尚未有公开可见的里程碑进展。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Jalapeño
+  canonical_name: OpenAI Jalapeño
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - OpenAI 与 Broadcom 联合宣布了 Jalapeño，这是 OpenAI 首款专为大规模推理设计的芯片。
+  - OpenAI 自研芯片部分是为了减少对英伟达的依赖，同时也希望获得类似苹果对技术栈的全面控制。
+  article_id: adfef108caf2f335
+- object_type: project
+  name: DeepSeek Custom Chip Project
+  canonical_name: DeepSeek Custom Chip Project
+  url: null
+  confidence: medium
+  article_role: primary_subject
+  evidence_snippets:
+  - 路透社援引三位知情人士报道，DeepSeek 已推进芯片自研约一年，正在与硬件和芯片领域的潜在合作伙伴会面。
+  - DeepSeek 芯片项目专注于数据中心推理芯片而非训练芯片，目标之一是减少对华为和英伟达的依赖。
+  - DeepSeek 正在为该芯片项目招聘工程师，美国出口管制是该计划紧迫性的主要原因。
+  article_id: adfef108caf2f335
 ---
 
 DeepSeek, the Chinese startup developing large language models that are competitive with those from US companies like OpenAI and Anthropic, is planning to enter the silicon business, according to Reuters.

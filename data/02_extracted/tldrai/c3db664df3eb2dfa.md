@@ -13,26 +13,65 @@ id: c3db664df3eb2dfa
 manifest_dates:
 - '2026-07-02'
 source_type: news_media
-tldr: Anthropic 发布 Claude Sonnet 5，具更强智能体能力，性能接近 Opus 4.8 但价格更低。
-objective_summary: Anthropic 于 2026 年 7 月 15 日发布 Claude Sonnet 5，该模型在推理、工具使用、编程和知识工作方面较
-  Sonnet 4.6 显著提升，性能接近 Opus 4.8。定价为每百万输入 token 2 美元、输出 10 美元（优惠至 8 月 31 日），之后调整为 3
+tldr: Anthropic 发布 Claude Sonnet 5，这是迄今为止最具智能体能力的 Sonnet 系列模型，性能接近 Opus 4.8 但价格更低。该模型即日起在所有套餐中可用，促销定价为输入
+  $2/百万 token、输出 $10/百万 token。
+objective_summary: 2026年7月22日，Anthropic 发布了 Claude Sonnet 5 模型。该模型在推理、工具使用、编码和知识工作等智能体性能上较前代
+  Sonnet 4.6 有显著提升，性能接近 Opus 4.8 但价格更低。Sonnet 5 即日起作为 Free 和 Pro 套餐的默认模型，并向 Max、Team
+  和 Enterprise 用户开放，同时可通过 claude-sonnet-5 在 Claude API 中调用。定价方面，2026年8月31日前为促销价，之后恢复标准价。安全评估显示其不良行为率低于
+  Sonnet 4.6，且网络安全能力远低于当前 Opus 模型。
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
   companies:
   - Anthropic
-  technologies: []
+  technologies:
+  - Claude Sonnet 5
+  - Sonnet 4.6
+  - Opus 4.8
+  - BrowseComp
+  - OSWorld-Verified
   key_people: []
 key_logic_flow:
-- Claude Sonnet 5 是 Anthropic 发布的最新 Sonnet 系列模型，具备更强的智能体能力，在推理、工具使用、编程和知识工作上较 Sonnet
-  4.6 显著提升。
-- Sonnet 5 性能接近 Opus 4.8，但定价更低，优惠期价格为每百万输入 token 2 美元、输出 token 10 美元。
-- 模型即日起在所有套餐中可用，包括 Free、Pro、Max、Team 和 Enterprise 计划，同时在 Claude Code 和 Claude Platform
-  中提供。
-- 在安全评估中，Sonnet 5 的不良行为率低于 Sonnet 4.6，网络安防能力远低于 Opus 模型，更适合智能体场景使用。
-- 早期测试伙伴反馈一致认为 Sonnet 5 能自主完成复杂多步骤任务，包括代码调试、Salesforce 操作、法律研究和浏览器操作等。
-- Sonnet 5 支持通过扩展思考调整推理努力水平，用户可在不同成本和性能之间灵活权衡。
+- Anthropic 发布了 Claude Sonnet 5 模型，这是迄今为止最具智能体能力的 Sonnet 系列模型，能够制定计划、使用浏览器和终端等工具并自主运行。
+- Sonnet 5 在推理、工具使用、编码和知识工作等智能体性能关键指标上较前代 Sonnet 4.6 有显著提升，性能接近 Opus 4.8 但价格更低。
+- Sonnet 5 即日起在所有套餐中可用，包括 Free、Pro、Max、Team 和 Enterprise，同时在 Claude Code 和 Claude
+  平台通过 claude-sonnet-5 名称提供调用。
+- 定价方面，2026年8月31日前的促销价为输入 $2/百万 token、输出 $10/百万 token，之后恢复为标准价输入 $3/百万 token、输出 $15/百万
+  token。
+- 安全评估显示 Sonnet 5 的不良行为率低于 Sonnet 4.6，在智能体场景中整体更安全，且网络安全能力远低于当前 Opus 模型。
+- 早期访问合作伙伴反馈表明 Sonnet 5 能完成更复杂的多步骤任务，检查自身输出并以更少的步骤实现同等质量的成果。
 extract_result: success
+object_mentions:
+- object_type: model
+  name: Claude Sonnet 5
+  canonical_name: Claude Sonnet 5
+  url: https://www.anthropic.com/news/claude-sonnet-5
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Claude Sonnet 5 是 Anthropic 发布的最新模型，被描述为迄今为止最具智能体能力的 Sonnet 系列模型，能够制定计划、使用浏览器和终端等工具并自主运行。
+  - Sonnet 5 在推理、工具使用、编码和知识工作等智能体性能上较前代 Sonnet 4.6 有显著提升，性能接近 Opus 4.8 但价格更低。
+  - Sonnet 5 即日起在所有套餐中可用，开发者可通过 claude-sonnet-5 名称在 Claude API 中调用，促销定价为输入 $2/百万 token、输出
+    $10/百万 token。
+  article_id: c3db664df3eb2dfa
+- object_type: product
+  name: Claude Code
+  canonical_name: Claude Code
+  url: https://claude.ai/code
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 文章提到 Claude Sonnet 5 在 Claude Code 中也可用，作为该模型可访问的平台之一。
+  article_id: c3db664df3eb2dfa
+- object_type: product
+  name: Claude API
+  canonical_name: Claude API
+  url: https://docs.anthropic.com/en/api
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 开发者可以通过 claude-sonnet-5 名称在 Claude API 中调用 Sonnet 5 模型。
+  article_id: c3db664df3eb2dfa
 ---
 
 # Introducing Claude Sonnet 5

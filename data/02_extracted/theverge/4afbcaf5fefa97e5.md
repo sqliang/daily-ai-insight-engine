@@ -16,9 +16,11 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 4afbcaf5fefa97e5
 source_type: news_media
-tldr: Xbox Games Showcase 2026 公布《Fable》DLC、SEGA《Crazy Taxi》重启用生成式AI，独占策略信号混乱
-objective_summary: 'Microsoft 在 Xbox Games Showcase 2026 上展示了已知游戏的更新，包括《Fable》故事扩展包和《Persona
-  6》预告片。SEGA 承认在《Crazy Taxi: World Tour》开发中使用了生成式 AI。'
+tldr: 微软在2026年Xbox游戏发布会上公布了多款作品的新消息，包括《Fable》剧情扩展、《Crazy Taxi》重启作使用生成式AI以及《Persona
+  6》预告，但独占策略仍然混乱——《战争机器：E-Day》不上PS5，而《Fable》和《光环：战斗进化》仍将登陆索尼平台。
+objective_summary: '在2026年夏季游戏节期间，微软举办了Xbox Games Showcase。发布会上，《Fable》宣布将推出名为《Order
+  of the Hero》的发售后剧情扩展包，包含全新区域和邪教崇拜玩法。《Crazy Taxi: World Tour》首次亮相，世嘉确认在开发过程中使用了生成式AI作为辅助工具，但未用于游戏表演者相关部分。Atlus发布了《Persona
+  6》的简短预告。微软在发布会后重申，已宣布跨平台发行的游戏将按计划推进，但暗示未来第一方作品将仅限Xbox平台，这与其当前独占策略形成矛盾。'
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
@@ -26,20 +28,78 @@ entities:
   - Microsoft
   - Xbox
   - Sony
-  - PlayStation
-  - SEGA
+  - Sega
+  - Atlus
+  - The Verge
   technologies:
-  - generative AI
+  - Generative AI
   key_people:
   - Asha Sharma
 key_logic_flow:
-- 'Xbox Games Showcase 2026 主要聚焦已公布游戏，但关于独占策略的信号出现混乱：Gears of War: E-Day 不会登陆 PS5，而
-  Fable 和 Halo: Combat Evolved 仍将登陆索尼平台。'
-- Microsoft 在会后博文中表示，已宣布的多平台发行计划保持不变，但暗示未来第一方作品将仅限 Xbox 独占。
-- 'SEGA 确认在《Crazy Taxi: World Tour》开发中使用了生成式 AI 作为开发者支持工具，但声明未针对游戏表演者使用 AI。'
-- Xbox 游戏部门在 4 月经历高管改组，新任负责人 Asha Sharma 承诺推动"Xbox 的回归"。
-- '活动亮点包括《Fable: Order of the Hero》故事扩展包的首批展示，以及《Persona 6》的简短预告。'
+- 微软在2026年Xbox Games Showcase上主要展示了已公布游戏的新消息，同时发布了关于独占策略的混乱信号。
+- 《战争机器：E-Day》不会登陆PS5，但《Fable》和《光环：战斗进化》等第一方大作仍将登陆索尼平台。
+- 微软在博客中重申已宣布跨平台发行的游戏将按计划推进，同时暗示未来第一方作品将仅限Xbox平台。
+- 微软游戏部门在4月经历了高管调整，新任负责人Asha Sharma承诺推动所谓的"Xbox回归"战略。
+- '世嘉确认在《Crazy Taxi: World Tour》开发过程中使用了生成式AI作为开发者支持工具，但表示未将其用于游戏表演者相关内容。'
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Fable
+  canonical_name: Fable
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - '《Fable》将获得一个发售后推出的剧情扩展包《Fable: Order of the Hero》，包含全新区域和邪教崇拜玩法。'
+  - 该扩展包将作为Premium Edition的一部分提供，玩家可以引导邪教仪式并将邪教塑造成自己的英雄愿景。
+  article_id: 4afbcaf5fefa97e5
+- object_type: product
+  name: 'Crazy Taxi: World Tour'
+  canonical_name: 'Crazy Taxi: World Tour'
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - '世嘉在Xbox发布会上首次展示了《Crazy Taxi: World Tour》，确认在开发过程中使用了生成式AI作为开发者支持工具。'
+  - 世嘉声明生成式AI旨在为开发者提供支持，让开发者更专注于创意任务，且未将该技术用于游戏表演者相关内容。
+  article_id: 4afbcaf5fefa97e5
+- object_type: product
+  name: Persona 6
+  canonical_name: Persona 6
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Xbox发布会上发布了《Persona 6》的一个非常简短的预告片。
+  article_id: 4afbcaf5fefa97e5
+- object_type: product
+  name: 'Fable: Order of the Hero'
+  canonical_name: 'Fable: Order of the Hero'
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - '《Fable: Order of the Hero》是《Fable》的发售后剧情扩展包，包含一个充满危险、奇迹和远古力量低语的全新区域。'
+  - 玩家在该扩展包中可通过自己的行为赢得邪教徒的崇拜，成为他们最新且最伟大的名人监督者。
+  article_id: 4afbcaf5fefa97e5
+- object_type: product
+  name: 'Gears of War: E-Day'
+  canonical_name: 'Gears of War: E-Day'
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 《战争机器：E-Day》将不会登陆PS5，这是发布会上的一大意外消息。
+  article_id: 4afbcaf5fefa97e5
+- object_type: product
+  name: 'Halo: Combat Evolved'
+  canonical_name: 'Halo: Combat Evolved'
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 《光环：战斗进化》与《Fable》等其他第一方大作仍将登陆索尼PS5平台。
+  article_id: 4afbcaf5fefa97e5
 ---
 
 The console industry is in a weird place, and both Xbox and PlayStation have a chance to change the narrative a bit with their showcases at Summer Game Fest. Sony did that by focusing on the single-player titles it’s known for, and then it was Microsoft’s turn.

@@ -14,31 +14,64 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 5fa761beca9ae2d5
 source_type: news_media
-tldr: Notion 将于 2026 年 9 月 22 日关闭邮件产品 Notion Mail，全面转向 AI Agent 方案。
-objective_summary: Notion 宣布关闭其邮件产品 Notion Mail，最终运营截止日期为 2026 年 9 月 22 日。该公司称超半数用户已通过
-  AI Agent 管理邮件而不再打开收件箱，因此将全面转向 AI Agent。Notion Mail 于 2024 年预览发布，2025 年 4 月正式开放，
+tldr: Notion 宣布将于2026年9月22日关闭其电子邮件产品 Notion Mail，原因是超过半数用户已通过 AI 代理管理邮件而不再直接打开收件箱，公司决定全力投入
+  AI 代理方向。
+objective_summary: Notion 于2026年6月25日宣布将在2026年9月22日关闭其电子邮件产品 Notion Mail。该公司表示，随着
+  Notion 代理能力增强，超过一半的 Notion Mail 用户已通过代理管理邮件工作流而不再打开收件箱。Notion 决定全力投入 AI 代理来管理收件箱，强调基于电子邮件的代理功能将在关闭后继续运行。Notion
+  Mail 与 Gmail 关联，关闭后邮件保留在 Gmail 中，但用户需导出草稿和定时邮件。
 event_type: application_landing
 epistemic_status: pr_statement
 entities:
   companies:
   - Notion
-  - Gmail
   - Skiff
   - Superhuman
   - Fyxer
   - AgentMail
+  - Gmail
   technologies:
   - AI Agent
-  - Notion AI
   key_people: []
 key_logic_flow:
-- Notion 宣布将于 2026 年 9 月 22 日关闭其邮件产品 Notion Mail。
-- Notion 表示超过半数 Notion Mail 用户通过 AI Agent 管理邮件而从不打开收件箱，这是关停的主要原因。
-- Notion 将全面转向以 AI Agent 接管收件箱的策略，现有的邮件相关 Agent 功能在 Notion Mail 关闭后继续运行。
-- Notion Mail 与 Gmail 关联，用户 Gmail 邮件不受影响，但需自行导出草稿和定时邮件。
-- Notion Mail 源于 2024 年对安全生产力初创公司 Skiff 的收购，2025 年 4 月正式开放，曾与 Superhuman、Fyxer 竞争。
-- 新兴创业公司如 AgentMail 正沿着类似思路构建专为 AI Agent 设计的邮件服务。
+- Notion 宣布将于2026年9月22日关闭其电子邮件产品 Notion Mail。
+- 超过一半的 Notion Mail 用户已通过 AI 代理管理邮件工作流而不再直接打开收件箱。
+- Notion 决定全力投入 AI 代理来管理收件箱这一产品方向。
+- Notion Mail 与 Gmail 关联，关闭后所有邮件保留在 Gmail 中，但用户需自行导出草稿和定时邮件。
+- Notion 于2024年收购安全优先的生产力初创公司 Skiff 后推出了邮件产品预览版，并于2025年4月正式开放。
+- 新兴创业公司 AgentMail 与 Notion 的判断一致，正在构建专门面向 AI 代理的电子邮件服务。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Notion Mail
+  canonical_name: Notion Mail
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Notion 宣布将于2026年9月22日关闭其电子邮件产品 Notion Mail。
+  - 超过一半的 Notion Mail 用户通过 AI 代理管理邮件而不再直接打开收件箱。
+  - Notion 于2024年收购 Skiff 后推出了邮件产品预览版，并于2025年4月正式开放。
+  article_id: 5fa761beca9ae2d5
+- object_type: product
+  name: Notion AI Agent
+  canonical_name: Notion AI Agent
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Notion 决定全力投入使用 AI 代理来管理用户的收件箱。
+  - 超过一半的 Notion Mail 用户已将邮件工作流交给代理处理，不再手动查看收件箱。
+  - Notion 强调基于电子邮件的代理功能将在 Notion Mail 关闭后继续运行。
+  article_id: 5fa761beca9ae2d5
+- object_type: product
+  name: AgentMail
+  canonical_name: AgentMail
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 新兴创业公司 AgentMail 与 Notion 的判断一致，正在尝试构建专门面向 AI 代理的电子邮件服务。
+  article_id: 5fa761beca9ae2d5
 ---
 
 Productivity company Notion is shutting down its email product, Notion Mail, on September 22. The company said it is discontinuing its email inbox in favor of its AI agent offering. It noted that users were increasingly handing over the reins of their email to the agents, and not opening their inbox at all.

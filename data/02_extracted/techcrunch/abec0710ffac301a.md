@@ -12,8 +12,11 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: abec0710ffac301a
 source_type: news_media
-tldr: In the Weights 推出AI虚荣搜索，衡量个人在LLM参数中的被记忆程度
-objective_summary: 前OpenAI员工Thomas Dimson和Joey Flynn创建了In the Weights网站，通过向Grok、Gemini、GPT、Claude、Llama等多个AI模型提问来评估模型对个人的"记忆"强度，并给出分数和排行榜。该工具旨在反映LLM时代信息检索方式的变化。
+tldr: Thomas Dimson 和 Joey Flynn 创办了 AI 虚荣搜索工具 In the Weights，通过查询多个大语言模型来评估一个人被 AI
+  记忆的强度分数，上线后反响远超预期。
+objective_summary: 前 OpenAI 员工 Thomas Dimson 和 Joey Flynn 创建了 In the Weights 网站，该工具通过向
+  Grok、Gemini、GPT、Claude、Llama 等多个 AI 模型询问特定姓名并聚类回答，为每个人生成一个强度分数。网站旨在衡量离开网络搜索后 AI
+  模型对某人的记忆程度，上线后因满足了人们对比自己在 AI 中'权重'的好奇心而获得大量关注。
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
@@ -24,22 +27,33 @@ entities:
   technologies:
   - Grok
   - Gemini
-  - GPT-5.4 Mini
+  - GPT
   - Claude
   - Llama
   key_people:
   - Thomas Dimson
   - Joey Flynn
-  - Macaulay Culkin
-  - Luciano Pavarotti
-  - Anthony Ha
+  - Macauley Culkin
 key_logic_flow:
-- Thomas Dimson和Joey Flynn创建了In the Weights网站，用于衡量个人是否被AI模型的训练参数所"记住"。
-- 该工具同时查询Grok、Gemini、GPT-5.4 Mini、Claude、Llama等多个AI模型，通过聚类相似描述并分配强度分数来评估记忆程度。
-- 结果显示哪些模型返回了哪些答案，并高亮显示模型可能产生的幻觉内容。
-- Dimson表示，2026年Google虚荣搜索已不再合适，因为越来越多流量转向了LLM。
-- Dimson和Flynn此前通过其设计公司Global Illumination被收购而加入OpenAI，离职后创建了这一项目。
+- Thomas Dimson 和 Joey Flynn 在离开 OpenAI 后创建了 AI 虚荣搜索工具 In the Weights。
+- 该网站通过向 Grok、Gemini、GPT、Claude、Llama 等多个 AI 模型提问'<名字>是谁'来获取回答。
+- 系统将不同模型的相似回答聚类并为每个人分配一个强度分数，旨在衡量模型不借助网络搜索时对某人的记忆程度。
+- 例如作者获得了 641 分（前 6%），而 Macaulay Culkin 以 988 分位居榜首，与歌唱家 Luciano Pavarotti 并列。
+- 结果还会显示哪些模型返回了哪些回答，并标记潜在的幻觉内容，例如 GPT-5.4 Mini 将作者标记为'模糊的名字'。
+- Dimson 表示该工具上线后反响远超预期，击中了人们想知道自己是否能在超级智能中'永生'的好奇心。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: In the Weights
+  canonical_name: In the Weights
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Thomas Dimson 和 Joey Flynn 创建了 In the Weights 网站，该工具通过查询多个 AI 模型来评估一个人被 AI 记忆的程度并分配强度分数。
+  - 网站会查询包括 Grok、Gemini、GPT、Claude、Llama 在内的不同模型，并以提问'<名字>是谁'的方式获取回答后再聚类评分。
+  - Dimson 表示该工具上线后反响远超预期，击中了人们想知道自己是否能在超级智能中'永生'的好奇心。
+  article_id: abec0710ffac301a
 ---
 
 Anyone who’s Googled themselves recently knows that it doesn’t quite hit the way it used to. Sure, there’s everything going on with Google search itself, but there’s also an inescapable feeling that web search isn’t the canonical source of information that it used to be, with just as many people learning about who you and I might be from chatbots.

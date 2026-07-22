@@ -31,8 +31,8 @@ tags:
 extraction_status: success
 id: 8e9dc20c5ca66bfe
 source_type: academic_paper
-tldr: LBW-Guard在AdamW之上实现有界自主训练控制，Qwen2.5-7B困惑度降18.7%且提速1.10倍，高学习率下保持可训练性。
-objective_summary: 2026年，一篇arXiv论文提出LBW-Guard（Learn-by-Wire Guard），一种位于AdamW优化器之上的有界自主训练控制治理层。该层观测训练遥测数据、识别不稳定区域并施加有界控制，不替换优化器更新规则。在Qwen2.5系列模型（3B/7B/14B）和TinyLlama-1B上使
+tldr: 一篇arXiv论文提出了LBW-Guard（Learn-by-Wire Guard），一种运行在AdamW优化器之上的有界自治训练控制治理层，通过观察训练遥测数据识别不稳定区间并施加有界控制来提升大语言模型训练的稳定性和效率。在Qwen2.5-7B的WikiText-103测试中，LBW-Guard将最终困惑度从13.21降至10.74（提升18.7%），同时端到端训练时间缩短了1.10倍。
+objective_summary: 该论文提出了一种名为LBW-Guard（Learn-by-Wire Guard）的训练控制治理层，它位于AdamW优化器之上，通过观察训练遥测数据、识别不稳定敏感区间，并在保持固定训练目标的前提下对优化器执行施加有界控制。研究团队以Qwen2.5-7B为核心模型，在WikiText-103数据集上进行了压力与鲁棒性测试，并与Qwen2.5-3B和Qwen2.5-14B进行规模对比，同时设置了学习率压力测试、梯度裁剪基线对比以及无LoRA的TinyLlama-1B全参数检查。实验结果显示，在7B参考设定下，LBW-Guard将最终困惑度从13.21降至10.74（提升18.7%），并将端到端训练时间从392.54秒缩短至357.02秒（获得1.10倍加速）。
 event_type: framework_tools
 epistemic_status: theoretical_claim
 entities:
@@ -41,22 +41,50 @@ entities:
   - LBW-Guard
   - AdamW
   - LoRA
-  - Gradient Clipping
+  - Qwen2.5
+  - TinyLlama
   - WikiText-103
-  - Qwen2.5-7B
-  - Qwen2.5-3B
-  - Qwen2.5-14B
-  - TinyLlama-1B
   key_people: []
 key_logic_flow:
-- 现代语言模型训练在高学习率、大规模和运行压力条件下，面临日益加剧的不稳定性、运行退化和算力浪费问题
-- LBW-Guard被设计为AdamW优化器之上的一个有界自主训练控制治理层，通过观测训练遥测数据、识别不稳定敏感区域并施加有界控制来工作，而非替换优化器更新规则
-- 在Qwen2.5-7B基准设置中，LBW-Guard将最终困惑度从13.21降至10.74（降低18.7%），同时将端到端训练时间从392.54秒缩短至357.02秒，实现1.10倍加速
-- 在更强的学习率压力下（LR=3e-3），AdamW的最终困惑度退化至1885.24，LR=1e-3时退化至659.76，而LBW-Guard分别保持在11.57和10.33的可训练水平
-- 梯度裁剪基线方法无法复现LBW-Guard的效果，证明其机制不同于简单的局部梯度抑制
-- 作者得出有限系统结论：稳定性敏感的LLM训练可以从优化器之上的治理平面中受益，有界运行时控制可在压力下保持有效算力利用
+- 现代语言模型训练面临不稳定性、训练退化和算力浪费问题，尤其在激进学习率、大规模和运行时压力条件下更为突出。
+- LBW-Guard是一个运行在AdamW优化器之上的有界自治训练控制治理层，它不替换优化器更新规则，而是通过观察训练遥测数据识别不稳定区间并对优化器施加有界控制。
+- 在Qwen2.5-7B参考设定下，LBW-Guard将最终困惑度从13.21降至10.74（提升18.7%），端到端时间从392.54秒降至357.02秒（1.10倍加速）。
+- 在LR=3e-3的极端学习率压力下，标准AdamW的困惑度退化至1885.24，而LBW-Guard仍保持在11.57，验证了其在极端条件下的稳定性优势。
+- 梯度裁剪基线无法复现LBW-Guard的效果，表明该方法的优势并非来自局部梯度抑制。
 pipeline_stage: fact_extracted
 extract_result: success
+object_mentions:
+- object_type: paper
+  name: 'Learn-by-Wire Training Control Governance: Bounded Autonomous Training Under
+    Stress for Stability and Efficiency'
+  canonical_name: LBW-Guard
+  url: https://arxiv.org/abs/2605.19008
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - LBW-Guard是一个运行在AdamW优化器之上的有界自治训练控制治理层，通过观察训练遥测数据来识别不稳定敏感区间并施加有界控制，而不是替换优化器更新规则。
+  - 在Qwen2.5-7B的WikiText-103测试中，LBW-Guard将最终困惑度从13.21降至10.74（提升18.7%），端到端训练时间从392.54秒缩短至357.02秒（加速1.10倍）。
+  - 在LR=3e-3的极端学习率压力下，标准AdamW的困惑度退化至1885.24，而LBW-Guard仍保持在11.57，证明其在极端条件下的稳定性优势。
+  article_id: 8e9dc20c5ca66bfe
+- object_type: model
+  name: Qwen2.5-7B
+  canonical_name: Qwen2.5-7B
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 论文以Qwen2.5-7B作为经验锚点，在WikiText-103数据集上开展压力与鲁棒性测试套件。
+  - 模型规模对比实验涵盖Qwen2.5-3B和Qwen2.5-14B，以验证LBW-Guard在不同参数量级下的泛化效果。
+  article_id: 8e9dc20c5ca66bfe
+- object_type: dataset
+  name: WikiText-103
+  canonical_name: WikiText-103
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 论文在WikiText-103数据集上对Qwen2.5系列模型进行了训练压力与鲁棒性评估。
+  article_id: 8e9dc20c5ca66bfe
 ---
 
 # Computer Science > Artificial Intelligence

@@ -12,23 +12,59 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: dbdce0f8b0fb62b6
 source_type: newsletter_rss
-tldr: Anthropic 推出 Claude Tag，将 AI 智能体引入 Slack 频道
-objective_summary: Anthropic 于 2026 年 6 月 24 日发布 Claude Tag 功能，使 Claude AI 能在 Slack
-  频道中被 @ 标记并像团队成员一样执行任务，支持异步协作、跨频道上下文学习和主动信息跟踪。
+tldr: Anthropic 推出 Claude Tag 功能，将 AI 助手 Claude 接入 Slack 成为团队协作者，团队成员只需在频道中标记 @Claude
+  即可委派任务，AI 会分阶段处理并在完成后回复。
+objective_summary: 2026 年 6 月 24 日，Anthropic 面向 Slack 平台发布 Claude Tag 功能，允许用户在 Slack
+  频道中通过 @Claude 标记来委派任务。该 AI 助手会将任务分解为多个阶段逐步执行，利用经过授权的工具和数据完成工作，并在完成后回复。Claude 能在不同频道间执行操作（仅限有权限的频道），还具备环境感知模式，可主动跟进沉寂任务。
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
   companies:
   - Anthropic
   - Slack
-  technologies: []
+  technologies:
+  - Claude Tag
+  - Claude Code
+  - Agentic AI
   key_people: []
 key_logic_flow:
-- Anthropic 发布了 Claude Tag 功能，将此前仅限于 Claude Code 和 Cowork 的智能体能力引入 Slack 即时通讯平台。
-- 团队成员只需在 Slack 频道中 @Claude 并描述任务，AI 会自动将任务拆解为多个阶段，使用已授权的工具和数据逐步处理并返回结果。
-- Claude Tag 具备跨频道上下文学习能力，能够随时间推移积累工作知识，并仅在其有权限访问的频道范围内采取行动。
-- Claude Tag 还拥有环境模式（ambient mode），可主动从相关频道获取信息，并在任务被搁置时主动跟进处理。
+- Anthropic 推出了名为 Claude Tag 的新功能，将 Claude AI 助手直接集成到 Slack 平台中。
+- 团队成员只需在 Slack 频道中标记 @Claude，AI 即可接收任务并自动分解为多个阶段逐步执行。
+- Claude 能够跨不同 Slack 频道执行操作，但仅限于被授予访问权限的频道范围。
+- Claude 具备环境感知模式，可以主动从相关频道获取信息并跟进那些已沉寂但可能需要关注的任务。
+- Claude Tag 将此前仅限 Claude Code 和 Cowork 使用的智能体能力扩展到了团队协作场景。
+- AI 会随时间积累上下文知识，理解正在进行的工作内容，并利用经过授权的工具和数据完成委派任务。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Claude Tag
+  canonical_name: Claude Tag
+  url: https://www.anthropic.com/news/introducing-claude-tag
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Anthropic 推出了 Claude Tag 功能，让团队可以在 Slack 频道中标记 @Claude 来异步委派任务。
+  - Claude Tag 将此前仅限 Claude Code 和 Cowork 的智能体能力扩展到团队协作场景中。
+  - Claude 具备环境感知模式，能够从相关频道获取信息并主动跟进可能需要注意的沉寂任务。
+  article_id: dbdce0f8b0fb62b6
+- object_type: product
+  name: Claude Code
+  canonical_name: Claude Code
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Claude Code 为个人开发者提供了智能体能力，而 Claude Tag 将这一能力扩展到了团队协作场景。
+  article_id: dbdce0f8b0fb62b6
+- object_type: product
+  name: Claude Cowork
+  canonical_name: Claude Cowork
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Claude Tag 将此前仅限 Claude Code 和 Cowork 使用的智能体能力扩展到了团队中。
+  article_id: dbdce0f8b0fb62b6
 ---
 
 Title: Meet your new Slack coworker — Claude

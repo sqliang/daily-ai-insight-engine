@@ -83,41 +83,90 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: f6bf145df4fac14e
 source_type: news_media
-tldr: 36氪WAVES2026圆桌论坛：五位从业者探讨具身智能、世界模型的产业落地与公众认知变迁
-objective_summary: 36氪WAVES2026大会举办圆桌论坛，由蚂蚁集团何思翀主持，帕西尼感知科技罗霄恒、擎朗智能唐旋来、极佳视界朱政、大界机器人孟浩参与，讨论2026年AI与机器人领域的技术趋势。唐旋来分享人形机器人在做咖啡测试中自主触发清洁任务的涌现案例，朱政指出2026年春节后资本加速涌入，
+tldr: 36氪WAVES2026大会圆桌论坛上，来自蚂蚁集团、帕西尼感知、擎朗智能、极佳视界、大界机器人的代表讨论了2026年具身智能与世界模型领域的关键进展，认为技术信心呈非线性增长，但产业化落地和公众接受度仍面临挑战。
+objective_summary: 2026年7月，36氪WAVES2026新浪潮大会在广州番禺良仓新造创意园举办，主题为'今年盛夏'。在'少数，即浪潮'圆桌论坛中，主持人何思翀（蚂蚁集团NEXTA创新实验室）与罗霄恒（帕西尼感知）、唐旋来（擎朗智能）、朱政（极佳视界）、孟浩（大界机器人）四位嘉宾，围绕具身智能、世界模型、人形机器人等领域的产业进展展开讨论。唐旋来分享了擎朗智能测试中人形机器人意外触发自主清洁行为的案例，认为是具身智能涌现的表现；朱政指出世界模型从2023年不被理解发展到2026年获得广泛关注，产业信心呈非线性加速增长。
 event_type: application_landing
-epistemic_status: theoretical_claim
+epistemic_status: verified_fact
 entities:
   companies:
-  - 36氪
   - 蚂蚁集团
   - 帕西尼感知科技
   - 擎朗智能
   - 极佳视界
   - 大界机器人
-  - SpaceX
+  - 36氪
   technologies:
   - 具身智能
   - 世界模型
   - 人形机器人
-  - 柔性制造
-  - 触觉感知
   - AI Agent
   - 大模型
+  - ChatGPT
+  - 柔性制造
+  - 触觉感知
   key_people:
   - 何思翀
   - 罗霄恒
   - 唐旋来
   - 朱政
   - 孟浩
+  - 李飞飞
 key_logic_flow:
-- 擎朗智能唐旋来分享人形机器人在做咖啡测试中意外打翻杯子后，自主触发清洁桌面的任务，展示了具身智能的涌现能力。
-- 极佳视界朱政指出2026年春节后资本和人才加速涌入具身智能赛道，行业发展呈非线性加速态势，与L4自动驾驶长达十年的周期形成对比。
-- 大界机器人孟浩表示尚未在具身智能领域看到让自己感到惊喜的突破性时刻。
-- 帕西尼感知罗霄恒认为投资界和政府层面对跨学科技术的钻研深度和接受度超预期，但公众对人形机器人的实际价值感知和接受度提升较慢。
-- 擎朗智能唐旋来认为大模型和AI Agent已快速融入工作和生活成为实用工具，但具身智能的真实场景应用和好产品的出现进度不及预期。
-- 极佳视界朱政回忆2023年世界模型概念鲜有投资人理解甚至因此被拒绝投资，到2026年上半年投资人已主动讨论并建议世界模型的技术路线，公众认知发生了快速转变。
+- 唐旋来分享了擎朗智能在测试人形机器人制作咖啡时，机器人意外触发自主清洁任务并清理桌面咖啡渍，他认为这是具身智能涌现现象的体现。
+- 朱政指出极佳视界从2023年成立起便确定世界模型技术路线，早期说服投资人理解世界模型概念非常困难，但到2026年世界模型已获得学术界和产业界的广泛关注。
+- 罗霄恒认为投资界和政府领导对具身智能等交叉学科的钻研深度和接受度远超预期，但社会公众对具身智能带来的实际便利认知仍然不足。
+- 唐旋来认为大模型和AI Agent已快速融入工作和生活成为实用工具，但具身智能真正走入真实生活场景并解决日常问题的进度没有想象中快。
+- 孟浩表示自己持续关注具身智能及行业动态，但尚未在2026年上半年看到令其感到惊叹的技术突破时刻。
+- 朱政表示春节后随着资本和人才涌入，业界对具身智能和机器人产业的信心普遍增加，且这种加速很可能是非线性的。
 extract_result: success
+object_mentions:
+- object_type: company
+  name: 极佳视界
+  canonical_name: 极佳视界
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 极佳视界从2023年成立起就确定了世界模型的技术路线，是国内较早专注世界模型研究的公司之一。
+  - 朱政表示到2026年世界模型已获得广泛关注，投资人甚至会主动来教育他们应该做什么样的世界模型。
+  article_id: f6bf145df4fac14e
+- object_type: company
+  name: 擎朗智能
+  canonical_name: 擎朗智能
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 擎朗智能专注于具身服务机器人的研发与产业化，其机器人已广泛应用于餐饮、酒店、零售和医院等生活服务场景。
+  - 唐旋来分享了在测试人形机器人制作咖啡时，机器人意外触发自主清洁任务并清理咖啡渍的经历。
+  article_id: f6bf145df4fac14e
+- object_type: company
+  name: 帕西尼感知科技
+  canonical_name: 帕西尼感知科技
+  url: null
+  confidence: medium
+  article_role: primary_subject
+  evidence_snippets:
+  - 罗霄恒作为帕西尼感知科技首席战略官参与圆桌讨论，其公司业务涉及具身智能、人形机器人和具身数据等领域。
+  article_id: f6bf145df4fac14e
+- object_type: company
+  name: 大界机器人
+  canonical_name: 大界机器人
+  url: null
+  confidence: medium
+  article_role: primary_subject
+  evidence_snippets:
+  - 孟浩作为大界机器人创始人兼CEO参加圆桌讨论，表示2026年上半年尚未找到让其惊叹的具身智能技术突破。
+  article_id: f6bf145df4fac14e
+- object_type: company
+  name: 蚂蚁集团NEXTA创新实验室
+  canonical_name: 蚂蚁集团NEXTA创新实验室
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 何思翀作为蚂蚁集团NEXTA创新实验室项目负责人，主持了本场圆桌论坛并引导嘉宾围绕科技产业趋势展开讨论。
+  article_id: f6bf145df4fac14e
 ---
 
 “2026年，创投圈的浪潮再次翻涌：AI从技术概念走进产业深水区，硬科技创业从“小众赛道” 变成“主流共识”，年轻的创业者们正在用代码和双手，重新定义中国创新的未来坐标。

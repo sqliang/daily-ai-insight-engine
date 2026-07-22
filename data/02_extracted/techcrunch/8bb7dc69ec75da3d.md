@@ -14,8 +14,10 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 8bb7dc69ec75da3d
 source_type: news_media
-tldr: Amazon 在印度测试支持印地语的 Alexa+ 语音助手
-objective_summary: Amazon 向部分印度用户发送邮件，邀请其参与 Alexa+ 印地语版 Beta 测试，旨在拓展印度市场，覆盖超过 6 亿印地语使用者。测试版本可能存在缺陷。
+tldr: 亚马逊正在印度测试印地语版 Alexa+，邀请用户参与 Beta 测试计划。该生成式 AI 语音助手此前已在美国上线，并逐步扩展至英国、加拿大等多国市场。
+objective_summary: 亚马逊于 2026 年 6 月向部分印度用户发送邮件，邀请其填写印地语表格加入 Alexa+ Beta 测试计划。Alexa+
+  目前尚未在印度正式上线，本次测试聚焦印地语体验。亚马逊于 2017 年在印度推出英语版 Alexa，2019 年增加印地语支持。Alexa+ 于 2025 年首次发布，2026
+  年 2 月面向全美用户开放，此后陆续扩展至英国、加拿大、巴西、墨西哥、意大利和德国等市场。Alexa+ 对 Prime 会员免费，其他用户可付费订阅。
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
@@ -24,15 +26,38 @@ entities:
   - TechCrunch
   technologies:
   - Alexa+
+  - conversational AI
+  - Hindi language support
   key_people: []
 key_logic_flow:
-- Amazon 正在印度测试支持印地语的 Alexa+，并向部分用户发送了 Beta 测试邀请邮件，要求用户在 6 月 22 日前填写印地语表单。
-- 印地语 Beta 版本存在缺陷，可能提供不准确信息或误读本地发音细节。
-- Amazon 于 2017 年在印度推出支持英语的 Alexa，2019 年增加印地语兼容。
-- 印度有超过 6 亿印地语使用者，Amazon 希望通过 Alexa+ 开拓该市场，应对语音交互在印度 AI 工具使用中的增长趋势。
-- Alexa+ 于 2025 年首次发布，2026 年 2 月向所有美国用户开放，随后扩展至英国、加拿大、巴西、墨西哥、意大利和德国等国家。
-- Amazon 向 Prime 用户免费提供 Alexa+，非 Prime 用户需按月付费使用。
+- 亚马逊向部分印度用户发送电子邮件，邀请其加入 Alexa+ 印地语版本的 Beta 测试计划。
+- 亚马逊确认正在印度测试 Alexa+，但未提供更多评论，正式上线日期也未公布。
+- Alexa+ 是亚马逊于 2025 年发布的生成式 AI 驱动对话助手，2026 年 2 月才向全美用户开放。
+- 2026 年内，亚马逊已将 Alexa+ 扩展至英国、加拿大、巴西、墨西哥、意大利和德国等市场。
+- 印度有超过 6 亿印地语使用者，亚马逊试图开拓以印地语为主的用户市场。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Alexa+
+  canonical_name: Amazon Alexa+
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 亚马逊正在印度测试生成式 AI 驱动的对话助手 Alexa+，并邀请用户参与印地语版本的 Beta 测试计划。
+  - 亚马逊于 2025 年首次发布 Alexa+，2026 年 2 月向全美用户开放，此后逐步扩展至英国、加拿大等多个国家。
+  - Alexa+ 对 Prime 会员免费，非会员可付费订阅访问该升级版语音助手。
+  article_id: 8bb7dc69ec75da3d
+- object_type: product
+  name: Alexa
+  canonical_name: Amazon Alexa
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 亚马逊于 2017 年在印度推出英语版 Alexa，2019 年增加了印地语兼容性。
+  - Alexa+ 是亚马逊原有语音助手 Alexa 的升级版，集成了生成式 AI 对话能力。
+  article_id: 8bb7dc69ec75da3d
 ---
 
 Amazon is planning to increase the footprint of its new conversational AI assistant Alexa+ to India and is inviting users in the country to test out a Hindi-language version.

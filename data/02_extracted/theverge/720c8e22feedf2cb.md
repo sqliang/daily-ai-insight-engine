@@ -16,9 +16,11 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 720c8e22feedf2cb
 source_type: news_media
-tldr: 微软宣布8月Xbox全线涨价，Prime Day期间仍有折扣可享
-objective_summary: 微软宣布因内存价格上涨，将在8月上调所有Xbox机型价格，这是不到一年内的第二次涨价。Prime Day促销期间，Xbox Series
-  X（1TB）在沃尔玛和Target售价约573-574美元，Xbox Series S（512GB）在戴尔售价349.99美元，均低于当前常规价格。
+tldr: 微软宣布所有Xbox机型将于8月涨价，这是不到一年内的第二次提价。当前Prime Day促销中，Xbox Series X降至约573美元，Xbox Series
+  S在Dell售价349.99美元。
+objective_summary: 微软宣布所有Xbox机型将在8月再次涨价，原因是内存价格持续冲击从汽车到计算等多个行业。在涨价前，1TB Xbox Series
+  X（带光驱版）在Walmart和Target分别以573美元和573.99美元促销（原价649.99美元，涨价后将达799.99美元）。512GB Xbox Series
+  S（无光驱版）在Dell售价349.99美元（原价399.99美元，8月将涨至499.99美元）。
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
@@ -30,13 +32,32 @@ entities:
   technologies: []
   key_people: []
 key_logic_flow:
-- 微软宣布将在2025年8月提高所有Xbox机型的价格，这是不到一年内的第二次涨价
-- 价格上涨的原因是内存价格持续上涨，影响从汽车到计算等多个行业
-- Xbox Series X（1TB版含光驱）当前常规价649.99美元，8月将涨至799.99美元
-- Prime Day促销期间，Xbox Series X在沃尔玛售价573美元，在Target售价573.99美元
-- Xbox Series S（512GB）当前常规价399.99美元，8月将涨至499.99美元
-- 戴尔以349.99美元提供Xbox Series S最佳折扣价，Target售价379.99美元
+- 微软宣布所有Xbox机型价格将于8月上涨，这是不到一年内的第二次涨价。
+- 1TB Xbox Series X带光驱版当前售价约573至573.99美元，一个月后将从649.99美元涨至799.99美元。
+- 512GB Xbox Series S无光驱版在Dell售价349.99美元，原价399.99美元，8月将涨至499.99美元。
+- 涨价原因在于内存价格持续冲击从汽车到计算等多个行业。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Xbox Series X
+  canonical_name: Xbox Series X
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 1TB Xbox Series X 在 Walmart 和 Target 分别以 573 美元和 573.99 美元促销，比原价 649.99 美元显著降低。
+  - 该机型配备内置 4K 蓝光播放器，价格将在不到一个月后从 649.99 美元上涨至 799.99 美元。
+  article_id: 720c8e22feedf2cb
+- object_type: product
+  name: Xbox Series S
+  canonical_name: Xbox Series S
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Dell 将 512GB Xbox Series S 定价为 349.99 美元，是当前该机型的最佳交易价格。
+  - Xbox Series S 无光驱版原价 399.99 美元，8 月价格将涨至 499.99 美元。
+  article_id: 720c8e22feedf2cb
 ---
 
 Microsoft announced today that the price of all Xbox models will rise in August, the second time in less than a year as memory prices continue to wreak havoc on every industry from cars to computing. Thankfully, we’re already out looking for Prime Day deals, and we were able to find some discounts on both the **Xbox Series S** and **Xbox Series X** ahead of the price hikes.

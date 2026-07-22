@@ -18,28 +18,60 @@ manifest_dates:
 - '2026-07-07'
 - '2026-07-08'
 source_type: tech_blog
-tldr: Anthropic 公布 Claude Fable 5 网络安全分类器详情及 AI 越狱严重性分级框架草案
-objective_summary: Anthropic 在重新部署 Claude Fable 5 后，公开了其网络安全分类器的具体防护范围，并与 Glasswing
-  合作提出了 AI 越狱严重性分级框架草案，旨在建立业界统一的越狱风险评估标准，同时启动了 HackerOne 漏洞奖励计划。
+tldr: Anthropic 在重新部署 Claude Fable 5 后，发布了其网络安全分类器的详细说明，并与 Glasswing 合作提出了一个 AI 越狱严重性评估框架草案，同时在
+  HackerOne 上启动了安全漏洞报告项目。
+objective_summary: Anthropic 在重新部署 Claude Fable 5 后，公开了该模型配套的网络安全分类器的详细说明，将网络安全使用行为分为四个类别以区分防御性和攻击性用途。同时，Anthropic
+  与 Glasswing 合作发布了一个 AI 越狱严重性评估框架的早期草案，旨在为不同严重程度的越狱行为建立统一的风险描述标准。此外，Anthropic 在 HackerOne
+  上启动了漏洞报告项目，邀请安全研究人员提交在 Fable 5 中发现的潜在网络越狱漏洞。
 event_type: policy_and_safety
-epistemic_status: pr_statement
+epistemic_status: verified_fact
 entities:
   companies:
   - Anthropic
   - Glasswing
-  - HackerOne
   technologies:
   - safety classifiers
   - AI jailbreak
+  - cybersecurity safeguards
   key_people: []
 key_logic_flow:
-- Anthropic 宣布 Claude Fable 5 已重新部署并向全球所有用户开放使用。
-- Anthropic 公开了 Fable 5 的网络安全分类器（safety classifiers）详细信息，列出了其设计用于防范和不予防范的具体危害类型。
-- 网络安全能力具有双重用途（dual use），同一能力可被用于良性或恶意目的。
-- Anthropic 与 Glasswing 合作提出了 AI 越狱严重性分级框架的早期草案，旨在建立统一的越狱风险评估标准。
-- 越狱攻击的严重程度差异很大，但目前业界缺乏统一的描述框架来评估其风险。
-- Anthropic 启动了 HackerOne 漏洞奖励计划，邀请安全研究人员提交 Fable 5 中发现的潜在网络越狱漏洞。
+- Anthropic 在重新部署 Claude Fable 5 后，发布了其网络安全分类器的详细说明，列出了这些分类器旨在预防和未涵盖的危害类型。
+- Anthropic 与 Glasswing 合作提出了一个 AI 越狱严重性评估框架草案，旨在为不同严重程度的越狱行为建立统一的风险描述标准。
+- 网络安全领域对 AI 安全措施具有特殊挑战性，因为许多网络安全能力具有双重用途，既可防御也可攻击。
+- Anthropic 不打算阻止 Fable 5 的所有网络安全活动，而是训练分类器区分四个类别的网络安全使用场景。
+- Anthropic 在 HackerOne 上启动了漏洞报告项目，邀请安全研究员提交在 Fable 5 中发现的潜在网络越狱漏洞。
+- Anthropic 希望通过与学术界、业界、公民社会和政府的讨论，建立能够实现技术防御用途同时防止滥用的标准。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Fable Safeguards
+  canonical_name: Fable Safeguards
+  url: https://www.anthropic.com/news/fable-safeguards-jailbreak-framework
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Anthropic 在重新部署 Claude Fable 5 后，发布了其网络安全分类器的详细说明，这些分类器用于检测和阻止危险的网络安全相关使用。
+  - 这些分类器将网络安全使用分为四个类别，从最明显有潜在危害到最明显良性的用途，以区分防御性和攻击性行为。
+  article_id: aaef033dfabe2831
+- object_type: project
+  name: AI Jailbreak Severity Framework
+  canonical_name: AI Jailbreak Severity Framework
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Anthropic 与 Glasswing 合作提出了一个 AI 越狱严重性评估框架草案，旨在让 AI 开发者与政府用一致的术语讨论每次越狱的风险。
+  - 该框架反映了 Anthropic 当前的思考，其目标是引发学术界、业界、公民社会和政府关于如何划定风险界限的讨论。
+  article_id: aaef033dfabe2831
+- object_type: project
+  name: Fable 5 HackerOne Cyber Jailbreak Program
+  canonical_name: Fable 5 HackerOne cyber jailbreak program
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Anthropic 在 HackerOne 上启动了一个项目，允许安全研究人员提交他们在 Fable 5 中发现的安全越狱漏洞以供审查。
+  article_id: aaef033dfabe2831
 impact_score:
   score: 5.5
   reason: 该事件并非技术范式突破，而是AI安全治理领域的重要标准化尝试。Anthropic公开Fable 5网络安全分类器的具体防护边界，并与Glasswing合作提出越狱严重性分级框架草案，若被业界采纳可能成为行业评估基准。但当前仍处于草案征求意见阶段，实际影响力取决于后续被监管机构和竞争对手接受的程度。短期来看属于重要但非颠覆性的安全合规事件。
@@ -85,6 +117,72 @@ confidence:
   compound: medium
   hype: low
 actionable_insight: strategic_invest
+object_insights:
+- object_type: product
+  name: Fable Safeguards
+  canonical_name: Fable Safeguards
+  url: https://www.anthropic.com/news/fable-safeguards-jailbreak-framework
+  positioning: Anthropic 为 Claude Fable 5 配备的网络安全分类器系统，通过四类别分类法区分防御性与攻击性网络安全使用行为。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users:
+  - AI 安全研究人员
+  - 网络安全防御团队
+  - Claude Fable 5 企业用户
+  product_signal: Fable Safeguards 将网络安全使用行为分为四个类别，从最明显有潜在危害到最明显良性用途，以区分防御性和攻击性行为。
+  market_signal: Anthropic 在重新部署 Fable 5 后公开网络安全分类器细节，体现了模型安全透明度的持续提升。
+  differentiation: 不同于全面封锁网络安全活动的传统做法，Fable Safeguards 采用四类别分类法实现精准管控而非一刀切。
+  watch_reason: Fable Safeguards 代表了 AI 安全领域的前沿实践，其四类别分类法为行业树立了双重用途技术管控的标杆，值得持续跟踪以观察行业采纳和后续迭代方向。
+  risk_notes:
+  - 网络安全领域的双重用途特性使得分类器难以做到完美区分，可能存在误判和绕过的风险。
+  score: 8.0
+  article_ids:
+  - aaef033dfabe2831
+  evidence_snippets:
+  - Anthropic 在重新部署 Claude Fable 5 后，发布了其网络安全分类器的详细说明，这些分类器用于检测和阻止危险的网络安全相关使用。
+  - 这些分类器将网络安全使用分为四个类别，从最明显有潜在危害到最明显良性的用途，以区分防御性和攻击性行为。
+- object_type: project
+  name: AI Jailbreak Severity Framework
+  canonical_name: AI Jailbreak Severity Framework
+  url: null
+  positioning: 由 Anthropic 与 Glasswing 合作提出的 AI 越狱严重性评估框架草案，旨在为不同严重程度的越狱行为建立统一的风险描述标准。
+  technical_signal: 该框架提出了 AI 越狱严重性的标准化评估方法，旨在让 AI 开发者与政府用一致的术语描述每次越狱的风险等级。
+  adoption_signal: null
+  ecosystem_relevance: 该框架旨在引发学术界、业界、公民社会和政府关于如何划定 AI 越狱风险界限的讨论，推动行业统一标准的建立。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: 该框架是行业中少有的针对 AI 越狱严重性的标准化尝试，如能推动行业共识，将对 AI 安全监管和模型防护策略产生深远影响，值得持续关注其迭代与采纳进程。
+  risk_notes:
+  - 该框架目前仅为早期草案，尚需学术界、业界和政府广泛讨论才能形成行业共识，不确定性较高。
+  score: 7.0
+  article_ids:
+  - aaef033dfabe2831
+  evidence_snippets:
+  - Anthropic 与 Glasswing 合作提出了一个 AI 越狱严重性评估框架草案，旨在让 AI 开发者与政府用一致的术语讨论每次越狱的风险。
+  - 该框架反映了 Anthropic 当前的思考，其目标是引发学术界、业界、公民社会和政府关于如何划定风险界限的讨论。
+- object_type: project
+  name: Fable 5 HackerOne Cyber Jailbreak Program
+  canonical_name: Fable 5 HackerOne cyber jailbreak program
+  url: null
+  positioning: Anthropic 在 HackerOne 上启动的安全漏洞报告项目，邀请安全研究人员提交在 Fable 5 中发现的安全越狱漏洞以供审查。
+  technical_signal: Anthropic 在 HackerOne 上启动了专门的安全漏洞报告项目，为发现 Fable 5 越狱漏洞的研究人员提供了官方提交与审查渠道。
+  adoption_signal: null
+  ecosystem_relevance: 该项目为安全研究社区提供了正式渠道与 Anthropic 协作发现 AI 安全漏洞，有助于构建更广泛的 AI 安全防御生态。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: 作为 AI 安全领域的官方漏洞报告项目，其运行效果和发现的真实越狱案例将为行业提供重要的安全实践参考和风险基线，值得持续跟踪其运行成果。
+  risk_notes:
+  - 该项目依赖于安全研究社区的参与积极性，漏洞报告的质量和响应效率尚需在实践中验证。
+  score: 6.0
+  article_ids:
+  - aaef033dfabe2831
+  evidence_snippets:
+  - Anthropic 在 HackerOne 上启动了一个项目，允许安全研究人员提交他们在 Fable 5 中发现的安全越狱漏洞以供审查。
 ---
 
 # More details on Fable 5’s cyber safeguards and our jailbreak framework

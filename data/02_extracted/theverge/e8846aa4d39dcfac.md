@@ -18,26 +18,58 @@ id: e8846aa4d39dcfac
 manifest_dates:
 - '2026-06-30'
 source_type: news_media
-tldr: OpenAI 联合 Work Louder 发布 Codex 专属硬件设备，7 月 15 日亮相。
-objective_summary: OpenAI 于 7 月 15 日在 X 平台发布视频，预告一款与 Work Louder 合作的 Codex 编程工具专用硬件设备。该设备为方形面板，配有多枚可编程按钮，支持
-  Codex 快捷键映射，外观类似 Work Louder 的 Creator Micro 2 宏键盘。
+tldr: OpenAI与Work Louder合作推出了一款针对AI编程工具Codex的方形快捷键硬件设备，预告视频显示其配有多个按钮，将于7月15日正式发布。该设备并非OpenAI与Jony
+  Ive合作的AI项目。
+objective_summary: OpenAI于2026年7月13日（周一）在X平台发布预告视频，展示了一款与AI编程工具Codex相关的方形硬件设备，其外观配有多个按钮。该设备由OpenAI与硬件公司Work
+  Louder合作开发，设备轮廓类似Work Louder的Creator Micro 2宏控制面板，后者配备13个机械开关、摇杆和触摸传感器。OpenAI明确表示这不是与苹果前设计师Jony
+  Ive合作的AI设备项目。该设备将于7月15日正式发布，具体细节尚未公布。
 event_type: application_landing
 epistemic_status: pr_statement
 entities:
   companies:
   - OpenAI
   - Work Louder
-  - Figma
   technologies:
   - Codex
-  key_people: []
+  key_people:
+  - Jony Ive
 key_logic_flow:
-- OpenAI 在 X 平台发布视频，预告一款与 Work Louder 联合开发的 Codex 专属硬件设备，定于 7 月 15 日发布。
-- 视频中展示的设备为方形面板，配有多枚按钮，并配文"你最喜欢的 Codex 快捷键即将升级"。
-- 该设备并非 OpenAI 与 Jony Ive 合作的 AI 设备项目，而是一款基于 Work Louder Creator Micro 2 的宏键盘，具备 13
-  个机械开关、摇杆和触控传感器。
-- 用户可为此设备的不同应用（如 Photoshop）分配快捷键和自定义操作，Figma 此前已与 Work Louder 合作推出类似产品。
+- OpenAI在X平台发布了一段预告视频，展示了一款与AI编程工具Codex相关的方形硬件设备，配文称"你最喜欢的Codex快捷键即将升级"。
+- 该硬件是OpenAI与硬件公司Work Louder合作开发的，定于7月15日正式发布。
+- 设备外形与Work Louder的Creator Micro 2宏控制面板相似，后者配备13个机械开关、一个摇杆和一个触摸传感器，用户可为不同应用分配快捷键。
+- OpenAI澄清该设备并非其与苹果前设计师Jony Ive合作的神秘AI项目。
+- Figma此前也曾与Work Louder合作推出过一款预配置快捷键的宏控制面板。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: OpenAI Codex Hardware
+  canonical_name: OpenAI Codex Hardware
+  url: null
+  confidence: medium
+  article_role: primary_subject
+  evidence_snippets:
+  - OpenAI在X平台发布视频，展示了一款方形设备配有多个按钮，并配文称"你最喜欢的Codex快捷键即将升级"。
+  - 该设备由OpenAI与硬件公司Work Louder合作开发，将于7月15日正式发布，但更多细节尚未公布。
+  article_id: e8846aa4d39dcfac
+- object_type: product
+  name: Codex
+  canonical_name: OpenAI Codex
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 预告视频显示该硬件设备与OpenAI的AI编程工具Codex直接相关，配文明确提到了Codex快捷键的升级。
+  article_id: e8846aa4d39dcfac
+- object_type: product
+  name: Creator Micro 2
+  canonical_name: Work Louder Creator Micro 2
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - OpenAI展示的设备轮廓与Work Louder的Creator Micro 2宏控制面板相似，后者配备13个机械开关、摇杆和触摸传感器。
+  - 用户可以在Creator Micro 2上为不同应用（如Photoshop）分配快捷键和自定义操作。
+  article_id: e8846aa4d39dcfac
 ---
 
 OpenAI is releasing some sort of device related to its AI-powered coding tool, Codex, on July 15th. In a video posted to X on Monday, OpenAI shows a square-shaped device with several buttons, alongside the caption, “Your favorite Codex shortcuts are getting an upgrade.”

@@ -13,47 +13,95 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: f736cad9bae46be9
 source_type: community_discussion
-tldr: 独立基准测试显示，多款AI模型在安全漏洞发现能力上接近甚至超越Anthropic的Mythos。
-objective_summary: 作者swelljoe构建了基于Mythos公开漏洞的安全审计基准测试，评估9款以上AI模型在盲测条件下发现真实漏洞的能力。结果显示Qwen
-  3.6、MiMo、DeepSeek等模型在检测率上与Opus 4.8和GPT 5.5竞争，中国模型以低约一个数量级的价格取得可比成绩。
-event_type: infrastructure_update
+tldr: 独立开发者 swelljoe 构建了一套名为"Will It Mythos?"的基准测试，用 Anthropic Mythos 此前发现的 9 个真实安全漏洞检验各模型的漏洞发现能力。结果显示
+  Qwen 3.6、MiMo 和 DeepSeek 等低成本模型在漏洞检测上与 Opus 4.8 和 GPT 5.5 等前沿模型直接竞争，而 Mistral Medium
+  和 Google 的 agy CLI 完全失败。
+objective_summary: 独立开发者 swelljoe 于 2026 年构建了一套名为"Will It Mythos?"的安全漏洞发现基准测试，其测试集包含
+  9 个由 Anthropic Mythos 此前发现并披露的真实漏洞，所有漏洞均位于各模型知识截止日期之后。测试中每款模型获得相同的源码文件集和基础工具，不给予任何关于漏洞类型的提示。结果显示中国低成本模型表现突出：Qwen
+  3.6 27B 自托管模型发现漏洞数超过多个大型商业模型且误报更少，MiMo 和 DeepSeek 以约十分之一的价格达到与 Opus 4.8 和 GPT 5.5
+  接近的检出率。Mistral Medium 完全未发现任何目标漏洞，Google 的 agy（Antigravity CLI）因内置安全限制在 9 个测试中有
+  8 个直接拒绝执行分析。
+event_type: framework_tools
 epistemic_status: verified_fact
 entities:
   companies:
   - Anthropic
-  - Google
   - OpenAI
-  - Alibaba (Qwen)
+  - Google
+  - Alibaba
   - DeepSeek
   - Mistral
   - MiniMax
-  - Zhipu AI (GLM)
-  - Moonshot AI (Kimi)
-  - NVIDIA (Nemotron)
-  - Laguna
+  - Zhipu AI
+  - Moonshot AI
+  - NVIDIA
+  - North AI
   technologies:
   - Mythos
-  - Opus 4.8
-  - GPT 5.5
-  - Gemini 3.1 Pro
-  - Gemini 3.5 Flash
-  - Qwen 3.6
-  - DeepSeek
-  - MiMo
   - Claude Code
-  - Gemma 4
-  - Nemotron
-  - MiniMax M3
+  - Antigravity CLI
   key_people:
   - swelljoe
 key_logic_flow:
-- 作者对Anthropic声称Mythos在安全漏洞发现上具有独特优势表示怀疑，认为限制访问的真实原因可能只是运行成本过高而非安全性考虑。
-- 作者基于此前构建的Nelson工具开发了基准测试套件，选取Mythos文档中披露的9个真实漏洞作为测试用例，所有漏洞均在各模型知识截止日期之后以保证公平。
-- 测试中每个模型获得相同的原始代码仓库和基本工具，未获任何提示，需自行跨文件追踪逻辑发现漏洞，Claude模型额外使用Claude Code。
-- Qwen 3.6 27B表现超预期，击败了Gemini 3.1 Pro等更大尺寸的商业模型，自托管运行时仅为速度最慢的模型。
-- 中国模型MiMo和DeepSeek在漏洞检测能力上与Anthropic Opus 4.8和OpenAI GPT 5.5直接竞争，但价格低约一个数量级，且DeepSeek平均速度最快。
-- Gemma 4 MoE在检测到4/9个漏洞（100%精确率）后意外进入领先位置，但获得了多次尝试机会，存在统计偏差。
+- 作者构建了一套基准测试套件，将 Anthropic Mythos 此前发现的安全漏洞组成包含 9 个漏洞的测试集，每个漏洞均位于所有模型的知识截止日期之后。
+- 测试中所有模型被提供相同的源码文件集和基础工具，不给予任何关于漏洞类型的提示，模型可自由查看整个仓库但需自行定位漏洞。
+- Qwen 3.6 27B 自托管模型表现超出预期，发现漏洞数量超过多个大型商业模型且误报更少，但运行速度最慢且有一次超时。
+- MiMo 和 DeepSeek 等中国低成本模型在漏洞发现能力上与 Opus 4.8 和 GPT 5.5 直接竞争，但价格低约一个数量级，其中 DeepSeek
+  平均运行速度最快。
+- Gemma 4 MoE 测得 4/9 漏洞检出率且 100% 精确率，追平了 MiMo 和 GPT 5.5 的领先位置，但获得了多次尝试机会。
+- Mistral Medium 完全未能发现任何目标漏洞，Google 的 agy（Antigravity CLI）在 9 个测试中有 8 个直接拒绝执行安全分析任务。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Mythos
+  canonical_name: Anthropic Mythos
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Mythos 是 Anthropic 开发的安全漏洞发现工具，能够发现极具挑战性的安全漏洞。
+  - 作者质疑 Anthropic 对 Mythos 不开源的公开解释，猜测真正原因是其运营成本远高于现有模型。
+  article_id: f736cad9bae46be9
+- object_type: project
+  name: Will It Mythos?
+  canonical_name: Will It Mythos benchmark
+  url: https://swelljoe.com/post/will-it-mythos/
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 作者构建了一套名为 Will It Mythos? 的基准测试套件，使用 Mythos 此前发现的 9 个漏洞检验各模型的漏洞发现能力。
+  - 该基准测试的唯一目的是验证其他模型能否做到 Mythos 所能做到的事情。
+  article_id: f736cad9bae46be9
+- object_type: project
+  name: Nelson
+  canonical_name: Nelson
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 作者此前建立了一个名为 Nelson 的工具，用于自动化自己项目中的漏洞狩猎工作。
+  - 基准测试套件借鉴了 Nelson 的部分代码来构建测试用例。
+  article_id: f736cad9bae46be9
+- object_type: project
+  name: agy
+  canonical_name: Antigravity CLI
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - agy（Antigravity CLI for Gemini）在 9 个安全分析案例中有 8 个直接拒绝执行，回答无法完成请求。
+  - 作者认为 Antigravity 不适合安全分析工作，将其从排名中移除。
+  article_id: f736cad9bae46be9
+- object_type: product
+  name: Claude Code
+  canonical_name: Claude Code
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Claude 模型通过 Claude Code agent 运行测试，因为对订阅用户来说其成本远低于直接 API 调用。
+  - agent 模式并未提升模型性能，部分模型表现反而更差，且时间和 Token 消耗显著增加。
+  article_id: f736cad9bae46be9
 ---
 
 OK, so Mythos finds really challenging security bugs, right? That’s why it’s cordoned off from the hoi polloi, to protect the world from such a powerful finder of exploits.

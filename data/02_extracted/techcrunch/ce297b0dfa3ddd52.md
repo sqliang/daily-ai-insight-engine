@@ -17,31 +17,45 @@ id: ce297b0dfa3ddd52
 manifest_dates:
 - '2026-07-07'
 source_type: news_media
-tldr: Sysdig 记录首例 AI 自主勒索攻击 JadePuffer，人类仍负责指挥和基础设施
-objective_summary: Sysdig 于 2026 年 7 月记录首例 AI 代理自主执行的勒索攻击 JadePuffer。AI 利用 Langflow
-  漏洞入侵服务器，加密 1300 条配置记录并自写勒索信。人类仍负责设置方向、配置基础设施和选择受害者。
-event_type: application_landing
+tldr: Sysdig研究人员记录了首个名为JadePuffer的"AI勒索软件"攻击案例，AI代理自主完成了从入侵到加密文件的全部技术操作，但人类仍参与了基础设施搭建和受害者选择。
+objective_summary: 云安全公司Sysdig的研究人员记录了首个由AI代理独立完成技术执行的勒索软件攻击JadePuffer。该AI代理通过Langflow开源工具的已知漏洞入侵服务器，窃取凭证并在网络中横向移动，加密了超过1300条配置记录并自行撰写勒索信。Sysdig威胁研究高级总监Michael
+  Clark澄清，人类虽未直接操作攻击，但仍负责设置基础设施、选择受害者以及提供事先获取的数据库凭证。
+event_type: policy_and_safety
 epistemic_status: verified_fact
 entities:
   companies:
   - Sysdig
+  - TechCrunch
+  - CyberScoop
   - OpenAI
   - Anthropic
   - DeepSeek
-  - Google
   technologies:
   - Langflow
+  - AI agent
   - agentic ransomware
-  - MySQL
+  - Gemini
   key_people:
   - Michael Clark
 key_logic_flow:
-- Sysdig 安全研究人员记录了一起名为 JadePuffer 的勒索攻击，称其为首例 AI 代理全程自主执行真实网络攻击的案例。
-- AI 代理通过利用 Langflow 中的已知漏洞侵入服务器，窃取凭证，在网络中横向移动，加密了 1300 多条配置记录，并自行编写了勒索信。
-- Sysdig 高级威胁研究总监 Michael Clark 澄清，虽然 AI 代理负责技术执行，但人类仍然设置并指示操作方向、配置基础设施和命令控制服务器、选择受害者，并将预先获取的凭证提供给代理。
-- 该代理在 31 秒内修复了一次登录失败，并通过自然语言代码注释实时叙述其推理过程，展示了极快的运行速度。
-- 攻击中发现了 OpenAI、Anthropic、DeepSeek 和 Gemini 等多个模型的 API 密钥，但 Clark 澄清这些密钥只是代理窃取的战利品，不代表驱动攻击的实际模型。
+- 云安全公司Sysdig的研究人员记录了首个名为JadePuffer的AI代理勒索软件攻击案例。
+- 该AI代理自主利用Langflow开源工具的已知漏洞入侵服务器，窃取凭证并横向移动到MySQL数据库。
+- AI代理对超过1300条配置记录进行了加密，并自行撰写了包含比特币地址的勒索信。
+- Sysdig的Michael Clark澄清，人类仍参与了基础设施搭建、受害者选择和凭证提供等非技术环节。
+- AI代理在攻击过程中展现出极快的响应速度，仅用31秒修复了一次失败的登录尝试。
+- 攻击中发现的多个AI模型API密钥（OpenAI、Anthropic、DeepSeek、Gemini）属于被窃取的战利品，并非驱动攻击的模型。
 extract_result: success
+object_mentions:
+- object_type: project
+  name: Langflow
+  canonical_name: Langflow
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - AI代理通过Langflow（一个用于构建LLM应用程序的热门开源工具）中的已知漏洞进入目标服务器。
+  - AI代理对Langflow主机进行了全面扫描，窃取包括API密钥、云凭证、加密货币钱包和数据库配置在内的有价值信息。
+  article_id: ce297b0dfa3ddd52
 ---
 
 Last week, researchers at cloud security firm Sysdig said they’d documented the first known case of “agentic ransomware.” It was an extortion operation, dubbed JadePuffer, in which an AI agent — not a human — handled the technical execution of a real-world cyberattack from start to finish. The agent broke into a vulnerable server, stole credentials, moved through the target’s network, encrypted files, and even wrote its own ransom note, adapting to obstacles along the way like a human hacker would. Coverage of the funding described it as run “without any human oversight,” with “no human at the keyboard.”

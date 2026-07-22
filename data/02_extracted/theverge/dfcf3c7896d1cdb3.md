@@ -16,32 +16,45 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: dfcf3c7896d1cdb3
 source_type: news_media
-tldr: 苹果寻求特朗普政府批准，从被五角大楼列入黑名单的中国芯片供应商CXMT采购RAM芯片
-objective_summary: 据《金融时报》报道，苹果因RAM和存储价格飙升而提高了全线产品价格，现向特朗普政府申请豁免，以合法从涉军黑名单企业长鑫存储（CXMT）采购内存芯片。此举面临国会中国委员会主席John
-  Moolenaar的批评，称其将是个严重错误。
+tldr: 苹果向特朗普政府申请豁免，希望从被美国国防部列入黑名单的中国供应商长鑫存储（CXMT）采购RAM芯片，以缓解存储芯片价格上涨带来的供应链压力。
+objective_summary: 据《金融时报》报道，苹果正寻求特朗普政府特别许可，从被美国国防部列入黑名单的中国内存芯片制造商长鑫存储（CXMT）购买RAM芯片。CXMT因与中国军方关联被列入黑名单，此前美国商务部曾提议将其列入实体清单但因中美贸易谈判而搁置。存储芯片价格飙升已迫使苹果本周上调几乎所有产品售价，但与中国军方关联企业交易将带来声誉风险。众议院中国委员会主席John
+  Moolenaar公开批评此举是严重错误，认为将增加美国对中国供应链的依赖。
 event_type: policy_and_safety
 epistemic_status: verified_fact
 entities:
   companies:
   - Apple
-  - CXMT
-  - Pentagon
+  - CXMT (长鑫存储)
   - Financial Times
   - Commerce Department
-  - Trump administration
-  - House China Committee
-  technologies: []
+  - Pentagon
+  technologies:
+  - RAM
   key_people:
   - Tim Cook
-  - John Moolenaar
   - Donald Trump
+  - John Moolenaar
+  - Brett Ratner
 key_logic_flow:
-- 苹果正寻求特朗普政府豁免，以从被五角大楼列入黑名单的中国DRAM厂商长鑫存储（CXMT）采购内存芯片
-- RAM和存储价格飙升已迫使苹果本周上调几乎所有产品线的价格，推动其寻找替代供应商
-- 苹果在法律上不被禁止从CXMT购买芯片，但与涉华军事企业交易存在严重的声誉风险
-- CXMT此前已被商务部列入拟议的"实体清单"追加名单，但因白宫正与中国进行贸易谈判而暂缓执行
-- 众议院中国委员会主席John Moolenaar公开批评称，苹果若与涉华军事企业合作将是"一个严重错误"
+- 苹果向特朗普政府申请特别许可，希望从被美国国防部列入黑名单的中国内存芯片制造商CXMT采购RAM芯片，以缓解存储芯片价格上涨带来的供应链压力。
+- 存储芯片价格飙升已迫使苹果本周上调几乎所有产品售价，因此寻求替代供应商成为降低成本的合理选择。
+- 在法律层面，苹果并未被禁止与CXMT交易，但与中国军方关联企业开展业务将带来严重的声誉风险。
+- CXMT此前被美国商务部提议列入实体清单，但因白宫正处于对华贸易谈判中而暂缓执行。
+- 苹果CEO Tim Cook此前一直致力于与特朗普政府建立良好关系，但若白宫批准该请求将面临重大政治反弹。
+- 众议院中国委员会主席John Moolenaar公开批评该潜在合作，认为帮助中国主导关键供应链将增加美国对中国的依赖。
 extract_result: success
+object_mentions:
+- object_type: company
+  name: CXMT (长鑫存储)
+  canonical_name: ChangXin Memory Technologies
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 苹果寻求特朗普政府豁免，希望从被美国国防部列入黑名单的中国供应商CXMT购买RAM芯片。
+  - CXMT因与中国军方关联被列入黑名单，美国商务部曾提议将其加入实体清单但因贸易谈判搁置。
+  - 众议院中国委员会主席John Moolenaar批评苹果与CXMT合作是严重错误，将增加对华供应链依赖。
+  article_id: dfcf3c7896d1cdb3
 ---
 
 Apple is looking to alleviate some of the pressure on its supply chain by seeking an exception from the Trump administration to buy RAM chips from CXMT, a company blacklisted by the Pentagon over ties to the People’s Liberation Army, according to the *Financial Times*. The skyrocketing prices of RAM and storage have driven Apple to raise prices on almost all of its products this week, so it makes sense that it would seek alternative sources.

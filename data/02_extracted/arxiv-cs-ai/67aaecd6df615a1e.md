@@ -33,26 +33,38 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 67aaecd6df615a1e
 source_type: academic_paper
-tldr: 研究AI推荐系统中用户通信精度与推荐集合大小的最优权衡，发现最优策略取决于采样方案和成本参数。
-objective_summary: 该论文从理论上建模AI辅助搜索中用户与推荐系统的交互过程。用户以有成本且含噪声的消息传达偏好，AI作为贝叶斯智能体据此形成后验信念并决定推荐数量。研究在d维偏好空间中，分别分析后验采样和倾斜分布采样两种方案下的最优交互策略。
+tldr: 这篇论文构建了用户与AI推荐系统的交互模型，研究如何优化用户的通信成本（偏好信息精度）和AI的搜索成本（推荐集大小）。在高维空间中，论文刻画了两种采样方案下的最优交互策略：后验采样方案需要联合优化信息比特数和推荐数量，倾斜采样方案则倾向于只使用成本较低的那一种。
+objective_summary: arXiv 发表了一篇编号为 2605.23944 的理论论文，研究 AI 辅助搜索中通信与推荐集大小的最优化问题。作者将用户与
+  AI 推荐系统的交互建模为贝叶斯博弈：用户发送有成本且带有噪声的偏好信息，AI 作为贝叶斯智能体形成后验信念并做出推荐决策。论文使用基于互信息的成本函数刻画两类成本——通信成本随消息精度增加而上升，搜索成本随推荐集规模增加而上升——并在两种推荐采样方案（后验采样与倾斜采样）下分析了高维空间中最大化用户期望收益的最优策略。
 event_type: framework_tools
 epistemic_status: theoretical_claim
 entities:
   companies: []
   technologies:
-  - Bayesian inference
-  - mutual information
-  - recommendation systems
-  - posterior sampling
-  - tilted distribution
+  - Recommendation Systems
+  - Bayesian Inference
+  - Mutual Information
   key_people: []
 key_logic_flow:
-- 论文建模了用户与AI驱动推荐系统之间的交互过程，用户通过有成本且含噪声的消息传达偏好信息，AI助手据此进行贝叶斯推断。
-- 使用基于互信息的成本函数量化两类用户成本：通信成本随偏好消息精度增加而上升，搜索成本随推荐集合大小增加而上升。
-- 在d维偏好空间的高维情形下，分析了两种推荐采样方案：基于贝叶斯后验信念的采样，以及经过优化的倾斜分布采样。
-- 在后验采样方案下，存在一个混合策略区间，高效交互需联合优化用户传达的信息量（以比特计）和AI提供的推荐数量。
-- 在倾斜采样方案下，最优交互策略仅使用通信或搜索其中之一，优先选择成本更低的那一方。
+- 论文建模了用户与AI推荐系统之间的交互过程：用户通过有成本且带有噪声的消息传达偏好信息，AI作为贝叶斯智能体解释消息并形成关于用户真实偏好的后验信念。
+- AI智能体决定向用户展示多少个推荐项，以最大化用户从最终选择中获得的期望效用，同时考虑推荐集大小带来的搜索成本。
+- 论文使用基于互信息的成本函数来建模两类成本：通信成本随用户偏好消息的精度增加而增加，搜索成本随AI推荐集的大小增加而增加。
+- 研究假设产品和偏好位于d维空间中，考察在高维极限下如何最大化用户的期望收益。
+- 在后验采样方案下，论文识别出一个混合机制，要求联合优化用户传达的信息比特数和AI提供的推荐数量。
+- 在倾斜采样方案下，最优交互策略只使用通信或搜索中的一种，倾向于选择成本较低的那个维度。
 extract_result: success
+object_mentions:
+- object_type: paper
+  name: Right-Sizing Communication and Recommendation Set Size in AI-Assisted Search
+  canonical_name: '2605.23944'
+  url: https://arxiv.org/abs/2605.23944
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 论文建模了用户与AI推荐系统的交互，用户通过有成本且带有噪声的消息传达偏好信息，AI作为贝叶斯智能体解释消息并形成关于用户真实偏好的后验信念。
+  - 论文使用基于互信息的成本函数建模两类成本：通信成本随偏好消息精度上升，搜索成本随推荐集规模上升。
+  - 在后验采样方案下论文识别出混合机制，要求联合优化用户传达的信息比特数和AI提供的推荐数量；在倾斜采样方案下最优策略只使用其中一种。
+  article_id: 67aaecd6df615a1e
 ---
 
 # Computer Science > Artificial Intelligence

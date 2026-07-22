@@ -21,9 +21,11 @@ manifest_dates:
 - '2026-07-05'
 - '2026-07-06'
 source_type: newsletter_rss
-tldr: NVIDIA 发布 ENPIRE 框架，让物理机器人实现自主实验与策略改进闭环
-objective_summary: NVIDIA 研究团队发布 ENPIRE 框架，通过环境自动重置与验证、策略改进、策略评估和代码演进四个模块，让物理机器人在无需人工干预的情况下自主完成实验、学习和策略优化。每个工作站配备两台
-  I2RT YAM 机械臂和 NVIDIA RTX 5090。
+tldr: NVIDIA 发布了 ENPIRE 框架，这是一个让物理机器人能够像 AI agent 一样自主实验和学习的闭环系统。该系统包含自动评估和自动重置机制，每个工位配备两台
+  I2RT 的 YAM 机械臂和一张 RTX 5090 显卡。
+objective_summary: NVIDIA 研究人员开发了 ENPIRE 框架，这是一个用于物理机器人的自改进闭环系统。该框架包含四个核心模块：环境模块负责自动重置和验证，策略改进模块发起策略优化，rollout
+  执行模块让多台物理机器人并行操作，进化模块由编码 agent 分析日志、查阅文献并改进训练代码。系统通过自动评估机制对每次实验进行评分，并通过自动重置将场景恢复到初始状态，从而大幅减少人工干预。每个实验工位配备两台
+  I2RT 的 YAM 机械臂、一组摄像头和一台搭载 NVIDIA RTX 5090 的工作站。
 event_type: framework_tools
 epistemic_status: verified_fact
 entities:
@@ -34,12 +36,33 @@ entities:
   - ENPIRE
   key_people: []
 key_logic_flow:
-- NVIDIA 研究团队开发了 ENPIRE 框架，这是一个让物理机器人实现自主实验与执行循环的软件系统
-- ENPIRE 包含四个核心模块：环境模块（EN）负责自动重置和验证，策略改进模块（PI）启动策略优化，评估模块（R）在单台或多台机器人上并行评估策略，演进模块（E）由编码智能体分析日志、查阅文献并改进训练代码
-- 该系统通过自动评估系统对每次试验结果进行评分，并通过自动重置系统将场景恢复到初始状态，大幅减少人工参与
-- 每个物理工作站配备两台 I2RT 的 YAM 机械臂（固定双臂配置）、一组摄像头和一台运行 FastAPI 服务器的工控机
-- 每个工作站使用 NVIDIA RTX 5090 显卡进行策略推理和智能体运行
+- NVIDIA 研究人员开发了 ENPIRE 框架，这是一个让物理机器人实现自主实验和学习循环的软件框架。
+- ENPIRE 包含四个核心模块：环境模块（自动重置和验证）、策略改进模块、rollout 执行模块（多台机器人并行操作）和进化模块（编码 agent 分析日志、查阅文献并改进代码）。
+- 系统的两个关键部件是自动评估系统（对每次实验结果自动评分）和自动重置系统（将场景恢复到初始状态），两者均无需人工干预。
+- 每个实验工位配备两台 I2RT 的 YAM 机械臂、一组摄像头和一台搭载 NVIDIA RTX 5090 的工作站。
 extract_result: success
+object_mentions:
+- object_type: project
+  name: ENPIRE
+  canonical_name: NVIDIA ENPIRE
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - NVIDIA 研究人员开发了 ENPIRE 框架，这是一个用于物理机器人的闭环自改进系统，让机器人能够像 AI agent 一样进行自主实验和学习。
+  - ENPIRE 包含环境模块、策略改进模块、rollout 执行模块和进化模块四个核心组件，通过自动评估和自动重置机制减少人工干预。
+  - 该框架将物理机器人学习转化为可控的优化过程，agent 可以管理整个流程，从而最小化人力投入并允许进行公平的实验对比。
+  article_id: a566ddf4df08f0ad
+- object_type: product
+  name: YAM (Yet Another Manipulator)
+  canonical_name: I2RT YAM
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - 每个实验工位包含两台由 I2RT 公司提供的 YAM（Yet Another Manipulator）机械臂，采用固定双臂配置。
+  - YAM 机械臂与一组摄像头和一台搭载 NVIDIA RTX 5090 的工作站共同组成 ENPIRE 系统的硬件基础设施。
+  article_id: a566ddf4df08f0ad
 ---
 
 # Import AI 463: Self-improving robots; a 10k Chinese GPU cluster; and an elegiac essay for the human era

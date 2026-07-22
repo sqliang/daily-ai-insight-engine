@@ -14,9 +14,10 @@ tags:
 extraction_status: success
 id: decb0744cbe9f9e8
 source_type: news_media
-tldr: Google 为 YouTube Shorts 推出基于 Gemini Omni 的 AI 重混功能，用户可提示词转换视频风格或修改内容。
-objective_summary: Google 于 2026 年 5 月宣布 YouTube Shorts 新 Remix 功能，集成 Gemini Omni
-  模型。用户点击 Shorts 底部 remix 图标后选择"reimagine"选项，通过自然语言提示词可将视频转换为像素艺术、动漫、恐怖片等风格，
+tldr: 谷歌宣布为 YouTube Shorts 推出 AI 重混功能，用户可通过 Gemini Omni 将他人视频片段重新风格化为像素风、动漫或恐怖风格，甚至将自己插入到视频中，创作者可选择关闭该功能。
+objective_summary: 谷歌于 2026 年 7 月 21 日宣布在 YouTube Shorts 中推出基于 Gemini Omni 的 Reimagine
+  重混功能。用户点击重混图标后，可通过文本提示将他人视频转换为像素艺术、动漫或伪纪录片恐怖风格，也能修改视频内容（如放大头部、添加背景角色、更换海盗服装或将自己合成到片段中）。原创作者可以在设置中选择关闭重混功能，防止他人修改自己的视频。经过重混的
+  Shorts 会带有数字水印并链接回原始视频。
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
@@ -25,17 +26,48 @@ entities:
   - YouTube
   technologies:
   - Gemini Omni
-  - digital watermarking
   key_people: []
 key_logic_flow:
-- Google 宣布 YouTube Shorts 新增 Remix 功能，底层集成 Gemini Omni 多模态 AI 模型
-- 用户在任意 Shorts 底部点击 remix 图标后，出现"reimagine"选项，可通过自然语言提示词驱动 AI 对视频进行风格转换
-- 支持的风格转换包括像素艺术、动漫、伪纪录片恐怖片等，同时也支持内容级别的修改（放大头部、插入背景演员、更换服装等）
-- 用户还可通过该功能将自身形象插入到他人的 Shorts 视频中
-- 创作者拥有控制权：可在上传时选择关闭 AI 重混功能，防止他人操纵自己的视频内容
-- 所有通过 Gemini Omni 重混生成的视频均强制添加数字水印（digital watermark），并自动链接回原始视频以保障来源可追溯
+- 谷歌宣布为 YouTube Shorts 推出基于 Gemini Omni 的 Reimagine 重混功能。
+- 用户可在 Shorts 底部点击重混图标，选择"Reimagine"选项来使用 AI 修改视频。
+- Gemini Omni 支持将视频转换为像素艺术、动漫或伪纪录片恐怖片等多种风格。
+- 用户还能对视频内容进行局部修改，例如放大头部、添加背景角色、更换海盗服装或将自己合成到片段中。
+- 原创作者可以控制是否允许他人重混自己的视频，该功能默认由创作者自行开启或关闭。
+- 经 Gemini Omni 重混后的 Shorts 将带有数字水印并链接回原始视频，确保可追溯性。
 pipeline_stage: fact_extracted
 extract_result: success
+object_mentions:
+- object_type: product
+  name: YouTube Shorts Remix (Reimagine)
+  canonical_name: YouTube Shorts Remix Reimagine
+  url: https://www.youtube.com/shorts
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 谷歌宣布在 YouTube Shorts 推出 Reimagine 重混功能，用户可基于 Gemini Omni 将他人视频片段重新风格化。
+  - 用户点击重混图标后可以选择"Reimagine"选项，用文本提示将视频转换为像素艺术、动漫或恐怖片风格。
+  - 原创作者可以开启或关闭此功能，防止他人对自己的视频进行 AI 修改。
+  article_id: decb0744cbe9f9e8
+- object_type: product
+  name: Gemini Omni
+  canonical_name: Gemini Omni
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Gemini Omni 是谷歌用于驱动 YouTube Shorts Reimagine 功能的 AI 模型，支持视频风格转换和内容修改。
+  - Gemini Omni 可以将视频变为像素艺术、动漫或伪纪录片恐怖片，也能实现放大头部、更换服装等局部编辑。
+  article_id: decb0744cbe9f9e8
+- object_type: product
+  name: YouTube Shorts
+  canonical_name: YouTube Shorts
+  url: https://www.youtube.com/shorts
+  confidence: high
+  article_role: ecosystem_context
+  evidence_snippets:
+  - YouTube Shorts 是谷歌旗下的短视频平台，本次新增的 Reimagine 功能允许用户基于 Gemini Omni 重混他人发布的短视频。
+  - 创作者可以通过设置决定是否允许他人使用 Reimagine 功能修改自己的 YouTube Shorts 视频。
+  article_id: decb0744cbe9f9e8
 ---
 
 Google announced a new YouTube Shorts Remix feature that lets users restyle clips or even insert themselves into other people’s videos using Gemini Omni. Now, at the bottom of a YouTube Short, when you click the remix icon, you’ll see an option to “reimagine” it. Here, you can prompt Gemini to turn a video into pixel art, an anime, or a found-footage horror film. But, beyond that, you can also alter the contents by, say, inflating heads, inserting background actors, dressing people in pirate costumes, or even putting yourself in the clip.

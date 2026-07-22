@@ -11,25 +11,37 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: c897a6db847fceea
 source_type: news_media
-tldr: Lightfield 是一款 AI 驱动的 CRM，能自动记录销售互动并支持自然语言查询。
-objective_summary: Lightfield 发布了一款 AI CRM 产品，能够自动捕获邮件、会议和通话记录，用户可通过自然语言查询销售管道数据。该产品声称无需
-  IT 支持即可在数分钟内完成配置，已被数千家以销售为主导的公司使用。
+tldr: Lightfield 是一款 AI 驱动的 CRM 平台，可自动记录邮件、会议和通话，支持自然语言查询管道数据，无需手动录入和 IT 支持，已获得数千家销售驱动的公司使用。
+objective_summary: Lightfield 发布了一款 AI 原生 CRM 产品，能够自动捕获并记录销售团队的所有邮件、会议和通话内容，无需手动录入。用户可以通过自然语言提问获取即时回答、报告和下一步建议。该产品声称可在数分钟内完成设置，连接邮箱并导入数据即可使用，面向销售、RevOps、创始人和客户成功团队。产品宣传中包括多名用户对其自动化能力和效率提升的正面评价。
 event_type: application_landing
 epistemic_status: pr_statement
 entities:
   companies:
   - Lightfield
-  - HubSpot
-  technologies: []
+  technologies:
+  - CRM AI
+  - 自然语言查询
   key_people: []
 key_logic_flow:
-- Lightfield 的 CRM 能够自动捕获每封邮件、会议和通话记录，无需手动输入。
-- 用户可以通过单一自然语言提示，即时查询销售管道数据、生成报告和获取下一步行动建议。
-- 该产品声称数分钟内即可完成配置，只需连接邮箱、导入数据即可使用。
-- 产品面向整个 GTM 团队（销售、RevOps、创始人和客户成功），提供统一数据源。
-- Lightfield 宣称已被数千家以销售为主导的公司采用，并引用了多位用户的好评。
-- 有用户表示因使用 Lightfield 而降级了 HubSpot 订阅。
+- Lightfield 是一款 AI 驱动的 CRM 产品，核心卖点是自动记录所有客户交互数据，无需人工录入。
+- 用户可以通过自然语言向系统提问，获取即时答案、报告和下一步行动建议。
+- 产品宣称在数分钟内即可完成设置：连接邮箱、导入数据、开始使用，无需 IT 部门介入。
+- 目标用户群覆盖销售、RevOps、创始人和客户成功等整个 GTM 团队。
+- 多位用户证言称 Lightfield 大幅减少了日常录入工作，有人因此降低了 HubSpot 订阅等级。
+- 用户报告称可在半小时内生成 18 个客户案例研究，效率提升显著。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Lightfield
+  canonical_name: Lightfield
+  url: https://lightfield.app
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Lightfield 是一款 AI 驱动的 CRM 产品，能够自动捕获每封邮件、会议和通话记录，无需手动录入。
+  - 用户可以通过单一提示词获得即时答案、报告和下一步建议，实现自然语言查询管道数据。
+  - 多位用户证言称 Lightfield 大幅提升了工作效率，有人半小时内生成了 18 个客户案例研究。
+  article_id: c897a6db847fceea
 ---
 
 ## Your pipeline, on autopilot. *Lightfield handles the logging so your team can focus on closing.*

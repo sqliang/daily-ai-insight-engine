@@ -13,9 +13,12 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 9fde553deecda35f
 source_type: news_media
-tldr: Patronus AI 完成 5000 万美元 B 轮融资，构建模拟数字世界压力测试 AI 代理
-objective_summary: Patronus AI 于 2026 年 6 月 25 日宣布完成 5000 万美元 B 轮融资，由 Greenfield Partners
-  领投。该公司由前 Meta AI 研究人员于 2023 年创立，构建模拟数字环境，通过强化学习方法在训练后对 AI 代理进行压力测试，
+tldr: Patronus AI 完成 5000 万美元 B 轮融资，用于构建模拟数字环境来压力测试 AI 代理的性能，公司年收入增长 15 倍，总融资额达 7000
+  万美元。
+objective_summary: Patronus AI 是一家 2023 年由前 Meta AI 研究员 Anand Kannappan 和 Rebecca
+  Qian 创立的旧金山初创公司，通过构建名为"数字世界模型"的模拟环境，在强化学习训练后对 AI 代理进行压力测试，以此评估其在真实复杂任务中的可靠性。该公司于
+  2026 年 6 月 25 日宣布完成 5000 万美元 B 轮融资，由 Greenfield Partners 领投，Notable Capital、Lightspeed、Datadog
+  和 Samsung 参投，累计融资达 7000 万美元。公司过去一年收入增长 15 倍，客户覆盖几乎所有前沿 AI 实验室，目前主要聚焦软件工程和金融领域的可验证问题。
 event_type: capital_movement
 epistemic_status: verified_fact
 entities:
@@ -29,23 +32,48 @@ entities:
   - Meta
   - Waymo
   technologies:
-  - reinforcement learning
   - AI agents
+  - reinforcement learning
   - digital world models
   key_people:
   - Anand Kannappan
   - Rebecca Qian
   - Glenn Solomon
 key_logic_flow:
-- Patronus AI 由前 Meta AI 研究员 Anand Kannappan 和 Rebecca Qian 于 2023 年创立，帮助模型开发者和企业构建模拟数字环境来评估
-  AI 代理的性能。
+- Patronus AI 由前 Meta AI 研究员 Anand Kannappan 和 Rebecca Qian 于 2023 年创立，总部位于旧金山，主要帮助模型厂商和公司构建模拟数字环境来评估
+  AI 代理在复杂真实任务中的可靠性。
 - 该公司于 2026 年 6 月 25 日宣布完成 5000 万美元 B 轮融资，由 Greenfield Partners 领投，Notable Capital、Lightspeed、Datadog
   和 Samsung 参投，累计融资达 7000 万美元。
-- Patronus 使用所谓"数字世界模型"创建网站和内部系统的副本，在训练后通过强化学习对代理进行压力测试，迭代奖励成功完成任务并惩罚错误。
-- 该方法类比 Waymo 训练自动驾驶汽车的方式——先构建合成世界来测试车辆应对罕见危险场景的能力，但侧重防止 AI 代理走捷径而未能正确完成任务。
-- Patronus 目前为软件工程和金融领域提供模拟数字世界，过去一年收入增长 15 倍，几乎所有前沿 AI 实验室均已成为其客户。
-- 公司计划未来扩展至难以自动验证的领域，目标是创建能让代理连续运行 10 小时甚至数周的测试环境。
+- Patronus 使用名为"数字世界模型"的技术创建网站和内部系统的模拟副本，代理在这些环境中通过强化学习进行训练后压力测试，通过迭代奖励成功完成任务并惩罚错误。
+- 公司将这一方法类比于 Waymo 先构建合成世界来测试自动驾驶汽车应对罕见危险场景的方式，区别在于 AI 代理倾向于走捷径，而 Patronus 擅长发现这些取巧行为。
+- 公司过去一年收入增长 15 倍，客户覆盖几乎所有前沿 AI 实验室和众多新兴初创公司，目前主要聚焦软件工程和金融领域的可验证问题。
+- 公司联合创始人 Kannappan 表示，未来计划扩展到难以验证的更多领域，并希望创建能让代理持续运行 10 小时甚至 10 周的测试环境。
 extract_result: success
+object_mentions:
+- object_type: company
+  name: Patronus AI
+  canonical_name: Patronus AI
+  url: https://www.patronus.ai
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Patronus AI 由前 Meta AI 研究员 Anand Kannappan 和 Rebecca Qian 于 2023 年创立，通过构建模拟数字环境来评估
+    AI 代理在复杂真实任务中的可靠性。
+  - 该公司于 2026 年 6 月 25 日宣布完成 5000 万美元 B 轮融资，由 Greenfield Partners 领投，多家机构参投，累计融资达
+    7000 万美元。
+  - 公司过去一年收入增长 15 倍，客户覆盖几乎所有前沿 AI 实验室和众多新兴初创公司，Notable Capital 描述其需求几乎供不应求。
+  article_id: 9fde553deecda35f
+- object_type: product
+  name: Patronus Digital World Models
+  canonical_name: Patronus Digital World Models
+  url: null
+  confidence: medium
+  article_role: primary_subject
+  evidence_snippets:
+  - Patronus 使用名为"数字世界模型"的技术创建网站和内部系统的模拟副本，通过强化学习对 AI 代理进行训练后压力测试。
+  - 该公司将这一方法类比于 Waymo 先构建合成世界来测试自动驾驶汽车应对罕见危险场景，帮助 AI 代理尝试各种不可预测的复杂场景。
+  - Patronus 目前主要聚焦软件工程和金融领域的可验证问题，并计划未来扩展到难以验证的更多领域。
+  article_id: 9fde553deecda35f
 ---
 
 AI agents are becoming more sophisticated. They are evolving from answering questions to autonomously executing multi-step complex tasks.

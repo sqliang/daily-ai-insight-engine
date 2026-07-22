@@ -19,22 +19,38 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 63bbce2cc6ed251b
 source_type: academic_paper
-tldr: SPARC 是一个多智能体系统，通过可执行物理仿真进行电路图问答，准确率达83%。
-objective_summary: 研究人员提出了SPARC，一个利用LLM智能体合成、执行和分析物理仿真程序来回答电路图问题的多智能体系统。在电路图问答任务上达到83%准确率，相比基线最高提升58%，并支持系统性错误诊断。
+tldr: SPARC 是一个用于电路图问答的多智能体系统，通过 LLM 智能体合成、执行和分析物理仿真程序，达到 83% 准确率，相比基线最高提升 58 个百分点。
+objective_summary: arXiv 于 2026 年发表论文提出 SPARC，一个基于多智能体架构的电路图问答系统。该系统利用多模态大语言模型智能体合成可执行的物理仿真程序，通过程序执行结果而非直接推理来回答问题，设计上提升了准确性和可靠性。SPARC
+  在电路图问答任务上达到 83% 准确率，相比基线方法最高提升 58 个百分点，并支持系统性错误诊断。
 event_type: framework_tools
-epistemic_status: theoretical_claim
+epistemic_status: verified_fact
 entities:
   companies: []
   technologies:
   - SPARC
+  - Multi-Agent System
   - Multimodal LLM
+  - Physics-based Simulation
   key_people: []
 key_logic_flow:
-- SPARC 是一个多智能体系统，专门用于电路图问答任务，解决多模态大语言模型在复杂数学推理上的不足。
-- 该系统通过将推理过程锚定在可执行的物理仿真中，利用LLM智能体合成、执行并分析仿真程序。
-- SPARC 在电路图问答任务上达到 83% 的准确率，相比基线方法最高实现 58% 的绝对提升。
-- 该系统通过设计实现了系统性错误诊断能力，提升了可靠性和准确性。
+- 电路图问答任务需要复杂的数学推理，这对多模态大语言模型仍然充满挑战。
+- SPARC 提出了一个多智能体系统，将推理过程基于可执行的物理仿真程序。
+- 该系统使用 LLM 智能体来合成、执行和分析仿真程序，通过设计提升了准确性和可靠性。
+- 实验结果显示 SPARC 达到 83% 的准确率，相比基线方法最高提升 58 个百分点。
+- 该方案还支持系统性的错误诊断能力。
 extract_result: success
+object_mentions:
+- object_type: paper
+  name: 'SPARC: A Multi-Agent System for Electrical Circuit Question Answering'
+  canonical_name: SPARC
+  url: https://arxiv.org/abs/2606.20643
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - SPARC 是一个多智能体系统，通过将推理过程基于可执行的物理仿真程序来回答电路图问题。
+  - 该系统利用 LLM 智能体合成、执行和分析仿真程序，在电路图问答任务上达到 83% 准确率。
+  - 相比基线方法，SPARC 实现了最高 58 个百分点的绝对提升，并支持系统性错误诊断。
+  article_id: 63bbce2cc6ed251b
 ---
 
 # Computer Science > Artificial Intelligence

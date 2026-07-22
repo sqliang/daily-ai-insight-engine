@@ -16,31 +16,47 @@ id: efd33773fb7fcfc3
 manifest_dates:
 - '2026-07-04'
 source_type: community_discussion
-tldr: 新研究发现最高大树种的水分输送系统完全适应其高度，不因身高而更易干旱。
-objective_summary: 埃克塞特大学和卡迪夫大学在《科学》发表研究，测量马来西亚婆罗洲7至71米龙脑香树，发现其水分输送系统通过靠近地面导管增宽和叶片耐旱适应完全补偿了高度挑战，2023-2024年强厄尔尼诺干旱期间高树未出现高度相关的生长损失。
+tldr: 新研究推翻传统理论，发现超80米高的龙脑香科树木通过加宽底部导管和增强叶片耐旱性，完全补偿了高度带来的水分运输挑战，在干旱条件下并不比矮树更脆弱。研究成果发表在《科学》期刊上。
+objective_summary: 埃克塞特大学和卡迪夫大学联合团队在马来西亚婆罗洲对7至71米高的龙脑香科树木进行研究，测量了多个位置的输水系统特征和叶片性状，发现高树通过导管宽度梯度和叶片耐旱适应完全补偿了高度带来的水力挑战。研究还监测了2023-2024年强厄尔尼诺干旱期间的树干生长速率，发现高树未出现与高度相关的生长损失或水力脆弱性增加。成果发表于《科学》期刊，论文题为'Height
+  does not impair the hydraulic system of the tallest tropical Dipterocarp trees'。
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
   companies:
   - University of Exeter
   - Cardiff University
-  - Sabah Forestry Department
   - UK Centre for Ecology & Hydrology
   - University of Aberdeen
+  - Sabah Forestry Department
   - The Czech University of Life Sciences
-  - Natural Environment Research Council
   technologies: []
   key_people:
   - Lucy Rowland
   - Paulo Bittencourt
   - Palasiah Jotan
 key_logic_flow:
-- 传统理论认为树木越高，从根部向叶片输送水分越困难，会限制生长并增加干旱脆弱性。
-- 埃克塞特大学和卡迪夫大学团队在《科学》期刊发表研究，表明龙脑香树的水分输送系统通过适应性调整完全补偿了高度带来的挑战。
-- 研究测量了马来西亚婆罗洲7至71米高的龙脑香树，发现较高树木靠近地面的导管更宽，叶片进化出更强的耐旱能力。
-- 2023-2024年强厄尔尼诺干旱期间的测试显示，高树与矮树相比未出现高度相关的生长损失。
-- 森林中最高的1%树木储存了超过一半的地上碳，此前模型认为高树水分系统更脆弱，该研究结果对此提出质疑。
+- 传统理论认为树木越高，将水分从根部输送到叶片的难度越大，这会限制生长并增加干旱脆弱性。
+- 新研究由埃克塞特大学和卡迪夫大学主导，在马来西亚婆罗洲对7至71米高的龙脑香科树木进行实地测量。
+- 研究发现高树通过输水导管在靠近地面处更宽、以及叶片进化出更强耐旱能力等适应性调整，完全补偿了高度带来的水力挑战。
+- 在2023-2024年强厄尔尼诺干旱期间，高树的树干生长速率未出现与高度相关的损失，其水力系统并不比矮树更脆弱。
+- 研究人员指出当前部分气候变化模型假设高树因水力系统更弱而干旱死亡风险更高，这项研究表明该假设可能不正确。
+- 全球森林中最高1%的树木储存了超过一半的地上碳储量，因此理解高树的水力机制对碳循环和气候预测至关重要。
 extract_result: success
+object_mentions:
+- object_type: paper
+  name: Height does not impair the hydraulic system of the tallest tropical Dipterocarp
+    trees
+  canonical_name: Height does not impair the hydraulic system of the tallest tropical
+    Dipterocarp trees
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 新研究由埃克塞特大学和卡迪夫大学主导，发表在《科学》期刊上，挑战了树木越高水分运输越困难的传统理论。
+  - 论文标题为'Height does not impair the hydraulic system of the tallest tropical Dipterocarp
+    trees'，由英国自然环境研究委员会资助。
+  - 研究发现龙脑香科高树的水力系统完全适应其高度，在干旱条件下并不比矮树更脆弱。
+  article_id: efd33773fb7fcfc3
 ---
 
 The world’s tallest tropical trees have no trouble pumping water to their topmost branches, new research reveals.

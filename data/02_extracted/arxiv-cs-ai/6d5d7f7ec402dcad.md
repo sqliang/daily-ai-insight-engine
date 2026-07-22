@@ -31,24 +31,27 @@ id: 6d5d7f7ec402dcad
 manifest_dates:
 - '2026-07-08'
 source_type: academic_paper
-tldr: 提出 TurnOPD，一种面向长程智能体训练的高效同策略蒸馏方法，通过回合级预算控制提升训练效率。
-objective_summary: 该论文提出 TurnOPD 方法，通过自适应 rollout 深度预算和渐进式回合归一化损失预算，解决长程智能体同策略蒸馏中的低效问题。在
-  ALFWorld、WebShop 和 Multi-Hop Search 任务上，TurnOPD 在同等训练时间下取得了更优的验证准确率。
-event_type: framework_tools
+tldr: TurnOPD 是一种面向长周期智能体训练的逐轮预算策略，通过自适应回滚深度预算和渐进式轮归一化损失预算解决了传统在线策略蒸馏中尾部回合浪费算力和深层决策轮训练不足的问题。
+objective_summary: 该论文识别了在线策略蒸馏（OPD）在长周期智能体任务中的两个低效问题：完整轨迹回滚在尾部回合提供弱且噪声大的 KL 监督信号而浪费算力，以及轨迹级
+  KL 目标将大部分损失集中在浅层 token 上导致深层决策轮训练不足。作者提出 TurnOPD，包含自适应回滚深度预算和渐进式轮归一化损失预算两个控制器，在
+  ALFWorld、WebShop 和 Multi-Hop Search 三个基准上使用任务专用教师模型进行实验，验证了该方法在相同训练时间预算下取得更优的验证准确率。
+event_type: application_landing
 epistemic_status: theoretical_claim
 entities:
   companies: []
   technologies:
   - TurnOPD
   - On-Policy Distillation
-  - KL divergence
-  - Agent Training
+  - ALFWorld
+  - WebShop
+  - Multi-Hop Search
   key_people: []
 key_logic_flow:
-- TurnOPD 识别出 vanilla 同策略蒸馏的两个低效问题：完整回合 rollout 在尾部步骤浪费资源，以及回合级 KL 损失集中在浅层 token 上导致深层决策回合训练不足。
-- TurnOPD 提出自适应 rollout 深度预算控制器，基于探针回合统计数据动态决定 rollout 长度，避免尾部无效计算。
-- TurnOPD 提出渐进式回合归一化损失预算控制器，将 KL 权重从 token 级逐步转向回合平衡监督。
-- 在 ALFWorld、WebShop 和 Multi-Hop Search 三个长程智能体任务上，TurnOPD 在相同壁钟训练预算下超越了 vanilla OPD
+- 在线策略蒸馏（OPD）通过让学生智能体在其自身轨迹上模仿更强的教师策略来训练学生策略，但应用于长周期智能体任务时探索尚不充分。
+- 论文识别了两个关键低效问题：完整轨迹回滚在尾部回合浪费算力，以及轨迹级 KL 损失将大部分损失集中在浅层 token 上。
+- TurnOPD 提出了自适应回滚深度预算控制器，利用探针式回合统计来决定每轮的回滚长度。
+- TurnOPD 还提出了渐进式轮归一化损失预算控制器，逐步将 KL 权重从 token 级别转向回合平衡的监督方式。
+- 在 ALFWorld、WebShop 和 Multi-Hop Search 三个长周期任务上的实验表明，TurnOPD 在相同训练时间预算下取得了超越传统 OPD
   的验证准确率。
 specialized_tags:
   paper:
@@ -62,6 +65,18 @@ specialized_tags:
     researchArea: AI
     methodType: RL-based
 extract_result: success
+object_mentions:
+- object_type: model
+  name: TurnOPD
+  canonical_name: TurnOPD
+  url: https://arxiv.org/abs/2607.05804
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - TurnOPD 是一种逐轮预算策略，用于长周期智能体的高效在线策略蒸馏。
+  - TurnOPD 包含两个预算控制器：自适应回滚深度预算和渐进式轮归一化损失预算。
+  - 实验表明 TurnOPD 在相同训练时间预算下比传统 OPD 取得更优的验证准确率。
+  article_id: 6d5d7f7ec402dcad
 ---
 
 # Computer Science > Artificial Intelligence

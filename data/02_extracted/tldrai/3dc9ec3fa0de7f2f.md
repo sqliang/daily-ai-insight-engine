@@ -13,9 +13,10 @@ id: 3dc9ec3fa0de7f2f
 manifest_dates:
 - '2026-07-02'
 source_type: news_media
-tldr: OpenAI 推出 GeneBench-Pro，用于测试 AI 代理在计算生物学中的研究判断能力
-objective_summary: OpenAI 于 2026 年 7 月发布了 GeneBench-Pro 基准测试，包含 129 个合成数据问题，涵盖基因组学、定量生物学和转化医学领域，用于评估
-  AI 代理在计算生物学中处理模糊性、修正假设和做出分析判断的能力。该基准通过合成数据生成确保因果结构已知，并经过外部领域专家审核。
+tldr: OpenAI 发布 GeneBench-Pro 基准测试，包含 129 个合成构造问题，用于评估 AI 智能体在计算生物学中的高阶科学判断能力，包括处理模糊性、修正假设和选择正确分析路径。
+objective_summary: OpenAI 于 2026 年 7 月 21 日推出 GeneBench-Pro，这是一个面向计算生物学领域的研究级基准测试，用于衡量
+  AI 智能体在模糊性下做出科学判断的能力。该基准包含 129 个合成构造的问题，覆盖基因组学、定量生物学和转化医学，要求模型探索数据、选择分析路径并进行迭代实验。其中
+  82 个问题已送交外部领域专家（包括研究生、博士后、产业科学家和教授）评审以验证其真实性和答案可识别性。
 event_type: framework_tools
 epistemic_status: verified_fact
 entities:
@@ -26,13 +27,35 @@ entities:
   - GeneBench
   key_people: []
 key_logic_flow:
-- OpenAI 发布了 GeneBench-Pro，一个专门测试 AI 代理在计算生物学中做出高阶研究判断能力的基准测试。
-- GeneBench-Pro 包含 129 个问题，覆盖基因组学、定量生物学和转化医学三个领域。
-- 该基准将"研究品味"定义为塑造分析过程的判断链条：数据能支持哪些问题、早期诊断如何改变模型、初始计划何时需要修正。
-- GeneBench-Pro 采用合成数据构建，已知完整的因果结构并直接模拟数据生成过程，避免了历史数据基准中常见的任意性和数值不敏感问题。
-- 82 个问题经过外部领域专家（研究生、博士后、产业科学家和教授）审核，确保问题的现实性和解的可识别性。
-- 专家反馈认为这些问题即使对有经验导师指导的研究生也构成挑战，需要处理数据中的技术和质控问题，而非简单套用现成方法。
+- OpenAI 发布 GeneBench-Pro 基准测试，旨在衡量 AI 智能体在计算生物学中处理模糊性和进行高阶判断的能力。
+- 该基准定义了"研究品味"为塑造分析流程的一系列判断链，包括数据能支持哪些问题、早期诊断如何改变模型或估计量、以及何时需要修正初始计划。
+- GeneBench-Pro 包含 129 个问题，覆盖基因组学、定量生物学和转化医学领域，每个问题提供真实且混乱的数据集、实验上下文和面向下游决策的目标估计量。
+- 为避免传统基准的失败模式，每个问题均通过合成方式构建以确保因果结构已知，通过消融研究验证错误分析路径不会产生通过结果。
+- 82 个问题已送交外部领域专家评审，包括研究生、博士后、产业科学家和教授，以确保问题的真实性和分析方法的适当性。
+- 专家反馈指出，这些问题对研究生而言即使有资深导师的迭代反馈也颇具挑战性，要求对数据质量和潜在陷阱进行深入反思分析。
 extract_result: success
+object_mentions:
+- object_type: project
+  name: GeneBench-Pro
+  canonical_name: GeneBench-Pro
+  url: https://openai.com/index/introducing-genebench-pro/
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - OpenAI 发布 GeneBench-Pro，这是一个研究级基准测试，用于测试模型是否能处理现实计算生物学中需要大量判断的分析任务。
+  - 该基准包含 129 个合成构造的问题，覆盖基因组学、定量生物学和转化医学，要求模型探索数据、选择分析路径并进行迭代实验。
+  - 其中 82 个问题已送交外部领域专家（包括研究生、博士后、产业科学家和教授）评审，以验证问题的真实性和答案可识别性。
+  article_id: 3dc9ec3fa0de7f2f
+- object_type: project
+  name: GeneBench
+  canonical_name: GeneBench
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - GeneBench-Pro 在原有 GeneBench 的基础上扩展，覆盖了更困难、更贴近实际的任务。
+  - GeneBench 是 GeneBench-Pro 的前身基准，新基准在此基础上提升了任务难度和现实性。
+  article_id: 3dc9ec3fa0de7f2f
 ---
 
 # Introducing GeneBench-Pro

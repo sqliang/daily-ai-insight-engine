@@ -16,11 +16,11 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: b25b2eec7bd70aba
 source_type: news_media
-tldr: 贝佐斯创立的 AI 初创公司 Prometheus 获 120 亿美元融资，估值 410 亿美元，目标是构建"通用人工工程师"。
-objective_summary: Jeff Bezos 在 NYT 和 CNBC 报道中披露其 AI 初创公司 Prometheus 的规划。该公司已完成 120
-  亿美元融资，估值 410 亿美元，Bezos 与 Verily 联合创始人 Vik Bajaj 担任联席 CEO。
+tldr: 杰夫·贝佐斯透露其AI初创公司Prometheus的目标是开发"人工通用工程师"，该公司已完成120亿美元融资，估值达410亿美元，目前约有150名员工。
+objective_summary: 贝佐斯在接受《纽约时报》和CNBC采访时披露了其AI初创公司Prometheus的更多信息。该公司致力于开发AI驱动的工程工具，用于机器人、药物设计和制造等领域的实体产品设计。Prometheus已完成120亿美元融资，估值达410亿美元，贝佐斯与Alphabet旗下Verily联合创始人Vik
+  Bajaj共同担任联合CEO，目前员工约150人。
 event_type: capital_movement
-epistemic_status: pr_statement
+epistemic_status: verified_fact
 entities:
   companies:
   - Prometheus
@@ -29,18 +29,40 @@ entities:
   - Alphabet
   - Verily
   technologies:
+  - artificial general engineer
   - AI
   key_people:
   - Jeff Bezos
   - Vik Bajaj
 key_logic_flow:
-- Jeff Bezos 透露其 AI 初创公司名为 Prometheus，目标开发"通用人工工程师"（artificial general engineer）。
-- Prometheus 已筹集 120 亿美元资金，估值达到 410 亿美元。
-- Bezos 与 Alphabet 旗下 Verily 联合创始人 Vik Bajaj 共同担任 Prometheus 联席 CEO。
-- 该公司目前拥有约 150 名员工。
-- Prometheus 将开发 AI 驱动的工程工具，应用于机器人、药物设计和制造业等物理产品开发领域。
-- Bezos 表示其旗下 Blue Origin 等复杂设备制造公司将从 Prometheus 的工具中受益。
+- 杰夫·贝佐斯透露其AI初创公司Prometheus的目标是开发"人工通用工程师"，即AI驱动的工程工具。
+- Prometheus将开发用于机器人、药物设计和制造等行业的实体产品设计工具。
+- 该公司已完成120亿美元融资，估值达到410亿美元。
+- 贝佐斯与Verily联合创始人Vik Bajaj共同担任Prometheus的联合CEO。
+- Prometheus目前拥有约150名员工。
+- 贝佐斯表示Blue Origin等制造复杂设备的公司将受益于Prometheus的技术。
 extract_result: success
+object_mentions:
+- object_type: company
+  name: Prometheus
+  canonical_name: Prometheus
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 贝佐斯透露其AI初创公司Prometheus将致力于开发"人工通用工程师"，用于设计实体产品。
+  - Prometheus已完成120亿美元融资，估值达到410亿美元，目前约有150名员工。
+  - 贝佐斯与Verily联合创始人Vik Bajaj共同担任Prometheus的联合CEO。
+  article_id: b25b2eec7bd70aba
+- object_type: company
+  name: Verily
+  canonical_name: Verily
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Vik Bajaj共同创立了Alphabet旗下健康研究集团Verily，后与贝佐斯共同担任Prometheus的联合CEO。
+  article_id: b25b2eec7bd70aba
 ---
 
 Amazon founder Jeff Bezos says his new AI startup will work toward developing an “artificial general engineer,” according to reports from *The New York Times* and CNBC. The startup, called Prometheus, aims to develop AI-powered engineering tools to aid in the design of physical products.

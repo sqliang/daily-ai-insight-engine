@@ -13,8 +13,8 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: f7b52c6a47eccc6a
 source_type: community_discussion
-tldr: 硅氧烷污染导致ISS饮用水系统有机碳飙升，NASA历时13个月才溯源至宇航员个人护理产品。
-objective_summary: 2008年ISS安装水处理系统后，2010年6月饮用水总有机碳持续上升。NASA经数月排查，确认污染物为来自止汗剂等个人护理产品的硅氧烷分解物DMSD。DMSD在过滤床中积累后被置换，导致有机碳周期性飙升。NASA改用活性炭空气过滤器后引发霉菌问题，最终采用混合方案。
+tldr: 国际空间站（ISS）的水回收系统在2010年出现总有机碳超标，经一年多排查发现污染源是防汗剂等个人护理产品挥发的硅氧烷（siloxane）分解产物DMSD。该物质惰性极强，难以过滤，持续消耗空间站的过滤耗材并损坏设备，NASA至今仍未能彻底解决此问题。
+objective_summary: 2008年11月，NASA在国际空间站上安装了尿液处理组件（Water Processing Assembly），使水回收率从45%提升至80%。2010年6月起，宇航员饮用水中的总有机碳持续上升，逼近3ppm安全上限。经近一年追溯，化学家最终鉴定污染物为二甲基硅烷二醇（DMSD），其来源是空间站舱内防汗剂、湿巾、护发素等个人护理产品挥发的硅氧烷蒸气，在电离辐射下分解后溶于水。DMSD无法被标准过滤手段有效去除，持续缩短多级过滤床和热交换器的寿命，并摧毁了实验性的Sabatier反应器。NASA于2015年引入活性炭过滤方案，但因霉菌问题退化为混合方案，至今未找到根本解决途径。
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
@@ -22,18 +22,55 @@ entities:
   - NASA
   - Boeing
   technologies:
+  - Water Processing Assembly
+  - Urine Processing Assembly
   - DMSD
-  - siloxanes
+  - siloxane
   - Sabatier reactor
+  - total organic carbon
+  - gas chromatograph/mass spectrometer
+  - multifiltration beds
   key_people: []
 key_logic_flow:
-- 2008年11月ISS安装尿液处理装置，将水回收率从45%提升至80%。
-- 2010年6月饮用水中总有机碳(TOC)持续上升，地面实验室无法识别污染物种类。
-- 经Boeing实验室新参考库鉴定，污染物为二甲基硅烷二醇(DMSD)，来自个人护理产品中的硅氧烷分解产物。
-- DMSD在离子交换过滤床中积累后易被其他物质置换，导致TOC周期性飙升的假象。
-- 2015年NASA改用活性炭空气过滤器捕捉硅氧烷蒸气，但导致霉菌爆发，最终采用活性炭与HEPA混合方案。
-- 该问题在火星任务情景中会跟随船员在不同栖息地间重复出现，可能引发危险决策失误。
+- 2008年11月，国际空间站安装了800公斤的尿液处理组件（Water Processing Assembly），将水回收率从45%提升至80%。
+- 2010年6月起，饮用水总有机碳持续上升，至秋季逼近3ppm安全上限，威胁到任务延续。
+- 由于空间站不具备分析化学条件，水样本通过返航的Soyuz飞船送回地球，耗时数月才运抵休斯顿实验室。
+- 化学家先未能识别污染物，后由Boeing团队借助更新的质谱库鉴定出为二甲基硅烷二醇（DMSD），属于硅氧烷类化合物。
+- 污染源是宇航员的防汗剂、湿巾、护发素等个人护理产品挥发的硅氧烷蒸气，在舱内电离辐射下分解为水溶性的DMSD。
+- DMSD惰性极强，能通过大多数过滤系统，但会附着并破坏催化剂床和热交换器亲水涂层，导致Sabatier反应器仅运行1800升就报废。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Water Processing Assembly
+  canonical_name: ISS Water Processing Assembly
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 2008年11月，Water Processing Assembly抵达国际空间站，帮助空间站将水回收率从45%提升至80%。
+  - 2010年6月，在Water Processing Assembly上线13个月后，宇航员饮用水中开始出现总有机碳超标。
+  - 该装置包含多级过滤床，DMSD在过滤树脂上弱吸附后被其他物质置换，导致有机碳读数周期性飙升。
+  article_id: f7b52c6a47eccc6a
+- object_type: product
+  name: Urine Processing Assembly
+  canonical_name: ISS Urine Processing Assembly
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 2008年11月，800公斤的Urine Processing Assembly抵达国际空间站，用于处理宇航员的尿液。
+  - 该装置使空间站首次在轨道栖息地中实现大规模水回收，将回收率提升至80%。
+  article_id: f7b52c6a47eccc6a
+- object_type: product
+  name: Sabatier reactor
+  canonical_name: ISS Sabatier Reactor
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - DMSD与宇航员尿液中的二甲基砜共同作用，导致空间站的实验性Sabatier反应器仅运行1800升后即报废。
+  - 硅氧烷最终会在催化表面沉积一层玻璃状物质，有效摧毁任何活性表面，Sabatier反应器因此失效。
+  article_id: f7b52c6a47eccc6a
 ---
 
 # L'Affaire Siloxane

@@ -13,28 +13,44 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 8acc050cfcf32c0b
 source_type: news_media
-tldr: 外媒称Anthropic向NSA派驻工程师协助使用其网络安全AI模型Mythos
-objective_summary: Financial Times援引匿名消息称，Anthropic已向美国国家安全局派驻约6名工程师，协助其将前沿网络安全AI模型Mythos用于情报收集和网络攻击行动。此前Axios在4月报道NSA已在Mythos被联邦禁用的情况下使用该模型。
+tldr: 据《金融时报》援引匿名信源报道，Anthropic 已向美国国家安全局（NSA）部署约六名工程师，协助其前沿网络安全 AI 模型 Mythos 在网络行动中的应用，尽管此前国防部因
+  Anthropic 拒绝用于大规模监控和自主武器而将其列为供应链风险。
+objective_summary: 《金融时报》援引匿名消息称，Anthropic 已向 NSA 派驻约六名工程师，协助该情报机构将 Mythos 模型用于特定网络行动场景。报道未明确工程师或模型是否已实际投入黑客行动。此前
+  Axios 在四月曾报道 NSA 已在违反联邦禁令的情况下使用 Mythos，该禁令源于国防部将 Anthropic 列为供应链风险。NSA 拒绝证实或否认该报道，Anthropic
+  未回应置评请求。
 event_type: application_landing
 epistemic_status: rumor_leak
 entities:
   companies:
   - Anthropic
-  - National Security Agency
+  - National Security Agency (NSA)
   - Financial Times
   - Axios
+  - TechCrunch
   - Department of Defense
   technologies:
   - Mythos
   key_people: []
 key_logic_flow:
-- Financial Times援引匿名消息称，Anthropic已向美国国家安全局派驻约6名工程师，协助其使用Mythos模型进行网络情报收集和攻击行动。
-- 目前尚不清楚这些工程师或Mythos模型是否已被积极用于NSA的黑客行动中。
-- Axios在4月曾报道NSA已在使用Mythos，尽管该模型因联邦禁令被禁止使用。
-- 美国国防部将Anthropic列为供应链风险，原因是Anthropic拒绝让政府将其模型用于大规模国内监控和自主武器系统。
-- 各国政府正争相获取Mythos的访问权限，而Anthropic出于对其网络安全能力被滥用的担忧，已限制该模型的访问。
-- NSA发言人拒绝对该报道置评，Anthropic也未回应置评请求。
+- Anthropic 已向 NSA 派驻约六名工程师，协助该机构将 Mythos 模型用于网络行动。
+- Mythos 是 Anthropic 开发的网络安全前沿 AI 模型，Anthropic 曾因担心被利用发现安全漏洞而限制其访问。
+- Axios 在四月曾报道 NSA 已在违反联邦禁令的情况下使用 Mythos。
+- 联邦禁令源于国防部将 Anthropic 列为供应链风险，原因是 Anthropic 拒绝让政府将其模型用于大规模国内监控和自主武器。
+- NSA 的职责包括通过窃听、海底电缆、企业合作等手段收集情报，以及对外国对手实施进攻性网络攻击。
+- 各国政府正在争相获取 Mythos 的访问权限，但 Anthropic 此前以安全为由限制了模型的分发。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Mythos
+  canonical_name: Anthropic Mythos
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Anthropic 已向 NSA 派驻约六名工程师，协助该情报机构将其前沿网络安全 AI 模型 Mythos 用于特定应用场景。
+  - Anthropic 声称不得不限制 Mythos 的访问权限，担心其网络安全能力可能被利用来发现安全漏洞并实施黑客攻击。
+  - 各国政府正在争相获取 Mythos 的访问权限，尽管此前国防部因 Anthropic 拒绝合作而将其列为供应链风险。
+  article_id: 8acc050cfcf32c0b
 ---
 
 Anthropic has deployed around half-a-dozen engineers to the National Security Agency to help its spies use the company’s frontier cybersecurity AI model, Mythos, Financial Times reported, citing anonymous sources.

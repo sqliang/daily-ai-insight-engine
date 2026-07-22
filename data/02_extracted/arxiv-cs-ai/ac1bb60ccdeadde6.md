@@ -31,9 +31,8 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: ac1bb60ccdeadde6
 source_type: academic_paper
-tldr: Lung-R1 通过肺部知识图谱 LungKG 引导 LLM 进行肺部疾病诊断推理，在 EMR 诊断任务上达到 SOTA。
-objective_summary: 研究人员构建了首个结构化肺部知识图谱 LungKG（5.9 万节点、16.4 万边），并基于此训练了 Lung-R1 模型。该模型通过
-  KG 约束的推理链构建和强化学习训练，在 20 个系统的评估中，EMR 诊断得分达 4.3583，超越非 Lung-R1 基线 0.1476 分。
+tldr: 论文提出Lung-R1模型和LungKG知识图谱，通过知识图谱引导的强化学习方法训练大语言模型，在肺部疾病诊断推理任务上达到最先进水平，EMR诊断得分4.3583。
+objective_summary: 该论文针对大语言模型在肺部疾病知识问答上表现良好但缺乏基于电子病历的病例级诊断推理能力的问题，首先构建了LungKG——首个结构化肺部知识图谱，包含59,038个节点和164,308条边，覆盖15种实体类型和112种关系类型。在此基础上提出Lung-R1模型，通过知识图谱约束的推理链构建和知识图谱引导的强化学习进行训练。在包含20个系统的评估中，Lung-R1-14B在选择题、肺部知识问答和EMR诊断三项任务上均达到最先进水平，EMR诊断得分为4.3583。
 event_type: framework_tools
 epistemic_status: theoretical_claim
 entities:
@@ -41,19 +40,38 @@ entities:
   technologies:
   - LLM
   - Knowledge Graph
-  - LungKG
-  - Lung-R1
   - Reinforcement Learning
-  - KG-constrained reasoning
+  - EMR
+  - QA
   key_people: []
 key_logic_flow:
-- 论文定义了肺部知识与病例级诊断推理之间的差距为「肺知识到诊断鸿沟」（Pulmonary Knowledge-to-Diagnosis Gap）。
-- 研究团队构建了 LungKG，这是首个结构化肺部知识图谱，包含 59,038 个节点和 164,308 条边，覆盖 15 种实体类型和 112 种关系类型。
-- 基于 LungKG，团队提出了 Lung-R1，一种通过 KG 约束的推理链构建和 KG 引导的强化学习训练的肺部 LLM 诊断模型。
-- 在包含 20 个系统的评估中，Lung-R1-14B 在选择题、肺部问答和 EMR 诊断三项任务上均达到最先进水平。
-- Lung-R1-14B 的 EMR 诊断得分为 4.3583，超过最强非 Lung-R1 基线 0.1476 分。
-- 实验结果证明了 LungKG 引导的训练方法对基于 EMR 的肺部诊断的有效性。
+- 论文定义了"肺部知识到诊断的鸿沟"，即大语言模型在肺部知识问答上表现良好，但在基于电子病历的病例级诊断推理中仍存在不足。
+- 研究人员构建了LungKG，这是首个结构化的肺部知识图谱，包含59,038个节点和164,308条边，覆盖15种实体类型和112种关系类型。
+- 基于LungKG，论文提出了Lung-R1模型，通过知识图谱约束的推理链构建和知识图谱引导的强化学习进行训练。
+- 在包含20个系统的评估中，Lung-R1-14B在选择题、肺部知识问答和EMR诊断三项任务上均达到最先进的性能水平。
+- Lung-R1-14B的EMR诊断得分为4.3583，超过最强的非Lung-R1基线0.1476分，验证了知识图谱引导训练对基于电子病历的肺部诊断的价值。
 extract_result: success
+object_mentions:
+- object_type: model
+  name: Lung-R1
+  canonical_name: Lung-R1
+  url: https://arxiv.org/abs/2606.11675
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 基于LungKG，论文提出了Lung-R1模型，通过知识图谱约束的推理链构建和知识图谱引导的强化学习进行训练。
+  - 在20个系统的评估中，Lung-R1-14B在选择题、肺部知识问答和EMR诊断三项任务上均达到最先进水平，EMR诊断得分为4.3583。
+  article_id: ac1bb60ccdeadde6
+- object_type: project
+  name: LungKG
+  canonical_name: LungKG
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - LungKG是首个结构化的肺部知识图谱，包含59,038个节点和164,308条边，覆盖15种实体类型和112种关系类型。
+  - LungKG既是可复用的肺部知识资源，也是LungKG引导的模型适配的基础，服务于诊断知识组织和记录驱动的推理。
+  article_id: ac1bb60ccdeadde6
 ---
 
 # Computer Science > Artificial Intelligence

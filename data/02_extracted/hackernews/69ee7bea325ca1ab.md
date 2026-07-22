@@ -16,30 +16,42 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 69ee7bea325ca1ab
 source_type: community_discussion
-tldr: HackerRank开源ATS评分系统测试：同一简历得分66-99，LLM评分极不稳定
-objective_summary: 作者测试HackerRank开源的简历评分工具hiring-agent，发现同一份简历在100次运行中得分从66到99不等。技术检查项评分一致，项目经验等主观项波动极大。降低温度或换用Gemini、Claude
-  Opus等模型仍无法根本解决评分不稳定性问题。
+tldr: HackerRank 开源了 ATS 工具 hiring-agent，作者测试发现同一份简历的 LLM 评分在 66 到 99 之间随机波动，项目评分存在巨大随机性，而工作经验类目无论资历均给满分，暴露出
+  LLM 筛选简历的根本性不可靠。
+objective_summary: HackerRank 将其 ATS 工具开源为 hiring-agent 项目（GitHub 仓库 interviewstreet/hiring-agent），使用
+  LLM 对简历进行自动化评分。作者 Dan 对同一份简历进行了上百次重复测试，发现评分结果在 66 到 99 之间大幅波动，项目评分类目存在极高随机性，技术技能检查则几乎恒定。工作经验类目因提示词缺乏评分锚点，导致初级和资深工程师均获得满分
+  25 分。即使切换为 Gemini 或 Claude Opus 4.8 等模型，评分的不确定性依然存在。
 event_type: framework_tools
 epistemic_status: verified_fact
 entities:
   companies:
   - HackerRank
-  - interviewstreet
   technologies:
-  - ATS
   - LLM
-  - gemma3:4b
+  - Gemma 3
   - Gemini
   - Claude Opus 4.8
   key_people: []
 key_logic_flow:
-- HackerRank开源了其简历评分工具hiring-agent，该工具使用LLM对简历进行六维度评分并给出总分。
-- 作者将同一份简历重复运行100次，发现得分在66到99之间大幅波动，导致基于固定阈值的筛选完全依赖运气。
-- 技术技能等客观检查项评分一致性很高（98/100次拿到8/10），但项目经验等需要主观判断的类别评分波动极大。
-- 即使将温度参数降至0或换用Gemini、Claude Opus等更先进模型，评分不稳定的问题仍然存在，说明这是LLM评分系统的根本性设计缺陷。
-- 工作经验评分维度仅有两行简短标准，缺乏具体锚定值，导致初级实习生和资深工程师都获得满分25/25，完全失去区分度。
-- 工具将65%的权重分配给开源贡献和项目经验，严重低估了资深工程师的实际工作经验价值。
+- HackerRank 将其内部使用的 ATS 工具开源为 hiring-agent 项目，代码托管于 GitHub 仓库 interviewstreet/hiring-agent。
+- 该工具利用 LLM 对简历进行自动化评分，评分维度包括开源贡献（35 分）、个人项目（30 分）、工作经验（25 分）和技术技能（10 分），另有最高 20 分的额外奖励分。
+- 作者使用同一份简历运行上百次测试后发现，评分结果在 66 到 99 之间大幅波动，项目评分类目存在极高随机性，但技术技能检查几乎恒定。
+- 工作经验类目的 LLM 提示词仅有两行内容，缺乏详细评分锚点和示例，导致无论初级工程师还是资深架构师均获得满分 25 分，评分结果完全无法区分候选人的资质层级。
+- 即使切换为 Gemini 或 Claude Opus 4.8 等更强大的模型，项目评分的不确定性依然存在，说明 LLM 输出非确定性是设计层面的根本性问题，而非模型性能的差异。
 extract_result: success
+object_mentions:
+- object_type: project
+  name: interviewstreet/hiring-agent
+  canonical_name: interviewstreet/hiring-agent
+  url: https://github.com/interviewstreet/hiring-agent
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - HackerRank 将其 ATS 工具开源为 hiring-agent 项目，代码托管于 GitHub 仓库 interviewstreet/hiring-agent，在
+    LinkedIn 和 Reddit 上获得了数百次点赞和广泛讨论。
+  - 该工具将简历 PDF 解析为文本，调用 LLM 六次提取结构化信息，再从 GitHub 档案获取候选人仓库信息作为补充上下文，最后统一评分。
+  - 作者用同一份简历对 hiring-agent 运行了上百次测试，评分结果在 66 到 99 之间大幅波动，项目评分存在极大随机性，而技术技能检查几乎恒定。
+  article_id: 69ee7bea325ca1ab
 ---
 
 # HackerRank open sourced its ATS. My resume scored 90/100. Oh wait 74/100. No — 88/100. Actually 83/100.

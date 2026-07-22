@@ -7,6 +7,7 @@ published: '2026-07-19'
 created: '2026-07-20'
 manifest_dates:
 - '2026-07-20'
+- '2026-07-21'
 description: 'Title: Free AI Tools: Free browser tools for everyday tasks, no login
   | Product Hunt'
 tags:

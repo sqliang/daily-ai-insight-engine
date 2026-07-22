@@ -31,22 +31,48 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: b8fefd5fda42649d
 source_type: academic_paper
-tldr: 论文证明聚合指标会错误排序科学候选方案，提出搜索纪律协议作为外部控制循环
-objective_summary: arXiv 发表论文，证明当科学有效性是多维的但验证仅使用单一聚合指标时，聚合指标可能将科学上无效的候选方案排在第一位。作者在生态系统人口统计模型的火任务上演示了该反转现象，并提出搜索纪律协议作为外部控制循环，在代理决策后审计候选方案的分解行为。
+tldr: 该论文发现，在长周期自主研究智能体中，基于单一聚合指标对多维科学候选方案进行排名时，可能将结构上错误的候选方案排在首位，产生"全局分数提升但底层结构反转"的反直觉现象。作者提出将决策权转移至外部控制回路的"搜索纪律"协议，基于分组候选效果证据进行审计而非依赖聚合分数。
+objective_summary: 来自 arXiv 的学术论文 Search Discipline for Long-Horizon Research Agents
+  揭示了自主研究智能体在评估多维科学候选方案时的"聚合误导"问题：当验证指标是一个单一聚合值（如全局分数）而候选方案的有效性具有多维结构时，该聚合值可能将结构上错误的候选方案排在首位，使得全局分数看似提升但底层区域结构已然反转。研究者在生态系统人口模型（Ecosystem
+  Demography model）的火灾模拟任务中验证了这一现象——全局得分最高的候选方案导致北方保护区崩溃，而得分稍低的方案却能保护这些区域。论文提出了一种"搜索纪律"协议，将决策权从生成候选方案的智能体转移至外部控制回路，由该审计环路基于分组候选效果证据而非聚合分数进行决策。
 event_type: framework_tools
-epistemic_status: verified_fact
+epistemic_status: theoretical_claim
 entities:
   companies: []
-  technologies: []
+  technologies:
+  - Ecosystem Demography model
   key_people: []
 key_logic_flow:
-- 自主研究代理使用聚合指标来评估科学候选方案，但当科学有效性存在于分解结构中时，聚合指标可能将错误的候选方案排在第一位。
-- 指标提升的同时底层结构可能发生反转，导致基于该指标做出的决策接受了一个暗中破坏模型的候选方案。
-- 作者在生态系统人口统计模型（Ecosystem Demography model）的火任务上演示了这一反转现象：全局分数接近的两个候选方案中，高分方案导致受保护的北方森林区域崩溃，而次优方案则保全了它们。
-- 论文指出不应将最终决策权交给生成候选方案的代理，因为优化分数的代理最不可能发现分数本身的错误。
-- 建议将决策移至外部控制循环，在代理决策后审计每个候选方案的分解行为，可以降级代理本应接受的候选方案，也可以重新打开代理已声明完成的运行。
-- 该论文的核心贡献是发现了聚合指标反转现象本身，并提出了基于可审查的候选效果证据而非分数进行决策的搜索纪律协议。
+- 论文指出，当自主研究智能体使用单一聚合指标评估多个科学候选方案时，该聚合指标可能将实际上结构错误的候选方案排在第一。
+- 这种"聚合误导"具体表现为全局分数提升但底层区域结构发生反转，导致基于全局分数的决策可能默默破坏模型的有效性。
+- 研究者在生态系统人口模型的火灾模拟任务中验证了该现象：全局得分最高的候选方案导致北方保护区崩溃，而得分稍低的方案却能保护这些区域。
+- 论文认为这一决策不应由生成候选方案的同一智能体负责，因为优化聚合分数的智能体最不可能发现分数本身的错误。
+- 论文提出"搜索纪律"协议（search-discipline protocol），将决策权移至外部控制回路，由该审计环路基于分组候选效果证据进行判断。
+- 该外部控制回路可以降级智能体本应接受的候选方案，也可以重新开启智能体已声明完成的任务运行。
 extract_result: success
+object_mentions:
+- object_type: paper
+  name: Search Discipline for Long-Horizon Research Agents
+  canonical_name: Search Discipline for Long-Horizon Research Agents
+  url: https://arxiv.org/abs/2606.11522
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 该论文发表在 arXiv 上，揭示了自主研究智能体在评估多维科学候选方案时使用单一聚合指标可能导致错误排名的"聚合误导"问题。
+  - 论文的核心贡献是发现了聚合排名与底层结构反转之间的矛盾现象，并提出了一种名为"搜索纪律"的解决方案协议。
+  - 研究者通过生态系统人口模型的火灾模拟任务，实证展示了全局分数看似正常但底层保护区域已被破坏的具体案例。
+  article_id: b8fefd5fda42649d
+- object_type: project
+  name: search-discipline protocol
+  canonical_name: Search Discipline Protocol
+  url: null
+  confidence: medium
+  article_role: primary_subject
+  evidence_snippets:
+  - 搜索纪律协议是一个外部控制回路，它在智能体完成决策后审计每个候选方案的分组行为，而非依赖单一聚合分数。
+  - 该协议可以降级智能体本应接受的候选方案，也可以重新开启智能体已声明完成的任务。
+  - 论文将搜索纪律定位为基于可审查的候选效果证据进行决策的机制，而非由生成候选方案的同一智能体自我评判。
+  article_id: b8fefd5fda42649d
 ---
 
 # Computer Science > Artificial Intelligence

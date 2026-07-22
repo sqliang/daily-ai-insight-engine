@@ -32,27 +32,25 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: bcb8be308ae51c0d
 source_type: academic_paper
-tldr: 研究图世界模型中预测误差的累积问题，提出拓扑感知误差边界及Error-Aware GWM训练方法
-objective_summary: 该论文研究了图世界模型（GWM）在规划中的预测误差累积问题。作者Xinyuan Song和Zekun Cai为固定边和动态边GWM建立了统一的状态-动作转移框架，推导了拓扑感知误差边界，并提出了结合谱正则化、展开一致性和关键节点权重的Error-Aware
-  GWM训练目标，
+tldr: 该论文研究了图世界模型（GWM）在规划任务中的 rollout 误差累积问题，提出了固定边和动态边场景下的拓扑感知误差界，并设计了 Error-Aware
+  GWM 训练方法来提升长程稳定性。
+objective_summary: 该论文将 rollout 误差分析从向量值状态扩展到图结构环境，在统一的状态-动作转移框架下推导了固定边和动态边 GWM 的拓扑感知误差界。固定边场景中，长程节点误差分解为图谱半径决定的拓扑因子和层谱范数决定的模型因子；动态边场景中引入联合节点-边误差算子刻画特征预测与结构预测的相互反馈。基于误差界分析，论文提出了结合谱正则化、rollout
+  一致性和关键节点加权的 Error-Aware GWM 训练目标。在合成图拓扑和异构智能体-图测试床上的实验结果显示，Error-Aware GWM 在不牺牲单步准确率的前提下提升了长程稳定性。
 event_type: framework_tools
 epistemic_status: theoretical_claim
 entities:
   companies: []
   technologies:
-  - Graph World Models
-  - GWM
+  - Graph World Models (GWM)
   - Error-Aware GWM
-  key_people:
-  - Xinyuan Song
-  - Zekun Cai
+  key_people: []
 key_logic_flow:
-- 论文指出大多数世界模型（World Model）的展开误差分析假设向量化状态和标量误差放大，而许多规划环境天然具有图结构，需要拓扑感知的分析方法。
-- 为固定边和动态边GWM建立了统一的状态-动作转移框架，并分别推导了拓扑感知的误差传播边界。
-- 固定边展开中，长程节点误差可分解为拓扑因子（由图谱半径决定）和模型因子（由层谱范数决定）两个独立分量。
-- 动态边展开中引入了联合节点-边误差算子，揭示了特征预测与结构预测之间的反馈放大效应，说明边缘误差会放大后续消息传递。
-- 基于理论边界提出了Error-Aware GWM训练目标，融合了谱正则化、展开一致性约束和关键节点加权三种机制。
-- 实验证明展开误差和规划遗憾随预测步数增长而增大，结构动态变化时必须使用动态边训练，Error-Aware GWM能提升长程稳定性且不牺牲单步精度。
+- 该论文将图世界模型（GWM）的 rollout 误差分析从向量值状态扩展到图结构环境，并建立了统一的状态-动作转移分析框架。
+- 对于固定边 rollout，推导出长程节点误差可分解为拓扑因子（由图谱半径决定）和模型因子（由层谱范数决定）两部分。
+- 对于动态边 rollout，论文引入联合节点-边误差算子，捕获特征预测与结构预测之间的反馈循环，揭示了边误差会放大未来消息传递的条件。
+- 基于误差界分析，论文提出 Error-Aware GWM 训练目标，该目标同时使用谱正则化、rollout 一致性和关键节点加权三个组成部分。
+- 在合成图拓扑和异构智能体-图测试床上的实验表明，rollout 误差和规划遗憾度随着预测步数增加而增长，且动态边训练在结构演化场景中是必要的。
+- Error-Aware GWM 方法在不牺牲单步预测准确率的前提下，有效提升了长程自回归规划的稳定性。
 specialized_tags:
   paper:
     paperTitle: Understanding Rollout Error in Graph World Models
@@ -66,6 +64,28 @@ specialized_tags:
     researchArea: Graph
     methodType: theoretical
 extract_result: success
+object_mentions:
+- object_type: paper
+  name: Understanding Rollout Error in Graph World Models
+  canonical_name: Understanding Rollout Error in Graph World Models
+  url: https://arxiv.org/abs/2606.27780
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 该论文研究了图世界模型（GWM）在规划任务中的 rollout 误差累积问题，并提出了拓扑感知误差界。
+  - 论文提出了 Error-Aware GWM 训练目标，结合了谱正则化、rollout 一致性和关键节点加权以提升长程稳定性。
+  - 实验在合成图拓扑和异构智能体-图测试床上验证了 Error-Aware GWM 在长程稳定性上的改进效果。
+  article_id: bcb8be308ae51c0d
+- object_type: model
+  name: Error-Aware GWM
+  canonical_name: Error-Aware GWM
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Error-Aware GWM 是一种结合谱正则化、rollout 一致性和关键节点加权的训练目标。
+  - 实验表明 Error-Aware GWM 在不牺牲单步准确率的前提下提升了长程规划稳定性。
+  article_id: bcb8be308ae51c0d
 ---
 
 # Computer Science > Artificial Intelligence

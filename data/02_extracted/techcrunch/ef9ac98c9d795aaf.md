@@ -15,30 +15,63 @@ id: ef9ac98c9d795aaf
 manifest_dates:
 - '2026-06-30'
 source_type: news_media
-tldr: Proception 与特斯拉达成和解并完成 1100 万美元种子轮融资，专注高灵巧度机器人手研发
-objective_summary: 前特斯拉 Optimus 技术负责人 Jay Li 创办的 Proception 与特斯拉就商业机密诉讼达成和解。该公司同期宣布完成
-  1100 万美元种子轮融资，由 First Round Capital 领投，Y Combinator 和 BoxGroup 参投，
+tldr: 前特斯拉Optimus技术负责人Jay Li创办的机器人手部公司Proception，与特斯拉的商业机密诉讼达成和解，同时宣布完成1100万美元种子轮融资并开始交付首批高灵巧度机器人手。
+objective_summary: 2026年6月29日，Proception创始人Jay Li宣布与特斯拉就商业机密诉讼达成和解，特斯拉已于当月早些时候撤诉。同日，Proception宣布完成1100万美元种子轮融资，由First
+  Round Capital领投，Y Combinator和BoxGroup参投，并开始向研究机构和机器人公司交付首批高灵巧度机器人手，同时开放更广泛订单。Li认为远程操作员训练方法存在触觉反馈缺失和机器人数量受限的缺陷，Proception的数据收集方式有望更快解决灵巧操作难题。
 event_type: capital_movement
 epistemic_status: verified_fact
 entities:
   companies:
-  - Proception
   - Tesla
+  - Proception
   - First Round Capital
   - Y Combinator
   - BoxGroup
-  - Northwestern University
   technologies: []
   key_people:
   - Jay Li
   - Elon Musk
   - Kevin Lynch
 key_logic_flow:
-- 前特斯拉 Optimus 项目技术负责人 Jay Li 被前雇主指控窃取商业机密以创办 Proception，双方经过数月法律交锋后于本月达成和解，特斯拉撤销诉讼。
-- Proception 宣布完成 1100 万美元种子轮融资，由 First Round Capital 领投，Y Combinator 和 BoxGroup 参投。
-- Proception 已开始向研究机构和机器人公司交付首批高灵巧度机械手，并开放更大规模订单，目标是成为其他机器人公司的手部供应商。
-- Jay Li 认为当前机器人手部训练主要依赖遥操作方式，但该方式存在遥操作者无法获得触觉反馈且受限于可用机器人数量两大缺陷，Proception 采用不同的数据采集方法以加速研发。
+- 前特斯拉Optimus人形机器人项目技术负责人Jay Li创办了机器人手部公司Proception，被特斯拉起诉窃取商业机密。
+- 经过数月法律交锋，Proception与特斯拉达成和解，特斯拉于2026年6月初撤诉。
+- Proception宣布完成1100万美元种子轮融资，由First Round Capital领投，Y Combinator和BoxGroup参投。
+- Proception开始向研究人员和机器人公司交付首批高灵巧度机器人手，并开放更广泛订单。
+- Li认为当前行业普遍使用的远程操作员训练方法存在缺陷——操作员无法接收触觉反馈且受限于可用机器人数量。
+- Proception的目标是成为机器人的手部供应商，让其他公司无需自行投入资源研发灵巧操作技术。
 extract_result: success
+object_mentions:
+- object_type: company
+  name: Proception
+  canonical_name: Proception
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Proception由前特斯拉Optimus技术负责人Jay Li创办，被特斯拉起诉窃取商业机密后达成和解。
+  - Proception宣布完成1100万美元种子轮融资，由First Round Capital领投，Y Combinator和BoxGroup参投。
+  - Proception开始向研究人员和机器人公司交付首批高灵巧度机器人手，并开放更广泛订单。
+  article_id: ef9ac98c9d795aaf
+- object_type: product
+  name: Proception high-dexterity robotic hand
+  canonical_name: Proception高灵巧度机器人手
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Proception开始向研究人员和机器人公司交付首批高灵巧度机器人手，并开放更广泛订单。
+  - 公司目标是成为其他公司的手部供应商，让对方无需自行研发灵巧操作技术。
+  article_id: ef9ac98c9d795aaf
+- object_type: project
+  name: Tesla Optimus
+  canonical_name: Tesla Optimus
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Jay Li曾是Tesla Optimus人形机器人项目的技术负责人，这是其被起诉的背景。
+  - Elon Musk曾表示机器人手部是尚未解决的最大工程问题之一，Optimus机器人可能数年内进入工厂工作。
+  article_id: ef9ac98c9d795aaf
 ---
 
 Jay Li doesn’t recommend getting sued by Tesla if you’re trying to get a startup off the ground. But he does think his company, Proception, might be better off for having endured the experience.

@@ -16,43 +16,57 @@ tags:
 - clippings
 id: 4eaeb8d96a1a9adf
 source_type: news_media
-tldr: JAX团队发布《How To Scale Your Model》在线技术书籍，系统讲解TPU/GPU上LLM训练与推理的并行化策略与性能优化方法。
-objective_summary: Google JAX团队在jax-ml.github.io上线了《How To Scale Your Model》在线技术书籍。全书共12章，从roofline分析模型出发，深入讲解TPU/GPU硬件架构、矩阵分片乘法、Transformer参数量与FLOPs计算，
+tldr: JAX-ML 团队发布了一本名为《Scaling Book》的在线技术指南，系统讲解如何在 TPU 和 GPU 上规模化训练与服务 Transformer
+  大语言模型。全书共 12 章，涵盖 roofline 分析、TPU 架构、分片矩阵乘法、Transformer 参数量与 FLOPs 计算、四种并行策略（数据/张量/流水线/专家）以及
+  JAX 编程与性能剖析等实操内容。
+objective_summary: JAX-ML 团队于 2026 年 7 月前在 jax-ml.github.io 发布了《How To Scale Your
+  Model》技术指南（即 Scaling Book），面向具备 Transformer 和 JAX 基础知识的读者。全书分为三大部分共 12 章，从 roofline
+  分析基础讲起，详细拆解 TPU 与 GPU 的硬件工作原理、分片矩阵乘法、Transformer 各模块的参数量和 FLOPs 统计，然后深入讲解训练阶段的四种并行方案（数据并行、张量并行、流水线并行、专家并行）以及推理阶段的
+  KV 缓存与解耦服务，最后通过 LLaMA 3 实战案例和 JAX 性能剖析工具帮助读者将理论落地。该书强调强缩放（strong scaling）目标，即增加芯片数应带来吞吐量的线性增长，并指出理解通信与计算瓶颈是设计高效并行方案的关键。
 event_type: framework_tools
 epistemic_status: verified_fact
 entities:
   companies:
   - Google
-  - Meta
+  - NVIDIA
+  - JAX-ML
   technologies:
-  - JAX
   - TPU
   - GPU
+  - JAX
   - Transformer
-  - XLA
+  - LLM
   - FSDP
-  - Megatron
-  - ZeRO
-  - Pipeline Parallelism
-  - Tensor Parallelism
-  - Data Parallelism
-  - Expert Parallelism
-  - KV Cache
-  - Roofline Analysis
-  - Gradient Accumulation
-  - Rematerialisation
+  - AllGather
+  - FLOPs
+  - KV cache
+  - XLA
+  - roofline analysis
   key_people:
   - James Bradbury
   - Blake Hechtman
 key_logic_flow:
-- 该书核心主张：理解硬件工作原理后，即使在数万芯片规模下，模型性能优化也不再是黑魔法，而是可以遵循相对简单的原则
-- 第一部分建立roofline分析基础框架——算法性能的瓶颈始终来自计算、通信和内存三者之一，以此为全书提供统一的分析语言
-- 第二部分深入TPU架构：单芯片的计算单元与内存层次、多芯片间互联拓扑与带宽约束，以及如何在不同分片布局下高效完成矩阵乘法
-- 第四部分对Transformer架构进行逐层拆解，精确计算每个矩阵乘法的参数量与FLOPs，为后续并行化决策提供量化依据
-- 第五至第八章是全书核心：系统对比四种并行策略的适用场景与通信开销，并引入重计算、ZeRO优化器分片、主机卸载、梯度累积等内存优化手段
-- 实战部分以LLaMA 3为例，在TPU v5e上估算训练成本与时间、推理延迟与吞吐量的权衡，最后通过JAX+TensorBoard分析器教授性能调试方法；第十二章新增GPU章节作为补充
+- 该书提出模型规模化的核心目标是实现强缩放（strong scaling），即增加芯片数量时吞吐量应呈线性增长，但通信时间超过计算时间时会进入通信瓶颈状态。
+- 全书从 roofline 分析出发，将算法性能的约束归结为计算、通信和内存三个维度，并以此为基础分析 TPU 和 GPU 的硬件特性。
+- Transformer 的每个模块（注意力层和前馈网络）的参数量和 FLOPs 都可以精确计算，这决定了模型的内存占用、计算时间和通信开销。
+- 训练阶段有四种主要并行策略：数据并行、张量并行、流水线并行和专家并行，外加减少内存需求的重物化、ZeRO 优化器分片、主机卸载和梯度累积等技术。
+- 推理阶段新增了延迟约束，需要重点管理 KV 缓存大小，并通过解耦服务架构来优化吞吐量与延迟的权衡。
+- 该书以 LLaMA 3 为实战案例，在 TPU v5e 上演示训练和推理的成本估算与时间预算，并提供 JAX + XLA 性能剖析工具的使用教程。
 pipeline_stage: fact_extracted
 extract_result: success
+object_mentions:
+- object_type: project
+  name: scaling-book
+  canonical_name: jax-ml/scaling-book
+  url: https://jax-ml.github.io/scaling-book/
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - JAX-ML 团队在 jax-ml.github.io 发布了《How To Scale Your Model》在线技术指南，系统讲解如何在 TPU 和 GPU
+    上规模化训练与服务 Transformer 模型。
+  - 该书共 12 章，涵盖 roofline 分析、TPU 架构、Transformer 数学、四种并行策略、推理优化以及 JAX 性能剖析等完整内容。
+  - 该书以 LLaMA 3 为实战案例，演示如何在 TPU v5e 上估算训练成本、服务延迟和吞吐量权衡。
+  article_id: 4eaeb8d96a1a9adf
 ---
 
 A Systems View of LLMs on TPUs

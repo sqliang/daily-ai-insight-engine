@@ -15,8 +15,8 @@ manifest_dates:
 - '2026-06-29'
 - '2026-06-30'
 source_type: news_media
-tldr: OceanBase发布湖库一体AI数据库，融合湖、库与多模态数据于一套引擎。
-objective_summary: 2026年6月29日，OceanBase发布面向AI时代的湖库一体AI数据库，以Lakebase为引擎统一管理结构化、非结构化和向量数据，同步推出DataStudio和DataPilot产品体系，已在蚂蚁阿福、灵光等场景完成验证，宣称可降低整体TCO约30%-50%。
+tldr: OceanBase于2026年6月29日发布面向AI时代的湖库一体AI数据库，以一套引擎统一管理结构化、非结构化和向量数据，同步推出Lakebase、DataStudio、DataPilot三款产品，已在蚂蚁阿福、灵光等场景完成验证。
+objective_summary: 2026年6月29日，OceanBase发布湖库一体的AI数据库，将数据湖、事务处理与多模态数据处理统一在同一引擎中。围绕该架构，OceanBase推出了Lakebase（底层引擎）、DataStudio（数据治理与编排）和DataPilot（企业智能入口）三款产品。相比传统多系统方案，整体TCO降低约30%-50%。该能力已在蚂蚁阿福和灵光两个AI场景完成验证，其中灵光累计生成数千万个闪应用。
 event_type: application_landing
 epistemic_status: pr_statement
 entities:
@@ -26,21 +26,63 @@ entities:
   technologies:
   - AI数据库
   - 湖库一体
+  - 多模态数据
   - Lakebase
   - DataStudio
   - DataPilot
-  - 多模态数据
   key_people:
   - 杨传辉
   - 杨冰
 key_logic_flow:
-- 大模型能力快速提升，但企业AI落地瓶颈从模型转向数据，AI需要获取完整业务上下文。
-- 2026年6月29日，OceanBase发布面向AI时代的湖库一体AI数据库，将数据湖的开放存储能力、数据库的事务分析与处理能力、多模态数据处理能力统一到一套引擎中。
-- 围绕湖库一体架构，OceanBase推出三层产品体系：Lakebase底层引擎、DataStudio数据治理与编排平台、DataPilot企业业务智能入口。
-- 相比传统多系统方案，OceanBase AI数据库宣称可降低整体TCO约30%-50%。
-- 该能力已在蚂蚁阿福、灵光等场景完成验证，其中灵光累计生成数千万个'闪应用'，验证了湖库一体在千万级Agent场景下的可行性。
-- OceanBase选择从数据库内核出发重构数据体系，将金融级事务一致性、高可用与弹性能力延伸至湖与多模态数据体系之上。
+- OceanBase于2026年6月29日发布面向AI时代的湖库一体AI数据库，旨在帮助Agent一次获取完整业务上下文。
+- OceanBase认为AI落地的真正瓶颈正在从模型转向数据，湖库一体架构可以通过统一引擎消除多系统割裂。
+- OceanBase发布了三款产品：Lakebase作为底层引擎统一管理多模态数据，DataStudio负责数据治理与服务化，DataPilot作为企业业务智能入口。
+- 相比传统多系统方案，OceanBase AI数据库可降低整体TCO约30%-50%。
+- 该能力已在蚂蚁阿福和灵光等AI场景完成验证，其中灵光累计生成数千万个闪应用。
+- OceanBase选择从数据库内核出发，将金融级事务一致性、高可用与弹性能力延伸至湖与多模态数据体系。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: OceanBase AI数据库
+  canonical_name: OceanBase AI数据库
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 6月29日，OceanBase发布面向AI时代的湖库一体AI数据库，提出以湖库一体为核心架构。
+  - 相较传统多系统方案，OceanBase AI数据库可降低整体TCO约30%-50%。
+  - 目前该能力已在蚂蚁阿福、灵光等场景完成验证，其中灵光累计生成数千万个闪应用。
+  article_id: dcde9bfd34ee88ac
+- object_type: product
+  name: OceanBase Lakebase
+  canonical_name: OceanBase Lakebase
+  url: null
+  confidence: high
+  article_role: ecosystem_context
+  evidence_snippets:
+  - OceanBase Lakebase作为底层引擎，让结构化数据、非结构化数据和向量数据在统一架构中被管理、加工、检索和调用。
+  - Lakebase解决AI时代的数据底座问题，是OceanBase AI数据库的底层数据引擎。
+  article_id: dcde9bfd34ee88ac
+- object_type: product
+  name: OceanBase DataStudio
+  canonical_name: OceanBase DataStudio
+  url: null
+  confidence: high
+  article_role: ecosystem_context
+  evidence_snippets:
+  - OceanBase DataStudio运行在Lakebase之上，覆盖数据接入、加工、编排、语义建模到Agent协作等环节。
+  - DataStudio把分散的数据资产转化为可调用的数据服务，解决数据治理与服务化问题。
+  article_id: dcde9bfd34ee88ac
+- object_type: product
+  name: OceanBase DataPilot
+  canonical_name: OceanBase DataPilot
+  url: null
+  confidence: high
+  article_role: ecosystem_context
+  evidence_snippets:
+  - OceanBase DataPilot作为统一的企业业务智能入口，让业务人员通过自然语言完成分析报告、数据看板和可信答案生成。
+  - DataPilot解决业务人员如何直接使用数据智能的问题。
+  article_id: dcde9bfd34ee88ac
 ---
 
 # OceanBase发布AI数据库：以一套引擎融合湖库与多模态数据

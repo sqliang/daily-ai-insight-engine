@@ -12,27 +12,50 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: c7affab7451ec44b
 source_type: tech_blog
-tldr: OpenAI与Thrive Holdings利用Codex为Crete会计事务所构建自进化税务代理Tax AI，试点处理7000份税表，准确率达97%。
-objective_summary: 过去六个月，OpenAI派驻工程师与Thrive Holdings合作，为Crete旗下30余家会计事务所开发Tax AI系统，用于自动处理1040和1041税表。系统利用Codex的智能体能力将生产使用转化为结构化信号以驱动自主改进。在试点中处理了7000份税表，节省约三分之一准备时间，
+tldr: OpenAI 与 Thrive Holdings 合作，基于 Codex 为克里特岛 30 多家会计事务所构建了 Tax AI 系统。在试点季度中处理了
+  7,000 份纳税申报表，节省约三分之一的时间，准确率高达 97%，吞吐量提升约 50%，且系统通过闭环反馈实现了持续的自主改进。
+objective_summary: OpenAI 与 Thrive Holdings 历经六个月合作，为克里特岛 30 多家会计事务所开发了 Tax AI 系统，用于自动化
+  1040 和 1041 纳税申报准备。该系统基于 Codex 的智能体能力，将生产环境中的反馈转化为结构化信号，驱动模型无需工程师介入即可自主改进。在试点季度中，Tax
+  AI 处理了 7,000 份申报表，节省从业人员约三分之一的准备时间，准确率达 97%，吞吐量提升约 50%。上线时仅 25% 的申报表达到 75% 字段正确率，六周内该比例跃升至
+  86%。
 event_type: application_landing
-epistemic_status: pr_statement
+epistemic_status: verified_fact
 entities:
   companies:
   - OpenAI
   - Thrive Holdings
-  - Crete
   technologies:
   - Codex
-  - Tax AI
   key_people: []
 key_logic_flow:
-- Crete会计事务所的从业人员在税季高峰期间，中等至复杂税表的数据录入每份需耗时8小时，涉及数百万份底层文档、往年数据和手工提取计算，税务准备工作成为严重瓶颈。
-- OpenAI与Thrive Holdings合作，将前沿部署工程师和研究员派驻至Crete网络，与一线从业人员直接协作开发Tax AI系统。
-- Tax AI基于Codex的智能体能力构建，通过精心设计的评估基础设施、一线从业人员直接反馈和真实生产环境，将使用数据转化为结构化信号，实现系统的自主改进。
-- 从业人员上传源文件和客户备注后，Tax AI自动创建税务引擎提交草案供审核，涵盖1040和1041类型税表的准备流程。
-- 系统在试点期间处理了7000份税表，字段完成准确率从上线初期的25%（75%正确率阈值）在六周内提升至86%，90%和100%正确率阈值增长更快。
-- 最终效果：节省约三分之一税务准备时间，草拟税表准确率最高达97%，吞吐量提升约50%。
+- OpenAI 与 Thrive Holdings 合作六个月，为克里特岛 30 多家会计事务所构建 Tax AI 系统，以解决纳税申报中手动数据录入的效率瓶颈。
+- Tax AI 利用 Codex 的智能体能力，将生产使用中的反馈转化为结构化信号，实现系统的自主持续改进，无需工程师逐个排查故障。
+- 在试点季度中，Tax AI 处理了 7,000 份 1040 和 1041 纳税申报表，自动完成大部分耗时的数据录入和计算工作。
+- 系统为从业人员节省约三分之一的纳税准备时间，申报表字段准确率高达 97%，整体吞吐量提升约 50%。
+- 上线时仅 25% 的申报表达到 75% 字段正确率，六周内该比例提升至 86%，90% 和 100% 正确率指标也呈现类似的高速增长趋势。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Tax AI
+  canonical_name: Tax AI (Thrive Holdings)
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Tax AI 在试点季度中处理了克里特岛会计事务所的 7,000 份纳税申报表，涵盖 1040 和 1041 表单类型。
+  - 该系统为从业人员节省约三分之一的纳税准备时间，申报表准确率高达 97%，吞吐量提升约 50%。
+  - 上线六周内，达到 75% 字段正确率的申报表比例从 25% 跃升至 86%，验证了系统的自主改进能力。
+  article_id: c7affab7451ec44b
+- object_type: product
+  name: Codex
+  canonical_name: Codex (OpenAI)
+  url: null
+  confidence: high
+  article_role: ecosystem_context
+  evidence_snippets:
+  - OpenAI 前向部署工程师与 Thrive Holdings 团队利用 Codex 的智能体能力共同构建了 Tax AI 系统。
+  - Tax AI 使用 Codex 将生产反馈转化为结构化信号，驱动系统无需工程师介入即可自主改进。
+  article_id: c7affab7451ec44b
 ---
 
 *How Thrive Holdings and OpenAI co-developed Tax AI for Crete accountants by fusing practitioner expertise with a Codex-driven loop*

@@ -14,26 +14,53 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: f3373cadbcb2ef31
 source_type: news_media
-tldr: Google Labs发布Dreambeans应用，利用用户Google数据生成每日AI插图生活建议故事。
-objective_summary: Google Labs于2026年6月3日推出Dreambeans iOS/Android应用。该应用在用户许可下调用Gmail、日历、照片、YouTube和搜索历史等Google服务数据，每晚处理后生成10至14条AI插图式生活建议故事，产品负责人Gozde
+tldr: Google Labs 发布了名为 Dreambeans 的 AI 移动应用，该应用在用户睡眠时连接 Gmail、日历、照片等 Google 账户数据，每天早晨为用户生成约
+  10 到 14 条 AI 插画风格的生活灵感建议，旨在减少手机沉迷并提供个性化启发。
+objective_summary: Google Labs 于 2026 年 6 月 3 日正式发布了 Dreambeans iOS 和 Android 版本应用。产品负责人
+  Gozde Oznur 介绍，Dreambeans 利用 Personal Intelligence 技术接入用户的 Gmail、日历、照片、YouTube 和搜索历史等
+  Google 服务数据，在用户睡眠时处理后每天早晨生成 10 到 14 条 AI 插画风格的故事卡片，涵盖地点推荐、活动提醒和个性化资讯。该应用通过限制每日推送数量来对抗手机成瘾，并允许用户控制数据连接和删除权限。
 event_type: application_landing
-epistemic_status: verified_fact
+epistemic_status: pr_statement
 entities:
   companies:
   - Google
   - Google Labs
   - TechCrunch
-  technologies: []
+  technologies:
+  - Personal Intelligence
   key_people:
   - Gozde Oznur
 key_logic_flow:
-- Google Labs推出了一款名为Dreambeans的AI驱动移动应用，同时支持iOS和Android平台。
-- 该应用在用户授权下，从Gmail、Google日历、Google照片、YouTube和搜索历史等Google服务中提取个人数据。
-- 应用在用户夜间睡眠时处理后端数据，每天早晨生成10至14条AI插图式故事，内容涵盖地点推荐、活动建议、旅行提示和新闻资讯等。
-- 产品负责人Gozde Oznur表示，限制每日故事数量是为了对抗手机成瘾和刷屏行为，鼓励用户获取灵感后回归现实生活。
-- 隐私方面，用户可随时删除数据，并可自主选择授权哪些Google服务接入该应用。
-- 应用名称'Dreambeans'的构词逻辑：'Dream'指应用在用户睡眠时处理数据，'Beans'喻意晨间如咖啡般提供浓缩灵感。
+- Google Labs 发布了名为 Dreambeans 的 AI 移动应用，支持 iOS 和 Android 平台。
+- Dreambeans 使用 Personal Intelligence 技术连接用户的 Gmail、日历、照片、YouTube 和搜索历史等 Google 服务数据。
+- 该应用在用户睡眠时处理数据，每天早晨为用户生成 10 到 14 条图文并茂的生活灵感建议。
+- 产品负责人 Gozde Oznur 表示 Dreambeans 旨在作为刷手机成瘾的解药，通过限制每日推送数量让用户回归现实生活。
+- 隐私方面，只有用户本人可以访问应用生成的故事，用户可以随时删除数据并选择连接哪些 Google 服务。
+- 应用名称 Dreambeans 的灵感来源于它在用户睡眠时工作以及早晨为用户提供浓缩灵感如同现煮咖啡。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Dreambeans
+  canonical_name: Google Dreambeans
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Google Labs 发布了名为 Dreambeans 的 AI 驱动的 iOS 和 Android 应用，该应用使用用户 Google 账户数据生成 AI
+    插画形式的图文故事。
+  - Dreambeans 每晚在用户睡眠时处理来自 Gmail、日历、照片、YouTube 和搜索历史等 Google 服务的数据，每天早晨提供 10 到 14
+    条生活灵感建议。
+  - 产品负责人 Gozde Oznur 表示 Dreambeans 旨在作为刷手机成瘾的解药，通过限制每日推送数量鼓励用户亲自去体验生活。
+  article_id: f3373cadbcb2ef31
+- object_type: product
+  name: Bond
+  canonical_name: Bond
+  url: null
+  confidence: low
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 文章在介绍 Dreambeans 时提及了另一家初创公司 Bond，该应用同样使用 AI 自动生成用户的生活建议，但仅作为背景比较出现。
+  article_id: f3373cadbcb2ef31
 ---
 
 Google Labs, the tech giant’s team devoted to experimental product design, has launched a new AI-fueled app for iOS and Android that will quite literally animate your life.

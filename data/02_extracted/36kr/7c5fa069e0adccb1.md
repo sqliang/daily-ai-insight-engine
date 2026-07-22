@@ -27,49 +27,106 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 7c5fa069e0adccb1
 source_type: news_media
-tldr: 腾讯阿里入股脑机接口公司阶梯医疗；猫眼娱乐接入微信AI生态；丰田入股Tier IV；GIM获超亿元融资
-objective_summary: 2026年6月8-9日，腾讯、阿里入股植入式脑机接口公司阶梯医疗；猫眼娱乐成为微信AI Agent生态首批内测开发者；丰田通过基金向自动驾驶公司Tier
-  IV出资10亿日元；金融AI公司GIM完成超亿元天使+轮融资；诺基亚推出DDoS自动化防护系统Deepfield Genome Shield。
+tldr: 36氪晚报汇总多条商业动态：猫眼娱乐接入微信AI Agent生态；腾讯和阿里入股脑机接口公司阶梯医疗；丰田投资自动驾驶公司Tier IV；金融垂域AI公司GIM获超亿元天使轮融资；诺基亚推出Deepfield
+  Genome Shield DDoS防护系统。
+objective_summary: 2026年6月9日至10日，多家企业发布了商业动态。猫眼娱乐宣布作为首批内测开发者接入微信AI Agent生态。腾讯和阿里巴巴通过旗下公司入股植入式脑机接口研发商上海阶梯医疗科技有限公司。丰田通过基金向自动驾驶公司Tier
+  IV出资10亿日元，持股1%。金融垂域AI大模型公司GIM完成过亿元人民币天使+轮融资。诺基亚推出Nokia Deepfield Genome Shield主动式DDoS自动化防护系统。
 event_type: capital_movement
 epistemic_status: verified_fact
 entities:
   companies:
-  - 阶梯医疗
-  - 阿里巴巴
-  - 腾讯
   - 猫眼娱乐
+  - 微信
+  - 腾讯
+  - 阿里巴巴
+  - 上海阶梯医疗科技有限公司
   - 丰田
   - Tier IV
   - GIM
-  - 赛富投资基金
-  - Monolith砺思资本
-  - 五源资本
   - 诺基亚
+  - 香港金融管理局
   - 京东方A
   - 歌尔股份
   - Tims天好中国
   - 飞猪
-  - 天康生物
+  - 中船集团
+  - 沪东中华造船
   technologies:
+  - 微信AI Agent
   - 脑机接口
-  - AI Agent
+  - BCI
   - 自动驾驶
+  - DDoS自动化防护
   - 金融垂域大模型
-  - DDoS防护
   key_people:
   - 卢永臣
   - 张国华
-  - 余伟文
-  - 赵郑拓
   - 张世强
+  - 赵郑拓
+  - 余伟文
 key_logic_flow:
-- 猫眼娱乐宣布作为首批内测开发者接入微信AI Agent生态，提供影片推荐、选座、支付等服务。
-- 腾讯、阿里通过旗下投资公司入股脑机接口公司阶梯医疗，注册资本从100万增至约300.6万元。
-- 丰田通过Toyota Invention Partners基金向自动驾驶公司Tier IV出资10亿日元，持股1%。
-- 金融垂域AI大模型公司GIM完成超亿元天使+轮融资，由赛富投资基金领投，将自研金融垂域大模型。
-- 诺基亚推出Deepfield Genome Shield，定位为业界首个主动式全天候DDoS自动化防护系统。
-- 京东方A公告控股子公司能源科技拟终止北交所上市申请并撤回文件。
+- 猫眼娱乐作为首批内测开发者接入微信AI Agent生态，为用户提供影片演出推荐、智能选座、一键支付等服务。
+- 腾讯和阿里巴巴通过旗下公司入股植入式脑机接口研发商上海阶梯医疗科技有限公司，后者注册资本由100万增至约300.6万人民币。
+- 丰田通过旗下基金向自动驾驶系统开发和服务商Tier IV出资10亿日元，获得1%股权。
+- 金融垂域AI大模型公司GIM完成超亿元天使+轮融资，由赛富投资基金领投，将进一步从零自研金融垂域大模型。
+- 诺基亚推出Nokia Deepfield Genome Shield，定位为业界首个主动式全天候DDoS安全自动化系统。
+- 我国在全球LNG船市场占有率突破30%，沪东中华造船手握近60艘LNG船待建订单，生产排期已至2030年之后。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: 微信AI Agent生态
+  canonical_name: 微信AI Agent生态
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 猫眼娱乐宣布作为微信AI生态首批内测开发者之一，旗下小程序接入微信AI Agent生态，借助其能力提供影片演出推荐、附近影院筛选、智能选座、一键支付等服务。
+  article_id: 7c5fa069e0adccb1
+- object_type: company
+  name: 上海阶梯医疗科技有限公司
+  canonical_name: 阶梯医疗
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 腾讯和阿里巴巴旗下公司新增为上海阶梯医疗科技有限公司股东，该公司注册资本由100万人民币增至约300.6万人民币，是一家专注于植入式脑机接口领域的创新型科技企业。
+  article_id: 7c5fa069e0adccb1
+- object_type: company
+  name: GIM (Grace Investment Machine)
+  canonical_name: GIM
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 金融垂域AI大模型公司GIM完成天使+轮融资，由赛富投资基金领投，某千亿市值互联网公司CEO家族办公室跟投，至此已完成过亿元人民币天使轮和天使+轮融资。
+  article_id: 7c5fa069e0adccb1
+- object_type: product
+  name: Nokia Deepfield Genome Shield
+  canonical_name: Nokia Deepfield Genome Shield
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 诺基亚于6月9日宣布推出Nokia Deepfield Genome Shield，定位为业界首个主动式、全天候DDoS安全自动化系统，面向电信运营商、托管服务商、互联网交换中心及云计算构建者。
+  article_id: 7c5fa069e0adccb1
+- object_type: company
+  name: Tier IV
+  canonical_name: Tier IV
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 丰田通过旗下基金向自动驾驶系统开发和服务商Tier IV出资，出资比例为1%，出资金额为10亿日元。
+  article_id: 7c5fa069e0adccb1
+- object_type: product
+  name: 跨境理财通3.0
+  canonical_name: 跨境理财通3.0
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 香港金融管理局总裁余伟文表示，跨境理财通3.0在额度、产品类别、参与投资者类别等方面均有拓展空间，但具体落地时间表尚未确定。
+  article_id: 7c5fa069e0adccb1
 ---
 
 ## 大公司：

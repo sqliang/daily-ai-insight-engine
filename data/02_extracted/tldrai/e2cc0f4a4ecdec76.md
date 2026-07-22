@@ -13,26 +13,43 @@ id: e2cc0f4a4ecdec76
 manifest_dates:
 - '2026-07-02'
 source_type: news_media
-tldr: Anthropic推出Claude Science，面向科学家的AI工作台
-objective_summary: Anthropic于2026年7月15日发布Claude Science测试版，这是一个整合了60多种科学工具和连接器的AI工作台应用。它帮助科学家在单一环境中完成文献分析、多步骤研究设计、生成可重现的图文工件，并支持本地或远程HPC/SSH基础设施运行。
+tldr: Anthropic 发布 Claude Science，一个面向科学家的 AI 工作台，整合了超过 60 种科学工具和技能，支持文献分析、多步研究执行和可复现工件的生成，兼容本地、SSH
+  和 HPC 环境，即日起面向 Claude Pro、Max、Team 和 Enterprise 用户开放测试。
+objective_summary: Anthropic 于 2026 年 7 月 22 日推出 Claude Science 测试版，这是一款集成科学研究的 AI
+  工作台。该产品将 PubMed、Jupyter、R 等分散工具整合到单一环境中，提供超过 60 种预配置的基因组学、蛋白质组学、结构生物学等领域的技能和连接器。Claude
+  Science 能生成附带完整代码和环境的可复现科学工件，管理 HPC 或 Modal 等计算资源的作业调度，并由评审代理自动检查引用和计算错误。产品支持 macOS、Linux
+  本地运行，以及 SSH 远程或 HPC 登录节点部署。
 event_type: application_landing
-epistemic_status: pr_statement
+epistemic_status: verified_fact
 entities:
   companies:
   - Anthropic
   - Modal
   technologies:
   - MCP
+  - SSH
   - HPC
   key_people: []
 key_logic_flow:
-- Anthropic 发布 Claude Science 测试版，这是一款面向科学家的 AI 工作台应用，旨在将分散的科学工具整合到单一研究环境中。
-- 该应用内置 60 多种预配置的技能和连接器，覆盖基因组学、单细胞分析、蛋白质组学、结构生物学和化学信息学等领域。
-- 用户通过通用协调代理与系统交互，该代理可调用专家代理和用户创建的自定义代理，并配备审核代理自动检查引用和计算错误。
-- Claude Science 支持生成丰富的科学工件（3D 蛋白质结构、基因组浏览器轨迹、化学结构图等），每项输出附带完整的可追溯生成记录。
-- 该应用可在 macOS/Linux 本地运行，也可通过 SSH 或 HPC 登录节点在远程基础设施上执行，敏感数据无需离开实验室自有系统。
-- 计算任务可自动扩展（从单 GPU 到数百 GPU），审核代理在流水线运行中持续检查输出并自我修正错误。
+- Anthropic 推出 Claude Science，这是一款面向科学家的 AI 研究工作台产品，目前处于测试阶段。
+- Claude Science 将 PubMed、Jupyter、R 等分散的研究工具整合到单一环境中，配备超过 60 种预配置的科学技能和连接器。
+- 该平台能生成完全可复现的科学工件，包括 3D 蛋白质结构、基因组浏览器轨迹和化学结构等可视化内容。
+- Claude Science 支持在本地、SSH 远程服务器或 HPC 集群上运行，敏感数据无需离开实验室自有基础设施。
+- 产品内置评审代理，可自动检查引用准确性、计算错误和图表与代码的一致性，并进行自我修正。
+- Claude Science 即日起向 Claude Pro、Max、Team 和 Enterprise 用户开放测试。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Claude Science
+  canonical_name: Claude Science
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Anthropic 发布了 Claude Science 测试版，这是一个面向科学家的 AI 工作台，将研究所需的各类工具整合到单一环境中。
+  - Claude Science 能够生成完全可复现的科学工件，包括 3D 蛋白质结构、基因组浏览器轨迹和化学结构等可视化内容。
+  - Claude Science 支持在本地、SSH 远程服务器或 HPC 集群上运行，并自动管理计算资源的作业调度。
+  article_id: e2cc0f4a4ecdec76
 ---
 
 AI has the potential to dramatically accelerate the pace of scientific discovery and the development of healthcare interventions. Since launching our efforts in the life sciences last fall, we’ve worked to improve our model capabilities, make connections to the scientific ecosystem via MCPs and skills, and launch partnerships in an effort to realize this potential.

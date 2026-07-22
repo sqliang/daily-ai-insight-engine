@@ -34,8 +34,10 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: ccceb9b00a5406ce
 source_type: academic_paper
-tldr: 提出CEO-Bench基准，评估LLM在多角色CEO战略资源再分配决策中的能力。
-objective_summary: 研究者提出了CEO-Bench，一个多智能体基准，让LLM接收CFO/CTO/COO/CMO四类高管的冲突建议，在约束丰富的多轮环境中测试CEO级战略资源再分配决策。实验覆盖5个前沿模型的13个场景，发现所有模型结构有效性高但战略校准差异显著，存在单顾问捕获、保守默认和历史遗忘等系统性失效。
+tldr: 该论文提出 CEO-Bench，一个多智能体基准测试，评估大语言模型在模拟企业环境中进行跨部门战略资源重新分配的能力。实验发现前沿模型在结构有效性上表现良好，但在战略校准层面出现严重分化，并揭示了单一顾问依赖、模糊情境下保守决策和历史遗忘等系统性失败模式。
+objective_summary: arXiv 在 2026 年 6 月发表的论文中提出了 CEO-Bench，这是一个多智能体基准测试框架，用于评估大语言模型在模拟
+  CEO 角色下进行多轮战略资源重新分配的能力。LLM 代理需要综合来自 CFO、CTO、COO、CMO 四位角色化 C 级顾问的冲突建议，并在信息不对称和组织约束下制定资本分配方案，评估维度包括角色整合、条件性果断、历史敏感判断和计划有效性。在
+  5 个前沿模型和 13 个场景上的实验显示，所有模型在结构有效性维度得分较高，但在战略校准等更高能力层出现显著分化。
 event_type: framework_tools
 epistemic_status: theoretical_claim
 entities:
@@ -43,16 +45,27 @@ entities:
   technologies:
   - LLM
   - CEO-Bench
-  - Multi-Agent System
   key_people: []
 key_logic_flow:
-- 现有LLM基准仅关注孤立认知任务，缺少对CEO级战略决策（在信息不对称、组织约束和时间依赖下整合冲突建议）的评估。
-- 提出CEO-Bench基准，让LLM代理接收CFO、CTO、COO、CMO四位角色化高管的冲突建议，制定资本再分配方案。
-- 评估四个维度：角色整合、条件性大胆、历史敏感判断和计划有效性。
-- 在5个前沿模型的13个场景上实验发现，所有模型结构有效性高但在战略校准上差异显著。
-- 识别出系统性失效模式：单一顾问捕获、模糊情境下的保守默认和历史遗忘。
-- 发现结构整合-大胆性权衡：越深入参与冲突观点整合的模型，其决策果断性越低。
+- 论文指出现有 LLM 评估基准局限于孤立的认知任务，如推理、知识检索和风格化经济理性，缺乏对真实高管决策环境的模拟。
+- 作者提出了 CEO-Bench，一个多智能体基准测试，要求 LLM 代理扮演 CEO 角色，在信息不对称和约束条件下整合四位 C 级顾问的冲突建议并制定资本分配方案。
+- 评估体系包含四个维度：角色整合、条件性果断、历史敏感判断和计划有效性，覆盖从低到高三个能力层。
+- 在 5 个前沿模型和 13 个场景上的实验显示，所有模型在结构有效性上表现良好，但在战略校准这一最高能力层出现显著分化。
+- 论文识别出三种系统性失败模式：单一顾问捕获、模糊情境下保守默认决策和历史遗忘。
+- 研究还发现了一个结构性的整合-果断权衡：模型越深入参与冲突观点的综合，其行动决策往往越不果断。
 extract_result: success
+object_mentions:
+- object_type: project
+  name: CEO-Bench
+  canonical_name: CEO-Bench
+  url: https://arxiv.org/abs/2606.17459
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 论文提出 CEO-Bench，一个多智能体基准测试，用于评估 LLM 在 CEO 级别的战略资源重新分配能力。
+  - CEO-Bench 要求 LLM 代理整合四位角色化 C 级顾问（CFO、CTO、COO、CMO）的冲突建议，制定跨业务单元的资本分配计划。
+  - 实验在 5 个前沿模型和 13 个场景上运行，发现模型在战略校准层面存在系统性失败模式。
+  article_id: ccceb9b00a5406ce
 ---
 
 # Computer Science > Artificial Intelligence

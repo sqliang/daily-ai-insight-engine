@@ -24,40 +24,87 @@ tags:
 - clippings
 id: ab2aa599a1c76dab
 source_type: news_media
-tldr: 宇树科技发布载人机甲GD01定价390万；谷歌首现AI开发零日漏洞工具；阿里发布AI店小蜜客服agent
-objective_summary: 5月12日，宇树科技发布全球首款量产版载人变形机甲GD01，创始人王兴兴亲自驾驶演示，定价390万元起。谷歌安全团队首次发现黑客使用AI开发零日漏洞攻击工具。阿里发布电商行业首个售前售后客服agent
-  AI店小蜜。智元机器人联合香港政府发布具身智能产业共创计划。
+tldr: 今日36氪晚报涵盖京东Q1营收3157亿元同比增长4.9%、宇树科技发布全球首款量产版载人变形机甲GD01定价390万元起、阿里推出AI店小蜜客服agent、谷歌首次发现黑客利用AI开发零日漏洞、智元机器人发布香港具身智能产业共创计划等事件。
+objective_summary: 京东发布2026年第一季度财报，营收3157亿元同比增长4.9%，研发投入同比增长59%。宇树科技发布全球首款量产版载人变形机甲GD01，定价390万元起，创始人王兴兴亲自演示操作。阿里发布电商行业首个具备售前售后办事能力的客服agent
+  AI店小蜜，接入后平均转人工率下降45%。谷歌安全团队首次发现黑客借助AI开发零日漏洞攻击工具并成功挫败。智元机器人联合香港多方发布具身智能产业共创计划，提出未来五年个十百千万目标。
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
   companies:
-  - 宇树科技
-  - Google
-  - Alibaba
-  - 智元机器人
-  - Microsoft
-  - OpenAI
   - 京东
+  - 华硕
+  - 宇树科技
+  - 京东健康
+  - 京东物流
+  - 腾讯音乐
+  - 智元机器人
+  - 微软
+  - OpenAI
+  - 谷歌
+  - 阿里巴巴
   - 腾讯
+  - 中信证券
+  - NASA
   technologies:
   - 具身智能
-  - AI agent
   - 零日漏洞
-  - 载人机甲
-  - 机器人
+  - AI客服agent
+  - AI
   key_people:
   - 王兴兴
   - 赵楠
   - 王腾
   - 张军
 key_logic_flow:
-- 宇树科技于5月12日发布GD01载人变形机甲，定价390万元起，创始人王兴兴亲自进入驾驶舱演示，宣称是全球首款量产版载人机甲
-- 谷歌安全团队首次发现网络犯罪团伙利用AI开发可绕过系统防御机制的零日漏洞攻击工具，谷歌已向该工具开发商发出警报并挫败攻击
-- 阿里于5月11日发布AI店小蜜，为电商行业首个具备售前售后办事能力的客服agent，实测转人工率下降45%，AI+人协同转化效果提升超10%
-- 智元机器人在香港具身智能产业峰会上发布共创计划，目标未来五年实现数个联合实验室、数十家创新企业、数百家产业伙伴的个十百千万目标
-- 微软给OpenAI的营收分成付款上限设为380亿美元，据称通过新合作交易OpenAI到2030年将共计节省970亿美元
-- 京东发布2026年第一季度财报，营收3157亿元同比增长4.9%，Non-GAAP归母净利润74亿元，年度活跃用户数超7.4亿
-extract_result: partial
+- 京东发布2026年第一季度财报，营收3157亿元同比增长4.9%，年度活跃用户数超7.4亿，研发投入同比增长59%。
+- 宇树科技发布全球首款量产版载人变形机甲GD01，定价390万元起，创始人王兴兴亲自登上驾驶舱演示真人操作。
+- 阿里发布AI店小蜜，这是电商行业首个具备售前售后办事能力的客服agent，商家接入后平均转人工率下降45%。
+- 谷歌安全研究人员首次发现黑客利用AI开发零日漏洞攻击工具，谷歌向该工具开发商发出警报后成功挫败该攻击。
+- 智元机器人联合香港政府及产业学界代表发布香港具身智能产业共创计划，围绕五大方向推动未来五年个十百千万目标。
+- 微软给OpenAI的营收分成付款上限设为380亿美元，OpenAI到2030年将共计节省970亿美元。
+extract_result: success
+object_mentions:
+- object_type: product
+  name: GD01 载人变形机甲
+  canonical_name: Unitree GD01
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 宇树科技发布全球首款量产版载人变形机甲GD01，定价三百九十万元起，创始人王兴兴亲自登上驾驶舱演示真人操作。
+  - 宇树早期投资人赵楠表示，机甲机器人的核心是通过破圈场景向世界展示宇树在传感器、控制器和工程能力上的技术优越性。
+  article_id: ab2aa599a1c76dab
+- object_type: product
+  name: AI店小蜜
+  canonical_name: 阿里AI店小蜜
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 阿里发布全新AI店小蜜，这是电商行业首个具备售前售后办事能力的客服agent。
+  - 商家接入AI店小蜜后平均转人工率下降百分之四十五，AI加入协同转化效果相比纯人工客服增加超百分之十。
+  article_id: ab2aa599a1c76dab
+- object_type: project
+  name: 香港具身智能产业共创计划
+  canonical_name: 智元机器人香港具身智能产业共创计划
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 智元机器人联合香港政府、产业、学术、科研及金融界代表正式发布香港具身智能产业共创计划。
+  - 该计划围绕应用场景、创新创业、产学研合作、人才培养及国际合作五大方向，推动香港具身智能产业未来五年实现个十百千万目标。
+  article_id: ab2aa599a1c76dab
+- object_type: company
+  name: 今日宜休
+  canonical_name: 北京今日宜休科技有限责任公司
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 王腾创办的睡眠健康公司今日宜休已完成新一轮融资，引入CMC资本、云九资本、高瓴创投等多方投资。
+  - 今日宜休成立于2026年1月，经营范围包含健康咨询服务、人工智能应用软件开发等，由智元机器人等共同持股。
+  article_id: ab2aa599a1c76dab
+pipeline_stage: fact_extracted
 ---
 
 ## 大公司：

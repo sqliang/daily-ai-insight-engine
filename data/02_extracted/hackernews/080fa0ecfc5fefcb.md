@@ -13,29 +13,39 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 080fa0ecfc5fefcb
 source_type: community_discussion
-tldr: 基于树莓派Zero的开源DIY数码相机项目，可自行3D打印组装
-objective_summary: Doruk Kumkumoglu 在 GitHub 发布了 Optocam Zero 项目，一款基于 Raspberry Pi
-  Zero 的紧凑型数码相机，使用现成组件和3D打印外壳构建。支持 2592×2592 像素拍摄、8种滤镜、GIF录制、Wi-Fi传输、USB-C充电，续航约70-80分钟。
-event_type: application_landing
+tldr: Optocam Zero 是一个基于 Raspberry Pi Zero 的开源数字相机项目，全部使用市售组件和 3D 打印外壳，支持自动对焦、8 种滤镜和
+  GIF 录制，已在 GitHub 上公开所有硬件文件和软件安装指南。
+objective_summary: 开发者 dorukkumkumoglu 在 GitHub 上发布了 Optocam Zero 项目，这是一款基于 Raspberry
+  Pi Zero 的紧凑型数码相机。该相机使用市售组件组装，外壳完全 3D 打印，具备 2592×2592 像素 JPEG 拍照、自动对焦、8 种滤镜、GIF 录制等功能，并通过自定义热点界面实现快速图像传输。项目仓库包含完整的物料清单、逐步组装指南、3D
+  打印文件和软件安装程序。
+event_type: framework_tools
 epistemic_status: verified_fact
 entities:
   companies:
-  - Raspberry Pi Foundation
-  - Kodak
-  technologies:
-  - Raspberry Pi Zero
-  - 3D printing
-  - USB-C
+  - Raspberry Pi
+  technologies: []
   key_people:
-  - Doruk Kumkumoglu
+  - dorukkumkumoglu
 key_logic_flow:
-- Optocam Zero 是一款基于 Raspberry Pi Zero 的紧凑型开源数码相机，全部设计文件和软件代码托管在 GitHub。
-- 相机使用现成的电子组件和完全3D打印的外壳（除紧固件外），降低了DIY门槛。
-- 核心规格：2592×2592像素JPEG拍摄、1.4英寸240×240 LCD屏幕、15-20fps实时预览、22秒启动时间。
-- 功能特性包括：8种照片滤镜、GIF录制播放、自定义热点传输界面、屏幕自动调光省电、USB-C充电（可边用边充）、可更换14500锂电池（续航70-80分钟）。
-- 项目仓库包含完整物料清单(BOM)、分步组装指南(PDF)、3D打印文件(STL/Bambu Studio项目)和相机软件安装程序。
-- 设计灵感来源于 Kodak 等玩具相机，强调便携（51×71×18mm）、趣味性和直觉化操作。
+- Optocam Zero 是一款基于 Raspberry Pi Zero 的紧凑型数码相机，全部使用市售组件和 3D 打印外壳制造。
+- 相机具备 2592×2592 像素 JPEG 拍摄、自动对焦摄像头模块、8 种照片滤镜和 GIF 录制功能。
+- 电池续航约 70-80 分钟，采用 14500 型锂电池并通过 USB-C 充电，设备可在充电时使用。
+- 图像通过自定义热点界面实现快速传输，已针对移动端和桌面端进行优化。
+- 项目仓库公开了完整的 3D 打印文件、物料清单、详细组装指南和软件安装程序，方便他人自行构建。
+- 相机尺寸为 51×71×18mm，配备 1.4 英寸 240×240 像素 LCD 显示屏，启动时间约 22 秒。
 extract_result: success
+object_mentions:
+- object_type: project
+  name: dorukkumkumoglu/optocamzero
+  canonical_name: optocamzero
+  url: https://github.com/dorukkumkumoglu/optocamzero
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Optocam Zero 是一个基于 Raspberry Pi Zero 的紧凑型数码相机项目，全部使用市售组件和 3D 打印外壳制造。
+  - 项目仓库包含完整的硬件文件、物料清单、详细逐步组装指南和软件安装程序，供他人自行构建。
+  - 相机具备自动对焦模块、8 种滤镜、GIF 录制功能和自定义热点图像传输界面。
+  article_id: 080fa0ecfc5fefcb
 ---
 
 Optocam Zero is a Raspberry Pi Zero based compact digital camera made using off the shelf components.

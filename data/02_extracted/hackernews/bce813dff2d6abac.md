@@ -13,9 +13,9 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: bce813dff2d6abac
 source_type: community_discussion
-tldr: Apple 宣布新一代 Siri AI 将于今年秋季随 Apple Intelligence 一同推出。
-objective_summary: Apple 宣布新一代 Apple Intelligence 和 Siri AI 将于今年秋季发布，Siri AI 年内晚些时候推出、首批仅支持英语。新
-  AI 深度集成于应用中，基于用户上下文提供个性化帮助，并在每个环节注重隐私保护。
+tldr: Apple 宣布推出下一代 Apple Intelligence 和 Siri AI，新功能将于今年秋季上线，Siri AI 英文版于今年晚些时候推出。
+objective_summary: Apple 通过官网发布公告，宣布推出下一代 Apple Intelligence 和 Siri AI，该功能将于今年秋季上线，其中
+  Siri AI 英文版于今年晚些时候推出。新系统强调以用户为中心、深度集成于各类应用中、基于用户上下文信息，并在每一步都保护用户隐私。
 event_type: application_landing
 epistemic_status: pr_statement
 entities:
@@ -23,14 +23,35 @@ entities:
   - Apple
   technologies:
   - Apple Intelligence
-  - Siri AI
   key_people: []
 key_logic_flow:
-- Apple 宣布推出新一代 Apple Intelligence 和 Siri AI，定位为以用户为中心的个性化 AI 助手。
-- 新 Siri AI 将深度集成到各类应用中，基于用户的个人上下文信息提供智能帮助。
-- Apple 强调该系统在每一个环节都注重用户隐私保护。
-- Apple Intelligence 新功能将于今年秋季发布，Siri AI 首批仅支持英语，计划年内晚些时候推出。
+- Apple 宣布推出下一代 Apple Intelligence 和 Siri AI，强调其具备真正有帮助的 AI 能力。
+- 新系统以用户为中心，深度集成于各类应用之中，并基于用户上下文信息提供个性化服务。
+- Apple 承诺在 AI 处理的每一步都保障用户隐私。
+- Apple Intelligence 新功能将于今年秋季正式上线。
+- Siri AI 的英文版本将于今年晚些时候推出。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Apple Intelligence
+  canonical_name: Apple Intelligence
+  url: https://www.apple.com/apple-intelligence/
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Apple 宣布推出下一代 Apple Intelligence，强调其是真正有帮助且以用户为中心的 AI 系统。
+  - Apple Intelligence 新功能将于今年秋季上线，集成于各类应用中并保护用户隐私。
+  article_id: bce813dff2d6abac
+- object_type: product
+  name: Siri AI
+  canonical_name: Siri AI
+  url: https://www.apple.com/apple-intelligence/
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Siri AI 与 Apple Intelligence 一同被推出，定位为真正有用且以用户为中心的 AI 助手。
+  - Siri AI 的英文版本将于今年晚些时候正式推出，中文等其他语言版本尚未公布时间表。
+  article_id: bce813dff2d6abac
 ---
 
 # Apple Intelligence and Siri

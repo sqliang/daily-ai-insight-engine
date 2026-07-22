@@ -30,46 +30,77 @@ id: 9b97fda7d8efea05
 manifest_dates:
 - '2026-07-03'
 source_type: news_media
-tldr: 证监会批准宇树科技科创板IPO注册；Meta出售算力被误读为算力过剩，业内人士澄清
-objective_summary: 证监会同意宇树科技在科创板IPO注册。Meta出售算力引发A股科技股大跌，但业内人士澄清该消息属误读，并不意味着AI资本支出结束。抖音电商上线肖像保护功能打击AI仿冒内容。秦淮数据投运行业首个算力中心SST商用项目。
+tldr: 证监会同意宇树科技科创板IPO注册；Meta出售算力消息引发A股科技股大跌但被指误读；抖音电商上线肖像保护功能拦截AI仿冒；秦淮数据投运行业首个算力中心SST商用项目；理想汽车拆分产品部并入研发；AI创作平台灵珠完成天使轮融资。
+objective_summary: 2026年7月2日，证监会同意宇树科技科创板IPO注册，该公司成为人形机器人领域重要上市标的。同日Meta出售算力消息引发A股科技股大跌，但业内人士称算力过剩系误读，实际意味着AI基建商业模式成熟。抖音电商上线肖像保护功能，利用AI模型识别主动拦截仿冒内容。秦淮数据投运行业首个算力中心SST（固态变压器）智能直流供电商业化项目，实现供配电范式突破。理想汽车将产品部电动本体和自动驾驶职能拆分并入研发部门。AI创作平台灵珠完成由TikTok天使投资人韦海军领投的天使轮融资。
 event_type: capital_movement
 epistemic_status: verified_fact
 entities:
   companies:
-  - 宇树科技
   - Meta
-  - 证监会
+  - 宇树科技
   - 抖音电商
+  - 理想汽车
   - 秦淮数据
+  - 小红书
+  - Quantum Systems
   - 灵珠
+  - 北京君正
+  - 香奈儿
   - 奥飞娱乐
   - 盐湖股份
-  - 北京君正
-  - 小红书
-  - 香奈儿
-  - Charvet
-  - 理想汽车
-  - Quantum Systems
+  - 雀巢
   - 普华永道
+  - 一汽奥迪
   technologies:
   - SST
   - DRAM
-  - NOR Flash
   - SRAM
+  - NOR Flash
+  - AI仿冒识别
   key_people:
-  - 郭永锋
+  - 韦海军
   - 范皓宇
   - 刘立国
   - 詹锟
-  - 韦海军
+  - 郭永锋
 key_logic_flow:
 - 证监会同意宇树科技股份有限公司首次公开发行股票并在科创板上市的注册申请。
-- Meta对外出售算力的消息被市场解读为算力过剩，导致A股科技股大跌，创业板指和科创综指分别下跌5.71%和5.64%。
-- 多位业内人士指出，Meta出售算力属于误读，不代表AI资本支出结束，而是意味着AI基建商业模式走向成熟。
-- 抖音电商上线'肖像保护功能'，利用模型识别和授权核验主动拦截AI仿冒、盗用素材等交易类侵权内容。
-- 秦淮数据投运行业首个算力中心SST（固态变压器）智能直流供电商业化项目，实现从工频到高频、从交流到直流的供配电范式突破。
-- AI创作平台'灵珠'完成天使轮融资，由TikTok天使投资人韦海军领投。
+- Meta对外出售算力的消息被市场解读为算力过剩，引发A股科技股大跌，但业内人士指出这是误读，意味着AI基建商业模式走向成熟。
+- 抖音电商上线"肖像保护功能"，通过模型识别和核验授权信息主动拦截AI仿冒与盗用素材等侵权内容。
+- 秦淮数据投运行业首个算力中心SST（固态变压器）智能直流供电商业化项目，标志着供配电体系从工频到高频、从交流到直流的范式突破。
+- 理想汽车调整组织架构，将产品部的电动本体定义团队拆分并入整车研发部门，自动驾驶终端产品团队并入基座模型研发团队。
+- AI创作平台"灵珠"完成天使轮融资，由TikTok天使投资人韦海军领投。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: 灵珠
+  canonical_name: 灵珠
+  url: null
+  confidence: medium
+  article_role: primary_subject
+  evidence_snippets:
+  - AI创作平台"灵珠"近日完成了天使轮融资，由TikTok天使投资人韦海军领投。
+  article_id: 9b97fda7d8efea05
+- object_type: project
+  name: 秦淮数据算力中心SST商用项目
+  canonical_name: 秦淮数据SST智能直流供电项目
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 行业首个算力中心SST（固态变压器）智能直流供电商业化项目在秦淮数据环首都·桑园云计算产业基地正式投运。
+  - 该项目标志着算力中心供配电体系实现从"工频"到"高频"、从"交流"到"直流"的范式突破。
+  article_id: 9b97fda7d8efea05
+- object_type: product
+  name: 抖音电商肖像保护功能
+  canonical_name: 抖音电商肖像保护功能
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 抖音电商正式宣布上线"肖像保护功能"，利用模型识别、核验授权信息、阻断相似内容传播等功能主动识别并拦截AI仿冒侵权内容。
+  - 截至2026年6月，抖音电商已累计处置侵权仿冒达人账号超1.2万个，肖像保护功能已主动拦截侵权账号9.2万个。
+  article_id: 9b97fda7d8efea05
 impact_score:
   score: 3.5
   reason: 本文为 36氪每日新闻汇总，涵盖多个独立事件但无单一范式级突破。最受关注的是 Meta 出售算力被误读为算力过剩导致 A 股科技股大跌，业内人士澄清该误读反而不改
@@ -119,6 +150,78 @@ confidence:
   compound: medium
   hype: medium
 actionable_insight: monitor
+object_insights:
+- object_type: product
+  name: 灵珠
+  canonical_name: 灵珠
+  url: null
+  positioning: 面向内容创作者的AI驱动创作平台，提供视频、图像与文案等AI生成能力。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users:
+  - 内容创作者
+  - 视频创作者
+  - 自媒体从业者
+  product_signal: 获得TikTok天使投资人韦海军领投的天使轮融资，产品方向获得知名投资人认可。
+  market_signal: 处于天使轮早期阶段，产品和市场表现尚需时间验证。
+  differentiation: 从公开信息来看，其核心差异化能力和技术壁垒尚不明确，需关注后续产品发布。
+  watch_reason: AI创作工具赛道竞争激烈但市场空间广阔，灵珠获得TikTok天使投资人韦海军领投具有重要信号意义，值得持续跟踪其产品定位、目标用户和后续融资进展。
+  risk_notes:
+  - 仅完成天使轮融资，产品仍在早期阶段且融资金额未披露，后续开发存在不确定性。
+  - AI创作工具领域已有众多成熟玩家，新平台实现差异化突围和用户积累的难度较大。
+  score: 5.0
+  article_ids:
+  - 9b97fda7d8efea05
+  evidence_snippets:
+  - AI创作平台"灵珠"近日完成了天使轮融资，由TikTok天使投资人韦海军领投。
+- object_type: project
+  name: 秦淮数据算力中心SST商用项目
+  canonical_name: 秦淮数据SST智能直流供电项目
+  url: null
+  positioning: 行业首个算力中心固态变压器（SST）智能直流供电商业化项目，实现供配电体系从工频到高频、从交流到直流的范式突破。
+  technical_signal: 采用固态变压器实现智能直流供电，标志着算力中心供配电体系从工频到高频、从交流到直流的范式突破。
+  adoption_signal: 已在秦淮数据环首都·桑园云计算产业基地正式投运，为算力中心行业首个SST智能直流供电商业化落地案例。
+  ecosystem_relevance: 属于算力基础设施底层供配电技术革新，对提升AI算力中心能效和供电可靠性具有行业示范意义。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: 作为行业首个算力中心SST智能直流供电商业化项目，该技术范式突破可能引领数据中心供配电体系变革，对降低算力中心能耗、提升供电效率和可靠性具有重要的行业示范意义，值得持续跟踪其运行表现和技术推广进展。
+  risk_notes:
+  - SST固态变压器技术成熟度有待更多运行数据验证，大规模商业化推广仍需时间和成本优化。
+  - 新型SST智能直流供配电方案的初期建设成本可能高于传统方案，长期经济性需进一步验证。
+  score: 7.0
+  article_ids:
+  - 9b97fda7d8efea05
+  evidence_snippets:
+  - 行业首个算力中心SST（固态变压器）智能直流供电商业化项目在秦淮数据环首都·桑园云计算产业基地正式投运。
+  - 该项目标志着算力中心供配电体系实现从"工频"到"高频"、从"交流"到"直流"的范式突破。
+- object_type: product
+  name: 抖音电商肖像保护功能
+  canonical_name: 抖音电商肖像保护功能
+  url: null
+  positioning: 抖音电商平台推出的AI驱动肖像保护功能，利用模型识别和授权核验技术主动拦截AI仿冒与盗用素材等侵权内容。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users:
+  - 抖音电商达人
+  - 内容创作者
+  - 电商平台用户
+  product_signal: 已主动拦截侵权账号9.2万个，累计处置侵权仿冒达人账号超1.2万个，表明该功能已具备规模化实战拦截能力。
+  market_signal: 在AI仿冒侵权问题日益严重的行业背景下，该功能具有明确且迫切的市场需求和平台合规价值。
+  differentiation: 利用AI模型实现主动识别拦截而非被动处理，具备授权核验和相似内容阻断等综合防护能力。
+  watch_reason: 随着AI生成内容爆发式增长，AI仿冒和肖像侵权成为电商平台治理的核心挑战。抖音电商推出的AI主动拦截方案已积累大规模实战数据和治理经验，其技术路线和治理效果值得持续跟踪，对整个电商行业具有重要参考意义。
+  risk_notes:
+  - AI识别模型可能存在误判或漏判情况，识别的精准度和召回率需要持续迭代优化。
+  - 肖像保护功能的有效性高度依赖数据积累和模型持续更新，仿冒技术也在不断演进对抗。
+  score: 7.0
+  article_ids:
+  - 9b97fda7d8efea05
+  evidence_snippets:
+  - 抖音电商正式宣布上线"肖像保护功能"，利用模型识别、核验授权信息、阻断相似内容传播等功能主动识别并拦截AI仿冒侵权内容。
+  - 截至2026年6月，抖音电商已累计处置侵权仿冒达人账号超1.2万个，肖像保护功能已主动拦截侵权账号9.2万个。
 ---
 
 ## 大公司：

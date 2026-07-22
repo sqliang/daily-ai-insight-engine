@@ -13,28 +13,63 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: f5d5fbbb3a446ab9
 source_type: newsletter_rss
-tldr: 微软在Build 2026一天内发布七款AI模型，含首款推理模型MAI-Thinking-1
-objective_summary: 2026年微软Build大会上，微软AI CEO Mustafa Suleyman宣布推出七款覆盖转录、语音、图像、代码和推理的新AI模型，包括首款推理模型MAI-Thinking-1（350亿活跃参数、256K上下文窗口）。Suleyman表示微软正追求AI领域的完全自给自足，
-event_type: application_landing
+tldr: Microsoft 在 Build 2026 上一口气发布了 7 个新 AI 模型，覆盖转录、语音、图像、代码和推理。微软 AI CEO Mustafa
+  Suleyman 表示公司正努力在 AI 领域实现真正自给自足，同时保持与 OpenAI 的合作关系。
+objective_summary: 2026 年微软 Build 大会上，微软 AI CEO Mustafa Suleyman 宣布推出 7 个新 AI 模型，涵盖转录、语音、图像、代码和推理领域。其中
+  MAI-Thinking-1 是微软首个推理模型，拥有 350 亿活跃参数和 256K 上下文窗口。Suleyman 表示微软希望在前沿 AI 上实现自给自足，同时继续与
+  OpenAI 合作。微软还与梅奥诊所合作，从零开始训练新的健康基础模型。
+event_type: infrastructure_update
 epistemic_status: verified_fact
 entities:
   companies:
   - Microsoft
   - OpenAI
   - Mayo Clinic
+  - BeyondTrust
   technologies:
   - MAI-Thinking-1
+  - Copilot
   key_people:
   - Mustafa Suleyman
   - Corey
 key_logic_flow:
-- 微软在Build 2026大会上一口气发布了七款新AI模型，涵盖转录、语音、图像、代码和推理五大领域。
-- 微软AI CEO Mustafa Suleyman表示微软希望在保持与OpenAI合作的同时，实现前沿AI领域的完全自给自足。
-- MAI-Thinking-1是微软首款推理模型，拥有350亿活跃参数和256K上下文窗口，配套发布了109页技术报告。
-- 微软的AI训练数据规模超过250万亿token，经过筛选后用于高效训练模型。
-- Suleyman提出'人本超级智能'理念，认为判断技术是否该存在的标准是它能否加速人类进步。
-- 微软与Mayo Clinic合作，从零开始训练一个新的医疗基础模型。
+- 微软在 Build 2026 大会上一天内发布了 7 个新 AI 模型，涵盖转录、语音、图像、代码和推理五种能力。
+- 微软 AI CEO Mustafa Suleyman 表示公司正努力在 AI 领域实现真正的自给自足，同时保持与 OpenAI 的合作伙伴关系。
+- MAI-Thinking-1 是微软首个推理模型，拥有 350 亿活跃参数、256K 上下文窗口，并附带 109 页技术报告。
+- 微软训练模型时以超过 250 万亿 token 的初始数据集开始，再逐步精简以提高训练效率。
+- Suleyman 提出 '人文主义超级智能' 理念，认为评判技术是否应该存在的标准是它是否加速了人类进步。
+- 微软正与梅奥诊所合作，从零开始训练一个全新的健康基础模型。
 extract_result: success
+object_mentions:
+- object_type: model
+  name: MAI-Thinking-1
+  canonical_name: MAI-Thinking-1
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - MAI-Thinking-1 是微软发布的第一个推理模型，拥有 350 亿活跃参数和 256K 上下文窗口。
+  - 微软为 MAI-Thinking-1 发布了长达 109 页的技术报告。
+  article_id: f5d5fbbb3a446ab9
+- object_type: product
+  name: Copilot
+  canonical_name: Microsoft Copilot
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 文章提到微软 AI CEO Mustafa Suleyman 的布局将影响 Copilot 的未来发展方向。
+  article_id: f5d5fbbb3a446ab9
+- object_type: project
+  name: Mayo Clinic Health Foundation Model
+  canonical_name: Microsoft-Mayo Clinic Health Foundation Model
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 微软正与梅奥诊所合作，从零开始训练一个全新的健康基础模型。
+  - 梅奥诊所是世界上顶尖的医疗机构之一，微软与其合作构建医疗 AI 基础模型。
+  article_id: f5d5fbbb3a446ab9
 ---
 
 # 😸 WATCH: Sleeping on Microsoft AI? Whoops.

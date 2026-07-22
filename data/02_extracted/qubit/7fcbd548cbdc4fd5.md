@@ -12,39 +12,75 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 7fcbd548cbdc4fd5
 source_type: news_media
-tldr: 正行创新完成近亿美元天使轮融资，正大集团、华勤技术、九安医疗等联合投资
-objective_summary: 2026年6月23日，具身智能企业正行创新（Striding AI）宣布完成近亿美元天使轮融资，由正大集团、华勤技术、九安医疗等多家上市企业联合投资。资金将用于人才引进、世界动作模型与强化学习技术迭代、以及零售与工业场景落地验证。
+tldr: 面向物理智能的具身智能企业正行创新（Striding AI）完成近亿美元天使轮融资，由正大集团、华勤技术、九安医疗等多家上市企业联合投资，资金将用于人才引进、核心技术迭代和场景落地。
+objective_summary: 正行创新（Striding AI）于2026年6月23日宣布完成近亿美元天使轮系列融资，投资方包括正大集团、华勤技术、九安医疗等多家上市企业以及多位知名企业家。公司成立于2026年初，由姚颂、正大集团和于超联合发起，专注于通过世界动作模型与强化学习技术推动人形机器人规模化部署。本轮融资将用于全球人才引进、世界动作模型与强化学习核心技术迭代、以及零售与工业场景的产品化落地。
 event_type: capital_movement
 epistemic_status: pr_statement
 entities:
   companies:
-  - 正行创新/Striding AI
+  - 正行创新
+  - Striding AI
   - 正大集团
   - 华勤技术
   - 九安医疗
+  - 清华大学
   - 深鉴科技
   - 东方空间
-  - 清华大学
+  - 蔚来
+  - 智元
+  - 海康
+  - 大疆
+  - 主线科技
   technologies:
   - 世界动作模型
   - 强化学习
-  - 具身智能
-  - MAPPO
-  - RLinf
   - 隐空间世界动作模型
+  - MAPPO
+  - VLA
   - Agent Loop
-  - 端云协同部署
+  - 人在环路
+  - 端云协同
   key_people:
   - 姚颂
   - 于超
   - 汪玉
 key_logic_flow:
-- 正行创新成立于2026年初，由连续创业者姚颂、正大集团、清华学者于超联合发起，完成近亿美元天使轮系列融资。
-- 公司提出'数据—模型—基础设施'协同进化的技术路线：依托产业伙伴场景采集百万小时级真实数据，开发隐空间世界动作模型，构建Agent Loop系统。
-- 创始团队由姚颂（曾创立深鉴科技、东方空间）和于超博士（MAPPO算法提出者、RLinf开源框架作者）领衔，全栈团队覆盖算法到硬件量产全链条。
-- 公司已与正大集团（零售与农业场景）和华勤技术（3C制造与供应链）建立深度合作，同时布局消费零售与工业制造两大赛道。
-- 正行创新首批自研轮臂机器人与人形机器人本体及解决方案计划于2026年下半年亮相，并重点布局海外市场。
+- 正行创新完成近亿美元天使轮融资，投资方包括正大集团、华勤技术、九安医疗等多家上市企业及多位知名企业家。
+- 公司由连续创业者姚颂、正大集团和清华大学青年学者于超联合发起，核心研发团队覆盖基座模型、强化学习、运动控制、人形机器人整机设计等全链条能力。
+- 正行创新提出「数据—模型—基础设施」协同进化的技术路线，依托正大集团和华勤技术的真实场景进行百万小时级数据采集。
+- 公司与清华大学团队联合研发新一代机器人基座模型，已完成「隐空间世界动作模型」阶段性验证，使机器人从人类视频中习得通用动作规律。
+- 正行创新同步布局消费零售与工业制造两大场景，同时重点规划出海业务，首批自研本体与解决方案预计于2026年下半年亮相。
 extract_result: success
+object_mentions:
+- object_type: project
+  name: RLinf
+  canonical_name: RLinf
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 团队开源的具身智能训练框架RLinf上线半年便在GitHub上获得超过3800颗星标，被海内外多家顶尖高校与头部机器人企业采用。
+  - 于超博士主导提出的多智能体强化学习算法MAPPO已成为领域基准方法，团队开源的RLinf框架获得广泛采用。
+  article_id: 7fcbd548cbdc4fd5
+- object_type: model
+  name: 隐空间世界动作模型
+  canonical_name: 隐空间世界动作模型
+  url: null
+  confidence: medium
+  article_role: primary_subject
+  evidence_snippets:
+  - 正行创新与清华大学团队联合开发新一代机器人基座模型，目前已完成「隐空间世界动作模型」的阶段性验证。
+  - 该模型让机器人在更高效的隐空间中学习物理状态变化，推动人类动作与机器人动作的对齐迁移。
+  article_id: 7fcbd548cbdc4fd5
+- object_type: project
+  name: MAPPO
+  canonical_name: MAPPO
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 于超博士主导提出的多智能体强化学习算法MAPPO已成为领域基准方法，在学术界和产业界被广泛引用和使用。
+  article_id: 7fcbd548cbdc4fd5
 ---
 
 # 正行创新完成近亿美元天使轮融资，正大集团、华勤技术等多家上市企业联合加持

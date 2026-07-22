@@ -14,10 +14,12 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: be8abe6f7bf0dfa0
 source_type: news_media
-tldr: AI token成本失控，企业被迫削减支出，Linux基金会启动Tokenomics基金会制定成本标准
-objective_summary: 2026年，Uber、微软、Priceline等企业因AI token消耗远超预算而被迫削减支出。Linux基金会宣布成立Tokenomics基金会，旨在为AI
-  token成本管理制定行业标准，类似FinOps对云支出的规范。
-event_type: policy_and_safety
+tldr: 企业因AI token消费失控面临预算危机：Uber在4月就用完全年AI编码预算，微软撤回开发者Claude Code许可，Priceline续约Cursor费用涨4-5倍。Linux
+  Foundation宣布成立Tokenomics Foundation，旨在为AI token成本建立类似FinOps的标准化管理框架。
+objective_summary: TechCrunch报道了AI token成本飙升导致的企业预算危机。Uber在2026年4月之前已耗尽全年AI编码预算；微软在启用数月后撤销了开发者的Claude
+  Code许可；Priceline续约Cursor合同费用上涨4到5倍。OpenAI企业负责人Alexander Embiricos表示客户对话已从功能询问转向成本控制诉求。Linux
+  Foundation于本周宣布成立Tokenomics Foundation，致力于为AI token消费建立类似FinOps的成本管控标准。多位企业高管公开讨论了从追求速度到寻求防护栏和治理手段的行业转变。
+event_type: application_landing
 epistemic_status: verified_fact
 entities:
   companies:
@@ -26,28 +28,92 @@ entities:
   - Priceline
   - OpenAI
   - Linux Foundation
-  - Tokenomics Foundation
   - FinOps Foundation
   - Anthropic
   - Google
   technologies:
-  - Claude Code
-  - Cursor
-  - Claude Opus 4.5
-  - GPT-5.1
-  - Gemini 3 Pro
+  - AI agents
+  - tokenomics
   key_people:
   - Alexander Embiricos
   - J.R. Storment
   - Chris Reed
 key_logic_flow:
-- Uber在2026年4月就已耗尽全年AI编码预算，微软收回了已下发给开发者的Claude Code许可证，Priceline续约Cursor时费用上涨4-5倍。
-- 尽管单token价格下降，但AI采用率提升和自主Agent的普及导致整体token消耗量激增。
-- Linux基金会本周宣布成立Tokenomics基金会，旨在效仿FinOps模式为AI token成本管理建立行业标准。
-- OpenAI企业主管Alexander Embiricos表示，企业客户的关注点已从"AI能做什么"转向"成本透明度和token管控"。
-- 2025年11月发布的Anthropic Claude Opus 4.5、OpenAI GPT-5.1和Google Gemini 3 Pro等新模型大幅提升了Agent能力，进一步推高了token消耗。
-- 一家公司因忘记为员工设置使用限制，产生了5亿美元的Claude账单。
+- Uber在2026年4月之前就已耗尽全年AI编码预算，显示出企业AI token消耗速度远超预期。
+- 微软在启用开发者Claude Code许可数月后撤销了该许可，反映出企业开始收紧AI工具的使用权限。
+- Priceline续约Cursor的合同费用上涨了4到5倍，体现了AI编码工具成本急速攀升的趋势。
+- OpenAI企业负责人Alexander Embiricos指出，企业客户关注点已从'能做什么'转向'花费太多，需要可见性和审计能力'。
+- Linux Foundation本周宣布成立Tokenomics Foundation，致力于为AI token消费建立标准化的成本管理和治理框架。
+- FinOps Foundation执行董事J.R. Storment表示企业正从追求速度转向寻求防护栏和支出控制手段。
 extract_result: success
+object_mentions:
+- object_type: project
+  name: Tokenomics Foundation
+  canonical_name: Tokenomics Foundation
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Linux Foundation本周宣布组建Tokenomics Foundation，旨在为AI token消费建立类似FinOps的成本管控标准化框架。
+  - 新标准组织由FinOps Foundation执行董事J.R. Storment推动，目标直指企业AI token预算超支的生存危机。
+  article_id: be8abe6f7bf0dfa0
+- object_type: product
+  name: Claude Code
+  canonical_name: Claude Code
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 微软在启用几个月后撤销了其开发者的Claude Code许可，这是企业收紧AI工具使用的标志性案例。
+  - 该案例与其他预算失控事件并列出现，共同揭示了企业AI工具成本失控的普遍性问题。
+  article_id: be8abe6f7bf0dfa0
+- object_type: product
+  name: Cursor
+  canonical_name: Cursor
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Priceline员工向TechCrunch透露，该公司的常规Cursor续约合同费用上涨了4到5倍。
+  - Priceline高级IT财务总监Chris Reed用'像快克可卡因一样'来形容企业对AI工具的成本依赖困境。
+  article_id: be8abe6f7bf0dfa0
+- object_type: project
+  name: FinOps Foundation
+  canonical_name: FinOps Foundation
+  url: null
+  confidence: high
+  article_role: ecosystem_context
+  evidence_snippets:
+  - FinOps Foundation是Linux Foundation旗下的项目，其云成本管理框架被Tokenomics Foundation视为核心参考模板。
+  - 该基金会执行董事J.R. Storment表示2026年4月和5月已频繁听到企业AI预算超支3倍的生存危机报告。
+  article_id: be8abe6f7bf0dfa0
+- object_type: model
+  name: Claude Opus 4.5
+  canonical_name: Claude Opus 4.5
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Anthropic发布的Claude Opus 4.5是2025年11月推动agentic工具能力提升并加剧token消费的新模型之一。
+  article_id: be8abe6f7bf0dfa0
+- object_type: model
+  name: GPT-5.1
+  canonical_name: GPT-5.1
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - OpenAI发布的GPT-5.1与同期新模型一起显著改进了agentic工具能力，进而导致企业token消费量成倍增长。
+  article_id: be8abe6f7bf0dfa0
+- object_type: model
+  name: Gemini 3 Pro
+  canonical_name: Gemini 3 Pro
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Google的Gemini 3 Pro与Claude Opus 4.5和GPT-5.1同期发布，被文章列为推动token消费暴涨的驱动因素之一。
+  article_id: be8abe6f7bf0dfa0
 ---
 
 Across the industry, companies are starting to balk at the price of AI. Uber blew through its entire 2026 AI coding budget by April. Microsoft revoked its developers’ Claude Code licenses months after enabling them. A Priceline employee told TechCrunch that a routine Cursor contract renewal came back 4-5x more expensive.

@@ -16,8 +16,9 @@ manifest_dates:
 - '2026-07-05'
 - '2026-07-06'
 source_type: news_media
-tldr: Midjourney要求好莱坞工作室披露AI使用细节，以证明用版权内容训练AI是行业惯例。
-objective_summary: 在迪士尼、环球和华纳兄弟起诉Midjourney侵犯版权后，Midjourney向法院申请要求这些工作室披露其内部使用生成式AI的全部情况，包括用于故事板和内容构思的AI模型及提示词，以证明未授权使用版权内容训练AI属于行业惯例。
+tldr: Midjourney 在与迪士尼、环球和华纳兄弟的版权诉讼中，要求法院强制这些好莱坞工作室披露其内部使用 AI 生成内容的详细情况，包括所有提示词和输出结果，以证明对方也在做同样的事。
+objective_summary: Midjourney 因被迪士尼、环球和华纳兄弟以版权侵权为由起诉后，在证据开示阶段提出动议，要求法院撤销此前限制工作室仅需披露"面向消费者"AI
+  使用情况的裁定。Midjourney 认为工作室可能在内部使用 AI 生成受版权保护的内容，并要求对方交出所有 Midjourney 提示词及输出结果。工作室律师则称这是"钓鱼执法"。
 event_type: policy_and_safety
 epistemic_status: verified_fact
 entities:
@@ -27,18 +28,30 @@ entities:
   - Universal
   - Warner Bros.
   technologies:
-  - generative AI
-  - image-generation models
+  - 图像生成模型
+  - AI 训练
   key_people:
   - David Singer
 key_logic_flow:
-- 迪士尼和环球去年起诉Midjourney侵犯版权，称其图像生成模型可创建受版权保护的角色形象（如巴特·辛普森和达斯·维达），随后华纳兄弟也提起类似诉讼。
-- 法官此前裁定工作室需提供生成式AI使用信息，但仅限于面向消费者的视频和图片，而非内部使用。
-- Midjourney申请推翻该限制，认为工作室可以借此筛选对其有利的文件，而隐瞒能支持Midjourney抗辩的证据。
-- Midjourney声称若工作室内部也在开发图像生成AI用于故事板或内容构思，则证明未授权使用版权内容训练AI是行业惯例。
-- Midjourney还要求工作室披露在Midjourney上使用的所有提示词及输出结果，而非仅限涉嫌侵权的内容。
-- 工作室首席律师David Singer称Midjourney的请求属于"钓鱼式取证"，并强调工作室无意阻止AI技术发展，只是要求停止未经授权复制其影视作品和角色。
+- 迪士尼和环球去年起诉 Midjourney，指控其图像生成模型能创建属于工作室版权的角色形象，随后华纳兄弟也提起了类似诉讼。
+- 法官此前裁定工作室仅需披露那些导致"面向消费者"视频和图像的 AI 使用情况的相关文件。
+- Midjourney 在最新动议中寻求推翻该限制，声称工作室可能正在内部做它们起诉 Midjourney 所做的同样事情。
+- Midjourney 认为若工作室在内部使用 AI 生成图像用于故事板或创意构思，则证明了下载和训练未授权版权内容是行业惯例。
+- Midjourney 要求工作室交出所有在 Midjourney 上使用的提示词及对应输出结果，而不仅仅是涉嫌侵权的那些。
+- 工作室首席律师 David Singer 称 Midjourney 的要求是"钓鱼执法"，并表示工作室只是想阻止 Midjourney 未经授权复制其电影和电视作品。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Midjourney
+  canonical_name: Midjourney
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 迪士尼和环球去年起诉 Midjourney，指控其图像生成模型能够创建属于工作室版权的角色形象。
+  - Midjourney 在最新法律动议中要求工作室披露所有在 Midjourney 上使用的提示词及对应的输出结果。
+  - Midjourney 认为其基于版权角色图像训练 AI 模型的行为属于合理使用范畴。
+  article_id: 85afafbbb341e6d7
 ---
 
 As part of an ongoing legal dispute with three Hollywood studios, AI startup Midjourney is seeking to compel those studios to reveal how they use AI themselves.

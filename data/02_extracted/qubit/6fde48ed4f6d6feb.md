@@ -12,9 +12,9 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 6fde48ed4f6d6feb
 source_type: news_media
-tldr: 复旦系眸深智能发布机器人原生STI-WM时空一体世界动作模型
-objective_summary: 眸深智能发布专为机器人打造的STI-WM时空一体世界动作模型，该模型实现空间结构、时间演化、物理一致性、执行鲁棒性四维统一，半年内完成5轮融资，3亿元Pre-A轮融资获5倍超额认购，已与宇树科技、禾川科技等企业达成合作。
-event_type: application_landing
+tldr: 复旦系科创企业眸深智能发布STI-WM时空一体世界动作模型，专为机器人原生打造具身大脑，实现空间、时间、物理、执行四维统一。团队源自复旦深度学习实验室，半年获5轮融资，已与宇树科技等头部企业达成商业化合作。
+objective_summary: 眸深智能（复旦系科创企业）于2026年5月推出STI-WM时空一体世界动作模型，该模型面向机器人原生设计，采用时空一体化建模、物理一致性约束和端到端原生融合架构，旨在解决VLA等传统模型空间感知不足、物理逻辑缺失等问题。公司核心团队源自复旦大学深度学习实验室，由陈涛教授、前英特尔首席科学家张益民博士等组成，此前已推出MotionGPT等成果并获得IJCAI2025杰出论文奖。眸深智能半年内完成5轮融资，Pre-A轮3亿元融资获5倍超额认购，已与宇树科技、禾川科技等达成合作，覆盖工业制造和居家康养等场景。
+event_type: framework_tools
 epistemic_status: pr_statement
 entities:
   companies:
@@ -31,18 +31,62 @@ entities:
   - MLD
   - MotionGPT
   - HL3DWM
+  - 世界模型
+  - 具身智能
   key_people:
   - 陈涛
   - 张益民
   - 穆泽林
 key_logic_flow:
-- 眸深智能发布专为机器人原生打造的STI-WM时空一体世界动作模型，以时空一体化建模、物理一致性约束、端到端原生融合为核心技术突破。
-- 核心团队源自复旦大学深度学习实验室，由教授陈涛、原英特尔首席科学家张益民、95后连续创业者穆泽林组成'复旦铁三角'阵容。
-- 团队先后推出全球首个人形动作生成大模型MotionGPT和三维世界模型HL3DWM，获得ICCV2023三维目标识别冠军、CVPR2024三维密集语义推理冠军、IJCAI2025杰出论文奖。
-- STI-WM实现空间结构、时间演化、物理一致性、执行鲁棒性四维一体化，兼容RGB图像和深度点云等多模态输入，支持百秒级长时程任务推演与全局轨迹规划。
-- 模型具备六大技术壁垒：时空一体化原生建模、原生三维感知、物理一致性引擎、长时程高阶规划、端侧轻量化部署、小样本强泛化能力。
-- 眸深智能半年内完成5轮融资，3亿元Pre-A轮融资获5倍超额认购，已与多家千亿级产业龙头达成战略合作，未来三年预计可锁定10亿元订单。
+- 眸深智能发布STI-WM时空一体世界动作模型，该模型专为机器人原生打造，实现空间结构、时间演化、物理一致性、执行鲁棒性四维一体化统一。
+- 核心团队源自复旦大学深度学习实验室，由陈涛教授、前英特尔首席科学家张益民博士、95后创业者穆泽林组成，自2021年起布局世界模型等核心技术。
+- 团队此前推出全球首个人形动作生成大模型MotionGPT和三维世界模型HL3DWM，获得ICCV2023三维目标识别冠军、CVPR2024三维密集语义推理冠军及IJCAI2025杰出论文奖。
+- STI-WM采用时空一体化原生建模、原生三维感知、物理一致性引擎、长时程高阶规划、端侧轻量化部署和小样本强泛化能力六大技术壁垒。
+- 眸深智能半年内完成5轮融资，Pre-A轮3亿元融资获5倍超额认购，获得国家级投资平台和头部产业资本认可。
+- 公司已与宇树科技、禾川科技、颐家养老等企业达成合作，覆盖工业制造、居家康养、商业服务等场景，未来三年预计可锁定10亿元订单。
 extract_result: success
+object_mentions:
+- object_type: model
+  name: STI-WM
+  canonical_name: STI-WM Spatiotemporally Integrated World Model
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 眸深智能正式推出STI-WM时空一体世界动作模型，专为机器人原生打造的通用具身大脑，以时空一体化建模、物理一致性约束、端到端原生融合为核心。
+  - STI-WM实现空间结构、时间演化、物理一致性、执行鲁棒性四维一体化统一，可兼容RGB图像、深度点云、机器人本体多模态感知输入。
+  - STI-WM构建出理解世界、推演未来、规划动作、执行纠错的完整物理智能闭环，支持百秒级长时程任务推演与全局轨迹规划。
+  article_id: 6fde48ed4f6d6feb
+- object_type: model
+  name: MotionGPT
+  canonical_name: MotionGPT
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 团队推出全球首个人形动作生成大模型MotionGPT，作为眸深智能在具身智能领域的前期核心成果之一。
+  - MotionGPT被列为团队在2021年行业风口未至之时前瞻性布局世界模型、三维感知、时序动作生成三大底层核心技术的代表性成果。
+  article_id: 6fde48ed4f6d6feb
+- object_type: model
+  name: HL3DWM
+  canonical_name: HL3DWM
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 团队推出三维世界模型HL3DWM，作为眸深智能在具身智能领域的前期核心成果之一。
+  - HL3DWM与MotionGPT共同构成团队自2021年起在世界模型和三维感知方向的技术积累。
+  article_id: 6fde48ed4f6d6feb
+- object_type: model
+  name: MLD
+  canonical_name: MLD Model
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 团队在2022年提出全球首个影空间语言-动作端到端映射MLD模型，该成果发表于CVPR 2023。
+  - MLD模型的核心思路在2025年5月被英伟达DAIR实验室核心工作引用验证，体现了团队技术的原创性和前瞻性。
+  article_id: 6fde48ed4f6d6feb
 ---
 
 # 机器人原生世界动作模型问世！首创时空一体架构，复旦系团队出品

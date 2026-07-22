@@ -6,6 +6,7 @@ published: ''
 created: '2026-07-20'
 manifest_dates:
 - '2026-07-20'
+- '2026-07-21'
 description: 'A Flexible Framework for Experiencing Heterogeneous LLM Inference/Fine-tune
   Optimizations A Flexible Framework for Experiencing Cutting-edge LLM Inference/Fine-tune
   Optimizations 🎯 Overview | 🚀 Inference | 🎓 SFT | 🔥 Citation | 🚀 Roadmap(2026Q2)

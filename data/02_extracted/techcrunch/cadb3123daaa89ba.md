@@ -13,9 +13,9 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: cadb3123daaa89ba
 source_type: news_media
-tldr: FERC 下令电网运营商为 AI 数据中心并网开设快速通道
-objective_summary: FERC 于 2026 年 6 月 18 日一致通过指令，要求六大电网运营商为数据中心等大型用电户提供并网快速通道，数据中心承担并网成本。运营商需在
-  30 天内提交容量报告，60 天内调整电价。此举因 AI 数据中心电力需求预计到 2035 年增长近三倍。
+tldr: 美国联邦能源监管委员会（FERC）周四一致通过指令，要求六大电网运营商为AI数据中心等大型用电户创建并网快速通道，数据中心需承担并网费用。电网运营商须在30天内报告备用发电容量，60天内调整电价。
+objective_summary: 2026年6月18日，FERC一致通过指令，要求美国六大电网运营商优先处理数据中心的并网请求，确保其能及时有序接入输电系统，数据中心需自行承担相关费用。FERC同时要求运营商评估固态变压器等替代输电技术，并更包容数据中心的表后供电方案。能源部长Chris
+  Wright此前敦促FERC介入，称并网延迟已威胁美国AI竞争力。当前数据中心用电需求预计到2035年将增长近三倍，而截至2023年底电厂并网请求总量已超过现有电厂总容量。
 event_type: policy_and_safety
 epistemic_status: verified_fact
 entities:
@@ -23,17 +23,21 @@ entities:
   - FERC
   - PJM
   - Bloomberg
-  technologies: []
+  - Department of Energy
+  technologies:
+  - solid-state transformers
+  - superconducting transmission lines
   key_people:
   - Chris Wright
 key_logic_flow:
-- FERC 于 2026 年 6 月 18 日一致通过指令，要求美国六大电网运营商为 AI 数据中心等大型用电户建立并网快速通道，数据中心需自行承担并网成本。
-- FERC 同时要求电网运营商考虑固态变压器、超导输电线路等替代输电技术，为电网技术初创公司提供机会。
-- 电网运营商需在 30 天内提交可用发电容量报告，60 天内说明或修订区域电价，并需更包容地对待数据中心的表后电力方案。
-- 截至 2023 年底，发电厂并网请求总量已超过现有发电厂总装机容量，电网拥堵严重，新建电厂本身也面临并网困难。
-- AI 数据中心电力需求预计到 2035 年增长近三倍，部分区域批发电价较五年前上涨最高 267%，PJM 等电网运营商陷入混乱。
-- 能源部长 Chris Wright 于 2025 年 10 月敦促 FERC 处理数据中心并网延迟问题，称其威胁美国 AI 竞争力。
+- 美国联邦能源监管委员会（FERC）周四一致通过指令，要求六大电网运营商为数据中心等大型用电户创建并网快速通道。
+- 数据中心需承担并网产生的全部费用，FERC还要求运营商考虑固态变压器和超导输电线路等替代输电技术。
+- 电网运营商须在30天内提交剩余发电容量报告，并在60天内对区域电价进行辩护或修订。
+- 截至2023年底，电厂的并网请求总量已超过现有电厂总容量，意味着并网排队比电网本身能服务的容量还长。
+- 数据中心用电需求预计到2035年将增长近三倍，而过去二十年电网运营商已习惯近乎零增长的电力需求环境。
+- 能源部长Chris Wright在2025年10月敦促FERC解决数据中心并网延迟问题，称其已威胁美国在AI领域的竞争力。
 extract_result: success
+object_mentions: []
 ---
 
 The Federal Energy Regulatory Commission (FERC) told grid operators on Thursday to fast-track interconnection requests from data centers and other large electricity users.

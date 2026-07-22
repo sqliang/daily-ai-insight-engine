@@ -14,8 +14,8 @@ id: ee5a0be33c0fc24c
 manifest_dates:
 - '2026-07-01'
 source_type: news_media
-tldr: 硅基流动向港交所提交上市申请，冲刺AI Token工厂第一股，2025年营收5533万元但亏损3.45亿元。
-objective_summary: 硅基流动（SiliconFlow）于2026年7月向港交所提交IPO招股书，定位为AI推理时代的Token工厂，不做模型和应用，专注Token供应服务。公司已完成7轮融资估值77.4亿元，2025年收入同比增长653%至5533万元，但净亏损扩大至3.45亿元，公有云服务毛利率为-119%。
+tldr: 硅基流动向港交所提交上市申请，定位港股「AI Token工厂第一股」。2025年收入5533万元同比增长653%，但亏损扩大至3.45亿元，毛利率转负为-24.0%，公有云业务拖累严重。
+objective_summary: 硅基流动于2026年7月向港交所提交IPO申请，声称要做AI推理时代的Token工厂。创始人袁进辉（原OneFlow创始人）携团队专注将异构算力封装为可计量的Token供应服务，不做模型也不做应用。招股书显示2025年收入5533万元（同比增长653.2%），但亏损3.45亿元（扩大4.2倍），毛利率从39.4%降至-24.0%。平台注册用户达1028万，日均Token吞吐量5785亿，支持超170个模型，服务超13000家企业客户。公司已完成7轮融资估值77.4亿元，阿里、美团、商汤、华为等产业方均有投资。
 event_type: capital_movement
 epistemic_status: verified_fact
 entities:
@@ -28,39 +28,64 @@ entities:
   - 蔚来
   - 智谱
   - 华为
-  - 壁仞
-  - 云天励飞
-  - 联通
-  - '360'
   - 携程
   - 金蝶
-  - 软通
-  - 万兴
-  - 创新工场
-  - 耀途资本
-  - 普华资本
-  - 纪源资本
-  - 华控基金
+  - '360'
+  - 联通
   - OneFlow
   - 光年之外
-  - 沙利文
+  - 创新工场
+  - 壁仞
+  - 云天励飞
   technologies:
-  - AI推理
   - Token
+  - AI推理
   - 异构算力
-  - AI Infra
   key_people:
   - 袁进辉
   - 张钹
   - 王慧文
 key_logic_flow:
-- 硅基流动已向港交所提交上市申请，剑指港股「AI Token工厂第一股」。
-- 公司已完成7轮融资，估值77.4亿元，阿里、美团、商汤、蔚来、智谱等产业方均有投资。
-- 公司定位为AI推理时代的Token工厂，不做模型和应用，专注异构算力与Token供应服务。
-- 2025年收入5533万元，同比增长653.2%，但亏损扩大至3.45亿元（上年8191.5万元），经调整净亏损1.87亿元。
-- 公有云服务收入首次超过本地部署，占总收入52.9%，但其毛利率为-119.0%，整体毛利率转负至-24.0%。
-- 截至2026年4月，平台注册用户超1028万，日均Token吞吐量5785亿，支持超170个模型，服务超13000家企业客户。
+- 硅基流动已向港交所提交上市申请，剑指港股「AI Token工厂第一股」，公司已完成7轮融资估值达77.4亿元。
+- 创始人袁进辉为张钹院士高徒，原为AI Infra公司OneFlow创始人，OneFlow被王慧文光年之外收购并入美团后，袁进辉携原班人马创立硅基流动。
+- 硅基流动不做模型也不做应用，核心业务是将异构算力、多模型和企业调用需求封装为可稳定交付和可计费的Token供应服务。
+- 2025年公司收入5533万元同比增长653.2%，但亏损扩大至3.45亿元，毛利率从39.4%转负为-24.0%。
+- 截至2026年4月，硅基流动平台注册用户达1028.24万，日均词元吞吐量5785亿，累计支持超过170个模型，服务超过13000家企业客户。
+- 公有云服务收入2926.1万元占比52.9%首次超过本地部署，但公有云毛利率为-119.0%，销售成本从445万元飙升至6863万元，算力成本压力显著。
 extract_result: success
+object_mentions:
+- object_type: company
+  name: 硅基流动
+  canonical_name: 硅基流动
+  url: https://www1.hkexnews.hk/app/sehk/2026/108701/documents/sehk26063002927_c.pdf
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 硅基流动已向港交所提交上市申请，剑指港股「AI Token工厂第一股」，公司已完成7轮融资估值达到77.4亿元人民币。
+  - 2025年硅基流动收入5533万元同比增长653.2%，但亏损3.45亿元，毛利率从39.4%转负为-24.0%。
+  - 截至2026年4月平台注册用户达1028.24万，日均词元吞吐量5785亿，累计支持超过170个模型，服务超过13000家企业客户。
+  article_id: ee5a0be33c0fc24c
+- object_type: product
+  name: 硅基流动平台
+  canonical_name: 硅基流动平台
+  url: https://siliconflow.cn
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 硅基流动平台作为Token工厂核心产品，将异构算力、多模型和企业调用需求封装成可稳定交付、可计量、可收费的Token供应服务。
+  - 平台公有云服务2025年收入2926.1万元占总收入52.9%，首次超过本地部署成为收入占比最高的业务板块。
+  - 虽然用户规模和Token吞吐量大幅增长，但后端算力成本同步推高，平台公有云服务毛利率为-119.0%。
+  article_id: ee5a0be33c0fc24c
+- object_type: project
+  name: OneFlow
+  canonical_name: OneFlow
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 袁进辉曾创办AI Infra公司OneFlow，OneFlow在2023年被王慧文光年之外收购后并入美团。
+  - 硅基流动的团队班底就是袁进辉创办OneFlow时的原班人马。
+  article_id: ee5a0be33c0fc24c
 ---
 
 # 卖Token也不是稳赚不赔！硅基流动招股书来了

@@ -14,9 +14,12 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: ce06dcdbb7372ccd
 source_type: community_discussion
-tldr: Apple 发布 container 工具，在 macOS 上运行轻量级 Linux 容器虚拟机。
-objective_summary: Apple 在 GitHub 上发布了 container-machine 功能文档，该工具可在 macOS 上创建基于标准
-  OCI 镜像的轻量级 Linux 容器虚拟机，支持 systemd 初始化系统、自动映射宿主机用户和家目录，提供持久化存储和长期服务运行能力，支持
+tldr: 苹果发布了 container machine 功能，可在 macOS 上运行轻量级、持久化的 Linux 容器环境，基于标准 OCI 镜像，自动共享宿主的用户和家目录，支持
+  systemd 服务注册和多发行版并行测试。
+objective_summary: 苹果在 GitHub 上的 apple/container 项目中推出了 Container Machine 功能，用于在 macOS
+  上创建基于标准 OCI 镜像的轻量级 Linux 环境。该功能自动将宿主的用户名和家目录映射到容器中，支持运行 systemd 服务、多发行版并行测试以及直接在
+  macOS 端使用编辑器编辑代码并在 Linux 环境内构建。用户可通过 container machine 命令行工具创建、运行、停止和删除容器机器，并支持动态调整
+  CPU 和内存配置。
 event_type: framework_tools
 epistemic_status: verified_fact
 entities:
@@ -25,16 +28,39 @@ entities:
   technologies:
   - OCI
   - systemd
+  - Docker
+  - Linux
   key_people: []
 key_logic_flow:
-- Apple 推出 container machine 功能，在 macOS 上提供高度集成的轻量级 Linux 环境，基于标准 OCI 镜像构建和共享。
-- 容器虚拟机运行镜像的 init 系统（如 systemd），支持注册长期运行服务以及在进程管理器下测试应用。
-- 系统自动将 macOS 宿主机用户名和家目录映射到 Linux 环境中，用户可在 macOS 上编辑代码，在容器内编译和运行。
-- 支持通过 container machine 命令行工具进行创建、运行、查看、停止和删除操作，并支持设置默认容器机。
-- 用户可以构建自定义镜像（如 Ubuntu 24.04 带 systemd 的镜像），通过 container build 和 container machine
-  create 命令使用。
-- 容器机支持配置 CPU 和内存资源（默认内存为宿主机一半），修改配置需停止后重新启动生效。
+- Container Machine 提供与 macOS 深度集成的 Linux 容器环境，基于标准 OCI 镜像，具备快速、轻量且持久化的特性。
+- 容器机器与普通应用容器的区别在于其模拟完整的 Linux 环境而非单个应用，运行镜像的 init 系统并支持注册长期运行的后台服务。
+- 容器机器自动将主机的用户名和家目录映射到 Linux 环境中，使 macOS 侧的仓库和配置文件在双平台均可直接访问使用。
+- 用户可通过 container machine 命令行工具执行创建、列出、检查、运行、停止和删除等管理操作，并支持设置默认容器机器以省略 -n 参数。
+- 任何包含 /sbin/init 的 Linux 镜像均可作为容器机器使用，文章提供了基于 Ubuntu 24.04 的完整 Dockerfile 构建示例。
+- 容器机器支持通过 set 命令动态调整 CPU 和内存配置，变更在容器机器下次重启后生效。
 extract_result: success
+object_mentions:
+- object_type: project
+  name: apple/container
+  canonical_name: apple/container
+  url: https://github.com/apple/container
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 该文档是苹果官方在 GitHub 仓库 apple/container 中发布的 Container Machine 功能说明，详细介绍了其用法和设计理念。
+  - 容器机器的创建、运行和管理均通过 container 命令行工具完成，文档中提供了完整的 CLI 操作指令和输出示例。
+  article_id: ce06dcdbb7372ccd
+- object_type: product
+  name: Container Machine
+  canonical_name: Container Machine
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Container Machine 提供与 macOS 无缝集成的 Linux 环境，基于标准 OCI 镜像构建，支持快速、轻量和持久化运行。
+  - 容器机器自动将宿主的用户名和家目录映射到 Linux 环境中，开发者可在 macOS 上编辑代码，在容器中构建和运行应用。
+  - 容器机器运行镜像的 init 系统，支持通过 systemctl 注册长期运行的后台服务，便于在 Mac 上测试真实 Linux 服务。
+  article_id: ce06dcdbb7372ccd
 ---
 
 Container machine provides a highly integrated Linux environment that works seamlessly on your Mac. Container machines are fast, lightweight and persistent. They are based on standard OCI images that can be built and shared. Host integrations such as automatic user and home directory sharing provide quick and easy access to your Linux environment no matter where you are in a terminal.

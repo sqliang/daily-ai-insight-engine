@@ -13,17 +13,21 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 1c5afcc7fc630be9
 source_type: news_media
-tldr: Anthropic与印度IT巨头TCS合作，加速企业级AI部署
-objective_summary: Anthropic与印度IT服务公司TCS达成合作，TCS将设立专门业务单元部署Anthropic的AI模型，为5万多名员工提供Claude助手，并获得新模型早期访问权限。双方将共同开发金融、医疗、电信和航空等行业解决方案。
+tldr: Anthropic 与印度 IT 服务巨头塔塔咨询（TCS）达成合作，TCS 将组建专门业务单元部署 Anthropic 的 AI 模型，并向其 5 万多名员工提供
+  Claude AI 助手。双方将共同开发金融、医疗、电信和航空等行业的解决方案。
+objective_summary: Anthropic 于 2026 年 6 月与印度 IT 服务巨头 Tata Consultancy Services（TCS）达成战略合作。TCS
+  将组建一个专注于部署 Anthropic AI 模型的业务单元，获得新模型版本的早期访问权限，并向其超过 5 万名员工提供 Claude AI 助手。双方计划为金融服务、医疗、电信和航空等行业开发联合解决方案。TCS
+  旗下的 Diligenta 计划将 Claude 用于客户服务和流程自动化，TCS iON 将提供基于 Anthropic 模型的培训与认证项目。TCS 还将为
+  Anthropic 的 Claude Code 生态系统贡献能力，包括理赔裁定和贷款咨询工具。Anthropic 将印度视为其第二大市场，此前已与 Infosys
+  达成类似合作。
 event_type: application_landing
-epistemic_status: verified_fact
+epistemic_status: pr_statement
 entities:
   companies:
   - Anthropic
   - Tata Consultancy Services (TCS)
   - Infosys
   - HCLTech
-  - OpenAI
   - Diligenta
   - TCS iON
   technologies:
@@ -31,13 +35,51 @@ entities:
   - Claude Code
   key_people: []
 key_logic_flow:
-- Anthropic与印度IT服务巨头Tata Consultancy Services (TCS)达成合作，旨在加速其AI模型在企业中的采用。
-- TCS将创建专门业务单元部署Anthropic的AI模型，为超过5万名员工提供Claude AI助手，并获得新模型的早期访问权限。
-- 双方将共同开发金融、医疗、电信和航空等行业的解决方案。
-- Diligenta（TCS旗下英国寿险业务，服务超2200万客户）计划使用Claude进行客户服务和流程自动化。
-- TCS iON将提供Anthropic模型相关的培训和认证项目，TCS还将为Claude Code生态贡献理赔裁决和贷款咨询工具。
-- 该合作发生在印度IT服务业因AI崛起面临质疑的背景下，TCS和Infosys股价今年已分别下跌约34%和31%。
+- Anthropic 与印度 IT 服务巨头 Tata Consultancy Services（TCS）建立战略合作伙伴关系，以加速企业级 AI 部署。
+- TCS 将组建专门业务单元来部署 Anthropic 的 AI 模型，获得新模型早期访问权限，并向其 5 万多名员工提供 Claude AI 助手。
+- 双方计划为金融服务、医疗、电信和航空等行业开发联合解决方案。
+- TCS 旗下的英国寿险与养老金业务 Diligenta（服务超 2200 万客户）计划使用 Claude 进行客户服务和流程自动化。
+- TCS 的数字学习平台 TCS iON 将提供基于 Anthropic 模型的培训和认证项目。
+- TCS 将为 Anthropic 的 Claude Code 生态系统贡献理赔裁定和贷款咨询等专业工具。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Claude
+  canonical_name: Anthropic Claude
+  url: https://claude.ai
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - TCS 将向超过 5 万名员工提供 Anthropic 的 Claude AI 助手。
+  - TCS 旗下的 Diligenta 计划使用 Claude 进行客户服务和流程自动化。
+  article_id: 1c5afcc7fc630be9
+- object_type: product
+  name: Claude Code
+  canonical_name: Anthropic Claude Code
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - TCS 表示将为 Anthropic 的 Claude Code 生态系统贡献能力，包括理赔裁定和贷款咨询工具。
+  article_id: 1c5afcc7fc630be9
+- object_type: product
+  name: TCS iON
+  canonical_name: TCS iON
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - TCS 的数字学习平台 TCS iON 将提供基于 Anthropic 模型的培训和认证项目。
+  article_id: 1c5afcc7fc630be9
+- object_type: company
+  name: Diligenta
+  canonical_name: Diligenta
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Diligenta 是 TCS 旗下英国寿险与养老金业务，拥有超过 2200 万客户，计划使用 Claude 进行客户服务和流程自动化。
+  article_id: 1c5afcc7fc630be9
 ---
 
 Anthropic has partnered with Indian IT services giant Tata Consultancy Services (TCS) in a bid to accelerate adoption of its artificial intelligence models at enterprises.

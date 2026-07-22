@@ -15,28 +15,37 @@ id: 83cf8a3ef5bd09ac
 manifest_dates:
 - '2026-07-01'
 source_type: community_discussion
-tldr: Google 开源的跨仓库代码同步与转换工具
-objective_summary: Google 开发的 Copybara 是一个用于在多个 Git 仓库之间转换和移动代码的开源工具。它要求指定一个权威仓库作为唯一真相源，支持双向代码同步，使用
-  Starlark 配置文件定义工作流，采用无状态设计将同步状态存储在目标仓库的提交标签中。
+tldr: Google 开源了其内部使用的代码仓库同步工具 Copybara，该工具可在多个 Git 仓库之间转换和移动代码，采用无状态设计并将状态存储在目标仓库的提交信息标签中。
+objective_summary: Google 将其内部使用的代码同步工具 Copybara 以开源形式发布在 GitHub 上。该工具用于在多个代码仓库之间转换和移动代码，支持选择一个权威仓库作为唯一事实来源，同时允许任何仓库接收外部贡献和发布版本。Copybara
+  采用无状态设计，将同步状态以标签形式存储在目标仓库的提交信息中。目前该工具正式支持 Git 仓库，Mercurial 支持仍处于实验阶段，使用 Java 开发并通过
+  Bazel 构建系统编译。
 event_type: framework_tools
 epistemic_status: verified_fact
 entities:
   companies:
   - Google
-  technologies:
-  - Copybara
-  - Bazel
-  - Starlark
-  - Git
+  technologies: []
   key_people: []
 key_logic_flow:
 - Copybara 是 Google 内部开发并开源的代码仓库同步工具，用于在多个仓库之间转换和移动代码。
-- 要求指定一个权威仓库作为唯一真相源，但允许在任何仓库中提交贡献和发布版本。
-- 目前仅正式支持 Git 仓库类型，Mercurial 读取功能为实验性，可通过可扩展架构添加自定义源和目标。
-- 采用无状态设计，将同步状态存储在目标仓库的提交信息标签中，允许多用户共享配置获得一致结果。
-- 使用 Starlark 语言编写配置文件（如 copy.bara.sky），定义工作流名称、源仓库、目标仓库、文件映射和转换规则。
-- 可通过 Bazel 构建、每周快照发布或 Docker 容器三种方式运行，需 Java Runtime 21 或更高版本。
+- 它要求选择一个权威仓库作为唯一事实来源，但允许非权威仓库接收贡献和发布版本。
+- Copybara 采用无状态设计，将同步状态以标签形式存储在目标仓库的提交信息中，支持多用户或服务共享同一配置。
+- 该工具目前正式支持 Git 仓库，Mercurial 仓库处于实验阶段，可扩展架构允许添加自定义的源和目标类型。
+- Copybara 使用 Java 开发并通过 Bazel 构建系统编译，提供每周快照发布版本和 Docker 实验性支持。
+- 配置以 .bara.sky 文件存储，推荐使用版本控制系统管理这些配置文件。
 extract_result: success
+object_mentions:
+- object_type: project
+  name: google/copybara
+  canonical_name: google/copybara
+  url: https://github.com/google/copybara
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Copybara 是 Google 内部使用的工具，用于在代码仓库之间转换和移动代码。
+  - 该工具要求选择一个权威仓库作为唯一事实来源，但允许任何仓库接收外部贡献和发布版本。
+  - Copybara 采用无状态设计，将同步状态以标签形式存储在目标仓库的提交信息中。
+  article_id: 83cf8a3ef5bd09ac
 ---
 
 *A tool for transforming and moving code between repositories.*

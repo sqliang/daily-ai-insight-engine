@@ -22,24 +22,25 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: bbc17e01a6cb04cf
 source_type: academic_paper
-tldr: 提出 HALE 框架，将 LLM 用于基于智能体的建模以模拟人类决策
-objective_summary: 作者针对传统 ABM 依赖静态先验无法实时适应的问题，提出了 HALE 框架，利用大语言模型预测 ABM 模拟中的人类决策，并以
-  COVID-19 在盐湖县的模拟作为概念验证。
-event_type: framework_tools
-epistemic_status: theoretical_claim
+tldr: 该论文提出 HALE（混合智能体与语言驱动流行病）建模框架，利用大语言模型在智能体建模中预测人类决策，并以盐湖县的新冠模拟作为概念验证。
+objective_summary: 研究人员在 arXiv 发表论文，提出了一种名为 HALE（Hybrid Agent-based and Language-driven
+  Epidemic）的可扩展建模框架。该框架将大语言模型集成到智能体建模（ABM）中，用于预测模拟环境中的人类决策行为，以解决传统 ABM 依赖静态先验假设、无法适应实时变化的问题。研究团队以美国犹他州盐湖县的新冠疫情模拟作为概念验证案例。
+event_type: application_landing
+epistemic_status: verified_fact
 entities:
-  companies: []
+  companies:
+  - arXiv
   technologies:
-  - ABM
   - LLM
+  - Agent-based Modeling
+  - ABM
   - HALE
   key_people: []
 key_logic_flow:
-- 传统基于智能体的建模（ABM）依赖静态先验假设，无法适应实时变化。
-- 大语言模型（LLM）为预测人类决策提供了新的可能性。
-- 作者提出 HALE（混合智能体与语言驱动流行病模型）框架，将 LLM 集成到 ABM 模拟中。
-- HALE 框架使用 LLM 推理来驱动模拟中智能体的人类决策行为。
-- 以 COVID-19 在犹他州盐湖县的模拟作为概念验证案例。
+- 传统智能体建模（ABM）虽然能模拟数百万个体的交互行为，但依赖静态先验假设，无法适应实时变化。
+- 该研究提出 HALE（Hybrid Agent-based and Language-driven Epidemic）框架，利用大语言模型在 ABM 模拟中预测人类决策行为。
+- HALE 是一种可扩展的混合建模框架，旨在弥补传统 ABM 的信息滞后问题。
+- 研究团队以美国犹他州盐湖县的新冠疫情（COVID-19）模拟作为概念验证案例。
 specialized_tags:
   paper:
     paperTitle: LLM-powered reasoning in agent-based modeling
@@ -51,6 +52,29 @@ specialized_tags:
     researchArea: Other
     methodType: LLM-based
 extract_result: success
+object_mentions:
+- object_type: model
+  name: HALE
+  canonical_name: HALE (Hybrid Agent-based and Language-driven Epidemic)
+  url: https://arxiv.org/abs/2607.06757
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 该研究提出一种可扩展的 Hybrid Agent-based and Language-driven Epidemic (HALE) 建模框架，利用 LLM
+    在 ABM 模拟中预测人类决策。
+  - 研究团队以 HALE 模拟犹他州盐湖县的 COVID-19 疫情及其影响，作为该框架的概念验证。
+  article_id: bbc17e01a6cb04cf
+- object_type: paper
+  name: '2607.06757'
+  canonical_name: LLM-powered reasoning in agent-based modeling
+  url: https://arxiv.org/abs/2607.06757
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 该论文发表于 arXiv Computer Science > Artificial Intelligence 分类，标题为 LLM-powered reasoning
+    in agent-based modeling。
+  - 论文摘要描述了传统 ABM 依赖静态先验、无法适应实时变化的问题，并提出 HALE 框架作为解决方案。
+  article_id: bbc17e01a6cb04cf
 ---
 
 # Computer Science > Artificial Intelligence

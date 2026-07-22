@@ -18,25 +18,48 @@ id: dd070b5aeaf870de
 manifest_dates:
 - '2026-07-01'
 source_type: news_media
-tldr: Google NotebookLM 新增 TikTok 风格 AI 短视频功能
-objective_summary: Google 向 NotebookLM 的 AI Ultra 和 Pro 订阅用户推出 AI Clips 功能，可根据用户上传的资料自动生成带
-  AI 图像和旁白的 60 秒竖版短视频，目前仅支持英文，免费用户即将获得支持。
+tldr: Google 为 NotebookLM 推出新功能，可基于用户上传的资料生成 60 秒竖版 AI 视频摘要（类似 TikTok 风格），面向 AI Ultra
+  和 Pro 订阅用户开放，英语版先行，免费用户后续跟进。
+objective_summary: Google 在 2026 年 7 月为其 AI 笔记工具 NotebookLM 新增了 AI 短视频生成功能。该功能允许 AI
+  Ultra 和 Pro 订阅用户基于上传的资料生成 60 秒竖版视频，包含 AI 生成的图像和配音。用户可在 NotebookLM 网页版或应用中从 Studio
+  栏目选择 Video → Short 来生成视频。该功能目前仅支持英语，免费用户支持即将到来。
 event_type: application_landing
-epistemic_status: verified_fact
+epistemic_status: pr_statement
 entities:
   companies:
   - Google
   technologies:
   - NotebookLM
-  - AI Clips
+  - AI-generated video
   key_people: []
 key_logic_flow:
-- Google 为 NotebookLM 新增了 AI Clips 功能，可根据用户上传的资料生成 60 秒竖版 AI 短视频。
-- 该功能面向 Google AI Ultra 和 Pro 付费订阅用户开放，免费用户后续也会获得支持。
-- 生成的视频包含 AI 生成的图像和旁白，风格类似 TikTok 短视频。
-- 此前 NotebookLM 已支持 AI 播客、电影式视频和可视化讲解等交互方式。
-- 该功能目前仅支持英文，用户可在网页端或 App 中选择笔记本后通过 Studio 面板生成视频。
+- Google 为 NotebookLM 新增了 AI 短视频生成功能，可基于用户上传的笔记资料生成 60 秒竖版视频。
+- 该功能面向 Google AI Ultra 和 Pro 订阅用户开放，视频内容包含 AI 生成的图像和配音。
+- 用户可通过 NotebookLM 网页版或应用中的 Studio → Video → Short 路径选择主题并生成视频。
+- 该功能目前仅支持英语，免费用户的支持将在后续版本中推出。
+- 此前 NotebookLM 已支持 AI 播客、电影风格视频和可视化讲解等多种交互方式。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: NotebookLM
+  canonical_name: Google NotebookLM
+  url: https://notebooklm.google.com
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Google 为 NotebookLM 新增了名为 AI Clips 的短视频生成功能，可基于用户上传的资料生成 60 秒竖版视频。
+  - NotebookLM 此前已支持 AI 播客、电影风格视频和可视化讲解等多种与资料互动的方式。
+  article_id: dd070b5aeaf870de
+- object_type: product
+  name: AI Clips
+  canonical_name: NotebookLM AI Clips
+  url: null
+  confidence: medium
+  article_role: primary_subject
+  evidence_snippets:
+  - NotebookLM 新增的 AI Clips 功能可生成 60 秒竖版视频，包含 AI 生成的图像和配音，风格类似 TikTok。
+  - 用户可以在 NotebookLM 的 Studio 栏目中选择 Video → Short 来触发 AI Clips 的生成流程。
+  article_id: dd070b5aeaf870de
 ---
 
 Google’s NotebookLM is adding a new way to catch up on your notes: TikTok-style AI videos. The new feature is rolling out to Google AI Ultra and Pro subscribers, allowing NotebookLM to generate 60-second vertical AI clips based on the sources you upload to the app.
