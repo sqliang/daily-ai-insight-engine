@@ -12,17 +12,20 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: d9aa3dc13c5a8ec0
 source_type: news_media
-tldr: AI引发全球存储芯片短缺，苹果CEO Tim Cook警告iPhone/Mac/iPad可能涨价
-objective_summary: AI对硬件的巨大需求导致全球存储芯片短缺（RAMageddon），苹果CEO Tim Cook向WSJ表示芯片成本已上涨四倍，涨价"不可避免"。TechInsights估计下一代iPhone
-  Pro需加价270美元才能维持利润率。苹果今年因未能兑现AI承诺支付2.5亿美元和解金。
+tldr: AI 对硬件的巨大需求引发全球内存芯片短缺（RAMageddon），导致 DRAM/NAND 芯片价格自去年以来上涨四倍。苹果即将卸任的 CEO Tim
+  Cook 警告产品涨价不可避免，研究机构 TechInsights 估计下一代 iPhone Pro 需额外增加 270 美元才能维持利润。
+objective_summary: 苹果即将卸任的 CEO Tim Cook 在接受 WSJ 采访时表示，AI 对硬件的需求导致全球存储芯片价格自去年以来上涨四倍，苹果产品涨价"不可避免"。内存供应专家认为
+  iPhone 将最受影响，苹果可能在 9 月发布下一代 iPhone 时宣布涨价。研究机构 TechInsights 估计苹果需在下一代 iPhone Pro
+  上额外增加 270 美元才能维持利润率。苹果还因未能兑现 AI 功能承诺而支付了 2.5 亿美元和解金，并在 6 月 WWDC 上展示了包括 Siri 改版在内的
+  AI 进展。
 event_type: infrastructure_update
 epistemic_status: verified_fact
 entities:
   companies:
   - Apple
-  - Wall Street Journal
-  - Financial Times
   - TechInsights
+  - Financial Times
+  - Wall Street Journal
   technologies:
   - DRAM
   - NAND
@@ -31,13 +34,33 @@ entities:
   - Tim Cook
   - John Ternus
 key_logic_flow:
-- AI对硬件的巨大需求导致全球DRAM和NAND存储芯片短缺，业内称之为"RAMageddon"
-- 苹果CEO Tim Cook向WSJ表示芯片成本已较去年上涨四倍，产品涨价"不可避免"且"不可持续"
-- 今年4月Cook在创纪录季度销售后已预警成本将影响业绩，继任CEO John Ternus也发出同样警告
-- 存储芯片专家向金融时报表示iPhone几乎必然受涨价影响，苹果9月新机发布提供了调价窗口
-- TechInsights估算苹果需将下一代iPhone Pro加价270美元才能维持当前利润率（iPhone 17 Pro起售价1099美元）
-- AI至今未为苹果带来收益：公司因未兑现AI承诺支付2.5亿美元和解金，WWDC展示的Siri改造等进展反而意味着更多内存需求
+- AI 对硬件的巨大需求引发了全球内存芯片（DRAM 和 NAND）短缺，业界将这一现象称为"RAMageddon"。
+- 苹果即将卸任的 CEO Tim Cook 向 WSJ 表示，存储芯片价格自去年以来已上涨四倍，尽管公司努力吸收成本，产品涨价仍然"不可避免"。
+- 内存供应专家认为 iPhone 将最可能受到涨价影响，苹果预计在 9 月发布下一代 iPhone 时有调整价格的机会。
+- 研究机构 TechInsights 估计苹果需在下一代 iPhone Pro 上额外增加 270 美元才能维持现有利润水平。
+- 苹果在 AI 战略上面临压力，今年早些时候因未能兑现 AI 功能承诺支付了 2.5 亿美元和解金。
+- 苹果在 6 月的 WWDC 上展示了包括 Siri 改版在内的 AI 进展，但更多设备端 AI 处理意味着对内存的更大需求，可能最终推高消费者支出。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: iPhone 17 Pro
+  canonical_name: Apple iPhone 17 Pro
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 研究机构 TechInsights 估计苹果需在下一代 iPhone Pro 上额外增加 270 美元才能维持现有利润水平。
+  - 文章明确指出 iPhone 17 Pro 起售价为 1,099 美元，并认为下一代 iPhone 将在 9 月发布时面临涨价压力。
+  article_id: d9aa3dc13c5a8ec0
+- object_type: product
+  name: Siri
+  canonical_name: Apple Siri
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 苹果在 6 月的 WWDC 上展示了包括 Siri 改版在内的 AI 进展，以弥补此前未能兑现的 AI 功能承诺。
+  article_id: d9aa3dc13c5a8ec0
 ---
 
 It’s been called RAMageddon: AI’s insatiable demand for hardware has caused a worldwide shortage of memory chips. Now outgoing Apple CEO Tim Cook is warning its customers that your next Mac, iPhone, or iPad could be more expensive thanks to surging memory and storage chips costs.

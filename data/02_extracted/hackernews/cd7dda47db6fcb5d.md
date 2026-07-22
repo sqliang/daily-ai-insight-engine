@@ -14,8 +14,8 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: cd7dda47db6fcb5d
 source_type: community_discussion
-tldr: 美众议院通过H.R. 6028法案，重组版权局并削弱国会图书馆监督权，遭EFF反对
-objective_summary: 美国众议院以口头表决通过H.R. 6028法案，取消国会图书馆对版权局的监督权，将版权局局长改为总统任命、参议院确认的职位，并将DMCA第1201条规则制定权转移至版权局局长。EFF批评该法案使版权局更政治化且未经听证会快速通过，呼吁参议院否决。
+tldr: 美国众议院以口头表决通过了H.R. 6028号法案，该法案将剥离国会图书馆对美国版权局的监督权，使版权局长变为总统任命职位。EFF认为此举将使版权政策更加政治化，并呼吁参议院否决该法案。
+objective_summary: 2026年6月，美国众议院以口头表决方式通过了H.R. 6028号"立法分支机构澄清法案"。该法案表面上是技术性政府机构调整，实则将从根本上改变美国版权局的结构：剥夺国会图书馆的监督权，将多项权力直接移交给版权局长，并使版权局长成为总统任命、参议院确认的职位。法案还将DMCA第1201条的数字锁规则制定权从国会图书馆馆长移交给版权局长。EFF联合多个组织反对该法案未经听证即快速通过，并呼吁参议院予以否决。
 event_type: policy_and_safety
 epistemic_status: verified_fact
 entities:
@@ -23,20 +23,19 @@ entities:
   - EFF
   - Library of Congress
   - U.S. Copyright Office
-  - U.S. House of Representatives
-  - U.S. Senate
-  technologies:
-  - AI
-  - DMCA
+  - Public Knowledge
+  - Center for Democracy and Technology
+  technologies: []
   key_people: []
 key_logic_flow:
-- 美国众议院以口头表决方式通过了H.R. 6028法案，该法案表面上是技术性机构重组，实则大幅改变美国版权局的结构。
-- 法案取消国会图书馆对版权局的监督职能，将版权局局长改为由总统任命、参议院确认的政治任命职位。
-- 法案将DMCA第1201条规则制定权从国会图书馆馆长移交给版权局局长，进一步集中权力于版权局内部。
-- EFF指出该法案未经任何听证会或实质性审议即被快速推进，缺乏必要的公众监督和辩论。
-- EFF批评版权局此前在AI合理使用报告和SOPA等议题上已偏向大型娱乐产业利益，新法案将使其更加政治化。
-- EFF呼吁参议院否决该法案，认为版权机构应服务公共利益，而非总统行政部门或行业游说者。
+- 美国众议院以口头表决方式通过了H.R. 6028号法案，该法案表面上是技术性政府机构调整，实则将从根本上改变美国版权局的结构。
+- 该法案剥夺了国会图书馆对美国版权局的监督角色，将多项权力直接移交给版权局长，并使其成为总统任命、参议院确认的职位。
+- 法案还将DMCA第1201条的规则制定权从国会图书馆馆长移交给版权局长，进一步将权力集中于版权局内部。
+- H.R. 6028未经任何听证会或实质性审查就在众议院快速通过，EFF联合多个公共利益组织呼吁国会不要快速推进该法案。
+- EFF指出版权局在版权政策中多次偏向大型娱乐产业利益，包括支持SOPA法案以及在AI政策报告中错误处理合理使用问题。
+- EFF认为版权法应服务于公众利益和科学进步，呼吁参议院否决H.R. 6028以阻止版权政策进一步政治化。
 extract_result: success
+object_mentions: []
 ---
 
 In a voice vote earlier this week, the House of Representatives passed H.R. 6028, the “Legislative Branch Agencies Clarification Act.” The legislation is presented as a technical reorganization of some government agencies, but it’s much more than that.

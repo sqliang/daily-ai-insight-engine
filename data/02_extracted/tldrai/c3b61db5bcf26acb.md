@@ -14,29 +14,84 @@ id: c3b61db5bcf26acb
 manifest_dates:
 - '2026-07-07'
 source_type: news_media
-tldr: 字节跳动即将推出Seedance 2.5，支持最长3分钟的AI视频生成
-objective_summary: 字节跳动（ByteDance）即将发布AI视频生成模型Seedance 2.5，核心升级是从短视频片段扩展到30秒标准生成及最长180秒长视频模式。该模型将通过Dreamina、CapCut及合作伙伴平台分发，面向创作者和广告商。传闻发布时间为7月9日，但尚未官方确认。
+tldr: ByteDance 即将发布 Dreamina Seedance 2.5 模型，传闻指向 2026 年 7 月 9 日左右的发布窗口，核心升级是从短片段转向最长
+  180 秒的长视频生成能力。
+objective_summary: ByteDance 通过公开的产品页面和平台文案暗示即将发布 Dreamina Seedance 2.5 模型，传闻发布时间约为
+  2026 年 7 月 9 日。该模型将标准视频输出从短片段提升至 30 秒，并通过测试版长视频模式扩展至 90 秒草稿和 180 秒完整输出。Seedance
+  2.5 将部署在 Dreamina 的 Seedance 工作流、CapCut 创作者工具及 ByteDance 合作伙伴平台中，面向创作者、广告商和 AI 电影制作人。主要竞争压力来自
+  Google 的 Veo 和 Gemini Omni，而 OpenAI 已于 2026 年 4 月 26 日停用了 Sora 的网页和移动端产品。
 event_type: application_landing
-epistemic_status: pr_statement
+epistemic_status: rumor_leak
 entities:
   companies:
   - ByteDance
+  - Google
+  - OpenAI
   technologies:
-  - Seedance 2.5
-  - Dreamina
-  - CapCut
-  - Veo
-  - Gemini Omni
-  - Sora
+  - AI video generation
+  - long video workflow
+  - multimodal references
+  - audio-video generation
   key_people: []
 key_logic_flow:
-- 字节跳动即将推出AI视频生成模型Seedance 2.5，核心新功能是从短视频片段扩展到最长180秒（3分钟）的视频输出能力。
-- Seedance 2.5提供三种时长模式：标准模式30秒视频、Beta长视频模式90秒草稿和180秒完整输出。
-- 该模型将通过Dreamina的Seedance工作流、CapCut创作者工具以及字节跳动合作平台分发，面向创作者、广告商、动画编辑和AI电影制作者。
-- 传闻发布时间为7月9日，但字节跳动尚未发布官方确认公告，信息主要来自公开产品页面和平台文案。
-- 竞争对手方面，Google的Veo和Gemini Omni构成主要竞争压力，OpenAI已于2026年4月26日下架Sora的网页和应用产品。
-- Seedance 2.5标志着字节跳动AI视频战略从短视频片段向商业级长视频叙事工具的转型。
+- ByteDance 即将发布 Dreamina Seedance 2.5 模型，传闻中的发布时间为 2026 年 7 月 9 日左右，证据来自公开的产品页面和平台文案。
+- Seedance 2.5 的核心升级是从短视频片段转向长视频生成，标准模式下可输出 30 秒视频，测试版长视频模式可扩展至 90 秒草稿和 180 秒完整输出。
+- 该模型将部署在 Dreamina 的 Seedance 工作流、CapCut 创作者工具以及 ByteDance 的合作伙伴平台中，面向创作者、广告商、动画编辑和
+  AI 电影制作人。
+- 关于模型是否能保持角色一致性、运动逻辑、镜头控制和提示意图在长扩展中的稳定性，仍然是待解答的关键问题。
+- 主要竞争压力来自 Google 的 Veo 和 Gemini Omni，而 OpenAI 已于 2026 年 4 月 26 日停用了 Sora 的网页和移动端产品。
+- Seedance 2.5 的发布时机仍处于传闻阶段，需等待 ByteDance 发布正式的发布日期公告才能确认。
 extract_result: success
+object_mentions:
+- object_type: model
+  name: Seedance 2.5
+  canonical_name: ByteDance Seedance 2.5
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - ByteDance 即将发布 Dreamina Seedance 2.5 模型，传闻指向 2026 年 7 月 9 日左右的发布窗口。
+  - Dreamina 页面描述其长视频工作流可生成 30 秒场景、90 秒草稿和 180 秒输出，三分钟 AI 视频是本次升级的核心亮点。
+  - 标准模式下用户可创作最长 30 秒的影视级视频，通过测试版长视频模式可扩展至 180 秒。
+  article_id: c3b61db5bcf26acb
+- object_type: product
+  name: Dreamina
+  canonical_name: Dreamina
+  url: null
+  confidence: high
+  article_role: ecosystem_context
+  evidence_snippets:
+  - Seedance 2.5 预计部署在 Dreamina 的 Seedance 工作流中，作为 ByteDance 创作者生态的核心组成部分。
+  - Dreamina 页面已公开描述长视频工作流和 Seedance 2.5 的功能规格。
+  article_id: c3b61db5bcf26acb
+- object_type: product
+  name: CapCut
+  canonical_name: CapCut
+  url: null
+  confidence: high
+  article_role: ecosystem_context
+  evidence_snippets:
+  - CapCut 的创作者工具将集成 Seedance 2.5，作为 ByteDance 视频堆栈的组成部分。
+  - 文章明确将 CapCut 列为 Seedance 2.5 的预期部署平台之一。
+  article_id: c3b61db5bcf26acb
+- object_type: product
+  name: Veo
+  canonical_name: Google Veo
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Google 的 Veo 被视为 Seedance 2.5 最明确的竞争压力来源之一。
+  article_id: c3b61db5bcf26acb
+- object_type: product
+  name: Sora
+  canonical_name: OpenAI Sora
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - OpenAI 已于 2026 年 4 月 26 日停用了 Sora 的网页和移动端产品，退出 AI 视频生成的市场竞争。
+  article_id: c3b61db5bcf26acb
 ---
 
 ByteDance appears close to releasing Dreamina Seedance 2.5, with current rumors pointing to a **possible July 9 launch**. Public Dreamina and CapCut pages already reference the model, while third-party reports suggest an early-July rollout window rather than a confirmed date. Availability is expected across Dreamina, CapCut, and partner platforms that already work with ByteDance’s video stack.

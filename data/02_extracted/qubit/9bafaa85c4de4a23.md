@@ -11,39 +11,66 @@ tags:
 extraction_status: success
 id: 9bafaa85c4de4a23
 source_type: news_media
-tldr: 产品袋袋（Profy）上线，允许专家通过对话将隐性经验封装为可独立交付、自进化的数字分身。
-objective_summary: 2026年5月19日，未来式智能（Agentspro.cn）上线产品袋袋（Profy），允许VC、品牌顾问、编剧等专家通过对话方式将隐性经验封装为可独立接单的AI数字专家，无需学习任何技术框架。产品已服务120+头部企业客户，并在HLE基准测试中超越基座模型近20个百分点。
+tldr: 未来式智能（Agentspro.cn）于5月19日上线袋袋（Profy）产品，让各领域专家通过聊天输出经验即可自动封装为可独立交付的"数字专家"，实现判断力的规模化复制与独立流通。
+objective_summary: 未来式智能于2026年5月19日推出袋袋（Profy）平台，允许专业人士通过对话方式输出自身经验，系统自动封装为可独立交付的数字专家。早期VC
+  Selene和品牌全球化专家宫琼（Joanna）成为首批案例，其数字分身分别实现了90%的非同行调用率和线下高客单价转化。袋袋基于多智能体协同编排、隐性知识捕获、意图识别校准和安全边界四层技术架构，在HLE评测中超越基座模型近20个百分点。
 event_type: application_landing
 epistemic_status: pr_statement
 entities:
   companies:
-  - 袋袋
-  - Profy
-  - 未来式智能
-  - Agentspro.cn
-  - 领航国际品牌管理集团
-  - 迪思传媒
+  - 未来式智能（Agentspro.cn）
+  - 量子位
   technologies:
   - 多智能体协同编排
   - 隐性知识捕获
   - 意图识别校准
-  - IP黑盒保护
-  - 自进化
-  - 五层认知捕获管线
+  - 自进化能力
   - HLE
   key_people:
   - Selene
-  - 宫琼
-  - Joanna
+  - 宫琼（Joanna）
+  - 允中
 key_logic_flow:
-- 袋袋（Profy）于2026年5月19日上线，定位为让专家无需学习技术框架、仅通过对话即可将隐性经验封装为可独立交付的数字专家
-- 早期VC投资人Selene的数字分析师上线后，90%调用来自普通创业者而非投资同行，其判断力在本人休息时持续向新市场输出，尽调流程从五天压缩至不到两小时
-- 品牌全球化专家宫琼（Joanna）的数字分身通过标准化分发吸引用户，用户被专业度打动后顺平台找到她本人签下更高客单价的深度咨询，形成从标准到定制的完整商业闭环
-- 技术护城河由四层能力构成：多智能体协同编排、隐性知识捕获、意图识别校准、安全边界，辅以IP黑盒保护和五层认知捕获管线的自进化机制
-- IP黑盒保护确保专家核心逻辑和提示词在服务端密封运行，用户只能获取交付结果而无法逆向破解，这是专家愿意交出核心能力的信任前提
-- 在HLE全球权威评测中，袋袋超越基座模型近20个百分点，其背后团队未来式智能已有三年智能体领域积累并服务过120余家头部企业客户
+- 未来式智能（Agentspro.cn）于5月19日上线袋袋（Profy）产品，专家无需学习任何技术框架，只需像聊天一样说出经验即可自动封装为数字专家。
+- 早期风险投资人Selene的数字分析师上线后，90%的调用来自有创业念头的普通用户，投资尽调从五天缩短到不到两小时。
+- 品牌全球化专家宫琼（Joanna）的数字分身成为24小时引流器，用户被专业度打动后找到宫琼本人签约高客单价线下咨询，形成商业闭环。
+- 袋袋构建了多智能体协同编排、隐性知识捕获、意图识别校准和安全边界四层技术护城河，支撑复杂商业场景下的智能体交付。
+- 袋袋的IP黑盒保护将核心逻辑在服务端密封运行，用户只能获取最终交付结果而无法逆向破解背后的判断逻辑。
+- 袋袋在HLE（人类终极知识测验）全球权威评测中超越基座模型近20个百分点，验证了其复杂场景下的交付能力。
 pipeline_stage: fact_extracted
 extract_result: success
+object_mentions:
+- object_type: product
+  name: 袋袋（Profy）
+  canonical_name: 袋袋（Profy）
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 5月19日，一个叫袋袋（Profy）的产品悄悄上线，让专家只需要像聊天一样说出自己的经验，系统就能自动封装成可独立交付的'数字专家'。
+  - 袋袋的四层技术护城河包括多智能体协同编排、隐性知识捕获、意图识别校准和安全边界，支撑投资尽调、品牌出海等非线性复杂任务。
+  - 袋袋在HLE（人类终极知识测验）中直接超越基座模型近20个百分点，验证了其复杂商业场景下的交付能力。
+  article_id: 9bafaa85c4de4a23
+- object_type: product
+  name: Selene的数字分析师
+  canonical_name: Selene数字分析师
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Selene的数字分析师上线后，只有10%的调用来自投资同行，剩下90%来自有创业念头的普通用户。
+  - 全流程从五天变成了不到两小时，输入赛道方向即可得到带深度结论和风险分层的研报。
+  article_id: 9bafaa85c4de4a23
+- object_type: product
+  name: 品牌全球化专家Joanna
+  canonical_name: 品牌全球化专家Joanna
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 宫琼（Joanna）的数字分身上线后，有出海想法的用户在袋袋上评价'像是真的跟一个懂出海的人在聊'。
+  - 用户在袋袋上被Joanna分身的洞察击中后，顺着平台找到了宫琼本人，签下了客单价更高的线下深度定制化全案咨询。
+  article_id: 9bafaa85c4de4a23
 ---
 
 # VC、品牌顾问、编剧，正在批量把自己做成AI

@@ -11,29 +11,42 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 3fbf4fa1cdf402e1
 source_type: news_media
-tldr: 提示注入的本质是LLM角色混淆：模型将外部指令误解为自身推理，根源在单一文本流中缺乏角色感知边界。
-objective_summary: 一篇学术论文的博客式解读，提出提示注入攻击源于LLM对角色标签（system/user/think/assistant/tool）的感知缺陷。模型将所有输入视为单一连续文本流，角色标签是唯一区分自身思维与外部指令的离散控制机制，但已被过度加载信任、威胁、身份等多重语义，
+tldr: 该论文提出提示注入攻击的根源在于大语言模型将所有输入（系统提示、用户消息、工具输出和自身响应）视为单一连续文本流，仅靠角色标签（system、user、assistant、think、tool）区分内容类型。角色标签作为语言中唯一的离散控制机制已承载过多职责（信任、威胁、身份、生成模式），导致模型容易通过标签混淆被攻击。
+objective_summary: 一篇以博客形式呈现的学术论文，提出提示注入攻击的本质是角色混淆（Role Confusion）。LLM 将所有输入——系统提示、用户消息、工具输出、自身推理和响应——拼接成一条连续的
+  token 字符串，没有任何感官通道来区分"自己的想法"和"别人的话"。模型只能依赖插入在文本中的角色标签（system、user、assistant、think、tool）来恢复结构。这些标签原本应是离散的控制机制，但随着时间推移被赋予了信任层级、威胁识别、身份设定和生成模式等多重职责，导致过载和脆弱性。文章还展示了角色边界的单向镜效应，如许多
+  LLM 会在 assistant 输出中否认 think 块的存在。
 event_type: policy_and_safety
 epistemic_status: theoretical_claim
 entities:
   companies:
-  - Anthropic
   - OpenAI
-  - Deepseek
+  - Anthropic
+  - DeepSeek
   technologies:
-  - LLM
-  - prompt injection
+  - Prompt Injection
   - RLVR
-  - chat templating
+  - Chain of Thought
+  - Chat Templating
   key_people: []
 key_logic_flow:
-- LLM接收到的所有输入（系统提示、用户消息、工具输出、自身推理）被拼接为单一连续文本流，模型无法像人类那样通过物理通道区分自身思想与外部指令。
-- 角色标签（system、user、think、assistant、tool）是人为添加到文本流中的标记，是模型感知不同文本段性质的唯一离散控制机制。
-- 角色本质上是语言的一种"类型系统"，但已被过度加载信任层级（system > user > tool）、威胁识别、身份设定和生成模式等多重含义。
-- 提示注入攻击利用角色感知缺陷，通过让模型将外部输入误解为高优先级角色（如system或think）来劫持其行为。
-- 角色标签产生奇异涌现行为：think标签内容被模型视为"潜意识"，在生成assistant文本时往往被否认存在，尽管它仍活跃地影响模型输出。
-- 论文呼吁建立"角色科学"研究框架，以完整理解角色认知机制并从根本上防御提示注入攻击。
+- 大语言模型的所有输入（系统提示、用户消息、工具输出、自身推理和响应）被拼接成一条连续的 token 字符串，模型只能通过角色标签来区分不同来源的内容。
+- 角色标签（system、user、assistant、think、tool）是语言中唯一的离散控制机制，但已被过载地承载了信任层级、威胁识别、身份设定和生成模式等多重职责。
+- 提示注入攻击之所以成功，是因为攻击者可以在统一 token 流中插入或篡改角色标签，使模型将恶意输入误认为高信任级别的指令。
+- 角色边界在模型内部产生了类似单向镜的效应，例如许多 LLM 在生成 assistant 文本时会口头否认前文 think 块的存在，尽管该块仍在上下文中影响输出。
+- 文章认为理解角色的本质是建立 AI 安全科学的基础，并呼吁对角色机制进行系统性研究。
 extract_result: success
+object_mentions:
+- object_type: paper
+  name: Prompt Injection as Role Confusion
+  canonical_name: Prompt Injection as Role Confusion
+  url: https://role-confusion.github.io/
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 该文章是一篇博客风格的学术论文，提出提示注入攻击的根源在于大语言模型对角色标签的混淆处理机制。
+  - 文章展示了 LLM 将所有输入视为单一连续 token 流，仅靠角色标签区分内容，从而解释了提示注入为何能成功。
+  - 文章还讨论了角色边界的单向镜效应，例如许多 LLM 在 assistant 生成中否认 think 块的存在。
+  article_id: 3fbf4fa1cdf402e1
 ---
 
 A Theory of Prompt Injection (and why you should study roles)

@@ -11,8 +11,8 @@ extraction_status: partial
 pipeline_stage: fact_extracted
 id: c9bb5a4eac6e54c1
 source_type: news_media
-tldr: Uber对自动驾驶创企Nuro的承诺投资总额接近5亿美元
-objective_summary: 据知情人士透露，Uber对自动驾驶初创公司Nuro的承诺投资总额已接近5亿美元。该投资包括Uber此前参与Nuro的2.03亿美元融资轮。
+tldr: 据知情人士透露，Uber对自动驾驶初创公司Nuro的承诺投资总额已接近5亿美元，此前Uber曾宣布计划投资数亿美元并参与Nuro的2.03亿美元融资轮。
+objective_summary: 据知情人士消息，网约车平台Uber对自动驾驶初创公司Nuro的承诺投资总额已接近5亿美元。此前Uber曾公开宣布计划向Nuro投资数亿美元，其中包括参与Nuro完成的2.03亿美元融资轮。该信息由界面新闻援引知情人士表述，目前尚未得到双方官方确认。
 event_type: capital_movement
 epistemic_status: rumor_leak
 entities:
@@ -22,10 +22,32 @@ entities:
   technologies: []
   key_people: []
 key_logic_flow:
-- 知情人士透露Uber对Nuro的承诺投资总额已接近5亿美元
-- Uber此前宣布计划向Nuro投资数亿美元
-- 该承诺投资包含Uber参与Nuro的2.03亿美元融资轮
+- 知情人士称Uber对Nuro的承诺投资总额已接近5亿美元。
+- Uber此前曾公开宣布计划向Nuro投资数亿美元。
+- 该投资计划包括参与Nuro的2.03亿美元融资轮。
+- 此消息来源为界面新闻援引知情人士说法，尚未得到官方确认。
 extract_result: success
+object_mentions:
+- object_type: company
+  name: Nuro
+  canonical_name: Nuro
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Uber对自动驾驶初创公司Nuro的承诺投资总额已接近5亿美元。
+  - Uber此前曾宣布计划向Nuro投资数亿美元，其中包括参与后者的2.03亿美元融资轮。
+  article_id: c9bb5a4eac6e54c1
+- object_type: company
+  name: Uber
+  canonical_name: Uber
+  url: null
+  confidence: high
+  article_role: ecosystem_context
+  evidence_snippets:
+  - Uber对自动驾驶初创公司Nuro的承诺投资总额已接近5亿美元。
+  - Uber此前曾宣布计划向Nuro投资数亿美元，其中包括参与后者的2.03亿美元融资轮。
+  article_id: c9bb5a4eac6e54c1
 ---
 
 > **⚠️ 正文提取不完整**：HTML 获取成功但无法从中提取正文，以下为文章摘要

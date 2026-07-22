@@ -51,15 +51,16 @@ id: ff2fee7b79f9cdf4
 manifest_dates:
 - '2026-06-30'
 source_type: news_media
-tldr: 内存三巨头遭集体诉讼；韩国启动5760亿美元半导体AI投资计划
-objective_summary: 美国消费者于6月25日对三星、SK海力士、美光提起集体诉讼，指控其操纵DRAM价格并限制供应。同日韩国政府宣布超5760亿美元半导体与AI投资计划，三星和SK海力士将投资约5178亿美元新建芯片制造基地。此外，马斯克宣布Grok
-  4.5开始内部私测，DeepSeek V4官宣7月上线。
-event_type: capital_movement
+tldr: 三星、SK海力士和美光因涉嫌操纵DRAM价格遭美国集体诉讼；韩国宣布超5760亿美元半导体与AI投资计划；马斯克宣布Grok 4.5在SpaceX和特斯拉内部私测，性能声称接近Claude
+  Opus；DeepSeek V4正式版定于7月中旬上线，引入峰谷定价机制；百度开源OCR模型Unlimited OCR登顶HuggingFace和GitHub四榜。
+objective_summary: 6月25日至29日期间，三星、SK海力士和美光因涉嫌操纵DRAM价格并限制全球供应在美国加州遭集体诉讼。6月29日，韩国政府宣布规模超5760亿美元的半导体与AI产业投资计划，目标五年内将DRAM产能翻倍。马斯克于6月28日宣布Grok
+  4.5在SpaceX和特斯拉开启内部私测，声称性能接近Anthropic的Claude Opus。DeepSeek宣布V4正式版7月中旬上线并引入峰谷定价机制。谷歌因算力不足限制Meta对其Gemini模型的使用，暴露出算力供给仍是AI产业核心瓶颈。
+event_type: application_landing
 epistemic_status: verified_fact
 entities:
   companies:
   - Samsung
-  - SK海力士
+  - SK Hynix
   - Micron
   - Apple
   - SpaceX
@@ -72,24 +73,93 @@ entities:
   - Midea
   - Costco
   - Anthropic
+  - 哈啰出行
   technologies:
-  - Grok 4.5
-  - Gemini
   - DRAM
+  - Grok 4.5
+  - DeepSeek V4
+  - Unlimited OCR
+  - Gemini
   - OCR
-  - V9
-  - Claude Opus
+  - Reinforcement Learning
   key_people:
   - Elon Musk
-  - 李在明
+  - Lee Jae-myung
 key_logic_flow:
-- 三星、SK海力士和美光因涉嫌操纵DRAM价格并限制全球供应，于6月25日在美国加州联邦法院被提起集体诉讼。
-- 韩国政府于6月29日宣布超5760亿美元的半导体与AI产业投资计划，三星和SK海力士将投资约5178亿美元在各新建两个芯片制造基地。
-- 马斯克宣布Grok 4.5在SpaceX和特斯拉内部开启私测，基于1.5万亿参数V9模型打造，性能接近或超越Anthropic的Claude Opus。
-- DeepSeek V4正式版计划7月中旬上线，将引入峰谷API定价机制，高峰时段价格为平时2倍。
-- 百度开源端到端OCR模型Unlimited OCR，在GitHub和HuggingFace四项榜单登顶，OmniDocBench基准测试综合成绩93.92%。
-- 谷歌因算力不足限制Meta对其大模型Gemini的使用，暴露AI算力供给仍是产业核心瓶颈。
+- 三星、SK海力士和美光因涉嫌操纵DRAM价格并限制全球供应，于6月25日在美国加州联邦法院遭到集体诉讼。
+- 韩国政府6月29日宣布规模超5760亿美元的半导体与AI投资计划，三星和SK海力士将共同投资约5178.7亿美元新建芯片制造基地。
+- 马斯克于6月28日宣布Grok 4.5在SpaceX和特斯拉内部开启私测，该模型基于1.5万亿参数V9基础模型打造并加入了Cursor编程数据训练。
+- DeepSeek宣布V4正式版7月中旬上线，将引入峰谷定价机制，高峰时段价格为平日的2倍。
+- 百度开源OCR模型Unlimited OCR在HuggingFace和GitHub四榜登顶，在OmniDocBench测试中取得93.92%的成绩。
+- 谷歌因算力供给不足限制Meta对其Gemini大模型的使用，暴露出算力瓶颈仍是AI产业发展的核心制约因素。
 extract_result: success
+object_mentions:
+- object_type: model
+  name: Grok 4.5
+  canonical_name: Grok 4.5
+  url: null
+  confidence: medium
+  article_role: primary_subject
+  evidence_snippets:
+  - 马斯克于6月28日宣布Grok 4.5在SpaceX和特斯拉内部开启私测，该模型基于1.5万亿参数的V9基础模型打造。
+  - 早期评测结果显示Grok 4.5的性能已经接近甚至可能超越了Anthropic的旗舰模型Claude Opus。
+  article_id: ff2fee7b79f9cdf4
+- object_type: model
+  name: DeepSeek V4
+  canonical_name: DeepSeek V4
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - DeepSeek团队宣布V4正式版计划于7月中旬正式上线，将带来功能优化和性能提升。
+  - DeepSeek V4将引入峰谷定价机制，高峰时段价格是平时的2倍，高峰时段为每天上午9点到12点和下午2点到6点。
+  article_id: ff2fee7b79f9cdf4
+- object_type: model
+  name: Unlimited OCR
+  canonical_name: Baidu Unlimited OCR
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 百度正式发布并开源端到端OCR模型Unlimited OCR，发布次日即登顶GitHub和HuggingFace四榜。
+  - Unlimited OCR在OmniDocBench v1.6基准测试中取得93.92%综合成绩，刷新端到端OCR最新纪录。
+  article_id: ff2fee7b79f9cdf4
+- object_type: product
+  name: PortaSplit
+  canonical_name: Midea PortaSplit
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 美的集团生产的PortaSplit便携式分体空调成为欧洲市场的抢手货，在部分销售渠道已经售罄。
+  article_id: ff2fee7b79f9cdf4
+- object_type: product
+  name: Cursor
+  canonical_name: Cursor
+  url: https://cursor.sh
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Grok 4.5在补充训练中特别加入了热门AI编程工具Cursor的数据。
+  article_id: ff2fee7b79f9cdf4
+- object_type: product
+  name: 哈啰追风者
+  canonical_name: 哈啰追风者共享变速车
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 哈啰追风者共享变速车前30分钟收费15元，超出后7.5元/30分钟，骑行79分钟需支付30元。
+  article_id: ff2fee7b79f9cdf4
+- object_type: model
+  name: Gemini
+  canonical_name: Google Gemini
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 谷歌已开始限制Meta对其AI大模型Gemini的使用，原因是Meta的算力需求超出谷歌现有承载能力。
+  article_id: ff2fee7b79f9cdf4
 ---
 
 ## 今日热点导览

@@ -11,9 +11,11 @@ tags:
 - clippings
 id: ef2c16cfdd65c7a2
 source_type: news_media
-tldr: Spotify AI DJ新增法语、德语、意大利语和巴西葡萄牙语支持，扩展至75个国家。
-objective_summary: 2026年5月7日，Spotify宣布其交互式AI DJ功能新增法语、德语、意大利语和巴西葡萄牙语四种语言，每种语言配备不同名称和个性的AI
-  DJ。该功能同步扩展至奥地利、巴西、法国、德国、意大利、葡萄牙、韩国和瑞士八个新市场，现已在超过75个国家可用。
+tldr: Spotify 将 AI DJ 功能扩展到法语、德语、意大利语和巴西葡萄牙语，并为不同语言配置了独立人格和名称（Maia、Ben、Alex、Dani），同时新增
+  8 个上线国家，目前覆盖超过 75 个国家。
+objective_summary: Spotify 于 2026 年 5 月 7 日宣布，其交互式 AI DJ 功能新增法语、德语、意大利语和巴西葡萄牙语四种语言支持，此前仅支持英语和西班牙语。该公司为每种语言分配了不同名称和个性的
+  AI DJ（Maia、Ben、Alex、Dani），并将该功能推向奥地利、巴西、法国、德国、意大利、葡萄牙、韩国和瑞士等 8 个新市场。至此，AI DJ 已在超过
+  75 个国家上线。
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
@@ -21,20 +23,36 @@ entities:
   - Spotify
   technologies:
   - AI DJ
-  - voice interaction
-  - text prompting
-  - AI-powered commentary
-  - prompt-based playlist generation
   key_people: []
 key_logic_flow:
-- Spotify于2026年5月7日宣布AI DJ功能新增四种语言支持：法语、德语、意大利语和巴西葡萄牙语，此前仅支持英语和西班牙语
-- 每种语言的AI DJ拥有不同的名称和个性：Maia（法语）、Ben（德语）、Alex（意大利语）和Dani（巴西葡萄牙语）
-- 该功能同步扩展至奥地利、巴西、法国、德国、意大利、葡萄牙、韩国和瑞士八个新市场，全球可用国家超过75个
-- Spotify最初版AI DJ仅提供AI生成的口语歌曲评论，2025年5月升级为支持用户通过语音与AI DJ交互并请求切换心情或曲风
-- 2025年10月进一步新增文字提示功能，用户可像使用ChatGPT、Claude或Gemini一样通过文字描述请求播放特定曲目
-- Spotify持续在应用中添加AI功能，包括通过自然语言描述生成自定义歌曲或播客播放列表
+- Spotify 的 AI DJ 功能原本只支持英语和西班牙语，2026年5月新增法语、德语、意大利语和巴西葡萄牙语四种语言。
+- 每种语言的 AI DJ 拥有不同的名称和个性，分别为 Maia、Ben、Alex 和 Dani。
+- 该功能同时新增奥地利、巴西、法国、德国、意大利、葡萄牙、韩国和瑞士共 8 个国家的可用性。
+- AI DJ 已从最初的歌曲评论功能演进为支持语音交互和文本提示的交互式体验。
+- Spotify 还在持续增加其他 AI 功能，例如通过文本描述创建自定义歌曲或播客播放列表的 Prompted Playlist 功能。
 pipeline_stage: fact_extracted
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Spotify AI DJ
+  canonical_name: Spotify AI DJ
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Spotify 宣布其交互式 AI DJ 功能新增法语、德语、意大利语和巴西葡萄牙语四种语言支持。
+  - AI DJ 已从最初的歌曲评论功能演进为支持语音交互和文本提示的交互式体验。
+  - 该功能已覆盖超过 75 个国家，并针对不同语言配置了独立的 AI DJ 人格和名称。
+  article_id: ef2c16cfdd65c7a2
+- object_type: product
+  name: Spotify Prompted Playlist
+  canonical_name: Spotify Prompted Playlist
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Spotify 推出了 Prompted Playlist 功能，用户只需描述想听的内容即可创建自定义歌曲或播客播放列表。
+  article_id: ef2c16cfdd65c7a2
 ---
 
 Spotify said on Thursday that its interactive AI DJ feature now supports four additional languages: French, German, Italian, and Brazilian Portuguese. Until now, the feature, which you can interact with to request songs and get AI-powered spoken commentary, was only available in English and Spanish.

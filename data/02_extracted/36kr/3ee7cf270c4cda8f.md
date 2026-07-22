@@ -59,43 +59,112 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 3ee7cf270c4cda8f
 source_type: news_media
-tldr: 英伟达与微软合作推Agentic AI统一技术栈；腾讯股价创2021年来单日最大涨幅；豆包付费对标ChatGPT
-objective_summary: 2026年6月2日，英伟达与微软在Build大会上宣布合作推出Agentic AI统一技术栈；腾讯控股收盘大涨10.46%创近年单日最高涨幅；字节跳动豆包预计6月下旬上线付费内容，定价对标ChatGPT；微软发布350亿参数推理模型Mai-Thinking-1；
+tldr: 腾讯股价暴涨10.46%创2021年以来单日最大涨幅；财政部下达999亿元育儿补贴；英伟达与微软合作推出Agentic AI统一技术栈；微软发布Mai-Thinking-1推理模型；字节豆包将上线付费版专注复杂任务；宇树科技科创板IPO提交注册。
+objective_summary: 2026年6月2日，腾讯控股股价收盘大涨10.46%，创2021年1月以来单日最高涨幅纪录，市值飙升至4.39万亿港元，此前股价经历了8个月低迷期。财政部下达2026年育儿补贴补助资金999亿元，预计全年共安排约1100亿元。英伟达与微软在Build大会上合作推出用于部署Agentic
+  AI的统一技术栈，覆盖Windows设备到云端再到本地全场景。微软发布首个AI推理模型Mai-Thinking-1，拥有350亿活跃参数。字节跳动旗下豆包将于6月下旬上线付费版，专注复杂任务与生产力场景，定价锚定ChatGPT。宇树科技科创板IPO审核状态变更为提交注册。
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
   companies:
+  - 腾讯控股
   - NVIDIA
   - Microsoft
-  - Tencent
-  - ByteDance
-  - Unitree Technology
-  - Tiger Brokers
-  - Apple
-  - Tesla
-  - Meta
-  - Amazon
-  - Google
+  - 字节跳动
+  - 美团
+  - 宇树科技
+  - OpenAI
+  - 老虎国际
   technologies:
   - Agentic AI
   - Mai-Thinking-1
   - DeepSeek-V4
   - Vera CPU
-  - SeedFold
-  - SeedProteo
-  - DPLM
+  - GPU
   key_people:
-  - Jensen Huang
-  - Wang Xing
-  - Gu Quanquan
+  - 黄仁勋
+  - 王兴
+  - 顾全全
 key_logic_flow:
-- 英伟达与微软在Build 2026开发者大会上宣布合作，推出覆盖从Windows设备到云端到本地的统一技术栈，用于部署Agentic AI。
-- 腾讯控股股价6月2日收盘大涨10.46%报481.6港元，创2021年1月以来单日最高涨幅，此前经历8个月低迷区间最大回撤近38%。
-- 字节跳动旗下大模型豆包预计6月下旬上线付费内容，定价锚定ChatGPT，标准版约9.9美元、专业版约73美元，专注PPT生成、数据分析等复杂任务。
-- 微软推出首个AI推理模型Mai-Thinking-1，拥有350亿活跃参数。
-- 腾讯云宣布下调DeepSeek-V4系列模型价格，最高降幅达97.5%。
-- 英伟达CEO黄仁勋在Computex上表示Vera CPU将比GPU更受欢迎，将成为公司新的主要增长动力。
+- 腾讯控股股价在经历8个月低迷后于6月2日收盘暴涨10.46%，报481.6港元，创2021年1月以来单日最高涨幅纪录。
+- 财政部下达2026年育儿补贴补助资金999亿元，预计全年各级财政共安排补贴约1100亿元。
+- 英伟达与微软在Build大会上合作推出统一技术栈，用于部署Agentic AI，覆盖Windows设备到云端再到本地全场景。
+- 微软推出首个AI推理模型Mai-Thinking-1，拥有350亿活跃参数，由微软AI负责人宣布发布。
+- 字节跳动旗下豆包将于6月下旬正式上线付费版，专注复杂任务与生产力场景如PPT生成和数据分析，定价锚定ChatGPT。
+- 宇树科技科创板IPO审核状态变更为提交注册；英伟达CEO黄仁勋称Vera CPU将比GPU更受欢迎并成为新增长动力。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: 腾讯元宝
+  canonical_name: 腾讯元宝
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 美团AI助手'小美'与腾讯元宝的合作将于近期上线，届时用户可直接在元宝中输入诉求通过小美调用外卖等本地生活服务。
+  article_id: 3ee7cf270c4cda8f
+- object_type: product
+  name: 小美
+  canonical_name: 小美
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 美团AI助手'小美'与腾讯元宝的合作将于近期上线，用户可通过小美在元宝中完成一站式交易。
+  article_id: 3ee7cf270c4cda8f
+- object_type: model
+  name: Mai-Thinking-1
+  canonical_name: Mai-Thinking-1
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 微软推出首个AI推理模型Mai-Thinking-1，该模型拥有350亿活跃参数。
+  article_id: 3ee7cf270c4cda8f
+- object_type: model
+  name: DeepSeek-V4
+  canonical_name: DeepSeek-V4
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 腾讯云对DeepSeek-V4系列模型价格进行下调，最高降幅达97.5%，模型服务能力保持不变。
+  article_id: 3ee7cf270c4cda8f
+- object_type: product
+  name: 豆包
+  canonical_name: 豆包
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 字节跳动旗下豆包预计将在6月下旬正式上线付费内容，付费功能将专注复杂任务和生产力场景如PPT生成与数据分析。
+  article_id: 3ee7cf270c4cda8f
+- object_type: project
+  name: SeedFold
+  canonical_name: SeedFold
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 字节Seed旗下AI4S团队构建了SeedFold、SeedProteo以及DPLM系列的蛋白质语言模型。
+  article_id: 3ee7cf270c4cda8f
+- object_type: project
+  name: DPLM
+  canonical_name: DPLM
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 字节Seed旗下AI4S团队构建了SeedFold、SeedProteo以及DPLM系列的蛋白质语言模型。
+  article_id: 3ee7cf270c4cda8f
+- object_type: product
+  name: Vera CPU
+  canonical_name: NVIDIA Vera CPU
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 英伟达CEO黄仁勋表示Vera CPU将比GPU更受欢迎，将成为公司新的主要增长动力。
+  article_id: 3ee7cf270c4cda8f
 ---
 
 ## 今日热点导览

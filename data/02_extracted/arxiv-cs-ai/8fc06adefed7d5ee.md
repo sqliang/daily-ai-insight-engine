@@ -33,21 +33,21 @@ id: 8fc06adefed7d5ee
 manifest_dates:
 - '2026-07-07'
 source_type: academic_paper
-tldr: 论文提出内部多元主义模型，证明局部成对比较不足以捕捉个体对决策规则的多重优先级偏好。
-objective_summary: 研究者在 arXiv 发表论文，通过形式化建模分析内部多元主义（个体对决策规则存在多重权威优先级）如何破坏成对比较的两个隐含假设，发现全局性优先级（如比例性、平等主义）无法被局部比较捕获，且强优先级间的冲突会导致行为扭曲，并提出允许报告不确定能减少偏好学习所需查询次数。
-event_type: policy_and_safety
+tldr: 该论文提出"内部多元主义"的形式化模型，认为个体依据多个相互冲突的权威优先级评估决策规则。论文论证在此条件下局部成对比较无法捕捉全局性优先级且会被内部冲突扭曲，而允许报告"不确定"状态可大幅减少偏好学习所需的查询次数。
+objective_summary: 该学术论文（arXiv:2607.02672）探讨了参与式设计和AI对齐中常用局部成对比较方法的局限性。作者提出"内部多元主义"的正式模型，指出个体依据多个权威优先级评估决策规则，导致两种失败模式：一是比例性、平等主义等优先级本质上是全局性的，局部比较无法捕捉；二是强烈优先级之间的内部冲突会在被迫比较时产生行为扭曲。论文证明允许报告"不确定"可显著减少偏好学习所需的查询次数，并提出了直接提取优先级的偏好学习方法。
+event_type: framework_tools
 epistemic_status: theoretical_claim
 entities:
   companies: []
   technologies: []
   key_people: []
 key_logic_flow:
-- 论文指出局部成对比较依赖于两个隐含假设：局部比较足以推断个体对决策规则的偏好，且个体总能给出明确比较结果。
-- 提出"内部多元主义"概念，即个体同时持有多个权威性优先级来评估决策规则，导致上述假设部分失效。
-- 构建了关于多元偏好的形式化模型，用以分析成对比较数据的两种失效模式。
-- 第一类失效：比例性、平等主义等优先级本质上是全局性的，单个局部案例的比较结果无法体现其在其他案例中的含义。
-- 第二类失效：即使优先级可局部表示，彼此矛盾的强优先级会产生内部冲突，被迫下定论会导致行为扭曲。
-- 模型分析表明，允许个体报告"不确定"可显著减少准确学习偏好所需的查询次数，指向直接引出优先级的新偏好学习方法。
+- 局部成对比较是参与式设计和AI对齐中常用的偏好学习方法，但它隐含了两个强假设：局部比较足以反映个人对决策规则的完整偏好，且人们总能做出明确的比较判断。
+- 作者提出"内部多元主义"的形式化模型，认为个体在评估决策规则时同时依据多个权威优先级，这些优先级之间可能存在冲突。
+- 比例性、平等主义和公平对待等优先级本质上是全局性的，它们在某个案例中的含义取决于其他案例的情况，因此局部比较无法充分捕捉这些优先级。
+- 即使优先级可局部表征，强烈优先级之间的内部冲突也会在被迫做出比较时产生潜在的有害行为扭曲。
+- 允许人们报告"不确定"可以显著减少准确学习偏好所需的查询次数。
+- 该模型指向直接提取优先级的偏好学习方法，从而能更忠实、更可解释地呈现人们的价值取向。
 specialized_tags:
   paper:
     paperTitle: Internal Pluralism and the Limits of Pairwise Comparisons
@@ -59,6 +59,18 @@ specialized_tags:
     researchArea: Other
     methodType: theoretical
 extract_result: success
+object_mentions:
+- object_type: paper
+  name: Internal Pluralism and the Limits of Pairwise Comparisons
+  canonical_name: Internal Pluralism and the Limits of Pairwise Comparisons
+  url: https://arxiv.org/abs/2607.02672
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 该学术论文提出内部多元主义的形式化模型，证明在多个权威优先级并存时，局部成对比较存在两种不同的失败模式。
+  - 该论文证明允许人们报告"不确定"可显著减少准确学习偏好所需的查询次数，并指向更忠实的偏好学习方法。
+  - 该论文指出比例性、平等主义和公平对待等优先级本质上是全局性的，它们在某个案例中的含义取决于其他案例的情况。
+  article_id: 8fc06adefed7d5ee
 ---
 
 # Computer Science > Artificial Intelligence

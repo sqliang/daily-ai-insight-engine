@@ -13,31 +13,74 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 61cebb5cfcee9b53
 source_type: community_discussion
-tldr: OpenClaw 仓库 PR 量从每周 2 个飙升至 3400 个，合并率从 48% 骤降至 9.3%，AI 生成的垃圾 PR 泛滥成灾。
-objective_summary: Greptile 通过其 PR 审查工具观察到 OpenClaw 仓库的 PR 数量从每周 2 个激增至 3400 个，合并率从
-  48% 跌至 9.3%。大量 PR 由 AI 编程代理生成，一位贡献者一天内提交 106 个 PR，中位间隔 3 秒。
-event_type: application_landing
+tldr: Greptile 基于为 OpenClaw 审查 PR 的数据发现，AI 编码代理正导致开源 PR 垃圾信息泛滥：OpenClaw 的 PR 从每周 2
+  个飙升至 3400 个，合并率从 48% 跌至 9.3%。文章认为需要发件人声誉系统和信任基础设施来应对这一趋势。
+objective_summary: Greptile 员工 Rahul 基于该公司为 OpenClaw 审查 PR 的实际数据，分析了 AI 编码代理对开源贡献的影响。OpenClaw
+  的 PR 提交量从每周 2 个暴增至 3400 个，合并率从 48% 降至 9.3%，大量低质量 PR 由 AI 代理自动生成。文章将 PR 垃圾信息类比为 2000
+  年代初的电子邮件垃圾信息，指出需要声誉系统和信任管理工具来应对。Mitchell Hashimoto 因 Ghostty 项目遭遇 AI 生成的 PR 泛滥，已发布
+  Vouch 信任管理系统。在 OpenClaw 中，重构类 PR 的合并率（35%）远高于功能类 PR（9%），表明需深入理解代码库的贡献更受青睐。
+event_type: policy_and_safety
 epistemic_status: verified_fact
 entities:
   companies:
   - Greptile
+  - OpenClaw
   technologies:
-  - Vouch
-  - Claude
-  - Codex
-  - Cursor
-  - Devin
+  - AI coding agents
   key_people:
+  - Rahul
   - Mitchell Hashimoto
   - Linus Torvalds
 key_logic_flow:
-- OpenClaw 仓库的 PR 提交量从去年 12 月的每周 2 个飙升至今年 2 月的每周 3400 个，合并率从 48% 骤降至 9.3% 以下。
-- 大量低质量 PR 由 AI 编程代理自动生成，一位贡献者在一天内提交了 106 个 PR，中位提交间隔仅为 3 秒。
-- PR 垃圾信息与 2000 年代初的电子邮件垃圾信息模式高度相似，需要建立基于发件人信誉的过滤机制。
-- Mitchell Hashimoto 因 AI 生成的 PR 垃圾泛滥而限制了 Ghostty 项目的贡献，并发布了 Vouch 信任管理系统来验证贡献者身份。
-- 多位贡献者使用相同的 AI 编程代理独立提交了内容完全相同的 PR，说明 AI 工具导致了开源贡献的同质化问题。
-- 重构类 PR 的合并率（35%）远高于功能类 PR（9%），表明深度理解代码库的贡献比纯代码生成更有价值。
+- OpenClaw 的 PR 提交量从每周约 2 个暴增至 3400 个，合并率从约 48% 降至不到 9.3%，大量低质量 PR 由 AI 编码代理自动生成。
+- PR 垃圾信息与 2000 年代初的电子邮件垃圾信息模式相似，需要通过发件人声誉系统和信任基础设施来应对。
+- Mitchell Hashimoto 因 Ghostty 项目遭遇 AI 生成 PR 泛滥，发布了 Vouch 信任管理系统来管理开源贡献者的可信度。
+- 当大多数贡献者使用相同的 AI 编码代理时，观点多样性丧失，Linus 定律（足够多的眼球使所有漏洞变浅显）可能不再成立。
+- 在 OpenClaw 中，需要深入理解代码库的重构类 PR 合并率（35%）远高于功能类 PR（9%），表明深度思考比大量编写更重要。
+- 开源社区需要更好的身份认证、声誉系统和贡献验证基础设施来应对 AI 带来的新挑战。
 extract_result: success
+object_mentions:
+- object_type: project
+  name: openclaw/openclaw
+  canonical_name: openclaw/openclaw
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - OpenClaw 成为 GitHub 历史上增长最快的仓库，PR 提交量从每周约 2 个暴增至 3400 个，合并率从 48% 降至不到 9.3%。
+  - 大量 PR 是由 AI 编码代理生成的低质量贡献，有贡献者在一天内提交了 106 个 PR，中位提交间隔仅 3 秒。
+  - 在 OpenClaw 中，重构类 PR 的合并率为 35%，远高于功能类 PR 的 9%，表明需深入理解代码库的贡献更受青睐。
+  article_id: 61cebb5cfcee9b53
+- object_type: project
+  name: Vouch
+  canonical_name: Vouch
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Mitchell Hashimoto 发布了 Vouch，一个为开源贡献者设计的信任管理系统，未经过担保的用户无法贡献。
+  - Vouch 的愿景是让信任决策最终在不同项目之间传播，类似开源版的发件人声誉评分系统。
+  article_id: 61cebb5cfcee9b53
+- object_type: project
+  name: Ghostty
+  canonical_name: Ghostty
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - Mitchell Hashimoto 创建并维护了 Ghostty，这是最受欢迎的开源终端模拟器之一。
+  - 由于 AI 生成的 PR 垃圾流量过大，Mitchell 需要限制 AI 生成的贡献，随后发布了 Vouch 来解决这个问题。
+  article_id: 61cebb5cfcee9b53
+- object_type: company
+  name: Greptile
+  canonical_name: Greptile
+  url: null
+  confidence: high
+  article_role: ecosystem_context
+  evidence_snippets:
+  - Greptile 是一家构建 AI 代理来审查拉取请求的公司，为 OpenClaw 提供 PR 审查服务。
+  - 该文章基于 Greptile 在审查 OpenClaw PR 过程中直接观察到的数据和经验撰写。
+  article_id: 61cebb5cfcee9b53
 ---
 
 I'm Rahul, and I work at Greptile, where we build AI agents that review pull requests. Greptile reviews PRs for OpenClaw which became the fastest-growing repo in GitHub history almost overnight. That gave us a front row seat to something strange.

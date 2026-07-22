@@ -13,27 +13,60 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: f9cb2c160bbcd29a
 source_type: community_discussion
-tldr: 一份平台无关的网站技术规范，涵盖SEO、可访问性、安全等10个类别，并提供MCP服务器接口。
-objective_summary: 一份名为The Website Specification的开放技术规范发布，定义了每个网站应具备的技术特性标准，涵盖HTML基础、SEO、可访问性、安全、Well-Known
-  URI、Agent就绪性、性能、隐私、弹性和国际化10个类别，并提供MCP服务器和Agent Skill供AI代理查询。
+tldr: The Website Specification 是一份平台无关的技术规范清单，定义了每个优秀网站应有的功能特性，涵盖 SEO、可访问性、安全、性能等十个领域，并提供
+  MCP 服务器和 Agent Skill 供 AI 代理查询。
+objective_summary: 'The Website Specification 项目发布了一份平台无关的网站技术规范，从 HTML 基础到安全头、可访问性、性能优化和国际化的完整检查清单。该规范以标准组织（WHATWG、W3C、IETF、WCAG、MDN）的官方标准为依据，适用于
+  WordPress、Next.js、Astro 等任意技术栈。项目同时提供了开放的 MCP 服务器（mcp.specification.website）和 Agent
+  Skill，允许 AI 代理以编程方式查询规范，还通过 /llms.txt 和 Accept: text/markdown 提供每页的 Markdown 版本。'
 event_type: framework_tools
 epistemic_status: verified_fact
 entities:
   companies: []
   technologies:
   - MCP
+  - llms.txt
   - WCAG
   - SEO
-  - llms.txt
   key_people: []
 key_logic_flow:
-- 该规范定义了每个合格网站应具备的技术特性，内容覆盖HTML基础、SEO、可访问性、安全、Well-Known URI、Agent就绪性、性能、隐私、弹性和国际化10个类别。
-- 每个规范条目均链接回对应的权威标准来源，包括WHATWG、W3C、IETF RFC、WCAG和MDN。
-- 该规范支持WordPress、Drupal、Next.js、Astro、Hugo、Django及纯HTML等所有平台，实现提示跟随规范而非反过来。
-- 整套规范以开源MCP服务器形式提供，无需认证的只读访问，同时发布了Agent Skill供兼容的AI代理使用。
-- '用户可通过llms.txt和Accept: text/markdown头获取每页的Markdown版本。'
-- 该站点提供审计清单供开发者逐项检查、点击进入学习实现细节，并通过GitHub PR接受改进建议。
+- The Website Specification 是一份平台无关的网站技术规范，列出了每个优秀网站应具备的功能特性。
+- 规范涵盖十个核心领域：基础、SEO、可访问性、安全、Well-Known URIs、代理就绪、性能、隐私、弹性和国际化。
+- 每一项都链接回 WHATWG、W3C、IETF RFC、WCAG 和 MDN 等标准机构的官方标准。
+- 该规范通过开放的 MCP 服务器（mcp.specification.website）提供只读查询接口，无需认证。
+- 项目还发布了 Agent Skill，可教导兼容的 AI 代理在何时以及如何使用该规范。
+- '每页内容可通过 /llms.txt 和 Accept: text/markdown 获取 Markdown 格式。'
 extract_result: success
+object_mentions:
+- object_type: project
+  name: The Website Specification
+  canonical_name: The Website Specification
+  url: https://specification.website/
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - The Website Specification 是一份平台无关的技术规范清单，定义了每个优秀网站应有的功能特性。
+  - 该规范涵盖基础、SEO、可访问性、安全、性能、隐私等十个核心领域，并链接到 WHATWG、W3C 和 IETF RFC 等官方标准。
+  article_id: f9cb2c160bbcd29a
+- object_type: project
+  name: specification.website MCP Server
+  canonical_name: specification.website MCP Server
+  url: https://mcp.specification.website/mcp
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 项目提供开放的 MCP 服务器（mcp.specification.website），允许 AI 代理以只读方式查询规范，无需认证。
+  - 'MCP 服务器的配置为 transport: http, url: https://mcp.specification.website/mcp。'
+  article_id: f9cb2c160bbcd29a
+- object_type: project
+  name: llms.txt
+  canonical_name: llms.txt
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 规范通过 /llms.txt 提供每页的 Markdown 内容，便于 AI 代理和爬虫读取。
+  - llms.txt 是项目中 Agent Readiness 领域的一部分，用于让网站对 AI 代理更可读。
+  article_id: f9cb2c160bbcd29a
 ---
 
 # What a good website does.

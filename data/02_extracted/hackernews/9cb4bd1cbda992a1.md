@@ -14,28 +14,39 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 9cb4bd1cbda992a1
 source_type: community_discussion
-tldr: 挪威Datatilsynet对Elkjop处以2000万克朗罚款，因其客户俱乐部强制同意营销属非法
-objective_summary: 2021年7月，一位隐私专家向Elkjop投诉其客户俱乐部将接收营销与会员资格捆绑。该投诉经瑞典IMY转交挪威Datatilsynet，于2026年6月1日被处以2000万挪威克朗（约180万欧元）罚款，认定其同意机制违反GDPR多项条款。
+tldr: 2021年，一位隐私专家投诉Elkjop集团将营销邮件同意与顾客俱乐部会员资格捆绑，违反GDPR关于自由同意的规定。2026年6月，挪威数据保护机构Datatilsynet对Elkjop处以2000万挪威克朗（约180万欧元）罚款，认定其强制同意安排违法。
+objective_summary: 2021年7月，隐私专家The Privacy Guy向Elkjop集团数据保护官投诉，指出该集团将接收营销邮件作为顾客俱乐部会员的强制条件，违反GDPR第4(11)条和第7条关于自由同意的规定。投诉经瑞典监管机构IMY于2022年9月依据一站式机制移交至挪威Datatilsynet。2026年6月1日，Datatilsynet对Elkjop
+  Nordic AS处以2000万挪威克朗罚款，认定其顾客俱乐部的同意机制为强制同意、不具体且信息不充分，同时该公司未按第6(4)条进行兼容性评估即将数据用于广告和转化追踪。原作者从GDPRhub维基偶然获知裁决结果，未收到任何监管机构通知，已要求IMY作出解释。
 event_type: policy_and_safety
 epistemic_status: verified_fact
 entities:
   companies:
   - Elkjop Nordic AS
-  - Elgiganten
+  - Integritetsskyddsmyndigheten (IMY)
   - Datatilsynet
-  - IMY
-  - GDPRhub
-  technologies: []
-  key_people:
-  - That Privacy Guy
+  technologies:
+  - GDPR
+  - ePrivacy Directive
+  key_people: []
 key_logic_flow:
-- 2021年7月，作者向Elkjop集团DPO投诉其客户俱乐部将取消营销邮件与取消会员资格捆绑，违反GDPR第21(2)条、第4(11)条和第7条关于自由同意权的规定。
-- Elkjop书面回复确认接收营销/优惠是会员资格的条件，将合法的拒绝权变成了准入门槛，书面坐实了违规事实。
-- 作者发出第18条限制处理请求和第15条主体访问请求，并向瑞典监管机构IMY提起正式投诉（案件编号DI-2021-6660）。
-- 2022年9月，IMY根据GDPR一站式服务机制（第56(1)条）将案件移交挪威Datatilsynet，因实际控制者Elkjop Nordic AS主营业地位于挪威。
-- 2026年6月1日，Datatilsynet对Elkjop集团处以2000万挪威克朗（约180万欧元）罚款，认定其同意无效（强迫、不具体、信息不充分），且未经第6(4)条兼容性评估擅自将数据用于广告和转化追踪。
-- 作者通过志愿者运营的GDPRhub维基而非监管机构获知处罚结果，正追究IMY未履行第77(2)条告知义务的责任，并计划对Elkjop提起民事诉讼。
+- 2021年7月，一位隐私专家发现Elkjop集团将取消营销邮件的唯一方式是取消顾客俱乐部会员资格，即营销同意与会员身份强制捆绑。
+- 该专家向Elkjop数据保护官及瑞典监管机构IMY提出正式投诉，指出这种强制同意安排违反GDPR第4(11)条和第7条关于自由同意的规定。
+- IMY于2022年9月依据GDPR第56(1)条一站式机制将案件移交至挪威Datatilsynet，因Elkjop Nordic AS的决策机构位于挪威。
+- 2026年6月1日，Datatilsynet对Elkjop集团处以2000万挪威克朗（约180万欧元）罚款，认定其强制同意、同意不具体及信息不充分等多项违规。
+- Datatilsynet同时认定该公司未按GDPR第6(4)条进行兼容性评估，即将会员数据用于广告和转化追踪。
+- 原作者从社区运营的GDPRhub维基偶然获知裁决结果，未收到任何监管机构的主动通知，已要求IMY作出解释并可能启动欧盟侵权诉讼。
 extract_result: success
+object_mentions:
+- object_type: project
+  name: GDPRhub
+  canonical_name: GDPRhub
+  url: https://gdprhub.eu
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 原作者从GDPRhub（一个由志愿者运营的维基平台）偶然获知本案的裁决结果，而非从负责案件的监管机构直接得知。
+  - GDPRhub被描述为志愿者运营的维基平台，专门收录GDPR执法案例和隐私监管决策的公开信息。
+  article_id: 9cb4bd1cbda992a1
 ---
 
 Back in the summer of 2021 I was a member of the Elgiganten Kundklubb, the customer club the Elkjop group runs across the Nordics, and like a lot of members I was buried under marketing emails. So I did the obvious thing and went looking for a way to switch them off. What I found instead was the problem that has taken five years to put right - the only way to stop the marketing was to cancel my membership of the club altogether.

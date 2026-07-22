@@ -51,23 +51,46 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 6bbd89da1a951eab
 source_type: community_discussion
-tldr: Plane 是一个开源项目管理工具，支持问题跟踪、周期管理和路线图规划。
-objective_summary: makeplane 在 GitHub 上发布 Plane，一个开源项目管理工具，提供云服务和自托管两种部署方式，核心功能包括工作项管理、周期、模块、自定义视图、AI
-  辅助页面和分析仪表盘，采用 AGPL v3.0 协议。
-event_type: framework_tools
-epistemic_status: pr_statement
+tldr: Plane 是一款开源项目管理工具，支持问题追踪、冲刺（Cycles）管理和产品路线图规划，提供云托管和自托管两种部署方式，采用 AGPL v3.0 许可证。
+objective_summary: makeplane/plane 是一个开源项目管理工具，支持问题追踪、冲刺管理、模块拆分、自定义视图、AI 辅助页面和实时分析功能。用户可以通过
+  Plane Cloud 快速开始使用，也可以在自有服务器上自托管部署。项目遵循 AGPL v3.0 许可证，通过 GitHub Issues 和社区论坛收集反馈。
+event_type: application_landing
+epistemic_status: verified_fact
 entities:
   companies:
   - makeplane
   technologies: []
   key_people: []
 key_logic_flow:
-- Plane 是一个开源项目管理工具，核心用途是跟踪问题、管理周期（Cycles）和产品路线图。
-- Plane 提供两种部署方式：Plane Cloud 云服务（免费注册）和自托管部署（支持 Docker 和 Kubernetes）。
-- Plane 的核心功能包括工作项管理（支持富文本编辑器和文件上传）、周期与燃尽图、模块化项目拆分、自定义筛选视图、AI 辅助页面（Pages）以及实时分析仪表盘。
-- Plane 托管在 GitHub 上，采用 GNU Affero General Public License v3.0 开源协议。
-- Plane 通过 GitHub Discussions 和官方论坛鼓励社区参与，支持报告 bug、提交功能请求和改进文档等贡献方式。
+- Plane 是一个开源项目管理工具，核心功能包括问题追踪、Cycles（冲刺）管理和产品路线图规划。
+- 提供 Plane Cloud（云托管）和自托管（Docker/Kubernetes）两种部署方式供用户选择。
+- 工作项（Work Items）支持富文本编辑器和文件上传，可添加子属性和关联引用。
+- Cycles 功能通过燃尽图等工具帮助团队跟踪进度和维持工作节奏。
+- Modules 功能将复杂项目拆分为更小的可管理模块，Views 功能允许用户自定义过滤器保存和共享视图。
+- Pages 功能提供 AI 辅助和富文本编辑能力，Analytics 功能提供跨项目实时数据洞察。
 extract_result: success
+object_mentions:
+- object_type: project
+  name: makeplane/plane
+  canonical_name: makeplane/plane
+  url: https://github.com/makeplane/plane
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Plane 是一个开源项目管理工具，用于跟踪问题、运行冲刺周期和管理产品路线图。
+  - 项目采用 AGPL v3.0 许可证，通过 GitHub Issues 和社区论坛收集用户反馈和建议。
+  - Plane 提供 Cloud 云托管和自托管（Docker/Kubernetes）两种部署方式，用户可根据需求选择。
+  article_id: 6bbd89da1a951eab
+- object_type: product
+  name: Plane Cloud
+  canonical_name: Plane Cloud
+  url: https://plane.so
+  confidence: high
+  article_role: ecosystem_context
+  evidence_snippets:
+  - Plane Cloud 提供免费账户注册，是最快速的开始方式，用户无需担心基础设施管理。
+  - 用户可以通过 Plane Cloud 直接使用 Plane 的全部功能，无需自行部署和维护服务器。
+  article_id: 6bbd89da1a951eab
 ---
 
 **Modern project management for all teams**

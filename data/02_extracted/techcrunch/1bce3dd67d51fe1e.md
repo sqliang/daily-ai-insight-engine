@@ -14,35 +14,87 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 1bce3dd67d51fe1e
 source_type: news_media
-tldr: 苹果WWDC 2026：Siri集成Google Gemini，Apple Intelligence全系统升级，Tim Cook最后一次主题演讲
-objective_summary: 2026年6月8日，苹果在WWDC 2026上宣布Siri AI重大升级，整合Google Gemini并推出独立App；Apple
-  Intelligence新增Safari标签管理、跨应用上下文感知等功能。Apple与Google合作开发下一代Apple Foundation Models。
+tldr: 苹果在 WWDC 2026 上宣布了基于 Google Gemini 的新版 Siri AI、iOS 27 以及 Apple Intelligence
+  全线更新。这是 CEO Tim Cook 主持的最后一届 WWDC，他将于 9 月 1 日将 CEO 职位交给硬件工程高级副总裁 John Ternus。
+objective_summary: 苹果于 2026 年 6 月 8 日在 WWDC 2026 上发布了一系列 AI 相关更新，包括基于 Google Gemini
+  模型的新版 Siri AI。新 Siri 将具备更强的对话能力、视觉智能集成，并推出独立应用。Apple Intelligence 获得跨应用上下文感知、Safari
+  标签管理、一键密码更新、Messages AI 回复建议等功能。Craig Federighi 强调苹果在 AI 领域的隐私承诺。苹果还与 Google 合作开发下一代
+  Apple Foundation Models。Liquid Glass 设计语言允许用户选择性回退。
 event_type: application_landing
-epistemic_status: pr_statement
+epistemic_status: verified_fact
 entities:
   companies:
   - Apple
   - Google
   technologies:
-  - Siri AI
   - Apple Intelligence
-  - iOS 27
   - Google Gemini
+  - Siri AI
   - Liquid Glass
-  - Image Playground
   - Apple Foundation Models
   key_people:
   - Tim Cook
   - John Ternus
   - Craig Federighi
 key_logic_flow:
-- 苹果在WWDC 2026上发布Siri AI重大更新，整合Google Gemini以提升对话能力和视觉智能，并推出独立App形态。
-- 苹果高级副总裁Craig Federighi强调隐私优先的AI理念，宣称'AI中的隐私不可妥协'，数据仅用于执行用户请求且接受外部专家验证。
-- Apple Intelligence迎来全系统升级，新增Safari标签管理、一键密码更新、跨应用上下文感知等功能。
-- Messages新增AI回复建议，Phone应用可在通话中从Mail和Messages等其他应用提取上下文信息。
-- 苹果确认与Google合作，基于Gemini模型系列开发下一代Apple Foundation Models。
-- 苹果允许用户选择回滚或增强Liquid Glass设计元素，并展示新的分层应用图标方案。
+- 苹果在 WWDC 2026 上正式发布了基于 Google Gemini 模型的新版 Siri AI，赋予其更强的对话能力和视觉智能集成。
+- 新版 Siri 将推出独立应用，同时保持跨现有应用的集成能力。
+- Craig Federighi 强调苹果在 AI 领域坚持隐私优先，声称数据仅用于执行用户请求且可被外部专家随时验证。
+- Apple Intelligence 获得多个更新，包括 Safari 标签管理、跨应用上下文感知、Messages AI 回复建议以及 Phone 应用在通话中从
+  Mail 和 Messages 拉取上下文。
+- 苹果确认与 Google 及 Gemini 模型家族合作开发下一代 Apple Foundation Models。
+- Liquid Glass 设计语言允许用户选择性回退部分元素，同时应用图标引入新的分层视觉效果。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Siri AI
+  canonical_name: Apple Siri AI
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 苹果在 WWDC 2026 上发布了基于 Google Gemini 的新版 Siri AI，具备更强的对话能力和视觉智能集成。
+  - 新版 Siri 将推出独立应用，同时保持跨现有应用的集成能力。
+  - Craig Federighi 强调苹果在 AI 领域的隐私承诺，声称数据仅用于执行用户请求。
+  article_id: 1bce3dd67d51fe1e
+- object_type: product
+  name: Apple Intelligence
+  canonical_name: Apple Intelligence
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Apple Intelligence 获得多个更新，包括 Safari 标签管理、一键密码更新和跨应用上下文感知。
+  - 苹果与 Google 及 Gemini 模型家族合作开发下一代 Apple Foundation Models，用于驱动 Apple Intelligence。
+  - Messages 获得 AI 回复建议，Phone 应用可在通话中从 Mail 和 Messages 拉取上下文信息。
+  article_id: 1bce3dd67d51fe1e
+- object_type: product
+  name: iOS 27
+  canonical_name: Apple iOS 27
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - WWDC 2026 预计将发布关于 iOS 27、Siri AI 和 Apple Intelligence 的公告。
+  article_id: 1bce3dd67d51fe1e
+- object_type: product
+  name: Liquid Glass
+  canonical_name: Apple Liquid Glass
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 苹果允许用户选择性回退 Liquid Glass 设计语言的某些元素，同时展示应用图标的新分层视觉效果。
+  article_id: 1bce3dd67d51fe1e
+- object_type: product
+  name: Image Playground
+  canonical_name: Apple Image Playground
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 苹果在 WWDC 2026 上宣布 Image Playground 获得又一次更新机会。
+  article_id: 1bce3dd67d51fe1e
 ---
 
 Apple’s WWDC 2026 event kicked off this morning at 10 a.m. PT at Apple Park, starting a week full of expected announcements around Siri, iOS 27, Apple Intelligence and more, along with developer events and demos. This year’s event is particularly notable for a couple things. It marks CEO Tim Cook’s last with the company, after announcing he’s handing things off to Senior Vice President of Hardware Engineering John Ternus September 1. And it’s expected to play host to Apple’s attempt to give Siri and its AI efforts overall a big boost after handing some work off to Google and delaying some releases.

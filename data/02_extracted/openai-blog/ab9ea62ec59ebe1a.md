@@ -13,26 +13,52 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: ab9ea62ec59ebe1a
 source_type: tech_blog
-tldr: 澳洲支付公司AP+使用ChatGPT Enterprise和Codex加速支付系统分析与文档工作
-objective_summary: 澳大利亚支付基础设施运营商AP+引入ChatGPT Enterprise和Codex。77%受访员工每周节省2小时以上，80%报告创造力或工作质量提升。Codex将复杂对账调查从数天缩短至30分钟，工作模拟构建从数天缩短至1天。
+tldr: 澳大利亚支付基础设施运营商 AP+ 全面部署 ChatGPT Enterprise 和 Codex，77% 的受访员工每周节省超 2 小时，技术团队使用
+  Codex 将复杂对账调查从 4 小时缩短至 30 分钟。
+objective_summary: 澳大利亚支付基础设施公司 Australian Payments Plus (AP+) 在全员范围内引入 OpenAI 的 ChatGPT
+  Enterprise 和 Codex。调查显示 77% 的受访员工每周节省 2 小时以上，80% 报告创造力或工作质量提升。技术团队使用 Codex 将复杂对账问题的排查时间从
+  4 小时缩短至 30 分钟，并在一日内完成工作模拟原型构建，而传统方法需要数天到数周。AP+ 还将 ChatGPT 用于汇总复杂材料、导航 eftpos 技术规范以及起草数据驱动的成员沟通文档等知识工作场景。
 event_type: application_landing
 epistemic_status: pr_statement
 entities:
   companies:
-  - OpenAI
   - Australian Payments Plus
+  - OpenAI
   technologies:
-  - ChatGPT
+  - ChatGPT Enterprise
   - Codex
   key_people: []
 key_logic_flow:
-- AP+ 在全公司推广 ChatGPT Enterprise，帮助员工处理复杂的支付系统知识工作，77% 的受访员工每周节省 2 小时以上
-- 80% 的受访员工报告使用 ChatGPT 后创造力或工作质量得到提升
-- 技术团队使用 Codex 追溯支付系统中系统日志与对账数据间的时间戳不一致问题，将数天的调查工作缩短至 30 分钟
-- Codex 将构建工作模拟的时间从数天缩短至 1 天
-- AP+ 正在探索将 Codex 用于安全团队的威胁建模、漏洞分析、警报分类及跨系统可见性分析
-- ChatGPT Enterprise 帮助员工快速导航 eftpos 规范和内部文档，更快找到正确的起点后再进行专家审查
+- AP+ 在全员范围内部署 ChatGPT Enterprise，帮助员工更快地处理复杂的知识工作。
+- 77% 的受访员工每周节省 2 小时以上，80% 的受访员工报告创造力或工作质量有所提升。
+- 技术团队使用 Codex 追踪支付系统中的时间戳不一致问题，将调查时间从 4 小时缩短至 30 分钟。
+- Codex 帮助 AP+ 在一天内构建出工作模拟原型，而传统方法需要数天到数周。
+- AP+ 还在探索 Codex 在安全团队中的应用，包括威胁建模、漏洞分析和警报分类等场景。
+- ChatGPT Enterprise 被用于汇总复杂技术材料、查找 eftpos 规范以及起草面向成员的数据驱动沟通文档。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: ChatGPT Enterprise
+  canonical_name: ChatGPT Enterprise
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - AP+ 在全公司范围内引入 ChatGPT Enterprise 以帮助员工更快地处理复杂的知识工作。
+  - AP+ 员工使用 ChatGPT Enterprise 汇总复杂材料、起草数据驱动的成员沟通文档并梳理模糊问题。
+  - 77% 的受访员工使用 ChatGPT 后每周节省 2 小时以上，80% 报告创造力或工作质量提升。
+  article_id: ab9ea62ec59ebe1a
+- object_type: product
+  name: Codex
+  canonical_name: Codex
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - AP+ 技术团队使用 Codex 追踪支付系统中的时间戳不一致问题，将调查时间从 4 小时缩短至 30 分钟。
+  - Codex 帮助 AP+ 在一天内构建出工作模拟原型，而传统方法需要数天到数周。
+  - AP+ 还在探索 Codex 在安全团队中的应用，包括威胁建模、漏洞分析和警报分类等场景。
+  article_id: ab9ea62ec59ebe1a
 ---
 
 2+

@@ -13,9 +13,12 @@ tags:
 extraction_status: success
 id: eec1bd5cdabc90d3
 source_type: community_discussion
-tldr: 一位开发者将其运行10年的博客从Digital Ocean的Ubuntu 16.04 VPS迁移至Hetzner的FreeBSD 14.
-objective_summary: 作者于2026年将运行在Digital Ocean纽约节点上已达1491天uptime的Ubuntu 16.04 VPS（$13/月），迁移至Hetzner德国节点的FreeBSD
-  14.3虚拟机（约€6/月）。迁移中采用FreeBSD Jails+Bastille实现每站点独立隔离，
+tldr: 一位博主将在 Digital Ocean 上运行了 10 年的 Ubuntu 16.04 博客迁移到 Hetzner VPS，改用 FreeBSD 14.3
+  系统，利用 Bastille 管理 Jails 实现站点隔离，以 Caddy 替代 nginx 作为反向代理服务器。
+objective_summary: 博主的博客运行在 Digital Ocean VPS 的 Ubuntu 16.04 LTS 上超过 10 年，该系统已停止安全更新至少
+  5 年。博主出于安全考虑将服务器迁移至 Hetzner VPS，价格仅为原来的不到一半（约 6 欧元/月），并在 Hetzner 上安装 FreeBSD 14.3，使用
+  Bastille 管理 Jails 为每个站点创建独立容器，用 Caddy 作为反向代理服务器自动处理 SSL 证书，替换了原来的 nginx 加 certbot
+  的方案。
 event_type: infrastructure_update
 epistemic_status: verified_fact
 entities:
@@ -24,24 +27,75 @@ entities:
   - Hetzner
   technologies:
   - FreeBSD
-  - FreeBSD Jails
-  - Bastille
+  - Ubuntu
   - ZFS
+  - Bastille
   - Caddy
   - nginx
   - Hugo
+  - Jails
   - PF
-  - Btrfs
   key_people: []
 key_logic_flow:
-- 旧服务器为Digital Ocean纽约节点VPS，运行Ubuntu 16.04 LTS超10年，已停止安全更新支持至少5年，存在安全隐患
-- 新服务器选用Hetzner德国节点虚拟机，配置为旧机两倍内存和CPU，月费仅为旧机一半以下（从$13降至约€6）
-- 迁移动机之一是学习FreeBSD，尤其是其Jails容器化技术和成熟的ZFS文件系统的快照功能
-- 通过Bastille工具管理Jails，为Caddy反向代理和每个站点分别创建独立Jail，实现网络隔离
-- 使用PF防火墙配置NAT出站规则和HTTP/HTTPS端口重定向，将外部流量引导至Caddy Jail
-- 用Caddy替代nginx作为Web服务器，主要原因是Caddy可自动处理SSL证书的申请和续期，避免手动运行certbot
+- 博主的博客在 Digital Ocean VPS 上运行 Ubuntu 16.04 LTS 超过 10 年，该系统已停止安全更新至少 5 年，存在安全风险。
+- 博主将服务器迁移到 Hetzner VPS，配置为 4GB 内存、2 vCPU、40GB 磁盘、20TB 流量，价格不到 6 欧元/月，远低于原 Digital
+  Ocean 的 13 美元/月。
+- 博主选择 FreeBSD 14.3，利用其 Jails 容器化技术实现站点隔离，并通过 Bastille 工具管理 Jails 的创建、启动和控制。
+- 新架构中，一个运行 Caddy 的 Jail 作为反向代理服务器处理所有外部流量和 SSL 证书，每个站点各自运行在独立的 Jail 中。
+- 利用 ZFS 文件系统提供数据完整性和快照功能，不依赖 VPS 提供商额外的付费快照服务。
+- 旧服务器在关闭时已连续运行 1491 天（约 4 年）未中断，期间未出现明显的安全问题。
 pipeline_stage: fact_extracted
 extract_result: success
+object_mentions:
+- object_type: project
+  name: Bastille
+  canonical_name: Bastille
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Bastille 是 FreeBSD 上一套成熟的 Jails 容器管理框架，提供创建、启动、停止、控制台访问等一键式命令。博主用它替代了手工配置 Jails
+    的繁琐步骤，将每个站点的运行环境隔离在各自的 Jail 容器中。
+  article_id: eec1bd5cdabc90d3
+- object_type: product
+  name: Caddy
+  canonical_name: Caddy
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 博主在新架构中选择 Caddy 作为 Web 服务器，负责反向代理所有站点的流量。博主从 nginx 切换至 Caddy 的主要原因在于 Caddy 能自动申请和续期
+    SSL 证书，无需再手动运行 certbot，避免了证书过期的问题。
+  article_id: eec1bd5cdabc90d3
+- object_type: product
+  name: Hugo
+  canonical_name: Hugo
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Hugo 是生成该博客全部静态页面的站点生成器。博主的发布流程为：本地撰写博文后提交 Git 仓库，登录服务器拉取代码，再手动执行 hugo 命令完成静态站点的构建和部署。
+  article_id: eec1bd5cdabc90d3
+- object_type: project
+  name: FreeBSD
+  canonical_name: FreeBSD
+  url: null
+  confidence: high
+  article_role: ecosystem_context
+  evidence_snippets:
+  - 博主选择 FreeBSD 14.3 作为新服务器的操作系统，核心动机是尝试不同于 Linux 的技术栈。FreeBSD 凭借集成设计、Jails 容器化技术、ZFS
+    文件系统和长期稳定性获得了博主的青睐。
+  article_id: eec1bd5cdabc90d3
+- object_type: product
+  name: nginx
+  canonical_name: nginx
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 旧服务器上博主使用 nginx/1.10.3 作为 Web 服务器，配合 certbot 手动管理各域名的 SSL 证书续期。博主提到 nginx 本身没有问题，但证书管理比较麻烦，这是切换到
+    Caddy 的主要原因。
+  article_id: eec1bd5cdabc90d3
 ---
 
 This blog has been running on a Digital Ocean VPS for over ten years. A machine hosted in New York City, running **Ubuntu 16.04 LTS**. An LTS that hasn’t been in support for at least 5 years. It was about time to change it. After some considerations, I migrated to a Hetzner virtual machine that is way better than my old Ubuntu one, less than half the price of what I used to pay, and just across the country from me. Not only that, but I took the challenge to move my stack to **FreeBSD**. It’s a long text, but stay for a cool introduction of *FreeBSD Jails* with *Bastille* and some interesting site load benchmarks.

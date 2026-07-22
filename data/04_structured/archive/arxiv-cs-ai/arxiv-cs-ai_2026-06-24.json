@@ -16,27 +16,47 @@
     "pipeline_stage": "fact_extracted",
     "id": "064132d87a1b96f4",
     "source_type": "academic_paper",
-    "tldr": "AlphaMemo提出结构化搜索-进程记忆框架，让LLM智能体在因子挖掘中自我进化。",
-    "objective_summary": "研究人员提出AlphaMemo，一种自进化因子挖掘智能体，通过结构化搜索-进程记忆记录可重用编辑模式。它从抽象语法树差异中提取模式，运用置信门控残差记忆和非对称否决控制，解决了搜索空间大、反馈噪声和过拟合问题。在CSI 500和标普500指数上验证了样本外性能和发现效率提升。",
+    "tldr": "AlphaMemo 提出了一种结构化搜索-过程记忆机制，让 LLM 驱动的量化选股因子挖掘代理能够记录编辑模式在特定父因子上下文中的成败经验，从而提升搜索效率并降低过拟合风险。在 CSI 500 和 S&P 500 指数上验证了其样本外表现和发现效率的提升。",
+    "objective_summary": "AlphaMemo 是面向量化金融因子挖掘（alpha mining）的自演化 LLM 代理系统。它通过结构化搜索-过程记忆（Structured Search-Process Memory）解决因子搜索空间大、反馈噪声高、发现冗余和过拟合等问题。核心方法包括：从抽象语法树（AST）差异中提取编辑模式（motifs）、在搜索账本先验之上叠加置信度门控残差记忆（confidence-gated residual memory）、以及使用非对称否决控制（asymmetric veto control）抑制高置信度失败模式。论文在 CSI 500 和 S&P 500 两个指数上进行了实验，结果显示该方法改善了样本外表现和固定预算下的发现效率。消融实验验证了残差学习、置信度门控、AST 差异模式提取和否决记忆各模块的有效性。代码已开源。",
     "event_type": "framework_tools",
-    "epistemic_status": "theoretical_claim",
+    "epistemic_status": "verified_fact",
     "entities": {
       "companies": [],
       "technologies": [
-        "LLM",
-        "AST",
-        "AlphaMemo"
+        "AlphaMemo",
+        "Structured Search-Process Memory",
+        "AST-diff motifs",
+        "confidence-gated residual memory",
+        "asymmetric veto control",
+        "LLM"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "AlphaMemo针对LLM因子挖掘中的组合搜索空间庞大、非平稳反馈噪声、发现冗余和过拟合风险四大问题提出解决方案。",
-      "它记录在特定父因子上下文中哪些编辑模式有效或失败的可重用证据，而非仅记忆最终因子或完整轨迹。",
-      "系统通过抽象语法树差异提取编辑模式，并在搜索账本先验之上应用置信门控残差记忆。",
-      "使用非对称否决控制机制抑制高置信度失败模式，避免重复无效搜索路径。",
-      "在CSI 500和标普500指数上的实验显示样本外性能和固定预算发现效率均有提升。"
+      "AlphaMemo 面向的问题：LLM 代理在量化因子搜索中面临组合爆炸、非平稳噪声反馈、冗余发现以及过度复用历史成功经验导致的过拟合风险。",
+      "核心创新是结构化搜索-过程记忆（SSPM）：不仅记忆最终因子或完整轨迹，而是记录特定编辑模式在特定父因子上下文下的成功或失败经验。",
+      "模式提取方式：对 AST 差异（Abstract Syntax Tree differences）进行分析，从中提取可复用的编辑模式作为记忆单元。",
+      "置信度门控残差记忆机制：在搜索账本（search-ledger）先验基础上叠加残差记忆，并通过置信度门控控制每条记忆的影响权重。",
+      "非对称否决控制：对高置信度失败模式进行抑制，防止代理重复犯相同的错误。",
+      "在 CSI 500 和 S&P 500 指数上的实验表明，AlphaMemo 在样本外表现和固定预算发现效率上均优于基线方法。"
     ],
     "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "AlphaMemo",
+        "canonical_name": "AlphaMemo",
+        "url": "https://arxiv.org/abs/2606.20625",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "AlphaMemo 是一个自演化的 LLM 代理系统，用于量化因子挖掘，通过结构化搜索-过程记忆机制提升搜索效率和样本外表现。",
+          "AlphaMemo 的核心设计包括 AST 差异模式提取、置信度门控残差记忆和非对称否决控制三大模块。",
+          "论文在 CSI 500 和 S&P 500 指数上对 AlphaMemo 进行了实验验证，消融研究确认了各模块的独立贡献。"
+        ],
+        "article_id": "064132d87a1b96f4"
+      }
+    ],
     "impact_score": {
       "score": 5.5,
       "reason": "AlphaMemo提出了结构化搜索-进程记忆框架，针对LLM因子挖掘中的组合搜索空间庞大、非平稳反馈噪声和过拟合风险等实际问题给出了系统性的工程方案。该工作在量化金融这一垂直领域有明确的应用价值和实验验证（CSI 500和标普500样本外表现提升）。但本质上是学术渐进式改进，应用场景局限于量化因子挖掘，短期内不会对AI行业产生广泛冲击，也不构成范式转移。"
@@ -94,7 +114,34 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "AlphaMemo",
+        "canonical_name": "AlphaMemo",
+        "url": "https://arxiv.org/abs/2606.20625",
+        "positioning": "AlphaMemo 是一个面向量化金融因子挖掘的结构化搜索-过程记忆系统，旨在提升 LLM 代理在因子搜索中的效率和样本外表现。",
+        "technical_signal": "核心创新包括 AST 差异模式提取、置信度门控残差记忆和非对称否决控制三大模块，已在 CSI 500 和 S&P 500 指数上通过消融实验验证有效性。",
+        "adoption_signal": "论文代码已开源，但目前主要停留在学术论文层面，尚未观察到广泛的产业或社区采用信号。",
+        "ecosystem_relevance": "AlphaMemo 填补了自演化 LLM 代理在结构化搜索记忆方面的空白，可融入量化投研工具链，促进因子挖掘的自动化升级。",
+        "target_users": [],
+        "watch_reason": "AlphaMemo 提出了一种新颖的结构化记忆机制解决 LLM 因子挖掘中的过拟合和搜索效率问题，在两大指数上验证了有效性，代码开源降低了复现和扩展门槛，值得持续跟踪其在量化实战中的演进。",
+        "risk_notes": [
+          "论文实验仅涵盖 CSI 500 和 S&P 500 两个指数，在更多市场和资产类别上的泛化能力有待验证。",
+          "结构化记忆机制在真实交易环境中的稳健性和可操作性尚未充分验证，从学术成果到实盘部署仍有距离。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "064132d87a1b96f4"
+        ],
+        "evidence_snippets": [
+          "AlphaMemo 是一个自演化的 LLM 代理系统，用于量化因子挖掘，通过结构化搜索-过程记忆机制提升搜索效率和样本外表现。",
+          "AlphaMemo 的核心设计包括 AST 差异模式提取、置信度门控残差记忆和非对称否决控制三大模块。",
+          "论文在 CSI 500 和 S&P 500 指数上对 AlphaMemo 进行了实验验证，消融研究确认了各模块的独立贡献。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -113,27 +160,55 @@
     "pipeline_stage": "fact_extracted",
     "id": "0c9028aa03086542",
     "source_type": "academic_paper",
-    "tldr": "提出DEMM-Bench基准，衡量智能体运行时记录能否充分重建决策级属性。",
-    "objective_summary": "DEMM-Bench基于决策证据成熟度模型(DEMM)，通过8个证据体系和8种退化条件评估64个案例，发现传统方法在75%案例中存在过度声明，而属性级评分器零过度声明但准确率仅56.25%。",
+    "tldr": "DEMM-Bench 是一个跨体制的智能体运行时治理证据充分性基准测试，基于决策证据成熟度模型（DEMM），衡量八类证据记录是否足以重构决策级属性。实验表明，仅凭痕迹或模式存在会高估75%的案例，而经过属性级裁剪的评分器在高估率为零的情况下达到56.25%的平均属性充分性准确率。",
+    "objective_summary": "DEMM-Bench 是 arXiv 于 2026 年 6 月发布的一篇学术论文中提出的基准测试，旨在评估智能体运行时系统产生的痕迹、账本、溯源图、策略日志等八类证据记录对重构决策级属性的充分性。该基准通过适配器标准化不同证据体制、提出属性级问题并施加八种确定性降级条件，在64个人工案例上对多种基线进行了评测。结果显示痕迹存在和模式存在基线在75%的案例中存在过度声明，账本存在基线在50%案例中过度声明，而经属性级裁剪的候选评分器零过度声明，平均属性充分性准确率为56.25%。",
     "event_type": "framework_tools",
-    "epistemic_status": "theoretical_claim",
+    "epistemic_status": "verified_fact",
     "entities": {
       "companies": [],
       "technologies": [
         "DEMM-Bench",
-        "DEMM",
-        "Decision Evidence Maturity Model"
+        "Decision Evidence Maturity Model (DEMM)"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "智能体运行时系统产生追踪、账本、溯源图等多种记录，但这些记录不一定能回答关于特定决策的治理问题。",
-      "DEMM-Bench基于决策证据成熟度模型(DEMM)，衡量8个证据体系的记录是否足以重建决策级属性，而非仅呈现原始数据。",
-      "基准通过适配器规范化各证据体系，围绕行为者、权限、动作、策略、决策依据、资源接触、生命周期上下文和验证强度8类属性提出治理问题。",
-      "应用8种确定性退化条件进行测试，在64个案例中trace-present和schema-present基线在75%案例中存在过度声明。",
-      "ledger-present基线在50%案例中过度声明，而经编辑的属性级候选评分器零过度声明，平均属性充分性准确率为56.25%。"
+      "DEMM-Bench 提出智能体运行时系统产生的痕迹、账本、溯源图等记录并不一定能回答特定决策的治理问题。",
+      "该基准基于决策证据成熟度模型（DEMM），衡量八类证据体制的记录是否足以重构决策级属性而非仅呈现存在性。",
+      "基准通过适配器标准化不同证据体制，针对行为者、权限、行动、策略、决策依据等八个维度提出属性级问题。",
+      "实验在64个人工案例上进行，使用八种确定性降级条件对多个基线进行对比评测。",
+      "痕迹存在基线和模式存在基线在75%的案例中存在过度声明，账本存在基线在50%案例中过度声明。",
+      "经属性级裁剪的候选评分器实现零过度声明，平均属性充分性准确率为56.25%。"
     ],
     "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "DEMM-Bench",
+        "canonical_name": "DEMM-Bench",
+        "url": "https://arxiv.org/abs/2606.20634",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "DEMM-Bench 是一个跨体制的智能体运行时治理证据充分性基准测试，它衡量八类证据记录是否足以重构决策级属性。",
+          "该基准通过适配器标准化不同证据体制，针对行为者、权限、行动等八个维度提出属性级问题，并施加八种确定性降级条件。",
+          "在64个人工案例上，经属性级裁剪的候选评分器实现零过度声明，平均属性充分性准确率为56.25%。"
+        ],
+        "article_id": "0c9028aa03086542"
+      },
+      {
+        "object_type": "model",
+        "name": "Decision Evidence Maturity Model (DEMM)",
+        "canonical_name": "Decision Evidence Maturity Model",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "DEMM-Bench 基于决策证据成熟度模型（DEMM），该模型定义了衡量证据充分性的成熟度框架。",
+          "DEMM 用于判断智能体运行时记录是否具备足够成熟度来回答决策级治理问题。"
+        ],
+        "article_id": "0c9028aa03086542"
+      }
+    ],
     "impact_score": {
       "score": 3.5,
       "reason": "该论文提出了一个针对智能体运行时治理证据充分性的基准测试，属于AI安全与治理的子领域。核心发现是现有追踪记录系统在75%的案例中存在过度声明，这一发现对构建可审计的AI Agent系统有警示意义。但整体影响力有限——该工作仍处于学术理论验证阶段，未提供可立即落地的工程解决方案，且DEMM框架本身不改变大模型训练、推理或部署的基本范式。短期行业冲击力较低，主要影响关注Agent治理和合规性的研究团队与安全工程师圈子。"
@@ -188,7 +263,38 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "DEMM-Bench",
+        "canonical_name": "DEMM-Bench",
+        "url": "https://arxiv.org/abs/2606.20634",
+        "positioning": "DEMM-Bench 是一个跨体制的智能体运行时治理证据充分性基准测试，基于决策证据成熟度模型（DEMM）衡量八类证据体制的记录是否足以重构决策级属性。",
+        "technical_signal": "该基准通过适配器标准化八种证据体制，针对行为者、权限、行动等八个维度提出属性级问题，并施加八种确定性降级条件进行评测。",
+        "adoption_signal": "经属性级裁剪的候选评分器在64个人工案例上实现零过度声明，平均属性充分性准确率为56.25%。",
+        "ecosystem_relevance": "该基准填补了智能体运行时审计领域的标准化评估空白，为异构系统间的治理证据成熟度提供了可复现的评测框架。",
+        "target_users": [
+          "AI安全与治理研究人员",
+          "智能体运行时系统开发者",
+          "AI审计与合规从业者"
+        ],
+        "watch_reason": "DEMM-Bench 首次系统性地衡量智能体运行时产生的八类证据记录对治理决策的充分性，揭示了痕迹存在基线在75%的案例中过度声明的关键问题，对构建可审计、可问责的AI代理系统具有基础性参考价值。",
+        "risk_notes": [
+          "当前实验仅在64个人工案例上进行，规模有限，可能不足以覆盖真实世界异构系统的多样性。",
+          "平均属性充分性准确率仅56.25%，表明现有评分器在证据充分性评估上仍有显著提升空间。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "0c9028aa03086542"
+        ],
+        "evidence_snippets": [
+          "DEMM-Bench 是一个跨体制的智能体运行时治理证据充分性基准测试，它衡量八类证据记录是否足以重构决策级属性。",
+          "该基准通过适配器标准化不同证据体制，针对行为者、权限、行动等八个维度提出属性级问题，并施加八种确定性降级条件。",
+          "在64个人工案例上，经属性级裁剪的候选评分器实现零过度声明，平均属性充分性准确率为56.25%。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -207,8 +313,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "15cbfa534467a519",
     "source_type": "academic_paper",
-    "tldr": "提出用于AI-SDLC流程中人类与智能体责任边界的协议规范语言",
-    "objective_summary": "该论文提出一种领域特定语言(DSL)，用于规范AI参与软件开发生命周期时的人类-智能体责任边界、审批关卡和治理约束。该语言区分策略(意图声明)与机制(结构强制)，通过验证令牌和能力边界等原语约束流程非确定性，并形式化了2+N团队职责分离模式。",
+    "tldr": "该论文提出了一种用于AI软件开发生命周期（AI-SDLC）的领域专用语言，通过结构化协议定义人类与AI代理之间的责任边界、审批关卡和治理约束，并提供了形式化语法和操作语义。",
+    "objective_summary": "研究人员提出了一门领域专用语言（DSL），用于以协议形式规范AI-SDLC流程。该语言区分了策略（声明意图）与机制（结构性强制），并通过验证令牌和能力边界等原语对流程非确定性进行约束。论文给出了形式化语法、良构条件和操作语义，以及失效速率分析，证明结构性强制能将系统失效率限制在代理与验证器速率的加权乘积内。此外还提出了2+N团队模式（两个人类管控角色加N个专业代理成员），将经典职责分离原则引入AI-SDLC。该工作已有一个可运行实现，但实证评估留作未来工作。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
@@ -224,14 +330,53 @@
       "key_people": []
     },
     "key_logic_flow": [
-      "现有AI-SDLC协作缺乏专门用于表达人类与智能体责任边界、审批关卡和治理约束的规范语言，现有方案分散在智能体提示词、工作流管理和访问控制等局部领域。",
-      "该论文提出一种领域特定语言(DSL)，将AI-SDLC流程定义为可执行协议，包含形式化语法、良构条件、操作语义和强制不变性。",
-      "该语言区分策略(声明的意图)与机制(结构性强制)，通过验证令牌和能力边界等原语来约束流程非确定性，使实现能严格界定智能体行为边界。",
-      "失败率分析证明：结构性强制将系统失败率约束为智能体率和验证器率的加权乘积，而纯行为合规则允许失败率累积或饱和增长。",
-      "论文提出2+N团队模式(两个人类管控角色加N个专业智能体成员)，为AI-SDLC场景形式化了经典的职责分离原则。",
-      "该贡献并非单点原语创新，而是将多智能体框架、工作流规范和基于能力的安全机制整合为统一的协议规范语言。"
+      "论文指出现有AI-SDLC流程要么编码在代理提示词中（容易漂移），要么只覆盖权限控制、审批等碎片环节，缺乏统一的规约语言。",
+      "作者提出了一门领域专用语言，定义了形式化语法、良构条件、操作语义和执行不变量，将流程规约从提示词解耦为结构化协议。",
+      "该语言的核心创新是区分策略（declared intent）与机制（structural enforcement），通过验证令牌（validation tokens）和能力边界（capability boundaries）原语约束非确定性。",
+      "失效速率分析表明：结构性强制将系统失效率控制为代理与验证器速率的加权乘积，而行为合规方式会导致累积或接近饱和的失效增长。",
+      "论文提出的2+N团队模式（两个人类管控角色加N个专业代理成员）将经典的职责分离原则形式化地引入AI-SDLC。",
+      "该工作相对MetaGPT、FlowAgent、BPMN扩展和SAGA的定位是：创新点在于特定集成，而非任何单一原语。"
     ],
     "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "paper",
+        "name": "Specifying AI-SDLC Processes: A Protocol Language for Human-Agent Boundaries",
+        "canonical_name": "Specifying AI-SDLC Processes: A Protocol Language for Human-Agent Boundaries",
+        "url": "https://arxiv.org/abs/2606.20615",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "论文提出了一门领域专用语言（DSL），用于以协议形式表达AI软件开发生命周期中的人类-代理责任边界、审批关卡和治理约束。",
+          "该语言区分策略（声明意图）与机制（结构性强制），通过验证令牌和能力边界等原语约束流程非确定性。",
+          "论文给出了形式化语法、良构条件、操作语义和执行不变量，并提供了一个可工作实现。"
+        ],
+        "article_id": "15cbfa534467a519"
+      },
+      {
+        "object_type": "project",
+        "name": "MetaGPT",
+        "canonical_name": "MetaGPT",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "论文将自身贡献定位于多代理框架MetaGPT、工作流规约FlowAgent和BPMN扩展等相关工作之上。",
+          "作者指出该工作的新颖之处在于特定集成，而非任何单一原语，以区别于MetaGPT等现有框架。"
+        ],
+        "article_id": "15cbfa534467a519"
+      },
+      {
+        "object_type": "project",
+        "name": "FlowAgent",
+        "canonical_name": "FlowAgent",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "论文将FlowAgent列为工作流规约领域的相关工作，并指出自身在该基础上的差异化定位。"
+        ],
+        "article_id": "15cbfa534467a519"
+      }
+    ],
     "impact_score": {
       "score": 3.0,
       "reason": "该论文提出了用于AI-SDLC流程中人类与智能体责任边界的协议规范语言(DSL)，属于学术框架性质的理论贡献。虽然形式化体系较为完整（含语法、良构条件、操作语义和失效分析），但论文明确声明'empirical evaluation is future work'，且发布于arXiv未经同行评审。当前多智能体框架(MetaGPT等)和工作流规范(BPMN等)已在实践中探索类似问题，该语言尚未展现出足以改变局部竞争格局的产业价值，属于典型的小圈子学术探索。"
@@ -287,7 +432,48 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "MetaGPT",
+        "canonical_name": "MetaGPT",
+        "positioning": "用于AI软件开发生命周期的多代理协作框架，将协作流程编码在代理提示词中驱动多角色协同。",
+        "technical_signal": "MetaGPT通过代理提示词编码AI-SDLC流程，论文指出该方式面临流程定义因提示词更新而漂移的风险。",
+        "ecosystem_relevance": "论文将MetaGPT列为AI-SDLC多代理框架的代表性相关工作，作为新协议语言对比和差异化定位的基准。",
+        "target_users": [],
+        "watch_reason": "MetaGPT作为多代理AI-SDLC领域的代表性框架，其提示词编码流程的方式与新协议语言的形式化规约路径形成鲜明对照，可持续跟踪两种技术路线在AI-SDLC流程治理领域的演进趋势。",
+        "risk_notes": [
+          "将AI-SDLC流程编码在代理提示词中缺乏结构性强制保障，流程定义可能随提示词迭代而漂移。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "15cbfa534467a519"
+        ],
+        "evidence_snippets": [
+          "论文将自身贡献定位于多代理框架MetaGPT、工作流规约FlowAgent和BPMN扩展等相关工作之上。",
+          "作者指出该工作的新颖之处在于特定集成，而非任何单一原语，以区别于MetaGPT等现有框架。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "FlowAgent",
+        "canonical_name": "FlowAgent",
+        "positioning": "AI-SDLC工作流规约领域的研究项目，专注于代理工作流定义与协作流程编排。",
+        "technical_signal": "FlowAgent被论文列为工作流规约领域的相关工作，代表现有的流程定义与编排方法。",
+        "ecosystem_relevance": "论文将FlowAgent作为工作流规约的参考基准，用于定位自身协议语言在流程规约层面的差异化贡献。",
+        "target_users": [],
+        "watch_reason": "FlowAgent作为AI-SDLC工作流规约的代表性工作，与论文提出的协议规约语言处于同一问题域，值得持续跟踪两者在流程形式化治理技术路线上的进展。",
+        "risk_notes": [],
+        "score": 2.0,
+        "article_ids": [
+          "15cbfa534467a519"
+        ],
+        "evidence_snippets": [
+          "论文将FlowAgent列为工作流规约领域的相关工作，并指出自身在该基础上的差异化定位。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",

@@ -64,44 +64,106 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: eef0ce22dfe3cec1
 source_type: news_media
-tldr: 小米发布SKYNOMAD增程SUV，OpenAI首席未来学家离职，工信部警告Claude Code存在后门
-objective_summary: 2026年7月8日，小米发布全新子品牌SKYNOMAD及增程式SUV；OpenAI首席未来学家Joshua Achiam离职；工信部通报Claude
-  Code存在安全后门；特朗普政府解除对GPT 5.6限制；OpenAI发布GPT-Live语音模型并宣布7月9日推出GPT-5.
+tldr: 小米发布全新子品牌SKYNOMAD及首款增程SUV（代号昆仑N3），计划2026年下半年上市；OpenAI首席未来学家Joshua Achiam宣布离职，同日发布GPT-5.6系列和GPT-Live语音模型；工信部警告Claude
+  Code存在向远程服务器回传敏感信息的后门隐患；字节跳动调整绩效规则加大半年激励；B站内测网页发布平台Toy使用量突破850万次。
+objective_summary: 2026年7月8日，小米汽车官宣全新独立子品牌SKYNOMAD，首款增程式SUV内部代号昆仑N3，计划下半年正式发布。OpenAI首席未来学家Joshua
+  Achiam宣布离职，结束近九年任职；同日OpenAI正式发布GPT-5.6系列（Sol、Terra、Luna版本）和GPT-Live-1语音模型，特朗普政府解除对GPT-5.6的限制；马斯克宣布SpaceX
+  AI将于7月9日开放Grok 4.5。中国工信部NVDB监测发现Anthropic旗下AI编程工具Claude Code（版本2.1.91至2.1.196）存在安全后门，可未经用户同意回传敏感信息。字节跳动调整绩效规则，综合绩效E及以上员工可获得半年激励，计算基数从月薪调整为月总包。B站内测网页内容发布平台Toy，上线一个多月使用量突破850万次。
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
   companies:
-  - 小米
+  - Xiaomi
   - OpenAI
-  - 粉笔
-  - 腾讯
   - SpaceX
   - Anthropic
-  - 字节跳动
-  - B站
-  - 工信部
+  - ByteDance
+  - Bilibili
+  - Tencent
+  - 粉笔
+  - Apple
   technologies:
-  - VLM
   - GPT-5.6
+  - GPT-Live-1
   - Grok 4.5
   - Claude Code
-  - GPT-Live
+  - VLM
   key_people:
   - 雷军
   - Joshua Achiam
   - 张小龙
-  - 田永龙
-  - Yonglong Tian
   - 盛海燕
+  - Yonglong Tian
+  - 姚顺雨
   - Elon Musk
 key_logic_flow:
-- 小米汽车发布全新子品牌SKYNOMAD，首款增程式SUV内部代号昆仑N3，计划于2026年下半年正式发布。
-- OpenAI首席未来学家Joshua Achiam在效力近九年后宣布离职，他表示离开是长久深思熟虑的结果。
-- 工信部通报AI编程工具Claude Code（2.1.91至2.1.196版本）存在安全后门，未经用户同意向远程服务器回传敏感信息。
-- 特朗普政府解除对OpenAI GPT 5.6的限制，OpenAI宣布将于7月9日正式发布GPT-5.6 Sol、Terra和Luna版本。
-- OpenAI推出GPT-Live-1和GPT-Live-1 mini语音模型，采用全双工架构支持用户实时打断交互。
-- 腾讯招入OpenAI前研究员田永龙（Yonglong Tian），将参与VLM视觉语言模型相关研发。
+- 小米汽车发布全新独立子品牌SKYNOMAD，首款增程式SUV内部代号昆仑N3，计划于2026年下半年正式发布。
+- OpenAI首席未来学家Joshua Achiam宣布离职，结束近九年的任职，表示将继续致力于推动AI造福人类的愿景。
+- OpenAI正式发布GPT-5.6系列（Sol、Terra、Luna版本）和GPT-Live-1语音模型，后者采用全双工架构支持实时打断交互；特朗普政府同时解除对GPT-5.6的限制。
+- 中国工信部NVDB监测发现Anthropic旗下AI编程工具Claude Code（版本2.1.91至2.1.196）存在安全后门，内置监控机制可未经用户同意回传用户地域和身份标识等敏感信息。
+- 字节跳动调整绩效规则，综合绩效E及以上员工可获得半年激励，计算基数从月薪调整为月总包，字节范和领导力原则作为综合绩效上调或下调的参考。
+- B站内测上线网页内容发布平台Toy，支持将本地创意网页一键发布为站内互动作品，内测一个多月UP主已上传超300件作品，用户使用量累计超850万次。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: SKYNOMAD
+  canonical_name: Xiaomi SKYNOMAD
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 7月8日，小米汽车官方微博发布主题为'SKYNOMAD'的海报，确认首款增程式SUV将归属全新独立子品牌SKYNOMAD。
+  - SKYNOMAD首款车型内部代号昆仑N3，计划于2026年下半年正式发布，该系列并非此前网传的'红米汽车'。
+  article_id: eef0ce22dfe3cec1
+- object_type: product
+  name: GPT-5.6
+  canonical_name: OpenAI GPT-5.6
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - OpenAI宣布将于当地时间2026年7月9日正式公开发布GPT-5.6 Sol、Terra和Luna三个版本。
+  - 报道称特朗普政府解除对OpenAI的GPT-5.6的限制，美国商务部已批准OpenAI广泛推出该模型。
+  article_id: eef0ce22dfe3cec1
+- object_type: product
+  name: GPT-Live-1
+  canonical_name: OpenAI GPT-Live-1
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - OpenAI正式推出新一代语音模型GPT-Live-1和GPT-Live-1 mini，对ChatGPT的语音功能进行全面升级。
+  - 新模型采用'全双工'架构，能够同时收听和说话，用户可以在AI回应时随时打断，交互方式更接近真实对话。
+  article_id: eef0ce22dfe3cec1
+- object_type: product
+  name: Grok 4.5
+  canonical_name: Grok 4.5
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 马斯克表示SpaceX AI将于2026年7月9日向公众开放Grok 4.5，相关消息由财联社援引报道。
+  article_id: eef0ce22dfe3cec1
+- object_type: product
+  name: Claude Code
+  canonical_name: Claude Code
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 工业和信息化部NVDB监测发现，AI编程工具Claude Code存在安全后门隐患，危害严重，受影响的版本为2.1.91至2.1.196。
+  - Claude Code内置监控机制，可未经用户同意即向远程服务器回传用户地域和身份标识等敏感信息。
+  article_id: eef0ce22dfe3cec1
+- object_type: product
+  name: Toy
+  canonical_name: Bilibili Toy
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - B站已从6月起启动小范围内测，上线网页内容发布平台'Toy'，支持将本地创意网页一键发布为站内互动作品。
+  - 内测启动一个多月以来，UP主已上传超300件作品，站内公开数据显示平台用户体验量已累计超850万次。
+  article_id: eef0ce22dfe3cec1
 ---
 
 ## 今日热点导览

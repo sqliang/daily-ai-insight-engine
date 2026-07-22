@@ -11,42 +11,214 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: f429dc7eeb13cc3a
 source_type: community_discussion
-tldr: Claude Tag 让 Claude Code 可在 Slack 中被 @ 提及并协作
-objective_summary: Ben's Bites 日报汇总多项 AI 新闻：Anthropic 发布 Claude Tag 功能使 Claude Code
-  集成到 Slack 协作；Google 为 Gemini 3.5 Flash 增加计算机使用能力；Figma Config 发布多项新工具；Notion 推出支持外部
+tldr: 本期 Ben's Bites 介绍了 Claude Tag（在 Slack 中召唤 Claude Code 的协作功能）、Gemini 3.5 Flash
+  新增计算机使用能力、OpenAI 与 Broadcom 合作自研芯片 Jalapeño、Figma Config 发布多项新工具、Notion 新开发者平台支持集成外部
+  AI Agent 等多项 AI 动态。
+objective_summary: 2026 年 7 月 21 日，Ben's Bites 汇总了近期 AI 行业动态，核心包括：Anthropic 推出 Claude
+  Tag 功能，允许用户在 Slack 中像 Agent 一样调用共享 Claude Code 实例并保持上下文；Google 发布 Gemini 3.5 Flash
+  并开放计算机使用能力；OpenAI 与 Broadcom 合作制造首款自研 AI 芯片 Jalapeño，专为 ChatGPT、Codex 和 API 设计；Figma
+  Config 大会发布代码生成、Figma Motion 动效工具和 Agent 第三方连接等更新；Notion 新开发者平台支持运行代码工作流并集成 Claude
+  Code、Cursor、Codex 等外部 Agent。
 event_type: application_landing
-epistemic_status: verified_fact
+epistemic_status: pr_statement
 entities:
   companies:
   - Anthropic
   - Google
-  - Figma
-  - Notion
   - OpenAI
   - Broadcom
+  - Figma
+  - Notion
   - DeepMind
-  - Runpod
   - AssemblyAI
+  - Modal
+  - Perplexity
+  - Genspark
+  - Harvey
   - Rippling
+  - Runpod
+  - Exa
   technologies:
   - Claude Code
   - Claude Tag
   - Gemini 3.5 Flash
   - GPT-5.5 Instant
+  - Image Gen
   - Jalapeño
-  - Computer Use
   key_people:
   - Keshav
-  - John Jumper
   - Ben Kus
+  - John Jumper
 key_logic_flow:
-- Claude Tag 是 Anthropic 推出的新功能，允许用户在 Slack 中 @ 提及共享的 Claude Code 实例，使其保持对话上下文并委派任务
-- Google 为 Gemini 3.5 Flash 增加了计算机使用能力，可控制浏览器、移动和桌面环境
-- OpenAI 与 Broadcom 合作制造了其首款 AI 芯片 Jalapeño，专为 ChatGPT、Codex、API 及未来代理产品设计
-- Figma Config 大会上发布了从设计图层生成代码、Figma Motion 动效工具、可编辑着色器以及 Figma Agent 第三方连接等新功能
-- Notion 新开发者平台支持运行基于代码的工作流，并可集成 Claude Code、Cursor、Codex 等外部 AI 代理
-- AlphaFold 负责人 John Jumper 离开 DeepMind 加入 Anthropic
+- Keshav 分享了一个使用 Codex 的 Image Gen 技能自动生成 UI 图片的技巧，认为这样能让网页 UI 不再单调。
+- Claude Tag 允许用户在 Slack 中@提及共享的 Claude Code 实例，将其作为团队 Agent，保持上下文并委派任务。
+- Google 发布的 Gemini 3.5 Flash 新增计算机使用能力，可控制浏览器、移动端和桌面环境，并提供 GitHub 仓库供本地或通过 Browserbase
+  试用。
+- OpenAI 与 Broadcom 合作制造了首款自研 AI 芯片 Jalapeño，专为 ChatGPT、Codex、API 及未来 Agent 产品的 LLM
+  推理工作设计。
+- Notion 新开发者平台支持运行基于代码的工作流，并能集成 Claude Code、Cursor、Codex 等外部 Agent，使其基于共享文档和任务板工作。
+- Figma Config 大会发布了多项更新，包括将设计图层转化为代码的新工具、Figma Motion 动效设计工具、可编辑着色器生成以及 Figma Agent
+  第三方连接等功能。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Claude Tag
+  canonical_name: Claude Tag
+  url: null
+  confidence: medium
+  article_role: primary_subject
+  evidence_snippets:
+  - Claude Tag 允许用户在 Slack 中@提及共享的 Claude Code 实例，像 Agent 一样将其引入团队工作流。
+  - 它可以保持来自 Slack 的上下文，让用户委派任务后去做其他事情。
+  article_id: f429dc7eeb13cc3a
+- object_type: product
+  name: Gemini 3.5 Flash
+  canonical_name: Gemini 3.5 Flash
+  url: null
+  confidence: medium
+  article_role: primary_subject
+  evidence_snippets:
+  - Gemini 3.5 Flash 新增了计算机使用能力，可以控制浏览器、移动端和桌面环境。
+  - Google 提供了一个 GitHub 仓库，供用户本地或通过 Browserbase 试用该功能。
+  article_id: f429dc7eeb13cc3a
+- object_type: product
+  name: Jalapeño
+  canonical_name: Jalapeño
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - OpenAI 与 Broadcom 合作制造了首款自研 AI 芯片 Jalapeño，专为 ChatGPT、Codex 和 API 的 LLM 工作设计。
+  - 该芯片也面向未来的 Agent 产品，用于支撑推理场景。
+  article_id: f429dc7eeb13cc3a
+- object_type: product
+  name: Figma Motion
+  canonical_name: Figma Motion
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Figma Config 大会发布了 Figma Motion，这是一个用于动效设计工作的新工具。
+  - 大会还发布了将设计图层转化为代码的工具、可编辑着色器生成和 Figma Agent 第三方连接等功能。
+  article_id: f429dc7eeb13cc3a
+- object_type: product
+  name: Notion Developer Platform
+  canonical_name: Notion Developer Platform
+  url: null
+  confidence: medium
+  article_role: primary_subject
+  evidence_snippets:
+  - Notion 的新开发者平台增加了运行基于代码的工作流的能力。
+  - 该平台可以集成 Claude Code、Cursor、Codex 等外部 Agent，使其基于共享文档和任务板协作。
+  article_id: f429dc7eeb13cc3a
+- object_type: product
+  name: GPT-5.5 Instant
+  canonical_name: GPT-5.5 Instant
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - GPT-5.5 Instant 获得了一次更新，使其对话更有趣，同时在意图理解、约束遵循和推荐方面表现更好。
+  article_id: f429dc7eeb13cc3a
+- object_type: product
+  name: Exa Connect
+  canonical_name: Exa Connect
+  url: null
+  confidence: low
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Exa Connect 是面向 Web Agent 的产品，可查询 ZoomInfo、Crunchbase、Similarweb 等数据源。
+  article_id: f429dc7eeb13cc3a
+- object_type: product
+  name: Perplexity Computer for Counsel
+  canonical_name: Perplexity Computer for Counsel
+  url: null
+  confidence: low
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Perplexity Computer for Counsel 是一款面向法律场景的产品，提供法律研究、文档和案件管理工具。
+  article_id: f429dc7eeb13cc3a
+- object_type: product
+  name: AssemblyAI Universal-3.5 Pro Realtime
+  canonical_name: AssemblyAI Universal-3.5 Pro Realtime
+  url: null
+  confidence: low
+  article_role: mentioned_reference
+  evidence_snippets:
+  - AssemblyAI Universal-3.5 Pro Realtime 是一款语音转文本产品，能够利用 Agent 在通话端提供的上下文信息。
+  article_id: f429dc7eeb13cc3a
+- object_type: product
+  name: Modal Auto Endpoints
+  canonical_name: Modal Auto Endpoints
+  url: null
+  confidence: low
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Modal Auto Endpoints 允许用户用一条命令在生产环境中运行开源模型。
+  article_id: f429dc7eeb13cc3a
+- object_type: project
+  name: Executor
+  canonical_name: Executor
+  url: null
+  confidence: low
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Executor 是一个开源网关，用于将 Agent 连接到各类服务。
+  article_id: f429dc7eeb13cc3a
+- object_type: product
+  name: Aside
+  canonical_name: Aside
+  url: null
+  confidence: low
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Aside 是一款 AI 浏览器，具有垂直标签页、本地加密数据存储以及 Claude 和 ChatGPT 支持。
+  article_id: f429dc7eeb13cc3a
+- object_type: product
+  name: Genspark Design
+  canonical_name: Genspark Design
+  url: null
+  confidence: low
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Genspark Design 可以生成 UI 原型、视频、HTML 动画和代码。
+  article_id: f429dc7eeb13cc3a
+- object_type: product
+  name: Hubble
+  canonical_name: Hubble
+  url: null
+  confidence: low
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Hubble 是一款面向用户和 Agent 的 Markdown 记事本，支持实时 HTML 预览。
+  article_id: f429dc7eeb13cc3a
+- object_type: company
+  name: Engram
+  canonical_name: Engram
+  url: null
+  confidence: low
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Engram 是一个新的实验室，希望训练一个能从用户工作中学习并每天更新的个人模型。
+  article_id: f429dc7eeb13cc3a
+- object_type: project
+  name: Emil's design skills repo
+  canonical_name: Emil's design skills repo
+  url: null
+  confidence: low
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 该仓库包含了设计工程相关的技能集，拥有超过 10 万次安装。
+  article_id: f429dc7eeb13cc3a
+- object_type: product
+  name: Harvey Labs
+  canonical_name: Harvey Labs
+  url: null
+  confidence: low
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Harvey Labs 提供了法律领域的基础模型、开放式评估以及由律所拥有的人工智能能力。
+  article_id: f429dc7eeb13cc3a
 ---
 
 # Claude Code in Slack

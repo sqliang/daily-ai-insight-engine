@@ -336,6 +336,7 @@ id: 2a7f0fddd2dac162
 manifest_dates:
 - '2026-06-21'
 - '2026-07-20'
+- '2026-07-21'
 ---
 
 The next generation coding agent harness to raise the skill ceiling.

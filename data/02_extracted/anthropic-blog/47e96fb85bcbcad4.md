@@ -11,24 +11,29 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 47e96fb85bcbcad4
 source_type: tech_blog
-tldr: Anthropic 首尔办公室开业，与韩国科技部签署 AI 安全 MOU，并宣布与多家韩国企业、初创公司及学术机构的合作。
-objective_summary: Anthropic 在首尔开设办公室，与韩国科学技术信息通信部签署 AI 安全合作谅解备忘录。同时宣布 NAVER 全员部署
-  Claude Code、Nexon 用 Claude Code 开发游戏、LG CNS 向数千员工推广 Claude、Samsung SDS 在三星电子内部部署
+tldr: Anthropic 在首尔设立办公室，与韩国科学技术信息通信部签署 AI 安全谅解备忘录，并宣布 NAVER、Nexon、LG CNS、三星 SDS、Channel
+  Corp 等韩国企业大规模部署 Claude 及 Claude Code。
+objective_summary: Anthropic 在韩国首尔开设办公室，由 KiYoung Choi 担任代表理事，并与韩国科学技术信息通信部签署谅解备忘录，将在韩语模型安全评估和
+  AI 网络威胁信息交换方面展开合作。在企业合作方面，NAVER 全公司部署 Claude Code，Nexon 使用 Claude Code 开发游戏代码，LG
+  CNS 向数千员工推广 Claude，三星 SDS 在三星电子内部部署 Claude 及 Claude Code，创业公司 Channel Corp 将 Claude
+  集成到其客户 AI 平台 Channel Talk 中。Anthropic 还将为 NAIRL 联盟的 60 名研究人员提供 Claude 访问权限，支持前沿
+  AI 安全研究。
 event_type: application_landing
 epistemic_status: pr_statement
 entities:
   companies:
   - Anthropic
-  - Korea Ministry of Science and ICT
   - NAVER
   - Nexon
   - LG CNS
   - LG Group
   - Hanwha Solutions
+  - Hanwha
   - Samsung SDS
   - Samsung Electronics
   - Channel Corp
   - Good Neighbors Korea
+  - Korea Ministry of Science and ICT
   - National AI Research Lab (NAIRL)
   - KAIST
   - Korea University
@@ -38,26 +43,106 @@ entities:
   - Replit
   - Korea Investment Partners
   - Korea Investment Accelerator
+  - WRTN
+  - Law&Company
   - Korea AI Safety Institute
+  - Tata Consultancy Services (TCS)
   technologies:
   - Claude
   - Claude Code
   - Claude Cowork
   - AWS Bedrock
+  - Channel Talk
   key_people:
   - KiYoung Choi
   - Jeongsun Park
 key_logic_flow:
-- Anthropic 在首尔开设办公室，由拥有 30 年韩国科技行业经验的 KiYoung Choi 担任韩国代表理事。
-- Anthropic 与韩国科学技术信息通信部签署谅解备忘录，将在 AI 安全、网络威胁信息共享及韩语模型安全评估方面展开合作。
-- NAVER 在全公司范围内部署 Claude Code，数千名工程师用于提升编码效率；Nexon 工程团队用 Claude Code 编写和审查面向全球玩家的游戏代码。
-- LG CNS 向数千员工推广 Claude 并计划扩展至 LG 集团；Samsung SDS 在三星电子内部部署 Claude（含 Claude Cowork
-  和 Claude Code）；Hanwha Solutions 通过 AWS Bedrock 使用 Claude 满足数据驻留和安全合规要求。
-- Anthropic 将向 NAIRL（由 KAIST、高丽大学、延世大学、POSTECH 组成的联盟）最多 60 名研究人员提供 Claude 访问权限，支持
-  AI 安全和对齐研究。
-- Claude for Startups 已在韩国启动，Anthropic 与 BASS Ventures 合办 Claude Build Day，并将与 Replit
-  等机构合办黑客松。
+- Anthropic 在首尔正式开设办公室，由 KiYoung Choi 担任韩国代表理事，并开始招聘多个岗位。
+- Anthropic 与韩国科学技术信息通信部签署谅解备忘录，将在韩语 AI 安全评估和网络威胁信息交换方面展开合作。
+- NAVER 在全公司范围内部署 Claude Code，数千名工程师使用该工具提升编码效率和工具多样性。
+- Nexon 的游戏工程团队使用 Claude Code 进行代码编写、审查和发布，支持全球数百万玩家的在线游戏运营。
+- LG CNS 向数千名员工推广 Claude 并计划部署至 LG 集团，三星 SDS 在三星电子内部部署 Claude 及 Claude Cowork 和 Claude
+  Code，用于知识工作与软件开发。
+- 创业公司 Channel Corp 将 Claude 集成到其客户 AI 平台 Channel Talk 中，该平台已被超过 23 万家企业使用。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Claude
+  canonical_name: Anthropic Claude
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Anthropic 与韩国科学技术信息通信部签署谅解备忘录，将在韩语模型安全评估和 AI 网络威胁信息交换方面展开合作。
+  - 三星 SDS 正在三星电子内部部署 Claude，包括 Claude Cowork 和 Claude Code，以推进知识工作、智能体工作流和软件开发。
+  - Anthropic 将为 NAIRL 联盟的 60 名研究人员提供 Claude 访问权限，支持 AI 安全、模型评估、对齐和鲁棒性等前沿研究。
+  article_id: 47e96fb85bcbcad4
+- object_type: product
+  name: Claude Code
+  canonical_name: Anthropic Claude Code
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - NAVER 已在其整个工程组织中部署 Claude Code，数千名工程师使用它来多样化编码工具并最大化编码生产力。
+  - Nexon 的工程团队使用 Claude Code 来编写、审查和发布全球数百万玩家游玩的在线游戏代码。
+  article_id: 47e96fb85bcbcad4
+- object_type: product
+  name: Claude Cowork
+  canonical_name: Anthropic Claude Cowork
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 三星 SDS 在三星电子内部部署包括 Claude Cowork 在内的 Claude 产品，用于推进日常知识工作和智能体工作流。
+  article_id: 47e96fb85bcbcad4
+- object_type: product
+  name: Channel Talk
+  canonical_name: Channel Talk
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Channel Corp 使用 Claude 为其客户 AI 平台 Channel Talk 提供支持，该平台处理客户咨询并分析服务和销售数据，已被超过 23
+    万家企业使用。
+  article_id: 47e96fb85bcbcad4
+- object_type: project
+  name: Claude for Startups
+  canonical_name: Claude for Startups
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - Claude for Startups 项目已在韩国上线，旨在支持面向全球市场进行构建的韩国创业公司。
+  article_id: 47e96fb85bcbcad4
+- object_type: project
+  name: Claude Build Day
+  canonical_name: Claude Build Day
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Anthropic 与 BASS Ventures 共同举办了 Claude Build Day 活动，超过 100 名韩国创始人和开发者参与动手构建。
+  article_id: 47e96fb85bcbcad4
+- object_type: project
+  name: Push to Prod hackathon
+  canonical_name: Push to Prod Hackathon
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Anthropic 将与 Replit、Korea Investment Partners 和 Korea Investment Accelerator 共同举办
+    Push to Prod 黑客马拉松，创业团队将使用 Claude Code 进行构建并获得指导。
+  article_id: 47e96fb85bcbcad4
+- object_type: project
+  name: Claude Meetups
+  canonical_name: Claude Meetups
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - 自 2025 年 9 月以来，Claude Meetups 已在韩国吸引了数百名开发者参与。
+  article_id: 47e96fb85bcbcad4
 ---
 
 # Anthropic opens Seoul office and announces new partnerships across the Korean AI ecosystem

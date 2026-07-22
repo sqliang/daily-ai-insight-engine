@@ -14,31 +14,72 @@ manifest_dates:
 - '2026-07-04'
 - '2026-07-05'
 source_type: news_media
-tldr: Meta 内部模型 Watermelon 据称在基准测试中追上 GPT-5.5，但未经独立验证。
-objective_summary: Alexandr Wang 在 Meta 内部全体会议上声称，正在训练中的 Watermelon 模型在 AI 基准测试中已追上
-  OpenAI 的 GPT-5.5。该模型使用了比 Muse Spark 多一个数量级的算力。此消息源自 Business Insider 援引两名匿名知情人士，Meta
-event_type: application_landing
+tldr: Meta AI 负责人 Alexandr Wang 在内部全体会上称，正在训练的新模型 Watermelon 在 AI 基准测试上已追平 OpenAI
+  的 GPT-5.5，且其训练算力比上一代 Muse Spark 高出一个数量级，但该说法来自匿名信源且未经双方公司证实。
+objective_summary: Business Insider 援引两名知情人士报道称，Meta 超级智能负责人 Alexandr Wang 在内部全体会议上告诉员工，正在训练中的下一代模型
+  Watermelon 在多项 AI 基准测试上已追平 OpenAI 的 GPT-5.5。Wang 表示 Watermelon 使用的训练算力比 Meta 在 2026
+  年 4 月发布的 Muse Spark（内部代号 Avocado）高出一个数量级，且模型仍在训练中。报道未说明 Wang 引用的是哪些具体基准测试，Meta 拒绝置评，OpenAI
+  也未回应置评请求。在 Meta 公开模型或发布可复现的基准结果之前，应将该声明视为早期信号而非已验证结论。
+event_type: infrastructure_update
 epistemic_status: rumor_leak
 entities:
   companies:
   - Meta
   - OpenAI
   - Business Insider
-  technologies:
-  - Watermelon
-  - Muse Spark
-  - GPT-5.5
-  - GPT-5.6
+  technologies: []
   key_people:
   - Alexandr Wang
 key_logic_flow:
-- Meta 人工智能负责人 Alexandr Wang 在内部全体会议上声称，正在训练中的模型 Watermelon 在基准测试中已追上 OpenAI 的 GPT-5.5。
-- Watermelon 使用了比此前模型 Muse Spark（内部代号 Avocado）多一个数量级的训练算力，表明 Meta 以算力规模为核心竞争策略。
-- 该消息源自 Business Insider 援引两名匿名知情人士，Business Insider 未明确 Wang 引用了哪些具体基准测试。
-- OpenAI 已于 2026 年 4 月发布 GPT-5.5，并于上月底发布 GPT-5.6。
-- Meta 和 OpenAI 均未对 Business Insider 的报道作出官方回应或确认。
-- 文章指出在 Meta 发布公开模型卡或可复现评估结果之前，该声称应被视为早期信号而非经过验证的事实。
+- Meta 超级智能负责人 Alexandr Wang 在内部全体会上声称，正在训练的新模型 Watermelon 在 AI 基准测试上已追平 OpenAI 的
+  GPT-5.5。
+- Wang 表示 Watermelon 使用的训练算力比 Meta 四月发布的 Muse Spark（内部代号 Avocado）高出一个数量级。
+- 该报道源自 Business Insider 引用的两名匿名知情人士，Meta 和 OpenAI 均未确认这一说法，所引用的基准测试也未被明确披露。
+- OpenAI 于 2026 年 4 月发布了 GPT-5.5，并在上月末推出了 GPT-5.6。
+- Meta 在 2026 年 4 月发布的 Muse Spark（Wang 加入后的首个重大模型）在某些基准上表现良好，但整体仍落后于领先竞品。
+- 在 Meta 发布公开模型卡或独立评测结果之前，该声明不应被用于模型选型或容量规划决策。
 extract_result: success
+object_mentions:
+- object_type: model
+  name: Watermelon
+  canonical_name: Meta Watermelon
+  url: null
+  confidence: medium
+  article_role: primary_subject
+  evidence_snippets:
+  - Meta 超级智能负责人 Alexandr Wang 在内部全体会上称，正在训练的新模型 Watermelon 在基准测试上已追平 OpenAI 的 GPT-5.5。
+  - Wang 表示 Watermelon 使用的训练算力比 Muse Spark（内部代号 Avocado）高出一个数量级，且模型仍在训练中。
+  - Business Insider 援引匿名人士报道称，Meta 尚未公布 Watermelon 的发布时间表，该声明需等待独立验证。
+  article_id: 5ad8f0bc5bfec4f6
+- object_type: model
+  name: Muse Spark
+  canonical_name: Meta Muse Spark
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Meta 于 2026 年 4 月发布了 Muse Spark（内部代号 Avocado），这是 Meta 自聘请 Alexandr Wang 以来推出的首个重大模型。
+  - Muse Spark 在某些基准测试上表现良好，但整体仍落后于领先竞品，因此 Watermelon 的算力大幅提升被视为追赶策略的关键。
+  article_id: 5ad8f0bc5bfec4f6
+- object_type: model
+  name: GPT-5.5
+  canonical_name: OpenAI GPT-5.5
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - OpenAI 于 2026 年 4 月发布了 GPT-5.5，Wang 声称 Watermelon 已在该模型的基准测试水平上追平。
+  - OpenAI 在上月末推出了 GPT-5.6，但报道未说明 Watermelon 与 GPT-5.6 的比较情况。
+  article_id: 5ad8f0bc5bfec4f6
+- object_type: model
+  name: GPT-5.6
+  canonical_name: OpenAI GPT-5.6
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - OpenAI 在 2026 年 4 月发布 GPT-5.5 后，于上月末进一步推出了 GPT-5.6。
+  article_id: 5ad8f0bc5bfec4f6
 ---
 
 Meta's superintelligence chief **Alexandr Wang** told employees in a town hall that the company's upcoming model, codenamed **Watermelon**, has "caught up" with OpenAI's **GPT-5.5** on closely followed AI benchmarks, according to Business Insider, which cited two people familiar with the matter. Wang reportedly said Watermelon is still in training and uses "an order of magnitude more compute" than **Muse Spark** (Meta's April model, internally codenamed Avocado), which had trailed rival models despite solid benchmark scores. Business Insider notes it was not clear which benchmarks Wang cited, and neither Meta nor OpenAI has confirmed the claim. For practitioners, an internal, single-sourced benchmark claim is not equivalent to a published, reproducible evaluation and should be treated as an early signal, not a verified result, until Meta releases the model publicly.

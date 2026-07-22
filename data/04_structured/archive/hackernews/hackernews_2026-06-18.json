@@ -16,10 +16,10 @@
     "pipeline_stage": "fact_extracted",
     "id": "2f378c007c33241b",
     "source_type": "community_discussion",
-    "tldr": "本地Qwen模型不是能力更差的Claude Opus，而是用途不同的工具——适用于隐私、固定成本和供应商风险规避，但不可靠于自主任务。",
-    "objective_summary": "Alex Ellis（软件公司创始人）基于实际业务经验，对比本地Qwen 27B模型与Claude Opus 4.8在前沿能力上的差异。他指出本地模型在固定成本、数据隐私和供应商独立性方面有优势，但在长周期自主任务中容易陷入无限循环和幻觉，无法替代前沿模型进行无人值守的复杂编码工作。",
+    "tldr": "Alex Ellis 通过自身在 OpenFaaS 等产品的实际使用经验指出，本地模型（如 Qwen 27B）与云端前沿模型（如 Claude Opus）是不同工具，前者在成本可控、数据主权和隐私方面有价值，但在无监督的复杂长任务中仍不可靠，存在循环和幻觉问题。",
+    "objective_summary": "OpenFaaS 创始人 Alex Ellis 撰写长文，基于其软件业务和开源项目中的实际使用经验，对比了本地模型（Qwen 3.6 27B）与云端前沿模型（Claude Opus 4.8）的优劣。他指出本地模型在固定成本、隐私保护和规避供应商风险方面具有优势，但在无人监督的长期任务中容易出现无限循环和幻觉问题，无法替代 SOTA 云模型在复杂工程任务中的表现。他认为两者是不同工具，应在适合各自能力范围的场景中使用。",
     "event_type": "application_landing",
-    "epistemic_status": "theoretical_claim",
+    "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
         "VMware",
@@ -30,32 +30,132 @@
         "Anthropic"
       ],
       "technologies": [
-        "Qwen 27B",
-        "Qwen 3.6 27B",
-        "Claude Opus 4.8",
-        "SWE-Bench Verified",
-        "OpenFaaS",
-        "SlicerVM",
-        "Actuated",
-        "Inlets",
+        "Go",
+        "React",
+        "Kubernetes",
         "Firecracker",
-        "GitHub Copilot",
-        "Codex",
-        "Superterm"
+        "SWE-Bench Verified",
+        "VSock",
+        "OpenFaaS",
+        "SlicerVM"
       ],
       "key_people": [
-        "Alex Ellis"
+        "Alex Ellis",
+        "Eoin"
       ]
     },
     "key_logic_flow": [
-      "Alex Ellis以软件公司创始人的身份，基于实际业务使用经验而非基准测试数据，论证本地Qwen模型与Claude Opus是不同用途的工具，而非能力高下的比较。",
-      "Qwen 3.6 27B在SWE-Bench Verified上得分为77.2%，Claude Opus 4.8为88.6%，但作者认为基准测试（尤其是面向Python同步代码的SWE-Bench）不能反映Go语言分布式系统等真实业务场景。",
-      "本地模型的核心价值在于固定硬件成本（而非token计费）、数据隐私与主权、以及防范供应商风险（如Anthropic突然撤下Fable 5模型）。",
-      "Qwen 27B在长周期自主任务中容易陷入无限循环和产生幻觉，量化压缩到消费级GPU后此问题更加严重，作者类比为淬火过色的刀刃——错过颜色就需重来。",
-      "作者团队用Claude/Codex可以无人值守完成复杂任务（如诊断VSock文件描述符耗尽问题并自动修复），而Qwen在同一使用方式下需要密切监督。",
-      "深度使用场景下API token计费成本高昂（Uber限制每开发者每月1500美元），这使得本地模型的固定成本优势对重度用户更具吸引力。"
+      "Alex Ellis 指出本地模型 Qwen 3.6 27B 在 SWE-Bench Verified 上得分 77.2%，而 Claude Opus 4.8 得分 88.6%，但 Benchmark 存在训练偏差，且其团队编写的 Go 分布式系统与基准测试的 Python 单线程代码差异巨大。",
+      "本地模型的核心优势包括固定成本（避免 API 按 token 计费的高昂开销）、数据主权与隐私保护，以及对 Anthropic 等云端供应商突然撤除模型（如 Fable 5 下架）的避险需求。",
+      "本地模型在无人监督的长期任务中容易出现无限循环和幻觉问题，类似于热处理钢材时错过正确回火颜色，必须清空上下文重新开始。",
+      "作者在实际业务中由 Claude 或 Codex 完成大部分编码工作，它们能长时间无人值守地朝着目标持续取得进展，而本地模型仅在受引导的小型任务中发挥作用。",
+      "Uber 已将每个开发者每款工具的 AI 支出上限设为每月 1500 美元，对于重度使用者，本地模型在成本经济性上具有显著吸引力。",
+      "本地模型与云端前沿模型不是同一类工具，不应在相同场景下直接替代，而应在适合其能力范围的特定任务中使用。"
     ],
-    "extract_result": "success"
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "OpenFaaS",
+        "canonical_name": "OpenFaaS",
+        "url": "https://www.openfaas.com/",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "Alex Ellis 是 OpenFaaS 的创始人和维护者，该项目最初完全由手工构建，后转向开源核心模式并建立了自举公司。",
+          "OpenFaaS 在用户自己的基础设施上运行函数，支持用户自定义限制、首选语言和事件处理。"
+        ],
+        "article_id": "2f378c007c33241b"
+      },
+      {
+        "object_type": "product",
+        "name": "SlicerVM",
+        "canonical_name": "SlicerVM",
+        "url": "https://slicervm.com/",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "SlicerVM 是 AI 沙箱产品，运行 Firecracker 微虚拟机，可在用户自己的设备甚至 MacBook 上部署。",
+          "Alex Ellis 提到 SlicerVM 产品（原为 2022 年手工编写）曾被拥有订阅的开发者在一夜之间克隆。"
+        ],
+        "article_id": "2f378c007c33241b"
+      },
+      {
+        "object_type": "product",
+        "name": "Superterm",
+        "canonical_name": "Superterm",
+        "url": "https://superterm.dev/",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Alex Ellis 编写了免费工具 Superterm.dev 来跟踪 tmux 会话、笔记并获取编码代理的视觉反馈。",
+          "Superterm 在 2026 年完全由编码代理编写完成，但后来也被其他开发者在一夜之间克隆。"
+        ],
+        "article_id": "2f378c007c33241b"
+      },
+      {
+        "object_type": "product",
+        "name": "Actuated",
+        "canonical_name": "Actuated",
+        "url": "https://actuated.com/",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "Actuated.com 提供自托管的 GitHub/GitLab CI 运行器，将 GitHub Actions 的繁重部分转移到用户自己的机器上。",
+          "作者将 Actuated 描述为专注于效率、用户体验、控制和自主性的基础设施产品。"
+        ],
+        "article_id": "2f378c007c33241b"
+      },
+      {
+        "object_type": "product",
+        "name": "Inlets",
+        "canonical_name": "Inlets",
+        "url": "https://inlets.com/",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "Inlets.com 提供自托管的 HTTP/TCP 隧道，用户可完全控制隧道客户端和服务端，确保 100% 隐私。",
+          "作者将 Inlets 描述为专注于效率、用户体验、控制和自主性的基础设施产品之一。"
+        ],
+        "article_id": "2f378c007c33241b"
+      },
+      {
+        "object_type": "model",
+        "name": "Qwen 3.6 27B",
+        "canonical_name": "Qwen3.6-27B",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Qwen 3.6 27B 在 SWE-Bench Verified 上得分 77.2%，而 Claude Opus 4.8 得分 88.6%，差距约 12 个百分点。",
+          "作者指出将 Qwen 量化以适配消费级 GPU 时，无限循环和幻觉风险最为突出。"
+        ],
+        "article_id": "2f378c007c33241b"
+      },
+      {
+        "object_type": "model",
+        "name": "Claude Opus 4.8",
+        "canonical_name": "Claude Opus 4.8",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Claude Opus 4.8 在 SWE-Bench Verified 上得分 88.6%，作者表示 Claude 或 Codex 完成其大部分编码工作。",
+          "作者称 Claude 能够长时间无人值守地工作，在接收复杂问题后自主诊断、修复并端到端测试代码。"
+        ],
+        "article_id": "2f378c007c33241b"
+      },
+      {
+        "object_type": "product",
+        "name": "Codex",
+        "canonical_name": "Claude Codex",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者表示 Claude 或 Codex 完成其大部分编码工作，并很少再手工编写代码。",
+          "作者将 Codex 与 Claude 并列为完成其日常编码工作的主要 AI 工具。"
+        ],
+        "article_id": "2f378c007c33241b"
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -74,26 +174,56 @@
     "pipeline_stage": "fact_extracted",
     "id": "96462802cc97854d",
     "source_type": "community_discussion",
-    "tldr": "Midjourney 宣布开发超声波医疗扫描仪并计划2027年开设首家水疗中心",
-    "objective_summary": "Midjourney 于2026年6月宣布进军医疗领域，计划开发一款60秒内完成的超声波身体扫描仪，并于2027年在旧金山开设首家配套水疗中心，目标到2031年全球部署超5万台扫描仪，实现每月10亿次扫描能力。",
+    "tldr": "Midjourney 宣布进军医疗领域，正在开发一款名为 Midjourney Scanner 的超声波全身扫描仪，并计划于 2027 年在旧金山开设首家 Midjourney Spa，目标到 2031 年在全球部署超过 5 万台扫描仪，覆盖每月 10 亿次扫描能力。",
+    "objective_summary": "Midjourney 于 2026 年 7 月发布官方公告，宣布正在建造一种名为 Midjourney Scanner 的新型医疗成像设备。该扫描仪利用超声波在水中穿透人体，由 50 万个微型传感元件组成的环形传感器在 60 秒内完成全身扫描，生成亚毫米精度的 3D 人体图像，每秒产生数 TB 数据。Midjourney 同时宣布将于 2027 年在旧金山开设首家 Midjourney Spa，将扫描仪嵌入水疗体验中。该公司自称无外部投资者，是一家社区支持的研究实验室，计划通过逐步向 FDA 提交测试结果来获得更多诊断能力的审批，长期目标是到 2031 年全球部署超过 5 万台扫描仪。",
     "event_type": "application_landing",
     "epistemic_status": "pr_statement",
     "entities": {
       "companies": [
         "Midjourney"
       ],
-      "technologies": [],
+      "technologies": [
+        "ultrasonic imaging",
+        "3D body composition mapping"
+      ],
       "key_people": []
     },
     "key_logic_flow": [
-      "Midjourney 宣布开发名为 Midjourney Scanner 的新型医疗扫描设备，采用超声波和水介质技术，可在60秒内完成全身扫描。",
-      "该扫描仪通过50万个微型传感器构成的环形装置发射超声波，利用计算机集群将声波数据重建为亚毫米级精度的3D身体图像。",
-      "Midjourney 计划于2027年在旧金山开设首家 Midjourney Spa，将扫描服务融入水疗体验中。",
-      "公司规划到2028年推广至更多城市并升级至第三代扫描仪，目标2031年全球部署超5万台设备，月扫描能力达10亿次。",
-      "Midjourney 自称是一家社区支持的研究实验室，无外部投资者，资金来源于普通用户。",
-      "公司声称该技术未来有可能避免全球30%的死亡和50%的医疗成本。"
+      "Midjourney 宣布正在建造一种名为 Midjourney Scanner 的新型医疗成像设备，利用超声波在水中穿透人体进行快速全身扫描。",
+      "该扫描仪包含由 50 万个微型超声波元件组成的环形传感器，可在 60 秒内完成全身扫描并生成亚毫米精度的 3D 人体图像。",
+      "Midjourney 同时宣布将于 2027 年在旧金山开设首家 Midjourney Spa，将扫描仪嵌入水疗环境中，让扫描成为水疗体验的附带功能。",
+      "Midjourney 自称是一家无外部投资者的社区支持型研究实验室，计划通过逐步向 FDA 提交测试结果来逐步获得更多诊断能力的监管审批。",
+      "该公司的路线图包括 2028 年扩展到更多城市并升级第三代扫描仪，目标到 2031 年全球部署超过 5 万台扫描仪。",
+      "Midjourney 声称这种早期成像技术可能帮助避免全球 30% 的死亡和 50% 的医疗费用。"
     ],
-    "extract_result": "success"
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "Midjourney Scanner",
+        "canonical_name": "Midjourney Scanner",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Midjourney 正在建造一种名为 Midjourney Scanner 的全新医疗成像设备，利用超声波在水中穿透人体，形成体内的高分辨率 3D 图像。",
+          "该扫描仪包含由 50 万个微型超声波元件组成的环形传感器，每秒产生数 TB 的数据并需要在计算机集群上处理。",
+          "扫描过程不超过 60 秒，用户走入金色浅水池中通过升降平台下降，经过传感器环即可完成全身扫描。"
+        ],
+        "article_id": "96462802cc97854d"
+      },
+      {
+        "object_type": "product",
+        "name": "Midjourney Spa",
+        "canonical_name": "Midjourney Spa",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "首家 Midjourney Spa 将于 2027 年在旧金山核心区域开业，提供热水浴池、桑拿、冷浴和带有扫描功能的金色浅水池。",
+          "扫描是水疗体验的附带功能，用户可以在放松的同时完成身体扫描并获得关于自身健康的长期数据追踪库。"
+        ],
+        "article_id": "96462802cc97854d"
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -112,8 +242,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "ffa3dd06b35b135f",
     "source_type": "community_discussion",
-    "tldr": "Ribbie 是一个将 MLB 实时比赛渲染为 8 位像素艺术的直播平台。",
-    "objective_summary": "开发者通过 Show HN 发布了 Ribbie.tv，该网站将美国职业棒球大联盟（MLB）的实时比赛数据重新呈现为 8 位像素风格的动画直播画面，包括比分、球数、跑垒员和每一次比赛事件。",
+    "tldr": "Ribbie 是一个将 MLB 比赛实时转换为 8 位像素艺术风格画面的直播平台，展示比分、球数、垒上跑垒员和每一次攻防动作。",
+    "objective_summary": "开发者通过 Ribbie（ribbie.tv）发布了一个 8 位像素风格的 MLB 比赛直播产品。该产品将真实比赛的实时数据转化为复古像素画面，覆盖比分、球数、垒上跑垒员和每一次攻防动作，以 Hacker News 的 Show HN 形式公开发布。",
     "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
@@ -122,12 +252,28 @@
       "key_people": []
     },
     "key_logic_flow": [
-      "Ribbie.tv 是一个 8 位像素风格的实时棒球比赛直播平台。",
-      "该平台实时呈现 MLB 比赛数据，包括比分、球数、跑垒员和每一次比赛事件。",
-      "该项目以 Show HN 的形式发布到 Hacker News 上。",
-      "网站被描述为\"Live MLB games reimagined as 8-bit pixel art\"。"
+      "Ribbie 是一个在 Hacker News 上以 Show HN 形式公开发布的 8 位像素风格 MLB 直播平台。",
+      "该平台将真实的 MLB 比赛数据实时转化为 8 位像素艺术画面进行呈现。",
+      "直播内容覆盖实时比分、球数统计、垒上跑垒员位置以及每一次攻防动作。",
+      "产品网站地址为 https://ribbie.tv，使用 Next.js 构建并支持 PWA 安装。"
     ],
-    "extract_result": "success"
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "Ribbie",
+        "canonical_name": "Ribbie",
+        "url": "https://ribbie.tv",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Ribbie 是一个将现场 MLB 比赛重新想象为 8 位像素艺术的实时直播平台。",
+          "该平台在 Hacker News 上以 Show HN 形式发布，实时展示比分、球数、垒上跑垒员和每一次攻防动作。",
+          "网站标题为 'Ribbie: 8-bit baseball'，描述中明确说明其将 MLB 比赛转化为像素艺术风格。"
+        ],
+        "article_id": "ffa3dd06b35b135f"
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -146,9 +292,9 @@
     "pipeline_stage": "fact_extracted",
     "id": "fffae681381a3c4c",
     "source_type": "community_discussion",
-    "tldr": "Valve 发布 SteamOS Linux 3.8 稳定版",
-    "objective_summary": "Valve 于 2026 年 6 月通过 Steam 官方新闻频道发布了 SteamOS Linux 3.8 稳定版。该版本是 SteamOS 操作系统的一次正式版本更新。",
-    "event_type": "infrastructure_update",
+    "tldr": "Valve 正式发布 SteamOS Linux 3.8 稳定版，这是 Steam Deck 掌机操作系统的重大更新版本。",
+    "objective_summary": "Valve 于 2026 年 7 月发布了 SteamOS Linux 3.8 稳定版。该版本基于 Arch Linux 构建，是 Steam Deck 的官方操作系统。本次更新包含多项改进和修复，旨在提升 Steam Deck 用户的游戏体验和系统稳定性。",
+    "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
@@ -157,15 +303,32 @@
       ],
       "technologies": [
         "SteamOS",
-        "Linux"
+        "Linux",
+        "Arch Linux"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "Valve 正式发布了 SteamOS Linux 3.8 稳定版本。",
-      "该发布通过 Steam 官方新闻渠道公告，面向 Steam Deck 及 SteamOS 用户。"
+      "Valve 发布了 SteamOS Linux 3.8 稳定版，这是 Steam Deck 掌机操作系统的正式版本更新。",
+      "SteamOS 基于 Arch Linux 发行版构建，专为游戏和掌机体验优化。",
+      "该版本经过测试阶段后转为稳定版，标志着正式面向所有 Steam Deck 用户推送。"
     ],
-    "extract_result": "success"
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "SteamOS Linux 3.8",
+        "canonical_name": "SteamOS 3.8",
+        "url": "https://store.steampowered.com/news/app/1675200/view/697641379212298072",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "文章标题明确指出 SteamOS Linux 3.8 已作为稳定版发布。",
+          "该版本是 Steam Deck 掌机操作系统 SteamOS 的最新稳定更新。"
+        ],
+        "article_id": "fffae681381a3c4c"
+      }
+    ]
   },
   {
     "source_dir": "hackernews",

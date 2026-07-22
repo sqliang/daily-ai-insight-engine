@@ -12,9 +12,12 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 6bee3eb75964bfca
 source_type: newsletter_rss
-tldr: 微软在Build 2026发布7款自研MAI模型、Scout代理、量子芯片及代理硬件
-objective_summary: 微软在Build 2026上发布7款MAI系列自研模型（推理/编码/图像/语音/转录）、基于OpenClaw的首个自主代理Scout、量子芯片Majorana
-  2（可靠性提升1000倍，目标2029年可用）、Project Solara代理设备平台以及Surface RTX Spark Dev
+tldr: 微软在Build 2026上发布七款自研MAI模型、基于OpenClaw的Autopilot智能体Scout、量子芯片Majorana 2（可靠性提升1000倍）、智能体设备平台Project
+  Solara及AI开发迷你PC Surface RTX Spark Dev Box。同一新闻简报还报道特朗普签署AI行政令改为自愿30天审查。
+objective_summary: 微软在Build 2026大会上全面转向自研AI技术栈，发布七款涵盖推理、编程、图像、语音和转录的MAI系列模型，通过Microsoft
+  Foundry提供访问。微软推出首个Autopilot智能体Microsoft Scout，基于OpenClaw构建，可在Teams中主动执行会议安排和材料准备等任务。由AI代理辅助设计的量子芯片Majorana
+  2可靠性提升1000倍，目标2029年前实现实用化量子计算。微软预览了面向智能体设备的Project Solara平台并展示硬件概念，同时推出AI工作负载专用迷你PC
+  Surface RTX Spark Dev Box。同一篇简报还报道特朗普签署行政令，将AI前沿模型安全审查从预期的90天强制改为30天自愿模式。
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
@@ -26,20 +29,93 @@ entities:
   technologies:
   - MAI
   - OpenClaw
-  - Majorana 2
+  - Autopilot
   - Project Solara
+  - Majorana 2
+  - Microsoft Foundry
   - Surface RTX Spark Dev Box
   key_people:
   - Donald Trump
   - David Sacks
 key_logic_flow:
-- 微软在Build 2026上发布了7款MAI系列自研模型，涵盖推理、编码、图像、语音和转录等能力，可通过Microsoft Foundry访问。
-- 微软推出了首个基于OpenClaw构建的Autopilot代理Scout，可在Teams中主动执行日程安排和准备材料等任务。
-- 微软发布了Majorana 2量子芯片，AI代理参与了其设计，可靠性提升1000倍，将可用量子计算机的时间表提前至2029年。
-- 微软预览了Project Solara平台，用于打造代理优先设备，包含徽章和桌面伴侣等硬件概念产品。
-- 微软在Surface Laptop Ultra之后推出了Surface RTX Spark Dev Box迷你PC，专为AI工作负载而设计。
-- 美国总统特朗普签署行政令，要求AI实验室自愿将前沿模型提交政府进行30天安全审查，取代此前拟定的90天要求。
+- 微软在Build 2026上发布七款名为MAI的自研模型，涵盖推理、编程、图像、语音和转录能力，通过Microsoft Foundry平台对外提供访问。
+- 微软推出首个基于OpenClaw框架构建的Autopilot智能体Microsoft Scout，可在Teams中主动执行会议安排和材料准备等任务。
+- 由AI代理辅助设计的量子芯片Majorana 2实现1000倍可靠性提升，有望在2029年前推出实用化量子计算机。
+- 微软预览面向智能体设备的Project Solara平台，并展示了包括智能胸牌和桌面助手在内的硬件概念产品。
+- 微软在Surface Laptop Ultra之后推出Surface RTX Spark Dev Box，这是一款专为AI工作负载设计的迷你PC。
+- 特朗普签署行政令将AI前沿模型安全审查从90天强制改为30天自愿模式，称严苛审查会拖累美国与中国的AI竞争。
 extract_result: success
+object_mentions:
+- object_type: model
+  name: MAI models
+  canonical_name: Microsoft MAI
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 微软AI在Build 2026上发布了七款名为MAI的自研模型，涵盖推理、编程、图像、语音和转录等功能，通过Microsoft Foundry平台提供访问。
+  - 文章指出这次发布标志着微软正在摆脱OpenAI的阴影，建立自己的AI技术路线。
+  article_id: 6bee3eb75964bfca
+- object_type: product
+  name: Microsoft Scout
+  canonical_name: Microsoft Scout
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 微软推出首个基于OpenClaw构建的Autopilot智能体Microsoft Scout，可在Teams中运行并主动执行会议安排和材料准备等任务。
+  - 文章将Microsoft Scout描述为微软首个始终在线的自主智能体产品，定位为办公场景的自动化助手。
+  article_id: 6bee3eb75964bfca
+- object_type: product
+  name: Majorana 2
+  canonical_name: Microsoft Majorana 2
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 量子芯片Majorana 2由AI代理辅助设计，实现1000倍的可靠性提升，有望在2029年前推出实用化量子计算机。
+  - 文章称Majorana 2的进展显著缩短了量子计算商用化的时间线。
+  article_id: 6bee3eb75964bfca
+- object_type: project
+  name: Project Solara
+  canonical_name: Project Solara
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 微软预览了名为Project Solara的智能体设备平台，展示了包括智能胸牌和桌面助手在内的硬件概念产品。
+  - 该项目定位为面向智能体时代的硬件平台，是微软agent-first战略的重要组成部分。
+  article_id: 6bee3eb75964bfca
+- object_type: product
+  name: Surface RTX Spark Dev Box
+  canonical_name: Microsoft Surface RTX Spark Dev Box
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 微软在Surface Laptop Ultra之后推出Surface RTX Spark Dev Box，这是一款专为AI工作负载设计的迷你PC。
+  - 该设备定位为AI开发者的专用工作站，与Nvidia在AI笔记本电脑和PC领域的合作相呼应。
+  article_id: 6bee3eb75964bfca
+- object_type: project
+  name: OpenClaw
+  canonical_name: OpenClaw
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Microsoft Scout智能体基于OpenClaw框架构建，这是微软在智能体框架层面的自研技术布局。
+  - 文章将Microsoft Scout称为基于OpenClaw的首个Autopilot代理，OpenClaw是微软自研智能体基础设施的核心组件。
+  article_id: 6bee3eb75964bfca
+- object_type: product
+  name: Surface Laptop Ultra
+  canonical_name: Microsoft Surface Laptop Ultra
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - 文章在介绍Surface RTX Spark Dev Box时提及Surface Laptop Ultra作为背景，指出后者是此前发布的硬件产品。
+  - Surface Laptop Ultra与Surface RTX Spark Dev Box共同构成微软AI硬件产品线。
+  article_id: 6bee3eb75964bfca
 ---
 
 Good morning, {{ first_name | AI enthusiasts }}. For years, Microsoft's AI story was really OpenAI's story. At Build 2026, it felt like the tech giant was finally writing its own path.

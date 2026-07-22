@@ -13,9 +13,8 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: c253faf4fbc7c43d
 source_type: news_media
-tldr: KDnuggets 文章介绍了 5 个用于自动化 PDF 处理的 Python 脚本。
-objective_summary: KDnuggets 发布了一篇技术教程，介绍了 5 个 Python 脚本，用于自动执行常见的 PDF 操作任务，包括合并与拆分、文本和表格提取、水印与页码添加等。脚本基于
-  pypdf 和 pdfplumber 库，支持命令行批量处理。
+tldr: 本文介绍了5个用于自动化PDF处理的Python脚本，涵盖PDF合并与拆分、文本和表格提取、水印和页码添加等常见任务，全部基于pypdf和pdfplumber等库从命令行运行。
+objective_summary: KDnuggets于2026年7月21日发布了一篇技术教程，详细介绍了5个自动化PDF处理的Python脚本。这些脚本使用pypdf和pdfplumber等库，支持从命令行运行和批量处理，覆盖了PDF合并与拆分、文本与表格提取为结构化文件、以及水印/页码/页眉页脚添加等常见操作，可通过配置文件调整行为。
 event_type: framework_tools
 epistemic_status: verified_fact
 entities:
@@ -24,15 +23,33 @@ entities:
   technologies:
   - pypdf
   - pdfplumber
-  - Python
   key_people: []
 key_logic_flow:
-- PDF 文件在多种工作流中被广泛使用，手动处理多个文件既慢且容易出错。
-- 第一个脚本使用 pypdf 库实现 PDF 的合并（按文件名或自定义顺序）与拆分（按固定页数、范围或页码列表），通过模式标志控制。
-- 第二个脚本使用 pypdf 进行基础文本提取、pdfplumber 进行布局感知的表格提取，支持输出为纯文本、Markdown、CSV 或 Excel 格式，并生成摘要报告。
-- 第三个脚本支持对 PDF 批量添加文本/图像水印、页眉/页脚文字、页码等，位置、字体大小、透明度和颜色均可配置。
-- 文章共介绍了 5 个脚本，涵盖 PDF 日常处理中最常见的痛点场景，但正文仅完整描述了前 3 个脚本。
+- 第一个脚本使用pypdf库实现PDF合并与拆分功能，合并时按文件名排序顺序写入，拆分时支持按页范围列表、固定块大小或特定页码三种方式。
+- 第二个脚本结合pypdf和pdfplumber从PDF中提取文本和表格数据，文本输出为纯文本或Markdown文件，表格输出为CSV或Excel格式。
+- 第三个脚本支持对PDF批量添加文字或图片水印、页眉页脚和页码，所有参数均可配置，可处理整个文件夹。
+- 所有脚本均设计为命令行运行并支持批量处理，旨在替代手动操作以提升重复性PDF处理任务的效率。
 extract_result: success
+object_mentions:
+- object_type: project
+  name: pypdf
+  canonical_name: pypdf
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 文章第一个脚本使用pypdf进行所有页面级操作，在合并模式下从输入文件夹读取所有PDF并按文件名排序后顺序写入到一个输出文件中。
+  - 文章第二个脚本使用pypdf进行基础文本提取，结合pdfplumber实现布局感知的文本和表格检测。
+  article_id: c253faf4fbc7c43d
+- object_type: project
+  name: pdfplumber
+  canonical_name: pdfplumber
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 文章第二个脚本使用pdfplumber进行布局感知的提取和表格检测，逐页运行并利用其表格查找器识别表格区域，提取的表格会经过空行移除和表头检测等规范化处理。
+  article_id: c253faf4fbc7c43d
 ---
 
 # 5 Useful Python Scripts to Automate Boring PDF Tasks

@@ -33,35 +33,61 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 6fc77bdc5b8a25da
 source_type: community_discussion
-tldr: GitHub 开源英语学习指南更新至 2026 版，新增以 Gemini 为主引擎、多 AI 工具分工协作的听说读写训练体系。
-objective_summary: 作者 byoungd（离谱）于 2017 年应友人请求开始撰写英语学习心得，后整理为结构化指南发布于 GitHub。2026
-  版新增 AI 学习章节，系统阐述以 Gemini 为核心引擎，配合 ChatGPT、Claude、Perplexity、DeepL Write
-event_type: application_landing
+tldr: 该指南是一份托管于GitHub的英语进阶学习指南，作者结合个人经验与科学依据分享英语学习方法。2026年版新增AI章节，系统介绍将Gemini作为核心引擎、配合ChatGPT、Claude、Perplexity、DeepL
+  Write等工具构建完整听说读写训练流程的方案。
+objective_summary: 开发者byoungd在GitHub上发布的英语学习进阶指南（English-level-up-tips），最初于2017年7月因回应好友关于高效学习英语的提问而创作。指南综合了作者的主观学习经验与科学依据，提供从入门到进阶的英语学习方法论。2026年版新增AI学习章节，重点介绍以Gemini为核心引擎、配合ChatGPT、Claude、Perplexity、DeepL
+  Write等AI工具构建完整听说读写训练回路的方法。作者声明本指南不接受金钱赞助，采用知识共享署名-非商业性使用4.0国际许可协议进行许可。
+event_type: framework_tools
 epistemic_status: verified_fact
 entities:
-  companies:
-  - ku0.com
+  companies: []
   technologies:
-  - Gemini
+  - AI
   - ChatGPT
   - Claude
+  - Gemini
   - Perplexity
   - DeepL Write
-  - Gem
-  - Live
-  - Guided Learning
-  - Canvas
-  key_people:
-  - byoungd
+  key_people: []
 key_logic_flow:
-- 作者于 2017 年 7 月因友人 W. 备考托福时询问学习方法，开始撰写英语学习心得
-- 作者将零散的学习经验整理为结构化指南，发布至 GitHub 供更多人参考
-- 指南核心理念主张英语学习应如母语习得般自然发生，强调热爱是高效学习的驱动力
-- 2026 版新增 AI 章节，不再仅提供通用 Prompt，而是系统回答如何用 AI 加速英语学习
-- 推荐以 Gemini 作为英语学习主引擎，将 Gem、Live、Guided Learning、Canvas、Quiz、Flashcards 串联为完整训练流程
-- 设计 ChatGPT、Claude、Perplexity、DeepL Write 等工具的明确分工方案，构建长期有效的听说读写训练回路
-- 指南以知识共享署名-非商业性使用 4.0 国际许可协议开源，作者声明不接受金钱赞助
+- 该指南由开发者byoungd于2017年7月因回应好友W.关于高效学习英语的提问而开始创作，并在GitHub上持续更新。
+- 指南综合了作者在高考英语语文双科省第一（江苏卷）以及大学一学期通过26门课的个人学习经验。
+- 作者主张学习英语应是一件自然而然的事情，核心在于培养对语言学习的热情与兴趣。
+- 2026年版新增AI学习章节，重点介绍以Gemini为核心引擎配合ChatGPT、Claude、Perplexity、DeepL Write等工具构建听说读写训练回路的方法。
+- 作者同步推荐其产品ku0.com，将其定位为可信任的AI资源库，提供各平台AI账户与接口资源的一站式获取服务。
+- 指南采用知识共享署名-非商业性使用4.0国际许可协议进行许可，且作者声明不接受任何金钱赞助。
 extract_result: success
+object_mentions:
+- object_type: project
+  name: byoungd/English-level-up-tips
+  canonical_name: byoungd/English-level-up-tips
+  url: https://github.com/byoungd/English-level-up-tips
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 该指南最初于2017年7月因作者回应好友关于高效学习英语的提问而创作，并在GitHub上持续更新至今。
+  - 2026年版新增AI章节，系统介绍以Gemini为核心引擎配合ChatGPT、Claude等工具构建英语听说读写训练回路的方法。
+  article_id: 6fc77bdc5b8a25da
+- object_type: product
+  name: ku0.com
+  canonical_name: ku0.com
+  url: https://ku0.com
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - ku0.com被介绍为可信任AI资源库，提供ChatGPT、Claude、Gemini等账户充值、成品号和号池资源的一站式获取服务。
+  - 该平台通过Token质检和统一网关筛除不稳定、掺水、冒名的中转服务，帮助用户降低AI使用成本与采购风险。
+  article_id: 6fc77bdc5b8a25da
+- object_type: product
+  name: Gemini
+  canonical_name: Google Gemini
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 指南推荐将Gemini作为英语学习主引擎，利用其Live、Guided Learning、Canvas等功能构建完整训练流程。
+  - Gemini与ChatGPT、Claude、Perplexity、DeepL Write等工具在听说读写训练中各有分工，需要合理搭配使用。
+  article_id: 6fc77bdc5b8a25da
 ---
 
 谨以此献给我曾今的挚爱 `W.`

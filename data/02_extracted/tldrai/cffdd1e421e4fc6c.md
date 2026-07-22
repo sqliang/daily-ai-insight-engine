@@ -14,31 +14,69 @@ id: cffdd1e421e4fc6c
 manifest_dates:
 - '2026-07-01'
 source_type: news_media
-tldr: Google 向所有美国用户免费开放 Gemini 个性化 AI 图像生成功能
-objective_summary: Google 于 2026 年 6 月 29 日宣布，Gemini 应用的个性化图像生成功能（基于 Nano Banana 技术）对所有美国用户免费开放，此前仅限
-  Plus/Pro/Ultra 付费订阅用户使用。该功能利用 Google 账户数据自动理解用户偏好生成图像，无需手动指定提示词。
+tldr: Google 宣布 Gemini 应用的 Nano Banana 驱动的个性化图像生成功能即日起向所有美国用户免费开放，此前该功能仅限 Plus、Pro
+  和 Ultra 付费订阅用户使用。
+objective_summary: Google 于 2026 年 6 月 29 日宣布，其 Gemini 应用中的 Nano Banana 驱动的个性化图像生成功能向所有符合条件的美国用户免费开放。该功能基于
+  Gemini 对用户兴趣偏好的理解自动生成图像，数据来源于用户已授权的 Google 账户连接（包括 Gmail、Google Photos、YouTube 和
+  Search），无需用户在提示词中详细描述喜好。用户可选择启用该功能，并通过 Tools 菜单中的开关随时禁用。
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
   companies:
   - Google
   technologies:
-  - Gemini
   - Nano Banana
-  - Personal Intelligence
-  - Gemini Omni
-  - Gemini Spark
+  - Gemini
   key_people: []
 key_logic_flow:
-- Google 宣布向所有符合条件的美国用户免费开放 Gemini 的个性化 AI 图像生成功能，该功能此前仅限 Plus、Pro 和 Ultra 付费订阅用户使用。
-- 该功能基于 Nano Banana 技术，利用 Gemini 对用户偏好的理解自动生成图像，无需用户在提示词中明确指定喜好。
-- Gemini 通过用户的 Google 账户关联数据（Gmail、Google Photos、YouTube、Search）来实现对用户兴趣的理解，并可自动从
-  Google Photos 中提取用户照片。
-- Personal Intelligence 为可选功能，用户可控制 Gemini 可访问的应用程序，并可通过工具菜单中的开关禁用。
-- Google 还预告了 Gemini 应用的未来更新，包括 Daily Brief 功能、界面改版、AI 视频模型 Gemini Omni 以及个人 AI 代理
-  Gemini Spark。
-- Google 的 AI 聊天机器人 Gemini 月活跃用户已超 7.5 亿。
+- Google 宣布 Gemini 应用的 Nano Banana 驱动的个性化图像生成功能即日起向所有符合条件的美国用户免费开放，此前该功能仅限付费订阅用户。
+- 该功能基于 Gemini 对用户兴趣偏好的理解自动生成图像，无需用户在提示词中详细指定喜好内容。
+- Gemini 利用用户已授权的 Google 账户数据（包括 Gmail、Google Photos、YouTube 和 Search）来实现个性化图像生成。
+- 用户可选择启用该功能，并可随时通过 Tools 菜单中的开关将其禁用。
+- Google 此前已在 3 月向所有美国用户开放 Personal Intelligence 功能，并在近期扩展到印度和日本用户。
+- Google 预告了 Gemini 应用的未来更新，包括 Daily Brief 功能、界面改版、Gemini Omni 视频模型以及 Gemini Spark
+  个人 AI 代理。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Gemini
+  canonical_name: Google Gemini
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Google 宣布 Gemini 应用的个性化 AI 图像生成功能即日起向所有符合条件的美国用户免费开放，此前该功能仅限付费订阅用户使用。
+  - Gemini 根据用户已授权的 Google 账户数据（Gmail、Google Photos、YouTube 和 Search）来理解用户兴趣并生成个性化图像。
+  - Google 的 AI 聊天机器人 Gemini 已超过 7.5 亿月活用户，巩固了其在 AI 领域的主要参与者地位。
+  article_id: cffdd1e421e4fc6c
+- object_type: product
+  name: Nano Banana
+  canonical_name: Nano Banana
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Gemini 的个性化图像生成功能由 Nano Banana 技术驱动，允许用户创建反映其独特兴趣的图像。
+  - Google 于四月份首次宣布 Gemini 的 Personal Intelligence 功能将获得 Nano Banana 驱动的图像生成能力。
+  article_id: cffdd1e421e4fc6c
+- object_type: product
+  name: Gemini Spark
+  canonical_name: Gemini Spark
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Google 上月预告了 Gemini 应用的未来更新，包括一个名为 Gemini Spark 的个人 AI 代理。
+  article_id: cffdd1e421e4fc6c
+- object_type: model
+  name: Gemini Omni
+  canonical_name: Gemini Omni
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Google 预告的 Gemini 应用更新中将包含 AI 视频模型 Gemini Omni 的访问能力。
+  article_id: cffdd1e421e4fc6c
 ---
 
 Google announced on Monday that the Gemini app is now offering its personalized Nano Banana-powered image generation feature to a broader audience. Starting today, all eligible users in the U.S. can access the feature for free, a service that was previously only available to Plus, Pro, and Ultra subscribers.

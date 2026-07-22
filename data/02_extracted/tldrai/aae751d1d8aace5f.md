@@ -11,25 +11,56 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: aae751d1d8aace5f
 source_type: news_media
-tldr: Orca 是一个开源 AI 编排器，可并行运行多个 CLI 代码代理（Claude Code、Codex 等）并统一管理。
-objective_summary: stablyai 发布了 Orca，一款 MIT 协议的开源 AI 编排桌面工具，支持在独立工作树中并行运行 Codex、Claude
-  Code、OpenCode 等多种 CLI 代理，提供跨工作树搜索、账户切换用量追踪、富文件预览和 Computer Use 等功能，并配有
+tldr: Orca 是一个开源的 AI 编排桌面工具，由 Stably AI 开发并托管在 GitHub 上，支持在同一界面中并排运行 Claude Code、Codex、OpenCode、Pi
+  等多种 CLI 智能体，每个智能体拥有独立工作目录，并提供搜索、账户切换、用量追踪等配套功能。
+objective_summary: Stably AI 于 GitHub 上发布了 Orca 项目，这是一款 AI 编排桌面应用，能够同时管理多个 CLI 智能体并追踪其在独立工作目录中的运行状态。Orca
+  支持超过 20 种主流 AI 编码代理，提供快速搜索、账户热切换、用量监控、富仓库预览、计算机使用（Computer Use）以及通知功能，并附带 iOS 和
+  Android 移动端配套应用。该项目以 MIT 许可证开源发布，可通过官网、Homebrew、AUR 等方式获取。
 event_type: framework_tools
 epistemic_status: verified_fact
 entities:
   companies:
-  - stablyai
-  technologies:
-  - Computer Use
+  - Stably AI
+  technologies: []
   key_people: []
 key_logic_flow:
-- Orca 允许用户在独立工作树中并行运行 Codex、Claude Code、OpenCode、Pi 等多种 CLI 代理，并在一个统一界面中追踪所有代理。
-- 内置跨工作树快速搜索功能，支持搜索文件、代理、命令和仓库上下文。
-- 支持账户切换和 Claude/Codex 用量追踪，可查看使用情况和速率限制重置时间。
-- 提供 Markdown、图片、PDF 和仓库文档的富预览功能，以及让代理操控桌面应用的 Computer Use 功能。
-- 支持通知推送和未读状态标记，并提供 iOS/Android 移动端配套应用用于远程监控代理。
-- Orca 采用 MIT 开源协议，可通过 Homebrew 或 GitHub Releases 获取 macOS、Windows、Linux 各平台构建版本。
+- Orca 是一个 AI 编排器，允许用户并排运行 Claude Code、Codex、OpenCode、Pi 等多种 CLI 智能体，每个智能体拥有独立的工作目录。
+- Orca 提供快速搜索功能，用户可在工作目录、文件、智能体、命令和仓库上下文之间跨域搜索，无需离开当前流程。
+- Orca 支持账户切换和用量追踪，可查看 Claude 和 Codex 的使用情况与速率限制重置时间，并支持热切换账户。
+- Orca 提供计算机使用（Computer Use）功能，允许智能体在需要真实交互时操作桌面应用和可见 UI。
+- Orca 兼容任何 CLI 智能体，只要能在终端中运行的工具都可以接入 Orca 平台。
+- Orca 以 MIT 许可证在 GitHub 上开源发布，由 Stably AI 维护，提供 macOS、Windows、Linux 桌面端以及 iOS、Android
+  移动端应用。
 extract_result: success
+object_mentions:
+- object_type: project
+  name: stablyai/orca
+  canonical_name: stablyai/orca
+  url: https://github.com/stablyai/orca
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Orca 是一个 AI 编排工具，允许用户在同一界面中并排运行多个 CLI 智能体（如 Claude Code、Codex、OpenCode、Pi 等），每个智能体拥有独立的工作目录。
+  - Orca 以 MIT 许可证在 GitHub 上开源发布，由 Stably AI 维护，支持通过 Homebrew 和 AUR 包管理器安装。
+  article_id: aae751d1d8aace5f
+- object_type: product
+  name: Orca iOS App
+  canonical_name: Orca iOS
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - Orca 提供了 iOS 端配套应用，用户可通过 App Store 下载或在 TestFlight 上加入测试，用于从手机端监控和操控桌面端的智能体。
+  article_id: aae751d1d8aace5f
+- object_type: product
+  name: Orca Android App
+  canonical_name: Orca Android
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - Orca 提供了 Android 端配套应用，用户可下载 APK 0.0.27 版本，用于从手机上监控和操控桌面端的智能体。
+  article_id: aae751d1d8aace5f
 ---
 
 Español · Português · 中文 · 日本語 · 한국어

@@ -28,8 +28,10 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 5cae5da5bbac0107
 source_type: news_media
-tldr: 集思科技CEO李世尊提出营销内容从"用AI"到"管AI"实现百倍提效，数字人IP与AI直播已服务LVMH、欧莱雅等全球品牌，累计GMV超60亿。
-objective_summary: 2026年AI+产业大会上，集思科技CEO李世尊演讲披露：公司自2022年首创数字人直播带货以来，三年累计GMV超60亿，服务LVMH、欧莱雅、宝洁等全球集团。2026年被定义为营销内容Agent真正落地节点，核心主张是将品牌创始人对品牌的理解沉淀为AI可调用的上下文资产，
+tldr: 集思科技CEO李世尊在2026AI Partner大会上分享公司从'用AI'到'管AI'的营销提效实践。公司首创数字人直播带货，服务LVMH、欧莱雅、宝洁等全球品牌，累计GMV超60亿，并推出获官方身份认证的数字人IP
+  koko和视频产品Castar。
+objective_summary: 集思科技自2022年首创数字人直播带货以来，已服务LVMH、欧莱雅、宝洁、雅诗兰黛等全球零售集团客户，累计实现超过60亿GMV，运营超1000个直播间，服务C端消费者超三千万次。公司推出获得亦庄政府第二张数字人身份证的AI
+  IP koko，以及视频产品Castar，并与球星慈世平合作完成AI明星直播首秀，联合多个品牌冲到全国榜第二名。2026年集思科技正从'用AI'转向'管AI'模式，输入单一命令即可实现营销内容的全自动化执行，他们认为今年才是营销内容Agent真正落地应用的节点。
 event_type: application_landing
 epistemic_status: pr_statement
 entities:
@@ -42,37 +44,65 @@ entities:
   - 雀巢
   - Diageo
   - Burberry
-  - Shopee
   - 京东
   - 淘宝
+  - Shopee
+  - 37 Partners
   - 安踏
   - 李宁
   - 361度
   - VIVO
   - 三星
-  - 37 Partners
   - 波司登
-  - Meta
-  - 36氪
   technologies:
+  - Agent
   - AIGC
-  - AI Agent
+  - AI Sales
   - 数字人
-  - AI直播
-  - 数字人直播带货
-  - Castar
-  - 虚拟IP
   key_people:
   - 李世尊
-  - koko
   - 慈世平
 key_logic_flow:
-- 集思科技于2022年2月28日在京东平台首发38个美妆数字人直播间，首创数字人直播带货模式，三年累计GMV超60亿，服务C端消费者超三千万次。
-- 李世尊提出品牌核心资产不是视觉而是上下文——将创始人对品牌的理解沉淀为AI可调用的智力资产，这是营销内容Agent落地的关键前提。
-- 公司提出"用AI的人是不用AI的人的十倍效率，管AI的人是用AI的人的十倍效率"，即管AI相比不用AI实现百倍提效，2026年被定义为营销内容Agent真正落地应用的节点。
-- 产品矩阵覆盖文字、图片、视频、直播四种模态，核心产品包括AI直播（第一条曲线）和Castar视频生成，数字人IP koko已获得亦庄政府颁发的数字人身份证，即将获得中国第一个数字钱包。
-- 公司与Shopee官方于2024年11月在台湾发布首个官方数字人直播间（服务欧莱雅），不到半年在东南亚签约近百家客户，将国内直播带货know-how AI化后输出到海外市场。
-- 公司已是LVMH全球唯二的生成式AI服务商之一，同时是雅诗兰黛、欧莱雅、宝洁在北亚的服务商，以及雀巢、Diageo的全球生成式AI服务商。
+- 集思科技专注于AI Sales领域，自2022年2月首创数字人直播带货，为品牌零售业的B端客户提供面向消费者的AI Agent服务。
+- 公司已服务LVMH、欧莱雅、宝洁、雅诗兰黛等全球集团，累计实现超过60亿GMV，服务C端消费者超过三千万次，运营超过1000个直播间。
+- 集思科技的数字人IP koko获得亦庄政府颁发的第二张数字人身份证，也是工信部唯二认可的数字人之一，即将拿到中国第一个数字钱包。
+- 视频产品Castar与球星慈世平的37 Partners合作，用其IP在菲律宾进行AI明星直播首秀，联合安踏、李宁、三星等品牌冲到全国榜第二名。
+- 公司正在推动从'用AI'到'管AI'的转型，用户只需输入一个命令即可让AI自动完成所有营销环节并反复执行达到满意效果。
+- 2026年被集思科技视为营销内容Agent真正落地应用的节点，相比此前业界宣称的2023年Agent元年实际推迟了三年。
+extract_result: success
+object_mentions:
+- object_type: product
+  name: koko
+  canonical_name: koko
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - koko获得了亦庄政府颁发的第二张数字人身份证，即将拿到中国第一个数字钱包，作为Agent拿到数字钱包。
+  - koko可以覆盖多种模态，可以做图，IP保持一致还可以做视频，还可以做直播，本质上每一个品牌最好的销售就是创始人本人。
+  - koko也是工信部唯二认可的数字人，未来中国所有的数字人背后都会有一个ID来管控内容，koko是有身世的。
+  article_id: 5cae5da5bbac0107
+- object_type: product
+  name: Castar
+  canonical_name: Castar
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Castar是集思科技主做视频的产品，是一个视频品宣明星IP，与球星慈世平及其公司37 Partners展开了非常多合作。
+  - 集思科技用Castar帮助慈世平的IP在菲律宾做了一场AI明星首秀直播，联合安踏、李宁、361度、VIVO、三星，当天直播间冲到了全国榜第二名。
+  article_id: 5cae5da5bbac0107
+- object_type: company
+  name: 集思科技
+  canonical_name: 集思科技
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 集思科技专注于AI销售领域，用Agent的方式帮助品牌零售业的B端客户面对消费者，首创数字人直播带货并持续迭代。
+  - 集思科技服务LVMH、欧莱雅、宝洁等全球集团，累计实现超过60亿GMV，服务C端消费者超过三千万次。
+  - 集思科技从2022年首创数字人直播带货至今，已服务七百多家客户、一千多个直播间，覆盖美妆、服饰、奢品、母婴、个护等多个品类。
+  article_id: 5cae5da5bbac0107
 impact_score:
   score: 5.0
   reason: 这是一场行业大会上的企业PR演讲，非产品发布也非技术突破。集思科技展示了三年60亿GMV的商业成绩和LVMH等头部客户案例，在数字人直播和AIGC营销赛道确实有规模化落地成果，但其核心主张——从'用AI'到'管AI'实现百倍提效——仍停留在叙事层面，缺乏可验证的技术细节和独立第三方数据支撑。对行业而言，这更像是一次成熟商业模式的案例展示而非范式转移，局部改变品牌零售的AI营销竞争格局但未触及行业底层逻辑。
@@ -124,6 +154,56 @@ confidence:
   compound: medium
   hype: high
 actionable_insight: strategic_invest
+object_insights:
+- object_type: product
+  name: koko
+  canonical_name: koko
+  url: null
+  positioning: 集思科技推出的获官方身份认证的多模态数字人AI IP，支持图片、视频、直播内容生成与实时交互，服务于品牌零售企业的营销场景。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users:
+  - 品牌零售企业
+  - 需要数字人营销的B端客户
+  product_signal: 支持图片、视频、直播多模态内容生成，可保持IP视觉一致性并实现实时直播交互。
+  market_signal: 获得亦庄政府第二张数字人身份证及工信部认可，即将拿到中国第一个数字钱包。
+  differentiation: 作为工信部唯二认可且拥有政府数字人身份证的数字人IP，在合规化身份管理上形成显著先发优势。
+  watch_reason: koko作为获得政府数字人身份证和工信部双认证的数字人IP，在数字人身份管理与合规化方面具有先发优势，其商业变现进展和多模态营销能力值得持续跟踪。
+  risk_notes:
+  - 数字人行业监管政策尚未定型，身份认证体系仍在演进中。
+  - 数字人IP的商业化变现能力和用户长期接受度有待市场验证。
+  score: 7.0
+  article_ids:
+  - 5cae5da5bbac0107
+  evidence_snippets:
+  - koko获得了亦庄政府颁发的第二张数字人身份证，即将拿到中国第一个数字钱包，作为Agent拿到数字钱包。
+  - koko可以覆盖多种模态，可以做图，IP保持一致还可以做视频，还可以做直播，本质上每一个品牌最好的销售就是创始人本人。
+  - koko也是工信部唯二认可的数字人，未来中国所有的数字人背后都会有一个ID来管控内容，koko是有身世的。
+- object_type: product
+  name: Castar
+  canonical_name: Castar
+  url: null
+  positioning: 集思科技旗下的视频品宣明星IP产品，专注于利用AI技术实现明星虚拟化直播带货与品牌营销视频制作。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users:
+  - 品牌零售企业
+  - 需要明星IP数字化营销的B端客户
+  product_signal: 与球星慈世平合作完成AI明星直播首秀，联合安踏、李宁等品牌在菲律宾市场冲到全国榜第二名。
+  market_signal: 已在东南亚市场完成AI明星直播的首轮验证，与37 Partners建立深度合作关系。
+  differentiation: 利用AI技术替代传统明星实地拍摄，大幅降低时间与经济成本，实现明星IP的虚拟化跨境直播。
+  watch_reason: Castar探索了AI明星直播的跨境落地新模式，在菲律宾市场取得初步成效，其跨地域复制能力和规模化潜力值得持续关注。
+  risk_notes:
+  - AI明星直播涉及IP授权和肖像权等法律合规风险。
+  - 跨国明星IP数字化的规模化复制能力尚待验证。
+  score: 6.0
+  article_ids:
+  - 5cae5da5bbac0107
+  evidence_snippets:
+  - Castar是集思科技主做视频的产品，是一个视频品宣明星IP，与球星慈世平及其公司37 Partners展开了非常多合作。
+  - 集思科技用Castar帮助慈世平的IP在菲律宾做了一场AI明星首秀直播，联合安踏、李宁、361度、VIVO、三星，当天直播间冲到了全国榜第二名。
 ---
 
 从2022年首创数字人直播带货，到如今服务LVMH、欧莱雅、宝洁等全球集团，集思科技在三年间积累了超60亿GMV的实战成绩。

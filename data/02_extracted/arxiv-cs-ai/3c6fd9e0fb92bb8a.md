@@ -35,27 +35,26 @@ id: 3c6fd9e0fb92bb8a
 manifest_dates:
 - '2026-07-08'
 source_type: academic_paper
-tldr: 一篇综述论文，系统归纳了 LLM Agent 在工具使用、规划和推理等六个维度的失败模式。
-objective_summary: 该论文综合梳理了 2023-2026 年间 27 篇基准测试与分类学文献，覆盖 19 个不同基准，提出了 LLM Agent
-  局限性的统一分类体系。识别出工具调用错误、规划失败、长程上下文退化、多智能体协调失败、安全漏洞和测量有效性问题六大失败集群，并发现在任务长度增加时失败呈非线性累积。
+tldr: 该论文综合分析了27篇2023-2026年的基准测试与分类研究，归纳出LLM智能体在工具使用、规划、长周期推理、多智能体协作、安全与测量有效性方面的六类系统性失败模式，发现失败随任务长度非线性累积，且子任务表现优异不代表端到端成功。
+objective_summary: 该论文由arXiv发布，通过综合27篇2023-2026年的基准测试、分类法和审计论文（涵盖19个不同的基准测试），构建了一个统一的LLM智能体局限性分类体系。论文识别出六大失败集群：工具调用与参数级错误、规划与约束满足失败、长周期上下文积累导致的退化、多智能体协调失败、对抗性或欠规范条件下的安全失效以及测量有效性问题。研究发现，失败随任务长度非线性累积，强子任务表现不能可靠转化为端到端成功，额外脚手架不能一致提升可靠性；同时在单轮工具使用、短周期网页导航和窄范围编码任务上已有显著进展。
 event_type: framework_tools
-epistemic_status: theoretical_claim
+epistemic_status: verified_fact
 entities:
   companies: []
   technologies:
-  - LLM
-  - LLM Agent
+  - LLM Agents
   - Tool-Use
   - Planning
-  - Reasoning
   - Multi-Agent Coordination
+  - Long-Horizon Reasoning
   key_people: []
 key_logic_flow:
-- 该论文对 2023-2026 年间的 27 篇基准测试和分类学论文进行了系统综合，覆盖 19 个不同基准。
-- 提出了一个跨工具使用、规划、长程推理、多智能体协调、安全和测量有效性六大维度的统一分类体系。
-- 识别出六个失败集群：工具调用与参数级别错误、规划与约束满足失败、上下文累积导致的长程退化、多智能体协调失败、对抗或欠规范条件下的安全失败，以及测量有效性问题。
-- 研究发现失败随任务长度呈非线性累积，单个子任务上的优异表现不能可靠转化为端到端成功。
-- 在单轮工具使用、短程网页导航和窄范围编码任务上已有显著进展，但额外的脚手架并不能一致地提升可靠性。
+- 论文综合了27篇2023-2026年间发表的基准测试、分类法和审计论文，涵盖19个不同的基准测试，这是首个将工具使用、规划、长周期推理、多智能体协调、安全和测量有效性整合为统一分类体系的研究。
+- 分类体系通过将独立报告的误差类别按照智能体从推理到行动流程的各阶段进行分组，经迭代推导出六大失败集群：工具调用与参数级错误、规划与约束满足失败、长周期上下文积累导致的退化、多智能体协调失败、安全与安全失效以及测量有效性问题。
+- 研究发现失败随任务长度非线性累积，智能体在个体子任务上的强表现不能可靠转化为端到端的整体成功。
+- 额外脚手架（scaffolding）的添加并不能一致地提升智能体的可靠性，表明单纯增加结构支持不是解决根本问题的有效手段。
+- 在单轮工具使用、短周期网页导航和窄范围编码任务上，已有实质性进展被证明，说明部分受限场景下LLM智能体已具备可靠能力。
+- 论文指出跨文献的证据表明，基准测试排名往往掩盖了反复出现的失败模式，需要超越排行榜的评估方法来全面理解智能体局限。
 specialized_tags:
   paper:
     paperTitle: 'Beyond the Leaderboard: A Synthesis of Tool-Use, Planning, and Reasoning
@@ -68,6 +67,20 @@ specialized_tags:
     researchArea: NLP
     methodType: theoretical
 extract_result: success
+object_mentions:
+- object_type: paper
+  name: 'Beyond the Leaderboard: A Synthesis of Tool-Use, Planning, and Reasoning
+    Failures in Large Language Model Agents'
+  canonical_name: 'Beyond the Leaderboard: A Synthesis of Tool-Use, Planning, and
+    Reasoning Failures in Large Language Model Agents'
+  url: https://arxiv.org/abs/2607.05775
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 该论文综合了27篇2023-2026年的基准测试与分类研究，涵盖19个不同的基准测试，构建了首个统一的LLM智能体局限性分类体系。
+  - 论文识别出六大失败集群：工具调用与参数级错误、规划与约束满足失败、长周期上下文退化、多智能体协调失败、安全失效以及测量有效性问题。
+  - 研究发现失败随任务长度非线性累积，强子任务表现不能可靠转化为端到端成功，而额外脚手架也不能一致提升可靠性。
+  article_id: 3c6fd9e0fb92bb8a
 ---
 
 # Computer Science > Artificial Intelligence

@@ -11,37 +11,75 @@ tags:
 - clippings
 id: 5c0882beadc2bc6c
 source_type: news_media
-tldr: FastAPI Cloud 推出 CLI 一键部署平台，通过 waitlist 开放，教程演示从脚手架到部署监控的完整流程
-objective_summary: KDnuggets 发布教程，演示使用 FastAPI Cloud CLI 部署一个实时金银价格仪表板。作者通过 waitlist
-  获得访问权限，使用 uvx fastapi-new 脚手架创建项目，借助 httpx 调用 Gold API 获取价格数据，通过 fastapi deploy
+tldr: FastAPI Cloud 是一个面向 FastAPI 应用的托管部署平台，支持通过 CLI 一键部署。教程以实时贵金属价格仪表盘为例，展示从项目创建、本地测试到云端部署和监控的完整流程，部署体验接近
+  Vercel 或 Supabase 等现代平台。
+objective_summary: KDnuggets 发表了一篇 FastAPI Cloud 部署教程，作者使用 FastAPI 构建了一个实时黄金与白银价格仪表盘应用。文章详细演示了通过
+  uvx 脚手架创建项目、添加 httpx 依赖、编写异步 API 端点、本地测试，以及使用 fastapi deploy 命令一键部署到 FastAPI Cloud
+  的完整流程。部署完成后用户可通过 FastAPI Cloud 仪表盘查看日志和监控应用状态。
 event_type: framework_tools
 epistemic_status: verified_fact
 entities:
   companies:
-  - FastAPI
   - FastAPI Cloud
   - KDnuggets
-  - Supabase
-  - Vercel
-  - Astral
+  - Gold API
   technologies:
   - FastAPI
   - httpx
   - uv
-  - Python
-  - Gold API
   key_people: []
 key_logic_flow:
-- FastAPI Cloud 是一个面向 FastAPI 应用的托管部署平台，当前通过 waitlist 逐步开放访问，定位类似 Supabase 和 Vercel
-  的开发者体验
-- 项目脚手架通过 `uvx fastapi-new` 命令生成，自动创建项目结构并安装依赖，使用 uv 作为包管理器
-- 示例应用使用 httpx 异步客户端从 Gold API 获取实时金银价格，通过 `/api/prices` 端点返回 JSON 数据，并在根路径提供带 15
-  秒自动刷新的 HTML 仪表板
-- 部署仅需一条 `fastapi deploy` 命令，CLI 引导用户完成账号关联和配置后自动构建并部署，最终生成 `.fastapicloud.dev` 域名
-- 部署后自动获得交互式 API 文档（/docs），并可通过 FastAPI Cloud 控制台查看应用日志和运行状态进行监控
-- 该平台还提供集成面板，支持在应用发展过程中接入额外服务
+- FastAPI Cloud 是一个用于托管 FastAPI 应用的托管平台，提供基于 CLI 的一键部署体验。
+- 作者使用 uvx fastapi-new 脚手架命令创建了名为 metals-live 的项目结构。
+- 应用通过 httpx 异步客户端从 Gold API 获取实时金价和银价，并在 /api/prices 端点返回 JSON 数据。
+- 应用主页提供一个自动每 15 秒刷新一次的 HTML 仪表盘，展示实时贵金属价格。
+- 运行 fastapi deploy 命令后，CLI 引导用户完成账户连接和应用配置，自动构建并部署到 FastAPI Cloud。
+- 部署完成后应用获得 public URL，用户可通过 FastAPI Cloud 仪表盘查看日志和监控运行状态。
 pipeline_stage: fact_extracted
 extract_result: success
+object_mentions:
+- object_type: product
+  name: FastAPI Cloud
+  canonical_name: FastAPI Cloud
+  url: https://fastapicloud.com/
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - FastAPI Cloud 是一个托管部署平台，开发者可以通过 CLI 在数秒内完成应用的部署。
+  - FastAPI Cloud 提供日志查看、应用监控和集成面板等功能，体验接近 Vercel 或 Supabase 等现代平台。
+  - 访问目前仍通过 waitlist 逐步开放，作者在申请数月后才获得使用权限。
+  article_id: 5c0882beadc2bc6c
+- object_type: project
+  name: metals-live
+  canonical_name: metals-live
+  url: null
+  confidence: medium
+  article_role: primary_subject
+  evidence_snippets:
+  - metals-live 是一个使用 FastAPI 构建的实时贵金属价格仪表盘应用，作为本教程的示例项目。
+  - 该应用通过 httpx 异步请求 Gold API，在 /api/prices 返回 JSON 数据，并在主页提供每 15 秒自动刷新的 HTML 界面。
+  - 部署完成后应用可通过 https://metals-live.fastapicloud.dev/ 公开访问。
+  article_id: 5c0882beadc2bc6c
+- object_type: project
+  name: FastAPI
+  canonical_name: FastAPI
+  url: https://fastapi.tiangolo.com/
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - FastAPI 已发展为一个更广泛的生态系统，广泛应用于 AI 和机器学习项目的现代 Web 应用构建。
+  - FastAPI 提供内置开发服务器和自动生成 API 文档的能力，支持本地测试和快速迭代。
+  article_id: 5c0882beadc2bc6c
+- object_type: product
+  name: FastAPI CLI
+  canonical_name: FastAPI CLI
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - FastAPI CLI 提供 fastapi dev 命令用于本地开发服务器启动，以及 fastapi deploy 命令用于一键部署到 FastAPI Cloud。
+  - fastapi deploy 命令会在部署过程中引导用户完成账户连接、应用名称和团队配置等设置。
+  article_id: 5c0882beadc2bc6c
 ---
 
 ## \# Introduction

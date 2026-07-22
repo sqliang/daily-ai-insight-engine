@@ -16,25 +16,28 @@ id: ab1a1f55aaf02dc9
 manifest_dates:
 - '2026-06-30'
 source_type: community_discussion
-tldr: Paul Kafasis 呼吁 Apple 在 MacOS 中恢复允许第三方应用图标使用不同形状，而非强制统一的圆角矩形。
-objective_summary: Paul Kafasis 于 2026 年 6 月 26 日发表博文，批评 Apple 在 MacOS 26 (Tahoe)
-  中强制第三方应用图标统一为圆角矩形形状，认为此举损害了可用性和创意表达，并呼吁 Apple 在 MacOS 27 (Golden Gate) 中恢复图标形状的自由。
+tldr: 苹果在 macOS 26 Tahoe 中强制第三方应用图标统一采用圆角矩形形状，损害了可用性和创意表达；macOS 27 Golden Gate 虽改善了自家图标设计，但作者呼吁苹果进一步取消对图标形状的限制。
+objective_summary: 2026 年，苹果在 macOS 26 Tahoe 中引入 "Liquid Glass" 图标风格，并强制所有第三方应用图标采用预设的圆角矩形形状（squircle），不兼容的图标被缩小并置于灰色背景中。此举被批评为削弱了图标的可辨识性和创意表达。随后在
+  macOS 27 Golden Gate 测试版中，苹果改进了自家应用的图标设计，去除了多余的 Liquid Glass 效果，使图标更清晰。作者 Paul Kafasis
+  敦促苹果彻底取消对第三方图标形状的禁令，恢复多样化的图标形状以提升可用性和平台个性。
 event_type: policy_and_safety
 epistemic_status: theoretical_claim
 entities:
   companies:
   - Apple
-  technologies:
-  - MacOS
+  - Rogue Amoeba
+  technologies: []
   key_people:
   - Paul Kafasis
+  - Adam Engst
 key_logic_flow:
-- Apple 在 MacOS 26 (Tahoe) 中为第一方应用引入了模糊的「Liquid Glass」图标风格，并强制所有第三方应用图标必须采用统一的圆角矩形形状。
-- MacOS 27 (Golden Gate) 的测试版中，Apple 改进了第一方应用图标的清晰度，去除了 Liquid Glass 的多余效果。
-- 强制统一图标形状导致应用图标失去辨识度，颜色成为区分应用的唯一视觉线索。
-- 对色觉障碍用户和使用相似配色方案的应用（如 Slack 和 Photos），仅靠颜色区分效果不佳。
-- 作者提交了反馈 FB23388490，要求 Apple 取消对第三方应用图标形状的限制。
+- 苹果在 macOS 26 Tahoe 中将自家应用图标改造为 "Liquid Glass" 外观，导致图标模糊且细节简化，被认为是一次严重的设计倒退。
+- 苹果强制所有第三方应用图标统一采用预设的圆角矩形形状，不兼容的图标被缩小并放置在灰色背景中（即所谓的 "图标监狱"）。
+- macOS 27 Golden Gate 测试版中，苹果改进了自家应用的图标设计，去除了 Liquid Glass 叠加效果，使图标更加清晰锐利。
+- 统一的圆角矩形形状消除了过去通过外形区分应用的重要可用性线索，仅剩颜色作为主要区分依据，对色觉障碍用户或颜色相近的应用造成辨识困难。
+- 作者呼吁苹果收回对图标形状的禁令，恢复允许第三方开发者使用多样化图标形状的能力，以提升平台的可用性和创意表达。
 extract_result: success
+object_mentions: []
 ---
 
 ### Apple should end their prohibition on shapes in MacOS app icons

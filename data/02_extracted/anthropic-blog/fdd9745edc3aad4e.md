@@ -20,9 +20,12 @@ manifest_dates:
 - '2026-07-07'
 - '2026-07-08'
 source_type: tech_blog
-tldr: 美国解除对 Claude Fable 5 的出口管制，Anthropic 于7月1日重新部署该模型
-objective_summary: 美国政府对 Anthropic 的 Claude Fable 5 和 Mythos 5 实施的出口管制于6月30日解除。Anthropic
-  于7月1日向全球用户重新开放 Fable 5，覆盖 Claude 平台、Claude.ai、Claude Code 和 Claude Cowork。
+tldr: 美国出口管制解除后，Anthropic 宣布 Claude Fable 5 于7月1日起面向全球用户恢复可用，Claude Mythos 5 已向部分美国组织恢复访问，并正与政府协调扩大
+  Glasswing 项目的合作伙伴范围。
+objective_summary: Anthropic 于6月30日宣布，美国政府对 Claude Fable 5 和 Claude Mythos 5 实施的出口管制已解除。Fable
+  5 将于7月1日起面向全球用户通过 Claude Platform、Claude.ai、Claude Code 和 Claude Cowork 重新上线，并在
+  AWS、Google Cloud 和 Microsoft Foundry 上尽快恢复。Mythos 5 已于6月26日获美国政府批准，恢复对一批美国组织的访问权限。Anthropic
+  正与 Amazon、Microsoft、Google 等 Glasswing 合作伙伴共同开发行业统一的越狱评估框架，并深化与美国政府在预发布测试、信息共享和研究协作方面的合作。
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
@@ -31,20 +34,54 @@ entities:
   - Amazon
   - Microsoft
   - Google
-  - AWS
-  - Google Cloud
-  - Microsoft Foundry
-  technologies: []
+  technologies:
+  - Claude Fable 5
+  - Claude Mythos 5
   key_people: []
 key_logic_flow:
-- 美国政府于6月12日对 Anthropic 的 Claude Fable 5 和 Claude Mythos 5 实施出口管制，Anthropic 因无法实时核实用户国籍而暂停了所有用户的访问
-- 出口管制于6月30日解除，Fable 5 于7月1日起向全球用户重新开放，覆盖 Claude 平台、Claude.ai、Claude Code 和 Claude
-  Cowork
-- Fable 5 在 Pro、Max、Team 及部分 Enterprise 计划中，截至7月7日每周可用额度内免费使用，之后转为按用量计费
-- Mythos 5 于6月26日获美国政府批准，已恢复对部分美国组织的访问权限，Anthropic 正争取扩大 Glasswing 项目合作伙伴的访问范围
-- Anthropic 与 Amazon、Microsoft、Google 等 Glasswing 合作伙伴共同制定行业共享框架，用于统一评估和修复 AI 模型越狱问题的严重性分级
-- Anthropic 正在加强与美国政府在新模型预发布测试、信息共享和研究协作方面的合作
+- 6月12日，美国政府对 Anthropic 最新模型 Claude Fable 5 和 Claude Mythos 5 实施出口管制，要求限制外国人访问，Anthropic
+  因此暂停了所有用户对这两个模型的访问权限。
+- 截至6月30日，美国政府对 Fable 5 和 Mythos 5 的出口管制已正式解除。
+- Fable 5 将于7月1日起面向全球用户恢复可用，覆盖 Claude Platform、Claude.ai、Claude Code 和 Claude Cowork
+  等平台，并在之后尽快在 AWS、Google Cloud 和 Microsoft Foundry 上恢复。
+- Mythos 5 已于6月26日获美国政府批准，恢复了对一批美国组织的访问权限，Anthropic 正与政府协调扩大 Glasswing 项目的国内外合作伙伴范围。
+- Anthropic 联合 Amazon、Microsoft、Google 等 Glasswing 合作伙伴，共同开发行业统一的越狱评估框架和严重性判定标准。
+- Anthropic 正在深化与美国政府在预发布测试、信息共享和研究协作方面的合作。
 extract_result: success
+object_mentions:
+- object_type: model
+  name: Claude Fable 5
+  canonical_name: Claude Fable 5
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Fable 5 将于7月1日起面向全球用户在 Claude Platform、Claude.ai、Claude Code 和 Claude Cowork 上重新可用。
+  - Fable 5 与 Mythos 5 共享同一底层模型，但 Fable 5 配备了更强的安全防护措施以适用于通用场景。
+  - 受美国出口管制影响，Fable 5 曾于6月12日起暂停对所有用户的访问权限。
+  article_id: fdd9745edc3aad4e
+- object_type: model
+  name: Claude Mythos 5
+  canonical_name: Claude Mythos 5
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Mythos 5 的安全防护较少，仅向少量受信任的 Project Glasswing 合作伙伴开放用于防御性网络安全场景。
+  - 美国政府在6月26日批准后，Mythos 5 已恢复向一批美国组织提供访问权限。
+  - Anthropic 正与政府协调，以扩大 Mythos 5 在 Glasswing 项目中面向更多国内外合作伙伴的访问范围。
+  article_id: fdd9745edc3aad4e
+- object_type: project
+  name: Project Glasswing
+  canonical_name: Project Glasswing
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Project Glasswing 是 Anthropic 与少量受信任合作伙伴共同参与的防御性网络安全项目，Mythos 5 仅向该项目合作伙伴开放。
+  - Anthropic 正与 Amazon、Microsoft、Google 等 Glasswing 合作伙伴共同开发行业统一的越狱评估框架。
+  - Anthropic 将继续与政府协调，以扩大 Glasswing 项目的国内外合作伙伴范围。
+  article_id: fdd9745edc3aad4e
 ---
 
 # Redeploying Fable 5

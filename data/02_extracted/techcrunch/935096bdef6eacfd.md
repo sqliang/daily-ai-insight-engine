@@ -13,9 +13,11 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 935096bdef6eacfd
 source_type: news_media
-tldr: Cerebras 上市后首份财报超预期，但因利润率指引低于预期股价暴跌近20%。
-objective_summary: Cerebras Systems 发布上市后首份财报，Q1 营收 1.93 亿美元（同比增 94%），净亏损从 2390 万收窄至
-  1400 万。但由于全年核心业务毛利率指引仅为 38%-41%（低于 Q1 的 47%），股价次日下跌约 20% 至接近 IPO 价格。
+tldr: Cerebras Systems 上市后首份财报发布次日股价暴跌近 20%，因其全年核心业务毛利率指引仅为 38%-41%，远低于一季度 47% 的水平，CEO
+  称市场误解了该指引。
+objective_summary: 2026 年 6 月 24 日，AI 芯片公司 Cerebras Systems 发布上市后首份季度财报。一季度营收达 1.93
+  亿美元（同比增长 94%），净亏损从 2390 万美元收窄至 1400 万美元。但公司预计全年核心业务毛利率仅为 38%-41%，远低于一季度的 47%，导致次日股价下跌近
+  20%，逼近 IPO 发行价。CEO Andrew Feldman 解释称，公司为提前增加产能而临时向大客户回租设备，这一做法压缩了短期利润率，投资者对此存在误解。
 event_type: capital_movement
 epistemic_status: verified_fact
 entities:
@@ -25,12 +27,25 @@ entities:
   key_people:
   - Andrew Feldman
 key_logic_flow:
-- Cerebras Systems 发布上市以来首份 Q1 财报，营收 1.93 亿美元同比增长 94%，净亏损从 2390 万美元收窄至 1400 万美元，业绩超预期。
-- 公司在财报中给出全年核心业务毛利率指引为 38%-41%，显著低于 Q1 报告的 47%，引发市场担忧。
-- 受利润率指引影响，Cerebras 股价次日下跌约 20%，创上市以来新低，接近 IPO 发行价。
-- CEO Andrew Feldman 表示投资者误解了利润率指引，称公司为加快产能部署，需从一家大客户处临时回租设备，这将拖累今年的利润率。
-- 回租设备的决策原因是公司正在建设和部署自有数据中心产能，在此之前通过回租方式提前释放更多可用算力。
+- Cerebras Systems 于 2026 年 6 月 24 日发布上市后首份财报，一季度营收达 1.93 亿美元，同比增长 94%，净亏损从 2390 万美元收窄至
+  1400 万美元。
+- 公司在财报中给出全年核心业务毛利率指引仅为 38% 至 41%，显著低于一季度已实现的 47% 水平。
+- 财报发布后次日股价暴跌近 20%，创上市新低并逼近公司 IPO 发行价。
+- CEO Andrew Feldman 表示市场对毛利率指引存在误解，称公司需要从大客户处回租设备以提前释放产能，这压缩了短期利润率。
+- 公司计划在自建数据中心能力完成部署后逐步停止设备回租操作。
 extract_result: success
+object_mentions:
+- object_type: company
+  name: Cerebras Systems
+  canonical_name: Cerebras Systems
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Cerebras Systems 发布上市后首份季度财报，一季度营收同比大增 94% 至 1.93 亿美元。
+  - 公司股价在财报发布次日暴跌近 20%，逼近 IPO 发行价，因市场对毛利率指引产生负面反应。
+  - CEO Andrew Feldman 表示公司将临时从大客户处回租设备以提前释放产能，这影响了短期利润率。
+  article_id: 935096bdef6eacfd
 ---
 
 Shares of Cerebras Systems dropped almost 20% on Wednesday, even after the company delivered better-than-expected first-quarter earnings on Tuesday.

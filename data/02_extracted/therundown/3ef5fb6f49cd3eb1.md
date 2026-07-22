@@ -11,35 +11,80 @@ tags:
 extraction_status: success
 id: 3ef5fb6f49cd3eb1
 source_type: newsletter_rss
-tldr: OpenAI 通用推理模型自主证伪了 Erdős 1946 年单位距离问题的80年猜想，被公司称为 AI 在数学原创发现领域的首次突破。
-objective_summary: OpenAI 于近期宣布，其内部一个即将发布的通用推理模型自主证伪了 Erdős 在 1946 年提出的单位距离问题相关长期猜想，该证明采用了代数数论路径，并经过
-  Tim Gowers、Noga Alon、Thomas Bloom 等专家验证。
+tldr: OpenAI 宣布内部通用推理模型自主推翻了一个存在80年之久的数学猜想（Erdős 1946单位距离问题），称这是AI首次在数学领域实现原创发现；同时
+  Google 在 Nature 发表 Co-Scientist 研究成果，推出 Hypothesis Generation 工具用于生物学假设发现。
+objective_summary: OpenAI 宣布其内部通用推理模型自主解决了 Erdős 在1946年提出的单位距离问题中的一个长期未解猜想，推翻了该领域延续80年的理论。该证明采用了代数数论方法，并得到了
+  Tim Gowers、Noga Alon 和 Thomas Bloom 等数学家的验证。该模型是一个即将发布的通用推理模型，而非类似 DeepMind AlphaProof
+  的专用数学系统。OpenAI 此前曾撤回2025年关于 GPT-5 解决了10个 Erdős 问题的声明。与此同时，Google 在 Nature 上发表了 Co-Scientist
+  研究成果，推出 Hypothesis Generation 功能，通过"思想锦标赛"机制让 AI 智能体互相提出、评审和优化生物学假设。
 event_type: application_landing
-epistemic_status: pr_statement
+epistemic_status: verified_fact
 entities:
   companies:
   - OpenAI
+  - Google
   - DeepMind
+  - Stanford University
   technologies:
-  - general reasoning model
+  - Co-Scientist
+  - Gemini
   - AlphaProof
-  - algebraic number theory
+  - Hypothesis Generation
+  - Gemini for Science
+  - AlphaEvolve
+  - NotebookLM
   key_people:
   - Sam Altman
-  - Alex Wei
   - Tim Gowers
   - Noga Alon
   - Thomas Bloom
-  - Paul Erdős
+  - Alex Wei
 key_logic_flow:
-- OpenAI 内部通用推理模型（非数学专用系统）对 Erdős 1946 年单位距离问题发起探索
-- 该模型独立找到了一条不同于主流网格理论的证明路径，转而使用代数数论分支的方法
-- 模型最终证伪了该领域流行 80 年的一个核心猜想
-- 结果经过三位数学专家（Tim Gowers、Noga Alon、Thomas Bloom）验证确认
-- OpenAI 的 Alex Wei 将此视为数学作为 AI 能力「先行指标」的证据，预示系统可做出跨领域原创贡献
-- OpenAI 此前在 2025 年曾声称 GPT-5 解决 10 个 Erdős 问题后撤回，此次发布在可信度管理上更为谨慎
+- OpenAI 宣布其内部通用推理模型自主推翻了一个与 Erdős 1946 年单位距离问题相关的、存在80年之久的数学猜想。
+- 该证明采用了代数数论方法，并已获得 Tim Gowers、Noga Alon 和 Thomas Bloom 等数学家的独立验证。
+- 该模型是一个即将发布的通用推理模型，而非像 DeepMind AlphaProof 那样的专用数学系统。
+- OpenAI 此前曾撤回2025年关于 GPT-5 解决了10个 Erdős 问题的声明，该声明后来被证实只是文献发现而非原创发现。
+- Google 在 Nature 上发表了 Co-Scientist 研究成果，推出 Hypothesis Generation 功能，通过智能体之间相互评审和淘汰的机制来优化研究假设。
+- 在一项斯坦福大学的肝纤维化项目中，Google 表示 Co-Scientist 提出的一个药物候选方案在测试中将疤痕相关实验室信号降低了91%。
 pipeline_stage: fact_extracted
 extract_result: success
+object_mentions:
+- object_type: product
+  name: OpenAI General Reasoning Model
+  canonical_name: OpenAI General Reasoning Model
+  url: null
+  confidence: medium
+  article_role: primary_subject
+  evidence_snippets:
+  - OpenAI 宣布一个内部通用推理模型自主推翻了一个存在80年之久的数学猜想，该模型即将公开发布。
+  article_id: 3ef5fb6f49cd3eb1
+- object_type: product
+  name: Google Co-Scientist
+  canonical_name: Google Co-Scientist
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Google 在 Nature 上发表了 Co-Scientist 研究成果，该工具通过"思想锦标赛"机制让 AI 智能体互相提出、评审和优化生物学假设。
+  article_id: 3ef5fb6f49cd3eb1
+- object_type: product
+  name: Hypothesis Generation
+  canonical_name: Hypothesis Generation
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Google 推出了 Hypothesis Generation 功能，作为 Co-Scientist 的一部分，旨在帮助生物实验室自动生成和筛选新的研究假设。
+  article_id: 3ef5fb6f49cd3eb1
+- object_type: product
+  name: Gemini for Science
+  canonical_name: Gemini for Science
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Google 发布了 Gemini for Science 工具包，将 Co-Scientist 与 AlphaEvolve 和 NotebookLM 相结合，用于科学发现和文献分析。
+  article_id: 3ef5fb6f49cd3eb1
 ---
 
 Good morning, {{ first_name | AI enthusiasts }}. Sam Altman called it a "kinda big milestone." That may be the rare case of a tech CEO underselling a headline.

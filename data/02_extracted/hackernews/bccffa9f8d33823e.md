@@ -14,51 +14,71 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: bccffa9f8d33823e
 source_type: community_discussion
-tldr: 苹果Apple II的开关电源并非革命性创新，半导体晶体管技术进步才是关键。
-objective_summary: Ken Shirriff于2012年发文，通过历史文献和产品数据考证，反驳Steve Jobs关于Apple II开关电源革命性的说法。文章指出开关电源在1977年Apple
-  II发布前已广泛用于计算机、航空航天等领域，真正的电源革命源于1960年代末至1970年代中期高压高速开关晶体管和PWM控制
+tldr: 文章考证了开关电源技术的发展史，指出乔布斯称Apple II开关电源具有革命性的说法不实——在Apple II于1977年发布前，IBM、DEC、HP等公司已广泛使用开关电源，真正的革命来自高压高速开关晶体管和PWM控制器集成电路的进步。
+objective_summary: 文章以2012年的视角回顾了开关电源技术从1930年代到1970年代的发展历程，系统性反驳了乔布斯在《史蒂夫·乔布斯传》中关于Apple
+  II开关电源具有革命性且后续所有计算机都在抄袭其设计的说法。文章列举了大量历史证据，包括IBM 704在1958年使用真空管开关稳压器、PDP-11/20在1969年使用开关电源等多个计算机型号在Apple
+  II之前已采用该技术的实例，并引用RO Associates、Boschert Inc等多家电源制造商在1970年代初的产品化进程。文章强调真正的技术革命来自半导体领域：高压高速功率晶体管的低成本化使离线开关电源成为可能，1976年PWM控制器集成电路的引入则极大简化了开关电源的设计。Rod
+  Holt为Apple II设计的简单离线反激变换器并非开创性创新，且其使用分立元件构建控制电路的方式随后被IC方案取代。
 event_type: infrastructure_update
 epistemic_status: verified_fact
 entities:
   companies:
   - Apple
   - IBM
+  - DEC
   - Hewlett-Packard
   - Honeywell
-  - DEC
+  - Univac
   - Burroughs
   - RCA
-  - General Electric
-  - Pioneer Magnetics
-  - RO Associates
-  - NEMIC
-  - Boschert Inc
-  - NASA
   - Data General
   - Texas Instruments
   - Interdata
   - Matsushita
   - Hitachi
   - Ferranti
-  - Sun
+  - RO Associates
+  - NEMIC
+  - Pioneer Magnetics
+  - General Electric
+  - Boschert Inc
+  - NASA
   technologies:
   - switching power supply
   - linear power supply
   - flyback converter
   - PWM controller IC
   key_people:
-  - Rod Holt
   - Steve Jobs
+  - Rod Holt
   - Robert Boschert
-  - Walt Hirschberg
 key_logic_flow:
-- Steve Jobs声称Apple II的开关电源具有革命性，且所有后续计算机都在抄袭Rod Holt的设计，但文章通过大量历史证据驳斥了这一说法。
-- 开关电源的原理早在1930年代就已知晓，1950年代已有商用产品，IBM 704（1958年）和NASA Telstar卫星（1962年）等早期系统已采用开关电源技术。
-- 1960年代末至1970年代中期，PDP-11/20（1969年）、HP 2100A（1971年）等众多计算机已使用开关电源，1971年时IBM、Honeywell、DEC等计算机巨头均已采用。
-- 开关电源的真正革命是由半导体技术进步驱动的，特别是低成本高压高速功率晶体管的问世（1960年代末至1970年代初），使电源可以省去笨重的工频变压器直接离线运行。
-- 1976年PWM控制器IC的引入极大简化了开关电源设计，而Apple II仍使用分立元件振荡器，这在技术路线上是死胡同。
-- Apple II使用的简单离线反激变换器拓扑在Boschert等公司已有类似产品，现代计算机电源基于PWM控制器IC，与Rod Holt的设计没有继承关系。
+- 乔布斯声称Apple II的开关电源具有革命性且所有现代计算机都在抄袭Rod Holt的设计，但这一说法与大量历史事实不符。
+- 开关电源的基本原理在1930年代已知，1950年代已有实际应用，1960年代NASA和航空航天业因其体积小、效率高的优势成为主要推动力。
+- 到1977年Apple II发布之前，IBM、DEC、HP、Data General、Texas Instruments等多家计算机公司已在各自产品中广泛使用开关电源。
+- 电源制造商RO Associates在1967年推出首个20KHz开关电源产品，Boschert Inc在1974年开始批量生产低成本开关电源，充分说明开关电源已实现商业化。
+- 开关电源的真正革命来自半导体技术进步：高压高速功率晶体管的低成本化使离线设计成为可能，1976年PWM控制器集成电路的引入标志着开关电源时代的到来。
+- Holt为Apple II设计的离线反激变换器拓扑并非创新，类似设计已被Boschert等公司商业化，且其使用分立元件的方案随后被集成IC方案取代。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Apple II
+  canonical_name: Apple II
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Apple II个人计算机于1977年发布，其紧凑的无风扇开关电源由Rod Holt设计，提供5V、12V、-5V和-12V共38W功率输出，采用离线反激变换器拓扑结构。
+  article_id: bccffa9f8d33823e
+- object_type: product
+  name: Boschert OL-80 switching power supply
+  canonical_name: Boschert switching power supply
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Boschert Inc在1976年推出了低成本80W开关电源产品，与Holt为Apple II设计的电源类似，早于Apple II的发布。
+  article_id: bccffa9f8d33823e
 ---
 
 *Steve Jobs*contains a remarkable claim about the power supply of the Apple II and its designer Rod Holt:[1]

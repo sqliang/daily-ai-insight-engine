@@ -14,8 +14,8 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: a4f0972ba7d7cade
 source_type: community_discussion
-tldr: 书中列举了乌鸦和渡鸦等多种鸦科鸟类的创新觅食行为，展示了其惊人的问题解决能力和工具使用智慧。
-objective_summary: 路易斯·勒菲弗在《鸟的智商》一书中，通过记录乌鸦、渡鸦等鸦科动物使用工具、合作捕食、开启水龙头、在红绿灯处取食等创新行为，揭示了鸦科鸟类具有复杂的认知灵活性和逐步升级的问题解决能力。
+tldr: 文章摘录自Louis Lefebvre所著《A Bird's IQ》，记录了鸦科鸟类（乌鸦、渡鸦、喜鹊等）在觅食中展现的多种创新行为，包括工具使用、合作捕猎、递进式问题解决等，揭示了鸦科动物具有较高认知能力。
+objective_summary: 动物认知研究者Louis Lefebvre在其著作《A Bird's IQ》中按创新记录排出了鸦科鸟类智力顺序，欧亚腐肉乌鸦位居榜首。书中详细描述了多项野外观察案例：美国乌鸦从矿井中捕获蝙蝠、两只乌鸦合作从水獭处偷鱼、乌鸦用木片制作工具捕捉蜘蛛；普通渡鸦利用枪声和狼嚎定位食物来源，在科罗拉多州故意引导生物学家前往雁巢以趁机捕食幼雁；扇尾渡鸦在肯尼亚偷走乒乓球后依次尝试用喙啄、滚石碾压、小石敲击的递进式问题解决；印度家鸦能等红绿灯时偷取谷物、用树叶作工具捕捉蚂蚁。
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
@@ -24,24 +24,33 @@ entities:
   technologies: []
   key_people:
   - Louis Lefebvre
-  - Pablo Strauss
-  - Crow White
+  - Staffan Andersson
   - Fred Harrington
   - Paul Frame
   - Merle Richmond
   - Richard Engeman
-  - Staffan Andersson
   - Salim Ali
+  - Crow White
 key_logic_flow:
-- 记录创新行为最多的鸦科鸟类依次为 Eurasian carrion crow、common raven、Eurasian magpie、house crow 和
-  American crow。
-- 乌鸦展示了多种复杂觅食策略：潜入矿井抓蝙蝠、与同伴合作分散水獭注意力偷鱼、利用城市建筑让小鸟撞窗后捕食。
-- 渡鸦能感知人类活动信号（枪声、狼嚎），有案例显示渡鸦故意引导生物学家到鹅巢，趁鹅受惊飞走时偷走幼鹅。
-- 肯尼亚一只 fan-tailed raven 误将乒乓球当作蛋，先后尝试用喙啄、滚大石砸、用小石头敲击等逐步升级的解决方法。
-- 动物工具使用分两类：proto-tool use（利用环境，如将猎物摔在石头上）和 true tool use（操控独立物体），鸦科鸟类能掌握更复杂的 true
-  tool use。
-- 马来西亚 house crow 学会在红绿灯处等待运粮卡车，停车时啄破粮袋取食，绿灯亮时飞离，展现了环境观察与时机把握能力。
+- 根据创新记录数量，鸦科鸟类中智力排名从高到低依次为：欧亚腐肉乌鸦、普通渡鸦、欧亚喜鹊、家鸦、美国乌鸦。
+- 美国乌鸦展示了多个令人惊叹的创新行为，包括从废弃矿井中捕获蝙蝠、两只乌鸦合作从水獭处偷鱼、用木片制作探针工具捕捉蜘蛛等。
+- 普通渡鸦被观察到利用人类的枪声和狼嚎声定位食物来源，在科罗拉多州还出现了渡鸦故意引导生物学家前往雁巢以趁机捕食幼雁的案例。
+- 肯尼亚一只扇尾渡鸦偷走乒乓球后依次尝试用喙啄、用大石碾压、用小石敲击的递进式问题解决方法，展示了鸦科动物在面对非自然物体时的认知升级能力。
+- 动物工具使用分为原工具使用（利用环境特征）和真正的工具使用（操控物体），前者所需脑容量小于后者，而鸦科动物能够进行更复杂的真正工具使用。
+- 印度家鸦表现出多种复杂行为：在红灯时偷取卡车上的谷物、用树叶作工具捕捉蚂蚁、将老鼠淹死并反复确认是否死亡、饮用具有药用价值的植物汁液等进行自我治疗。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: A Bird's IQ
+  canonical_name: A Bird's IQ
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 动物认知研究者Louis Lefebvre在其著作《A Bird's IQ》中按创新记录数量对鸦科鸟类进行了智力排名。
+  - 该书由Greystone Books于2026年5月出版，本文摘录自其中关于鸦科鸟类创新觅食策略的章节。
+  - 作者Lefebvre通过对全球各地鸦科鸟类观察案例的汇编，展示了这些鸟类在工具使用和问题解决方面的认知能力。
+  article_id: a4f0972ba7d7cade
 ---
 
 [Editor’s note: Not only is it a bit rude to call someone a “featherbrain,” it’s also highly inaccurate, Louis Lefebvre writes in ‘*A Bird’s IQ*,’ translated from the original French by Pablo Strauss and out now from Greystone Books. In fact, when humans study birds, there’s a lot we can learn about ourselves. In this excerpt, Lefebvre shares a litany of innovative, sometimes bloody-minded, corvid meal acquisition tactics.]

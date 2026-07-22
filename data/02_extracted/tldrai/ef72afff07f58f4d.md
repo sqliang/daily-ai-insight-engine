@@ -13,9 +13,11 @@ id: ef72afff07f58f4d
 manifest_dates:
 - '2026-07-01'
 source_type: news_media
-tldr: Cognition 发布 Devin Fusion，双智能体并行架构实现 35% 成本降低
-objective_summary: Cognition 在其博客中宣布推出 Devin Fusion，一种多模型路由架构。该架构并行运行前沿模型主智能体与低成本"副手"模型，主智能体负责关键决策并动态委派任务。在
-  FrontierCode 编码基准上保持前沿性能的同时降低 35% 成本，与 Fable 5 搭配时成本降低 41%。
+tldr: Cognition 发布 Devin Fusion 多模型路由架构，采用主模型与辅助模型并行的"sidekick"方案，在 FrontierCode 编码基准上实现前沿级性能的同时将成本降低
+  35%。
+objective_summary: Cognition 于 2026 年 7 月发布 Devin Fusion，这是一种多模型智能体协作架构。其核心是让一个前沿模型作为主智能体负责规划与关键决策，一个成本更低的辅助智能体并行处理常规任务，两者各自维护独立的持久化缓存上下文。在
+  Cognition 自建的前沿编码基准 FrontierCode 上，该系统以比纯前沿模型方案低 35% 的成本保持了同等水平的性能。Fable 5 在该架构下表现尤为突出，成本降幅达
+  41%。该系统已在 app.devin.ai/signup 开放预览。
 event_type: framework_tools
 epistemic_status: pr_statement
 entities:
@@ -25,17 +27,50 @@ entities:
   - Devin Fusion
   - FrontierCode
   - Fable 5
-  - Opus
+  - Smart Friend
   - GPT-5.5
+  - Opus
   key_people: []
 key_logic_flow:
-- Devin Fusion 的核心架构是并行运行两个智能体：一个使用前沿模型（主智能体），另一个使用低成本"副手"模型，两者各自拥有独立工具集和缓存的上下文。
-- 主智能体负责制定计划、解读模糊性、最终审查等关键决策，默认情况下应最小化自身操作，将任务委托给副手并监控执行。
-- 该架构解决了传统模型路由的三个问题：保留真实前沿智能而非仅优化基准分数、可泛化到单提示任务之外的复杂场景、通过保持各自独立缓存避免切换模型时的高成本缓存未命中。
-- 在 FrontierCode 编码基准测试中，Devin Fusion 保持前沿和 Fable 5 级性能的同时降低了 35% 成本。
-- 使用轻量级分类器在任务执行过程中动态判断何时需要切换回主智能体或改用不同模型，实现动态会话中路由。
-- Fable 5 在该多智能体设置中表现尤为出色，比纯 Fable 5 方案便宜 41%，表明副手模式将随基础模型进步而变得更有效。
+- Cognition 发布 Devin Fusion 多模型路由系统，采用主模型与辅助模型并行运行的双智能体架构。
+- 主智能体使用前沿模型，负责规划、模糊信息解读和最终审查；辅助智能体使用低成本模型，处理常规编程任务。
+- 在自建的前沿编码基准 FrontierCode 上，Devin Fusion 以比纯前沿模型方案低 35% 的成本保持了同等性能水平。
+- 与"Smart Friend"或"Advisor"等工具方案不同，辅助模型维护自己的持久化缓存上下文，避免了模型切换时的缓存未命中成本。
+- Fable 5 在该架构下表现尤为出色，成本降幅达 41%，且智能性几乎不受影响。
+- 系统在任务执行过程中使用轻量级分类器动态判断是否需要切换主模型或更换模型类型，以应对任务复杂度变化。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Devin Fusion
+  canonical_name: Devin Fusion
+  url: https://app.devin.ai/signup
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Cognition 发布 Devin Fusion 多模型路由系统，采用主模型与辅助模型并行的双智能体架构。
+  - 在 FrontierCode 基准上以 35% 更低的成本保持了前沿模型级别的编码性能。
+  - Devin Fusion 已在 app.devin.ai/signup 开放预览。
+  article_id: ef72afff07f58f4d
+- object_type: dataset
+  name: FrontierCode
+  canonical_name: FrontierCode
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Cognition 使用新基准 FrontierCode 衡量代码正确性与质量。
+  - Devin Fusion 在 FrontierCode 上以 35% 更低的成本保持了前沿模型级别性能。
+  article_id: ef72afff07f58f4d
+- object_type: model
+  name: Fable 5
+  canonical_name: Fable 5
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Fable 5 在多智能体架构中表现出色，能更智能地分配任务、更高效地请求上下文。
+  - Fusion 搭配 Fable 5 比纯 Fable 5 方案成本降低 41%，智能性几乎不受影响。
+  article_id: ef72afff07f58f4d
 ---
 
 Engineering teams are lighting money on fire.

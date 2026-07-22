@@ -13,8 +13,9 @@ tags:
 - clippings
 id: 2b3da5eccbbf89bd
 source_type: news_media
-tldr: Anthropic推出面向律所的Claude法律插件和MCP连接器，扩展法律AI服务
-objective_summary: 2026年5月12日，Anthropic宣布为律所发布一系列新聊天机器人功能，扩展Claude for Legal产品线，新增面向商业、隐私、公司法等领域的法律插件和MCP连接器，集成Docusign、Box、Westlaw等工具，向所有付费Claude用户开放。
+tldr: Anthropic宣布推出面向律所的Claude for Legal新功能套件，包含专用插件和MCP连接器，可实现文档检索、文件起草等任务自动化。该市场竞争激烈，Harvey估值110亿美元，Legora完成6亿美元D轮融资。
+objective_summary: 2026年5月12日，Anthropic宣布扩展Claude for Legal功能，推出面向商业、隐私、公司、雇佣、产品及AI治理等多个法律领域的专用插件和MCP连接器。新工具可与Docusign、Box、Thomson
+  Reuters等律所常用系统集成，实现文档搜索审查、判例法检索、取证准备和文件起草等任务自动化。该功能面向所有付费Claude用户开放。与此同时，AI法律市场竞品Harvey以110亿美元估值融资2亿美元，Legora完成6亿美元D轮融资。
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
@@ -25,18 +26,50 @@ entities:
   - Docusign
   - Box
   - Thomson Reuters
+  - Westlaw
   technologies:
   - MCP
   - Claude
   key_people: []
 key_logic_flow:
-- Anthropic于2026年5月12日宣布推出新的法律聊天机器人功能，扩展今年早些时候推出的Claude for Legal插件。
-- 新功能包括面向商业、隐私、公司法、劳动法、产品法和AI治理等领域的法律插件以及MCP连接器。
-- MCP连接器可将Claude集成到律所常用的第三方工具中，包括Docusign、Box和Thomson Reuters旗下的Westlaw。
-- 新插件和连接器向所有付费Claude客户开放，建筑在此前2月发布的法律行业插件基础之上。
-- 法律AI领域竞争激烈：Harvey以110亿美元估值融资2亿美元，Legora完成6亿美元D轮融资。
-- 报道同时指出AI在法律行业应用存在风险，包括律师使用AI生成错误文件、加州开出首例相关罚单等问题。
-extract_result: partial
+- Anthropic于2026年5月12日宣布扩展Claude for Legal功能，推出面向商业、隐私、公司、雇佣、产品及AI治理等领域的专用插件和MCP连接器。
+- 新功能包括文档搜索审查、判例法检索、取证准备和文件起草等自动化工具，面向所有付费Claude用户开放。
+- MCP连接器可将Claude与Docusign、Box、Thomson Reuters等律所常用软件系统直接集成。
+- AI法律服务市场竞争激烈，Harvey于2026年3月以110亿美元估值完成2亿美元融资。
+- Legora近期完成6亿美元D轮融资，并推出由Jude Law代言的高调广告活动。
+- AI在法律领域的误用已造成实际问题，多名律师和律所因使用AI生成错误百出的法律文件被处罚。
+extract_result: success
+object_mentions:
+- object_type: product
+  name: Claude for Legal
+  canonical_name: Claude for Legal
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Anthropic于2026年5月12日宣布推出面向律所的新版Claude for Legal功能套件，包含针对多个法律领域的专用插件和MCP连接器。
+  - 该功能套件可与Docusign、Box、Thomson Reuters等律所常用系统集成，实现文档搜索审查和文件起草等任务自动化。
+  - 新插件和MCP连接器面向所有付费Claude用户开放，并建立在2月推出的首批法律插件基础之上。
+  article_id: 2b3da5eccbbf89bd
+- object_type: product
+  name: Harvey
+  canonical_name: Harvey
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - AI法律初创公司Harvey于2026年3月以110亿美元估值完成2亿美元融资，使用代理型AI自动化法律工作流程。
+  article_id: 2b3da5eccbbf89bd
+- object_type: product
+  name: Legora
+  canonical_name: Legora
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Legora近期完成6亿美元D轮融资，并推出由Jude Law代言的高调广告活动，提供与Harvey类似的自动化法律解决方案。
+  article_id: 2b3da5eccbbf89bd
+pipeline_stage: fact_extracted
 ---
 
 Anthropic announced Tuesday that it is launching a host of new chatbot features designed to provide automated assistance to law firms. The new features expand Claude for Legal — the law-focused plug-in that launched earlier this year — offering users a new set of legal plug-ins and MCP connectors designed for specific areas of law.

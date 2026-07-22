@@ -135,11 +135,15 @@ tags:
 extraction_status: success
 id: d58d3aa12effc0a2
 source_type: community_discussion
-tldr: HKUDS发布ViMax多智能体视频生成框架，实现从创意到成片的端到端自动化视频制作
-objective_summary: 香港大学数据科学实验室（HKUDS）在GitHub开源发布ViMax多智能体视频框架。该框架接收用户创意或脚本输入，自动完成脚本生成、分镜设计、角色创建和视频生成，支持Google
-  Gemini和MiniMax等多种模型后端，提供idea2video和script2video两种工作模式。
+tldr: HKUDS 团队发布 ViMax v1.2.0，一个开源的智能体视频生成框架，将导演、编剧、制片人和视频生成器整合为一体化工作流。用户只需输入创意概念，ViMax
+  即可自动完成脚本撰写、分镜设计、角色创建和最终视频生成，支持 Google AI Studio 和 MiniMax 等多种模型后端。
+objective_summary: 香港大学数据科学实验室（HKUDS）于 2026 年 7 月 20 日发布 ViMax v1.2.0（Web Workspace），这是一个基于智能体的多镜头视频生成框架。ViMax
+  采用多智能体编排架构，自动处理长脚本生成（基于 RAG 的场景分割）、表现性分镜设计、多机位拍摄模拟、参考图像智能选择、图像生成一致性检查以及高效并行镜头生成。该框架支持
+  Idea2Video 和 Script2Video 两种工作流，并新增 Web UI 实现项目管理和代理对话。用户需自行配置聊天模型、图像生成器和视频生成器的
+  API 密钥（支持 Google Gemini、MiniMax 等）。项目在 GitHub 获 11.2k Stars 和 1.7k Forks，采用 MIT
+  许可证。
 event_type: framework_tools
-epistemic_status: pr_statement
+epistemic_status: verified_fact
 entities:
   companies:
   - HKUDS
@@ -147,24 +151,63 @@ entities:
   - MiniMax
   - OpenRouter
   technologies:
-  - ViMax
   - RAG
   - MLLM
   - VLM
-  - Gemini-2.5-Flash-Lite
-  - MiniMax-M2.7
+  - Gemini
   - Veo
-  - Nanobanana
   key_people: []
 key_logic_flow:
-- ViMax是一个多智能体视频生成框架，通过中央编排调度实现从创意输入到最终视频输出的全自动化流程
-- 框架包含脚本理解、场景与镜头规划、视觉资产规划、资产索引、一致性校验、视觉合成与组装六大核心模块
-- 采用RAG引擎处理长篇故事类输入，自动分段为多场景脚本并保留关键情节与角色对话
-- 通过MLLM/VLM自动生成多张候选图像并选出最佳一致帧，模拟人类创作者的筛选工作流
-- 支持同一机位的连续镜头并行处理，以提高长视频制作效率
-- 提供idea2video和script2video两种输入模式，通过OpenAI兼容API接入Google Gemini、MiniMax等多种模型
+- ViMax 是一个多智能体视频框架，将导演、编剧、制片人和视频生成器整合为一体化系统，用户只需输入概念即可全自动完成视频创作。
+- 框架采用中央编排层调度多个智能体，涵盖脚本理解、场景与镜头规划、视觉资产规划、资产索引、一致性与连续性检查、视觉合成与组装等完整管线。
+- ViMax 支持两种主要工作流：Idea2Video（从创意想法生成视频）和 Script2Video（基于剧本或分场脚本生成视频），以及新增的 Agent Loop
+  + TUI 交互式工作流。
+- 技术能力包括基于 RAG 的长脚本生成、通过镜头语言创建表现性分镜、多机位拍摄模拟、智能选择参考图像确保多角色和环境一致性，以及利用 MLLM/VLM 进行图像生成一致性校验。
+- v1.2.0 版本新增 Web UI 界面，支持命名项目管理、代理对话、工件与分镜预览、渲染检查点、文件上传、提供商设置和暗色模式。
+- 项目已发表 arXiv 论文（2606.07649），使用 uv 管理环境，配置支持 Google Gemini API、MiniMax 等模型后端。
 pipeline_stage: fact_extracted
 extract_result: success
+object_mentions:
+- object_type: project
+  name: HKUDS/ViMax
+  canonical_name: HKUDS/ViMax
+  url: https://github.com/HKUDS/ViMax
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - ViMax 是一个多智能体视频框架，能够实现自动化多镜头视频生成，同时确保角色和场景的一致性。
+  - ViMax 将导演、编剧、制片人和视频生成器整合为一体化系统，用户只需输入概念即可自动完成脚本撰写、分镜设计和最终视频生成。
+  - 该项目在 GitHub 获 11.2k Stars 和 1.7k Forks，最新 v1.2.0 版本于 2026 年 7 月 20 日发布。
+  article_id: d58d3aa12effc0a2
+- object_type: paper
+  name: ViMax arXiv Paper
+  canonical_name: ViMax arXiv Paper
+  url: https://arxiv.org/abs/2606.07649
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 项目已发表 arXiv 论文，编号为 2606.07649，可作为学术引用参考。
+  article_id: d58d3aa12effc0a2
+- object_type: product
+  name: Google AI Studio API
+  canonical_name: Google AI Studio
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - ViMax 支持通过 Google AI Studio API 配置聊天模型、图像生成器和视频生成器。
+  - ViMax 的视频生成器工具支持 Google Veo API，图像生成器支持 Google 提供的 API。
+  article_id: d58d3aa12effc0a2
+- object_type: product
+  name: MiniMax API
+  canonical_name: MiniMax
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - ViMax 支持 MiniMax 作为备选聊天模型提供商，兼容 OpenAI 的 API 格式。
+  - MiniMax-M2.7 提供 100 万 token 上下文窗口，是 ViMax 推荐使用的聊天模型。
+  article_id: d58d3aa12effc0a2
 ---
 
 - ❌

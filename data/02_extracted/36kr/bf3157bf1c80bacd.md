@@ -56,30 +56,52 @@ tags:
 - clippings
 id: bf3157bf1c80bacd
 source_type: news_media
-tldr: 36氪发布2026 AI最佳场景渗透案例，55个案例覆盖10余行业，揭示AI从工具升级为决策中枢的三大趋势。
-objective_summary: 36氪于2026年1月启动AI场景渗透案例征集，历时3个月调研评审，发布55个覆盖智能制造、医疗等10余领域的入围案例。麦肯锡报告显示83%中国企业常态化使用生成式AI，45%实现规模化部署。评选同时发布灯塔者与破壁者两类特别致敬人物。
+tldr: 36氪发布"2026 AI最佳场景渗透案例"评选结果，55个入围案例覆盖智能制造、医疗健康等10多个领域。评选发现AI正从辅助工具升级为决策中枢，具身智能从数字世界走向物理产业，垂直领域深度应用成为竞争壁垒。同时发布"特别致敬人物"名单致敬AI落地早期的探路者。
+objective_summary: 2026年7月，36氪经过3个月公开征集、案例调研与多维评审，发布了"2026 AI最佳场景渗透案例"评选结果，涵盖55个入围案例和多位"灯塔者"与"破壁者"致敬人物。评选发现三大趋势：AI角色从辅助工具升级为自主决策中枢；具身智能从虚拟算法进化为物理世界生产力；垂直领域深度应用构建了行业Know-How竞争壁垒。同期调研显示，企业AI落地痛点主要集中在效果验证与数据治理方面。
 event_type: application_landing
-epistemic_status: verified_fact
+epistemic_status: pr_statement
 entities:
   companies:
   - 36氪
-  - 麦肯锡
+  - McKinsey
   technologies:
   - 生成式AI
-  - 具身智能
   - 智能体(Agent)
   - 强化学习
-  - AMR（自主移动机器人）
+  - 具身智能
+  - AMR
   - 端侧AI
+  - 大模型
   key_people: []
 key_logic_flow:
-- 麦肯锡《2025 AI应用现状调研》数据显示，83%的中国企业已在至少一个职能中常态化使用生成式AI，45%实现规模化或全面部署，均领先全球平均水平。
-- 36氪经过3个月公开征集与多维评审，发布覆盖智能制造、医疗健康、金融保险等10余领域的55个"2026 AI最佳场景渗透案例"。
-- 趋势一：AI角色从"辅助工具"升级为"决策中枢"，在供应链优化、动态定价、药物研发等场景中基于实时数据自主预测、权衡与执行。
-- 趋势二：AI形态从"数字副脑"进化为"产业工人"，具身智能在制造车间、农业养殖、物流仓库等物理场景完成感知-决策-执行闭环。
-- 趋势三：AI路径从"通用能力"转向"行业深潜"，垂直领域模型通过行业专有数据与专家经验构建可解释性与竞争壁垒。
-- 36氪同步发布"灯塔者"与"破壁者"两类特别致敬人物，表彰在AI落地早期投入资源验证可行性的产业领袖与技术领军者。
-extract_result: partial
+- 36氪发布了"2026 AI最佳场景渗透案例"评选结果，共55个入围案例覆盖智能制造、医疗健康、金融保险、零售电商等10多个行业领域。
+- 第一趋势为角色升维：AI正在从处理确定性任务的辅助工具转向能够自主进行预测、权衡和方案执行的决策中枢。
+- 第二趋势为形态进化：具身智能在高端制造、农业养殖、物流仓库和变电站等物理场景中实现了感知-决策-执行闭环。
+- 第三趋势为路径深化：利用行业专有数据训练的垂直模型在准确性、合规性与可解释性上远超通用方案，构建了竞争护城河。
+- 36氪同步发布了"特别致敬人物"名单，分为指明方向的"灯塔者"和扎根场景攻坚的"破壁者"两类人物。
+- 产业调研显示当前企业AI落地的核心痛点集中在效果验证、数据治理等关键环节。
+extract_result: success
+object_mentions:
+- object_type: product
+  name: 智能涌现
+  canonical_name: 智能涌现
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 2023年，36氪推出"智能涌现"公众号，聚焦AI新时代下涌现的产业革命。
+  article_id: bf3157bf1c80bacd
+- object_type: product
+  name: AI Partner
+  canonical_name: AI Partner
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 2024年36氪正式推出首届AI Partner大会，旨在寻找AI创新应用标杆案例。
+  - 2026年1月，36氪再度启动AI Partner系列案例征集，明确聚焦"场景渗透"主题。
+  article_id: bf3157bf1c80bacd
+pipeline_stage: fact_extracted
 ---
 
 **如果用一个词来描述当下的AI产业，“落地”已有些过时，“渗透”则更为准确。**

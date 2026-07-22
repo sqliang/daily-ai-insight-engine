@@ -137,25 +137,29 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: da414ddeaa6e6c3f
 source_type: community_discussion
-tldr: Turso 发布用 Rust 重写的 SQLite 兼容数据库，内置 MCP 服务器模式
-objective_summary: Turso 团队正式发布 Turso Database（Beta 阶段），这是一款用 Rust 编写的进程内 SQL 数据库，兼容
-  SQLite 的文件格式、SQL 方言和 C API。该数据库支持 MVCC 提升写入吞吐、CDC 实时变更捕获、io_uring 异步
-event_type: infrastructure_update
+tldr: Turso Database 是一个用 Rust 重写的 SQLite 兼容数据库，处于 Beta 阶段，支持 MVCC、CDC、向量搜索和异步 I/O。其
+  CLI 内置 MCP 服务器，可为 AI 助手提供九种数据库交互工具，并支持 Rust、JavaScript、Python、Go、.NET 和 Java 等多种语言绑定。
+objective_summary: Turso 团队在 GitHub 上发布了 tursodatabase/turso 项目，这是一个用 Rust 从零重写的 SQLite
+  兼容数据库引擎。该数据库支持多版本并发控制（MVCC）提升写入吞吐量、变更数据捕获（CDC）、向量搜索与操作、异步 I/O（io_uring）、以及扩展的 ALTER
+  TABLE 等特性。项目提供跨平台支持（Linux、macOS、Windows 和浏览器 WebAssembly），并为 Rust、JavaScript、Python、Go、.NET
+  和 Java 提供了官方 SDK 绑定。Turso CLI 工具内置 MCP 服务器模式，可让 AI 助手直接通过自然语言查询和修改数据库。该项目源于 libSQL
+  的演进，目前处于 Beta 阶段，团队建议在生产数据中保持谨慎并做好备份。
+event_type: framework_tools
 epistemic_status: verified_fact
 entities:
   companies:
   - Turso
+  - Spice.ai
   technologies:
   - SQLite
-  - Rust
   - MVCC
   - CDC
-  - MCP
-  - io_uring
   - WebAssembly
+  - MCP
   - DBSP
   - tantivy
   - libSQL
+  - io_uring
   key_people:
   - Pekka Enberg
   - Sasu Tarkoma
@@ -166,17 +170,48 @@ entities:
   - Harrison Goldstein
   - Leonidas Lampropoulos
 key_logic_flow:
-- Turso Database 是一款用 Rust 编写的进程内 SQL 数据库，兼容 SQLite 的 SQL 方言、文件格式和 C API，目前处于 Beta
-  阶段。
-- 核心功能包括：MVCC（多版本并发控制）提升写入性能、CDC（变更数据捕获）实现实时数据库变更追踪、io_uring 异步 I/O（Linux）、向量搜索以及跨平台支持（含浏览器
-  WebAssembly）。
-- 实验性功能包括：静态加密、基于 DBSP 的增量计算、基于 tantivy 的全文搜索、以及通过 .tshm 侧车进程实现的多进程 WAL 协调。
-- CLI 内置 MCP 服务器模式，提供 9 种数据库交互工具（打开数据库、列出表、描述表结构、执行查询、插入/更新/删除数据、模式变更），可与 Claude Code、Claude
-  Desktop、Cursor 等 AI 客户端集成。
-- 该项目替代了 libSQL 成为 Turso 的发展方向——libSQL 已生产就绪，Turso Database 尚在快速演进中，已用于 Turso Cloud、Kin
-  AI 助手和 Spice.ai 等生产环境。
-- 支持 Rust、JavaScript、Python、Go、.NET、Java 六种语言绑定，CLI 可通过 curl 一键安装或通过 Docker 运行。
+- Turso Database 是一个用 Rust 重写的 SQLite 兼容数据库引擎，目前处于 Beta 阶段，提供跨 Linux、macOS、Windows
+  和浏览器的多平台支持。
+- 该数据库支持多版本并发控制（MVCC）提升写入吞吐量、变更数据捕获（CDC）、向量搜索与操作，以及基于 io_uring 的异步 I/O。
+- 项目提供加密、增量计算（DBSP）、全文搜索（tantivy）等实验性功能，并将向量索引列为未来路线图。
+- Turso 拥有 Rust、JavaScript、Python、Go、.NET 和 Java 六种语言的官方 SDK 绑定，方便不同技术栈的开发者集成。
+- Turso CLI 内置 MCP 服务器模式，提供九种数据库交互工具，可集成到 Claude Code、Claude Desktop 和 Cursor 等 AI
+  客户端中。
+- 该项目由 libSQL 演进而来，团队选择 Rust 重写方案替代了原先的 libSQL 分支方案，Turso Cloud 等生产应用已在运行中。
 extract_result: success
+object_mentions:
+- object_type: project
+  name: tursodatabase/turso
+  canonical_name: tursodatabase/turso
+  url: https://github.com/tursodatabase/turso
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Turso Database 是一个用 Rust 编写的 SQLite 兼容数据库，支持多版本并发控制（MVCC）以提高写入吞吐量。
+  - 该项目处于 Beta 阶段，提供跨平台支持和 Rust、JavaScript、Python、Go、.NET、Java 等多语言绑定。
+  - 项目由 libSQL 演进而来，团队以 Rust 重写方案替代了原先的 libSQL 分支方案。
+  article_id: da414ddeaa6e6c3f
+- object_type: project
+  name: libSQL
+  canonical_name: libSQL
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - libSQL 项目也试图向类似方向演进 SQLite，但采用 fork 分支方式而非 Rust 重写。
+  - Turso Database 最初是作为一个实验开始的，现已替代 libSQL 成为团队的预期发展方向。
+  article_id: da414ddeaa6e6c3f
+- object_type: product
+  name: Turso MCP Server
+  canonical_name: Turso MCP Server
+  url: null
+  confidence: high
+  article_role: ecosystem_context
+  evidence_snippets:
+  - Turso CLI 内置 MCP 服务器模式，可为 AI 助手提供九种数据库交互工具，包括查询、插入、更新和删除操作。
+  - 该 MCP 服务器支持与 Claude Code、Claude Desktop 和 Cursor 等 AI 工具集成。
+  - 用户可以通过自然语言向 AI 助手询问数据库内容，例如查询表结构或查找特定数据。
+  article_id: da414ddeaa6e6c3f
 ---
 
 An in-process SQL database, compatible with SQLite.

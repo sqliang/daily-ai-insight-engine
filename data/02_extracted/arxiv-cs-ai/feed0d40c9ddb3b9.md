@@ -35,9 +35,12 @@ id: feed0d40c9ddb3b9
 manifest_dates:
 - '2026-07-08'
 source_type: academic_paper
-tldr: FirstResearch 提出可审计的研究问题证书框架，让 LLM 科学发现 Agent 的问题生成过程透明可核查。
-objective_summary: 该论文提出 FirstResearch 框架，通过结构化"研究问题证书"记录定义、假设、机制、矛盾、可证伪假设等要素，使 LLM
-  生成的科研问题可审计。在 10 个研究主题上，该框架以 4.86/5 分优于基线方法（最高 4.38），但结果基于 LLM 评判而非人类专家评审。
+tldr: FirstResearch 是一个面向科学发现 LLM 代理的研究问题形成框架，通过结构化"研究问题证书"记录原始定义、假设、机制模型和可证伪假设，使问题在下游执行前可被审计。在十个主题上的实验显示其得分（4.86/5）优于
+  AI co-scientist 等基线方法。
+objective_summary: 研究人员提出了 FirstResearch，一个基于一阶原理的科学问题生成框架，专为 LLM 驱动的科学发现代理设计。该框架的核心产出是"研究问题证书"，包含原始定义、假设、机制模型、张力矛盾、可证伪假设、最小决定性测试和失败更新规则七项结构化内容。在十个
+  LLM 代理研究主题上，FirstResearch 在 DeepSeek 盲评审协议下优于 AI co-scientist、Agent Laboratory 和
+  AI Scientist-v2 等基线方法，Gemini-2.5-Flash 独立重评也确认了该排名（4.86/5 vs 最强基线 4.38/5，Pearson
+  一致性 0.865）。消融实验显示证书机制是最强组件，去除证书后得分降至 1/5 以下。结果尚属初步且使用 LLM 评审而非人类专家。
 event_type: framework_tools
 epistemic_status: theoretical_claim
 entities:
@@ -46,16 +49,21 @@ entities:
   - Google
   technologies:
   - LLM
-  - Research Question Certificate
+  - FirstResearch
+  - AI co-scientist
+  - Agent Laboratory
+  - AI Scientist-v2
+  - Gemini-2.5-Flash
   key_people: []
 key_logic_flow:
-- LLM 科学发现系统在提出研究问题时缺乏可审计性，问题看似合理但无法暴露其机制、可证伪条件和假设。
-- FirstResearch 框架的核心是结构化的研究问题证书，包含原始定义、假设、机制模型、矛盾/张力、可证伪假设、最小决定性测试和失败更新规则七要素。
-- 在 10 个 LLM Agent 研究主题上，FirstResearch 在 DeepSeek 盲评协议下优于 AI co-scientist、Agent Laboratory
+- FirstResearch 是一个面向科学发现 LLM 代理的一阶研究问题形成框架，其核心产出是结构化的"研究问题证书"。
+- 该证书记录了原始定义、假设、机制模型、张力或矛盾、可证伪假设、最小决定性测试和失败更新规则七项内容，使提出的问题在下游执行前可被科学家检查。
+- 在十个 LLM 代理研究主题上，FirstResearch 在 DeepSeek 盲评审协议下优于 AI co-scientist、Agent Laboratory
   和 AI Scientist-v2 等基线方法。
-- Gemini-2.5-Flash 独立重评保留了相同排名，FirstResearch 得分 4.86/5，最强基线 4.38/5，Pearson 一致性 0.865。
-- 消融实验表明证书核心是最强组件：仅证书方案达 4.90/5，移除证书后评分降至 1/5 以下。
-- 研究结果具有初步性，使用 LLM 评判而非人类领域专家，但表明显式推导约束是提升 LLM 科研问题可审计性的有效机制。
+- Gemini-2.5-Flash 独立评审对相同 40 个基线包的重新评分保持了系统级排名，FirstResearch 得分为 4.86/5，最强基线得分为 4.38/5，Pearson
+  一致性达 0.865。
+- 消融实验表明仅使用证书核心即可达到 4.90/5（DeepSeek）和 4.88/5（Gemini），而去除证书后得分降至 1/5 以下。
+- 这些结果尚属初步阶段且使用 LLM 评审而非人类领域专家，但表明显式推导约束是让 LLM 生成科学问题更具可审计性的有前景机制。
 specialized_tags:
   paper:
     paperTitle: 'FirstResearch: Auditable Question Formation for LLM Scientific Discovery
@@ -68,6 +76,30 @@ specialized_tags:
     researchArea: Other
     methodType: LLM-based
 extract_result: success
+object_mentions:
+- object_type: paper
+  name: 'FirstResearch: Auditable Question Formation for LLM Scientific Discovery
+    Agents'
+  canonical_name: FirstResearch
+  url: https://arxiv.org/abs/2607.05682
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - FirstResearch 是一个面向科学发现 LLM 代理的一阶研究问题形成框架，其核心产出是结构化的研究问题证书。
+  - 在十个 LLM 代理研究主题上，FirstResearch 在 DeepSeek 盲评审协议下优于 AI co-scientist、Agent Laboratory
+    和 AI Scientist-v2 等基线方法。
+  - 消融实验表明仅使用证书核心即可达到 4.90/5（DeepSeek）和 4.88/5（Gemini），而去除证书后得分降至 1/5 以下。
+  article_id: feed0d40c9ddb3b9
+- object_type: project
+  name: Research Question Certificate
+  canonical_name: Research Question Certificate
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 研究问题证书记录了原始定义、假设、机制模型、张力或矛盾、可证伪假设、最小决定性测试和失败更新规则七项内容。
+  - 消融实验表明证书机制是 FirstResearch 的最强组件，仅使用证书即可保持最高评分。
+  article_id: feed0d40c9ddb3b9
 ---
 
 # Computer Science > Artificial Intelligence

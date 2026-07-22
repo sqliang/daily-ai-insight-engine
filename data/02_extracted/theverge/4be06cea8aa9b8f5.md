@@ -15,8 +15,8 @@ tags:
 extraction_status: success
 id: 4be06cea8aa9b8f5
 source_type: news_media
-tldr: Meta与肯塔基州一学区就青少年心理健康损害达成和解，YouTube、Snap和TikTok也已类似和解，仍有约1200个学区案件待审。
-objective_summary: 2026年5月，Meta与肯塔基州Breathitt县学区就社交媒体对青少年心理健康损害的索赔达成庭外和解，和解条款未披露。Google旗下的YouTube、Snap和TikTok此前也以类似方式解决了该学区的同类索赔。该案原定于6月作为联邦多区诉讼的首个风向标审判，
+tldr: Meta与肯塔基州Breathitt县学区就社交媒体影响青少年心理健康诉讼达成和解，和解条款未披露。YouTube、Snap和TikTok也各自与同一学区达成了类似和解，但仍有数千起类似案件待审。
+objective_summary: 2026年，Meta（Facebook/Instagram母公司）与肯塔基州Breathitt县学区就社交媒体对青少年心理健康影响的索赔案达成和解，Google旗下的YouTube、Snap和TikTok也同期与同一学区达成了类似和解。该案原定于2026年6月开庭，是联邦多地区诉讼（MDL）中的首个示范案件，旨在为剩余案件的和解谈判提供参考。和解条款未对外公开，但原告律师表示将继续为剩余约1200个学区案件寻求正义。下一个联邦MDL示范案件定于2027年1月开庭，加州州立法院的下一个案件预计于2026年7月开庭。
 event_type: policy_and_safety
 epistemic_status: verified_fact
 entities:
@@ -26,25 +26,35 @@ entities:
   - YouTube
   - Snap
   - TikTok
-  - Breathitt County School District
   technologies: []
   key_people:
-  - Andy Stone
-  - José Castañeda
-  - Monique Bellamy
   - Lexi Hazam
   - Previn Warren
   - Chris Seeger
   - Ronald Johnson
+  - Andy Stone
+  - José Castañeda
+  - Monique Bellamy
 key_logic_flow:
-- Meta在连续两场关于青少年心理健康影响的审判中败诉后，选择与肯塔基州Breathitt县学区达成和解，避免原定6月开庭的联邦风向标审判
-- YouTube、Snap和TikTok此前也以类似方式与同一学区达成和解，各公司发言人表示和解为'友好解决'
-- 该学区起诉这些平台的核心诉求是要求科技公司支付因社交媒体引发的青少年心理健康问题所导致的应对成本
-- 此案本应是联邦多区诉讼中的首个风向标审判，旨在通过抽样陪审团审判为其余大量案件的全局和解提供参考
-- 和解后仍有约1200个学区已提起诉讼尚待审理，洛杉矶州法院的下一个类案预计7月开庭，下一场联邦风向标审判排在2026年1月
-- Meta发言人强调公司将持续推进Teen Accounts等青少年保护功能，YouTube和Snap也表示将继续完善年龄适配产品和家长控制工具
+- Meta与肯塔基州Breathitt县学区就社交媒体影响青少年心理健康的诉讼达成庭外和解，和解金额未对外公开。
+- Google旗下的YouTube、Snap以及TikTok也各自与同一学区达成了类似和解，各方均表示和解是友好达成的。
+- 该案原定于2026年6月开庭，是联邦多地区诉讼（MDL）中的首个示范案件，其审判结果本应为剩余同类案件的和解谈判提供参考。
+- 原告律师表示将继续为剩余约1200个尚未和解的学区案件追求正义，这些案件均指控社交媒体平台对青少年心理健康造成危害。
+- Meta发言人Andy Stone表示公司将继续推进Teen Accounts等青少年保护功能，YouTube和Snap也发表了类似声明，强调将建设适龄产品和家长控制工具。
+- 下一个联邦MDL示范案件定于2027年1月开庭，加州州立法院的下一个社交媒体成瘾相关案件预计于2026年7月开庭。
 pipeline_stage: fact_extracted
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Teen Accounts
+  canonical_name: Meta Teen Accounts
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Meta发言人Andy Stone在声明中表示公司将继续推进Teen Accounts等保护措施，帮助青少年在社交平台上保持安全，同时为家长提供简单的控制工具来支持家庭。
+  - YouTube发言人José Castañeda也表示公司专注于建设适龄产品和家长控制功能来履行对青少年安全的承诺。
+  article_id: 4be06cea8aa9b8f5
 ---
 
 After back-to-back losses in trials grappling with its impact on teens’ mental health, Meta just settled what was supposed to be its next legal battle with Kentucky’s Breathitt County School District. Google’s YouTube, Snap, and TikTok all recently settled similar claims brought by the school district, which was seeking payment from the companies to cover the cost of combatting social media-related mental health harms.

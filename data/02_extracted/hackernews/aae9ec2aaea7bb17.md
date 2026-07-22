@@ -16,24 +16,39 @@ id: aae9ec2aaea7bb17
 manifest_dates:
 - '2026-07-01'
 source_type: community_discussion
-tldr: arXiv 将于2026年7月1日从康奈尔大学剥离，转为独立非营利组织。
-objective_summary: 2026年7月1日，预印本平台 arXiv 正式从康奈尔大学独立，成为独立非营利组织。转型后 arXiv 继续保持免费提交和免费阅读政策，用户短期内不会感知到变化。
+tldr: arXiv 于 2026 年 7 月 1 日从康奈尔大学剥离，成为独立的非营利组织。剥离后 arXiv 将保持免费阅读和提交的承诺，使命、愿景和价值观不变，社区用户几乎不会感受到服务变化。
+objective_summary: 2026 年 7 月 1 日，预印本平台 arXiv 正式从康奈尔大学剥离，成为一家独立的非营利组织。arXiv 在康奈尔大学托管了
+  25 年，此次剥离经过长期讨论和筹备，目的是获得更大的运营灵活性和发展机会。剥离后 arXiv 将继续保持免费阅读和免费提交的核心政策，组织使命、愿景和价值观不发生改变。arXiv
+  推出了专门的 FAQ 页面解答有关领导层、治理和特殊项目的问题，并计划在未来几周发布系列博客文章，涵盖新的工程总监及开发团队项目、300 万篇提交里程碑以及 AI
+  文章相关政策的更新。
 event_type: infrastructure_update
 epistemic_status: verified_fact
 entities:
   companies:
-  - Cornell University
   - arXiv
+  - Cornell University
   technologies: []
   key_people: []
 key_logic_flow:
-- arXiv 将于2026年7月1日正式从康奈尔大学剥离，成为独立非营利组织。
-- arXiv 长期讨论独立运营的可能性，此次剥离旨在获得更大的灵活性和新的发展机会。
-- 剥离后 arXiv 的核心使命、愿景和价值观不变，将继续提供免费提交和免费阅读服务。
-- 工作人员已为平稳过渡付出大量努力，用户短期内不会感受到明显服务变化。
-- arXiv 设立了公开的 FAQ 页面，向社区透明通报领导层、治理结构和特别项目等信息。
-- arXiv 计划后续发布系列博客，涵盖新任工程总监、300万篇提交里程碑及 AI 文章政策变更等内容。
+- arXiv 于 2026 年 7 月 1 日正式从康奈尔大学剥离，成为一家独立的非营利组织。
+- arXiv 已在康奈尔大学托管了 25 年，剥离的目的是获得新的灵活性和发展机会。
+- 剥离后 arXiv 的核心政策保持不变：对读者和投稿者均免费开放。
+- arXiv 承诺在过渡期间保持服务不中断，社区用户几乎不会感知到变化。
+- arXiv 创建了专门的 FAQ 页面，介绍新组织的领导层、治理结构和特殊项目。
+- arXiv 计划在未来几周发布系列博客，内容包括新的工程总监及开发团队、300 万篇提交里程碑以及 AI 文章政策更新。
 extract_result: success
+object_mentions:
+- object_type: project
+  name: arXiv
+  canonical_name: arXiv
+  url: https://arxiv.org
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - arXiv 于 2026 年 7 月 1 日从康奈尔大学剥离，成为独立的非营利组织，结束了在康奈尔大学 25 年的托管历史。
+  - 剥离后 arXiv 将继续保持免费阅读和免费提交的核心政策，使命、愿景和价值观不发生改变。
+  - arXiv 创建了 FAQ 页面介绍新组织的领导层、治理和特殊项目，并计划发布系列博客更新组织动态。
+  article_id: aae9ec2aaea7bb17
 ---
 
 **On July 1, 2026, arXiv will spin out from Cornell University, its home for the past 25 years, to become an independent nonprofit organization.** With this next phase in arXiv’s journey quickly approaching, you can read more about arXiv’s history and the decision to spin out from Cornell in this recent article in the Cornell Chronicle.

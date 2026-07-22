@@ -35,28 +35,33 @@ id: 19c7cd5c4fe4af3c
 manifest_dates:
 - '2026-07-07'
 source_type: academic_paper
-tldr: ASK+ 方法通过轨迹感知提示和思维链推理，让小语言模型在部分可观测环境下有效辅助强化学习智能体
-objective_summary: 研究提出 ASK+ 方法，在部分可观测马尔可夫决策过程中使用预测熵门控选择性查询小语言模型，通过轨迹感知上下文和结构化思维链推理替代原始自我中心提示，实验显示
-  DoorKey 成功率从 89% 提升至 93%，FourRooms 从 53% 提升至 70%。
+tldr: 该论文提出 ASK+ 方法，通过为小语言模型提供轨迹感知上下文（部分地图、位置和动作历史）和结构化思维链推理，解决了在部分可观测环境下 SLM 几乎从不主动干预策略的问题。在
+  DoorKey 任务上，ASK+ 成功率从 89% 提升至 93%；在 FourRooms 上从 53% 提升至 70%。
+objective_summary: 该研究针对部分可观测环境下的强化学习问题，提出了一种基于不确定性门控的小语言模型辅助方法 ASK+。研究人员发现，原始的 ASK
+  方法因缺少上下文而导致小语言模型几乎从不主动改写策略。ASK+ 通过提供轨迹感知上下文（部分地图、已访问位置和动作历史）并引入结构化思维链推理，将小语言模型从被动的冗余检查转变为信息丰富的咨询者。实验表明，ASK+
+  在 DoorKey 任务上达到 93% 的成功率，在 FourRooms 上达到 70%，在 HigherLower 上达到 73.7%。研究还确认，预测熵信号在部分可观测马尔可夫决策过程中仍然有效，且
+  Qwen3.5-2B 的表现匹配或超过 Qwen3.5-4B，证明提示工程和选择性门控比模型规模的影响更大。
 event_type: framework_tools
 epistemic_status: theoretical_claim
 entities:
-  companies: []
+  companies:
+  - Alibaba
   technologies:
   - SLM
   - PPO
   - POMDP
+  - LLM
   - RL
-  - chain-of-thought
   - ASK+
-  - uncertainty-gating
+  - Chain-of-Thought
   key_people: []
 key_logic_flow:
-- 在部分可观测环境下，RL 智能体基于不完整信息行动，自然适合引入小语言模型（SLM）的宽泛推理先验进行辅助
-- 标准 uncertainty-gated 方法因使用裸自我中心提示，SLM 几乎从不贡献独立动作（覆盖写入率接近为零），被确认为上下文问题而非能力问题
-- ASK+ 方法为 SLM 提供轨迹感知上下文（部分地图、已访问位置、动作历史）和结构化思维链推理，将其从被动冗余检查转为信息顾问
-- 实验证明预测熵信号衡量的是动作不确定性而非状态不确定性，在 POMDP 中仍然有效
-- Qwen3.5-2B 匹配或超越 Qwen3.5-4B，验证提示设计和选择性门控的贡献远大于模型规模扩展
+- 在部分可观测环境下，强化学习代理必须基于不完整信息行动，自然适合从小语言模型获取引导。
+- 原始的 ASK 方法因使用过于简化的自我中心提示，未能提供足够上下文，导致小语言模型在所有测试环境中几乎从不主动改写策略。
+- 研究人员将此失败归因为上下文问题而非模型能力问题，并提出了 ASK+ 方法。
+- ASK+ 向小语言模型提供轨迹感知上下文（部分地图、已访问位置和动作历史）和结构化思维链推理，使其能有效纠正策略。
+- 实验证明，预测熵信号在部分可观测马尔可夫决策过程中仍然有效，不确定性门控辅助不仅在完全可观测环境下可行。
+- Qwen3.5-2B 在所有环境中匹配或超过 Qwen3.5-4B 的表现，说明提示设计和选择性门控对效果的影响超过模型规模。
 specialized_tags:
   paper:
     paperTitle: 'ASK in the Dark: Uncertainty-Gated LLM Assistance under Partial Observability'
@@ -68,6 +73,36 @@ specialized_tags:
     researchArea: RL
     methodType: RL-based
 extract_result: success
+object_mentions:
+- object_type: paper
+  name: 'ASK in the Dark: Uncertainty-Gated LLM Assistance under Partial Observability'
+  canonical_name: 'ASK in the Dark: Uncertainty-Gated LLM Assistance under Partial
+    Observability'
+  url: https://arxiv.org/abs/2607.02686
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 该论文提出 ASK+ 方法，通过提供轨迹感知上下文和结构化思维链推理，将小语言模型从被动冗余检查转变为信息丰富的咨询者。
+  - 实验结果表明 ASK+ 在 DoorKey 上达到 93% 成功率，在 FourRooms 上达到 70%，在 HigherLower 上达到 73.7%。
+  article_id: 19c7cd5c4fe4af3c
+- object_type: model
+  name: Qwen3.5-2B
+  canonical_name: Qwen3.5-2B
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Qwen3.5-2B 在所有测试环境中匹配或超过 Qwen3.5-4B 的表现，证明提示设计和选择性门控比模型规模的影响更大。
+  article_id: 19c7cd5c4fe4af3c
+- object_type: model
+  name: Qwen3.5-4B
+  canonical_name: Qwen3.5-4B
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Qwen3.5-4B 作为对比基准模型，被用于验证模型规模对 ASK+ 方法效果的影响。
+  article_id: 19c7cd5c4fe4af3c
 ---
 
 # Computer Science > Artificial Intelligence

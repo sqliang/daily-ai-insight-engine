@@ -28,24 +28,26 @@ id: 26f0d76bfefb7a6a
 manifest_dates:
 - '2026-07-07'
 source_type: academic_paper
-tldr: APeB 是评估LLM代理个性化能力的基准测试框架
-objective_summary: 研究人员提出了 APeB（Agent Personalized Benchmark），基于个性化产品搜索场景，用于评估大语言模型代理在用户原始不明确查询下的个性化能力。实验发现主流LLM处理明确查询表现良好，但在需要意图和偏好发现的早期查询阶段表现不佳，主要原因是未能有效利用历史交互信息。
+tldr: APeB 是从行动日志构建的基准测试，用于评估大语言模型代理在原始不完整查询下的个性化能力。研究发现现有模型在处理需要意图发现和偏好推断的查询时表现不佳，主要原因是未能有效利用用户历史信息。
+objective_summary: 研究人员针对大语言模型代理在原始不完整查询下的个性化能力不足问题，引入个性化产品搜索（PPS）作为测试平台，并从行动日志中构建了
+  Agent Personalized Benchmark（APeB）。该基准将不完整意图与丰富历史记录及候选物品配对，评估了多步代理工作流下的多个前沿大语言模型。结果发现模型在显式查询上表现良好，但在早期查询中因历史信息利用不充分而效果不佳；提出的
+  VQRA 查询优化管线取得了一致性性能提升。
 event_type: framework_tools
-epistemic_status: theoretical_claim
+epistemic_status: verified_fact
 entities:
   companies: []
   technologies:
   - LLM
-  - APeB
+  - PPS
   - VQRA
   key_people: []
 key_logic_flow:
-- 现有基准测试很少评估LLM代理在用户原始不明确查询下的个性化能力，通常依赖用户精炼后的查询或简化历史
-- APeB基准基于个性化产品搜索构建，包含不明确意图、丰富交互历史和候选项目数据，用于测试代理的意图推断和偏好提取能力
-- 评估发现主流LLM在处理明确查询时表现良好，但在需推断潜在意图和发现偏好的早期阶段查询上表现不佳
-- Rubric归因分析表明模型表现差距主要源于未能有效利用用户交互历史信息
-- 提出的VQRA（历史感知查询精炼管线）通过显式利用历史信息，在个性化任务上获得了一致性的性能提升
-- 该研究揭示了专用历史利用模块对个性化代理系统的必要性
+- 现有基准测试很少评估大语言模型代理在原始不完整查询下的个性化能力，代理需要推断隐式意图、从噪声交互历史中提取偏好并在竞争选项中做出选择。
+- 研究引入个性化产品搜索（PPS）作为测试平台，并从行动日志构建了 Agent Personalized Benchmark（APeB），将不完整意图与丰富历史记录及用户已浏览的候选物品配对。
+- 评估发现当前模型在处理显式查询时表现良好，但在需要意图发现和偏好推断的早期阶段查询中表现不佳。
+- 评分分析将性能差距主要归因于代理对历史信息的低效利用，而非推理能力不足。
+- 论文提出的历史感知查询优化管线 VQRA 通过简单的查询精炼方法在实验中取得了一致性的性能提升。
+- 研究结果表明个性化代理需要设计专用的历史信息利用模块来提升其在原始查询场景下的表现。
 specialized_tags:
   paper:
     paperTitle: 'APeB: Benchmarking Personalization Ability of Large Language Model
@@ -58,6 +60,36 @@ specialized_tags:
     researchArea: NLP
     methodType: benchmark
 extract_result: success
+object_mentions:
+- object_type: project
+  name: APeB
+  canonical_name: Agent Personalized Benchmark
+  url: https://arxiv.org/abs/2607.03162
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 论文从行动日志中构建了 Agent Personalized Benchmark（APeB），用于评估大语言模型代理在原始查询条件下的个性化能力。
+  - APeB 将不完整意图与丰富历史记录及用户已浏览候选物品配对，填补了现有基准在代理个性化评估方面的空白。
+  article_id: 26f0d76bfefb7a6a
+- object_type: project
+  name: PPS
+  canonical_name: Personalized Product Search
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - 研究引入了个性化产品搜索（Personalized Product Search, PPS）作为测试平台，用于在原始查询和多样化历史记录下测试代理的个性化能力。
+  article_id: 26f0d76bfefb7a6a
+- object_type: project
+  name: VQRA
+  canonical_name: VQRA
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 论文提出的历史感知查询优化管线 VQRA 通过简单的查询精炼方法在实验中取得了一致性的性能提升。
+  - VQRA 的效果表明个性化代理需要设计专用的历史信息利用模块来提升其在原始查询场景下的表现。
+  article_id: 26f0d76bfefb7a6a
 ---
 
 # Computer Science > Artificial Intelligence

@@ -17,22 +17,36 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 3b80cbc55fdbbf5c
 source_type: academic_paper
-tldr: 提出最差维度优化方法，解决多模态推理中过程奖励模型因均衡加权而掩盖单维度失败的问题。
-objective_summary: 该论文指出当前多模态推理的过程奖励模型（Process Reward Models）使用启发式定义的奖励函数对各维度等权加权，导致主导因素掩盖个别维度失败，无法保证推理过程的有效性。
+tldr: 一篇 arXiv 论文指出，当前多模态推理中的流程奖励模型因平等加权视觉定位与逻辑一致性等多维约束，导致主导因素掩盖了单个维度的失败。论文提出最差维度优化方法以解决该问题。
+objective_summary: 该论文发表于 arXiv（编号 2606.07801），分析了当前多模态推理中 Process Reward Models 的局限性。论文指出，这些模型使用启发式定义的奖励函数平等加权不同维度的约束，使得视觉定位或逻辑一致性等单个维度的失败可能被其他主导因素掩盖。为此，论文提出
+  Worst Dimension Optimization 方法，旨在保障推理过程在各维度上的完整性。
 event_type: framework_tools
 epistemic_status: theoretical_claim
 entities:
   companies: []
   technologies:
   - Process Reward Models
+  - Worst Dimension Optimization
   - Multimodal Reasoning
   key_people: []
 key_logic_flow:
-- 多模态推理需要在从视觉锚定到逻辑一致性等多个约束维度上保持路径完整性。
-- 当前的过程奖励模型采用启发式定义的奖励函数，对各维度因素进行等权加权。
-- 等权加权方式会导致主导因素掩盖个别维度的失败，无法保证推理过程整体有效性。
-- 该论文提出最差维度优化方法，旨在解决上述过程奖励模型的结构性缺陷。
+- 多模态推理需要在从视觉定位到逻辑一致性的广泛约束中保持路径完整性。
+- 当前流程奖励模型依赖启发式定义的奖励函数，平等地加权所有维度的约束。
+- 这种平等加权方式可能导致主导因素掩盖单个维度（如视觉定位或逻辑一致性）的失败。
+- 论文提出最差维度优化方法，旨在确保推理过程在各维度上的整体有效性。
 extract_result: success
+object_mentions:
+- object_type: paper
+  name: Improving Multimodal Reasoning via Worst Dimension Optimization
+  canonical_name: Improving Multimodal Reasoning via Worst Dimension Optimization
+  url: https://arxiv.org/abs/2606.07801
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 论文分析了当前 Process Reward Models 在平等加权多维约束时导致主导因素掩盖单维度失败的问题。
+  - 论文提出 Worst Dimension Optimization 方法，旨在保障多模态推理在视觉定位与逻辑一致性等各维度上的完整性。
+  - 该论文发表于 arXiv，编号为 2606.07801，属于计算机科学与人工智能领域。
+  article_id: 3b80cbc55fdbbf5c
 ---
 
 # Computer Science > Artificial Intelligence

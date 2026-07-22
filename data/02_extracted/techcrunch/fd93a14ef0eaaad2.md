@@ -14,9 +14,10 @@ id: fd93a14ef0eaaad2
 manifest_dates:
 - '2026-07-01'
 source_type: news_media
-tldr: Riverside 推出 AI 新闻通讯功能，可将录音自动转为新闻信
-objective_summary: Riverside 在 2026 年 6 月为其录制工具推出 AI 新闻通讯功能，用户可将现有播客和视频录音自动转为新闻信并从应用内直接发送。同时推出了多摄像头录制、远程嘉宾、AI
-  剪辑、社交内容生成和 AI 视频增强等更新。该公司累计融资超 6000 万美元。
+tldr: 视频与播客录制工具 Riverside 推出内置新闻通讯功能，利用 AI 将已有的音视频内容自动转化为新闻通讯稿件，用户无需从空白页开始创作。
+objective_summary: Riverside 于 2026 年 6 月 30 日宣布在其录制套件中新增新闻通讯发布功能。该功能通过 AI 将用户已有的视频和播客内容自动转化为新闻通讯稿件，用户也可从零创建。同时
+  Riverside 还推出了多机位录制、远程嘉宾支持、AI 初剪草稿、社交媒体钩子生成和 AI 视频增强等新特性。Riverside 已累计融资超过 6000
+  万美元，其联合创始人兼 CEO Nadav Keyson 表示该功能旨在帮助创作者减少重复劳动。
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
@@ -28,19 +29,58 @@ entities:
   - Ghost
   - Mastodon
   - TechCrunch
-  technologies:
-  - AI
+  technologies: []
   key_people:
   - Nadav Keyson
 key_logic_flow:
-- Riverside 为其视频和播客录制工具新增新闻通讯功能，用户可通过 AI 将现有录音自动转为新闻信并从应用内直接发送。
-- Riverside 联合创始人兼 CEO Nadav Keyson 表示，该功能旨在帮助用户利用已有的口语内容生成新闻信，而非直接与 Mailchimp、Substack、Beehiiv
-  等平台竞争。
-- Riverside 还更新了录制套件，支持多摄像头录制和添加远程嘉宾。
-- 新 AI 功能包括录音完成后自动生成剪辑初稿、为社交媒体平台创建钩子和内容，以及基于对话视频播客训练的 AI 视频增强功能（改善光线、深度和清晰度）。
-- Riverside 累计融资超过 6000 万美元。与此同时，Substack 于 3 月推出内置录音工作室，Beehiiv 于 4 月涉足播客，Mastodon
-  于 6 月宣布允许用户将帖子发布为新闻信。
+- Riverside 在其视频和播客录制工具中新增了新闻通讯发布功能。
+- 该功能利用 AI 将用户已有的录制内容自动转化为新闻通讯稿件，无需从零开始写作。
+- 用户也可以不使用 AI 转换功能，直接创建和发送新闻通讯。
+- Riverside 还同步推出了多机位录制、远程嘉宾支持、AI 初剪草稿、社交媒体钩子生成和 AI 视频增强等新功能。
+- Riverside 联合创始人兼 CEO Nadav Keyson 表示，该功能帮助创作者利用已产出的口语内容，而非在独立工具中重复劳动。
+- Substack、Beehiiv 和 Mastodon 等平台此前也已进入对方领地，行业正在出现跨功能融合趋势。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Riverside
+  canonical_name: Riverside
+  url: https://riverside.fm
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Riverside 是一家视频和播客录制工具制造商，现为用户提供将录制内容转化为新闻通讯的 AI 工具。
+  - Riverside 已累计融资超过 6000 万美元，其联合创始人兼 CEO 为 Nadav Keyson。
+  - Riverside 同时更新了录制套件，支持多机位录制和远程嘉宾添加。
+  article_id: fd93a14ef0eaaad2
+- object_type: product
+  name: Substack
+  canonical_name: Substack
+  url: https://substack.com
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Substack 于 2026 年 3 月推出了内置录制工作室，与 Riverside 形成直接竞争。
+  - Riverside 表示其并非要直接挑战 Substack、Beehiiv 等现有新闻通讯平台。
+  article_id: fd93a14ef0eaaad2
+- object_type: product
+  name: Beehiiv
+  canonical_name: Beehiiv
+  url: https://beehiiv.com
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 新闻通讯平台 Beehiiv 于 2026 年 4 月进军播客领域，与 Riverside 形成功能交叉竞争。
+  - Riverside 表示其并非要直接挑战 Substack、Beehiiv 或 Ghost 等现有平台。
+  article_id: fd93a14ef0eaaad2
+- object_type: product
+  name: Mastodon
+  canonical_name: Mastodon
+  url: https://joinmastodon.org
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 社交网络 Mastodon 于 2026 年 6 月宣布允许用户将帖子作为新闻通讯发布。
+  article_id: fd93a14ef0eaaad2
 ---
 
 Video and podcast recording tool maker Riverside is giving its users a new way to reach their audiences: newsletters.

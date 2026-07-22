@@ -14,33 +14,51 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: e344bcc2fda636ef
 source_type: community_discussion
-tldr: C# 15/.NET 11 预览版正式引入 union 关键字，支持可穷尽模式匹配的联合类型。
-objective_summary: 2026年，.NET 11 预览版 4 中 C# 15 引入了 union 关键字，允许开发者声明可表示多种不相关类型的联合类型。编译器生成实现
-  IUnion 接口的 struct，通过 [Union] 属性驱动隐式转换和 switch 表达式穷尽检查。
+tldr: C# 15（.NET 11 Preview 4）通过 union 关键字正式引入内置的判别联合类型支持，编译器自动生成带有 [Union] 属性的 struct
+  并实现 IUnion 接口，配合 switch 表达式可实现穷举模式匹配，无需提供默认分支。
+objective_summary: 2026年7月，.NET 11 Preview 4 为 C# 15 带来了内置的判别联合类型（可区分联合）支持。开发者使用 union
+  关键字声明联合类型，编译器自动生成带有 [Union] 特性的 struct，将各子类型实例以 object? 形式存储并通过 IUnion 接口暴露。该特性配合
+  switch 表达式可实现穷举模式匹配，编译器会自动检查所有分支是否已覆盖，未覆盖时发出警告。虽然需要 .NET 11 SDK 并启用预览语言版本，但联合类型可作为纯粹的编译器功能面向旧版本
+  .NET 运行时运行。默认生成的联合类型会对值类型参数进行装箱操作，开发者可通过自定义实现来避免这一性能开销。
 event_type: framework_tools
 epistemic_status: verified_fact
 entities:
   companies:
   - Microsoft
   technologies:
-  - C# 15
   - .NET 11
-  - union types
+  - C# 15
+  - union
   - IUnion
-  - UnionAttribute
-  - OneOf
-  - Sasa
-  key_people:
-  - Andrew Lock
+  - switch 表达式
+  key_people: []
 key_logic_flow:
-- 联合类型允许一个类型表示多种可能不相关的数据类型，常见例子包括 Option<T> 和 Result<TSuccess, TError>。
-- C# 15 通过 union 关键字声明联合类型，语法为 `public union TypeName(CaseType1, CaseType2, ...)`。
-- 编译器将 union 声明生成为一个实现 IUnion 接口的 struct，包含 object? Value 属性和每个 case 类型的构造函数，并标注 [Union]
-  属性。
-- '[Union] 属性驱动隐式转换（从 case 类型到 union 类型）和 switch 表达式的穷尽性检查，遗漏 case 会触发 CS8509 警告。'
-- 默认实现将值类型参数装箱为 object 存储在 Value 属性中，在值类型较多的场景下会产生不必要的堆分配。
-- 开发者可通过手动实现 IUnion 接口并添加 [Union] 属性来创建自定义联合类型，以此避免装箱开销并复用编译器的模式匹配支持。
+- C# 15 通过 union 关键字支持判别联合类型，可将多个不相关的 record 或 class 类型组合为一个联合类型。
+- 编译器为 union 声明生成带有 [Union] 属性的 struct，内部包含一个只读的 object? Value 属性并实现 IUnion 接口。
+- 联合类型支持隐式转换：将子类型实例赋值给联合类型变量时，编译器自动包装为对应的构造函数调用。
+- 配合 switch 表达式可实现穷举模式匹配，编译器检查所有分支覆盖情况，遗漏时发出警告 CS8509。
+- 使用联合类型需要安装 .NET 11 Preview 2+ SDK 并在 .csproj 中设置 LangVersion 为 preview。
+- 默认生成的联合类型会对值类型参数进行装箱（heap 分配），开发者可以通过自定义实现加上 [Union] 属性来避免此开销。
 extract_result: success
+object_mentions:
+- object_type: project
+  name: OneOf
+  canonical_name: OneOf
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 文章提到 OneOf 是社区中已有的自定义联合类型实现库之一，可以通过添加 [Union] 属性和实现 IUnion 接口来利用新的语言支持。
+  article_id: e344bcc2fda636ef
+- object_type: project
+  name: Sasa
+  canonical_name: Sasa
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 文章提到 Sasa 是作者之前使用过的另一个自定义联合类型实现库，同样可以受益于内置的联合类型语言支持。
+  article_id: e344bcc2fda636ef
 ---
 
 Unions are one of those features that have been requested for years, and in .NET 11 (or rather, C# 15) they're *finally* here. In this post I describe what that support looks like, how you can use them, how they're implemented, and how you can implement your own custom types.

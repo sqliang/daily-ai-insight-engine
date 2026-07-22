@@ -13,8 +13,11 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: ef8a2deee4e7a86d
 source_type: community_discussion
-tldr: 为公用事业公司构建HTML优先网站，用户量一夜翻倍
-objective_summary: 作者为一家公用事业公司用Astro框架构建了HTML优先的表单网站，替代了此前失败的React实现。采用渐进增强策略，每个表单步骤独立提交到后端，并构建了不到1KB的HTML验证Web组件。上线后用户完成量翻倍，分析工具无法追踪新增用户来源。
+tldr: 作者为一家公用事业公司使用 Astro 构建了 HTML-first 的多步骤表单网站，上线后次日完成表单的用户数翻倍。该站点无需 JavaScript
+  即可运行，并通过后端会话持久化确保用户数据永不丢失。
+objective_summary: 一家受监管的垄断型公用事业公司面临客户满意度低于 96% 将导致数百万英镑罚款的压力。此前两次尝试包括一次外包 React 方案均告失败，React
+  应用上线仅 3 天即因大量加载转圈和全局状态问题被撤回。作者 Moh Kohn 使用 Astro 构建了 HTML-first 的渐进增强表单应用，每个步骤作为独立页面，通过表单提交和后端重定向实现流程。上线后次日完成表单的用户数翻倍。作者还开发了
+  validation-enhancer 这个不到 1KB 的 HTML Web Component，用于渐进增强原生表单验证。
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
@@ -23,19 +26,54 @@ entities:
   - Astro
   - React
   - Web Components
-  - HTML
-  - ASP
+  - Remix
+  - HTML-first
+  - WCAG
+  - ARIA
   key_people:
   - Moh Kohn
   - Terence Eden
 key_logic_flow:
-- 一家公用事业公司面临客户满意度低于96%将面临数百万英镑罚款的压力，此前两次用React构建在线申请表均因用户投诉而失败。
-- 作者选择Astro构建HTML优先架构，JavaScript仅通过Web组件实现渐进增强，确保表单在不支持JS的环境下仍可正常使用。
-- 每个表单步骤为独立页面，用户点击下一步时提交数据到后端验证，验证通过后重定向到下一步，杜绝前端LocalStorage存储的5MB限制问题。
-- 作者构建了不到1KB的validation-enhancer HTML Web组件，利用浏览器原生HTML验证API提供现代化UI，失败时优雅降级到浏览器内置验证或后端验证。
-- 上线后表单完成用户量一夜翻倍，JS分析工具无法识别这些来自JS失败用户的流量来源。
-- 后端会话机制确保用户数据永不丢失，有用户在一个月后继续完成之前开始的表单提交。
+- 作者客户是一家受监管的垄断型公用事业公司，客户满意度低于 96% 将面临数百万英镑罚款。
+- 此前两次尝试（包括一次外包 React 应用）均失败，React 应用因大量加载转圈和全局 JavaScript 状态问题上线 3 天即被撤回。
+- 作者使用 Astro 构建 HTML-first 方案，每个表单步骤为独立页面，通过后端提交和重定向实现流程流转。
+- 作者构建了 validation-enhancer Web Component，体积不到 1KB，可渐进增强原生 HTML 表单验证。
+- 上线后次日完成表单的用户数翻倍，JavaScript 分析工具甚至无法追踪这些新增用户的来源。
+- 有用户在一个月前启动表单填写，一个月后才完成提交，后端会话持久化策略保证了数据不丢失。
 extract_result: success
+object_mentions:
+- object_type: project
+  name: validation-enhancer
+  canonical_name: validation-enhancer
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 作者构建了一个名为 validation-enhancer 的 HTML Web Component，包装在表单外部并利用浏览器原生验证进行渐进增强。
+  - 该组件不到 1KB，如果加载失败则回退到浏览器内置验证，后端 API 作为最终验证兜底。
+  - 作者声称这是从业 20 多年来用过最好的表单验证库，并已从零重写了一版面向通用使用的版本。
+  article_id: ef8a2deee4e7a86d
+- object_type: project
+  name: HTML-first Astro form site
+  canonical_name: HTML-first Astro utility form
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 作者使用 Astro 构建了 HTML-first 的渐进增强表单网站，无需 JavaScript 即可完成整个申请流程。
+  - 每个步骤在表单向导中是独立页面，用户点击下一步时提交数据，通过 API 验证后重定向到下一步。
+  - 上线后次日完成表单的用户数翻倍，分析团队甚至无法追踪这些新增用户的来源。
+  article_id: ef8a2deee4e7a86d
+- object_type: project
+  name: GOV.UK
+  canonical_name: GOV.UK
+  url: https://www.gov.uk
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 文章引用 Terence Eden 的见闻，描述用户在 PSP 游戏机浏览器上访问 GOV.UK 住房补助页面。
+  - GOV.UK 页面使用简单 HTML 编写，轻量级且在糟糕的浏览器上也能正常工作，被作者视为设计标杆。
+  article_id: ef8a2deee4e7a86d
 ---
 
 # How building an HTML-first site doubled our users overnight

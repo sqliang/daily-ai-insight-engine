@@ -11,33 +11,90 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 9e2cefb75fdf36b6
 source_type: news_media
-tldr: ChatGPT 市占率首次跌破 50%，Gemini 和 Claude 快速崛起
-objective_summary: Sensor Tower 报告显示 ChatGPT 月活 11 亿但仍从年初 50%+ 降至 5 月底 46.4%；Gemini
-  升至 27.7%、Claude 升至 10.3%。2026 H1 AI 应用下载预计 23 亿次、消费 42 亿美元，用户跨平台切换意愿增强，Claude 付费转化率
+tldr: 据 Sensor Tower 报告，ChatGPT 的全球市场份额首次跌破 50%，从年初超 50% 降至 5 月底的 46.4%，Gemini（27.7%）和
+  Claude（10.3%）快速追赶。2026 年上半年 AI 应用下载量预计达 23 亿次，用户支出超 42 亿美元，同比增长超 100% 但增速放缓。
+objective_summary: Sensor Tower 在 2026 年《State of AI Report》中披露，ChatGPT 全球市场份额首次跌破
+  50%，从 1 月的超 50% 降至 5 月底的 46.4%，Gemini 以 27.7% 和 Claude 以 10.3% 分列二三位。用户在不同 AI 助手间切换意愿增强，OpenAI
+  与美国国防部的合作在 2 月引发了可测量的卸载量激增。2026 年上半年 AI 应用下载量预计接近 23 亿次，用户支出超 42 亿美元，较 2025 年同期增长翻倍但增速放缓。Claude
+  以 13% 的用户付费转化率领先全行业，ChatGPT 从 2 月起测试广告业务，到 5 月已有 17% 的日均用户看到广告，并向 Target、Walmart
+  等零售商导流。
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
   companies:
+  - Sensor Tower
   - OpenAI
   - Google
   - Anthropic
   - xAI
-  - Sensor Tower
-  - Target
-  - Walmart
-  - Costco
+  - DeepSeek
+  - Meta
   - Amazon
+  - Walmart
+  - Target
+  - Costco
   technologies: []
   key_people: []
 key_logic_flow:
-- Sensor Tower 报告显示 ChatGPT 月活跃用户超 11 亿，但市占率从年初的 50% 以上降至 2026 年 5 月底的 46.4%。
-- Gemini 以 662 月活用户占 27.7% 份额，Claude 以 245 月活用户占 10.3%，其余助手（Grok、Perplexity、DeepSeek、Meta
-  AI）均低于 5%。
-- 用户跨平台切换意愿增强，OpenAI 与美国国防部合作引发显著卸载潮，表明品牌信任和价值观对齐影响用户选择。
-- 2026 年上半年 AI 应用下载量预计达 23 亿次，消费支出 42 亿美元，同比大幅增长但增速放缓，显示市场趋于成熟。
-- Claude 付费转化率 13% 领先行业；AI 应用使用时长从 2025 H1 的 17.2 亿小时增至 2026 H1 约 36 亿小时。
-- OpenAI 在 ChatGPT 中测试广告，5 月日均 17% 用户看到广告；ChatGPT 购物导流向 Target、Walmart 等零售商倾斜，亚马逊因屏蔽爬虫而流量停滞。
+- ChatGPT 全球市场份额首次跌破 50%，从 1 月的超 50% 降至 5 月底的 46.4%，Gemini 和 Claude 分别以 27.7% 和 10.3%
+  的份额紧随其后。
+- OpenAI 与美国国防部在 2 月的合作引发了可测量的 ChatGPT 卸载量激增，表明品牌信任和价值观对齐影响用户选择。
+- 2026 年上半年 AI 应用下载量预计达 23 亿次，用户支出超 42 亿美元，较 2025 年同期的 18.3 亿美元增长翻倍，但增速已放缓。
+- Claude 的付费用户转化率达到 13%，在行业中领先，成为投资者评估 AI 企业收入可持续性的关键指标。
+- ChatGPT 从 2 月开始测试广告业务，到 5 月日均用户中有 17% 看到广告，软件和购物类广告占比最大。
+- ChatGPT 向 Target、Walmart 和 Costco 等零售商导流，Amazon 因屏蔽 ChatGPT 爬虫致导流停滞，而 Walmart 自建
+  AI 助手 Spark 正在增长。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: ChatGPT
+  canonical_name: ChatGPT
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - ChatGPT 全球市场份额首次跌破 50%，从 1 月超 50% 降至 5 月底的 46.4%。
+  - ChatGPT 仍是全球最受欢迎的 AI 助手，月活用户超过 11 亿。
+  - ChatGPT 从 2 月开始测试广告业务，到 5 月已有 17% 的日均用户看到广告。
+  article_id: 9e2cefb75fdf36b6
+- object_type: product
+  name: Gemini
+  canonical_name: Google Gemini
+  url: null
+  confidence: high
+  article_role: ecosystem_context
+  evidence_snippets:
+  - Gemini 以 27.7% 的市场份额位居第二，增长主要得益于与 Google 生态系统的深度整合。
+  - Gemini 的月活跃用户达到 6.62 亿，仅次于 ChatGPT。
+  article_id: 9e2cefb75fdf36b6
+- object_type: product
+  name: Claude
+  canonical_name: Anthropic Claude
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Claude 以 10.3% 的市场份额位列第三，在生产力用例方面建立了良好口碑。
+  - Claude 的付费用户转化率达到 13%，在行业中领先，月活用户 2.45 亿。
+  article_id: 9e2cefb75fdf36b6
+- object_type: product
+  name: Rufus
+  canonical_name: Amazon Rufus
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Amazon 的 AI 购物助手 Rufus 用户增长陷入停滞，但使用 Rufus 的消费者在应用内停留时间更长且转化率更高。
+  article_id: 9e2cefb75fdf36b6
+- object_type: product
+  name: Spark
+  canonical_name: Walmart Spark
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Walmart 自建 AI 购物助手 Spark 正在获得增长，帮助用户在平台上搜索商品。
+  article_id: 9e2cefb75fdf36b6
 ---
 
 More than three and a half years after ChatGPT’s initial release, AI assistants are now used by millions of people worldwide, and the competitive landscape is changing fast. While OpenAI’s chatbot is still the most popular assistant globally, its market share has dipped below 50% for the first time as users are migrating between different assistants like Google’s Gemini, Anthropic’s Claude, and xAI’s Grok, according to analytics firm Sensor Tower’s State of AI Report for 2026.

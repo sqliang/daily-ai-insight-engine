@@ -13,19 +13,22 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 9c13a3fabc13d1bd
 source_type: news_media
-tldr: 爱尔兰无人机送货公司Manna Aero计划在俄克拉荷马州建厂，投资5000万美元进军美国市场。
-objective_summary: 爱尔兰无人机送货初创公司Manna Aero宣布在俄克拉荷马州塔尔萨建立美国运营和制造中心，预计创造约1000个就业岗位。公司4月刚完成5000万美元融资，已从爱尔兰撤回业务，将重心转向美国市场，目标与Zipline、Amazon和Wing竞争。
+tldr: 爱尔兰无人机配送公司 Manna Aero 获 5000 万美元融资后，宣布在俄克拉荷马州塔尔萨设立美国运营和制造中心，计划雇佣约 1000 人，目标与
+  Zipline、Amazon 和 Wing 竞争美国市场。
+objective_summary: 爱尔兰自主无人机配送初创公司 Manna Aero 于 2026 年 7 月 8 日宣布，将利用今年 4 月融资的 5000
+  万美元在俄克拉荷马州塔尔萨建立美国运营和制造中心，预计未来几年雇佣约 1000 人。工厂已开工建造，制造业务预计约一年后启动。公司同时评估另外六个美国城市，目标
+  2027 年底前进入这些市场。Manna 已停止在爱尔兰的配送运营，原因是缺乏可规模化扩张的规划法规，并聘请前瑞安航空 CMO Kenny Jacobs 担任执行主席兼总裁推动美国扩张。
 event_type: application_landing
-epistemic_status: verified_fact
+epistemic_status: pr_statement
 entities:
   companies:
   - Manna Aero
+  - Zipline
+  - Amazon
+  - Wing
   - DoorDash
   - Uber Eats
   - Deliveroo
-  - Amazon
-  - Zipline
-  - Wing
   - Ryanair
   - FAA
   technologies:
@@ -34,13 +37,36 @@ entities:
   - Bobby Healy
   - Kenny Jacobs
 key_logic_flow:
-- Manna Aero 获5000万美元融资后，宣布在俄克拉荷马州塔尔萨建设美国运营和制造中心，计划未来数年雇佣约1000人，工厂已开工，预计一年后投产。
-- 公司计划未来12个月内将运营团队扩至200-300人，并评估另外六个美国城市，目标2027年底前进入这些市场。
-- Manna 采用不降落的无人机配送方案，通过绳索降低包裹，与 Wing 和 Zipline 技术路线相同。
-- Manna 从爱尔兰撤回配送业务，理由是当地缺乏支持规模化发展的规划法规。
-- Manna 聘请前瑞安航空 CMO Kenny Jacobs 担任执行主席兼总裁，推动美国市场扩张。
-- CEO Bobby Healy 表示特朗普政府和 FAA 的政策为行业提供了监管助力，促使公司将全部资源投入美国。
+- Manna Aero 在 2026 年 4 月获得 5000 万美元风险投资，资金用于推动美国市场扩张。
+- 公司宣布在俄克拉荷马州塔尔萨建设美国运营和制造中心，预计未来几年创造约 1000 个就业岗位。
+- 塔尔萨工厂已开工建造，制造业务预计约一年后启动，同时运营团队将在 12 个月内扩至 200-300 人。
+- Manna 正评估另外六个美国城市，目标在 2027 年底前进入这些市场，成为与 Zipline、Amazon、Wing 竞争的主要无人机配送运营商。
+- Manna 已于上月停止在爱尔兰的无人机配送运营，原因为当地缺乏支持规模化扩张的规划法规。
+- 公司聘请前瑞安航空 CMO Kenny Jacobs 担任执行主席兼总裁，负责推动美国扩张战略。
 extract_result: success
+object_mentions:
+- object_type: company
+  name: Manna Aero
+  canonical_name: Manna Aero
+  url: https://mannaaero.com
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 爱尔兰自主无人机配送公司 Manna Aero 计划在俄克拉荷马州塔尔萨建立美国运营和制造中心，预计雇佣约 1000 人。
+  - Manna 运营不降落的自动化远程监控无人机，通过绳索降低包裹完成配送，采用混合商业模式。
+  - 公司已停止在爱尔兰的运营，将全部资本和资源投入美国市场扩张。
+  article_id: 9c13a3fabc13d1bd
+- object_type: product
+  name: Manna Drone Delivery Service
+  canonical_name: Manna Drone Delivery
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Manna 运营自动化的远程监控无人机，采用不落地配送方式，通过绳索将包裹降低到地面。
+  - 公司采用混合商业模式，既是按飞行次数收费的配送即服务平台，也与 DoorDash、Uber Eats 等聚合平台合作。
+  - Manna 还拥有面向消费者的自有应用，以及直接与企业合作的配送渠道。
+  article_id: 9c13a3fabc13d1bd
 ---
 
 Manna Aero, the Ireland-based autonomous drone delivery startup, has been a smaller player in the United States. Founder and CEO Bobby Healy told TechCrunch that’s about to change.

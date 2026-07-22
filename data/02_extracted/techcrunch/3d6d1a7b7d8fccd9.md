@@ -13,9 +13,11 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 3d6d1a7b7d8fccd9
 source_type: news_media
-tldr: Deezer 推出 Remix Lab，粉丝可在艺术家授权下混音歌曲并让艺术家获得报酬
-objective_summary: 2026年6月24日，Deezer 发布 Remix Lab 功能，允许粉丝在艺术家授权下通过应用内工具（调整节奏、添加混响、改变音乐类型和风格）创作混音作品。该功能最初仅在法国上线，面向
-  Céline Dion 等部分法国艺术家作品开放。Deezer 强调混音版本的每次播放都会向版权方支付报酬，
+tldr: Deezer 推出 "Remix Lab" 新功能，允许粉丝在获得艺术家同意的条件下对歌曲进行混音创作，且混音版的每次播放都会向艺术家支付报酬。该功能使用应用内工具而非
+  AI 技术，最初仅面向法国用户开放。
+objective_summary: Deezer 于 2026 年 6 月 24 日宣布推出名为 "Remix Lab" 的新功能，允许粉丝在获得原艺术家和版权方同意后对歌曲进行混音，且混音版本的每次播放都会向艺术家支付报酬。与
+  YouTube 和 Spotify 等使用 AI 进行混音的竞品不同，Remix Lab 采用应用内工具完成节奏调整、混响添加及音乐流派变换。Deezer CEO
+  Alexis Lanternier 表示该功能体现了尊重艺术家权利和最大化收益的理念。Remix Lab 最初仅在法国上线，覆盖塞琳·迪翁等法国艺人的作品，后续计划推广至其他国家。
 event_type: application_landing
 epistemic_status: pr_statement
 entities:
@@ -27,15 +29,47 @@ entities:
   - Apple Music
   technologies: []
   key_people:
-  - Alexis Lanternier
   - Pierre Trochu
+  - Alexis Lanternier
 key_logic_flow:
-- Deezer 推出 Remix Lab 功能，允许粉丝在获得原艺术家和版权方同意后对歌曲进行混音创作，且混音版本的每次播放都会向艺术家支付报酬。
-- Remix Lab 提供应用内混音工具（调整节奏、添加混响、改变音乐类型和风格），与 YouTube 和 Spotify 依赖 AI 进行混音的方案形成对比。
-- Deezer 长期采取抵制 AI 音乐的立场，其平台主动识别并移除 AI 生成曲目，不将其纳入编辑推荐歌单。
-- Remix Lab 最初仅在法国上线，面向 Céline Dion、Alain Souchon、Alonzo 等法国艺术家作品开放混音。
-- Deezer 同步在 Deezer Club 举办混音竞赛，获胜作品将入选官方歌单，获胜者获得 Deezer Purple Door 活动门票及艺术家周边。
+- Deezer 推出了名为 "Remix Lab" 的新功能，允许粉丝在获得艺术家和版权方同意后对歌曲进行混音创作，且混音版本的每次播放都会向艺术家支付报酬。
+- Remix Lab 提供应用内混音工具，支持调整节奏、添加混响以及改变音乐流派和风格，与依赖 AI 的竞争对手形成鲜明对比。
+- Deezer 长期对 AI 持反对立场，此前已推出一款分析播放列表以检测 AI 生成曲目的工具，并主动将 AI 歌曲排除在推荐和编辑歌单之外。
+- Remix Lab 最初仅在法国上线，支持塞琳·迪翁、Alain Souchon 等法国艺人的作品，后续计划逐步推广至其他国家。
+- Deezer 将在 Deezer Club 中举办混音比赛，获奖作品将被收录至专属播放列表，获奖者还将获得 Purple Door 活动门票和艺术家周边商品。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Remix Lab
+  canonical_name: Deezer Remix Lab
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Deezer 宣布推出名为 "Remix Lab" 的新功能，允许粉丝在获得原艺术家和版权方同意后对歌曲进行混音创作。
+  - 与使用 AI 进行混音的竞争对手不同，Remix Lab 提供应用内工具来实现节奏调整、混响添加以及音乐流派和风格的变换。
+  - Remix Lab 最初仅在法国上线，覆盖塞琳·迪翁、Alain Souchon 等法国艺人的作品，后续计划推广至其他国家。
+  article_id: 3d6d1a7b7d8fccd9
+- object_type: product
+  name: Deezer AI 检测工具
+  canonical_name: Deezer AI Track Detector
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Deezer 推出了一款新工具，可分析来自 Spotify 和 Apple Music 等流媒体服务的播放列表，以检测 AI 生成的曲目。
+  - Deezer 是少数主动将 AI 曲目从推荐中移除并将其排除在编辑歌单之外的流媒体服务平台之一。
+  article_id: 3d6d1a7b7d8fccd9
+- object_type: product
+  name: Deezer Club
+  canonical_name: Deezer Club
+  url: null
+  confidence: low
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Deezer 在 Deezer Club 中举办混音比赛，获奖者将在九月初公布。
+  - 获奖混音作品将被收录至专属 Deezer 播放列表，每位获奖者还将获得两张 Deezer Purple Door 活动门票和艺术家独家周边商品。
+  article_id: 3d6d1a7b7d8fccd9
 ---
 
 Global music streaming service Deezer announced on Wednesday the launch of its new feature, “Remix Lab,” which allows fans to creatively remix songs with the consent of the original artists and rights holders. Plus, the company says artists actually get paid for every stream of these remixed tracks.

@@ -11,27 +11,59 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 0dba0c3d7be35ac4
 source_type: tech_blog
-tldr: Anthropic 发布 Claude Design，一款基于 Claude Opus 4.7 的视觉设计协作工具，支持原型、线框图、演示文稿等创作。
-objective_summary: Anthropic 于 2026 年 6 月 1 日通过 Anthropic Labs 发布 Claude Design 研究预览版，面向
-  Pro、Max、Team 和 Enterprise 订阅用户。该产品基于 Claude Opus 4.
+tldr: Anthropic 发布 Claude Design，这是一款基于 Claude Opus 4.7 的视觉设计协作产品，支持创建原型、幻灯片、营销素材等视觉作品，已面向
+  Pro、Max、Team 和 Enterprise 订阅用户开放研究预览。
+objective_summary: 2026年7月21日，Anthropic 通过官方博客宣布推出 Anthropic Labs 的首款产品 Claude Design。该产品由
+  Claude Opus 4.7 视觉模型驱动，用户可通过自然语言描述需求，与 Claude 协作创作设计稿、原型、幻灯片和一页纸等视觉作品。Claude Design
+  支持导入团队设计系统、从代码库读取品牌规范，并提供内联评论、直接编辑和自定义滑块等精细化控制功能。该产品以研究预览形式面向 Claude Pro、Max、Team
+  和 Enterprise 订阅用户逐步开放。
 event_type: application_landing
-epistemic_status: verified_fact
+epistemic_status: pr_statement
 entities:
   companies:
   - Anthropic
   technologies:
-  - Claude Design
   - Claude Opus 4.7
   key_people: []
 key_logic_flow:
-- Anthropic 发布 Claude Design，这是一个基于 Claude Opus 4.7 模型的研究预览版产品，面向 Pro、Max、Team 和 Enterprise
-  订阅用户逐步开放。
-- Claude Design 支持设计师、产品经理、创始人和营销人员通过对话式协作创建原型、线框图、演示文稿、营销物料等视觉作品。
-- 产品在入职阶段通过读取代码库和设计文件自动构建团队设计系统，后续所有项目自动使用团队的色彩、字体和组件。
-- 用户可从文本提示、上传图片文档或指向代码库开始创作，支持 DOCX、PPTX、XLSX 等格式导入和网页元素抓取。
-- 提供行内评论、直接文字编辑和滑块调节等精细化控制手段，用户可实时调整间距、颜色和布局。
-- 输出结果可导出为 PPTX 或发送至 Canva，也可将线框稿交给 Claude Code 进行代码实现。
+- Anthropic 推出 Anthropic Labs 的首款产品 Claude Design，这是一款基于 Claude Opus 4.7 的视觉设计协作工具。
+- Claude Design 以研究预览形式向 Claude Pro、Max、Team 和 Enterprise 订阅用户逐步开放。
+- 用户可以通过自然语言描述需求，由 Claude 搭建初版，再通过对话、内联评论、直接编辑或自定义滑块进行精细化调整。
+- Claude Design 在 onboarding 阶段通过读取团队代码库和设计文件自动构建设计系统，后续项目自动使用统一的颜色、字体和组件。
+- 团队已将 Claude Design 用于交互原型、产品线框图、设计探索、提案演示、营销物料和前沿设计等多种场景。
+- 用户可以从文本提示、上传文件或代码库导入内容，最终可导出为 PPTX 或发送到 Canva。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Claude Design
+  canonical_name: Claude Design
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Anthropic 推出了 Anthropic Labs 的首款产品 Claude Design，允许用户与 Claude 协作创建设计稿、原型、幻灯片等视觉作品。
+  - Claude Design 由 Claude Opus 4.7 驱动，以研究预览形式面向 Claude Pro、Max、Team 和 Enterprise
+    订阅用户开放。
+  - Claude Design 支持导入团队设计系统，用户可通过内联评论、直接编辑和自定义滑块进行精细化调整。
+  article_id: 0dba0c3d7be35ac4
+- object_type: model
+  name: Claude Opus 4.7
+  canonical_name: Claude Opus 4.7
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Claude Design 由 Anthropic 目前最强的视觉模型 Claude Opus 4.7 驱动。
+  article_id: 0dba0c3d7be35ac4
+- object_type: product
+  name: Claude Code
+  canonical_name: Claude Code
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 产品经理可以把功能流程草图交给 Claude Code 进行实现，或者与设计师协作进一步细化。
+  article_id: 0dba0c3d7be35ac4
 ---
 
 # Introducing Claude Design by Anthropic Labs

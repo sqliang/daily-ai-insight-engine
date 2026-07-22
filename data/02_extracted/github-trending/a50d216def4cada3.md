@@ -47,9 +47,12 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: a50d216def4cada3
 source_type: community_discussion
-tldr: Cursor 发布官方插件市场仓库，收录 11 款开发工具插件
-objective_summary: Cursor 在 GitHub 上发布官方插件市场仓库 cursor/plugins，包含 11 个开发工具插件，如 Continual
-  Learning、PR Review Canvas、Orchestrate、pstack 等。每个插件在独立目录下通过 plugin.
+tldr: Cursor 官方发布 plugins 仓库，收录 11 个面向开发者的插件，涵盖持续学习、代码审查、文档渲染、CLI 设计、并行编排等场景。每个插件有独立的
+  manifest，遵循统一目录结构。
+objective_summary: Cursor 在 GitHub 上发布 cursor/plugins 仓库，提供面向开发工具、框架和 SaaS 产品的官方插件集合。该仓库包含
+  11 个插件，包括 continual-learning（增量记忆更新）、thermos（分支安全审查）、pr-review-canvas（PR 差异画布渲染）、docs-canvas（文档画布渲染）、cursor-sdk（TypeScript
+  SDK 集成）、orchestrate（并行云代理编排）等。每个插件以独立目录存放，包含 .cursor-plugin/plugin.json 清单、skills/
+  技能文件、rules/ 规则文件和 mcp.json 配置。
 event_type: framework_tools
 epistemic_status: verified_fact
 entities:
@@ -60,13 +63,126 @@ entities:
   key_people:
   - Lauren Tan
 key_logic_flow:
-- Cursor 在 GitHub 上开源了官方插件市场仓库 cursor/plugins，采用 MIT 许可证。
-- 该仓库收录 11 个插件，涵盖持续学习、代码审查、文档渲染、任务编排、CLI 设计模式等功能，全部归类为开发工具。
-- 每个插件以独立目录存放，内部包含 plugin.json 清单、skills 目录、rules 目录、mcp.json 等配置文件。
-- 根目录下通过 .cursor-plugin/marketplace.json 统一管理所有插件的注册信息。
-- 插件作者除 Cursor 官方外，还有个人开发者 Lauren Tan 贡献了 pstack 插件。
-- 仓库中的 cursor-sdk 插件支持基于 Cursor TypeScript SDK 构建应用，集成了 MCP、流式处理等能力。
+- Cursor 官方发布 plugins 仓库，集中管理面向开发者工具和 SaaS 产品的插件集合。
+- 每个插件是仓库根目录下的独立子目录，包含 .cursor-plugin/plugin.json 清单文件。
+- 仓库根目录的 .cursor-plugin/marketplace.json 列出所有插件的市场清单。
+- 插件内部结构统一：包含 skills/（技能文件）、rules/（.mdc 规则文件）、mcp.json（MCP 服务器定义）等目录。
+- 已收录 11 个插件，覆盖持续学习、团队工作流、代码审查、文档渲染、CLI 设计、SDK 集成和并行编排等领域。
+- 仓库基于 MIT 协议开源发布。
 extract_result: success
+object_mentions:
+- object_type: project
+  name: cursor/plugins
+  canonical_name: cursor/plugins
+  url: https://github.com/cursor/plugins
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Cursor 官方发布 plugins 仓库，收录面向开发工具、框架和 SaaS 产品的插件集合。
+  - 每个插件是独立目录，包含 .cursor-plugin/plugin.json 清单，仓库根目录有 .cursor-plugin/marketplace.json
+    市场清单。
+  article_id: a50d216def4cada3
+- object_type: project
+  name: continual-learning
+  canonical_name: cursor/plugins/continual-learning
+  url: https://github.com/cursor/plugins/tree/main/continual-learning
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Continual Learning 插件提供基于转录的增量记忆更新，仅使用高信号要点更新 AGENTS.md。
+  - 该插件属于 Developer Tools 类别，由 Cursor 官方维护。
+  article_id: a50d216def4cada3
+- object_type: product
+  name: cursor-team-kit
+  canonical_name: cursor/plugins/cursor-team-kit
+  url: https://github.com/cursor/plugins/tree/main/cursor-team-kit
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Cursor Team Kit 插件封装了 Cursor 开发者的内部团队工作流，支持 CI、代码审查、发布、本地自动化和验证。
+  article_id: a50d216def4cada3
+- object_type: project
+  name: thermos
+  canonical_name: cursor/plugins/thermos
+  url: https://github.com/cursor/plugins/tree/main/thermos
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Thermos 插件提供热核级别分支审查，包括深度安全/正确性审计、严格的代码质量评分、并行子代理和可选合并就绪 PR 流程。
+  article_id: a50d216def4cada3
+- object_type: project
+  name: create-plugin
+  canonical_name: cursor/plugins/create-plugin
+  url: https://github.com/cursor/plugins/tree/main/create-plugin
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Create Plugin 插件用于快速脚手架和验证新的 Cursor 插件，属于 Developer Tools 类别。
+  article_id: a50d216def4cada3
+- object_type: project
+  name: agent-compatibility
+  canonical_name: cursor/plugins/agent-compatibility
+  url: https://github.com/cursor/plugins/tree/main/agent-compatibility
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Agent Compatibility 插件提供 CLI 驱动的仓库兼容性扫描，以及用于审计启动、验证和文档的 Cursor 代理。
+  article_id: a50d216def4cada3
+- object_type: project
+  name: cli-for-agent
+  canonical_name: cursor/plugins/cli-for-agent
+  url: https://github.com/cursor/plugins/tree/main/cli-for-agent
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - CLI for Agents 插件提供让编码代理可靠运行的 CLI 设计模式，涵盖标志参数、帮助示例、管道、错误处理、幂等性和干运行。
+  article_id: a50d216def4cada3
+- object_type: project
+  name: pr-review-canvas
+  canonical_name: cursor/plugins/pr-review-canvas
+  url: https://github.com/cursor/plugins/tree/main/pr-review-canvas
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - PR Review Canvas 将 PR 差异渲染为交互式 Cursor Canvas，按重要性分组变更、分离样板代码与核心逻辑并突出显示异常代码。
+  article_id: a50d216def4cada3
+- object_type: project
+  name: docs-canvas
+  canonical_name: cursor/plugins/docs-canvas
+  url: https://github.com/cursor/plugins/tree/main/docs-canvas
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Docs Canvas 将架构文档、API 参考、操作手册和代码库导览渲染为可导航的 Cursor Canvas，支持章节、目录、图表和交叉引用。
+  article_id: a50d216def4cada3
+- object_type: project
+  name: cursor-sdk
+  canonical_name: cursor/plugins/cursor-sdk
+  url: https://github.com/cursor/plugins/tree/main/cursor-sdk
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Cursor SDK 插件基于 @cursor/sdk TypeScript SDK 构建应用、脚本、CI 流水线和自动化，覆盖运行时选择、认证、流式处理、MCP
+    和错误处理。
+  article_id: a50d216def4cada3
+- object_type: project
+  name: orchestrate
+  canonical_name: cursor/plugins/orchestrate
+  url: https://github.com/cursor/plugins/tree/main/orchestrate
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Orchestrate 插件将大型任务分发到并行的 Cursor 云代理，支持规划器、工作节点、验证器和结构化交接机制。
+  article_id: a50d216def4cada3
+- object_type: project
+  name: pstack
+  canonical_name: cursor/plugins/pstack
+  url: https://github.com/cursor/plugins/tree/main/pstack
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - pstack 插件由 Lauren Tan 开发，帮助编写更少但质量更高的代码，提供可安全并行化的严谨代理工作流。
+  article_id: a50d216def4cada3
 ---
 
 Official Cursor plugins for popular developer tools, frameworks, and SaaS products. Each plugin is a standalone directory at the repository root with its own `.cursor-plugin/plugin.json`

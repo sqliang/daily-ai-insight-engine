@@ -28,15 +28,14 @@ id: b2dff2e6ca6095bb
 manifest_dates:
 - '2026-07-02'
 source_type: news_media
-tldr: 北航机器人所孵化企业航墨科技完成近亿元天使轮融资，专注智能变刚度关节与外骨骼机器人
-objective_summary: 2026年7月，北航机器人所孵化的航墨科技宣布完成近亿元天使轮融资，由中投万方、三贤科技、北航天汇、诚美资本、三合投资、常州金控等共同投资。公司核心产品为自研智能变刚度关节模组FlexmoJoint及全球首款视觉感知全地形AI外骨骼IRMO
-  M1，资金将用于产品研发与市场推广。
+tldr: 航墨科技完成近亿元天使轮融资，其核心产品为自研的智能变刚度关节模组FlexmoJoint和全球首款视觉感知全地形自适应AI外骨骼IRMO M1。
+objective_summary: 航墨科技（2022年成立，源自北京航空航天大学机器人所）于近期完成由中投万方、三贤科技、北航天汇、诚美资本、三合投资、常州金控等机构投资的近亿元天使轮融资，德太资本担任长期战略融资顾问。公司创始人代万辉为北航机器人所硕士、清华大学MBA，CTO栾胜为北航博士及博士后。核心产品FlexmoJoint是国内首次实现机器人关节抗冲击、能量回收及多样性刚度能力的智能变刚度关节模组；延伸产品IRMO
+  M1是全球首款视觉感知全地形自适应AI外骨骼，众筹金额已达700万元。本轮融资将用于产品研发和市场推广。
 event_type: capital_movement
 epistemic_status: verified_fact
 entities:
   companies:
   - 航墨科技
-  - 北京航空航天大学机器人所
   - 中投万方
   - 三贤科技
   - 北航天汇
@@ -44,28 +43,63 @@ entities:
   - 三合投资
   - 常州金控
   - 德太资本
+  - 北京航空航天大学
   - 险峰长青
-  - 高创智行基金
+  - 高创智行
   technologies:
   - 智能变刚度关节
-  - FlexmoJoint
-  - Flexmo
-  - IRMO M1
   - EPA大模型算法
-  - 视觉感知全地形自适应AI外骨骼
-  - 柔性驱动+低成本电机+多模式切换控制技术
+  - FlexmoJoint
   key_people:
   - 代万辉
   - 栾胜
   - 赵阳
 key_logic_flow:
-- 航墨科技完成近亿元天使轮融资，由中投万方、三贤科技、北航天汇、诚美资本、三合投资、常州金控联合投资，德太资本担任融资顾问，资金用于产品研发和市场推广
-- 公司2022年成立，创始人代万辉为北航机器人所硕士、清华大学MBA，CTO栾胜为北航博士，核心技术来源于北航机器人所重点研发计划项目
-- 自研智能变刚度关节模组FlexmoJoint实现国内首创的抗冲击、能量回收及多样性刚度能力，外力估计误差降低23%，能耗减小31.2%，并大幅降低关节成本
-- 2025年推出全球首款视觉感知全地形自适应AI外骨骼IRMO M1，通过摄像头和激光雷达实现毫秒级多地形识别，众筹金额已达700万元
-- 自研EPA（Exteroception+Proprioception+Action）大模型算法实现用户步态自学习和运动数据分析
-- 工业具身机器人已在工厂落地，利用柔性关节物理被动形变特性实现人机协作安全防护，线束装配场景通过工厂真实采集数据构建标准化感应处理方案库
+- 航墨科技完成近亿元天使轮融资，投资方包括中投万方、三贤科技、北航天汇、诚美资本、三合投资、常州金控，资金将用于产品研发和市场推广。
+- 公司核心技术来源于北航机器人所，创始人代万辉为北航机器人所硕士和清华大学MBA，CTO栾胜为北航博士及博士后。
+- 核心产品FlexmoJoint是国内首次实现机器人关节抗冲击、能量回收及多样性刚度能力的智能变刚度关节模组，能实现意外情况下的柔顺保护。
+- 延伸产品IRMO M1是全球首款视觉感知全地形自适应AI外骨骼，通过摄像头和激光雷达智能融合识别地形，众筹金额已达700万元。
+- 公司自研EPA大模型算法，通过外感受、本体感受与动作协同实现个性化步态自适应和运动数据分析。
+- 航墨科技已在工厂落地工业具身机器人，优先突破人机协作场景，利用柔性关节的物理被动形变实现安全交互。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: FlexmoJoint
+  canonical_name: FlexmoJoint 变刚度智能关节模组
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 航墨的核心产品主要是变刚度智能关节模组FlexmoJoint。
+  - 航墨科技自研的智能变刚度关节是国内首次实现机器人关节抗冲击、能量回收及多样性刚度能力。
+  article_id: b2dff2e6ca6095bb
+- object_type: product
+  name: IRMO M1
+  canonical_name: IRMO M1 智能膝关节外骨骼
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 2025年推出的面向户外领域的智能膝关节外骨骼IRMO M1，也是全球首款视觉感知全地形自适应AI外骨骼，众筹金额已达700万元。
+  article_id: b2dff2e6ca6095bb
+- object_type: company
+  name: 航墨科技
+  canonical_name: 航墨科技
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 航墨科技成立于2022年，是一家专注于智能变刚度关节技术及消费级智能外骨骼的研发落地的高科技公司。
+  article_id: b2dff2e6ca6095bb
+- object_type: model
+  name: EPA大模型算法
+  canonical_name: EPA (Exteroception+Proprioception+Action) 大模型算法
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 航墨自研的EPA（Exteroception+Proprioception+Action）大模型算法，能根据不同用户的习惯做个性化的逻辑分布，实现步态自适应。
+  article_id: b2dff2e6ca6095bb
 impact_score:
   score: 6.0
   reason: 该事件属于机器人关节模组和外骨骼赛道的技术产品型融资，变刚度关节技术有实质工程创新（外力估计误差降低23%、能耗减少31.2%），且已实现工厂落地和消费级产品众筹验证。但对AI行业的直接冲击有限——技术核心在机器人硬件而非AI算法层面，且公司尚处天使轮阶段，量产和大规模市场验证尚未完成。对国内机器人产业链上游关节模组领域有一定竞争格局重塑意义，但短期难以产生跨行业的范式转移效应。评分6.0：重要产品发布+高额融资，改变局部竞争格局。
@@ -111,6 +145,56 @@ confidence:
   compound: medium
   hype: medium
 actionable_insight: monitor
+object_insights:
+- object_type: product
+  name: FlexmoJoint
+  canonical_name: FlexmoJoint 变刚度智能关节模组
+  url: null
+  positioning: 国内首创智能变刚度关节模组，基于仿生学设计实现机器人关节抗冲击、能量回收与多样性刚度能力，为工业具身机器人提供柔性安全交互的核心部件。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users:
+  - 工业机器人厂商
+  - 人形机器人研发企业
+  - 工业协作场景制造商
+  product_signal: 实现外力估计误差降低23%、能耗减小31.2%，采用柔性驱动+低成本电机+多模式切换控制技术，有效降低关节成本并保障人机交互安全。
+  market_signal: 全球机器人关节模组市场规模约100亿美元（2025年），中国关节市场预计2030年超640亿元，FlexmoJoint已完成近亿元天使轮融资。
+  differentiation: 国内首次实现机器人关节抗冲击、能量回收及多样性刚度能力，以物理被动形变作为安全保险机制，区别于传统刚性关节的纯软件控制方案。
+  watch_reason: FlexmoJoint作为国内首创智能变刚度关节模组，兼具抗冲击与能量回收能力，在工业人机协作中具备物理层面的安全壁垒，已获近亿元融资且技术路线清晰，值得持续跟踪其工业落地方案拓展与客户验证进展。
+  risk_notes:
+  - 变刚度关节在弹性材料与结构匹配、多关节同步抖动控制上仍有工程化挑战待突破。
+  - 工业具身机器人市场竞争激烈，需持续证明柔性关节在成本与性能上的综合竞争优势。
+  score: 7.0
+  article_ids:
+  - b2dff2e6ca6095bb
+  evidence_snippets:
+  - 航墨的核心产品主要是变刚度智能关节模组FlexmoJoint。
+  - 航墨科技自研的智能变刚度关节是国内首次实现机器人关节抗冲击、能量回收及多样性刚度能力。
+- object_type: product
+  name: IRMO M1
+  canonical_name: IRMO M1 智能膝关节外骨骼
+  url: null
+  positioning: 全球首款视觉感知全地形自适应AI外骨骼，面向户外运动人群，通过摄像头与激光雷达融合实现毫秒级地形识别与智能缓冲。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users:
+  - 户外运动爱好者
+  - 跑步及徒步人群
+  - 运动关节防护需求用户
+  product_signal: 搭载自研EPA大模型算法实现个性化步态自适应与运动数据分析，视场角120°、扫描范围2.5米，支持跑步跳跃等动作平稳缓冲。
+  market_signal: 作为消费级外骨骼产品众筹金额已达700万元，面向户外运动刚需人群，初步验证了市场需求与产品吸引力。
+  differentiation: 全球首款视觉感知全地形自适应AI外骨骼，多模态感知融合使其区别于传统医疗与军用外骨骼，主打消费级户外运动这一蓝海场景。
+  watch_reason: IRMO M1融合视觉感知与自研EPA算法的个性化步态自适应能力，在消费级外骨骼赛道中具有先发优势，700万元众筹验证了市场需求，值得持续跟踪产品量产交付与用户真实反馈。
+  risk_notes:
+  - 消费级外骨骼产品的定价合理性、续航时长与便携性仍需接受大众市场检验。
+  - 户外运动场景对产品可靠性与耐用性要求极高，量产一致性存在挑战。
+  score: 8.0
+  article_ids:
+  - b2dff2e6ca6095bb
+  evidence_snippets:
+  - 2025年推出的面向户外领域的智能膝关节外骨骼IRMO M1，也是全球首款视觉感知全地形自适应AI外骨骼，众筹金额已达700万元。
 ---
 
 **硬氪获悉，近期，航墨科技完成由中投万方、三贤科技、北航天汇、诚美资本、三合投资、常州金控的近亿元天使轮投资，德太资本担任长期战略融资顾问，此次融资主要用来产品研发和市场推广。**

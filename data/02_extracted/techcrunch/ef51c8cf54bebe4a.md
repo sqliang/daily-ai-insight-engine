@@ -15,8 +15,13 @@ id: ef51c8cf54bebe4a
 manifest_dates:
 - '2026-07-01'
 source_type: news_media
-tldr: Wayve 以 85 亿美元估值启动 8500 万美元员工股权收购要约
-objective_summary: 英国自动驾驶公司 Wayve 按 85 亿美元估值启动 8500 万美元员工股权收购要约，由现有及新投资者主导，为第二次流动性事件，旨在通过期权变现提升员工留存率。
+tldr: 英国自动驾驶初创公司 Wayve 启动 8500 万美元员工股权回购要约，公司估值维持 85 亿美元。该轮由现有及新投资者主导，是 Wayve 第二次员工流动性事件，反映
+  AI 初创公司利用要约收购作为人才保留工具的普遍趋势。
+objective_summary: 英国自动驾驶初创公司 Wayve 于 2026 年 6 月启动 8500 万美元员工股权回购（tender offer），公司估值维持在
+  85 亿美元。该估值基于 2026 年 2 月完成的 12 亿美元 D 轮融资，由 Eclipse、Balderton 和 SoftBank Vision Fund
+  2 领投，Microsoft、Nvidia、Uber 等参投。这是 Wayve 继 2024 年 5 月 10.5 亿美元 Series C 后的第二次员工流动性事件，反映
+  AI 初创公司利用要约收购作为人才保留工具的趋势。Wayve 采用端到端神经网络的自学习自动驾驶方案，已扩充员工至 1200 人，计划今年与 Uber 合作推出
+  robotaxi 试点，并于 2027 年起将 AI 软件集成到 Nissan 的下一代驾驶辅助系统中。
 event_type: capital_movement
 epistemic_status: verified_fact
 entities:
@@ -30,26 +35,74 @@ entities:
   - Microsoft
   - Nvidia
   - Uber
+  - Nissan
   - Decagon
   - ElevenLabs
   - Linear
   - Clay
   - Duolingo
   - Hertz
-  - Nissan
   technologies:
-  - autonomous driving
-  - end-to-end neural network
-  - robotaxi
+  - 端到端神经网络
+  - 自动驾驶
   key_people: []
 key_logic_flow:
-- Wayve 是一家英国自动驾驶初创公司，成立 9 年，员工数已增至 1200 人。
-- 该公司启动 8500 万美元员工股权收购要约，按 85 亿美元估值执行，由现有及新投资者主导。
-- 该估值基于 2026 年 2 月完成的 12 亿美元 D 轮融资，由 Eclipse、Balderton 和 SoftBank Vision Fund 2 领投。
-- 这是 Wayve 的第二次员工流动性事件，首次发生在 2024 年 5 月的 10.5 亿美元 C 轮融资期间。
-- Wayve 采用端到端神经网络的自学习方式实现自动驾驶，不依赖高精地图。
-- 公司计划 2026 年与 Uber 合作启动机器人出租车试点，2027 年起将 AI 软件集成到 Nissan 的驾驶辅助系统中。
+- 英国自动驾驶初创公司 Wayve 启动 8500 万美元员工股权回购要约，公司估值维持 85 亿美元，由现有及新投资者主导。
+- 该 85 亿美元估值基于 2026 年 2 月完成的 12 亿美元 D 轮融资，领投方包括 Eclipse、Balderton 和 SoftBank Vision
+  Fund 2。
+- 这是 Wayve 继 2024 年 5 月 10.5 亿美元 Series C 后的第二次员工流动性事件。
+- Wayve 采用端到端神经网络的自学习自动驾驶方案，不依赖预构建高精地图，旨在打造通用型 AI 驾驶系统。
+- 公司过去一年员工数量翻倍至 1200 人，计划 2026 年内与 Uber 合作推出 robotaxi 试点项目。
+- Wayve 计划从 2027 年起将其 AI 软件集成到 Nissan 的下一代驾驶辅助系统中。
 extract_result: success
+object_mentions:
+- object_type: company
+  name: Wayve
+  canonical_name: Wayve
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 英国自动驾驶初创公司 Wayve 推出 8500 万美元员工股权回购计划，公司估值维持在 85 亿美元，由现有及新投资者主导。
+  - Wayve 采用端到端神经网络的自学习自动驾驶方案，计划今年与 Uber 合作推出 robotaxi 试点。
+  - Wayve 计划从 2027 年起将其 AI 软件集成到 Nissan 的下一代驾驶辅助系统中。
+  article_id: ef51c8cf54bebe4a
+- object_type: company
+  name: Decagon
+  canonical_name: Decagon
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Decagon 构建了为企业（如 Duolingo 和 Hertz）处理客户服务的 AI 智能体，近期也完成了员工股权回购。
+  article_id: ef51c8cf54bebe4a
+- object_type: company
+  name: ElevenLabs
+  canonical_name: ElevenLabs
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - ElevenLabs 是 AI 语音生成公司，负责互联网上大量合成语音和配音工具，近期也完成了员工股权回购。
+  article_id: ef51c8cf54bebe4a
+- object_type: company
+  name: Linear
+  canonical_name: Linear
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Linear 是面向软件团队的项目管理平台，近期也完成了员工股权回购。
+  article_id: ef51c8cf54bebe4a
+- object_type: company
+  name: Clay
+  canonical_name: Clay
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Clay 是销售和营销自动化工具，帮助公司研究和触达潜在客户，在过去九个月内已完成两次股权回购。
+  article_id: ef51c8cf54bebe4a
 ---
 
 Wayve, a U.K.-based self-driving tech startup, is allowing its employees to sell a portion of their vested equity. The $85 million tender offer — essentially a structured opportunity for employees to sell shares back to investors — is being led by the company’s existing and new investors at the company’s latest valuation of $8.5 billion.

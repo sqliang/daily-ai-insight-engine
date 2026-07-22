@@ -110,27 +110,87 @@
     "pipeline_stage": "fact_extracted",
     "id": "0fd7e5e74878d4aa",
     "source_type": "academic_paper",
-    "tldr": "提出Visual-SDPO框架，通过视觉反馈自蒸馏优化代码生成模型，在图表/UI/幻灯片任务上提升超10个点。",
-    "objective_summary": "研究者提出Visual-SDPO框架，利用渲染后的视觉反馈作为特权信息，通过权重共享的教师模型蒸馏到代码生成学生模型。引入视觉接地代码信用加权机制和序列级GRPO目标，在ChartMimic、Design2Code、AeSlides基准上相比零样本基线提升超10个绝对点，相比GRPO提升至少2.",
+    "tldr": "论文提出 Visual-SDPO，一种基于视觉反馈的自蒸馏策略优化框架，用于提升代码生成视觉制品（图表、网页、幻灯片）的质量，在 ChartMimic、Design2Code 和 AeSlides 基准上相比零样本基线提升超过 10 个绝对百分点。",
+    "objective_summary": "该研究针对代码生成大语言模型在生成图表、网页和幻灯片等视觉制品时，因先提交代码后观察渲染结果而导致视觉缺陷（重叠、裁剪、对齐不当、对比度低等）的问题，提出了 Visual-SDPO 框架。该框架将渲染后的视觉反馈作为特权上下文传递给共享权重的教师模型，并将反馈蒸馏到编码学生模型中；同时引入视觉定位代码信用加权机制，将缺陷追溯到具体代码语句并放大蒸馏信号。基于 Qwen3-VL-8B-Instruct 骨干的 Visual-SDPO 在 ChartMimic、Design2Code 和 AeSlides 三项基准测试中均取得显著提升。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
+        "Visual-SDPO",
         "Self-Distillation Policy Optimization",
         "GRPO",
         "Visual-Grounded Code Credit Weighting",
-        "Qwen3-VL-8B-Instruct",
-        "Visual-SDPO"
+        "Qwen3-VL-8B-Instruct"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "代码生成LLM通过编写程序生成可视化产物（图表、网页、幻灯片），但程序执行前无法看到渲染结果，导致重叠、裁剪、对齐错误、低对比度、溢出等视觉缺陷。",
-      "Visual-SDPO将渲染后的视觉反馈作为特权上下文传递给权重共享的教师模型，再将教师指导蒸馏到代码生成的学生模型中。",
-      "提出视觉接地代码信用加权（Visual-Grounded Code Credit Weighting），将检测到的缺陷追溯至相关代码语句，增强对这些语句的蒸馏信号。",
-      "引入序列级GRPO目标项，奖励可执行且视觉质量高的生成结果；执行失败的样本仍可通过自蒸馏路径学习，将执行错误作为特权上下文传递给教师。",
-      "基于Qwen3-VL-8B-Instruct统一骨干网络，在ChartMimic、Design2Code、AeSlides三个基准上相比零样本基线提升超10个绝对点，相比GRPO提升至少2.4个点，且无需增加推理成本。"
+      "代码生成大语言模型通过编写程序由非可微渲染器执行来生成图表、网页和幻灯片等视觉制品，但模型在提交代码后才能观察渲染结果，导致重叠、裁剪、对齐不当和对比度低等视觉缺陷。",
+      "Visual-SDPO 是一种自蒸馏策略优化框架，将渲染后的视觉反馈作为特权上下文传递给共享权重的教师模型，并将该反馈蒸馏到编码学生模型中。",
+      "论文引入视觉定位代码信用加权机制，将每个检测到的视觉缺陷追溯到负责受影响元素的代码语句，并在这些语句上放大蒸馏信号。",
+      "Visual-SDPO 在序列层面使用 GRPO 项作为补充，通过奖励可执行且视觉质量高的 rollout，同时失败的执行通过自蒸馏路径将执行错误作为特权上下文传递给教师来保持可学习性。",
+      "基于 Qwen3-VL-8B-Instruct 统一骨干的 Visual-SDPO 在 ChartMimic、Design2Code 和 AeSlides 三项基准测试中，主要指标相比零样本基线提升超过 10 个绝对百分点，相比 GRPO 提升至少 2.4 个百分点。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "Visual-SDPO",
+        "canonical_name": "Visual-SDPO",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Visual-SDPO 是一种自蒸馏策略优化框架，将渲染后的视觉反馈作为特权上下文传递给共享权重的教师模型，并将该反馈蒸馏到编码学生模型中。",
+          "Visual-SDPO 在 ChartMimic、Design2Code 和 AeSlides 基准上相比零样本基线提升超过 10 个绝对百分点，相比 GRPO 提升至少 2.4 个百分点。",
+          "Visual-SDPO 使用 Qwen3-VL-8B-Instruct 作为统一骨干，覆盖图表生成、网页/界面生成和幻灯片生成三类任务。"
+        ],
+        "article_id": "0fd7e5e74878d4aa"
+      },
+      {
+        "object_type": "dataset",
+        "name": "ChartMimic",
+        "canonical_name": "ChartMimic",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Visual-SDPO 在 ChartMimic 图表生成基准上进行了评估，并取得了显著的效果提升。"
+        ],
+        "article_id": "0fd7e5e74878d4aa"
+      },
+      {
+        "object_type": "dataset",
+        "name": "Design2Code",
+        "canonical_name": "Design2Code",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Visual-SDPO 在 Design2Code 网页/界面生成基准上进行了评估，证明了方法的有效性。"
+        ],
+        "article_id": "0fd7e5e74878d4aa"
+      },
+      {
+        "object_type": "dataset",
+        "name": "AeSlides",
+        "canonical_name": "AeSlides",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Visual-SDPO 在 AeSlides 幻灯片生成基准上进行了评估，相比基线方法取得了性能提升。"
+        ],
+        "article_id": "0fd7e5e74878d4aa"
+      },
+      {
+        "object_type": "model",
+        "name": "Qwen3-VL-8B-Instruct",
+        "canonical_name": "Qwen3-VL-8B-Instruct",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "Visual-SDPO 使用 Qwen3-VL-8B-Instruct 作为统一骨干来实例化图表、网页和幻灯片生成任务。"
+        ],
+        "article_id": "0fd7e5e74878d4aa"
+      }
     ],
     "impact_score": {
       "score": 6.5,
@@ -188,7 +248,33 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Visual-SDPO",
+        "canonical_name": "Visual-SDPO",
+        "url": "https://arxiv.org/abs/2606.10334",
+        "positioning": "基于视觉反馈的自蒸馏策略优化框架，专门用于提升代码生成大模型在图表、网页和幻灯片等视觉制品中的输出质量。",
+        "technical_signal": "提出将渲染后视觉缺陷作为特权上下文传递给教师模型并蒸馏到编码学生模型中的自蒸馏框架，引入视觉定位代码信用加权机制实现缺陷到代码语句的精确追溯。",
+        "ecosystem_relevance": "基于Qwen3-VL-8B-Instruct统一骨干，覆盖图表、UI和幻灯片三类主流代码生成视觉任务，与开源多模态大模型生态紧密结合。",
+        "target_users": [],
+        "watch_reason": "Visual-SDPO通过视觉反馈自蒸馏解决了代码生成视觉制品中重叠、裁剪等缺陷这一普遍痛点，在三大基准上显著超越零样本和GRPO基线，且无需额外推理开销，有望成为多模态代码生成质量优化的关键方法。",
+        "risk_notes": [
+          "当前仅在Qwen3-VL-8B-Instruct单一骨干上验证，在更大模型或不同架构上的泛化性尚未确认。",
+          "视觉缺陷追溯的准确度高度依赖渲染器可微性及缺陷检测器的精度，在复杂布局场景下可能引入误报。"
+        ],
+        "score": 8.0,
+        "article_ids": [
+          "0fd7e5e74878d4aa"
+        ],
+        "evidence_snippets": [
+          "Visual-SDPO 是一种自蒸馏策略优化框架，将渲染后的视觉反馈作为特权上下文传递给共享权重的教师模型，并将该反馈蒸馏到编码学生模型中。",
+          "Visual-SDPO 在 ChartMimic、Design2Code 和 AeSlides 基准上相比零样本基线提升超过 10 个绝对百分点，相比 GRPO 提升至少 2.4 个百分点。",
+          "Visual-SDPO 使用 Qwen3-VL-8B-Instruct 作为统一骨干，覆盖图表生成、网页/界面生成和幻灯片生成三类任务。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",

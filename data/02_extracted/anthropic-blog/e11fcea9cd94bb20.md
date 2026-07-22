@@ -11,23 +11,61 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: e11fcea9cd94bb20
 source_type: tech_blog
-tldr: Anthropic 发布 Claude Fable 5 和 Claude Mythos 5，后者专供网络防御用途
-objective_summary: Anthropic 推出 Claude Fable 5（安全版）及 Claude Mythos 5（无限制版），后者通过 Project
-  Glasswing 与美国政府合作部署。定价每百万输入令牌 10 美元、输出令牌 50 美元，为 Mythos Preview 的一半。
+tldr: Anthropic 发布 Claude Fable 5（面向通用用户的旗舰模型）和 Claude Mythos 5（面向网络安全防御者的增强版本），定价为输入每百万
+  token 10 美元、输出每百万 token 50 美元，不到 Mythos Preview 的一半。
+objective_summary: 2026 年 7 月 21 日，Anthropic 正式发布 Claude Fable 5 和 Claude Mythos 5
+  两款模型。Fable 5 是面向公众开放的 Mythos 级模型，在软件工程、知识工作、视觉、科学研究等基准测试中达到最先进水平。为控制风险，Anthropic
+  对 Fable 5 加入了安全护栏，对部分敏感查询会降级到 Claude Opus 4.8 回复，该机制在不到 5% 的会话中触发。Mythos 5 与 Fable
+  5 使用相同底层模型，但移除了部分安全限制，通过 Project Glasswing 与美国政府合作部署，拥有全球最强的网络安全能力。两款模型定价均为输入每百万
+  token 10 美元、输出每百万 token 50 美元，不到 Claude Mythos Preview 的一半。
 event_type: application_landing
-epistemic_status: verified_fact
+epistemic_status: pr_statement
 entities:
   companies:
   - Anthropic
   technologies: []
   key_people: []
 key_logic_flow:
-- Anthropic 发布了 Claude Fable 5（通用安全版）和 Claude Mythos 5（专为网络防御设计）两款新模型。
-- Fable 5 在几乎所有基准测试中达到最先进水平，在软件工程、知识工作、视觉、科学研究和生命科学等领域表现领先。
-- Fable 5 配备安全防护，涉及某些敏感话题的查询将被转至 Claude Opus 4.8 处理，平均触发率低于 5% 的会话。
-- Claude Mythos 5 与 Fable 5 共享同一基础模型，但在部分领域移除了安全限制，通过 Project Glasswing 与美国政府合作部署。
-- 两款模型的定价为每百万输入令牌 10 美元、输出令牌 50 美元，是 Claude Mythos Preview 价格的一半。
+- Anthropic 发布了两款新模型：Claude Fable 5（面向公众的通用版本）和 Claude Mythos 5（面向网络安全防御者的增强版本）。
+- Fable 5 在软件工程、知识工作、视觉和科学研究等几乎所有基准测试中均达到最先进水平，任务越长越复杂其领先优势越大。
+- 为了安全发布，Anthropic 为 Fable 5 加入了安全护栏，对敏感查询会切换到 Claude Opus 4.8 回复，该机制平均在不到 5% 的会话中触发。
+- Mythos 5 基于与 Fable 5 相同的底层模型，但移除了部分安全限制，通过 Project Glasswing 与美国政府合作部署。
+- 两款模型的定价均为输入每百万 token 10 美元、输出每百万 token 50 美元，不到 Claude Mythos Preview 价格的一半。
+- Anthropic 表示这些模型在网络安全防御和生命科学研究领域已展现出巨大潜力，包括保障关键软件安全和提出新科学假设。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Claude Fable 5
+  canonical_name: Claude Fable 5
+  url: https://www.anthropic.com/news/claude-fable-5-mythos-5
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Anthropic 发布 Claude Fable 5，这是一款面向公众开放的 Mythos 级模型，在所有已测试的 AI 能力基准上均达到最先进水平。
+  - Fable 5 在软件工程、知识工作、视觉和科学研究等多个领域表现卓越，任务越复杂其领先优势越大。
+  - Fable 5 定价为输入每百万 token 10 美元、输出每百万 token 50 美元，不到 Claude Mythos Preview 价格的一半。
+  article_id: e11fcea9cd94bb20
+- object_type: product
+  name: Claude Mythos 5
+  canonical_name: Claude Mythos 5
+  url: https://www.anthropic.com/news/claude-fable-5-mythos-5
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Claude Mythos 5 与 Fable 5 使用相同底层模型，但移除了部分安全限制，拥有全球最强的网络安全能力。
+  - Mythos 5 通过 Project Glasswing 与美国政府合作部署，作为 Claude Mythos Preview 的升级版本。
+  - Mythos 5 的定价与 Fable 5 相同，均为输入每百万 token 10 美元、输出每百万 token 50 美元。
+  article_id: e11fcea9cd94bb20
+- object_type: project
+  name: Project Glasswing
+  canonical_name: Project Glasswing
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - Claude Mythos 5 通过 Project Glasswing 与美国政府合作部署，作为 Claude Mythos Preview 的升级版本。
+  - Project Glasswing 中已使用模型帮助网络防御者保护关键软件，并在生命科学研究中提出新假设和加速新疗法开发。
+  article_id: e11fcea9cd94bb20
 ---
 
 # Claude Fable 5 and Claude Mythos 5

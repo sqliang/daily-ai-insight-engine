@@ -13,31 +13,51 @@ tags:
 extraction_status: success
 id: 8ecb5ce2dd40da80
 source_type: community_discussion
-tldr: Waymo因robotaxi无法应对暴雨洪水，已在亚特兰大等四座城市暂停服务，NHTSA正密切关注此事。
-objective_summary: 2026年5月21日前后，Waymo因robotaxi在暴雨中驶入被淹道路，相继暂停亚特兰大、圣安东尼奥、达拉斯和休斯顿四城的自动驾驶服务。公司上周已针对洪水风险发起软件召回，但未完成最终修复方案，NHTSA表示已介入调查。
+tldr: Waymo因自动驾驶出租车在暴雨中反复驶入积水道路被困，已暂停亚特兰大、达拉斯、休斯顿和圣安东尼奥四城服务。公司上周已发布软件召回但未完成最终修复方案，一辆无乘客车辆在亚特兰大被淹路口滞留约一小时后才被回收。
+objective_summary: 2026年5月，Waymo因自动驾驶出租车在暴雨中反复驶入积水道路并被困，先后暂停了亚特兰大、达拉斯、休斯顿和圣安东尼奥四个城市的服务。一辆无乘客的Waymo出租车在亚特兰大驶入被淹路口后滞留约一小时才被回收。Waymo上周已发布软件召回，限制在洪水高风险时段和地点的行驶，但承认尚未完成避免积水区域的最终修复方案。NHTSA已关注此事并与Waymo保持沟通。此外，Waymo还面临NHTSA和NTSB关于车辆在学校班车旁非法行驶以及1月23日撞伤儿童事件的两项调查。
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
   companies:
   - Waymo
-  - NHTSA
-  - NTSB
-  - National Weather Service
+  - National Highway Traffic Safety Administration
+  - National Transportation Safety Board
+  - TechCrunch
   - Bloomberg News
   technologies:
-  - autonomous driving
   - robotaxi
-  - software recall
+  - autonomous driving
   key_people: []
 key_logic_flow:
-- Waymo的robotaxi在亚特兰大暴雨中驶入被淹街道并被困约一小时，随后被拖离现场。
-- Waymo已因同一洪水问题在圣安东尼奥、达拉斯和休斯顿暂停服务，累计四座城市停运。
-- Waymo上周已向NHTSA发起软件召回，但承认尚未完成避免洪水区域的"最终修复方案"，仅推送了限制性措施。
-- 亚特兰大暴雨来势迅猛，在国家气象局发布山洪预警之前就已发生洪水，Waymo依赖的预警信号未能及时触发。
-- NHTSA表示已知悉此次事件，正与Waymo沟通，如有必要将采取进一步行动。
-- 这不是Waymo首次召回后问题复发——去年robotaxi非法超越校车的问题经修复后仍持续出现，NHTSA和NTSB正对此进行双重调查。
+- Waymo因自动驾驶出租车在暴雨中反复驶入积水道路，先后暂停了亚特兰大、达拉斯、休斯顿和圣安东尼奥四个城市的服务。
+- 一辆无乘客的Waymo出租车在亚特兰大驶入被淹路口后滞留约一小时，最终被公司回收。
+- Waymo上周已为此问题发布软件召回，限制了在洪水高风险时段和地点的行驶，但公司承认尚未开发出避免积水区域的最终修复方案。
+- Waymo表示亚特兰大的暴雨来得太快，在国家气象局发布洪水警报之前积水已经形成，而气象警报是其准备应对恶劣天气的信号之一。
+- NHTSA已关注亚特兰大被困事件并与Waymo保持沟通，表示将视情况采取适当行动。
+- 除积水问题外，Waymo还面临NHTSA和NTSB的两项调查，分别涉及出租车在学校班车旁非法行驶以及1月23日在圣莫尼卡撞伤儿童的事件。
 pipeline_stage: fact_extracted
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Waymo Robotaxi Service
+  canonical_name: Waymo Robotaxi
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Waymo因自动驾驶出租车在暴雨中反复驶入积水道路，已暂停亚特兰大、达拉斯、休斯顿和圣安东尼奥四个城市的服务。
+  - 一辆Waymo出租车在亚特兰大驶入被淹路口后滞留约一小时才被回收，Waymo称安全是其最高优先事项。
+  article_id: 8ecb5ce2dd40da80
+- object_type: project
+  name: Waymo Flood Avoidance Software Recall
+  canonical_name: Waymo Flood Avoidance Software Recall
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Waymo上周发布软件召回，限制了在洪水高风险时段和地点的行驶，但承认尚未完成避免积水区域的最终修复方案。
+  - Waymo对Atlanta的召回后更新显然不足以阻止车辆驶入被淹路口，暴雨产生的积水在国家气象局发布警报之前就已经形成。
+  article_id: 8ecb5ce2dd40da80
 ---
 
 Waymo has now paused service in four cities because its robotaxis are struggling to deal with heavy rain and flooded roads, a problem that already prompted the company to issue a recall last week.

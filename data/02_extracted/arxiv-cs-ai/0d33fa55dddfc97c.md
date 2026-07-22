@@ -29,25 +29,36 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 0d33fa55dddfc97c
 source_type: academic_paper
-tldr: 论文提出隐藏锚点模型解释多智能体LLM协商机制，证明智能体内部信念可超出初始意见空间。
-objective_summary: 该论文将多智能体LLM协商建模为闭环动力系统，每个智能体存在隐藏的内部信念（锚点）持续牵引其观点。实验表明锚点可从协商对话中恢复，并解释了智能体置信度可超越所有初始信念凸包范围这一反常现象。
+tldr: 该论文将多智能体LLM讨论建模为闭环动力系统，提出每个智能体携带隐藏的"锚点"（内部信念），该锚点可仅从讨论过程恢复，并解释了智能体置信度为何能超越初始信念的凸包范围。
+objective_summary: 研究者将多智能体LLM讨论过程建模为一个闭环动力系统，每个智能体持有隐藏的内部信念锚点，该锚点持续牵引其观点而不受邻居意见影响，超越了经典共识模型（DeGroot和Friedkin-Johnsen）的解释能力。论文证明该锚点可仅从讨论过程恢复，并解释了智能体对正确答案的置信度能超过任何初始信念所在凸包范围的现象。在多个开源模型系列上的验证显示，锚点影响程度相似但位置不同，只有当锚点远离初始观点时讨论结果才会逃出凸包，此时需要完整的闭环模型来解释。
 event_type: framework_tools
 epistemic_status: theoretical_claim
 entities:
   companies: []
   technologies:
-  - Multi-Agent LLM
-  - DeGroot model
-  - Friedkin-Johnsen model
+  - LLM
+  - Multi-Agent Systems
   key_people: []
 key_logic_flow:
-- 多智能体LLM协商被建模为闭环动力系统，每个智能体携带隐藏的内部信念（锚点）持续牵引其观点。
-- 该模型借鉴经典意见动力学模型（DeGroot和Friedkin-Johnsen），同时引入内部信念作为独立于邻居意见的牵引力。
-- 研究证明锚点可以从协商过程中恢复出来，且恢复的锚点可预测未参与的协商回合。
-- 锚点解释了一种传统共识规则禁止的行为：智能体对正确答案的置信度可以超越所有初始信念形成的凸包范围。
-- 在三个开放权重模型家族上的实验表明，锚点影响强度相近，但锚点位置各异。
-- 仅当锚点位置远离初始意见时，协商才会突破凸包范围，此时必须使用完整闭环模型进行描述。
+- 论文将多智能体LLM讨论建模为闭环动力系统，每个智能体持有一个隐藏的内部信念锚点，该锚点持续牵引其观点而不受邻居意见影响。
+- 该模型超越了经典共识模型（如DeGroot和Friedkin-Johnsen），后者只能捕捉群体效应而无法模拟个体内部信念的持续牵引。
+- 研究者证明锚点可以仅从讨论过程本身恢复，无需外部知识或观测内部状态。
+- 锚点模型解释了经典共识规则无法解释的现象：智能体对正确答案的置信度可以超过任何初始信念所在的凸包范围。
+- 在多个开源模型系列上的验证显示，所有锚点的影响程度大致相当，但锚点位置存在差异。
+- 只有当锚点远离初始观点时，讨论结果才会逃出凸包，此时需要完整的闭环模型来解释讨论过程。
 extract_result: success
+object_mentions:
+- object_type: paper
+  name: Hidden Anchors in Multi-Agent LLM Deliberation
+  canonical_name: Hidden Anchors in Multi-Agent LLM Deliberation
+  url: https://arxiv.org/abs/2606.19494
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 该论文将多智能体LLM讨论建模为闭环动力系统，提出每个智能体携带一个隐藏的内部信念锚点，该锚点持续牵引其观点而不受邻居意见影响。
+  - 论文证明该锚点可以仅从讨论过程本身恢复，并解释了智能体置信度为何能超越初始信念的凸包范围，这是经典共识模型无法解释的。
+  - 在多个开源模型系列上的验证显示所有锚点的影响程度相似，但锚点位置不同，只有当锚点远离初始观点时讨论结果才会逃出凸包。
+  article_id: 0d33fa55dddfc97c
 ---
 
 # Computer Science > Artificial Intelligence

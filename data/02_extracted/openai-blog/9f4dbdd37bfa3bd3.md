@@ -13,11 +13,13 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 9f4dbdd37bfa3bd3
 source_type: tech_blog
-tldr: OpenAI 用 GPT-5.5 Instant 提升 ChatGPT 健康问答，事实错误率下降 71%
-objective_summary: OpenAI 宣布 ChatGPT 健康功能基于 GPT-5.5 Instant 大幅改进，该模型在 HealthBench
-  评估中达到前沿 Thinking 模型水平。通过与 260 多名全球医生合作审查超 70 万条回复，生产环境中健康回复的事实性问题在两个月内减少 71%。
+tldr: OpenAI 宣布通过 GPT-5.5 Instant 模型显著提升 ChatGPT 的健康智能水平，每周超过 2.3 亿用户使用健康相关功能。与 260
+  多名医生合作审查了超过 70 万条回复，生产流量监测显示健康回复中事实性问题标记率在过去两个月下降了 71%。
+objective_summary: OpenAI 于 2026 年 7 月通过官方博客宣布，基于 GPT-5.5 Instant 模型，ChatGPT 在处理健康问题方面取得重大进展。新模型能更好地识别紧急就医需求、解释不确定性并给出清晰行动指引，在最具挑战性的健康评估中表现已达到前沿
+  Thinking 模型水平。OpenAI 与来自 60 个国家的 260 多名医生合作，已审查超过 70 万条示例模型回复。生产流量监测显示，健康回复中存在事实性问题的比例在过去两个月下降了
+  71%。新能力已向 ChatGPT 免费用户开放。
 event_type: application_landing
-epistemic_status: verified_fact
+epistemic_status: pr_statement
 entities:
   companies:
   - OpenAI
@@ -28,13 +30,83 @@ entities:
   - HealthBench Professional
   key_people: []
 key_logic_flow:
-- OpenAI 宣布每周超过 2.3 亿人使用 ChatGPT 获取健康相关信息，GPT-5.5 Instant 模型使健康问答能力大幅提升。
-- GPT-5.5 Instant 在 HealthBench 健康评估中达到与前沿 Thinking 模型相当的水平，且面向免费用户开放。
-- OpenAI 与来自 60 个国家的 260 多名医生合作，覆盖 49 种语言和 26 个医学专科，医生已审查超过 70 万条示例模型回复。
-- 医生评审显示 GPT-5.5 Instant 的失效模式少于旧模型和人类医生撰写的回复，尤其在遗漏警示信号和就医转诊建议方面。
-- 基于生产流量监测，过去两个月中至少有一个事实性问题被标记的健康回复比例下降了 71%。
-- OpenAI 还在推进 ChatGPT for Clinicians 和 OpenAI for Healthcare 等面向医疗专业人员的工具。
+- 每周超过 2.3 亿用户通过 ChatGPT 获取健康与身心健康问题方面的帮助，涵盖理解健康信息、看懂化验结果、处理保险事宜等场景。
+- GPT-5.5 Instant 模型在健康评估中的表现已达到与前沿 Thinking 模型相当的水平，且可供 ChatGPT 免费用户使用。
+- OpenAI 与来自 60 个国家的 260 多名医生组成全球网络，已审查超过 70 万条示例模型回复以改进健康回复质量。
+- OpenAI 使用 HealthBench 和 HealthBench Professional 评估体系，通过真实感健康对话和医生撰写的评分标准来量化健康回复表现。
+- 医生评审表明，GPT-5.5 Instant 回复的失效模式（如遗漏警示信号、未结合当地医疗环境、缺少就医转诊建议）少于旧模型和医生手工撰写的回复。
+- 基于生产流量监测数据，过去两个月中健康回复中被标记存在事实性问题的比例下降了 71%。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: ChatGPT
+  canonical_name: ChatGPT
+  url: https://chat.openai.com
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 每周超过 2.3 亿人会向 ChatGPT 寻求健康与身心健康问题方面的帮助。
+  - GPT‑5.5 Instant 可供 ChatGPT 免费用户使用，让更多人能够从这些改进中受益。
+  - OpenAI 的目标是让 ChatGPT 在健康场景中更准确、更审慎、更有用。
+  article_id: 9f4dbdd37bfa3bd3
+- object_type: model
+  name: GPT-5.5 Instant
+  canonical_name: GPT-5.5 Instant
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 借助 GPT‑5.5 Instant，模型在处理健康问题方面迈出了重要一步，包括更好地识别何时可能需要紧急就医。
+  - 在最具挑战性的健康评估中，GPT‑5.5 Instant 的表现已达到与前沿 Thinking 模型相当的水平。
+  - GPT‑5.5 Instant 可供 ChatGPT 免费用户使用，更多人能够从这些改进中受益。
+  article_id: 9f4dbdd37bfa3bd3
+- object_type: project
+  name: HealthBench
+  canonical_name: HealthBench
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - OpenAI 使用面向健康领域的评估，包括 HealthBench 和 HealthBench Professional。
+  - 这些评估使用真实感较强的健康对话和由医生撰写的评分标准来衡量准确性、安全性和沟通等品质。
+  article_id: 9f4dbdd37bfa3bd3
+- object_type: project
+  name: HealthBench Professional
+  canonical_name: HealthBench Professional
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - OpenAI 使用面向健康领域的评估，包括 HealthBench 和 HealthBench Professional。
+  - 这些评估使用真实感较强的健康对话和由医生撰写的评分标准来衡量准确性、安全性和沟通等品质。
+  article_id: 9f4dbdd37bfa3bd3
+- object_type: product
+  name: ChatGPT for Clinicians
+  canonical_name: ChatGPT for Clinicians
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - OpenAI 还为临床医生打造了 ChatGPT for Clinicians 和 OpenAI for Healthcare，支持医疗专业人员完成文档记录、研究和护理咨询等任务。
+  article_id: 9f4dbdd37bfa3bd3
+- object_type: product
+  name: OpenAI for Healthcare
+  canonical_name: OpenAI for Healthcare
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - OpenAI 还为临床医生打造了 ChatGPT for Clinicians 和 OpenAI for Healthcare，支持医疗专业人员完成文档记录、研究和护理咨询等任务。
+  article_id: 9f4dbdd37bfa3bd3
+- object_type: model
+  name: GPT-5.2 Instant
+  canonical_name: GPT-5.2 Instant
+  url: null
+  confidence: low
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 文章段落标题提及 GPT-5.2 Instant，其下内容描述了 OpenAI 与 260 多名医生合作的健康回复改进工作。
+  article_id: 9f4dbdd37bfa3bd3
 ---
 
 健康是人们使用 ChatGPT 的最有意义的方式之一。每周，超过 2.3 亿人会向 ChatGPT 寻求健康与身心健康问题方面的帮助：理解健康信息、看懂化验结果、为就诊做准备、处理保险事宜、养成更健康的习惯，以及弄清下一步该问什么。

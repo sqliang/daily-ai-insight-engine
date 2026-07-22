@@ -16,44 +16,145 @@ id: 985dec6aa94dbbec
 manifest_dates:
 - '2026-07-02'
 source_type: community_discussion
-tldr: 回顾网络论坛从Usenet到Discourse的发展历程，反思其社区价值被现代社交网络稀释
-objective_summary: Tedium作者Ernie在获得Bluesky两万粉丝后反思社交网络带来的空虚感，回顾了网络论坛从1994年CERN的WIT到Discourse的发展历史，探讨了WebCrossing、phpBB、vBulletin等论坛软件的技术演进及其社区凝聚力为何难以被现代社交平台复制。
-event_type: framework_tools
+tldr: 本文回顾了网络论坛从 Usenet 到现代论坛软件的完整历史，认为老式论坛虽然技术粗糙但社区凝聚力远超今日社交媒体，并列举了 UBB、Slash、vBulletin、phpBB、Discourse
+  等关键论坛平台及其历史影响。
+objective_summary: Tedium 作者 Ernie 以自身在 Bluesky 积累 2 万粉丝却感到空洞为引，指出 2000 年代的论坛（如 Visual
+  Editors）尽管技术简陋但社区体验远优于现代社交平台。文章追溯了论坛的源头——1970 年代末的 Usenet 和 1994 年 CERN 的 WWW Interactive
+  Talk（WIT），梳理了从商业软件 WebCrossing（1995 年）到免费开源方案 WWWboard、UBB、Slash、vBulletin、phpBB，再到现代论坛
+  Discourse 的演进脉络，并介绍了 BBCode 作为论坛专用标记语言的历史作用。
+event_type: application_landing
 epistemic_status: verified_fact
 entities:
   companies:
   - CERN
-  - W3C
   - NCSA
   - Lundeen & Associates
+  - Salon
+  - The New York Times
   - Social Strata
   - CrowdStack
-  - Stack Exchange
+  - Slashdot
+  - SoylentNews
   - Discourse
-  - Bluesky
   technologies:
   - Usenet
   - BBCode
   - Markdown
   - CGI
   - Perl
-  - Docker
+  - PHP
+  - Ruby
   key_people:
+  - Ernie
   - Eric Hunting
   - Ari Luotonen
   - Rob Malda
   - Jeff Atwood
   - Robin Ward
   - Sam Saffron
-  - Chris Shiflett
 key_logic_flow:
-- 作者反思现代社交媒体的点赞和粉丝增长带来空虚感，认为早期的网络论坛（如Visual Editors）拥有更强的社区凝聚力
-- Usenet在1990年代前是主要的线上讨论系统，拥有约11万个新闻组，但缺乏图形化界面和多媒体的支持
-- 1994年CERN的Ari Luotonen开发了被认为是第一个Web论坛软件WWW Interactive Talk（WIT），但该软件未能长期存活
-- Lundeen & Associates在1995年推出WebCrossing论坛工具，被纽约时报、Salon等主流媒体采用，运行超30年
-- BBCode于1998年随UBB诞生，在论坛中替代HTML提供可控的格式化功能，成为早期模因文化的催化剂
-- Discourse（2014年）由Jeff Atwood等人开发，代表了论坛软件向现代技术栈（Ruby）的转型，延续了Stack Exchange的社区设计理念
+- 作者认为现代社交媒体虽然吸引了大量关注但让人感到空洞，老式论坛尽管技术简陋却拥有更强的社区凝聚力。
+- Usenet 作为 1970 年代末最早的论坛式系统，在 1990 年代末因缺乏图形界面而逐渐衰落。
+- 1994 年 CERN 的 Ari Luotonen 开发了被认为是最早的 Web 论坛软件 WWW Interactive Talk（WIT）。
+- 1995 年 Lundeen & Associates 推出商业论坛软件 WebCrossing，被《纽约时报》和 Salon 等主流媒体采用。
+- Matt's Script Archive 的 WWWboard 作为免费的 Perl 论坛工具大幅降低了普通用户搭建论坛的门槛。
+- Discourse 在 2014 年由 Jeff Atwood 等人创立，使用 Ruby 代码库重构论坛体验，延续了 Stack Exchange 的设计理念。
 extract_result: success
+object_mentions:
+- object_type: project
+  name: WWW Interactive Talk (WIT)
+  canonical_name: WWW Interactive Talk
+  url: https://github.com/
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 1994 年 6 月 CERN 的 Ari Luotonen 开发了被认为是最早的 Web 论坛软件 WWW Interactive Talk（WIT），作者将其上传到了
+    GitHub 并使其能在 Docker 容器中运行。
+  article_id: 985dec6aa94dbbec
+- object_type: project
+  name: WebCrossing
+  canonical_name: WebCrossing
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Lundeen & Associates 在 1995 年秋季发布了 WebCrossing 论坛工具，《纽约时报》和 Salon 等主要媒体在一年内将其投入使用。
+  - Salon 使用 WebCrossing 作为数字社区核心超过 15 年，直到 2011 年才因顾虑发展方向而关闭。
+  article_id: 985dec6aa94dbbec
+- object_type: project
+  name: WWWboard
+  canonical_name: WWWboard
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Matt's Script Archive 开发的 WWWboard 是免费的 Perl 论坛工具，虽然技术简陋且存在安全问题，但让普通用户也能搭建在线论坛。
+  article_id: 985dec6aa94dbbec
+- object_type: project
+  name: Ultimate Bulletin Board (UBB)
+  canonical_name: Ultimate Bulletin Board
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - UBB（后称 UBB.classic）由 Social Strata 在 1996 年左右开发，凭借低成本价格在互联网上获得了广泛流行。
+  article_id: 985dec6aa94dbbec
+- object_type: project
+  name: Slash
+  canonical_name: Slash
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Rob Malda 在 1998 年为管理 Slashdot 论坛开发了 Slash，其自我审核功能后来被 Hacker News、Digg 和 Reddit
+    等平台借鉴。
+  article_id: 985dec6aa94dbbec
+- object_type: project
+  name: vBulletin
+  canonical_name: vBulletin
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - vBulletin 是最知名的论坛平台之一，Something Awful 论坛使用了该软件但经过多年大幅修改和定制。
+  article_id: 985dec6aa94dbbec
+- object_type: project
+  name: phpBB
+  canonical_name: phpBB
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - phpBB 始终是免费开源软件，因此聚集了大量开发扩展的社区，与之类似的 nodeBB 是其现代化版本。
+  article_id: 985dec6aa94dbbec
+- object_type: project
+  name: Discourse
+  canonical_name: Discourse
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Jeff Atwood、Robin Ward 和 Sam Saffron 在 2014 年创立 Discourse，采用 Ruby 代码库重构论坛软件，是
+    Stack Exchange 理念的延续。
+  article_id: 985dec6aa94dbbec
+- object_type: product
+  name: The Well (The Whole Earth 'Lectronic Link)
+  canonical_name: The Well
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - The Well 始于 1985 年，是数字文化中持续运营时间最长的在线社区之一，成功从拨号 BBS 过渡到 Web 并至今作为付费私人社区活跃。
+  article_id: 985dec6aa94dbbec
+- object_type: product
+  name: Visual Editors
+  canonical_name: Visual Editors
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Visual Editors 是 2000 年代中期面向新闻设计师的论坛，虽然经常宕机但社区氛围极佳，被作者视为有史以来最喜欢的社交网络。
+  article_id: 985dec6aa94dbbec
 ---
 
 **Today in Tedium:**Recently, I passed 20,000 followers on Bluesky, which I didn’t really say anything about. Sure, I thought about it, but then I had decided to myself, what’s the point? Soon, there will be another mark I can point to and feel weird about. The thing about social media these days is that the good stuff all too often pulls you in, but at the end of the day, you end up feeling hollow. Perhaps it’s for this reason that, when I spotted a thread asking about what my favorite social network of all time was, my answer wasn’t Twitter or Bluesky or even Tumblr. It was, of all things, a forum for news designers that existed in the mid-2000s called Visual Editors. It barely worked, honestly: It had a chat option that was popular with designers waiting for their pages to get proofed late in the evening, but it would often go down with no warning. But from a community standpoint, it was spectacular. Why don’t many modern social networks feel like that? Today’s Tedium ponders the fate of the web forum.

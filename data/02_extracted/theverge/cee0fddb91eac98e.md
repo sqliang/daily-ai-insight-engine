@@ -17,9 +17,9 @@ id: cee0fddb91eac98e
 manifest_dates:
 - '2026-07-05'
 source_type: news_media
-tldr: 同人小说社群发布AO3皮肤插件检测Claude生成的文本，引发点名羞辱争议
-objective_summary: 2025年6月29日，匿名X账号@heatedrivalryai发布了一款AO3皮肤插件，通过检测Claude注入的代码标识符来识别AI生成的同人作品。该插件被用于公开点名和羞辱被标记的作者，引发对检测方法有效性和伦理的争议。
-event_type: policy_and_safety
+tldr: 匿名账户@heatedrivalryai为Archive of Our Own (AO3)发布了一款检测皮肤工具，通过识别Claude自动注入的'font-claude-response-body'代码标记来判定AI生成的同人作品，引发社区内关于检测方法可靠性和误伤风险的广泛争议。
+objective_summary: 2025年6月29日，匿名X账户@heatedrivalryai为同人作品平台AO3发布了一款皮肤工具，该工具利用Claude在粘贴文本时自动注入的'font-claude-response-body'代码标记来检测AI生成内容。实测显示直接从Claude粘贴到AO3的内容会触发全屏红色背景警告，而经手动处理的相同文本则不会触发。该工具发布后同人社区迅速将其用于公开点名和指责被标记的创作者，引发了关于AI检测方法可靠性、误伤风险以及社区信任的争议。
+event_type: framework_tools
 epistemic_status: verified_fact
 entities:
   companies:
@@ -28,15 +28,45 @@ entities:
   technologies:
   - Claude
   - ChatGPT
-  key_people:
-  - '@heatedrivalryai'
+  - generative AI
+  key_people: []
 key_logic_flow:
-- 2025年6月29日，匿名X账号@heatedrivalryai发布了一款AO3皮肤插件，通过检测Anthropic Claude注入的HTML代码标识符'font-claude-response-body'来识别AI直接粘贴的同人作品。
-- 该皮肤插件在检测到Claude生成的文本痕迹时将整个页面背景变为红色，以此做出视觉警示。
-- 经验证，该工具仅能检测直接从Claude聊天界面复制粘贴到AO3编辑器的文本，改写后或使用ChatGPT等其他AI工具生成的内容无法被识别。
-- 同人小说社群迅速围绕该工具展开行动，对被标记的作者进行公开点名和羞辱，尽管工具创建者声称其意图是展示系统有效而非制造不信任环境。
-- 该事件揭示了同人创作社群对生成式AI的强烈抵触情绪，以及AI使用检测手段在准确性和伦理上引发的深层分歧。
+- 2025年6月29日，匿名X账户@heatedrivalryai发布了一款用于AO3平台的皮肤工具，宣称可检测由Claude生成的同人作品。
+- 该皮肤通过识别Claude在粘贴文本时自动注入的'font-claude-response-body'代码标记来判断内容是否由AI生成。
+- 实测验证显示直接从Claude聊天界面粘贴到AO3编辑器中的文本会触发该皮肤显示全屏红色背景警告，而手动复制的相同文本则不会触发。
+- 该工具的发布导致同人社区迅速动员起来，公开点名和指责被标记的创作者，引发了关于AI检测方法误伤风险和社区信任的讨论。
+- 皮肤创建者称其目的是保护同人社区的'人性元素和创造力火花'，而非制造不信任环境或针对特定用户。
 extract_result: success
+object_mentions:
+- object_type: project
+  name: AO3 Claude detector skin
+  canonical_name: AO3 Claude detector skin
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 该皮肤由匿名X账户@heatedrivalryai发布，通过识别Claude注入的'font-claude-response-body'代码标记来检测AI生成内容。
+  - 当用户访问包含该代码的页面时，皮肤会将整个背景变为红色，以此提示作品可能由Claude生成。
+  - 从Claude直接粘贴到AO3编辑器的内容会触发皮肤检测，而手动粘贴的相同文本则不会触发，表明检测依赖原始格式标记。
+  article_id: cee0fddb91eac98e
+- object_type: product
+  name: Archive of Our Own (AO3)
+  canonical_name: Archive of Our Own (AO3)
+  url: null
+  confidence: high
+  article_role: ecosystem_context
+  evidence_snippets:
+  - AO3是流行的同人作品存储库，该检测皮肤专为AO3平台设计并以AO3自定义皮肤形式运行。
+  article_id: cee0fddb91eac98e
+- object_type: product
+  name: Claude
+  canonical_name: Claude
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Claude生成的回复在直接粘贴到AO3时会被自动注入'font-claude-response-body'代码标记，这正是该检测工具识别的关键痕迹。
+  article_id: cee0fddb91eac98e
 ---
 
 Over the past week, a new fanworks movement has kicked off, with the aim to root out authors using generative AI. But the detection methods being implemented are questionable, and any fanfic writer could be caught in the crossfire.

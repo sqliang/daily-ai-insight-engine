@@ -16,8 +16,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "2a5856277888c800",
     "source_type": "community_discussion",
-    "tldr": "攻击者通过LinkedIn冒充招聘，诱骗开发者审查含后门的npm仓库",
-    "objective_summary": "作者收到LinkedIn招聘信息后产生警觉，使用隔离VPS和只读AI代理审查代码，发现伪装成测试套件的后门通过npm prepare脚本在安装时自动执行。招聘者和仓库提交者均为身份盗用。举报后仓库仍未下架。",
+    "tldr": "一名开发者收到伪装成招聘面试的 LinkedIn 私信，对方要求审查一个 GitHub 仓库中的代码。该仓库包含一个通过 npm prepare 脚本自动执行的后门程序，提交记录冒用了一名真实开发者的身份，招聘者账号也盗用了一位文化记者。",
+    "objective_summary": "一名开发者在 LinkedIn 上收到来自加密货币初创公司招聘人员的消息，对方要求他审查一个 GitHub 仓库中的代码。该开发者没有直接克隆和安装依赖，而是在 Hetzner VPS 上使用 AI 代理 Pi 以只读方式审查代码，结果在 app/test/index.js 中发现了一个后门。该后门将 URL 片段拼接为远程服务器地址，并在注释代码之间隐藏了执行远程服务器返回任意命令的负载。package.json 中的 prepare 脚本会在 npm install 后自动触发该后门。提交记录冒用了一名全栈工程师的身份和邮箱，招聘者 LinkedIn 账号也盗用自一位知名文化记者。作者已将仓库和账号分别报告给 GitHub 和 LinkedIn，但截至发文时尚未得到处理。",
     "event_type": "policy_and_safety",
     "epistemic_status": "verified_fact",
     "entities": {
@@ -33,14 +33,29 @@
       "key_people": []
     },
     "key_logic_flow": [
-      "作者收到来自加密货币初创公司招聘人员的LinkedIn消息，对方要求审查一个GitHub仓库中所谓的已弃用Node模块问题。",
-      "作者产生警觉，使用Hetzner的临时VPS和只读AI代理（仅启用文件读取工具）审查代码。",
-      "AI代理立即在app/test/index.js中发现后门：该文件组装远程服务器URL并从服务器获取任意代码执行。",
-      "后门的触发机制是利用npm prepare脚本，开发者在执行npm install时即会自动运行该后门。",
-      "GitHub仓库的提交者身份被冒用，真正的开发者表示从未为该组织工作过且曾遭身份冒充。",
-      "LinkedIn招聘者的身份也被冒用，一位真正的文艺记者在被问及技术问题时突然表现出专业知识。"
+      "一名自称加密货币初创公司招聘人员的人在 LinkedIn 上联系作者，要求审查一个 GitHub 仓库中的代码。",
+      "作者没有直接运行 npm install，而是在 Hetzner VPS 上使用 AI 代理 Pi 以只读模式审查代码。",
+      "Pi 代理在 app/test/index.js 中立即发现了一个隐藏后门，该后门拼接 URL 并执行远程服务器返回的任意指令。",
+      "package.json 中的 prepare 脚本会在 npm install 后自动加载并执行该后门文件。",
+      "仓库的提交记录冒用了一名真实全栈开发者的姓名和邮箱，此人此前已被冒名并曾被下架过仓库。",
+      "作者向 GitHub 和 LinkedIn 报告了该仓库和账号，但截至发稿时内容仍未下架。"
     ],
-    "extract_result": "success"
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "Pi",
+        "canonical_name": "Pi (AI agent CLI tool)",
+        "confidence": "low",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "作者将 AI 代理 Pi 以只读模式指向代码仓库，仅启用了文件读取工具来审查代码。",
+          "Pi 代理在几秒钟内标记出了隐藏在测试文件中的后门代码，比人工阅读效率更高。",
+          "作者使用命令 pi --tools read,grep,find,ls 在隔离环境中执行代码审查。"
+        ],
+        "article_id": "2a5856277888c800"
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -59,8 +74,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "396c4b7434e14780",
     "source_type": "community_discussion",
-    "tldr": "AI编程工具的开源与闭源之争，以及Anthropic通过Claude Code建立生态护城河的商业策略分析。",
-    "objective_summary": "本文分析了AI编程工具领域开源与闭源的商业策略。作者引用Joel Spolsky的\"商品化补充品\"理论，解释Anthropic为何以补贴方式推广闭源的Claude Code，以获取开发者数据并建立事实标准。同时讨论了美国政府可能禁止未授权LLM的影响，以及中国通过免费AI策略抢占市场的做法。",
+    "tldr": "文章围绕AI编程工具的商业策略展开多角度辩论，分析了Anthropic通过补贴式订阅捆绑Claude Code获取市场主导地位的策略，并引用Joel Spolsky的\"将互补品商品化\"理论解释科技公司开源行为的商业动机，同时讨论了开放权重模型、中国AI倾销策略以及编程工具工程的技术挑战。",
+    "objective_summary": "多位评论者在一篇博文评论区中就编程工具应开源还是闭源展开辩论。一方主张编程工具和LLM都应作为商品化产品开放竞争，另一方引用Joel Spolsky的互补品商品化理论解释为何公司会选择开源。讨论聚焦于Anthropic通过低价订阅捆绑Claude Code的策略——以$20至$200月费提供大幅补贴的token消耗，从而获取软件开发领域的核心数据并推动行业标准化。评论还涉及中国以低价甚至免费提供AI模型以建立长期垄断的倾销策略、Google弃用开源Gemini CLI转投闭源Antigravity CLI的决策，以及小型模型对更复杂编程工具工程的依赖。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
@@ -68,14 +83,9 @@
         "Anthropic",
         "OpenAI",
         "Meta",
-        "Google",
-        "Kobo",
-        "Adobe"
+        "Google"
       ],
       "technologies": [
-        "Claude Code",
-        "Gemini CLI",
-        "Antigravity CLI",
         "LLM"
       ],
       "key_people": [
@@ -83,14 +93,63 @@
       ]
     },
     "key_logic_flow": [
-      "文章以Joel Spolsky在2002年提出的'商品化你的补充品'理论为框架，解释科技公司为何愿意将部分产品开源或免费，以在产业链其他环节建立垄断地位。",
-      "Anthropic通过低价捆绑Claude Code订阅（20/100/200美元）补贴令牌消耗，换取对软件开发行业使用LLM行为的第一手数据，并推动行业围绕其工具概念标准化。",
-      "Claude Code虽然是闭源产品且技术上并非最优，但因Anthropic的补贴策略和模型优势，成为包括竞品公司内部最流行的编程工具。",
-      "文章指出美国政府若禁止未经批准的LLM进口和使用，将使获得许可的大公司获得99%以上的市场份额，无需再将模型商品化。",
-      "中国通过免费提供AI模型的方式（类似太阳能板倾销策略），旨在长期打压竞争对手后攫取垄断利润。",
-      "开源生态本质上基于公地（commons）哲学，与通过国家力量强制管控的路径存在根本性冲突。"
+      "文章围绕AI编程工具的开源与闭源选择展开辩论，核心问题是编程工具和LLM是否应该作为商品开放竞争。",
+      "Joel Spolsky在2002年提出的\"将互补品商品化\"理论被用来解释科技公司为何愿意开源部分产品：通过促进互补层的竞争来巩固自身核心层的垄断地位。",
+      "Anthropic通过Claude Code订阅以远低于API价格的费率补贴token消耗，以获取软件开发领域的使用数据并推动行业围绕其工具标准化。",
+      "Google的Gemini CLI从开源转为被闭源Antigravity CLI取代，与行业向封闭式编程工具发展的趋势一致。",
+      "中国公司以低价甚至免费提供AI模型，类似于太阳能板行业的倾销策略，旨在迫使竞争对手退出市场后建立垄断。",
+      "小型语言模型需要更复杂的编程工具工程——包括工具调用压缩、规划器/执行器架构和智能体间通信——来弥补上下文窗口和推理能力的不足。"
     ],
-    "extract_result": "success"
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "Claude Code",
+        "canonical_name": "Claude Code",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Anthropic通过低价捆绑Claude Code订阅（$20至$200月费）大幅补贴token消耗，以此获取软件开发领域的使用数据。",
+          "Claude Code虽然是免费产品且可配合任何模型使用，但已成为最流行的编程工具，被OpenAI、Meta和Google等竞争对手内部使用。"
+        ],
+        "article_id": "396c4b7434e14780"
+      },
+      {
+        "object_type": "product",
+        "name": "Gemini CLI",
+        "canonical_name": "Gemini CLI",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Google的开源编程工具Gemini CLI已被弃用，转而采用闭源的Antigravity CLI。",
+          "文章将Gemini CLI的弃用作为行业向封闭式编程工具方向发展的例证。"
+        ],
+        "article_id": "396c4b7434e14780"
+      },
+      {
+        "object_type": "product",
+        "name": "Antigravity CLI",
+        "canonical_name": "Antigravity CLI",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Antigravity CLI是取代Google开源Gemini CLI的闭源编程工具，代表了行业向封闭式工具发展的趋势。"
+        ],
+        "article_id": "396c4b7434e14780"
+      },
+      {
+        "object_type": "product",
+        "name": "Kimi CLI",
+        "canonical_name": "Kimi CLI",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Kimi CLI在使用时容易陷入工具调用循环，缺乏防止无限循环的机制，在长时间运行任务中基本不可用。",
+          "在采纳了防止工具调用循环的机制后，Kimi CLI在部分任务上可以达到Sonnet级别的性能。"
+        ],
+        "article_id": "396c4b7434e14780"
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -109,8 +168,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "54499be046ee82e9",
     "source_type": "community_discussion",
-    "tldr": "Apple 用 Swift 重写了 TrueType 字体渲染字节码解释器，性能提升 13%，并开源。",
-    "objective_summary": "Apple 在 Fall 2025 版本中将 TrueType 字体渲染的字节码解释器从 C 语言重写为 Swift，以消除内存安全漏洞。新解释器通过测试验证与 C 实现像素级一致，平均性能提升 13%，相关源代码已公开发布。",
+    "tldr": "苹果将 TrueType 字体提示解释器从 C 语言重写为 Swift，以实现内存安全，该解释器已随 Fall 2025 系统版本发布，平均性能提升 13%，相关源代码已开源。",
+    "objective_summary": "苹果（Apple）在 Fall 2025 系统版本中，将 TrueType 字体提示解释器从 C 语言重写为 Swift。该项目目标是实现内存安全、保持像素级兼容性且不带来性能回退。苹果开发了两套测试套件（单元测试覆盖率达 99.7%，以及基于 4200 个 PDF 文件、25772 款字体的模糊测试语料库）来验证正确性。最终 Swift 解释器在实现完全内存安全的同时，平均运行速度比原 C 实现快 13%。源代码已公开发布。",
     "event_type": "infrastructure_update",
     "epistemic_status": "verified_fact",
     "entities": {
@@ -119,19 +178,34 @@
       ],
       "technologies": [
         "TrueType",
-        "Swift"
+        "Swift",
+        "TrueType Hinting Interpreter"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "Apple 用内存安全语言 Swift 重写了 TrueType 字体渲染的字节码解释器（C 实现），于 Fall 2025 发布。",
-      "TrueType 字体可包含由字节码解释器执行的程序，涉及输入驱动的控制流和复杂数据结构，构成安全攻击面。",
-      "团队构建了两套测试套件：单元测试覆盖率达 99.7%，以及从 1000 万 PDF 文件通过模糊测试精简出的 4200 个文件用于兼容性验证。",
-      "测试代码量是解释器本身代码量的近四倍。",
-      "性能优化手段包括：采用不可复制值类型（~Copyable）、使用投影类型（projection types）避免跨语言边界拷贝、用延续传递风格（continuation-passing）消除堆分配、减少动态派发。",
-      "平均性能比原 C 实现快 13%，自上线以来未报告任何 Bug。"
+      "苹果将 TrueType 字体提示解释器从 C 语言重写为 Swift，该解释器是安全关键攻击面，因字体文件可能包含由字节码解释器执行的程序。",
+      "二进制兼容性和像素级一致的字形渲染是项目核心要求，苹果将\"正确性\"定义为与 C 实现的输出完全一致。",
+      "苹果开发了两套测试套件：单元测试（99.7% 代码覆盖率）和基于 1000 万 PDF 文件经模糊测试缩减至 4200 个的兼容性语料库。",
+      "性能优化策略包括：使用 ~Copyable 值类型消除 ARC 和别名检查开销、用投影类型替代跨语言边界的数据拷贝、用延续传递方式避免堆分配、以及通过特化和内联消除动态派发。",
+      "最终 Swift 解释器平均运行速度比原 C 实现快 13%，自启用以来未报告任何 bug，仅在与 C 互操作的边界处使用了少量经过严格验证的 unsafe 语句。"
     ],
-    "extract_result": "success"
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "Swift TrueType Hinting Interpreter",
+        "canonical_name": "Apple Swift TrueType Hinting Interpreter",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "苹果将 TrueType 字体提示解释器从 C 语言重写为内存安全的 Swift，并随 Fall 2025 系统版本发布。",
+          "苹果已公开了该 Swift TrueType 提示解释器的源代码。",
+          "新 Swift 解释器平均运行速度比原 C 实现快 13%，自启用以来未报告任何 bug。"
+        ],
+        "article_id": "54499be046ee82e9"
+      }
+    ]
   },
   {
     "source_dir": "hackernews",

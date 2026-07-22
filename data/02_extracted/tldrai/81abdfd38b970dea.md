@@ -11,15 +11,18 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 81abdfd38b970dea
 source_type: news_media
-tldr: Gartner 将 Zenity 评为 AI 代理治理领域的领先厂商（2026年4月）
-objective_summary: Gartner 于 2026 年 4 月 17 日发布报告，将 Zenity 评为 AI 代理治理领域的领先厂商。Zenity
-  提供专为 AI 代理构建的安全平台，覆盖全生命周期，包括 MCP 和 A2A 交互场景。
+tldr: Gartner 于 2026 年 4 月 17 日将 Zenity 评为 AI Agent 治理领域的"最值得击败的厂商"（Vendor to Beat）。Zenity
+  提供面向 AI 代理的全程安全治理平台，覆盖发现、态势管理和运行时检测与响应。
+objective_summary: 2026 年 4 月 17 日，Gartner 发布报告将 Zenity 评为 AI Agent 治理领域的 Vendor to
+  Beat。Zenity 的平台专门为 AI 代理的安全挑战而构建，涵盖 SaaS 管理型、自定义构建型和设备端代理的全生命周期治理，包括 MCP 和 A2A 交互。其核心功能包括
+  Clarity Agent 意图感知实时监控、Shadow AI 发现（覆盖 Copilot Studio、Agentforce、Bedrock、Azure AI
+  Foundry 等平台）以及 AI 安全态势管理和检测与响应能力。Zenity Labs 也向 OWASP 和 MITRE ATLAS 框架贡献了基础研究。
 event_type: application_landing
 epistemic_status: pr_statement
 entities:
   companies:
-  - Gartner
   - Zenity
+  - Gartner
   technologies:
   - MCP
   - A2A
@@ -27,14 +30,46 @@ entities:
   - MITRE ATLAS
   key_people: []
 key_logic_flow:
-- Gartner 在 2026 年 4 月 17 日的报告中评选 Zenity 为 AI 代理治理领域的'最值得关注厂商'。
-- Zenity 平台专为 AI 代理安全挑战而构建，覆盖 SaaS 管理、自建和基于设备的代理全生命周期，包括 MCP 和 A2A 交互。
-- Zenity 的 Clarity Agent 实时监控代理执行，通过分析工具调用、内存访问和数据使用模式判断代理行为是否与预期意图一致。
-- Zenity 支持在 Copilot Studio、Agentforce、Bedrock 和 Azure AI Foundry 等平台中发现和治理未经安全部门知悉的
-  AI 代理。
-- Zenity Labs 为 OWASP 和 MITRE ATLAS 框架贡献基础研究，其企业 Copilot 间接提示注入攻击发现是该领域的奠基性参考。
-- Zenity 平台提供 AI 可观测性、安全态势管理和检测与响应三大能力，覆盖代理全生命周期安全。
+- Gartner 于 2026 年 4 月 17 日将 Zenity 评为 AI Agent 治理领域的 Vendor to Beat。
+- Zenity 的平台专为 AI 代理的安全挑战而设计，覆盖 SaaS 管理型、自定义构建型和设备端代理的全生命周期，包括 MCP 和 A2A 交互。
+- Clarity Agent 通过实时监控工具调用、内存访问和数据使用模式来理解 AI 代理的行为是否与其预期目的一致。
+- Zenity 提供了 Shadow AI 发现能力，可在 Copilot Studio、Agentforce、Bedrock 和 Azure AI Foundry
+  等平台上发现并治理未经安全团队知悉的 AI 代理。
+- Zenity Labs 为 OWASP Top 10 框架和 MITRE ATLAS 贡献了基础研究，其发现的针对企业 Copilot 的间接提示注入攻击是该领域的奠基性参考文献。
+- Zenity 的产品在财富 20 强科技公司和财富 50 强金融服务公司等客户中得到部署，实现了安全违规减少和风险降低等可量化的效果。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Zenity AI Agent Governance Platform
+  canonical_name: Zenity Platform
+  url: https://zenity.io
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Zenity 的平台专为 AI 代理引入的安全挑战而构建，覆盖 SaaS 管理型、自定义构建型和设备端代理的全生命周期治理。
+  - 该平台提供 AI 可观测性、AI 安全态势管理和 AI 检测与响应三大核心能力。
+  - 财富 20 强科技公司和财富 50 强金融服务公司等客户在部署 Zenity 平台后实现了安全违规减少和风险降低。
+  article_id: 81abdfd38b970dea
+- object_type: product
+  name: Clarity Agent
+  canonical_name: Zenity Clarity Agent
+  url: null
+  confidence: medium
+  article_role: primary_subject
+  evidence_snippets:
+  - Clarity Agent 实时监控 AI 代理的执行过程，分析工具调用、内存访问和数据使用模式以判断行为是否与其预期目的一致。
+  - 该代理是 Zenity 意图感知检测（Intent-Aware Detection）能力的核心组件。
+  article_id: 81abdfd38b970dea
+- object_type: project
+  name: Zenity Labs
+  canonical_name: Zenity Labs
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Zenity Labs 为基础研究做出了贡献，研究成果被纳入 OWASP Top 10 框架和 MITRE ATLAS。
+  - 该团队发现的企业级 Copilot 间接提示注入攻击是该领域的奠基性参考文献。
+  article_id: 81abdfd38b970dea
 ---
 
 # Gartner® Names Zenity as the Company to Beat in AI Agent Governance as of April 17, 2026

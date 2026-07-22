@@ -14,8 +14,8 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 55dffce3e3a7dc73
 source_type: community_discussion
-tldr: Pokémon Go玩家拍摄的300亿张扫描数据被用于训练军事无人机导航系统
-objective_summary: Pokémon Go玩家在不知情下拍摄了约300亿张环境扫描，Niantic Spatial将其训练为视觉定位系统（VPS），并于2025年12月与国防承包商Vantor合作，将系统整合用于GPS拒止环境下的无人机和军事机器人导航。
+tldr: 《精灵宝可梦Go》玩家拍摄的约300亿张环境扫描数据被Niantic Spatial用于训练视觉定位系统（VPS），该系统已通过与国防承包商Vantor的合作，将部署于GPS受干扰环境下的军用无人机和机器人导航，而绝大多数玩家对此毫不知情。
+objective_summary: 2025年12月16日，Niantic Spatial与国防承包商Vantor（前身为Maxar Intelligence）宣布合作，将其视觉定位系统与Vantor的Raptor空中导航软件融合，为军用无人机和机器人提供不依赖卫星信号的导航能力。该系统的训练数据来源于《精灵宝可梦Go》玩家自2021年以来拍摄的约300亿张环境扫描，玩家在游戏内授权条款中同意了可转让、可再许可的许可协议，但多数人未意识到数据最终流向军事用途。Vantor否认将直接使用游戏数据，但拒绝说明已部署的模型是否曾在训练中用过这些扫描，专家指出一旦数据融入模型便几乎无法追溯。
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
@@ -23,17 +23,20 @@ entities:
   - Niantic Spatial
   - Vantor
   - Maxar Intelligence
-  - Niantic
   - Google
+  - Keyhole
+  - In-Q-Tel
   - Scopely
   - Savvy Games Group
-  - In-Q-Tel
-  - Keyhole
   - Coco Robotics
+  - Shield AI
+  - DroneXL
   technologies:
   - VPS
   - Visual Positioning System
+  - Raptor
   - GPS
+  - GEOINT
   key_people:
   - Brian McClendon
   - John Hanke
@@ -43,14 +46,81 @@ entities:
   - Adrian Hon
   - Haye Kesteloo
 key_logic_flow:
-- Pokémon Go自2021年起要求玩家拍摄现实世界场景以获取游戏奖励，累计收集约300亿张环境扫描数据，用户授予了可转让、可再许可的扫描使用权。
-- Niantic Spatial利用这些扫描数据训练了视觉定位系统（VPS），该系统无需卫星信号，通过摄像头图像与3D模型匹配即可确定位置。
-- 2025年12月16日，Niantic Spatial与国防承包商Vantor（前身为Maxar Intelligence）宣布合作，将地面VPS与Vantor的Raptor空中导航软件整合，用于GPS拒止环境下的无人机和军事装备协同定位。
-- Vantor否认直接使用Pokémon Go数据，但拒绝说明其部署的模型是否曾使用这些扫描数据进行训练，这一模糊立场引发了数据来源争议。
-- Niantic的前身Keyhole曾接受CIA风投机构In-Q-Tel资助，其技术被用于支持伊拉克战争中的美军；2025年Niantic分拆后，游戏业务被沙特主权基金收购，地图技术则独立为Niantic
-  Spatial并向防务领域发展。
-- 该事件引发广泛的数据同意伦理争议：玩家为游戏目的提供的扫描数据可能被用于武器系统，而用户无法预见或追溯其数据的最终用途。
+- 《精灵宝可梦Go》自2021年起要求玩家拍摄现实世界地点的短视频以获取游戏内奖励，玩家授予了Niantic可转让、可再许可的数据许可协议。
+- Niantic Spatial利用约300亿张玩家扫描数据训练了视觉定位系统（VPS），该系统通过摄像头画面匹配3D地图来定位，无需GPS卫星信号。
+- 2025年12月16日，Niantic Spatial与国防承包商Vantor宣布合作，将VPS与Vantor的Raptor空中导航软件融合，用于GPS受干扰环境下的军用无人机和机器人导航。
+- Vantor否认将直接使用《精灵宝可梦Go》数据，但拒绝说明已部署的模型是否曾使用这些扫描数据进行训练，代尔夫特理工大学教授指出一旦数据融入模型便几乎无法追溯。
+- Niantic的根源可追溯至2003年获得CIA旗下风投In-Q-Tel资助的地图公司Keyhole，后被谷歌收购，其技术基因与国防领域有长期关联。
+- 2025年Niantic结构分拆中，游戏业务以35亿美元出售给沙特主权财富基金旗下的Scopely，技术平台独立为Niantic Spatial，地图数据流向国防领域。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Pokémon Go
+  canonical_name: Pokémon Go
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 《精灵宝可梦Go》自2021年起要求玩家录制现实世界地点的短视频以获取游戏内奖励，Niantic由此获得了约300亿张环境扫描数据。
+  - 玩家授予了可转让、可再许可的扫描数据许可协议，但绝大多数玩家未意识到这些数据最终被用于训练军用无人机导航系统。
+  article_id: 55dffce3e3a7dc73
+- object_type: product
+  name: Niantic Spatial Visual Positioning System
+  canonical_name: Niantic Spatial VPS
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Niantic Spatial利用约300亿张玩家扫描数据训练了视觉定位系统（VPS），通过摄像头画面匹配3D地图来在无GPS信号时确定位置。
+  - CTO Brian McClendon表示该技术适用于GPS经常失效的密集城市和信号被刻意屏蔽的战场等环境。
+  article_id: 55dffce3e3a7dc73
+- object_type: product
+  name: Vantor Raptor
+  canonical_name: Vantor Raptor
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Vantor的Raptor软件于2025年2月发布，利用无人机摄像头和专有3D地形数据实现空中定位。
+  - Raptor与Niantic VPS融合后，可在无卫星链路的情况下实现空中与地面设备的实时坐标共享。
+  article_id: 55dffce3e3a7dc73
+- object_type: product
+  name: Ingress
+  canonical_name: Ingress
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Niantic在2014年通过游戏Ingress就已收集玩家的相机图像数据，其方法与后续Pokémon Go使用的相同。
+  article_id: 55dffce3e3a7dc73
+- object_type: company
+  name: Keyhole
+  canonical_name: Keyhole
+  url: null
+  confidence: high
+  article_role: ecosystem_context
+  evidence_snippets:
+  - Niantic脱胎于地理数据公司Keyhole，后者在2003年获得CIA旗下风投In-Q-Tel资助，其服务在伊拉克战争期间用于支持美军。
+  - 谷歌于2004年收购Keyhole，Keyhole CEO John Hanke后来领导了谷歌地图和谷歌地球团队。
+  article_id: 55dffce3e3a7dc73
+- object_type: product
+  name: FirePoint
+  canonical_name: FirePoint
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 乌克兰的FirePoint在约三年内建立了七代导航系统，最终采用地形匹配方案，使用廉价夜视摄像头实现无GPS飞行。
+  article_id: 55dffce3e3a7dc73
+- object_type: product
+  name: Shield AI V-BAT
+  canonical_name: Shield AI V-BAT
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Shield AI的V-BAT无人机在无线电链路失效时仍能继续飞行，体现了无GPS视觉定位导航在军事领域的关键价值。
+  article_id: 55dffce3e3a7dc73
 ---
 
 Hundreds of millions of Pokémon Go players spent years filming the streets, parks, and buildings around them to earn in-game rewards. Those roughly 30 billion environmental scans are now owned by **Niantic Spatial**, and they helped train a camera-based navigation model that a U.S. defense contractor is preparing to put into drones and other military robots. Most of the players had no idea.

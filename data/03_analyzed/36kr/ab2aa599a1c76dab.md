@@ -24,39 +24,87 @@ tags:
 - clippings
 id: ab2aa599a1c76dab
 source_type: news_media
-tldr: 宇树科技发布载人机甲GD01定价390万；谷歌首现AI开发零日漏洞工具；阿里发布AI店小蜜客服agent
-objective_summary: 5月12日，宇树科技发布全球首款量产版载人变形机甲GD01，创始人王兴兴亲自驾驶演示，定价390万元起。谷歌安全团队首次发现黑客使用AI开发零日漏洞攻击工具。阿里发布电商行业首个售前售后客服agent
-  AI店小蜜。智元机器人联合香港政府发布具身智能产业共创计划。
+tldr: 今日36氪晚报涵盖京东Q1营收3157亿元同比增长4.9%、宇树科技发布全球首款量产版载人变形机甲GD01定价390万元起、阿里推出AI店小蜜客服agent、谷歌首次发现黑客利用AI开发零日漏洞、智元机器人发布香港具身智能产业共创计划等事件。
+objective_summary: 京东发布2026年第一季度财报，营收3157亿元同比增长4.9%，研发投入同比增长59%。宇树科技发布全球首款量产版载人变形机甲GD01，定价390万元起，创始人王兴兴亲自演示操作。阿里发布电商行业首个具备售前售后办事能力的客服agent
+  AI店小蜜，接入后平均转人工率下降45%。谷歌安全团队首次发现黑客借助AI开发零日漏洞攻击工具并成功挫败。智元机器人联合香港多方发布具身智能产业共创计划，提出未来五年个十百千万目标。
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
   companies:
-  - 宇树科技
-  - Google
-  - Alibaba
-  - 智元机器人
-  - Microsoft
-  - OpenAI
   - 京东
+  - 华硕
+  - 宇树科技
+  - 京东健康
+  - 京东物流
+  - 腾讯音乐
+  - 智元机器人
+  - 微软
+  - OpenAI
+  - 谷歌
+  - 阿里巴巴
   - 腾讯
+  - 中信证券
+  - NASA
   technologies:
   - 具身智能
-  - AI agent
   - 零日漏洞
-  - 载人机甲
-  - 机器人
+  - AI客服agent
+  - AI
   key_people:
   - 王兴兴
   - 赵楠
   - 王腾
   - 张军
 key_logic_flow:
-- 宇树科技于5月12日发布GD01载人变形机甲，定价390万元起，创始人王兴兴亲自进入驾驶舱演示，宣称是全球首款量产版载人机甲
-- 谷歌安全团队首次发现网络犯罪团伙利用AI开发可绕过系统防御机制的零日漏洞攻击工具，谷歌已向该工具开发商发出警报并挫败攻击
-- 阿里于5月11日发布AI店小蜜，为电商行业首个具备售前售后办事能力的客服agent，实测转人工率下降45%，AI+人协同转化效果提升超10%
-- 智元机器人在香港具身智能产业峰会上发布共创计划，目标未来五年实现数个联合实验室、数十家创新企业、数百家产业伙伴的个十百千万目标
-- 微软给OpenAI的营收分成付款上限设为380亿美元，据称通过新合作交易OpenAI到2030年将共计节省970亿美元
-- 京东发布2026年第一季度财报，营收3157亿元同比增长4.9%，Non-GAAP归母净利润74亿元，年度活跃用户数超7.4亿
+- 京东发布2026年第一季度财报，营收3157亿元同比增长4.9%，年度活跃用户数超7.4亿，研发投入同比增长59%。
+- 宇树科技发布全球首款量产版载人变形机甲GD01，定价390万元起，创始人王兴兴亲自登上驾驶舱演示真人操作。
+- 阿里发布AI店小蜜，这是电商行业首个具备售前售后办事能力的客服agent，商家接入后平均转人工率下降45%。
+- 谷歌安全研究人员首次发现黑客利用AI开发零日漏洞攻击工具，谷歌向该工具开发商发出警报后成功挫败该攻击。
+- 智元机器人联合香港政府及产业学界代表发布香港具身智能产业共创计划，围绕五大方向推动未来五年个十百千万目标。
+- 微软给OpenAI的营收分成付款上限设为380亿美元，OpenAI到2030年将共计节省970亿美元。
+extract_result: success
+object_mentions:
+- object_type: product
+  name: GD01 载人变形机甲
+  canonical_name: Unitree GD01
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 宇树科技发布全球首款量产版载人变形机甲GD01，定价三百九十万元起，创始人王兴兴亲自登上驾驶舱演示真人操作。
+  - 宇树早期投资人赵楠表示，机甲机器人的核心是通过破圈场景向世界展示宇树在传感器、控制器和工程能力上的技术优越性。
+  article_id: ab2aa599a1c76dab
+- object_type: product
+  name: AI店小蜜
+  canonical_name: 阿里AI店小蜜
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 阿里发布全新AI店小蜜，这是电商行业首个具备售前售后办事能力的客服agent。
+  - 商家接入AI店小蜜后平均转人工率下降百分之四十五，AI加入协同转化效果相比纯人工客服增加超百分之十。
+  article_id: ab2aa599a1c76dab
+- object_type: project
+  name: 香港具身智能产业共创计划
+  canonical_name: 智元机器人香港具身智能产业共创计划
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 智元机器人联合香港政府、产业、学术、科研及金融界代表正式发布香港具身智能产业共创计划。
+  - 该计划围绕应用场景、创新创业、产学研合作、人才培养及国际合作五大方向，推动香港具身智能产业未来五年实现个十百千万目标。
+  article_id: ab2aa599a1c76dab
+- object_type: company
+  name: 今日宜休
+  canonical_name: 北京今日宜休科技有限责任公司
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 王腾创办的睡眠健康公司今日宜休已完成新一轮融资，引入CMC资本、云九资本、高瓴创投等多方投资。
+  - 今日宜休成立于2026年1月，经营范围包含健康咨询服务、人工智能应用软件开发等，由智元机器人等共同持股。
+  article_id: ab2aa599a1c76dab
+pipeline_stage: fact_extracted
 impact_score:
   score: 6.0
   reason: 本期事件在三个维度有实质性行业影响：①谷歌首次发现AI被用于开发零日漏洞攻击工具，这是AI安全攻防的里程碑式发现，可能引发全球安全策略调整；②微软与OpenAI达成营收分成上限380亿美元的重大财务重组，重塑AI领域最重要商业合作的结构；③宇树发布载人机甲、阿里发布AI店小蜜、智元发布具身智能共创计划，代表AI在硬件和电商场景的落地加速。整体属于改变局部竞争格局的重要事件组合，但尚未达到ChatGPT级别的范式转移（8-10分）。
@@ -110,6 +158,77 @@ confidence:
   compound: medium
   hype: high
 actionable_insight: strategic_invest
+object_insights:
+- object_type: product
+  name: GD01 载人变形机甲
+  canonical_name: Unitree GD01
+  url: null
+  positioning: 宇树科技推出的全球首款量产版载人变形机甲，可变形且体重约500kg，兼具民用交通工具与科技破圈双重属性。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users:
+  - 民用交通爱好者
+  - 科技展示与赛事演出场景
+  product_signal: 全球首款量产版载人变形机甲，创始人王兴兴亲自登上驾驶舱演示真人操作，体重约500kg，定价390万元起。
+  market_signal: 投资人指出机甲核心是通过破圈场景展示宇树在传感器、控制器和工程能力上的技术优越性，产品破圈性即营销引擎。
+  differentiation: 与同业不同，宇树产品本身具备破圈属性，机甲通过大众化场景直白呈现机器人核心技术优势，而非依赖传统营销渠道。
+  watch_reason: 全球首款量产版载人变形机甲定义了具身智能在人机交互与物理形态上的前沿方向，其量产能力与市场接受度将验证消费级机甲机器人的商业化可行性，具有里程碑意义。
+  risk_notes:
+  - 定价390万元起，目标市场规模极为有限，从发布到量产交付的商业化路径存在较大不确定性。
+  - 载人机甲的安全性与法规认证问题尚未明确，作为民用交通工具面临严格的监管审批挑战。
+  score: 7.0
+  article_ids:
+  - ab2aa599a1c76dab
+  evidence_snippets:
+  - 宇树科技发布全球首款量产版载人变形机甲GD01，定价三百九十万元起，创始人王兴兴亲自登上驾驶舱演示真人操作。
+  - 宇树早期投资人赵楠表示，机甲机器人的核心是通过破圈场景向世界展示宇树在传感器、控制器和工程能力上的技术优越性。
+- object_type: product
+  name: AI店小蜜
+  canonical_name: 阿里AI店小蜜
+  url: null
+  positioning: 阿里推出的电商行业首个具备售前售后全链路办事能力的AI客服agent，通过AI与人工协同重构电商客服工作流。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users:
+  - 电商商家
+  - 客服外包服务商
+  product_signal: 电商行业首个具备售前售后办事能力的客服agent，商家接入后平均转人工率下降45%，AI协同转化效果相比纯人工增加超10%。
+  market_signal: 以转人工率下降45%和协同转化提升超10%两个核心KPI验证AI客服的商业价值，直接面向电商行业千万级商家群体。
+  differentiation: 行业首个覆盖售前售后全链路的AI客服agent，关键差异在于将AI与人工协同，在转化效果上实测超越纯人工客服。
+  watch_reason: 作为电商行业首个全链路AI客服agent，45%转人工率下降和超10%转化提升的实测数据若被规模化验证，将有力推动AI客服在电商行业的全面渗透与范式转变。
+  risk_notes:
+  - 实测数据来源于阿里自身测试环境，大规模推广至不同行业和商家后，实际效果可能因场景复杂度而打折。
+  - 客服场景的行业差异性和长尾问题可能限制AI店小蜜的通用适配能力，部分复杂场景仍需人工介入。
+  score: 8.0
+  article_ids:
+  - ab2aa599a1c76dab
+  evidence_snippets:
+  - 阿里发布全新AI店小蜜，这是电商行业首个具备售前售后办事能力的客服agent。
+  - 商家接入AI店小蜜后平均转人工率下降百分之四十五，AI加入协同转化效果相比纯人工客服增加超百分之十。
+- object_type: project
+  name: 香港具身智能产业共创计划
+  canonical_name: 智元机器人香港具身智能产业共创计划
+  url: null
+  positioning: 智元机器人联合香港政府、产业、学术、科研及金融界代表发布的具身智能产业共创计划，围绕五大方向推动未来五年发展。
+  technical_signal: 计划成立数个产研联合实验室，围绕应用场景与产学研合作推动具身智能技术创新，加速技术从实验室到商业场景的转化。
+  adoption_signal: 联合香港政府及产业学界多方代表共同发布，展现跨领域合作共识，推动具身智能与真实商业需求加速结合。
+  ecosystem_relevance: 提出培育数十家具身智能创新企业、发展数百家产业伙伴的个十百千万目标，旨在构建完整具身智能产业生态并推动中国产品走向全球。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: 智元机器人联合香港政产学研金多方推动具身智能产业共创，个十百千万目标路径清晰，若执行顺利将显著加速具身智能从技术到产业的生态化进程，值得持续关注进展节奏。
+  risk_notes:
+  - 个十百千万目标尚未公布具体实施路径和时间表，计划的落地执行效果和节奏有待持续观察验证。
+  - 跨区域多方协作存在沟通与资源协调成本，香港本地产业配套能否满足具身智能发展需求尚不确定。
+  score: 7.0
+  article_ids:
+  - ab2aa599a1c76dab
+  evidence_snippets:
+  - 智元机器人联合香港政府、产业、学术、科研及金融界代表正式发布香港具身智能产业共创计划。
+  - 该计划围绕应用场景、创新创业、产学研合作、人才培养及国际合作五大方向，推动香港具身智能产业未来五年实现个十百千万目标。
 ---
 
 ## 大公司：

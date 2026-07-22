@@ -15,29 +15,77 @@ id: cb2b299cfff1edd8
 manifest_dates:
 - '2026-07-03'
 source_type: community_discussion
-tldr: Linux 6.9 起 LUKS 挂起时未擦除内存加密密钥，已通过内核补丁和 cryptsetup 补丁修复
-objective_summary: Joachim Breitner 发现自 Linux 6.9 起，系统挂起时 LUKS 磁盘加密密钥未被从内存中擦除。他复活
-  Pali Rohár 的旧内核补丁实现 NixOS 安全挂起；Ondrej Kozina 为 cryptsetup 开发了规避补丁，将在 2.8.
+tldr: 开发者 iblech 发现 Linux 内核自 6.9 版起存在一个安全漏洞：LUKS 全盘加密的密钥在系统挂起到 RAM 后未从内存中清除。他通过复活
+  Pali Rohár 的旧内核补丁为 NixOS 推出了实验性安全挂起方案，cryptsetup 团队也开发了对应的工作补丁并计划在 2.8.7 版本中发布。
+objective_summary: 开发者 iblech 在将 Debian 的 cryptsetup-suspend 移植到 NixOS 时，通过 QEMU 虚拟机内存转储确认
+  Linux 内核自 6.9 版本起未在挂起时清除 LUKS 加密密钥，导致密钥在内存中易受冷启动攻击。他复活了 Pali Rohár 从未被合并的内核补丁，为
+  NixOS 推出了实验性安全挂起到 RAM 方案。cryptsetup 团队的 Ondrej Kozina 迅速为此开发了绕过内核 bug 的工作补丁，计划在
+  cryptsetup 2.8.7 版本中发布。Ondrej 同时发现了 loop 块设备系统中的相关安全问题。
 event_type: infrastructure_update
 epistemic_status: verified_fact
 entities:
   companies:
   - NixOS
   - Debian
+  - Red Hat
   technologies:
   - LUKS
-  - cryptsetup
+  - QEMU
+  - loop block device
   key_people:
-  - Joachim Breitner
   - Pali Rohár
   - Ondrej Kozina
+  - iblech
 key_logic_flow:
-- 自 Linux 6.9 起，系统挂起后 LUKS 加密密钥未被从内存中擦除，/proc/keys 中仍可见密钥条目，存在冷启动攻击风险
-- Joachim Breitner 在移植 Debian 的 cryptsetup-suspend 到 NixOS 时发现竞态条件问题，通过 QEMU 虚拟机转储内存确认了密钥泄露
-- Pali Rohár 曾提交但未被合入的内核补丁被复活，用于在挂起时擦除 LUKS 加密密钥，避免竞态条件并增加额外保护措施
-- Ondrej Kozina（cryptsetup 团队）开发了 cryptsetup 的规避补丁，计划在 cryptsetup 2.8.7 中发布
-- Ondrej Kozina 还发现 loop 块设备存在类似密钥泄露问题，单行内核补丁仅覆盖物理块设备场景，无法保护虚拟 loop 设备
+- Linux 内核自 6.9 版本起存在安全漏洞：LUKS 全盘加密密钥在系统挂起到 RAM 后仍驻留内存，未按预期被清除，易受冷启动攻击。
+- 开发者 iblech 在将 Debian 的 cryptsetup-suspend 移植到 NixOS 时发现该 bug，通过 QEMU 虚拟机内存转储确认了密钥泄露的事实。
+- Pali Rohár 曾提交在挂起时清除 LUKS 加密密钥的内核补丁，但该补丁从未被合并到主线内核中，iblech 的方案复活了该补丁。
+- cryptsetup 团队的 Ondrej Kozina 为 cryptsetup 开发了绕过内核 bug 的工作补丁，计划随 cryptsetup 2.8.7
+  版本发布。
+- Ondrej 在审查补丁时还发现了 loop 块设备系统中的相关安全问题，表明物理块设备和虚拟 loop 设备都受影响。
+- iblech 发布的 NixOS 实验性安全挂起方案支持根文件系统加密，并包含集成测试来验证密钥确实被清除。
 extract_result: success
+object_mentions:
+- object_type: project
+  name: NixOS experimental secure suspend-to-RAM
+  canonical_name: nixos-secure-suspend-ram
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - iblech 发布了一个实验性的 NixOS 安全挂起方案，通过复活 Pali Rohár 的内核补丁来在挂起时清除 LUKS 加密密钥。
+  - 该项目支持根文件系统加密，并提供了集成测试来验证密钥是否真正在挂起时被清除。
+  - 该方案受 Debian 的 cryptsetup-suspend 启发，但通过内核补丁避免了偶尔阻止系统进入睡眠的竞态条件。
+  article_id: cb2b299cfff1edd8
+- object_type: project
+  name: cryptsetup
+  canonical_name: cryptsetup
+  url: https://gitlab.com/cryptsetup/cryptsetup
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Ondrej Kozina 为 cryptsetup 开发了绕过内核 bug 的工作补丁，该补丁计划在 cryptsetup 2.8.7 版本中发布。
+  - 该补丁对应的合并请求位于 GitLab 上：https://gitlab.com/cryptsetup/cryptsetup/-/merge_requests/937。
+  article_id: cb2b299cfff1edd8
+- object_type: project
+  name: Pali Rohár's kernel patch for LUKS key wiping on suspend
+  canonical_name: pali-rohar-luks-suspend-patch
+  url: https://lore.kernel.org/linux-pm/1428254419-7334-1-git-send-email-pali.rohar@gmail.com/
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Pali Rohár 曾提交过在挂起时清除 LUKS 加密密钥的内核补丁，但该补丁从未被合并到主线内核中。
+  - iblech 在审查 cryptsetup 和内核文档后发现已在 /proc/keys 中可见的密钥实际未被清除，随后复活了该补丁。
+  article_id: cb2b299cfff1edd8
+- object_type: project
+  name: FridgeLock
+  canonical_name: FridgeLock
+  url: https://www.sec.in.tum.de/i20/publications/fridgelock-preventing-data-theft-on-suspended-linux-with-usable-memory-encryption
+  confidence: low
+  article_role: mentioned_reference
+  evidence_snippets:
+  - iblech 在讨论中提到未来复活 FridgeLock 项目可能是有意义的，该项目会在挂起前加密大量 RAM 内容。
+  article_id: cb2b299cfff1edd8
 ---
 
 @nixos_org @leah @identical9213 Announcing experimental secure suspend-to-RAM for NixOS

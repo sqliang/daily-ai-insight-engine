@@ -15,8 +15,10 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: ec5d5bdcea575d2f
 source_type: news_media
-tldr: Kaleidescape发布Strato E播放器，售价2995美元，提供接近无损的4K画质
-objective_summary: The Verge评测了Kaleidescape的Strato E 4K电影播放器。该设备售价2995美元，内置480GB固态硬盘，可直接从电影制片厂获取母带文件播放，码率不受互联网带宽限制，画质优于流媒体和4K蓝光碟片。
+tldr: Kaleidescape 发布 Strato E 4K 电影播放器，售价 2,995 美元，内置 480GB 固态硬盘，提供远超流媒体服务的参考级画质，但价格极其昂贵。
+objective_summary: Kaleidescape 于近期发布了 Strato E 4K 电影播放器，这是该品牌最便宜的 4K 机型，售价 2,995
+  美元。该设备从电影公司直接获取片源并以参考级质量编码，内置 480GB 固态硬盘（可存储 5-6 部 4K 电影），配备 USB 接口和 HDMI 2.1 端口，支持高码率的视觉无损画质和
+  Atmos 音频，但存储扩展只能使用昂贵的同生态产品。
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
@@ -26,15 +28,31 @@ entities:
   - Amazon
   - Disney
   - Apple
-  technologies: []
+  technologies:
+  - HDMI 2.1
+  - 4K Blu-ray
+  - Atmos
+  - SSD
   key_people: []
 key_logic_flow:
-- Kaleidescape Strato E是一款售价2995美元的4K电影播放器，内置480GB固态硬盘，可存储约5至6部4K电影。
-- 该设备直接从电影制片厂获取母带级文件进行编码，码率不受互联网带宽限制，最高可达144Mbps。
-- Strato E通过HDMI 2.1接口输出，提供接近视觉无损的4K画质和清晰的Atmos音效，画质优于流媒体服务。
-- 该设备的缺点是价格昂贵、内置存储空间有限，且仅支持昂贵的生态系统内存储扩展。
-- Kaleidescape产品线一直面向高端定制影院市场，Strato E是其目前最便宜的4K播放器机型。
+- 过去 15 年 Netflix、Amazon、Disney、Apple 等流媒体服务让用户用便利换取了画质，流媒体码率远不足以发挥现代电视的显示潜力。
+- Kaleidescape 直接从电影公司获取片源并以参考级质量编码，提供超过 4K 蓝光盘上限 144Mbps 码率的高画质。
+- Strato E 是 Kaleidescape 迄今最便宜的 4K 播放器，定价 2,995 美元，内置 480GB SSD 可存 5-6 部 4K 电影。
+- 设备配备 HDMI 2.1 接口同时处理音频和视频输出，USB 接口可用于扩展，但存储扩展只能使用昂贵的自有生态产品。
+- Strato E 提供视觉无损画质和清晰的 Atmos 音效，画质远超主流流媒体应用，但价格极其昂贵。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Kaleidescape Strato E
+  canonical_name: Kaleidescape Strato E
+  url: https://www.kaleidescape.com/
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Kaleidescape 最新的 Strato E 是该品牌迄今最便宜的 4K 播放器，售价 2,995 美元。
+  - Strato E 内置 480GB 固态硬盘，可存储 5 到 6 部 4K 电影，配备 USB 端口和 HDMI 2.1 端口。
+  - Strato E 提供高码率支持达到视觉无损画质，Atmos 音效清晰准确，画质远超主流流媒体应用。
+  article_id: ec5d5bdcea575d2f
 ---
 
 We’ve lost something in the past 15 years. Netflix, Amazon, Disney, Apple; they’ve all convinced us that streaming is the best way to watch movies and shows at home. With everything at our fingertips, there’s no need to run to Blockbuster for the weekend’s entertainment, or wait for a DVD rental to arrive in the mail. And going to the movie theater is a luxury — one that keeps getting more expensive.

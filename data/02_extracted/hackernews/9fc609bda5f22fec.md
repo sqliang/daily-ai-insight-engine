@@ -14,8 +14,9 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 9fc609bda5f22fec
 source_type: community_discussion
-tldr: 欧盟禁用农药在进口大米、茶叶和香料中被检出残留，形成"农药回旋镖"效应。
-objective_summary: Foodwatch 在荷兰、法国、奥地利和德国四国对 64 款食品进行实验室检测，发现其中 45 款含有欧盟已禁用的农药残留。这些被禁农药仍由欧盟成员国出口至第三国，再通过进口食品返回欧洲市场。
+tldr: 食品观察组织对荷兰、法国、奥地利和德国市场64款产品（大米、茶、香料）的检测发现，45款含有欧盟禁用农药残留，部分产品农药超标且含多达22种不同农药，形成了欧盟出口禁用农药再从进口食品返销的"有毒农药回旋镖"现象。
+objective_summary: 食品观察组织（foodwatch）于2026年7月在荷兰、法国、奥地利和德国四国市场抽检了64款大米、茶、香料等日常食品。实验室检测结果显示，49款产品检出至少一种农药残留，其中45款含有欧盟未批准使用的农药，14款样品的残留量超过法定上限。检出的禁用农药包括
+  Chlorfenapyr、Bifenthrin、Spirotetramat 等。欧洲化学品管理局数据显示，其中6种农药在2024至2025年间曾从欧盟成员国出口至第三国，随后以进口食品残留形式回流欧盟市场。
 event_type: policy_and_safety
 epistemic_status: verified_fact
 entities:
@@ -25,14 +26,15 @@ entities:
   technologies: []
   key_people: []
 key_logic_flow:
-- Foodwatch 对荷兰、法国、奥地利和德国四国的 64 款食品（大米、辣椒粉、茶叶、孜然、咖喱粉）进行实验室检测。
-- 49 款产品检出至少一种农药残留，其中 45 款含有欧盟已禁用的农药残留，14 个样品残留量超出法定上限。
-- 所有被检测的辣椒粉、辣椒和孜然样品均含有非欧盟批准的农药残留，其中一个辣椒粉样品检出 22 种不同农药（含 6 种禁用农药）。
-- 高频检出的禁用农药包括 Chlorfenapyr、Bifenthrin、Spirotetramat、Clothianidin 等，其中 6 种在 2024-2025
-  年仍被欧盟成员国出口至第三国。
-- 被禁农药从欧盟出口至第三国后，通过进口食品以残留形式返回欧洲市场，形成"有毒农药回旋镖"效应。
-- 欧盟拟通过"omnibus"快速通道一揽子削弱食品安全法规，包括降低农药安全审查、残留限量和进口管控标准。
+- 食品观察组织在荷兰、法国、奥地利和德国四国市场抽检了64款日常食品，涵盖大米、辣椒粉、茶、孜然和咖喱粉等产品。
+- 检测结果显示49款产品含有至少一种农药残留，其中45款含有欧盟未批准使用的农药，14款样品残留量超过法定上限。
+- 一款辣椒粉样品中检出了多达22种不同农药，其中包括6种欧盟禁用农药。
+- 频繁检出的禁用农药包括 Chlorfenapyr、Bifenthrin、Spirotetramat、Clothianidin、Thiametoxam、Imidacloprid
+  和 Isoprothiolane。
+- 欧洲化学品管理局数据显示，其中6种农药在2024至2025年间曾从欧盟成员国出口至第三国，形成了"有毒农药回旋镖"效应。
+- 欧盟委员会正试图快速通过一揽子食品安全法规松绑方案，可能削弱农药安全审查、残留限量标准和进口管控力度。
 extract_result: success
+object_mentions: []
 ---
 
 Pesticides that are not approved for use or sale in the EU have been found in everyday food products such as rice, tea and spices. New laboratory tests on 64 products from the Netherlands, France, Austria and Germany detected residues of multiple pesticides — including substances no longer approved in the EU.

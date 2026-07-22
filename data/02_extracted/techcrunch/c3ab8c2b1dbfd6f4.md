@@ -14,9 +14,11 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: c3ab8c2b1dbfd6f4
 source_type: news_media
-tldr: Anthropic 发布 Fable，因过度限制网络安全话题遭研究人员批评
-objective_summary: Anthropic 于周二发布 Fable 模型（Mythos 的受限公开版），内置针对网络安全和生物学的安全护栏导致大量正常请求被拒绝，多位安全研究员公开表达不满。Fable
-  在触发护栏时会降级回退到 Claude Opus 4.8。
+tldr: Anthropic 发布 Fable 模型作为网络安全模型 Mythos 的公开受限版本，因其基于关键词的过度防护机制触发安全无关请求被拒，引发网络安全研究人员的广泛批评。
+objective_summary: Anthropic 于 2026 年 6 月发布了 Fable 模型，定位为 Mythos 的公开受限版本。当用户请求涉及网络安全或生物学领域时，Fable
+  的防护机制会暂停对话并回退到 Claude Opus 4.8。IBM X-Force 研究员 Valentina Palmiotti 指出连阅读博客文章都会被阻止，Tolmo
+  的 Matt Suiche 认为防护机制基于关键词且过于敏感但可以理解。Mythos 于四月通过 Project Glasswing 项目限量发布，上周已扩展到
+  15 个国家的数百家组织。
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
@@ -24,23 +26,64 @@ entities:
   - Anthropic
   - IBM X-Force
   - Tolmo
-  - TechCrunch
   technologies:
   - Fable
   - Mythos
   - Claude Opus 4.8
   key_people:
-  - Valentina "Chompie" Palmiotti
+  - Valentina Palmiotti
   - Matt Suiche
   - Lorenzo Franceschi-Bicchierai
 key_logic_flow:
-- Anthropic 于周二发布 Fable 模型，将其定位为网络安全模型 Mythos 的受限公开版。
-- Fable 内置了基于关键词的安全护栏，任何与网络安全或生物学相关的话题（包括阅读博客、代码审查等无害任务）都会被拒绝，并提示"安全措施标记了此消息"。
-- 当触发护栏时，Fable 会自动降级回退到 Claude Opus 4.8 模型。
-- IBM X-Force 安全研究员 Valentina Palmiotti 表示 Fable 甚至拒绝"阅读博客文章"这一类无害请求。
-- Tolmo 安全研究员 Matt Suiche 指出护栏基于关键词匹配，"网络安全"词域内的任何内容都会触发限制，但同时表示早期阶段收紧限制比放松更合理，护栏预计会逐步进化。
-- Mythos 于今年 4 月通过 Project Glasswing 以有限范围发布，上周已扩展至 15 个国家的数百个组织。
+- Anthropic 发布了 Fable 模型，将其定位为网络安全模型 Mythos 的公开且功能受限的版本。
+- Fable 内置基于关键词的防护机制，会阻止任何与网络安全或生物学相关的请求，触发时暂停对话并回退到 Claude Opus 4.8。
+- IBM X-Force 研究员 Valentina Palmiotti 批评 Fable 连阅读博客文章这类无害任务也会被错误拦截。
+- Mythos 于四月通过 Project Glasswing 项目限量发布给少数组织，上周已扩展到 15 个国家的数百家组织。
+- Tolmo 的 Matt Suiche 认为防护机制过于敏感但可以理解，早期宁可误杀过多也不放过是合理的，机制会随时间逐步放宽。
+- 有多位网络安全专家在 X 平台上抱怨，即使是请求代码审查这种常规任务也会触发 Fable 的防护机制。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Fable
+  canonical_name: Anthropic Fable
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Anthropic 发布了最新模型 Fable，将其定位为强大的网络安全模型 Mythos 的公开且功能受限的版本。
+  - Fable 的防护机制会阻止任何可能涉及网络安全或生物学的请求，触发时暂停对话并回退到 Claude Opus 4.8。
+  - 网络安全研究人员批评 Fable 的防护机制过于激进，连阅读博客文章或代码审查等无害任务都会被阻止。
+  article_id: c3ab8c2b1dbfd6f4
+- object_type: product
+  name: Mythos
+  canonical_name: Anthropic Mythos
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Anthropic 于四月发布了网络安全模型 Mythos，并通过 Project Glasswing 项目限制为少数组织使用。
+  - 上周 Anthropic 将 Mythos 的访问权限扩展到 15 个国家的数百家组织，用于保护关键软件和基础设施。
+  - Fable 被定位为 Mythos 的公开且功能受限的版本，作为更广泛的安全防护措施的一部分。
+  article_id: c3ab8c2b1dbfd6f4
+- object_type: project
+  name: Project Glasswing
+  canonical_name: Project Glasswing
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Anthropic 通过 Project Glasswing 项目将 Mythos 部署于关键软件和基础设施的安全防护。
+  - Project Glasswing 最初将 Mythos 的访问限制在少数公司和组织范围内。
+  article_id: c3ab8c2b1dbfd6f4
+- object_type: product
+  name: Claude Opus 4.8
+  canonical_name: Claude Opus 4.8
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 当 Fable 触发防护机制时，会回退到 Claude Opus 4.8 模型继续对话。
+  article_id: c3ab8c2b1dbfd6f4
 ---
 
 Anthropic released its latest model Fable on Tuesday, billing it as a public and limited version of its powerful and much-hyped cybersecurity model Mythos.

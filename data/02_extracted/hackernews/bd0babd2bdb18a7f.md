@@ -13,26 +13,57 @@ tags:
 extraction_status: success
 id: bd0babd2bdb18a7f
 source_type: community_discussion
-tldr: Google在IO大会上宣布搜索将全面转向AI生成答案，减少来源链接，被作者视为对开放Web的宣战。
-objective_summary: 2026年5月20日，Google在IO大会上宣布搜索产品将深化AI Overviews方向，以AI生成的答案替代传统的链接索引范式。作者分析此举意在建立一个由Google控制的Web抽象层，将网站内容降格为训练AI的免费原材料，从而垄断信息获取渠道，颠覆参与式开放Web。
+tldr: 谷歌在IO主题演讲中宣布将搜索进一步推向AI直接生成答案的方向，减少对原始网页链接的依赖。批评者认为这本质上是在网络之上建立谷歌控制的抽象层，将创作者的作品降级为AI的免费原料，损害了参与式网络的根基。
+objective_summary: 2026年5月20日，谷歌在IO主题演讲中宣布搜索将更加侧重AI直接生成答案（即AI Overviews模式），而非提供指向信息来源的链接。批评文章指出，这一做法将网站和创作者的作品视为LLM的免费训练原料，用谷歌控制的抽象层遮蔽了开放网络。作者认为这是一场针对参与式网络的革命，谷歌意图垄断信息访问渠道，并预测下一步将使用贬义标签（类似'暗网'）来污名化开放网络。
 event_type: application_landing
-epistemic_status: verified_fact
+epistemic_status: theoretical_claim
 entities:
   companies:
   - Google
   technologies:
   - AI Overviews
   - LLM
-  key_people: []
+  key_people:
+  - Zuckerberg
 key_logic_flow:
-- Google在2026年IO大会上宣布搜索产品将全面转向AI生成的答案摘要，减少甚至放弃传统的来源链接范式。
-- 此举意味着Google试图在开放Web之上建立一个由其完全控制的新抽象层，将Web内容降格为训练AI的免费原材料。
-- 网站、创作者和艺术家的工作不再被视为独立的文化产物，而仅是Google合成文本机器的无偿输入。
-- 这本质上是对参与式Web的颠覆，目标是垄断信息获取渠道，使公众只能通过Google控制的界面接触信息。
-- 作者预测Google及其同类企业下一步将制造贬低开放Web的话术（类似暗网），将自身抽象层包装为安全Web。
-- 作者呼吁用户通过更换默认搜索引擎和停止使用Chrome浏览器来抵制这一趋势。
+- 谷歌在IO主题演讲中宣布搜索将更倾向于AI直接生成答案，而非提供信息链接，延续了AI Overviews的范式。
+- 批评者认为这本质是在网络之上建立谷歌控制的抽象层，将网站和创作者的作品降级为AI的免费原料。
+- 作者将此举与扎克伯格失败的Metaverse类比，认为谷歌正在发起对参与式网络的新一轮攻击。
+- 作者预测谷歌下一步将开发贬义标签来污名化开放网络，类似'暗网'一词的使用方式。
+- 文章呼吁用户去谷歌化，寻找替代搜索引擎并停止使用Chrome浏览器。
 pipeline_stage: fact_extracted
 extract_result: success
+object_mentions:
+- object_type: product
+  name: AI Overviews
+  canonical_name: Google AI Overviews
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 谷歌正在将搜索推向'直接给出答案'的方向，延续了AI Overviews（AI摘要）的范式，这些AI摘要在当前搜索中大约有10%的错误率。
+  - 谷歌正在放弃提供信息链接的范式，转而通过LLM生成回复，将网页信息去语境化并隐藏在其控制的抽象层之下。
+  article_id: bd0babd2bdb18a7f
+- object_type: product
+  name: Chrome
+  canonical_name: Google Chrome
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 作者批评谷歌不仅通过搜索改变信息获取方式，还拥有浏览器垄断地位，加剧了对网络流量的控制。
+  - 作者呼吁用户停止使用Chrome浏览器，作为去谷歌化行动的一部分。
+  article_id: bd0babd2bdb18a7f
+- object_type: product
+  name: Google Search
+  canonical_name: Google Search
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 谷歌在IO主题演讲中宣布搜索将更侧重于AI直接生成答案，这是对现有信息链接范式的重大转变。
+  - 作者认为谷歌的目标是让信息访问完全由其合成文本挤出机控制，用户只能获得谷歌认为相关的内容。
+  article_id: bd0babd2bdb18a7f
 ---
 
 In Yesterday’s IO Keynote Google declared war on the remnants of the Web. (See longer description on their website.) TL;DR: They are pushing Search more into the “here’s your processed answer” direction that “AI Overviews” have established (you know, those AI snippets in current Search that are wrong about 10% of the time). So they are mostly giving up on the paradigm of providing links to information.

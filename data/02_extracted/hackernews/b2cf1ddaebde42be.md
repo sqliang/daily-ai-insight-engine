@@ -14,35 +14,78 @@ pipeline_stage: fact_extracted
 id: b2cf1ddaebde42be
 source_type: community_discussion
 extract_result: success
-tldr: 匿名研究员在 GitHub 发布 22 个未公开 0-day 漏洞 PoC，涉及 Docker、Firefox、FFmpeg 等知名软件
-objective_summary: 匿名安全研究员在 GitHub 创建 exploitarium 仓库，集中发布 22 个未公开漏洞的 PoC，覆盖 7zip、Docker、Firefox、FFmpeg、Ghidra、libssh2、OpenVPN、PHP、VLC
-  等软件。该研究员声称使用 GPT-5.
-event_type: policy_and_safety
+tldr: 匿名研究人员通过 GitHub 账户 bikini 创建 exploitarium 仓库，批量公开了 7-zip、FFmpeg、libssh2、Docker、Firefox、Ghidra
+  等 20 余款主流软件的大量未公开零日漏洞 PoC，并披露其使用 GPT-5.5-3-Codex-Spark 模型辅助自动化 fuzzing 以发现这些漏洞。
+objective_summary: 安全研究人员通过 GitHub 账户 bikini 于 2026 年 6 月下旬创建 exploitarium 仓库，集中发布了此前多个独立
+  PoC 仓库的零日漏洞利用代码。该仓库包含至少 23 个漏洞研究项目，涉及 7-zip（RAR5 MOTW 链绕过）、AnyDesk（打印机 COM 模拟攻击）、c-ares（TCP
+  释放后使用）、Docker（cp 复制目的地逃逸）、Firefox（SmartWindow 私有 URL 泄露）、Floci/AWS API Gateway（VTL
+  远程代码执行）、FFmpeg（RASC DLTA 计算错误）、Ghidra 12.1.2（远程代码执行）、libssh2（CVE-2026-55200）、PHP
+  8.5.7（流桶 SOAP RCE）、RustDesk（会话权限绕过）、VLC（VP9 分辨率切换崩溃）等主流软件的未公开漏洞。作者自称拥有 fuzzing 方法论学位并发表过多篇相关论文，使用
+  GPT-5.5-3-Codex-Spark 模型配合严格 harness 自动化 fuzzing 流程，所有 PoC 代码为手工编写而非 AI 生成。
+event_type: application_landing
 epistemic_status: verified_fact
 entities:
   companies:
-  - GitHub
+  - AWS
   - Docker
   - Mozilla
-  - Amazon
-  - VideoLAN
+  - Gitea
   - OpenVPN
-  - PHP Group
+  - VideoLAN
+  - Oracle
+  - RustDesk
   technologies:
   - GPT-5.5-3-Codex-Spark
-  - Ghidra
   - fuzzing
+  - RCE
+  - LPE
+  - UAF
+  - ACE
+  - MCP
+  - VTL
   key_people:
+  - bikini
   - 4D4J
 key_logic_flow:
-- 匿名安全研究员在 GitHub 创建 exploitarium 仓库，集中发布 22 个未公开漏洞的 PoC（概念验证代码）。
-- 仓库覆盖 Docker、Firefox、FFmpeg、Ghidra、libssh2、OpenVPN、PHP、VLC 等多个知名软件的漏洞，部分为 0-day 且未分配
-  CVE。
-- 该研究员使用 GPT-5.5-3-Codex-Spark 模型自动化模糊测试工作流，但强调 PoC 代码为手动编写而非 AI 生成。
-- 该研究员自称拥有相关学位并发表过多篇模糊测试方法论论文，否认完全依赖 AI 进行漏洞发现。
-- 仓库中 libssh2 漏洞已获 CVE 编号（CVE-2026-55200），另有多个漏洞涉及 c-ares、nghttp2、Nmap、System Informer
-  等基础设施软件。
-- 研究员声明该仓库为善意公开披露的漏洞研究，禁止恶意使用，并在 Discord 上以 @ashdfrkl 身份接受协作讨论。
+- 匿名安全研究人员通过 GitHub 账户 bikini 创建了 exploitarium 仓库，集中发布了大量此前未公开的零日漏洞 PoC，涉及 7-zip、FFmpeg、libssh2、Docker
+  等 20 余款主流软件。
+- 作者使用 GPT-5.5-3-Codex-Spark 模型自动化 fuzzing 流程，在配合高效 harness 和人工监督的条件下完成了漏洞发现工作。
+- 该仓库列出了 23 个漏洞 PoC 项目，包括 Floci（AWS API Gateway VTL 远程代码执行）、libssh2 CVE-2026-55200、Firefox
+  SmartWindow 隐私 URL 泄露、Docker cp 目的地逃逸等严重漏洞。
+- 仓库由原独立 PoC 仓库合并而来，通过 Git tree 数据验证了 12 个原仓库共 96 个跟踪条目与原始文件完全一致，零差异。
+- 作者在 objdump 漏洞上承认另一位研究者 4D4J 更早发现并拥有更优的 PoC，要求社区将相关荣誉归给该研究者。
+- 作者声明所有内容为善意公开披露的漏洞研究，禁止恶意使用，旨在促进安全社区对漏洞挖掘领域的关注。
+object_mentions:
+- object_type: project
+  name: bikini/exploitarium
+  canonical_name: bikini/exploitarium
+  url: https://github.com/bikini/exploitarium
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 该仓库是匿名安全研究者集中发布零日漏洞 PoC 的存档库，包含 7-zip、FFmpeg、libssh2、Docker 等主流软件的未公开漏洞利用代码。
+  - 仓库由原独立 PoC 仓库合并而来，通过 Git tree 数据验证了 12 个原仓库共 96 个跟踪条目与原始文件完全一致。
+  - 该仓库包含至少 23 个漏洞研究项目文件夹，其中有 Floci API Gateway VTL RCE、libssh2 CVE-2026-55200、Firefox
+    SmartWindow 隐私 URL 泄露等严重漏洞的 PoC。
+  article_id: b2cf1ddaebde42be
+- object_type: model
+  name: GPT-5.5-3-Codex-Spark
+  canonical_name: GPT-5.5-3-Codex-Spark
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 作者使用 GPT-5.5-3-Codex-Spark 模型自动化所有 fuzzing 工作，在具备高效 harness 和人工监督的情况下该模型足以完成漏洞发现任务。
+  article_id: b2cf1ddaebde42be
+- object_type: project
+  name: 4D4J/objdump-Out-Of-Bounds-write
+  canonical_name: 4D4J/objdump-Out-Of-Bounds-write
+  url: https://github.com/4D4J/objdump-Out-Of-Bounds-write
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 作者在 objdump 漏洞发现上承认另一位研究者 4D4J 更早发现并拥有更优的 PoC，要求社区将相关荣誉归给该研究者。
+  article_id: b2cf1ddaebde42be
 ---
 
 This repo was incomplete when published. That's why some findings are kinda ass (ghidra) and some are better. Going forward, only serious vulnerabilities will be shared (Floci, libssh2, FFmpeg, c-ares).

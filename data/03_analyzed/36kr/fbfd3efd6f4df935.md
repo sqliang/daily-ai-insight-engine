@@ -11,22 +11,33 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: fbfd3efd6f4df935
 source_type: news_media
-tldr: 百度搭子DuMate iOS版上线苹果App Store，此前已发布安卓版本
-objective_summary: 百度于2026年6月20日宣布，其AI助手产品DuMate（搭子）的iOS版本正式登陆苹果App Store。此前DuMate已在Create大会上发布移动端能力并率先上线安卓版本，此次iOS上线后用户可在双端设备上调用信息检索、资料整理、内容生成、任务规划等功能。
+tldr: 百度旗下AI助手「搭子DuMate」iOS版正式上线苹果App Store，此前已发布安卓版本，用户可在双端调用其信息检索、资料整理、内容生成与任务规划等能力。
+objective_summary: 2026年7月，百度旗下AI助手产品「搭子DuMate」iOS版本登陆苹果App Store。该产品此前在百度Create大会上发布移动端能力，并率先上线安卓版本。iOS版上线后，DuMate实现了安卓与iOS双端覆盖，用户可在两种设备上调用DuMate完成信息检索、资料整理、内容生成和任务规划等场景任务，旨在打破AI协作对固定设备的依赖。
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
   companies:
   - 百度
-  - Apple
-  technologies:
-  - AI助手
+  technologies: []
   key_people: []
 key_logic_flow:
-- 百度搭子DuMate的iOS版本正式在苹果App Store上线。
-- DuMate此前已在Create大会上发布移动端能力，并率先推出了安卓版本。
-- iOS端上线后，用户可在安卓和iOS双端设备上使用DuMate。
-- DuMate支持信息检索、资料整理、内容生成、任务规划等AI协作场景。
+- 百度旗下AI助手产品「搭子DuMate」的iOS版本正式登陆苹果App Store。
+- DuMate此前已在百度Create大会上发布移动端能力，并率先上线了安卓版本。
+- iOS版上线后，DuMate实现了安卓与iOS双端设备覆盖。
+- 用户可在双端调用DuMate处理信息检索、资料整理、内容生成和任务规划等场景任务。
+- 该产品的定位是让AI协作不再局限于固定设备，实现跨终端使用。
+extract_result: success
+object_mentions:
+- object_type: product
+  name: 百度搭子DuMate
+  canonical_name: 百度搭子DuMate
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 百度搭子DuMate移动端APP iOS版本正式登陆苹果App Store，此前已在Create大会上发布移动端能力并率先上线安卓版本。
+  - 用户可在安卓和iOS设备上调用DuMate，处理信息检索、资料整理、内容生成、任务规划等场景，让AI协作不再局限于固定设备。
+  article_id: fbfd3efd6f4df935
 impact_score:
   score: 2.5
   reason: 百度搭子DuMate iOS版本上架App Store是一次常规的平台扩展，此前安卓版已发布。该事件未涉及任何技术突破或新功能发布，只是移动端覆盖范围的补齐。在当前AI助手市场已高度竞争的环境下（豆包、文心一言、通义千问等均已覆盖双端），这一举措属于日常产品运营更新，对行业格局几乎无影响。
@@ -67,6 +78,32 @@ confidence:
   compound: medium
   hype: medium
 actionable_insight: monitor
+object_insights:
+- object_type: product
+  name: 百度搭子DuMate
+  canonical_name: 百度搭子DuMate
+  url: null
+  positioning: 百度旗下跨终端AI助手产品，实现iOS与安卓双端全面覆盖，面向用户提供信息检索、资料整理、内容生成和任务规划等移动端AI协作能力。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users:
+  - 移动端用户
+  - 需要跨设备AI协作的用户
+  - 百度AI生态用户
+  product_signal: DuMate已完成iOS端上线，实现安卓与iOS双端设备全覆盖，用户可在双端调用信息检索、内容生成和任务规划等核心AI能力。
+  market_signal: 该产品在百度Create大会发布移动端能力后，从安卓起步并快速完成iOS端上架，表明百度正加速移动AI助手市场的终端布局。
+  differentiation: 与局限于固定设备的AI助手不同，DuMate强调跨终端AI协作体验，让用户在多设备间无缝切换使用AI能力完成日常任务。
+  watch_reason: DuMate作为百度在移动AI助手赛道的核心产品，其双端布局完成为观察百度AI战略在消费端落地提供了重要窗口，需持续关注其用户增长、场景扩展以及与竞品的差异化演进。
+  risk_notes:
+  - 移动AI助手赛道已有多个先发竞品，DuMate面临激烈的用户获取与留存竞争。
+  - 当前产品信息较为基础，核心差异化能力和技术壁垒尚不清晰。
+  score: 6.0
+  article_ids:
+  - fbfd3efd6f4df935
+  evidence_snippets:
+  - 百度搭子DuMate移动端APP iOS版本正式登陆苹果App Store，此前已在Create大会上发布移动端能力并率先上线安卓版本。
+  - 用户可在安卓和iOS设备上调用DuMate，处理信息检索、资料整理、内容生成、任务规划等场景，让AI协作不再局限于固定设备。
 ---
 
 36氪获悉，百度搭子DuMate移动端APP iOS版本正式登陆苹果App Store。此前，DuMate已在Create大会上发布移动端能力，并率先上线安卓版本。此次iOS端上线后，用户可在安卓和iOS设备上调用DuMate，处理信息检索、资料整理、内容生成、任务规划等场景，让AI协作不再局限于固定设备。
