@@ -26,27 +26,35 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 3aba75d6a4da6ce1
 source_type: community_discussion
-tldr: Extend UI 发布开源文档应用 UI 套件，提供 React 组件支持 PDF/DOCX/XLSX/CSV 查看与编辑。
-objective_summary: Extend UI 在 Hacker News 上以 Show HN 形式发布了开源 UI 工具包，包含 PDF、DOCX、XLSX、CSV
-  查看器的 React 组件，支持边界框标注、文件上传和电子签名功能，面向用户端流程、AI Agent 和内部工具场景。
-event_type: application_landing
+tldr: Extend UI 是一个开源 React UI 工具包，提供 PDF、DOCX、XLSX 和 CSV 查看器组件，支持边界框引用、文件上传和电子签名功能，可直接嵌入面向用户的流程、Agent
+  或内部工具中。
+objective_summary: Extend UI 发布了其开源 UI 工具包，专为现代文档应用设计。该工具包提供基于 React 的 PDF、DOCX、XLSX
+  和 CSV 文件查看器组件，集成了边界框引用标注、文件上传和电子签名等功能。该项目定位为可直接嵌入用户界面、AI Agent 或内部工具的前端组件集合。
+event_type: framework_tools
 epistemic_status: pr_statement
 entities:
-  companies:
-  - Extend UI
+  companies: []
   technologies:
   - React
-  - PDF
-  - DOCX
-  - XLSX
-  - CSV
   key_people: []
 key_logic_flow:
-- Extend UI 是一个开源 UI 工具包，专门面向现代文档应用场景。
+- Extend UI 是一个面向现代文档应用的开源 UI 工具包。
 - 该工具包提供 React 组件，用于渲染 PDF、DOCX、XLSX 和 CSV 等常见文档格式。
-- 组件包含边界框标注引用、文件上传和电子签名等高级功能。
-- 产品定位为可直接嵌入用户界面流程、AI Agent 或内部工具中。
-- 该项目通过 Hacker News 的 Show HN 栏目公开发布。
+- 组件内置了边界框引用标注、文件上传和电子签名等高级功能。
+- 该项目旨在降低开发者为用户界面、AI Agent 或内部工具集成文档处理能力的门槛。
+extract_result: success
+object_mentions:
+- object_type: project
+  name: Extend UI
+  canonical_name: Extend UI
+  url: https://www.extend.ai/ui
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Extend UI 是一个开源的 UI 工具包，专为现代文档应用设计。
+  - 它提供 React 组件用于 PDF、DOCX、XLSX 和 CSV 文件的查看与交互。
+  - 该工具包支持边界框引用、文件上传、电子签名等功能，可嵌入面向用户的流程、Agent 或内部工具中。
+  article_id: 3aba75d6a4da6ce1
 impact_score:
   score: 3.5
   reason: 该事件是 Hacker News 上一个开源 UI 工具包的发布公告，面向文档应用场景提供 React 组件封装。从技术含量看，本质是将 PDF.js、SheetJS
@@ -99,6 +107,31 @@ confidence:
   compound: low
   hype: low
 actionable_insight: monitor
+object_insights:
+- object_type: project
+  name: Extend UI
+  canonical_name: Extend UI
+  url: https://www.extend.ai/ui
+  positioning: Extend UI 是一个开源 React UI 工具包，专为现代文档应用提供 PDF、DOCX、XLSX 和 CSV 查看器组件，降低文档交互功能的集成门槛。
+  technical_signal: 基于 React 组件架构，覆盖 PDF、DOCX、XLSX 和 CSV 四种主流文档格式的查看与交互能力，并内置了边界框引用标注机制。
+  adoption_signal: 作为 Hacker News Show HN 项目首次公开发布，目前尚未披露具体的用户规模或采用数据，仍处于早期推广与验证阶段。
+  ecosystem_relevance: 该项目填补了开源生态中面向文档应用的 React UI 工具包空白，与 AI Agent 工作流和内部工具场景有天然的结合点。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: Extend UI 以开源方式切入文档 UI 工具包赛道，填补了 React 生态中面向多格式文档交互组件的空白，其边界框引用和电子签名等功能直接响应了
+    AI Agent 场景下文档处理的需求，值得跟踪其在开发者社区的采用速度与生态扩展方向。
+  risk_notes:
+  - 项目以 Hacker News Show HN 形式首次公开亮相，目前尚未有成熟的社区贡献者和用户基础来验证其可持续性。
+  - 多文档格式的兼容性存在不确定性，复杂文档如加密 PDF 或嵌入特殊字体 DOCX 的真实渲染能力尚未经过大规模验证。
+  score: 6.0
+  article_ids:
+  - 3aba75d6a4da6ce1
+  evidence_snippets:
+  - Extend UI 是一个开源的 React UI 工具包，专为现代文档应用而设计，涵盖 PDF、DOCX、XLSX 和 CSV 等多种文件格式。
+  - 它提供 React 组件用于 PDF、DOCX、XLSX 和 CSV 文件的查看与交互，支持丰富的文档操作能力。
+  - 该工具包支持边界框引用标注、文件上传和电子签名等功能，可灵活嵌入面向用户的流程、AI Agent 或内部工具中。
 ---
 
 # Open source UI kit for modern document apps

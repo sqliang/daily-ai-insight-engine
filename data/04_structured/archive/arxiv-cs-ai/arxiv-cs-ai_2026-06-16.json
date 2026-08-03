@@ -487,25 +487,45 @@
     "pipeline_stage": "fact_extracted",
     "id": "60c4a48be638433c",
     "source_type": "academic_paper",
-    "tldr": "CONCORD 提出异步稀疏聚合框架，解决设备-云双端 RAG 在文档隔离场景下的通信瓶颈问题。",
-    "objective_summary": "arXiv 论文提出 CONCORD 框架，用于设备-云协作推理中私有文档无法共享的隔离场景。通过等待债务控制和证书引导的最小补充机制，将云端视为异步证据源而非同步协同生成器。在 Natural Questions 和 WikiText-2 上，端到端吞吐量分别提升 1.66 倍和 2.",
-    "event_type": "infrastructure_update",
-    "epistemic_status": "theoretical_claim",
+    "tldr": "CONCORD 提出了一种异步稀疏聚合框架，用于设备-云协作下的文档隔离 RAG 场景，通过等待债务控制和证书引导的最小补充机制，将云视为异步到达的证据源，端到端吞吐量提升 1.66 至 2.15 倍，通信量降低两个数量级以上。",
+    "objective_summary": "arXiv 预印本发表于 2026 年 6 月，提出 CONCORD 框架，解决设备端私有文档与云端公共知识之间因隐私政策禁止原始文档交换而形成的文档隔离 RAG 问题。该框架将云视为异步到达的证据源而非持续同步的协同生成器，通过等待债务控制机制决定解码步骤是否等待远程参与，并设计证书引导的最小补充机制仅按需获取远程证据。在 Natural Questions 和 WikiText-2 数据集上的实验表明，CONCORD 端到端吞吐量相比基线提升 1.66 倍和 2.15 倍，每 token 通信量降低两个数量级以上，同时保持可比的答案质量和困惑度。",
+    "event_type": "framework_tools",
+    "epistemic_status": "verified_fact",
     "entities": {
       "companies": [],
       "technologies": [
         "RAG",
-        "CONCORD"
+        "CONCORD",
+        "Asynchronous Sparse Aggregation",
+        "Waiting Debt Control",
+        "Certificate-Guided Minimal Supplementation"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "RAG 通过在推理时引入外部知识来增强语言模型，设备-云协作推理使小模型可在边缘设备上部署。",
-      "私有文档保留在设备端、公共知识存储在云端，隐私政策禁止原始文档交换，形成文档隔离的双端 RAG 场景。",
-      "现有方法依赖频繁的远程同步和密集的证据传输，在真实延迟和带宽条件下限制了吞吐量。",
-      "CONCORD 将云端视为异步到达的证据源，通过等待债务控制机制决定每个解码步骤是否继续等待远程参与。",
-      "CONCORD 设计证书引导的最小补充机制，仅请求当前贪心决策所需的远程证据，未咨询云端的步骤在本地提交。",
-      "在 Natural Questions 和 WikiText-2 上，CONCORD 的端到端吞吐量分别提升 1.66 倍和 2.15 倍，单 token 通信量降低两个数量级以上，同时保持相当的答案质量和困惑度。"
+      "CONCORD 解决的核心问题是设备-云协同推理场景下，私有文档存储在设备端而公共知识在云端，隐私与政策约束禁止原始文档交换形成的文档隔离双端 RAG 环境。",
+      "现有方法依赖频繁远程同步和密集证据传输，在现实延迟和带宽条件下吞吐量受限；CONCORD 将云视为异步到达的证据源而非持续同步的协同生成器。",
+      "CONCORD 引入等待债务控制机制，根据等待的观察回报决定每个解码步骤是否继续等待远程参与。",
+      "CONCORD 设计证书引导的最小补充机制，仅请求确定当前贪婪决策所需的远程证据。",
+      "咨询云端的步骤与密集双端聚合保留相同的贪婪 token，其余步骤在本地提交而不依赖远程证据。",
+      "在 Natural Questions 和 WikiText-2 数据集上，CONCORD 端到端吞吐量分别提升 1.66 倍和 2.15 倍，每 token 通信量降低两个数量级以上，同时答案质量和困惑度与基线相当。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "CONCORD",
+        "canonical_name": "CONCORD",
+        "url": "https://arxiv.org/abs/2606.15179",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "CONCORD 是一种异步稀疏聚合框架，用于文档隔离下的双端 RAG 场景。",
+          "CONCORD 将云视为异步到达的证据源，通过等待债务控制和证书引导最小补充机制运作。",
+          "在 Natural Questions 和 WikiText-2 上，CONCORD 端到端吞吐量分别提升 1.66 倍和 2.15 倍。"
+        ],
+        "article_id": "60c4a48be638433c"
+      }
     ],
     "impact_score": {
       "score": 6.0,
@@ -559,7 +579,35 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "CONCORD",
+        "canonical_name": "CONCORD",
+        "url": "https://arxiv.org/abs/2606.15179",
+        "positioning": "CONCORD 是一种异步稀疏聚合框架，在设备-云文档隔离场景下实现无需交换原始文档的高效双端 RAG 推理。",
+        "technical_signal": "引入等待债务控制和证书引导最小补充机制，将云端视为异步到达的证据源而非同步协同生成器，大幅降低通信依赖。",
+        "adoption_signal": "目前为 arXiv 预印本阶段，尚未见到社区采用、代码开源或工业部署的公开案例。",
+        "ecosystem_relevance": "CONCORD 定位于设备-云协同推理生态，解决了隐私约束下文档隔离场景中 RAG 系统的效率瓶颈。",
+        "target_users": [],
+        "watch_reason": "CONCORD 通过异步稀疏聚合将双端 RAG 通信量降低两个数量级以上，端到端吞吐量提升 1.66 至 2.15 倍，为文档隔离场景下的设备-云协同推理提供了高实用性方案，值得持续跟踪其开源进展与产业落地。",
+        "risk_notes": [
+          "CONCORD 目前仍为 arXiv 预印本，尚未开源代码，实验可复现性和社区验证有待时间检验。",
+          "该方法仅在 Natural Questions 和 WikiText-2 数据集上验证，在更多复杂 RAG 场景中的泛化能力有待进一步评估。",
+          "等待债务控制机制在极端延迟或动态网络环境下的鲁棒性，以及最优等待策略的制定仍需更多实验验证。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "60c4a48be638433c"
+        ],
+        "evidence_snippets": [
+          "CONCORD 是一种异步稀疏聚合框架，用于文档隔离下的双端 RAG 场景。",
+          "CONCORD 将云视为异步到达的证据源，通过等待债务控制和证书引导最小补充机制运作。",
+          "在 Natural Questions 和 WikiText-2 上，CONCORD 端到端吞吐量分别提升 1.66 倍和 2.15 倍。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -850,25 +898,41 @@
     "pipeline_stage": "fact_extracted",
     "id": "a512181068703722",
     "source_type": "academic_paper",
-    "tldr": "Metric Match 通过子集选择方法，用少量人工标注评估 LLM Judge 可靠性，减少32.5%标注需求。",
-    "objective_summary": "该论文提出 Metric Match 方法，从有限人工标注中估计 LLM Judge 与人类评分者的一致性可靠性指标。该方法选择样本子集用于人工标注，使子集在合成标签上匹配总体可靠性指标。实验表明，Metric Match 在四种相关性指标和15个数据集上胜率达0.838，平均估计误差降低18.",
+    "tldr": "Metric Match 是一种从有限人工标注中估计 LLM 裁判与人类评分者一致性的子集选择方法，在 15 个数据集上对随机选择的胜率达 0.838，平均估计误差降低 18.7%，标注需求减少 32.5%，并提供可安装的代码包。",
+    "objective_summary": "Metric Match 提出了一种子集选择方法，旨在从有限的人工标注样本中估计 LLM 裁判与人类评分者之间的相关性可靠性指标。该方法通过选取与总体可靠性指标匹配的样本子集来减少人工标注成本。实验在 15 个数据集上覆盖四种相关性指标，对随机子集选择的胜率达 0.838，平均估计误差降低 18.7%，标注需求减少 32.5%。在一项医学案例研究中，该方法相比随机选择节省了 1,041.67 美元的专业标注费用。",
     "event_type": "framework_tools",
-    "epistemic_status": "verified_fact",
+    "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
-        "LLM",
+        "LLM Judge",
         "Metric Match"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "LLM Judge 的可靠性取决于与人类评分者的一致性，但评估这种一致性需要昂贵的人工标注。",
-      "Metric Match 选择样本子集进行人工标注，使该子集在合成标签上匹配总体的相关性可靠性指标。",
-      "在四种相关性指标和15个数据集上，Metric Match 对随机子集选择的胜率为0.838。",
-      "Metric Match 平均估计误差降低18.7%，标注需求减少32.5%。",
-      "在医疗案例研究中，Metric Match 相比随机选择为专家标注节省1,041.67美元。",
-      "该方法还适用于可靠性分类任务，判断 LLM Judge 是否超过部署阈值，表现优于随机选择。"
+      "LLM 裁判被广泛用于替代昂贵的人工评估，但其可靠性取决于与人类评分者的一致性，而这一致的评估本身又依赖昂贵的人工标注。",
+      "Metric Match 的核心思路是从数据集中选取一个样本子集交由人工标注，使得该子集在合成标签上的可靠性指标与总体可靠性指标相匹配。",
+      "在 15 个数据集上覆盖四种相关性指标的实验中，Metric Match 对随机子集选择的胜率达到 0.838。",
+      "该方法使平均估计误差降低 18.7%，标注需求减少 32.5%。",
+      "在医学专家标注的案例研究中，Metric Match 相比随机选择节省了 1,041.67 美元。",
+      "该研究还将任务从可靠性估计扩展为可靠性分类（判断 LLM 裁判是否超过部署阈值），Metric Match 同样优于随机选择。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "Metric Match",
+        "canonical_name": "Metric Match",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Metric Match 是一种从有限人工标注中估计 LLM 裁判与人类评分者相关性可靠性的子集选择方法。",
+          "该方法选取一个样本子集进行人工标注，使该子集在合成标签上的可靠性指标与总体可靠性指标相匹配。",
+          "所有项目代码已公开，并额外提供了可安装的软件包供使用。"
+        ],
+        "article_id": "a512181068703722"
+      }
     ],
     "impact_score": {
       "score": 5.0,
@@ -923,7 +987,35 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Metric Match",
+        "canonical_name": "Metric Match",
+        "url": "https://arxiv.org/abs/2606.15029",
+        "positioning": "Metric Match 是一种基于子集选择估计 LLM 裁判与人类评分者一致性的方法，通过选取与总体可靠性指标匹配的样本子集进行人工标注来降低评估成本。",
+        "technical_signal": "在 15 个数据集上覆盖四种相关性指标，对随机子集选择的胜率达 0.838，平均估计误差降低 18.7%。",
+        "adoption_signal": "所有项目代码已公开并提供了可安装的软件包，便于研究者和开发者直接集成使用。",
+        "ecosystem_relevance": "该方法直接服务于 LLM 评估基础设施建设，通过降低人工标注成本来提升 LLM 裁判部署的可信度与可验证性。",
+        "target_users": [],
+        "watch_reason": "Metric Match 解决了 LLM 裁判评估中人工标注成本高昂的核心瓶颈，在多个数据集上验证了显著优于随机选择的性能，且医学案例展示了实际成本节省效果，值得持续关注其在 LLM 评估生态中的推广与迭代。",
+        "risk_notes": [
+          "该方法依赖合成标签来指导子集选择，在分布外场景下的一致性估计准确性尚未得到验证。",
+          "医学案例研究聚焦于专业标注场景，其在通用 LLM 评估任务中的适用性仍需进一步验证。",
+          "当前仅针对相关性指标进行优化，对分类准确率等其他评估维度的适用性尚不明确。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "a512181068703722"
+        ],
+        "evidence_snippets": [
+          "Metric Match 是一种从有限人工标注中估计 LLM 裁判与人类评分者相关性可靠性的子集选择方法，旨在降低人工标注成本。",
+          "该方法选取一个样本子集进行人工标注，使该子集在合成标签上的可靠性指标与总体可靠性指标相匹配。",
+          "所有项目代码已公开，并额外提供了可安装的软件包供使用，便于研究者和开发者直接应用该方法。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -942,28 +1034,81 @@
     "pipeline_stage": "fact_extracted",
     "id": "ba92a281793a1572",
     "source_type": "academic_paper",
-    "tldr": "Dr-DCI 提出检索器引导的动态工作空间扩展框架，结合检索可扩展性与 DCI 精确性，在 1000 万级语料规模下保持有效。",
-    "objective_summary": "arXiv 预印本（2606.14885）提出 DR-DCI，一种检索器引导的直接语料交互框架。该框架将检索作为 agent 动作用于扩展局部工作空间，在 Browsecomp-Plus 上达 71.2% 准确率，较原始 DCI 提升 8.3 个百分点，并在 10 万至 2000",
-    "event_type": "infrastructure_update",
+    "tldr": "DR-DCI 是一种检索器引导的直接语料交互框架，通过将检索作为智能体可调用的动作来动态扩展本地工作区，解决了传统 DCI 在大规模语料上运行缓慢和不稳定的问题。在 Browsecomp-Plus 上达到 71.2% 准确率，并在 100K 到 2000 万文档规模下均保持有效。",
+    "objective_summary": "来自 arXiv 的预印本论文提出了 DR-DCI 框架，将检索作为智能体可调用的动作来动态扩展本地工作区，结合了检索器的可扩展召回和 DCI 的局部精确操作能力。该方法在 Browsecomp-Plus 基准上达到 71.2% 准确率，比原始 DCI 提升最多 8.3 个百分点；启用工作区保留的上下文重置后进一步提升至 73.3%。在文档规模从 10 万到 1000 万的扩展实验中，DR-DCI 保持稳定有效，而原始 DCI 变得不稳定，BM25 表现显著下降。在 2000 万规模的 Wiki-18 QA 设定下，DR-DCI 在六个基准上平均得分 63.0，优于检索基线和经过训练的搜索智能体基线。",
+    "event_type": "application_landing",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
-        "DCI",
         "DR-DCI",
+        "DCI",
         "BM25",
         "ColBERT",
-        "Agentic search"
+        "Browsecomp-Plus"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "传统检索辅助的 agent 搜索依赖 BM25 或 ColBERT 等检索器接口，限制了 agent 跨文档重组材料和验证约束的能力。",
-      "直接语料交互（DCI）通过暴露可执行的语料操作来解决此限制，但随语料规模增长，全语料终端命令变得缓慢且不稳定。",
-      "DR-DCI 将检索作为 agent 可调用的动作，动态地将相关文档拉入局部工作空间，再在工作空间内执行 DCI 操作。",
-      "该设计结合了检索器的可扩展召回能力与 DCI 的局部精确操作能力。",
-      "在 Browsecomp-Plus 测试中 DR-DCI 达 71.2% 准确率，工作空间保留的上下文重置进一步升至 73.3%。",
-      "语料规模实验显示 DR-DCI 从 10 万到 1000 万文档均保持有效，在 2000 万规模的 Wiki-18 QA 测试中平均得分 63.0。"
+      "传统智能体搜索依赖 BM25 或 ColBERT 等检索器中介接口，仅提供排序结果或有限文档视图，限制了智能体跨文档重新组织材料和验证约束的能力。",
+      "Direct Corpus Interaction (DCI) 通过暴露可执行的 shell 级语料库操作来解决此问题，但全语料终端命令在语料库增长时会变得缓慢且不稳定。",
+      "DR-DCI 将检索作为智能体可调用的动作，用于动态地将相关文档拉入一个不断演进的工作区，再在工作区内执行 DCI 操作，结合了检索级别的召回和 DCI 风格的精确性。",
+      "在 Browsecomp-Plus 基准上 DR-DCI 达到 71.2% 准确率，优于原始 DCI 及消融变体最多 8.3 个百分点，同时减少了工具调用次数、墙钟时间和预估成本。",
+      "在语料扩展实验中，DR-DCI 从 10 万到 1000 万文档均保持有效，而原始 DCI 变得不稳定，BM25 表现显著下降。",
+      "在 2000 万文档规模的 Wiki-18 QA 设定下，DR-DCI 在六个基准上平均得分 63.0，优于检索基线和经过训练的搜索智能体基线；消融分析表明排名预览和跨文档 DCI 是性能的关键。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "DR-DCI",
+        "canonical_name": "DR-DCI",
+        "url": "https://arxiv.org/abs/2606.14885",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "DR-DCI 是一个检索器引导的 DCI 框架，通过将检索作为智能体可调用的动作来动态扩展本地工作区，结合了检索器的可扩展召回和 DCI 的局部精确操作能力。",
+          "在 Browsecomp-Plus 基准上 DR-DCI 达到 71.2% 准确率，优于原始 DCI 及消融变体最多 8.3 个百分点，同时减少了工具调用次数和预估成本。",
+          "在 2000 万文档规模的 Wiki-18 QA 设定下，DR-DCI 在六个基准上平均得分 63.0，优于检索基线和经过训练的搜索智能体基线。"
+        ],
+        "article_id": "ba92a281793a1572"
+      },
+      {
+        "object_type": "project",
+        "name": "Direct Corpus Interaction",
+        "canonical_name": "Direct Corpus Interaction (DCI)",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Direct Corpus Interaction (DCI) 通过暴露可执行的 shell 级语料库操作来实现灵活的搜索、过滤、比较和验证，但全语料终端命令在大规模时变得缓慢且不稳定。",
+          "DR-DCI 在 Browsecomp-Plus 上比原始 DCI 提升最多 8.3 个百分点，在语料扩展实验中原始 DCI 变得不稳定而 DR-DCI 保持有效。"
+        ],
+        "article_id": "ba92a281793a1572"
+      },
+      {
+        "object_type": "dataset",
+        "name": "Browsecomp-Plus",
+        "canonical_name": "Browsecomp-Plus",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "DR-DCI 在 Browsecomp-Plus 基准上达到 71.2% 准确率，比原始 DCI 和消融变体提升最多 8.3 个百分点。",
+          "启用工作区保留的上下文重置后，DR-DCI 在 Browsecomp-Plus 上的准确率进一步提升至 73.3%。"
+        ],
+        "article_id": "ba92a281793a1572"
+      },
+      {
+        "object_type": "dataset",
+        "name": "Wiki-18 QA",
+        "canonical_name": "Wiki-18 QA",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "DR-DCI 在 2000 万规模的按文档即文件的 Wiki-18 QA 设定下进行实验，在六个基准上平均得分 63.0。",
+          "在 Wiki-18 QA 设定下 DR-DCI 优于检索基线和经过训练的搜索智能体基线。"
+        ],
+        "article_id": "ba92a281793a1572"
+      }
     ],
     "impact_score": {
       "score": 5.5,
@@ -1020,7 +1165,56 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "DR-DCI",
+        "canonical_name": "DR-DCI",
+        "url": "https://arxiv.org/abs/2606.14885",
+        "positioning": "DR-DCI 是一个检索器引导的直接语料交互框架，通过检索动作动态扩展本地工作区，实现大规模语料上的高效智能体搜索。",
+        "technical_signal": "DR-DCI 将检索作为智能体可调用的动作，先通过检索器召回相关文档到工作区，再在工作区内执行 DCI shell 级跨文档操作，结合了检索的可扩展召回与 DCI 的局部精确操作能力。",
+        "ecosystem_relevance": "DR-DCI 的检索-工作区混合范式弥合了检索式搜索与直接语料操作之间的鸿沟，对构建可大规模部署的智能体搜索系统具有重要的架构参考价值。",
+        "target_users": [],
+        "watch_reason": "DR-DCI 提出了一种检索引导工作区扩展的混合范式，在 10 万至 2000 万文档规模下均保持一致性有效，为智能体搜索的可扩展性瓶颈提供了新思路，值得持续关注其在更广泛应用场景中的表现。",
+        "risk_notes": [
+          "DR-DCI 依赖检索器的初始召回质量，若检索器在特定领域表现不佳可能影响整体效果。",
+          "目前仅在学术基准上验证，尚缺乏真实生产环境中的大规模部署数据。",
+          "工作区管理机制在大规模并发场景下的开销问题尚待进一步评估。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "ba92a281793a1572"
+        ],
+        "evidence_snippets": [
+          "DR-DCI 是一个检索器引导的 DCI 框架，通过将检索作为智能体可调用的动作来动态扩展本地工作区，结合了检索器的可扩展召回和 DCI 的局部精确操作能力。",
+          "在 Browsecomp-Plus 基准上 DR-DCI 达到 71.2% 准确率，优于原始 DCI 及消融变体最多 8.3 个百分点，同时减少了工具调用次数和预估成本。",
+          "在 2000 万文档规模的 Wiki-18 QA 设定下，DR-DCI 在六个基准上平均得分 63.0，优于检索基线和经过训练的搜索智能体基线。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Direct Corpus Interaction",
+        "canonical_name": "Direct Corpus Interaction (DCI)",
+        "positioning": "Direct Corpus Interaction (DCI) 是一种通过暴露 shell 级语料库操作来支持智能体灵活搜索、过滤和验证的框架。",
+        "technical_signal": "DCI 支持可执行的 shell 级语料库操作，允许智能体在全文级别进行搜索、过滤、比较和验证，但全语料执行在大规模场景下会变得缓慢和不稳定。",
+        "ecosystem_relevance": "DCI 提出的终端级语料操作范式为智能体搜索提供了新的交互思路，但其大规模性能瓶颈催生了 DR-DCI 等改进方案，体现了该方向的演进脉络。",
+        "target_users": [],
+        "watch_reason": "DCI 作为直接语料交互范式的开创性工作，其 shell 级操作设计仍有借鉴价值，但其在大规模语料上的性能退化问题限制了实际应用，需关注后续改进方案的成熟度。",
+        "risk_notes": [
+          "DCI 的全语料终端命令在大规模场景下会变得缓慢且不稳定，限制其实际部署范围。",
+          "在语料扩展实验中，DCI 的表现显著劣于 DR-DCI，在千万级文档规模下几乎无法有效工作。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "ba92a281793a1572"
+        ],
+        "evidence_snippets": [
+          "Direct Corpus Interaction (DCI) 通过暴露可执行的 shell 级语料库操作来实现灵活的搜索、过滤、比较和验证，但全语料终端命令在大规模时变得缓慢且不稳定。",
+          "DR-DCI 在 Browsecomp-Plus 上比原始 DCI 提升最多 8.3 个百分点，在语料扩展实验中原始 DCI 变得不稳定而 DR-DCI 保持有效。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -1128,26 +1322,53 @@
     "pipeline_stage": "fact_extracted",
     "id": "c5bf38f73aff0434",
     "source_type": "academic_paper",
-    "tldr": "OSGuard 双粒度基准测试，评估计算机使用智能体在操作级和端到端执行中的安全性",
-    "objective_summary": "研究人员在 arXiv 发布 OSGuard 基准测试套件，用于评估计算机使用智能体在良性用户指令下的安全性。该基准包含操作级局部护栏决策评估和风险增强的执行套件（端到端评估），实验表明当前多模态护栏在孤立操作判断上表现良好，但端到端安全仍存差距。",
-    "event_type": "framework_tools",
+    "tldr": "OSGuard 是一个用于评估计算机使用智能体安全性的双粒度基准测试套件，包含动作级基准和风险增强执行套件，实验表明当前多模态防护栏在局部判断上表现良好，但端到端安全性仍有差距。",
+    "objective_summary": "该论文由 arXiv 发布，提出了 OSGuard 基准测试套件，用于在良性不变的用户指令下评估计算机使用智能体的安全性。OSGuard 包含两个粒度：动作级基准测试用于局部防护栏决策评估，风险增强执行套件用于端到端评估。后者基于 OSWorld 构建了任务变体，在保持任务可完成的同时引入潜在危险，并通过添加状态安全不变量的增强评估器来区分安全与不安全的完成。实验结果显示当前多模态防护栏在孤立动作判断上表现良好，但风险增强执行暴露了局部监督与可靠端到端安全之间的差距。",
+    "event_type": "policy_and_safety",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
         "OSGuard",
-        "Computer-Use Agents",
-        "multimodal guardrails",
         "OSWorld"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "OSGuard 是一个双粒度安全基准测试套件，专门用于评估计算机使用智能体在用户指令未改变情况下的安全性。",
-      "该基准包含操作级基准（用于局部护栏决策评估）和风险增强执行套件（用于端到端评估）两个粒度层次。",
-      "操作级基准将上下文相关的拟议操作标注为允许、无关或不安全，并依据原始指令和当前界面状态进行判断。",
-      "执行套件包含人工构建的 OSWorld 衍生任务变体，在保持原始任务可达的同时引入潜在风险（如破坏性覆写等），并配以状态安全不变量的增强评估器。",
-      "实验结果表明，当前多模态护栏在孤立操作判断上表现良好，但风险增强的执行暴露了局部监督与可靠端到端安全之间的差距。"
+      "OSGuard 是一个双粒度基准测试套件，专门用于评估计算机使用智能体在未改变用户指令下的安全性表现。",
+      "动作级基准包含上下文化的提议动作，被标注为允许、无关或不安全，每个标注相对于原始指令和当前界面状态进行判断。",
+      "风险增强执行套件基于 OSWorld 手动构建任务变体，在保持原任务可完成的同时修改环境引入潜在危险，如破坏性覆写等。",
+      "每个任务变体配有针对状态安全不变量的增强评估器，能够区分满足名义目标的安全完成与不安全完成。",
+      "实验结果表明当前多模态防护栏在孤立动作判断上表现良好，但端到端评估暴露了局部监督与可靠安全之间的差距。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "OSGuard",
+        "canonical_name": "OSGuard",
+        "url": "https://arxiv.org/abs/2606.15034",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "论文标题为 OSGuard: A Benchmark for Safety in Computer-Use Agents，明确将 OSGuard 定义用于评估计算机使用智能体安全性的基准测试套件。",
+          "OSGuard 包含动作级基准用于局部防护栏决策评估，以及风险增强执行套件用于端到端安全性评估。",
+          "OSGuard 的实验结果表明当前多模态防护栏在孤立动作判断上表现良好，但端到端安全性仍存在差距。"
+        ],
+        "article_id": "c5bf38f73aff0434"
+      },
+      {
+        "object_type": "project",
+        "name": "OSWorld",
+        "canonical_name": "OSWorld",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "OSGuard 的风险增强执行套件包含基于 OSWorld 手动构建的任务变体，在该变体中原始任务仍然可完成。",
+          "OSWorld 作为基础基准被 OSGuard 继承和扩展，用于构建带潜在危险的环境场景。"
+        ],
+        "article_id": "c5bf38f73aff0434"
+      }
     ],
     "impact_score": {
       "score": 6.0,
@@ -1200,7 +1421,53 @@
       "compound": "medium",
       "hype": "medium"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "OSGuard",
+        "canonical_name": "OSGuard",
+        "url": "https://arxiv.org/abs/2606.15034",
+        "positioning": "用于评估计算机使用智能体安全性的双粒度基准测试套件，包含动作级局部防护栏评估和风险增强端到端执行评估两个层面。",
+        "technical_signal": "OSGuard 的动作级基准对上下文化提议动作进行允许、无关或不安全三元标注，风险增强执行套件通过状态安全不变量区分安全与不安全完成。",
+        "ecosystem_relevance": "基于 OSWorld 构建带潜在危险的任务变体，补充了现有计算机使用智能体评估基准对安全性维度的系统性缺失。",
+        "target_users": [],
+        "watch_reason": "随着计算机使用智能体部署加速，安全性评估正成为关键基础设施。OSGuard 的双粒度设计能从局部防护栏决策到完整任务执行两个层面系统诊断安全缺陷，对 AI 安全研究具有重要参考价值。",
+        "risk_notes": [
+          "当前多模态防护栏在端到端场景中仍存在安全性差距，局部监督不足以保证可靠的整体安全。",
+          "OSGuard 覆盖的任务类型和危险模式有限，需要持续扩展以跟踪真实部署中的安全挑战。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "c5bf38f73aff0434"
+        ],
+        "evidence_snippets": [
+          "论文标题为 OSGuard: A Benchmark for Safety in Computer-Use Agents，明确将 OSGuard 定义用于评估计算机使用智能体安全性的基准测试套件。",
+          "OSGuard 包含动作级基准用于局部防护栏决策评估，以及风险增强执行套件用于端到端安全性评估。",
+          "OSGuard 的实验结果表明当前多模态防护栏在孤立动作判断上表现良好，但端到端安全性仍存在差距。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "OSWorld",
+        "canonical_name": "OSWorld",
+        "positioning": "计算机使用智能体的基础任务执行基准平台，被 OSGuard 继承并扩展用于带潜在危险的安全评估场景。",
+        "ecosystem_relevance": "作为 OSGuard 风险增强执行套件的底层基础，在计算机使用智能体评估生态中提供任务可完成性与危险环境构造的双重前提。",
+        "target_users": [],
+        "watch_reason": "作为被安全性基准 OSGuard 引用和扩展的基础评估平台，OSWorld 在计算机使用智能体评估生态中具有持续的底层支撑价值。",
+        "risk_notes": [
+          "当前文章仅将其作为任务变异基础，未讨论 OSWorld 本身设计缺陷对安全评估结果可能产生的影响。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "c5bf38f73aff0434"
+        ],
+        "evidence_snippets": [
+          "OSGuard 的风险增强执行套件包含基于 OSWorld 手动构建的任务变体，在该变体中原始任务仍然可完成。",
+          "OSWorld 作为基础基准被 OSGuard 继承和扩展，用于构建带潜在危险的环境场景。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -1312,26 +1579,44 @@
     "pipeline_stage": "fact_extracted",
     "id": "ccab9256d0fe987f",
     "source_type": "academic_paper",
-    "tldr": "论文展示VGPT-RSI在黎曼假设相关形式化验证中的部分进展，明确标注未解决的数学障碍。",
-    "objective_summary": "该论文发表于arXiv，提出使用VGPT-RSI对黎曼假设相关的两个认证任务进行形式化验证：构造并验证有界RH边界证书，以及形式化Lagarias路径证书。两项任务均在Coq中完成了可验证的有限证书，同时明确标注了未解决的数学瓶颈。",
+    "tldr": "VGPT-RSI 系统成功完成黎曼假设相关的两项形式化验证任务：构造有限边界证书并通过 Rocq/CoqInterval 验证，形式化 Lagarias 不等式并生成 Coq 证书，同时明确识别了形式化 Lagarias 等价性、全局尾部定理证明和极充裕数反例归约等剩余数学障碍。",
+    "objective_summary": "研究人员应用 VGPT-RSI（可验证增长物理变压器与递归自改进）系统针对黎曼假设（RH）相关的两项形式化认证任务开展工作。第一项任务构造并验证了有限 RH 边界证书，通过向外舍入区间算术和 Arb/FLINT 球算术进行数值审计后，在 Rocq/CoqInterval 中完成参数化定理的形式化检查。第二项任务将 Lagarias 准则中的有限量形式化，生成了经 Coq 检查通过的有限证书。VGPT-RSI 最终识别了三个未解决的数学瓶颈：形式化 Lagarias 等价性、全局尾部定理的证明、以及将反例归约到极充裕数或相关极值整数。研究结果表明该系统能够生成经过认证的形式化进展，组织证明依赖关系，并在剩余数学障碍面前不作过度声称。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
         "VGPT-RSI",
-        "Coq",
-        "Rocq/CoqInterval",
-        "Arb/FLINT"
+        "Arb",
+        "FLINT",
+        "Rocq",
+        "CoqInterval",
+        "Coq"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "论文提出使用VGPT-RSI框架对黎曼假设相关的两个形式化认证任务进行验证，而非声称证明了RH本身。",
-      "第一个任务：构造并验证有界RH边界证书，使用向外舍入区间运算和Arb/FLINT球算术进行审计，再通过Rocq/CoqInterval验证参数化定理。",
-      "第二个任务：形式化Lagarias路径证书，将Lagarias等价条件（RH等价于全局不等式）中的有限量形式化，生成Coq可检查的有限证书。",
-      "系统明确识别了三个未解决的数学瓶颈：形式化Lagarias等价性、证明超过任何有限截断后的全局尾部定理、以及将反例归结为超穷整数或相关极值整数。",
-      "论文表明VGPT-RSI能够生成可验证的RH相关形式化进展、组织证明依赖关系，并在真正的数学障碍面前避免过度声称。"
+      "VGPT-RSI 系统不宣称证明黎曼假设，而是旨在通过可验证的 AI 辅助推理系统产生可靠的形式化部分进展并明确识别剩余数学障碍。",
+      "系统完成了第一项认证任务：构造并验证了黎曼假设相关的有限边界证书，通过向外舍入区间算术和 Arb/FLINT 球算术进行数值审计，并在 Rocq/CoqInterval 中完成参数化定理的形式化检查。",
+      "系统完成了第二项认证任务：将 Lagarias 准则中的有限不等式形式化，并生成了经 Coq 检查通过的有限证书。",
+      "VGPT-RSI 明确识别了三个未解决的数学瓶颈：形式化 Lagarias 等价性、证明全局尾部定理超越任何有限截断、以及将反例归约到极充裕数或相关极值整数。",
+      "研究表明 VGPT-RSI 能够生成经过认证的 RH 相关形式化进展，组织证明依赖关系，并在剩余障碍真正属于数学范畴时不作过度声称。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "VGPT-RSI",
+        "canonical_name": "VGPT-RSI",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "论文应用 VGPT-RSI 系统构造并验证了黎曼假设相关的有限边界证书，通过 Arb/FLINT 球算术和 Rocq/CoqInterval 完成形式化检查。",
+          "VGPT-RSI 系统将 Lagarias 准则中的有限量形式化，生成了经 Coq 检查通过的有限证书，并明确标出了剩余数学障碍。",
+          "研究结论指出 VGPT-RSI 能够生成经过认证的 RH 相关形式化进展，组织证明依赖关系，并在面对数学难题时不作过度声称。"
+        ],
+        "article_id": "ccab9256d0fe987f"
+      }
     ],
     "impact_score": {
       "score": 4.0,
@@ -1385,7 +1670,32 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "speculative_watch"
+    "actionable_insight": "speculative_watch",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "VGPT-RSI",
+        "canonical_name": "VGPT-RSI",
+        "positioning": "可验证的 AI 辅助数学推理系统，应用 VGPT-RSI 架构生成经形式化检查的定理部分证明，并明确识别剩余数学障碍。",
+        "technical_signal": "系统成功构造并验证了黎曼假设相关的有限边界证书，通过 Arb/FLINT 球算术和 Rocq/CoqInterval 完成形式化检查。",
+        "ecosystem_relevance": "系统与 Rocq/CoqInterval 形式化验证工具链和 Arb/FLINT 数值计算库集成，服务于数学定理证明的形式化生态。",
+        "target_users": [],
+        "watch_reason": "VGPT-RSI 展示了 AI 系统在严格数学形式化验证中的前沿能力，能生成经 Coq 检查的有限证书并识别剩余障碍，对 AI for Math 方向具有重要示范意义。",
+        "risk_notes": [
+          "系统当前仅完成黎曼假设邻近问题的有限形式化进展，距离完整数学证明仍有三个根本性的未解决障碍。",
+          "VGPT-RSI 的递归自改进机制缺乏外部独立复现验证，其可靠性和可扩展性尚待同行评估。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "ccab9256d0fe987f"
+        ],
+        "evidence_snippets": [
+          "论文应用 VGPT-RSI 系统构造并验证了黎曼假设相关的有限边界证书，通过 Arb/FLINT 球算术和 Rocq/CoqInterval 完成形式化检查。",
+          "VGPT-RSI 系统将 Lagarias 准则中的有限量形式化，生成了经 Coq 检查通过的有限证书，并明确标出了剩余数学障碍。",
+          "研究结论指出 VGPT-RSI 能够生成经过认证的 RH 相关形式化进展，组织证明依赖关系，并在面对数学难题时不作过度声称。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -1404,24 +1714,41 @@
     "pipeline_stage": "fact_extracted",
     "id": "d88cc14be84c36ef",
     "source_type": "academic_paper",
-    "tldr": "IRTS-ToolBench：面向不规则时间序列问答的1700题基准测试",
-    "objective_summary": "研究人员提出IRTS-ToolBench基准测试，包含1700个问题、10种任务类型、覆盖13个领域，用于评估大语言模型和AI智能体在不规则时间序列数据上的问答能力，弥补现有TSQA基准仅依赖规则采样输入的不足。",
+    "tldr": "该论文提出了IRTS-ToolBench基准，包含1700个问题、覆盖10种任务类型和13个领域，专门用于评估大语言模型在不规则时间序列问答场景下的表现。",
+    "objective_summary": "针对现实场景中时间序列数据普遍存在的非规则采样、缺失值信息性等问题，该论文构建了IRTS-ToolBench基准测试，包含1700个问题、覆盖10种任务类型和13个领域。该基准设计为独立可用，任何研究LLM不规则时间序列分析的科研人员都可以基于标准化输入和可复现评估协议开展工作。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
-        "TSQA",
-        "IRTS-ToolBench",
-        "LLM"
+        "LLM",
+        "AI Agent",
+        "Time Series",
+        "TSQA"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "现实世界的时间序列数据普遍是不规则的：观测异步、缺失值具有信息量而非随机、采样频率在不同传感器间变化，但现有TSQA基准大多假设规则采样输入。",
-      "为弥合这一差距，研究团队引入了IRTS-ToolBench基准测试，包含1700个问题、10种任务类型、覆盖13个领域。",
-      "IRTS-ToolBench设计为可供任何研究LLM不规则时间序列分析的研究人员独立使用，提供标准化输入和可复现的评估协议。",
-      "该基准专注于通过工具锚定推理实现可验证的智能体数据科学。"
+      "现实世界中的时间序列数据普遍存在非规则采样问题，观测是异步的、缺失值具有信息量而非随机性，且采样频率在不同传感器和运行窗口之间变化。",
+      "现有的时间序列问答基准大多假设输入为规则采样，缺乏对LLM和AI智能体在不规则条件下表现的评估。",
+      "作者提出了IRTS-ToolBench基准，包含1700个问题，覆盖10种任务类型和13个领域，专门用于填补这一空白。",
+      "IRTS-ToolBench设计为可由任何研究LLM不规则时间序列分析的科研人员独立使用，提供标准化输入和可复现的评估协议。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "IRTS-ToolBench",
+        "canonical_name": "IRTS-ToolBench",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "论文提出了IRTS-ToolBench基准，包含1700个问题、覆盖10种任务类型和13个领域。",
+          "IRTS-ToolBench设计为可由任何研究LLM不规则时间序列分析的科研人员独立使用，提供标准化输入和可复现的评估协议。",
+          "该基准专门用于评估大语言模型在不规则时间序列问答场景下的表现，填补了现有基准大多假设规则采样的空白。"
+        ],
+        "article_id": "d88cc14be84c36ef"
+      }
     ],
     "impact_score": {
       "score": 3.5,
@@ -1475,6 +1802,32 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "IRTS-ToolBench",
+        "canonical_name": "IRTS-ToolBench",
+        "positioning": "专门评估大语言模型在不规则时间序列问答场景下的基准测试，包含1700个问题、覆盖10种任务类型和13个领域。",
+        "technical_signal": "通过工具接地推理实现不规则时间序列问答的可验证智能体数据科学框架，填补了现有基准大多假设规则采样的空白。",
+        "adoption_signal": "作为arXiv预印本发布，代码和基准已公开提供下载，但尚未见到被其他研究团队广泛引用或采用的公开迹象。",
+        "ecosystem_relevance": "属于AI智能体驱动数据科学工具生态，为时间序列分析领域提供标准化评估基础设施，可与LLM研究社区形成协同。",
+        "target_users": [],
+        "watch_reason": "不规则时间序列是现实世界数据科学的核心难题，该基准填补了LLM在此场景下评估工具的空白，若被社区采纳将成为时序智能体研究的标准化衡量标尺，具有长期跟踪价值。",
+        "risk_notes": [
+          "作为预印本项目尚未经过同行评审，其基准质量和标注准确性有待社区进一步验证和长期维护观察。",
+          "覆盖13个领域共1700个问题，但在极端多样化的不规则时间序列场景中仍可能存在覆盖盲区。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "d88cc14be84c36ef"
+        ],
+        "evidence_snippets": [
+          "论文提出了IRTS-ToolBench基准，包含1700个问题、覆盖10种任务类型和13个领域，专门针对不规则时间序列问答评估场景。",
+          "IRTS-ToolBench设计为可由任何研究LLM不规则时间序列分析的科研人员独立使用，提供标准化输入和可复现的评估协议。",
+          "该基准专门用于评估大语言模型在不规则时间序列问答场景下的表现，填补了现有基准大多假设规则采样的空白。"
+        ]
+      }
+    ]
   }
 ]

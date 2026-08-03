@@ -71,45 +71,79 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 5fce3c914fe93bcc
 source_type: community_discussion
-tldr: WorldMonitor 开源实时全球情报仪表盘，集成500+新闻源与AI分析
-objective_summary: Elie Habib 开发的 WorldMonitor 是一个开源实时全球情报仪表盘，集成500+精选新闻源、双地图引擎（globe.gl
-  和 deck.gl）、国家不稳定指数（CII）和金融雷达。支持本地 AI 运行、6种站点变体和 Tauri 2 桌面应用，采用 AGPL-3.0 许可。
-event_type: application_landing
+tldr: WorldMonitor 是一个开源实时全球情报仪表盘，聚合 500+ 新闻源、双地图引擎（3D 地球和 WebGL 平面地图）、国家不稳定指数（CII）和金融雷达，支持本地
+  AI 运行、6 种站点变体和桌面客户端，基于 AGPL-3.0 协议开源。
+objective_summary: Elie Habib 开发的开源项目 WorldMonitor 于 2024-2026 年间持续维护，提供了一个统一态势感知界面。该项目聚合超过
+  65 个外部服务提供商和 API，覆盖地缘政治、金融、能源、气候、军事等 15 个类别的 500+ 精选新闻源。系统通过 AI 将新闻综合为简报，并配备 3D
+  地球（globe.gl）和 WebGL 地图（deck.gl）双引擎及 56 种地图图层。项目还包含针对 31 个 Tier-1 国家的服务器端 CII v8
+  压力评分、覆盖 29 个证券交易所的金融雷达以及 7 信号市场复合指标。该代码库可在 Vercel、Docker 或静态托管上部署，并提供 Tauri 2 桌面客户端支持
+  macOS、Windows 和 Linux。
+event_type: framework_tools
 epistemic_status: verified_fact
 entities:
   companies:
-  - Vercel
+  - koala73
   - Ollama
   - Groq
   - OpenRouter
   - Upstash
   - Wingbits
-  - MapLibre
+  - Vercel
   technologies:
   - globe.gl
   - Three.js
   - deck.gl
   - MapLibre GL
   - Tauri 2
-  - Protocol Buffers
   - Transformers.js
+  - Protocol Buffers
   - Redis
-  - Vite
-  - PWA
-  - WebGL
   - AGPL-3.0
   key_people:
   - Elie Habib
   - Cody Richard
 key_logic_flow:
-- WorldMonitor 是一个开源的实时全球情报仪表盘，提供 AI 驱动的新闻聚合、地缘政治监控和基础设施追踪功能。
-- 项目集成了500+精选新闻源（覆盖15个类别）、双地图引擎（globe.gl 3D地球和 deck.gl WebGL平面地图）以及56种地图图层类型。
-- 提供国家不稳定指数（CII v8，覆盖31个 Tier-1 国家）和金融雷达（29个交易所、商品、加密货币、7信号市场复合指数）等专业分析模块。
-- 支持本地 AI 运行（Ollama/Transformers.js）、6种站点变体（world/tech/finance/commodity/happy/energy）和
-  Tauri 2 原生桌面应用（macOS/Windows/Linux）。
-- 技术栈包括 Vanilla TypeScript、Vite、Three.js、deck.gl、MapLibre GL、Tauri 2（Rust）、Protocol
-  Buffers（276 protos, 34 services）和 Redis 三层缓存。
-- 代码采用 AGPL-3.0-only 许可，由 Elie Habib 开发，支持 Vercel Edge Functions、Docker 和静态文件等多种部署方式。
+- WorldMonitor 是一个开源的实时全球情报仪表盘项目，提供统一态势感知界面。
+- 系统聚合 65+ 外部数据提供商和 API，通过 500+ 精选新闻源覆盖地缘政治、金融、军事等 15 个类别。
+- 项目配备双地图引擎（3D 地球 globe.gl 和 WebGL 平面地图 deck.gl），支持 56 种地图图层类型。
+- 内置针对 31 个 Tier-1 国家的服务器端国家不稳定指数（CII v8）压力评分系统。
+- 金融雷达覆盖 29 个证券交易所、大宗商品和加密货币，并包含 7 信号市场复合指标。
+- 代码库支持 6 种站点变体和 Tauri 2 桌面客户端，采用 AGPL-3.0 协议开源且允许商业使用。
+extract_result: success
+object_mentions:
+- object_type: project
+  name: koala73/worldmonitor
+  canonical_name: koala73/worldmonitor
+  url: https://github.com/koala73/worldmonitor
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - WorldMonitor 是一个开源实时全球情报仪表盘，聚合 500+ 新闻源并进行 AI 综合生成简报。
+  - 该项目包含双地图引擎（3D 地球 globe.gl 和 WebGL 平面地图 deck.gl）和 56 种地图图层类型。
+  - 项目采用 AGPL-3.0 协议开源，允许个人、研究和商业使用，但需遵守 AGPL 条款。
+  article_id: 5fce3c914fe93bcc
+- object_type: product
+  name: worldmonitor.app
+  canonical_name: WorldMonitor Web App
+  url: https://worldmonitor.app
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - worldmonitor.app 是该项目的主站点变体，另包括 tech、finance、commodity、happy 和 energy 共 6 种变体。
+  - 所有站点变体和桌面二进制文件从同一代码库构建并通过同一发布流程发布。
+  - worldmonitor.app 等公共部署处于稳定状态，由该仓库积极维护。
+  article_id: 5fce3c914fe93bcc
+- object_type: product
+  name: WorldMonitor Desktop
+  canonical_name: WorldMonitor Desktop
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - WorldMonitor 提供基于 Tauri 2 的原生桌面客户端，支持 macOS、Windows 和 Linux 平台。
+  - 桌面二进制文件（Windows、macOS Apple Silicon、macOS Intel、Linux AppImage）处于稳定状态。
+  - 一个 Tauri 二进制文件可在应用内切换不同站点变体，当前 CI 发布目标为 full 和 tech 变体。
+  article_id: 5fce3c914fe93bcc
 impact_score:
   score: 5.0
   reason: 评分依据：WorldMonitor 是一个工程实现质量极高的开源情报仪表盘项目，单代码库产出6种站点变体、双地图引擎、本地AI推理、Tauri
@@ -167,6 +201,88 @@ confidence:
   compound: medium
   hype: medium
 actionable_insight: deep_dive
+object_insights:
+- object_type: project
+  name: koala73/worldmonitor
+  canonical_name: koala73/worldmonitor
+  url: https://github.com/koala73/worldmonitor
+  positioning: 一个开源的实时全球情报仪表盘，聚合500+新闻源覆盖15个类别，配备双地图引擎、国家不稳定指数和金融雷达。
+  technical_signal: 项目技术架构包含双地图引擎及56种地图图层，使用Protocol Buffers定义276个接口协议，通过Vercel Edge
+    Functions实现实时数据推送，并集成Ollama实现完全本地化AI推理能力。
+  adoption_signal: 项目自2024年持续维护至今，主站点worldmonitor.app及5个主题变体均已稳定公开部署，桌面客户端覆盖macOS、Windows和Linux三大平台，CI持续发布更新版本。
+  ecosystem_relevance: 项目整合65+外部数据服务提供商，汇聚500+新闻源，覆盖地缘政治、金融、能源、气候、军事等15个情报类别，是开源态势感知生态中的重要聚合平台。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: WorldMonitor是少数将地缘政治情报、金融雷达和国家不稳定指数整合在统一仪表盘的开源项目，技术架构成熟且支持本地部署和桌面客户端，在开源态势感知领域具有独特价值，值得持续跟踪其功能演进和社区发展。
+  risk_notes:
+  - 项目采用AGPL-3.0协议开源，商业使用需履行代码开源义务，对部分企业用户构成合规门槛。
+  - 项目整合65+外部数据服务，单一数据源中断或API变更可能导致部分情报模块不可用。
+  - 情报数据准确性与时效性高度依赖外部源质量，部分API需付费密钥才能获取实时数据。
+  score: 7.0
+  article_ids:
+  - 5fce3c914fe93bcc
+  evidence_snippets:
+  - WorldMonitor 是一个开源实时全球情报仪表盘，聚合 500+ 新闻源并进行 AI 综合生成简报。
+  - 该项目包含双地图引擎（3D 地球 globe.gl 和 WebGL 平面地图 deck.gl）和 56 种地图图层类型。
+  - 项目采用 AGPL-3.0 协议开源，允许个人、研究和商业使用，但需遵守 AGPL 条款。
+- object_type: product
+  name: worldmonitor.app
+  canonical_name: WorldMonitor Web App
+  url: https://worldmonitor.app
+  positioning: 一款实时全球情报Web应用，聚合500+新闻源并提供双地图可视化与AI简报能力，覆盖地缘政治、金融、能源等多个专题变体。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users:
+  - 地缘政治分析师
+  - 金融从业者
+  - 情报研究人员
+  - 宏观策略投资者
+  - 新闻聚合应用用户
+  product_signal: 主站点提供6种专题变体和24种语言支持，集成双地图引擎与56种地图图层，通过Vercel Edge Functions实现全球低延迟访问。
+  market_signal: 该项目为个人开发者主导的开源项目，尚未形成商业化模式，但其6个站点变体的稳定运行表明已积累一定的用户基础。
+  differentiation: 与商业情报平台相比，worldmonitor.app是完全开源且支持本地部署的替代方案，双地图引擎和CII指数是核心差异化功能。
+  watch_reason: 作为一个由个人开发者维护的开源全球情报平台，worldmonitor.app的功能完整度和技术成熟度超出同类项目，其6站点变体模式和Tauri桌面客户端的架构设计值得产品团队参考。
+  risk_notes:
+  - 个人开发者维护的项目存在维护持续性风险，关键功能依赖的付费API可能增加部署成本。
+  - 开源社区尚未形成规模，贡献者和Issue响应速度可能无法与企业产品竞争。
+  - 情报类产品涉及敏感数据合规问题，不同司法管辖区对情报展示有不同法律要求。
+  score: 6.0
+  article_ids:
+  - 5fce3c914fe93bcc
+  evidence_snippets:
+  - worldmonitor.app 是该项目的主站点变体，另包括 tech、finance、commodity、happy 和 energy 共 6 种变体。
+  - 所有站点变体和桌面二进制文件从同一代码库构建并通过同一发布流程发布。
+  - worldmonitor.app 等公共部署处于稳定状态，由该仓库积极维护。
+- object_type: product
+  name: WorldMonitor Desktop
+  canonical_name: WorldMonitor Desktop
+  url: null
+  positioning: 基于Tauri 2构建的原生桌面客户端，支持macOS、Windows和Linux三大平台，可在应用内切换不同站点变体，提供与Web版一致的情报体验。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users:
+  - 桌面端情报分析师
+  - 注重隐私的本地化用户
+  - 需要离线情报监控的专业用户
+  product_signal: WorldMonitor Desktop基于Tauri 2框架，一个二进制文件支持应用内切换所有站点变体，当前CI发布目标覆盖full和tech两种变体。
+  market_signal: 桌面客户端处于稳定发布状态，提供Windows、macOS和Linux二进制文件，但尚未看到大规模用户采纳的数据或社区反馈。
+  differentiation: 与同类开源情报仪表盘的Web-only方案不同，WorldMonitor Desktop提供原生桌面体验和本地AI推理能力，支持离线部署场景。
+  watch_reason: WorldMonitor Desktop展示了Tauri 2在数据密集型情报应用中的可行性，其单二进制支持多变体切换的架构设计值得关注，跟踪该项目可了解桌面端情报产品的技术演进方向。
+  risk_notes:
+  - 桌面客户端当前CI仅发布full和tech两种变体，其他变体的桌面支持可能不够完善。
+  - Tauri 2框架在复杂数据可视化场景下的稳定性尚需更长时间验证。
+  - 个人开发者维护的桌面应用在安全更新和漏洞响应方面可能存在延迟。
+  score: 5.0
+  article_ids:
+  - 5fce3c914fe93bcc
+  evidence_snippets:
+  - WorldMonitor 提供基于 Tauri 2 的原生桌面客户端，支持 macOS、Windows 和 Linux 平台。
+  - 桌面二进制文件（Windows、macOS Apple Silicon、macOS Intel、Linux AppImage）处于稳定状态。
+  - 一个 Tauri 二进制文件可在应用内切换不同站点变体，当前 CI 发布目标为 full 和 tech 变体。
 ---
 
 **Real-time global intelligence dashboard** — AI-powered news aggregation, geopolitical monitoring, and infrastructure tracking in a unified situational awareness interface.

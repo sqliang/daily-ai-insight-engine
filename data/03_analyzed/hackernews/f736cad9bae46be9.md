@@ -13,47 +13,95 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: f736cad9bae46be9
 source_type: community_discussion
-tldr: 独立基准测试显示，多款AI模型在安全漏洞发现能力上接近甚至超越Anthropic的Mythos。
-objective_summary: 作者swelljoe构建了基于Mythos公开漏洞的安全审计基准测试，评估9款以上AI模型在盲测条件下发现真实漏洞的能力。结果显示Qwen
-  3.6、MiMo、DeepSeek等模型在检测率上与Opus 4.8和GPT 5.5竞争，中国模型以低约一个数量级的价格取得可比成绩。
-event_type: infrastructure_update
+tldr: 独立开发者 swelljoe 构建了一套名为"Will It Mythos?"的基准测试，用 Anthropic Mythos 此前发现的 9 个真实安全漏洞检验各模型的漏洞发现能力。结果显示
+  Qwen 3.6、MiMo 和 DeepSeek 等低成本模型在漏洞检测上与 Opus 4.8 和 GPT 5.5 等前沿模型直接竞争，而 Mistral Medium
+  和 Google 的 agy CLI 完全失败。
+objective_summary: 独立开发者 swelljoe 于 2026 年构建了一套名为"Will It Mythos?"的安全漏洞发现基准测试，其测试集包含
+  9 个由 Anthropic Mythos 此前发现并披露的真实漏洞，所有漏洞均位于各模型知识截止日期之后。测试中每款模型获得相同的源码文件集和基础工具，不给予任何关于漏洞类型的提示。结果显示中国低成本模型表现突出：Qwen
+  3.6 27B 自托管模型发现漏洞数超过多个大型商业模型且误报更少，MiMo 和 DeepSeek 以约十分之一的价格达到与 Opus 4.8 和 GPT 5.5
+  接近的检出率。Mistral Medium 完全未发现任何目标漏洞，Google 的 agy（Antigravity CLI）因内置安全限制在 9 个测试中有
+  8 个直接拒绝执行分析。
+event_type: framework_tools
 epistemic_status: verified_fact
 entities:
   companies:
   - Anthropic
-  - Google
   - OpenAI
-  - Alibaba (Qwen)
+  - Google
+  - Alibaba
   - DeepSeek
   - Mistral
   - MiniMax
-  - Zhipu AI (GLM)
-  - Moonshot AI (Kimi)
-  - NVIDIA (Nemotron)
-  - Laguna
+  - Zhipu AI
+  - Moonshot AI
+  - NVIDIA
+  - North AI
   technologies:
   - Mythos
-  - Opus 4.8
-  - GPT 5.5
-  - Gemini 3.1 Pro
-  - Gemini 3.5 Flash
-  - Qwen 3.6
-  - DeepSeek
-  - MiMo
   - Claude Code
-  - Gemma 4
-  - Nemotron
-  - MiniMax M3
+  - Antigravity CLI
   key_people:
   - swelljoe
 key_logic_flow:
-- 作者对Anthropic声称Mythos在安全漏洞发现上具有独特优势表示怀疑，认为限制访问的真实原因可能只是运行成本过高而非安全性考虑。
-- 作者基于此前构建的Nelson工具开发了基准测试套件，选取Mythos文档中披露的9个真实漏洞作为测试用例，所有漏洞均在各模型知识截止日期之后以保证公平。
-- 测试中每个模型获得相同的原始代码仓库和基本工具，未获任何提示，需自行跨文件追踪逻辑发现漏洞，Claude模型额外使用Claude Code。
-- Qwen 3.6 27B表现超预期，击败了Gemini 3.1 Pro等更大尺寸的商业模型，自托管运行时仅为速度最慢的模型。
-- 中国模型MiMo和DeepSeek在漏洞检测能力上与Anthropic Opus 4.8和OpenAI GPT 5.5直接竞争，但价格低约一个数量级，且DeepSeek平均速度最快。
-- Gemma 4 MoE在检测到4/9个漏洞（100%精确率）后意外进入领先位置，但获得了多次尝试机会，存在统计偏差。
+- 作者构建了一套基准测试套件，将 Anthropic Mythos 此前发现的安全漏洞组成包含 9 个漏洞的测试集，每个漏洞均位于所有模型的知识截止日期之后。
+- 测试中所有模型被提供相同的源码文件集和基础工具，不给予任何关于漏洞类型的提示，模型可自由查看整个仓库但需自行定位漏洞。
+- Qwen 3.6 27B 自托管模型表现超出预期，发现漏洞数量超过多个大型商业模型且误报更少，但运行速度最慢且有一次超时。
+- MiMo 和 DeepSeek 等中国低成本模型在漏洞发现能力上与 Opus 4.8 和 GPT 5.5 直接竞争，但价格低约一个数量级，其中 DeepSeek
+  平均运行速度最快。
+- Gemma 4 MoE 测得 4/9 漏洞检出率且 100% 精确率，追平了 MiMo 和 GPT 5.5 的领先位置，但获得了多次尝试机会。
+- Mistral Medium 完全未能发现任何目标漏洞，Google 的 agy（Antigravity CLI）在 9 个测试中有 8 个直接拒绝执行安全分析任务。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Mythos
+  canonical_name: Anthropic Mythos
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Mythos 是 Anthropic 开发的安全漏洞发现工具，能够发现极具挑战性的安全漏洞。
+  - 作者质疑 Anthropic 对 Mythos 不开源的公开解释，猜测真正原因是其运营成本远高于现有模型。
+  article_id: f736cad9bae46be9
+- object_type: project
+  name: Will It Mythos?
+  canonical_name: Will It Mythos benchmark
+  url: https://swelljoe.com/post/will-it-mythos/
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 作者构建了一套名为 Will It Mythos? 的基准测试套件，使用 Mythos 此前发现的 9 个漏洞检验各模型的漏洞发现能力。
+  - 该基准测试的唯一目的是验证其他模型能否做到 Mythos 所能做到的事情。
+  article_id: f736cad9bae46be9
+- object_type: project
+  name: Nelson
+  canonical_name: Nelson
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 作者此前建立了一个名为 Nelson 的工具，用于自动化自己项目中的漏洞狩猎工作。
+  - 基准测试套件借鉴了 Nelson 的部分代码来构建测试用例。
+  article_id: f736cad9bae46be9
+- object_type: project
+  name: agy
+  canonical_name: Antigravity CLI
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - agy（Antigravity CLI for Gemini）在 9 个安全分析案例中有 8 个直接拒绝执行，回答无法完成请求。
+  - 作者认为 Antigravity 不适合安全分析工作，将其从排名中移除。
+  article_id: f736cad9bae46be9
+- object_type: product
+  name: Claude Code
+  canonical_name: Claude Code
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Claude 模型通过 Claude Code agent 运行测试，因为对订阅用户来说其成本远低于直接 API 调用。
+  - agent 模式并未提升模型性能，部分模型表现反而更差，且时间和 Token 消耗显著增加。
+  article_id: f736cad9bae46be9
 impact_score:
   score: 6.5
   reason: 该独立基准测试直接挑战了Anthropic关于Mythos在安全漏洞发现上具有独特优势的核心叙事。虽然测试规模有限（9个漏洞），但结果为行业提供了可验证的量化证据：Qwen
@@ -100,6 +148,126 @@ confidence:
   compound: medium
   hype: high
 actionable_insight: monitor
+object_insights:
+- object_type: project
+  name: Will It Mythos?
+  canonical_name: Will It Mythos benchmark
+  url: https://swelljoe.com/post/will-it-mythos/
+  positioning: 一套基于 Anthropic Mythos 此前发现的真实安全漏洞构建的基准测试集，以统一方法学评估各 AI 模型的漏洞发现能力。
+  technical_signal: 在该基准测试中，Qwen 3.6 27B 自托管模型发现的漏洞数量超过多个大型商业模型且误报更少，MiMo 和 DeepSeek
+    以约十分之一的价格达到与前沿模型接近的检出率。
+  adoption_signal: null
+  ecosystem_relevance: 该基准测试为 AI 安全领域提供了可复现的模型横向对比框架，首次系统性地展示了低成本开源模型在漏洞发现上挑战前沿模型的可行路径。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: 这项基准测试以统一方法学首次系统性地对比了数十款模型在真实漏洞发现上的能力差异，证明 Qwen 3.6、MiMo 和 DeepSeek
+    等低成本模型可以接近甚至超越 Opus 4.8 和 GPT 5.5 等前沿模型，若经更大样本量验证，将深刻影响企业安全工具在模型选型上的决策标准。
+  risk_notes:
+  - 当前测试集仅含 9 个漏洞样本，统计显著性和泛化能力有待更大规模验证。
+  - 测试环境未包含 Mythos 可能使用的调试器或模糊测试等高级工具链，评估维度可能不全面。
+  - 每款模型仅执行一轮测试，结果可能存在单次运行的随机波动。
+  score: 7.0
+  article_ids:
+  - f736cad9bae46be9
+  evidence_snippets:
+  - 作者构建了一套名为 Will It Mythos? 的基准测试套件，使用 Mythos 此前发现的 9 个漏洞检验各模型的漏洞发现能力。
+  - 该基准测试的唯一目的是验证其他模型能否做到 Mythos 所能做到的事情。
+  - Qwen 3.6 27B 自托管模型发现漏洞数超过多个大型商业模型且误报更少，但运行速度最慢且有一次超时。
+- object_type: product
+  name: Mythos
+  canonical_name: Anthropic Mythos
+  url: null
+  positioning: Anthropic 开发的专有安全漏洞发现工具，据称能发现极具挑战性的安全漏洞，但未向公众开放使用且未开源。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users:
+  - Anthropic 内部安全团队
+  product_signal: Anthropic 公开宣称 Mythos 能发现极具挑战性的安全漏洞，但作者质疑其能力是否不可替代，独立基准测试显示其他模型在相同漏洞集上可达到接近的检出率。
+  market_signal: Anthropic 未对公众开放 Mythos，作者推测真正原因是运营成本远高于现有模型而非安全考虑，这一策略限制了其商业化前景和市场影响力。
+  differentiation: Mythos 专注安全漏洞发现这一高风险高价值赛道，但独立基准测试表明 Qwen 3.6、MiMo 等模型在相同漏洞集上可达到接近的检出率，其不可替代性可能被高估。
+  watch_reason: Mythos 作为专有安全漏洞发现工具的标杆，其能力宣称直接影响 AI 安全工具的市场预期和竞争格局，但 Anthropic 长期不开源的策略可能导致其影响力被开源替代方案逐步侵蚀，值得持续观察。
+  risk_notes:
+  - Anthropic 未公开 Mythos 的任何技术细节或独立评估结果，难以客观验证其能力。
+  - 运营成本过高可能导致 Mythos 长期无法面向公众提供商业化服务。
+  - 独立基准测试显示其他模型可在同等任务上接近其能力表现。
+  score: 5.0
+  article_ids:
+  - f736cad9bae46be9
+  evidence_snippets:
+  - Mythos 是 Anthropic 开发的安全漏洞发现工具，能够发现极具挑战性的安全漏洞。
+  - 作者质疑 Anthropic 对 Mythos 不开源的公开解释，猜测真正原因是其运营成本远高于现有模型。
+- object_type: project
+  name: agy
+  canonical_name: Antigravity CLI
+  url: null
+  positioning: Google 为 Gemini 模型开发的 Antigravity CLI 工具，在安全分析场景中因内置安全限制几乎完全无法执行漏洞发现任务。
+  technical_signal: agy 在 9 个安全分析测试中有 8 个直接拒绝执行并回答无法完成请求，即使软化提示词也无法绕过安全限制，表明其内置安全策略极为严格。
+  adoption_signal: null
+  ecosystem_relevance: agy 在安全分析上的完全失效反映了当前主流 AI 厂商在工具安全策略上的极端保守取向，可能影响 CLI 工具在安全场景的部署选择与信任度。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: agy 因内置安全限制在 8/9 的漏洞分析任务中完全拒绝执行，凸显了 AI CLI 工具安全策略设计对实际可用性的重大影响，是考察
+    agent 安全边界与厂商策略权衡的典型案例。
+  risk_notes:
+  - 内置安全限制导致 agy 在安全分析等关键场景几乎完全不可用。
+  - 该工具的定位与安全分析需求存在根本性冲突，改进空间有限。
+  score: 4.0
+  article_ids:
+  - f736cad9bae46be9
+  evidence_snippets:
+  - agy（Antigravity CLI for Gemini）在 9 个安全分析案例中有 8 个直接拒绝执行，回答无法完成请求。
+  - 作者认为 Antigravity 不适合安全分析工作，将其从排名中移除。
+- object_type: product
+  name: Claude Code
+  canonical_name: Claude Code
+  url: null
+  positioning: Anthropic 提供的 Claude 模型 agent 化编程工具，在本文中被用作多款模型的通用 agent 运行环境进行安全分析对比测试。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users:
+  - Claude 订阅用户
+  - 安全研究人员
+  product_signal: 在漏洞发现测试中，Claude Code agent 模式并未提升模型的安全分析性能，部分模型表现反而更差，且时间和 Token
+    消耗均显著增加，表明 agent 层未必带来能力增益。
+  market_signal: null
+  differentiation: 相比直接 API 调用，Claude Code 对订阅用户的使用成本更低，但在安全分析任务中 agent 模式未能带来性能增益，反而显著增加了时间和资源开销。
+  watch_reason: Claude Code 在安全分析中的表现揭示了 agent 化架构未必带来能力增益这一反直觉结论，对于理解 AI agent 工具的适用边界和设计取舍具有重要参考价值。
+  risk_notes:
+  - 在安全分析场景中 agent 模式可能导致时间和成本大幅增加而非性能提升。
+  - 该结论基于单一基准测试的有限样本，需要在更多场景和任务类型中验证。
+  score: 4.0
+  article_ids:
+  - f736cad9bae46be9
+  evidence_snippets:
+  - Claude 模型通过 Claude Code agent 运行测试，因为对订阅用户来说其成本远低于直接 API 调用。
+  - agent 模式并未提升模型性能，部分模型表现反而更差，且时间和 Token 消耗显著增加。
+- object_type: project
+  name: Nelson
+  canonical_name: Nelson
+  url: null
+  positioning: 独立开发者 swelljoe 为自动化自身项目的漏洞发现而构建的工具，其部分代码被复用构建 Will It Mythos 基准测试套件。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: 作为个人开发者构建的自动化安全审计工具实践案例，Nelson 的设计思路通过 Will It Mythos 基准测试获得更广泛的方法论影响。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: Nelson 承载了作者在自动化安全审计领域的早期探索经验，其核心设计被复用至 Will It Mythos 基准测试，对理解后者的方法论起源有参考价值，但作为独立项目的跟踪意义有限。
+  risk_notes:
+  - 项目公开信息和技术细节有限，缺乏独立的技术评估和社区反馈。
+  score: 2.0
+  article_ids:
+  - f736cad9bae46be9
+  evidence_snippets:
+  - 作者此前建立了一个名为 Nelson 的工具，用于自动化自己项目中的漏洞狩猎工作。
+  - 基准测试套件借鉴了 Nelson 的部分代码来构建测试用例。
 ---
 
 OK, so Mythos finds really challenging security bugs, right? That’s why it’s cordoned off from the hoi polloi, to protect the world from such a powerful finder of exploits.

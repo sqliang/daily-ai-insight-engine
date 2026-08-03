@@ -393,26 +393,26 @@
       "2026-07-02"
     ],
     "source_type": "academic_paper",
-    "tldr": "Mnemosyne 提出 Agentic 事务处理模型，用于验证和修复 AI 生成的 workflow。",
-    "objective_summary": "论文提出 Agentic Transaction Processing (ATP) 模型，将 AI 生成的操作视为未受信任的提案，需通过声明性约束集 C 的确定性准入后才由运行时提交。Mnemosyne 运行时实现了追加日志、有效状态投影、依赖安全补偿和活跃提交记录，在9项测试中拒绝违规操作，",
+    "tldr": "arXiv 论文提出 Agentic Transaction Processing (ATP) 事务模型，将 AI 生成的动作视为不可信提案，只有通过确定性约束集 C 准入后才能提交。论文基于 ATP 实现了运行时系统 Mnemosyne，包含追加式转换日志、有效状态投影、依赖安全补偿和主动提交记录，并证明了四项安全属性。",
+    "objective_summary": "该论文提出了 Agentic Transaction Processing (ATP) 事务模型，将 LLM、求解器和智能体团队生成的工作流动作视为不可信提案，需通过声明的确定性约束集 C 的准入检查后才能由运行时提交。作者基于 ATP 实现了 Mnemosyne 运行时系统，采用追加式转换日志、有效状态投影、依赖安全补偿和主动提交记录等机制。论文证明了 ATP 相对于约束集 C 的四项安全属性：权限分离、序列等价生成准入、证据保留修复和约束包含。可复现的实验表明，Mnemosyne 在九项伪造测试中拒绝了所有目标违规行为，同时仍允许有效工作流通过，投影与验证开销低于 6%，局部修复协议 (LCRP) 修改的操作数比全局重新计算少一个数量级。",
     "event_type": "framework_tools",
-    "epistemic_status": "theoretical_claim",
+    "epistemic_status": "verified_fact",
     "entities": {
       "companies": [],
       "technologies": [
-        "LLM",
-        "Agentic Transaction Processing (ATP)",
-        "Localized Constrained Repair Protocol (LCRP)"
+        "ATP",
+        "LCRP",
+        "LLM"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "AI 生成的操作存在语法正确但过时、不可行、冲突或破坏证据的问题，现有方法缺乏事务性安全保障。",
-      "论文提出 Agentic Transaction Processing (ATP) 模型，核心原则是任何组件都可提议，但仅运行时负责准入和提交。",
-      "Mnemosyne 运行时实现 ATP 模型，包含追加式事务日志、有效状态投影、依赖安全补偿和活跃提交记录。",
-      "论文证明 ATP 相对于约束集 C 的四个安全属性：权威分离、序列等价生成准入、保留证据的修复和义务约束。",
-      "局部约束修复协议（LCRP）提供有界响应修复保证，编辑操作量比全局重算少一个数量级。",
-      "实验在9项 falsification 测试中成功拒绝违规操作，投影与验证开销低于6%。"
+      "论文指出现有问题：LLM 和智能体生成的工作流动作虽然语法正确，但可能因过时、不可行、冲突或破坏触发修复的证据而导致系统错误。",
+      "论文提出 Agentic Transaction Processing (ATP) 事务模型，核心原则是双重认定——提案不可信，且任何提案无法预见所有干扰；只有运行时负责准入和提交。",
+      "ATP 模型要求所有生成动作必须通过声明的确定性约束集 C 的准入检查后才能被提交执行。",
+      "论文实现了 Mnemosyne 运行时系统，包含追加式转换日志、有效状态投影、依赖安全补偿和主动提交记录四个核心组件。",
+      "论文证明了 ATP 相对于约束集 C 的四项安全属性：权限分离、序列等价生成准入、证据保留修复和约束包含。",
+      "实验表明 Mnemosyne 在九项测试中拒绝了所有目标违规行为，投影与验证开销低于 6%，局部修复协议 (LCRP) 相比全局重新计算效率高出一个数量级。"
     ],
     "specialized_tags": {
       "paper": {
@@ -428,6 +428,46 @@
       }
     },
     "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "Mnemosyne",
+        "canonical_name": "Mnemosyne",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "论文基于 Agentic Transaction Processing 模型实现了 Mnemosyne 运行时系统，包含追加式转换日志、有效状态投影、依赖安全补偿和主动提交记录等机制。",
+          "Mnemosyne 在九项伪造测试中拒绝了所有目标违规行为，同时仍允许有效工作流通过，投影与验证开销低于 6%。",
+          "论文标题为 Mnemosyne: Agentic Transaction Processing for Validating and Repairing AI-generated Workflows，Mnemosyne 是该工作的核心贡献。"
+        ],
+        "article_id": "2fafb6fdbe04709e"
+      },
+      {
+        "object_type": "project",
+        "name": "Agentic Transaction Processing (ATP)",
+        "canonical_name": "Agentic Transaction Processing",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "论文提出了 Agentic Transaction Processing (ATP) 事务模型，将生成的动作视为不可信提案，直到它们通过声明的确定性约束集的准入检查。",
+          "ATP 模型的核心原则是：提案不等于事实，且没有提案能预见所有干扰；任何东西都可以提议，但只有运行时负责准入和提交。",
+          "相对于约束集 C，ATP 保证已提交状态的正確性与提议层的能力、诚实性或学习无关。"
+        ],
+        "article_id": "2fafb6fdbe04709e"
+      },
+      {
+        "object_type": "project",
+        "name": "Localized Constraint Repair Protocol (LCRP)",
+        "canonical_name": "LCRP",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "论文证明了 Mnemosyne 的局部修复协议 (LCRP) 具有有界反应式修复保证。",
+          "LCRP 在实验中修改的操作数比全局重新计算少一个数量级。"
+        ],
+        "article_id": "2fafb6fdbe04709e"
+      }
+    ],
     "impact_score": {
       "score": 6.2,
       "reason": "该论文提出 Agentic Transaction Processing (ATP) 模型，将数据库事务的原子性、隔离性和补偿回滚等经典概念系统性地迁移到 AI 生成 workflow 的验证与修复场景，填补了现有 agent 系统缺乏事务性安全保障的空白。论文给出了四种形式化安全属性的证明（权威分离、序列等价生成准入、保留证据的修复、义务约束）以及 LCRP 协议的有界响应修复保证，学术贡献扎实。然而，这仍属理论性框架提出阶段，实验仅在 falsification 测试上验证了违规拒绝能力（开销低于 6%），尚未在真实复杂 agent 系统中大规模部署验证。相比 ChatGPT 发布级别的范式转移，其行业冲击力还需时间观察工程落地效果。综合评定为 6.2 分——在 agent 安全架构方向上开辟了新的研究路线，但短期内不会立即改变产业格局。"
@@ -566,7 +606,77 @@
         "探索将ATP与强化学习结合，实现约束的自适应演化",
         "研究松弛化形式化保证以换取更高性能的折中方案"
       ]
-    }
+    },
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Mnemosyne",
+        "canonical_name": "Mnemosyne",
+        "positioning": "基于 ATP 事务模型实现的运行时系统，具备追加式转换日志与有效状态投影等机制，专用于验证和修复 AI 生成的工作流。",
+        "technical_signal": "项目采用追加式转换日志、有效状态投影、依赖安全补偿和主动提交记录四项核心机制，为 AI 工作流提供运行时安全保障。",
+        "ecosystem_relevance": "作为开源项目，Mnemosyne 填补了 LLM 生成层与安全执行层之间的信任缺口，属于 AI 基础设施安全方向的关键探索。",
+        "target_users": [],
+        "watch_reason": "Mnemosyne 提出的 ATP 模型从根本上改变了 AI 生成工作流的信任模式，将运行时验证与局部修复机制结合，为智能体系统安全执行提供了可证明保障，值得持续关注其在多智能体协作场景中的推广效果。",
+        "risk_notes": [
+          "Mnemosyne 目前仍处于学术验证阶段，尚未在生产环境中经过大规模测试。",
+          "其约束集 C 的完整定义在实际部署中可能面临挑战，运行时性能开销也需要进一步评估。"
+        ],
+        "score": 8.0,
+        "article_ids": [
+          "2fafb6fdbe04709e"
+        ],
+        "evidence_snippets": [
+          "论文基于 Agentic Transaction Processing 模型实现了 Mnemosyne 运行时系统，包含追加式转换日志、有效状态投影、依赖安全补偿和主动提交记录等机制。",
+          "Mnemosyne 在九项伪造测试中拒绝了所有目标违规行为，同时仍允许有效工作流通过，投影与验证开销低于 6%。",
+          "论文标题为 Mnemosyne: Agentic Transaction Processing for Validating and Repairing AI-generated Workflows，Mnemosyne 是该工作的核心贡献。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Agentic Transaction Processing (ATP)",
+        "canonical_name": "Agentic Transaction Processing",
+        "positioning": "将数据库事务处理思想引入 AI 工作流领域的创新型事务模型，将生成动作视为不可信提案，需通过确定性约束准入后方可提交执行。",
+        "technical_signal": "ATP 提出双重认定原则，提案不等于事实且无法预见所有干扰，运行时负责准入和提交，使状态正确性与提议层能力解耦。",
+        "ecosystem_relevance": "ATP 弥补了 AI 生成内容运行时安全保障的理论空白，其四项安全属性定义对智能体系统安全方向有基础性贡献。",
+        "target_users": [],
+        "watch_reason": "ATP 模型为 AI 智能体工作流安全提供了一种全新的理论框架，将数据库事务的 ACID 属性思想迁移到 AI 生成动作验证场景，若被广泛采用可能成为智能体系统安全执行的标准范式。",
+        "risk_notes": [
+          "ATP 模型依赖约束集 C 的完整定义，在复杂真实场景中穷举所有约束可能不切实际。",
+          "ATP 目前仅在 Mnemosyne 单一实现中得到验证，缺乏跨框架通用性验证。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "2fafb6fdbe04709e"
+        ],
+        "evidence_snippets": [
+          "论文提出了 Agentic Transaction Processing (ATP) 事务模型，将生成的动作视为不可信提案，直到它们通过声明的确定性约束集的准入检查。",
+          "ATP 模型的核心原则是：提案不等于事实，且没有提案能预见所有干扰；任何东西都可以提议，但只有运行时负责准入和提交。",
+          "相对于约束集 C，ATP 保证已提交状态的正確性与提议层的能力、诚实性或学习无关。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Localized Constraint Repair Protocol (LCRP)",
+        "canonical_name": "LCRP",
+        "positioning": "Mnemosyne 运行时系统中的局部修复协议，当约束违反时通过有界反应式修复替代全局重新计算，高效修正 AI 工作流的违规操作。",
+        "technical_signal": "LCRP 具有有界反应式修复保证，在实验中修改的操作数比全局重新计算少一个数量级，显著提升修复效率。",
+        "ecosystem_relevance": "局部修复策略解决了 AI 工作流修复的核心效率瓶颈，对构建需要实时响应的智能体系统具有重要意义。",
+        "target_users": [],
+        "watch_reason": "LCRP 的局部修复策略效率比全局重新计算提升一个数量级，这对需要实时响应的智能体系统至关重要，值得关注其是否能成为 AI 工作流修复的标准方案。",
+        "risk_notes": [
+          "LCRP 作为 Mnemosyne 的组成部分，其有效性和边界条件与 Mnemosyne 整体架构深度耦合。",
+          "该协议仅在学术实验中验证，其在复杂多步工作流中的实际修复边界尚未明确。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "2fafb6fdbe04709e"
+        ],
+        "evidence_snippets": [
+          "论文证明了 Mnemosyne 的局部修复协议 (LCRP) 具有有界反应式修复保证。",
+          "LCRP 在实验中修改的操作数比全局重新计算少一个数量级。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -963,8 +1073,8 @@
       "2026-07-02"
     ],
     "source_type": "academic_paper",
-    "tldr": "提出面向航路空中交通管制的解空间路径规划算法SSPPV和SSPPE，最优变体在MUAC Delta扇区平均3.69ms计算无冲突路径",
-    "objective_summary": "本研究针对航路空中交通管制开发了一种无冲突路径规划算法，基于解空间框架整合三种意图冲突检测方法（距离法、时间间隔法、区域法），提出顶点搜索（SSPPV）和边搜索（SSPPE）两种变体。实验基于马斯特里赫特高空区域管制中心（MUAC）Delta扇区5海里网格数据，SSPPV配合区域冲突检测性能最优，",
+    "tldr": "该论文提出了一种名为解空间路径规划（SSPP）的算法，用于航路空中交通管制的无冲突路径规划。SSPPV变体结合区域冲突检测能在3.69毫秒内完成路径计算，在马斯特里赫特高空区域管制中心（MUAC）的Delta扇区测试中表现最佳。",
+    "objective_summary": "这篇学术论文针对航路空中交通管制（ATC）场景，开发了一种无冲突路径规划算法。算法基于解空间显示框架，集成了距离、时间间隔和区域三种意图冲突检测方法，并提出了基于顶点（SSPPV）和基于边（SSPPE）两种搜索节点变体。在马斯特里赫特高空区域管制中心（MUAC）的Delta扇区真实场景测试中，SSPPV结合区域冲突检测获得最佳性能，平均计算时间为3.69毫秒。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
@@ -972,20 +1082,21 @@
         "Maastricht Upper Area Control Centre (MUAC)"
       ],
       "technologies": [
-        "Solution Space Path Planning (SSPP)",
+        "SSPP",
         "SSPPV",
         "SSPPE",
-        "Conflict Detection"
+        "Solution Space Path Planning",
+        "conflict detection",
+        "air traffic control"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "现有路径规划算法在实际战术管制中采纳有限，与管制员实际需求存在错位，需开发可解释、计算高效且面向人使用的决策支持方案",
-      "算法设计基于两个指导原则：解空间显示的可解释性与灵活性，以及管制员实际执行的决策逻辑（间隔标准、机动限制、航路点最小化等）",
-      "算法在解空间框架内整合了三种基于意图的冲突检测方法：距离法、时间间隔法和区域法",
-      "提出两种搜索变体——基于顶点的SSPPV和基于边的SSPPE，分别从计算速度和解决方案质量两个维度进行评估",
-      "实验基于MUAC Delta扇区5海里网格数据，SSPPV配合区域冲突检测性能最优，平均路径计算时间为3.69ms",
-      "SSPPV在计算速度和解决方案质量方面均优于SSPPE"
+      "论文指出现有路径规划算法与实际管制员需求之间存在脱节，强调可解释性和计算效率是决策支持系统的关键设计目标。",
+      "算法基于解空间显示框架，集成距离、时间间隔和区域三种意图冲突检测方法，以识别无冲突路径。",
+      "研究提出基于顶点搜索（SSPPV）和基于边搜索（SSPPE）两种解空间路径规划变体，并进行性能对比。",
+      "在马斯特里赫特高空区域管制中心（MUAC）的Delta扇区使用5海里网格进行真实场景测试。",
+      "实验结果表明SSPPV结合区域冲突检测性能最优，平均路径计算时间为3.69毫秒。"
     ],
     "specialized_tags": {
       "paper": {
@@ -998,6 +1109,34 @@
       }
     },
     "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "paper",
+        "name": "Solution space path planning for supporting en-route air traffic control",
+        "canonical_name": "Solution space path planning for supporting en-route air traffic control",
+        "url": "https://arxiv.org/abs/2607.00064",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "该论文开发了一种用于航路空中交通管制的无冲突路径规划算法，旨在满足可解释性和计算效率两大设计考量。",
+          "算法集成了距离、时间间隔和区域三种意图冲突检测方法，在解空间框架内识别无冲突路径。",
+          "在MUAC的Delta扇区使用5海里网格的测试中，SSPPV结合区域冲突检测平均计算时间为3.69毫秒。"
+        ],
+        "article_id": "62ad39c4d716ade3"
+      },
+      {
+        "object_type": "project",
+        "name": "SSPP (Solution Space Path Planning)",
+        "canonical_name": "Solution Space Path Planning",
+        "confidence": "medium",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "研究提出了基于解空间的路径规划算法（SSPP），包含SSPPV和SSPPE两种变体。",
+          "SSPPV使用基于顶点的搜索节点，SSPPE使用基于边的搜索节点，两者在计算速度和求解质量上进行了评估。"
+        ],
+        "article_id": "62ad39c4d716ade3"
+      }
+    ],
     "impact_score": {
       "score": 2.0,
       "reason": "该论文面向航路空中交通管制这一窄域场景提出解空间路径规划变体（SSPPV/SSPPE），算法层面是经典路径规划问题在特定约束下的工程适配（整合三种冲突检测方式 + 网格搜索），缺乏底层方法论突破。平均3.69ms的计算速度在ATC领域有意义，但对整个AI行业而言影响极其有限，既非范式转移也非局部竞争格局改变，属于小圈子的专业更新。"
@@ -1131,7 +1270,34 @@
         "将SSPP框架推广至无人机交通管理（UTM）和城市空中交通（UAM）等新兴领域",
         "探索更高密度空域场景下SSPP的性能边界，研究网格分辨率与解质量之间的关系"
       ]
-    }
+    },
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "SSPP (Solution Space Path Planning)",
+        "canonical_name": "Solution Space Path Planning",
+        "url": "https://arxiv.org/abs/2607.00064",
+        "positioning": "面向航路空中交通管制场景的无冲突路径规划算法，基于解空间显示框架，集成距离、时间间隔和区域三种冲突检测方法，追求可解释性与计算效率的平衡。",
+        "technical_signal": "算法集成距离、时间间隔和区域三种意图冲突检测方法，SSPPV变体结合区域冲突检测平均计算时间仅3.69毫秒，兼顾了解释性和实时计算效率。",
+        "adoption_signal": "在马斯特里赫特高空区域管制中心（MUAC）的Delta扇区使用5海里网格进行了真实场景测试，验证了算法在实际管制情境中的可行性和有效性。",
+        "ecosystem_relevance": "填补了路径规划算法设计与管制员实际工作需求之间的脱节，为空中交通管理决策支持系统提供了可解释、高效率的候选技术方案。",
+        "target_users": [],
+        "watch_reason": "SSPP以3.69毫秒的极低延迟实现无冲突路径规划，且强调与管制员决策逻辑对齐的可解释性设计，若后续在更多管制中心获得部署验证，有望成为空中交通管理决策支持领域的实用工具。",
+        "risk_notes": [
+          "目前仅在马斯特里赫特高空区域管制中心（MUAC）的Delta扇区单一场景测试，泛化到其他空域结构和管制中心的能力尚待验证。",
+          "论文未涉及与现有空中交通管理系统的集成方案，实际部署的技术复杂度及改造成本尚不明确。",
+          "该研究缺乏与同类路径规划算法的充分基准对比，且置信度为中等，独立复现验证不足。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "62ad39c4d716ade3"
+        ],
+        "evidence_snippets": [
+          "研究提出了基于解空间的路径规划算法（SSPP），包含SSPPV和SSPPE两种变体。",
+          "SSPPV使用基于顶点的搜索节点，SSPPE使用基于边的搜索节点，两者在计算速度和求解质量上进行了评估。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -1258,29 +1424,30 @@
       "2026-07-02"
     ],
     "source_type": "academic_paper",
-    "tldr": "提出集成多智能体 LLM 推理与 APSIM 生物物理模拟的闭环农业咨询框架 Agri-SAGE。",
-    "objective_summary": "Agri-SAGE 是一个将检索增强的多智能体 LLM 推理与 APSIM 生物物理仿真相结合的闭环农业咨询框架。基于 Plan-and-Solve、Tree of Thoughts 和 Reflexion 三种推理方法的十年回顾性分析显示，三者均优于静态 PoP（实践包）基线，Tree of",
+    "tldr": "Agri-SAGE 是一个将检索增强的多智能体 LLM 推理与 APSIM 生物物理模拟相结合的闭环框架，用于生成并验证农业咨询建议。10年期回顾实验表明，Tree of Thoughts 方法达到最高产量，Reflexion 方法以更低计算成本取得可比结果。",
+    "objective_summary": "arXiv 论文提出 Agri-SAGE 框架，通过融合多智能体 LLM 推理与 APSIM 生物物理模拟，解决传统静态农业指南忽略季节内变化、以及纯 LLM 建议缺乏生理合理性的双重局限。研究在 10 年期回顾分析中评估了 Plan-and-Solve、Tree of Thoughts 和 Reflexion 三种推理方法，结果显示所有方法均显著优于静态 Package-of-Practice 基线，其中 Tree of Thoughts 达到峰值产量，Reflexion 借助跨季节 episodic memory 以更低计算成本取得相当效果。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
         "LLM",
-        "Multi-Agent",
+        "Multi-Agent LLM",
         "APSIM",
+        "RAG",
         "Plan-and-Solve",
         "Tree of Thoughts",
-        "Reflexion",
-        "RAG"
+        "Reflexion"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "农业咨询系统面临根本矛盾：静态农艺指南有循证依据但无法应对季节内变异，而 LLM 咨询系统可能生成农艺学可信但生理学不可靠的建议。",
-      "Agri-SAGE 通过将检索增强的多智能体 LLM 推理与 APSIM 生物物理仿真结合，构建闭环框架来生成并验证农艺建议。",
-      "在十年回顾性分析中评估了 Plan-and-Solve、Tree of Thoughts 和 Reflexion 三种推理方法。",
-      "三种方法均显著优于静态 PoP（Package-of-Practice）基线，其中 Tree of Thoughts 实现了最高产量。",
-      "Reflexion 通过利用跨季节情景记忆（episodic memory），在显著降低计算成本的同时达到了可比较的农艺效果。"
+      "农业咨询系统面临根本矛盾：静态指南可靠但忽视季节内变化，纯 LLM 建议则可能农学上合理但生理学上不具说服力。",
+      "Agri-SAGE 是一个闭环框架，将检索增强的多智能体 LLM 推理与 APSIM 生物物理模拟相结合，用于生成并验证农学咨询建议。",
+      "研究在 10 年期回顾分析中评估了 Plan-and-Solve、Tree of Thoughts 和 Reflexion 三种推理方法的表现。",
+      "Tree of Thoughts 方法实现了令人瞩目的峰值产量表现，在三种方法中最为突出。",
+      "Reflexion 方法通过利用跨季节的 episodic memory，在显著降低计算成本的同时取得了与 Tree of Thoughts 相当的农学效果。",
+      "所有三种推理方法均显著优于传统的静态 Package-of-Practice 基线方案。"
     ],
     "specialized_tags": {
       "paper": {
@@ -1293,6 +1460,33 @@
       }
     },
     "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "Agri-SAGE",
+        "canonical_name": "Agri-SAGE",
+        "url": "https://arxiv.org/abs/2607.00454",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Agri-SAGE 是一个闭环框架，通过结合检索增强的多智能体 LLM 推理与 APSIM 生物物理模拟，来生成并验证农学咨询建议。",
+          "该框架被设计用于解决静态指南忽略季节内变化和纯 LLM 建议缺乏生理合理性的双重局限。"
+        ],
+        "article_id": "643a4aba68aaedda"
+      },
+      {
+        "object_type": "project",
+        "name": "APSIM",
+        "canonical_name": "APSIM",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Agri-SAGE 框架集成了 APSIM 生物物理模拟引擎，用于在生成农学建议后验证其生理合理性。",
+          "APSIM 作为生物物理仿真引擎，为多智能体 LLM 生成的农学建议提供模拟验证的基础。"
+        ],
+        "article_id": "643a4aba68aaedda"
+      }
+    ],
     "impact_score": {
       "score": 3.0,
       "reason": "Agri-SAGE 将多智能体 LLM 推理（Plan-and-Solve、ToT、Reflexion）与 APSIM 生物物理仿真闭环结合，在农业 AI 领域具有场景级创新。但本质上是现有技术的集成式应用创新，未提出新的基础模型、训练范式或算法突破，且验证仅限于十年回顾分析而非在线生产环境。短期对 AI 行业整体格局无冲击力，属于细分场景的深化研究，影响范围限于农业 AI 小圈子。"
@@ -1426,7 +1620,56 @@
         "探索更轻量化的推理策略，降低框架在边缘设备上的部署门槛",
         "将农业经济学（成本收益分析）纳入建议优化目标"
       ]
-    }
+    },
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Agri-SAGE",
+        "canonical_name": "Agri-SAGE",
+        "url": "https://arxiv.org/abs/2607.00454",
+        "positioning": "一个将检索增强多智能体LLM推理与APSIM生物物理模拟相结合的闭环农业咨询生成框架，旨在解决静态指南忽略季节内变化和纯LLM建议缺乏生理合理性的双重局限。",
+        "technical_signal": "三种推理方法（Plan-and-Solve、Tree of Thoughts、Reflexion）在10年期回顾实验中均显著优于静态PoP基线，其中Tree of Thoughts实现峰值产量。",
+        "adoption_signal": "该方法目前仅在10年期回顾分析中完成学术验证，尚未在实际农场或农业推广环境中部署，采用仍处于学术实验阶段。",
+        "ecosystem_relevance": "属于AI+精准农业交叉领域的前沿探索，为LLM在农技推广中的闭环验证提供了可复用的架构范式。",
+        "target_users": [],
+        "watch_reason": "Agri-SAGE代表了LLM与物理模拟相结合的重要方向，其\"生成-验证\"闭环设计直击农业AI的可信度核心痛点。Tree of Thoughts与Reflexion的对比实验为不同计算预算下的系统选型提供了量化依据。随着农业数字化加速，这类模拟验证型AI咨询系统有潜力成为精准农业的关键基础设施。",
+        "risk_notes": [
+          "目前仅为学术论文验证，缺乏真实农场部署和实地用户反馈。",
+          "实验限定于10年回顾数据，在更极端气候场景下的泛化性尚待验证。",
+          "多智能体架构叠加生物物理模拟可能带来较高计算资源开销。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "643a4aba68aaedda"
+        ],
+        "evidence_snippets": [
+          "Agri-SAGE 是一个闭环框架，通过结合检索增强的多智能体 LLM 推理与 APSIM 生物物理模拟，来生成并验证农学咨询建议。",
+          "该框架被设计用于解决静态指南忽略季节内变化和纯 LLM 建议缺乏生理合理性的双重局限。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "APSIM",
+        "canonical_name": "APSIM",
+        "positioning": "在Agri-SAGE框架中充当生物物理模拟验证引擎，为多智能体LLM生成的农学建议提供生理合理性校验能力。",
+        "technical_signal": "本文中APSIM被成功集成到多智能体LLM推理闭环中，作为模拟验证层验证AI生成建议的农学生理合理性。",
+        "ecosystem_relevance": "作为成熟的农业生产系统模拟器，其与LLM的集成展示了传统生物物理模型在AI驱动精准农业中的可扩展价值。",
+        "target_users": [],
+        "watch_reason": "APSIM作为经典农业模拟系统被前沿AI研究选为验证引擎，标志着传统作物模型与生成式AI融合的技术趋势，这种交叉方向的发展值得持续关注。",
+        "risk_notes": [
+          "本文仅提及APSIM作为集成组件，缺乏对其在AI架构中运行效率和精度瓶颈的评估。",
+          "APSIM与LLM的耦合深度有限，尚未讨论模拟反馈如何反向优化LLM推理过程。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "643a4aba68aaedda"
+        ],
+        "evidence_snippets": [
+          "Agri-SAGE 框架集成了 APSIM 生物物理模拟引擎，用于在生成农学建议后验证其生理合理性。",
+          "APSIM 作为生物物理仿真引擎，为多智能体 LLM 生成的农学建议提供模拟验证的基础。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -1630,26 +1873,26 @@
       "2026-07-02"
     ],
     "source_type": "academic_paper",
-    "tldr": "PHREEQC-MCQ-200 基准测试评估了工具增强型 AI 代理在地球化学模拟中的表现",
-    "objective_summary": "研究人员提出了 PHREEQC-MCQ-200 基准测试，包含 200 道源自 21 个 PHREEQC 场景的多项选择题，用于评估大语言模型代理在地球化学模拟中使用工具的能力。实验表明，模拟器访问提升了整体准确率，但会导致原本答对的题目出现倒退。",
+    "tldr": "PHREEQC-MCQ-200 是一个包含200道多选题的基准测试，用于评估工具增强型大语言模型在水文地球化学模拟中的表现。研究发现模拟器访问整体提升准确率，但会导致部分模型在原本正确的问题上出现倒退，且输出访问协议对中端模型影响显著。",
+    "objective_summary": "研究人员提出了PHREEQC-MCQ-200基准，包含200道基于21个已验证PHREEQC场景的多选题，用于诊断工具增强型大语言模型代理在确定性水文地球化学模拟中的能力。测试要求代理构建模拟器输入、执行PHREEQC程序、检查结构化输出并提交最终答案。实验发现模拟器访问在多个模型家族上整体提升准确率，但增益并非单调，工具增强代理也会失去原本无需工具就能答对的题目。输出访问协议方面，目录式界面可降低较强模型的代币消耗但会降低中等模型的性能。",
     "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [],
       "technologies": [
+        "PHREEQC-MCQ-200",
         "PHREEQC",
-        "LLM",
-        "Tool-Augmented Agents"
+        "LLM Agent"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "研究人员提出了 PHREEQC-MCQ-200 基准测试，包含 200 道源自 21 个已验证 PHREEQC 场景的多项选择题。",
-      "该基准要求代理构建模拟器输入、执行 PHREEQC、检查结构化输出并提交最终答案，以端到端方式评估科学工具使用能力。",
-      "实验发现，模拟器访问显著提升了多个前沿和中端模型系列在科学计算任务上的整体准确率。",
-      "但工具增强也导致代理在原本无需工具就能答对的题目上出现性能倒退，仅看平均准确率无法发现这一问题。",
-      "目录式输出接口可降低令牌成本并保持或提升强模型准确率，但会降低中端模型的性能表现。",
-      "论文主张科学代理评估应报告准确率、条目级保留率、输出访问敏感性和计算链断裂位置等多维度指标。"
+      "研究人员提出了PHREEQC-MCQ-200基准，包含200道基于21个已验证PHREEQC场景的多选题，用于诊断工具增强型科学模拟代理的能力。",
+      "该基准要求代理完成构建模拟器输入、执行PHREEQC程序、检查结构化输出并提交最终答案的完整流程。",
+      "实验发现模拟器访问在多个前沿和中端模型家族上整体提升了准确率，证实了工具执行对科学计算任务的必要性。",
+      "然而工具接入带来的增益并非单调，工具增强代理也会在原本无需工具就能答对的题目上出现表现倒退。",
+      "输出访问协议的选择对结果有显著影响，目录式界面可降低较强模型的代币消耗并保持或提升准确率，但会降低中等模型的导航性能。",
+      "该研究主张科学代理评估应报告准确率、条目级保留率、输出访问敏感性、轨迹失败和计算链断点等多维度指标。"
     ],
     "specialized_tags": {
       "paper": {
@@ -1662,6 +1905,34 @@
       }
     },
     "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "PHREEQC-MCQ-200",
+        "canonical_name": "PHREEQC-MCQ-200",
+        "url": "https://arxiv.org/abs/2607.00436",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "PHREEQC-MCQ-200 是一个包含200道多选题的基准测试，用于评估工具增强型AI代理在确定性水文地球化学模拟中的表现。",
+          "该基准包含从21个已验证PHREEQC场景中衍生出的200道多选题，要求代理构建模拟器输入、执行模拟并提交最终答案。",
+          "实验表明模拟器访问整体提升准确率，但工具增强代理也会在原本正确的问题上出现倒退，揭示了单一准确率指标的局限性。"
+        ],
+        "article_id": "abcd805a11d113a9"
+      },
+      {
+        "object_type": "project",
+        "name": "PHREEQC",
+        "canonical_name": "PHREEQC",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "PHREEQC 是用于水文地球化学确定性模拟的科学软件，PHREEQC-MCQ-200基准要求代理使用该模拟器执行计算。",
+          "基准中的200道多选题基于21个经过验证的PHREEQC模拟场景，涵盖模拟器输入构建、执行和输出检查全流程。"
+        ],
+        "article_id": "abcd805a11d113a9"
+      }
+    ],
     "impact_score": {
       "score": 4.0,
       "reason": "该论文提出了一个针对地球化学模拟的专用基准测试，核心贡献在于揭示了工具增强型AI代理的一个反直觉现象：接入模拟器虽能提升整体准确率，但会导致代理在原本无需工具就能答对的题目上出现倒退。这一发现对LLM工具调用评估方法论有参考价值，但领域过于垂直（地球化学），且未提出新的模型架构或训练范式，短期行业冲击力有限，不足以改变局部竞争格局"
@@ -1792,7 +2063,57 @@
         "探索如何在保持工具便利性的同时减少对模型原生推理能力的干扰",
         "开发自动化的计算链路断点诊断工具，帮助定位科学智能体系统中的薄弱环节"
       ]
-    }
+    },
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "PHREEQC-MCQ-200",
+        "canonical_name": "PHREEQC-MCQ-200",
+        "url": "https://arxiv.org/abs/2607.00436",
+        "positioning": "首个针对工具增强型大语言模型代理在确定性水文地球化学模拟中表现的多选题诊断基准。",
+        "technical_signal": "基准要求代理完成模拟器输入构建、程序执行、结构化输出检查并提交最终答案的完整流程。",
+        "adoption_signal": "多个前沿和中端模型家族已在基准上完成测试，模拟器访问整体提升了准确率。",
+        "ecosystem_relevance": "为科学模拟代理评估提供了从单一准确率到多维诊断的方法论参考，可推广至其他科学计算领域。",
+        "target_users": [],
+        "watch_reason": "该基准首次揭示了工具增强带来的非单调增益现象，即代理在获得工具后反而在部分题目上表现倒退，这对AI科学代理的可靠性评估具有重要警示意义，值得持续跟踪其后续扩展和跨领域应用。",
+        "risk_notes": [
+          "基准仅涵盖水文地球化学单一领域，跨领域泛化性尚待验证。",
+          "200道多选题的规模相对有限，可能不足以完全反映模型在真实科学模拟中的复杂表现。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "abcd805a11d113a9"
+        ],
+        "evidence_snippets": [
+          "PHREEQC-MCQ-200 是一个包含200道多选题的基准测试，用于评估工具增强型AI代理在确定性水文地球化学模拟中的表现。",
+          "该基准包含从21个已验证PHREEQC场景中衍生出的200道多选题，要求代理构建模拟器输入、执行模拟并提交最终答案。",
+          "实验表明模拟器访问整体提升准确率，但工具增强代理也会在原本正确的问题上出现倒退，揭示了单一准确率指标的局限性。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "PHREEQC",
+        "canonical_name": "PHREEQC",
+        "positioning": "用于水文地球化学确定性模拟的科学软件，作为代理工具集成测试的基准模拟引擎。",
+        "technical_signal": "支持通过构建输入文件、批量执行和结构化输出检查的工作流进行程序化调用。",
+        "adoption_signal": "被PHREEQC-MCQ-200基准选为基础模拟平台，21个已验证场景覆盖多种水文地球化学计算任务。",
+        "ecosystem_relevance": "作为开源科学模拟软件，其工具化集成模式可为其他科学领域的模拟器代理研究提供参考。",
+        "target_users": [],
+        "watch_reason": "作为科学代理基准测试的基础执行引擎，PHREEQC的工具化集成方案为模拟类科学软件与LLM代理的结合提供了验证案例，值得关注其在更广泛科学计算场景中的代理集成进展。",
+        "risk_notes": [
+          "PHREEQC本身并非为AI代理集成设计，工具化接口的通用性可能受限。",
+          "作为特定领域科学软件，其代理集成经验向其他模拟器的迁移效果有待检验。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "abcd805a11d113a9"
+        ],
+        "evidence_snippets": [
+          "PHREEQC 是用于水文地球化学确定性模拟的科学软件，PHREEQC-MCQ-200基准要求代理使用该模拟器执行计算。",
+          "基准中的200道多选题基于21个经过验证的PHREEQC模拟场景，涵盖模拟器输入构建、执行和输出检查全流程。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -2594,28 +2915,28 @@
       "2026-07-02"
     ],
     "source_type": "academic_paper",
-    "tldr": "SPIRE 框架通过逆向规划将结构去噪转化为可验证任务，实现多智能体协作的个性化幻灯片页面生成。",
-    "objective_summary": "该论文提出 SPIRE 框架，将页面级幻灯片个性化生成（PSP）形式化为逆向规划问题，通过故意破坏干净幻灯片的视觉结构，让两个智能体通过强化学习协作去噪以恢复设计意图，实验证明该方法优于现有方案。",
+    "tldr": "该论文提出 SPIRE 框架，将页面级幻灯片个性化（PSP）形式化为逆向规划问题，通过故意破坏干净幻灯片的视觉结构让两个智能体经强化学习协作去噪，从而捕获用户潜在的设计意图。",
+    "objective_summary": "本文提出 SPIRE 框架，将页面级幻灯片个性化（PSP）问题形式化为逆向规划任务。SPIRE 通过故意破坏干净幻灯片的视觉结构来创建可验证的去噪任务，让两个智能体通过强化学习协作优化可执行的设计方案，无需依赖 PowerPoint 或 Beamer 等特定执行工具。论文证明了结构去噪是 PSP 的一致代理，且多智能体公式能降低强化学习中的策略梯度方差。大量实验表明 SPIRE 在幻灯片个性化任务上优于现有方法。",
     "event_type": "framework_tools",
-    "epistemic_status": "verified_fact",
+    "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
-        "SPIRE",
-        "RL",
         "PSP",
+        "SPIRE",
         "Inverse Planning",
-        "Structural Denoising",
-        "Multi-agent RL"
+        "Reinforcement Learning",
+        "Structural Denoising"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "当前 AI 智能体方法依赖预设模板或用户详细指令，无法捕捉细粒度页面级设计意图，导致页面级幻灯片个性化（PSP）问题未解决。",
-      "该论文将 PSP 形式化为逆向规划问题，旨在学习设计意图而不依赖任何具体的执行工具（如 PowerPoint、Beamer）。",
-      "为克服端到端优化难题，提出 SPIRE 框架，通过故意破坏干净幻灯片的视觉结构来创建可验证的去噪任务。",
-      "两个智能体通过强化学习（RL）协作优化可执行设计，理论证明结构去噪是 PSP 的一致替代目标。",
-      "多智能体公式严格降低了 RL 策略梯度的方差，实验证明了 SPIRE 的优越性。"
+      "论文将页面级幻灯片个性化（PSP）定义为逆向规划问题，目标是捕获用户潜在的设计意图而非依赖显式指令。",
+      "现有AI方法依赖预设模板或用户详细指令，无法处理细粒度的页面级个性化需求，PSP问题尚未得到解决。",
+      "SPIRE通过故意破坏干净幻灯片的视觉结构来创建可验证的去噪任务，以此近似求解PSP这一逆向规划问题。",
+      "两个智能体通过强化学习协作优化可执行的设计方案，无需依赖PowerPoint或Beamer等特定执行工具的知识。",
+      "论文从理论上证明了结构去噪是PSP的一致代理，且多智能体公式能严格降低强化学习中的策略梯度方差。",
+      "大量实验结果表明SPIRE在幻灯片个性化任务上的表现优于现有的AI代理方法。"
     ],
     "specialized_tags": {
       "paper": {
@@ -2628,6 +2949,21 @@
       }
     },
     "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "SPIRE",
+        "canonical_name": "SPIRE",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "SPIRE通过故意破坏干净幻灯片的视觉结构创建可验证的去噪任务，让两个智能体通过强化学习协作优化可执行的设计方案。",
+          "论文证明了SPIRE中结构去噪是页面级幻灯片个性化的一致代理，且多智能体公式严格降低了强化学习中的策略梯度方差。",
+          "大量实验结果表明SPIRE在幻灯片个性化任务上优于现有AI方法，验证了逆向规划框架的有效性。"
+        ],
+        "article_id": "f68ab06e07a75a98"
+      }
+    ],
     "impact_score": {
       "score": 3.0,
       "reason": "该论文提出 SPIRE 框架，将页面级幻灯片个性化生成（PSP）建模为逆向规划问题，通过结构去噪和双智能体强化学习协作恢复设计意图。技术上有理论贡献（证明结构去噪是 PSP 的一致替代目标、多智能体公式降低策略梯度方差），但应用场景非常垂直（幻灯片页面设计），短期内不会对 AI 行业整体格局产生显著冲击。学术价值高于产业影响。评分依据：窄领域学术论文，非行业级事件。"
@@ -2762,6 +3098,31 @@
         "与大型语言模型（LLM）结合，利用语义理解增强设计意图推断的准确性",
         "开发通用的工具无关设计表示中间层，对接PowerPoint、Keynote、Google Slides等主流格式的后端渲染器"
       ]
-    }
+    },
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "SPIRE",
+        "canonical_name": "SPIRE",
+        "positioning": "SPIRE框架将页面级幻灯片个性化形式化为逆向规划问题，通过破坏幻灯片视觉结构创建去噪任务，让两个智能体协作学习用户的潜藏设计意图。",
+        "technical_signal": "SPIRE通过故意破坏干净幻灯片的视觉结构创建可验证的去噪任务，两个智能体经强化学习协作优化设计方案，无需依赖PowerPoint等特定工具知识。",
+        "ecosystem_relevance": "SPIRE填补了AI在细粒度页面级幻灯片个性化领域的空白，其逆向规划与结构去噪方法可启发智能办公和设计生产力工具的创新。",
+        "target_users": [],
+        "watch_reason": "SPIRE通过逆向规划框架解决了AI幻灯片生成中长期被忽略的页面级个性化问题，其多智能体强化学习方法兼具理论创新性与实用潜力，若能集成主流办公工具将产生广泛的应用价值。",
+        "risk_notes": [
+          "SPIRE目前仍处于学术验证阶段，尚未与PowerPoint或Beamer等主流工具集成，距离实际落地场景仍有显著距离。",
+          "个性化质量高度依赖强化学习的训练效果，在复杂多变的真实场景中的泛化能力和鲁棒性尚未得到充分验证。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "f68ab06e07a75a98"
+        ],
+        "evidence_snippets": [
+          "SPIRE通过故意破坏干净幻灯片的视觉结构创建可验证的去噪任务，让两个智能体通过强化学习协作优化可执行的设计方案。",
+          "论文证明了SPIRE中结构去噪是页面级幻灯片个性化的一致代理，且多智能体公式严格降低了强化学习中的策略梯度方差。",
+          "大量实验结果表明SPIRE在幻灯片个性化任务上优于现有AI方法，验证了逆向规划框架的有效性。"
+        ]
+      }
+    ]
   }
 ]

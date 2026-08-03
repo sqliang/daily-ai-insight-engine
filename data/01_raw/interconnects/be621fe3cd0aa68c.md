@@ -7,6 +7,12 @@ published: '2026-07-20'
 created: '2026-07-21'
 manifest_dates:
 - '2026-07-21'
+- '2026-07-22'
+- '2026-07-23'
+- '2026-07-24'
+- '2026-07-25'
+- '2026-07-26'
+- '2026-07-27'
 description: The global implications on the AI ecosystem.
 tags:
 - clippings

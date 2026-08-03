@@ -16,14 +16,13 @@
     "pipeline_stage": "fact_extracted",
     "id": "0af70dc4df451a55",
     "source_type": "community_discussion",
-    "tldr": "Workweave 发布智能模型路由代理 Router，为 AI 编程工具自动选择最优模型",
-    "objective_summary": "Workweave（Weave）发布了智能模型路由代理 Router，支持 Anthropic、OpenAI 和 Gemini API 协议，使用基于 Avengers-Pro 的聚类评分器逐请求自动选择最优模型，可通过 npx 一键安装并接入 Claude Code、Codex、Cursor 等",
+    "tldr": "Workweave 发布了一款名为 Weave Router 的智能模型路由代理，可基于小型本地嵌入器和 Avengers-Pro 集群评分算法，为每次请求自动选择最优 LLM，支持 Anthropic、OpenAI、Gemini 及开源模型，并可直接接入 Claude Code、Codex 和 Cursor 等开发工具。",
+    "objective_summary": "Workweave 于 2026 年 7 月在 GitHub Show HN 上发布了 @workweave/router，一款开箱即用的智能模型路由代理。该工具提供一个本地代理端点，基于 Avengers-Pro 论文的集群评分器为每次请求自动路由到最优模型，同时支持 Anthropic Messages、OpenAI Chat Completions 和 Gemini 原生 API 格式。用户可通过 npx 一键安装并配置 Claude Code、Codex、opencode 或 Cursor 使用该路由，也可选择自托管部署。路由决策透明可审计，并提供 OTLP 可观测性。",
     "event_type": "framework_tools",
     "epistemic_status": "pr_statement",
     "entities": {
       "companies": [
-        "Workweave",
-        "Weave",
+        "Weave (Workweave)",
         "Anthropic",
         "OpenAI",
         "Google",
@@ -33,18 +32,74 @@
         "Reducto"
       ],
       "technologies": [
-        "Avengers-Pro"
+        "Avengers-Pro",
+        "OTLP"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "Workweave 发布了 Router，一个智能模型路由代理工具，基于 arXiv 论文 Avengers-Pro 提出的聚类评分器为每次请求自动选择最优模型。",
-      "Router 兼容 Anthropic Messages API、OpenAI Chat Completions API 和 Gemini 原生 API，支持流式传输、工具调用和视觉功能。",
-      "用户可通过 npx @workweave/router 一键安装并配置 Claude Code、Codex CLI、opencode 和 Cursor 等主流 AI 编程工具。",
-      "Router 支持 BYOK（自带密钥）模式，提供 OTLP 可观测性 trace 输出，可接入 Honeycomb、Datadog、Grafana 等第三方监控平台。",
-      "Router 支持通过 OpenRouter 接入 DeepSeek、Qwen、GLM、Llama、Mistral 等开源模型，以及 OpenAI 兼容的任意端点。"
+      "Weave Router 是一个本地代理，通过小型本地嵌入器和 Avengers-Pro 集群评分算法，为每次 LLM 请求自动选择最优模型。",
+      "该路由同时支持 Anthropic Messages、OpenAI Chat Completions 和 Gemini 原生 API 格式，并兼容 DeepSeek、Kimi、Qwen 等开源模型。",
+      "用户可以通过 npx @workweave/router 一键安装并配置 Claude Code、Codex CLI 或 opencode 使用该路由服务，也可选择自托管部署。",
+      "路由器支持 BYOK（自带密钥）模式，所有提供商密钥保留在用户本地，并默认输出 OTLP 追踪以实现可观测性。",
+      "路由决策可通过 POST /v1/route 接口单独查询，不发起上游调用，便于审计和调试。",
+      "Claude Code 用户可通过 /router-on 和 /router-off 等斜杠命令切换路由，Codex 和 opencode 也提供对应的开关与状态查询功能。"
     ],
     "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "@workweave/router",
+        "canonical_name": "@workweave/router",
+        "url": "https://github.com/workweave/router",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "用户可以通过 npx @workweave/router 一键安装并配置 Claude Code、Codex 或 opencode 使用智能路由，无需克隆仓库或启动 Docker。",
+          "该路由代理支持 Anthropic Messages、OpenAI Chat Completions 和 Gemini 原生 API 格式，并支持流式输出、工具调用和视觉识别等完整功能。",
+          "路由决策基于一个小型本地嵌入器（on-box embedder）和 Avengers-Pro 论文的集群评分器，而非基于提示词的模糊判断。"
+        ],
+        "article_id": "0af70dc4df451a55"
+      },
+      {
+        "object_type": "product",
+        "name": "Weave Router",
+        "canonical_name": "Weave Router",
+        "confidence": "medium",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Weave Router 既提供托管服务（通过 npx @workweave/router 一键使用），也支持用户自托管部署在 localhost:8080。",
+          "自托管版本需要配置上游提供商密钥并启动 Postgres 数据库，通过 make full-setup 命令完成全套部署。",
+          "路由器的可观测性通过 OTLP 追踪实现，用户可以在 Weave 仪表盘查看路由决策详情，或接入 Honeycomb、Datadog、Grafana 等工具。"
+        ],
+        "article_id": "0af70dc4df451a55"
+      },
+      {
+        "object_type": "paper",
+        "name": "Avengers-Pro",
+        "canonical_name": "Avengers-Pro",
+        "url": "https://arxiv.org/abs/2508.12631",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "该论文由 Zhang, Y. 等人撰写，标题为《Beyond GPT-5: Making LLMs Cheaper and Better via Performance–Efficiency Optimized Routing》，发表于 arXiv。",
+          "Weave Router 的集群评分器（cluster scorer）直接源自 Avengers-Pro 论文的技术方案，用于每轮请求的模型选择。"
+        ],
+        "article_id": "0af70dc4df451a55"
+      },
+      {
+        "object_type": "product",
+        "name": "Weave",
+        "canonical_name": "Weave",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "Weave 被描述为「排名第一的工程智能平台」，受到 Robinhood、PostHog、Reducto 等公司的青睐。",
+          "路由器的内置仪表盘运行在 http://localhost:8080/ui/，用户可通过 Weave 平台查看路由统计和观测数据。"
+        ],
+        "article_id": "0af70dc4df451a55"
+      }
+    ],
     "impact_score": {
       "score": 6.0,
       "reason": "该产品将学术界 Avengers-Pro 论文的聚类评分路由算法工程化落地，直接面向 Claude Code、Codex、Cursor 等主流 AI 编程工具，安装仅需一条 npx 命令。per-request 级别的智能路由可能改变开发者管理多模型成本与质量的体验——不再需要手动切换或固定绑定单一提供商。但模型路由赛道已有 OpenRouter、Portkey、Helicone 等竞品，Router 的差异化在于其算法驱动而非规则配置，技术壁垒取决于实际路由决策的精度和延迟。属于重要工具发布，能改变局部开发者工具链格局，但未达范式转移级别。"
@@ -97,7 +152,61 @@
       "compound": "medium",
       "hype": "medium"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "@workweave/router",
+        "canonical_name": "@workweave/router",
+        "url": "https://github.com/workweave/router",
+        "positioning": "@workweave/router 是一个开源的智能模型路由代理，基于小型本地嵌入器和 Avengers-Pro 集群评分算法，为每次 LLM 请求自动从多个提供商中选择最优模型并支持流式输出。",
+        "technical_signal": "采用 Avengers-Pro 论文的集群评分算法，基于小型本地嵌入器而非提示词做路由决策，决策可通过 /v1/route 接口单独查询审计，并默认输出 OTLP 追踪。",
+        "adoption_signal": "支持通过 npx 一键安装，可直接接入 Claude Code、Codex CLI 和 opencode 等主流开发工具，并提供斜杠命令快捷切换路由开关功能。",
+        "ecosystem_relevance": "同时支持 Anthropic、OpenAI 和 Gemini 三大主流 API 格式，并通过 OpenRouter 兼容 DeepSeek、Qwen、Llama 等开源模型，覆盖主流闭源和开源模型生态。",
+        "target_users": [],
+        "watch_reason": "Weave Router 提出了每次请求动态路由最优模型的实用方案，解决了开发者在多模型间手动切换的痛点，其基于嵌入器而非提示词的评分算法在同类工具中差异化明显，值得持续跟踪社区采用情况和路由决策准确性。",
+        "risk_notes": [
+          "路由决策依赖小型本地嵌入器和集群评分算法的质量，复杂或多轮对话场景下可能存在路由不准确的风险。",
+          "自托管版本需要部署 Postgres 数据库并配置多提供商密钥，部署运维复杂度高于纯托管方案。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "0af70dc4df451a55"
+        ],
+        "evidence_snippets": [
+          "用户可以通过 npx @workweave/router 一键安装并配置 Claude Code、Codex 或 opencode 使用智能路由，无需克隆仓库或启动 Docker。",
+          "该路由代理支持 Anthropic Messages、OpenAI Chat Completions 和 Gemini 原生 API 格式，并支持流式输出、工具调用和视觉识别等完整功能。",
+          "路由决策基于一个小型本地嵌入器（on-box embedder）和 Avengers-Pro 论文的集群评分器，而非基于提示词的模糊判断。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Weave Router",
+        "canonical_name": "Weave Router",
+        "positioning": "Weave Router 是 Weave 工程智能平台推出的智能模型路由服务产品，支持托管和自托管两种模式，通过可视化仪表盘提供路由决策的审计与可观测性。",
+        "target_users": [
+          "使用 Claude Code、Codex 或 Cursor 的 AI 应用开发者",
+          "需要管理多模型 API 调用的工程团队"
+        ],
+        "product_signal": "提供 npx 一键托管部署和 make full-setup 自托管两种方案，内置 OTLP 可观测性，可在 Weave 仪表盘或 Honeycomb 等第三方工具中查看路由决策详情。",
+        "market_signal": "由 Weave 工程智能平台推出，已有 Robinhood、PostHog 等知名企业客户的平台生态支撑，产品推广具备品牌和信任基础。",
+        "differentiation": "与纯提示词路由方案不同，Weave Router 基于 Avengers-Pro 论文的评分算法做决策，每次路由可通过 /v1/route 接口单独查询审计，透明度和可解释性更高。",
+        "watch_reason": "Weave Router 将智能模型路由从传统提示词方案提升到嵌入器评分层面，托管模式降低了个人使用门槛，自托管满足了企业数据安全需求，随着多模型并用趋势发展值得持续关注。",
+        "risk_notes": [
+          "产品仍处于早期阶段，Cursor 集成标注为早期 beta，性能和多场景覆盖的成熟度有待进一步提升。",
+          "自托管模式需要管理上游提供商密钥和路由密钥两套凭证，密钥配置不当将直接影响服务安全性和可用性。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "0af70dc4df451a55"
+        ],
+        "evidence_snippets": [
+          "Weave Router 既提供托管服务（通过 npx @workweave/router 一键使用），也支持用户自托管部署在 localhost:8080。",
+          "自托管版本需要配置上游提供商密钥并启动 Postgres 数据库，通过 make full-setup 命令完成全套部署。",
+          "路由器的可观测性通过 OTLP 追踪实现，用户可以在 Weave 仪表盘查看路由决策详情，或接入 Honeycomb、Datadog、Grafana 等工具。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -116,10 +225,10 @@
     "pipeline_stage": "fact_extracted",
     "id": "238c8d8bf6e82e96",
     "source_type": "community_discussion",
-    "tldr": "OpenAI 发布 GPT-5.6 系列模型（Sol/Terra/Luna），以有限预览形式向信任合作伙伴开放",
-    "objective_summary": "OpenAI 于 2026 年 7 月发布 GPT-5.6 系列模型，包含旗舰 Sol、平衡 Terra 和经济 Luna 三档。Sol 在编码、生物学和网络安全基准上创下新 SOTA，引入 max 推理强度和 ultra 子代理模式。模型采用分层安全防护，投入超 70 万 A100 等效 GPU",
-    "event_type": "application_landing",
-    "epistemic_status": "pr_statement",
+    "tldr": "OpenAI开始对GPT-5.6系列模型（Sol、Terra、Luna）进行有限预览。Sol在编程、生物学和网络安全基准测试中达到新水平，配备分层安全防护体系，计划数周内全面开放。",
+    "objective_summary": "OpenAI于2026年7月21日宣布开始对GPT-5.6系列模型进行有限预览，仅限受信任合作伙伴通过API和Codex访问。该系列引入Sol（旗舰）、Terra（日常平衡）和Luna（快速低价）三个能力层级，Sol在Terminal-Bench 2.1上达到最新技术水平，在GeneBench v1和ExploitBench上超越前代。OpenAI投入超过70万A100等效GPU小时进行自动化红队测试，并配备多层次安全防护。定价为Sol（$5/$30每百万token）、Terra（$2.50/$15）、Luna（$1/$6），计划数周内在ChatGPT、Codex和API全面开放。",
+    "event_type": "infrastructure_update",
+    "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
         "OpenAI",
@@ -136,14 +245,115 @@
       "key_people": []
     },
     "key_logic_flow": [
-      "OpenAI 发布 GPT-5.6 系列三款模型：旗舰 Sol、平衡 Terra 和经济 Luna，Terra 性能与 GPT-5.5 相当但成本降低一半，Luna 为最低价位最强能力。",
-      "GPT-5.6 Sol 在 Terminal-Bench 2.1（命令行编码）、GeneBench v1（基因组学与定量生物学）和 ExploitBench（网络安全）等基准上达到新 SOTA，且在 ExploitBench 上仅用 Mythos Preview 约 1/3 输出 token 即达到同等水平。",
-      "GPT-5.6 Sol 引入了新的 max 推理强度和 ultra 模式（通过子代理加速复杂工作），其网络安全能力经评估未达到 Preparedness Framework 定义的 Cyber Critical 阈值。",
-      "OpenAI 部署了迄今最强的分层安全防护：模型级训练防护、实时输出分类器（可暂停生成并调用大模型审查）、账户级跨会话审查和差异化访问，并投入超 70 万 A100 等效 GPU 小时进行自动化红队测试。",
-      "应美国政府要求，GPT-5.6 先以有限预览形式向信任合作伙伴开放，OpenAI 计划在未来数周内逐步向 ChatGPT、Codex 和 API 用户广泛开放。",
-      "GPT-5.6 引入新命名体系（数字代表世代，Sol/Terra/Luna 代表能力层级），定价为 Sol $5/$30、Terra $2.50/$15、Luna $1/$6（每百万 token 输入/输出），并将在 Cerebras 平台实现最高 750 token/秒的推理速度。"
+      "OpenAI发布GPT-5.6系列模型Sol、Terra和Luna的有限预览，Sol为旗舰模型，Terra为日常平衡模型，Luna为快速低价模型。",
+      "GPT-5.6 Sol在Terminal-Bench 2.1、GeneBench v1和ExploitBench等基准测试中达到或超越最新技术水平，展现出在编程、生物学和网络安全领域的全面提升。",
+      "OpenAI为GPT-5.6系列配备多层次安全防护，包括模型级拒绝训练、实时分类器审查、账户级行为分析和差异化访问控制。",
+      "OpenAI投入超过70万A100等效GPU小时进行自动化红队测试，并与第三方专家进行人工红队测试以发现和修复安全漏洞。",
+      "GPT-5.6系列定价为Sol（$5/$30每百万token）、Terra（$2.50/$15）、Luna（$1/$6），并引入30分钟最低缓存生命期和显式缓存断点支持。",
+      "GPT-5.6 Sol将在Cerebras上以最高750 token/秒运行，该系列模型计划在数周内向ChatGPT、Codex和API全面开放。"
     ],
     "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "model",
+        "name": "GPT-5.6 Sol",
+        "canonical_name": "GPT-5.6 Sol",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "GPT-5.6 Sol是OpenAI发布的旗舰模型，在Terminal-Bench 2.1上达到最新技术水平，在GeneBench v1上以更少token超越GPT-5.5，并配备最完善的安全防护措施。"
+        ],
+        "article_id": "238c8d8bf6e82e96"
+      },
+      {
+        "object_type": "model",
+        "name": "GPT-5.6 Terra",
+        "canonical_name": "GPT-5.6 Terra",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "GPT-5.6 Terra是GPT-5.6系列中的日常平衡模型，性能与GPT-5.5相当但成本降低一半，定价为每百万token输入$2.50、输出$15。"
+        ],
+        "article_id": "238c8d8bf6e82e96"
+      },
+      {
+        "object_type": "model",
+        "name": "GPT-5.6 Luna",
+        "canonical_name": "GPT-5.6 Luna",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "GPT-5.6 Luna是GPT-5.6系列中的快速低价模型，以最低成本提供强大能力，定价为每百万token输入$1、输出$6。"
+        ],
+        "article_id": "238c8d8bf6e82e96"
+      },
+      {
+        "object_type": "dataset",
+        "name": "Terminal-Bench 2.1",
+        "canonical_name": "Terminal-Bench 2.1",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "GPT-5.6 Sol在Terminal-Bench 2.1上设定新的技术水平，该基准测试命令工作流所需的规划、迭代和工具协调能力。"
+        ],
+        "article_id": "238c8d8bf6e82e96"
+      },
+      {
+        "object_type": "dataset",
+        "name": "GeneBench v1",
+        "canonical_name": "GeneBench v1",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "在GeneBench v1评估中，GPT-5.6 Sol在长周期基因组学和定量生物学分析上比GPT-5.5取得更强结果，同时使用更少token。"
+        ],
+        "article_id": "238c8d8bf6e82e96"
+      },
+      {
+        "object_type": "dataset",
+        "name": "ExploitBench",
+        "canonical_name": "ExploitBench",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "在ExploitBench上，GPT-5.6 Sol与Mythos Preview性能相当，仅使用约三分之一的输出token。"
+        ],
+        "article_id": "238c8d8bf6e82e96"
+      },
+      {
+        "object_type": "dataset",
+        "name": "ExploitGym",
+        "canonical_name": "ExploitGym",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "ExploitGym是由UC Berkeley研究人员与OpenAI等前沿实验室合作创建的网络安全基准测试，用于评估推理增强后的网络能力。"
+        ],
+        "article_id": "238c8d8bf6e82e96"
+      },
+      {
+        "object_type": "product",
+        "name": "Codex",
+        "canonical_name": "Codex",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "GPT-5.6系列模型在预览期间首先通过API和Codex向受信任合作伙伴提供，并计划未来在ChatGPT中全面开放。"
+        ],
+        "article_id": "238c8d8bf6e82e96"
+      },
+      {
+        "object_type": "company",
+        "name": "Cerebras",
+        "canonical_name": "Cerebras",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "OpenAI将在Cerebras上以最高750 token/秒的速度运行GPT-5.6 Sol，初期仅限选定的客户访问。"
+        ],
+        "article_id": "238c8d8bf6e82e96"
+      }
+    ],
     "impact_score": {
       "score": 7.2,
       "reason": "评分依据：GPT-5.6 系列是 OpenAI 继 GPT-5.5 之后的重要产品更新，三档模型（Sol/Terra/Luna）在编码、生物学和网络安全基准上创下新 SOTA，且 Terra 以半价达到 GPT-5.5 水平，直接重塑了前沿模型的性价比竞争格局。更重要的是，应美国政府要求采取有限预览策略，开创了前沿模型分阶段政府审核的先河，这对未来 AI 模型发布流程有示范效应。但模型本质上是渐进式改进（新推理强度模式 + 子代理加速），尚未达到 GPT-3 到 GPT-4 式的范式转移。综合评定为重要行业格局改变事件，评分 7.2。"
@@ -200,7 +410,35 @@
       "compound": "medium",
       "hype": "medium"
     },
-    "actionable_insight": "strategic_invest"
+    "actionable_insight": "strategic_invest",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "Codex",
+        "canonical_name": "Codex",
+        "positioning": "OpenAI旗下AI编程平台，为开发者提供基于GPT系列大模型的代码生成、补全与调试能力，是GPT-5.6系列模型的首批发布渠道之一。",
+        "target_users": [
+          "AI开发者",
+          "软件工程师",
+          "安全研究人员"
+        ],
+        "product_signal": "Codex作为GPT-5.6系列模型的早期接入平台，率先向受信任合作伙伴提供Sol、Terra和Luna的编程能力预览。",
+        "market_signal": "Codex与API并行成为GPT-5.6的首发渠道，说明OpenAI将编程场景定位为新一代模型的核心落地领域。",
+        "differentiation": "相比ChatGPT通用界面，Codex更专注于专业开发工作流，能够集成GPT-5.6 Sol的深度推理和子代理加速模式。",
+        "watch_reason": "Codex率先承载GPT-5.6 Sol的编程能力预览，Sol在Terminal-Bench 2.1等关键基准上刷新技术水平，将直接影响AI辅助编程工具的发展方向与竞争格局，值得持续跟踪其实际效果、开发者采纳度及对编程生态的长期影响。",
+        "risk_notes": [
+          "GPT-5.6 Sol在网络安全能力上的提升可能增加Codex被滥用于攻击性用途的风险，安全防护措施的有效性仍需验证。",
+          "Codex当前仅限受信任合作伙伴访问，全面开放时间和实际可用性存在不确定性。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "238c8d8bf6e82e96"
+        ],
+        "evidence_snippets": [
+          "GPT-5.6系列模型在预览期间首先通过API和Codex向受信任合作伙伴提供，并计划未来在ChatGPT中全面开放。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -322,32 +560,61 @@
     "pipeline_stage": "fact_extracted",
     "id": "45a2d35c7c269f7b",
     "source_type": "community_discussion",
-    "tldr": "Aleph Neuro 通过颅骨超声首次实现活体人脑超分辨率血管 3D 成像，分辨率比 CT 高 100 倍",
-    "objective_summary": "Aleph Neuro 团队利用 FDA 批准的微泡造影剂和超声定位显微镜技术，通过完整颅骨获取了活体人脑最详细的 3D 血管图像，达到亚毫米级分辨率。团队已将整个处理管线及数据集开源。",
-    "event_type": "application_landing",
+    "tldr": "Aleph Neuro 发布了一项里程碑成果：通过颅骨超声实现了人类活体大脑血管的超分辨率3D成像，分辨率比CT高100倍。该公司正在开源其微泡处理流水线和数据集，最终目标是实现无需造影剂的神经血管超声成像。",
+    "objective_summary": "Aleph Neuro 在2026年6月24日宣布，利用基于超声波的神经血管成像技术，首次通过完整颅骨实现了人类大脑血管的超声定位显微镜3D成像。该技术利用FDA批准的微泡造影剂突破衍射极限，成像体积分辨率比CT高100倍。公司同时开源了微泡处理流水线和数据集，并正在收集全球最大的神经血管超声数据集，目标是未来实现无需造影剂的脑成像。",
+    "event_type": "infrastructure_update",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
         "Aleph Neuro",
-        "Butterfly"
+        "Butterfly Network"
       ],
       "technologies": [
-        "ultrasound localization microscopy",
+        "Ultrasound Localization Microscopy",
         "neurovascular ultrasound",
         "microbubble imaging",
-        "super-resolution imaging"
+        "EEG",
+        "MEG"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "Aleph Neuro 团队宣布实现了据其所知最详细的活体人脑经颅超声血管图像，首次通过完整颅骨获得超声定位显微镜 3D 图像，体积分辨率比 CT 高约 100 倍。",
-      "该技术基于神经血管耦合原理——神经元放电触发局部血流增加——利用超声波穿过颅骨后经红细胞散射，绘制全脑血流和血容量图。",
-      "团队使用 FDA 批准的六氟化硫脂质壳微泡造影剂连续输注 4 分钟，通过稀疏浓度使微泡斑点不重叠，精确定位每个微泡中心，累积数百万个位置实现超越衍射极限的超分辨率成像。",
-      "团队认为通用脑机接口需满足大视野和高分辨率两大条件，神经血管超声在物理上同时满足这两点，而 EEG 和 MEG 因电场/磁场传播特性无法通过扩大传感器规模解决分辨率瓶颈。",
-      "终极目标是无需造影剂的神经血管超声成像，团队认为硬件成本下降（如 Butterfly 等公司的低价设备）和端到端机器学习可从原始超声数据中恢复更多信号。",
-      "团队已开源整个处理管线及相关数据集，并正在收集据称全球最大的神经血管超声数据集。"
+      "Aleph Neuro 认为现有脑机接口硬件存在两极化困境：要么开颅植入电极，要么使用EEG等颅外方法获取模糊信号。",
+      "该公司开发的超声神经血管成像技术利用神经元放电时局部血流量增加的特性，通过超声波经颅散射红细胞来绘制全脑血流图。",
+      "通用脑机接口需要同时满足两大条件：能够覆盖大脑大部分区域（1000个电极仅能捕获0.001%），以及具备高分辨率。",
+      "团队宣布实现了已知最详细的人类活体脑血管超声图像，首次在完整颅骨下完成超声定位显微镜的3D成像，体积分辨率比CT高100倍。",
+      "该技术通过稀疏注射微泡造影剂并精确定位每个微泡中心，突破衍射极限实现超分辨率成像。",
+      "Aleph Neuro 正在开源其微泡处理流水线和数据集，并持续收集全球最大的神经血管超声数据集，目标是实现无需造影剂的端到端机器学习成像方案。"
     ],
     "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "Microbubble Processing Pipeline",
+        "canonical_name": "Aleph Neuro Microbubble Processing Pipeline",
+        "url": "https://alephneuro.com/blog/ultrasound-brain",
+        "confidence": "medium",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "我们正在将整个流水线连同数据集一起开源，让中风、阿尔茨海默症和创伤性脑损伤等疾病能通过这种高分辨率成像手段获得新的诊断方法。",
+          "微泡让我们能够突破衍射极限，通过稀疏注射使气泡斑点不重叠，从而精确定位每个微泡的中心位置，累积数百万个位置后堆叠成超越波长的精细图像。"
+        ],
+        "article_id": "45a2d35c7c269f7b"
+      },
+      {
+        "object_type": "dataset",
+        "name": "Aleph Neuro Neurovascular Ultrasound Dataset",
+        "canonical_name": "Aleph Neuro Neurovascular Ultrasound Dataset",
+        "url": "https://alephneuro.com/blog/ultrasound-brain",
+        "confidence": "low",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "我们目前正在收集全球最大的神经血管超声数据集，并期待分享后续成果。",
+          "无造影剂成像更难，因为红细胞散射远弱于微泡，但标准超声探头每小时可接收TB级数据，现有处理流水线仅压缩到原始数据的0.1%。"
+        ],
+        "article_id": "45a2d35c7c269f7b"
+      }
+    ],
     "impact_score": {
       "score": 5.5,
       "reason": "该技术首次通过完整颅骨实现超声定位显微镜（ULM）超分辨率3D血管成像，体积分辨率比CT高约100倍，是神经成像领域的重要里程碑。从AI行业视角看：1) 团队开源了全套处理管线和数据集，为AI+医学影像交叉研究提供了稀缺训练资源；2) 提出的端到端机器学习方案从原始超声数据恢复信号，是AI与物理传感深度融合的典型案例；3) 但该成果本质是生物医学工程与神经科学的交叉突破，对大模型、推理、Agent等AI核心方向的短期直接影响有限；4) 当前需注射造影剂，距离通用的无创脑机接口愿景仍远。综合评定为中等偏上冲击力。"
@@ -403,7 +670,33 @@
       "compound": "medium",
       "hype": "medium"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Microbubble Processing Pipeline",
+        "canonical_name": "Aleph Neuro Microbubble Processing Pipeline",
+        "url": "https://alephneuro.com/blog/ultrasound-brain",
+        "positioning": "Aleph Neuro 开源的微泡处理流水线，通过稀疏注射微泡造影剂突破超声衍射极限，实现经颅脑血管超分辨率 3D 成像。",
+        "technical_signal": "该流水线利用 FDA 批准的微泡造影剂，通过精确定位每个微泡中心并累积数百万个位置，堆叠出超越超声波长的精细图像，体积分辨率比 CT 高 100 倍。",
+        "adoption_signal": "Aleph Neuro 已将该流水线连同配套数据集开源，面向中风、阿尔茨海默症和创伤性脑损伤等血管标志物疾病的临床诊断应用。",
+        "ecosystem_relevance": "该流水线是 Aleph Neuro 神经血管超声技术栈的核心组件，与全球最大神经血管超声数据集共同驱动无造影剂端到端机器学习成像方案。",
+        "target_users": [],
+        "watch_reason": "Aleph Neuro 首次通过完整颅骨实现人体超声定位显微镜 3D 成像，分辨率远超 CT，并开源核心流水线以加速临床转化；其对无造影剂脑成像的探索有望彻底改变神经血管疾病的诊断范式。",
+        "risk_notes": [
+          "当前超分辨率成像依赖微泡造影剂注射，并非完全无创的成像手段。",
+          "从造影到无造影成像面临巨大信号恢复挑战，标准探头一小时数据中 99.9% 的信号被当前流水线丢弃。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "45a2d35c7c269f7b"
+        ],
+        "evidence_snippets": [
+          "我们正在将整个流水线连同数据集一起开源，让中风、阿尔茨海默症和创伤性脑损伤等疾病能通过这种高分辨率成像手段获得新的诊断方法。",
+          "微泡让我们能够突破衍射极限，通过稀疏注射使气泡斑点不重叠，从而精确定位每个微泡的中心位置，累积数百万个位置后堆叠成超越波长的精细图像。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -700,15 +993,16 @@
     "pipeline_stage": "fact_extracted",
     "id": "9f94a3ee25cb5075",
     "source_type": "community_discussion",
-    "tldr": "PyNomo 是一个通过 Python 脚本生成算图（Nomogram）PDF 的开源工具。",
-    "objective_summary": "算图（Nomogram）由 Philbert Maurice d'Ocagne 于 1880 年发明，是一种通过标尺排列实现图形化计算的工具。PyNomo 是一个 Python 开源库，支持将数学方程转化为可打印的算图 PDF，适用于九种标准方程类型和一种通用类型。",
+    "tldr": "这篇文章介绍了诺模图（Nomogram）的定义、历史与广泛应用，并重点说明了PyNomo这一Python工具包如何通过简单脚本自动生成矢量格式的诺模图PDF文件，用户只需具备代数基础即可使用。",
+    "objective_summary": "诺模图是一种通过标尺排列和直尺对齐进行图形化计算的工具，由Philbert Maurice d'Ocagne于1880年发明，曾广泛用于铁路建设、医学、弹道学、航空导航、化学工程、统计学和军事等领域的复杂公式快速计算。该文以PyNomo为主要介绍对象，说明该Python工具支持九种标准方程类型和一种通用类型，用户只需将方程整理为支持的格式并编写简单脚本，即可自动生成矢量诺模图PDF，还可通过参数自定义刻度、标题、颜色和示例等值线等外观细节。",
     "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [],
       "technologies": [
+        "Nomogram",
         "PyNomo",
-        "nomogram"
+        "PDF"
       ],
       "key_people": [
         "Philbert Maurice d'Ocagne",
@@ -718,13 +1012,29 @@
       ]
     },
     "key_logic_flow": [
-      "算图（Nomogram）由 Philbert Maurice d'Ocagne 于 1880 年发明，是一种通过排列编号标尺并跨接直尺来求解数学公式的图形化计算工具。",
-      "算图可处理三个及以上变量的数学公式，包括无法通过代数变换显式求解的隐式变量。",
-      "PyNomo 是一个 Python 开源库，用户将方程整理为九种标准类型之一或使用通用类型后，编写简单脚本即可自动生成矢量格式的算图 PDF。",
-      "算图曾广泛应用于铁路土方计算、血液生理学、弹道学、航空导航、化学工程和质量控制等领域。",
-      "算图兼具快速数值计算和系统关系洞察的双重功能，可提供变量间的交叉敏感性可视化。"
+      "诺模图（Nomogram）是一种通过排列标尺并用直尺对齐已知值来求解数学公式的图形化计算工具，由Philbert Maurice d'Ocagne于1880年发明。",
+      "诺模图曾广泛应用于铁路土方计算、血液生理学、弹道学、航空导航、化学工程和军事等众多领域，其优势在于快速、可靠且不依赖电子设备。",
+      "PyNomo是一个Python工具包，能够将用户编写的简单脚本自动转换为矢量格式的诺模图PDF文件，几乎不需要数学背景即可使用。",
+      "PyNomo支持九种标准方程类型和一种通用类型，用户可通过复制和修改标准示例脚本的方式快速创建诺模图。",
+      "诺模图不仅用于快速计算，还能通过标尺的布局、标注和刻度关系提供对系统内部关联和变量敏感性的可视化洞察。"
     ],
     "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "PyNomo",
+        "canonical_name": "PyNomo",
+        "url": "https://lefakkomies.github.io/pynomo-doc/",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "PyNomo能够将用户编写的简单脚本自动转换为矢量格式的诺模图PDF文件，几乎不需要数学背景即可使用。",
+          "PyNomo支持九种标准方程类型和一种通用类型，用户可通过复制和修改标准示例脚本快速创建诺模图。",
+          "PyNomo提供了丰富的自定义功能，包括刻度间距、标尺标题、示例等值线和颜色设置等。"
+        ],
+        "article_id": "9f94a3ee25cb5075"
+      }
+    ],
     "impact_score": {
       "score": 1.2,
       "reason": "算图（Nomogram）是1880年发明的图形计算工具，已被电子计算器全面替代。PyNomo 作为一个将数学方程转化为算图PDF的开源Python库，属于计算机辅助的复古技术复兴，受众极窄（主要是数学教育、设计史爱好者等小圈子）。对当前AI行业无任何短期竞争格局或范式影响，纯属知识性/趣味性内容。"
@@ -773,7 +1083,34 @@
       "compound": "low",
       "hype": "low"
     },
-    "actionable_insight": "speculative_watch"
+    "actionable_insight": "speculative_watch",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "PyNomo",
+        "canonical_name": "PyNomo",
+        "url": "https://lefakkomies.github.io/pynomo-doc/",
+        "positioning": "PyNomo是一个Python工具包，通过简单脚本自动生成矢量格式的诺模图PDF文件，让非数学背景用户也能快速创建专业诺模图。",
+        "technical_signal": "支持九种标准方程类型和一种通用类型，用户只需将方程整理为支持的格式即可自动生成诺模图PDF。",
+        "adoption_signal": "诺模图在工程、医学、教育等领域仍有实用需求，PyNomo为这些场景提供了无需编程深度的现代化创作工具。",
+        "ecosystem_relevance": "在无电子设备或需快速可视化计算的场景中，诺模图仍有独特价值，PyNomo填补了现代数字环境中诺模图创作工具的空白。",
+        "target_users": [],
+        "watch_reason": "诺模图作为一种不依赖电子设备的可视化计算工具，在特定工程、教育和医疗场景中仍有不可替代的优势；PyNomo以极低成本让这一古老工具在数字时代焕发新生，其社区发展、应用拓展和与数字工具的集成能力值得持续关注。",
+        "risk_notes": [
+          "PyNomo作为小众工具包，社区规模和更新频率有限，长期维护存在不确定性。",
+          "诺模图已被电子计算器和计算机软件大规模取代，PyNomo的适用场景较为狭窄。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "9f94a3ee25cb5075"
+        ],
+        "evidence_snippets": [
+          "PyNomo能够将用户编写的简单脚本自动转换为矢量格式的诺模图PDF文件，几乎不需要数学背景即可使用。",
+          "PyNomo支持九种标准方程类型和一种通用类型，用户可通过复制和修改标准示例脚本快速创建诺模图。",
+          "PyNomo提供了丰富的自定义功能，包括刻度间距、标尺标题、示例等值线和颜色设置等。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -792,28 +1129,54 @@
     "pipeline_stage": "fact_extracted",
     "id": "b1b5ec40d7b4ca61",
     "source_type": "community_discussion",
-    "tldr": "基准测试分析显示，开源LLM与闭源LLM的平均性能差距约5个月且趋于稳定",
-    "objective_summary": "DoubleWord博客作者基于Artificial Analysis的18项基准测试数据，分析了开源权重LLM与闭源LLM之间的性能差距。综合指标上差距正缩小，预测2026年12月可能归零；但平均而言差距稳定在约5个月，编码类基准改善显著而其他领域差距仍在扩大。",
-    "event_type": "infrastructure_update",
+    "tldr": "文章分析了开源权重LLM与闭源LLM之间的能力差距，发现单个基准测试显示差距可能在2026年12月缩小至零，但综合分析18个不同基准后，平均差距稳定在约5个月且无明显缩小趋势，其中编码类基准进步最大。",
+    "objective_summary": "作者基于Artificial Analysis Intelligence Index基准，测量了开源权重LLM追赶闭源LLM前沿能力所需的时间。单个基准数据显示，自2024年夏季以来差距持续缩小，线性拟合预测2026年12月3日差距将归零。然而，对同一机构提供的18个不同基准进行逐项分析后，平均差距几乎保持水平，稳定在约5个月左右。最大的进步集中在编码基准上，该差距从15个月缩小至1-2个月。文章结论指出，LLM质量评估的难度导致不同测量方式得出截然不同的预测。",
+    "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [
         "Artificial Analysis"
       ],
       "technologies": [
-        "LLM"
+        "open weights LLMs",
+        "closed source LLMs"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "作者基于Artificial Analysis的Intelligence Index综合基准，将开源权重LLM的当前性能水平与闭源LLM达到该水平的历史时间点对比，以此衡量差距。",
-      "综合指标显示自2024年夏季起差距开始缩小，线性外推预测到2026年12月3日差距将归零。",
-      "作者将分析扩展到18项不同基准，每月计算各基准差距的箱线图分布。",
-      "18项基准的平均差距在整个分析时期内几乎保持平直，稳定在约5个月的水平，并未显著缩小。",
-      "编码类基准的追赶最为显著，差距从15个月缩小至仅1-2个月，但多数其他基准的差距甚至呈温和扩大趋势。",
-      "该分析表明LLM质量衡量方法高度依赖评测基准选择，单一基准无法反映全貌，开源是否追上取决于以何种标准衡量。"
+      "作者将开源权重LLM与闭源LLM之间的差距定义为：开源模型在某一基准上的前沿性能水平对应闭源模型前沿在多久之前达到的同一水平。",
+      "在Artificial Analysis Intelligence Index这一单一基准上，差距自2024年夏季开始持续缩小，线性拟合预测2026年12月3日差距将缩小至零。",
+      "作者对同一机构提供的18个不同基准进行了逐项重复分析，结果显示各基准差距的均值几乎完全水平，稳定在约5个月左右。",
+      "编码基准是进步最大的领域，其差距从15个月缩小至仅1-2个月，而其他多数基准的差距随时间略有扩大。",
+      "该分析揭示了LLM质量评估的困难：不同的测量方式会导致截然不同的结论，暗示开源模型是否即将追平闭源模型取决于采用何种基准。"
     ],
     "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "Artificial Analysis Intelligence Index",
+        "canonical_name": "Artificial Analysis Intelligence Index",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "该基准是Artificial Analysis的头号指数，用于评估模型的整体能力，并且作者发现它与人们对模型的主观感受有很好的相关性。",
+          "在该基准上，开源与闭源LLM的差距自2024年夏季开始持续缩小，线性拟合显示2026年12月3日差距将归零。"
+        ],
+        "article_id": "b1b5ec40d7b4ca61"
+      },
+      {
+        "object_type": "dataset",
+        "name": "Artificial Analysis 18 Benchmarks",
+        "canonical_name": "Artificial Analysis Benchmarks",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "作者获取了Artificial Analysis提供的18个不同基准的测量数据，对所有18个基准进行了重复分析并汇总为箱线图。",
+          "对18个基准取平均值后计算拟合线，结果显示该线几乎完全水平，整体差距稳定在略低于5个月的水平。"
+        ],
+        "article_id": "b1b5ec40d7b4ca61"
+      }
+    ],
     "impact_score": {
       "score": 5.5,
       "reason": "该文章提供了一个重要的行业‘清醒剂’，系统性地拆解了社交媒体上广为流传的‘开源LLM即将追上闭源’的简化叙事。其核心贡献在于：通过18项基准的箱线图分布分析，揭示了综合基准掩盖的严重领域差异——编码类确实大幅缩小差距，但多数非编码领域的差距甚至还在温和扩大。这一发现在AI投资、模型选型和战略规划层面有直接参考价值，但本质上是一篇深度分析性博客而非新产品或技术突破，因此评分居中偏上。"
@@ -867,7 +1230,32 @@
       "compound": "medium",
       "hype": "medium"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Artificial Analysis Intelligence Index",
+        "canonical_name": "Artificial Analysis Intelligence Index",
+        "positioning": "Artificial Analysis 推出的旗舰综合基准指数，用于评估大语言模型的整体能力，与人们对模型的主观感受有良好相关性。",
+        "technical_signal": "该指数整合了18个不同维度的基准测试来综合评估LLM能力，揭示了开源模型在不同能力维度上追赶闭源模型的速度存在显著差异，其中编码基准进步最为突出。",
+        "adoption_signal": "该指数的差距分析图在社交媒体上被广泛传播和讨论，但其单一综合基准结论与多基准平均分析结果存在显著分歧，引发了对LLM评估方法论有效性的行业反思。",
+        "ecosystem_relevance": "作为衡量LLM前沿能力竞争态势的核心参照系，该指数为开源社区和闭源厂商提供了可量化的能力差距追踪工具，直接影响行业对开源模型成熟度的判断。",
+        "target_users": [],
+        "watch_reason": "该指数是量化追踪开源与闭源LLM能力差距的核心指标：其单一基准预测差距将在2026年底归零，但多基准平均分析显示差距稳定在5个月左右；这种分歧揭示了LLM评估的深层困境，持续跟踪该指数有助于判断AI能力演进的真实拐点。",
+        "risk_notes": [
+          "单一综合指数与多基准平均分析得出的趋势结论截然相反，暗示该指数可能无法全面反映模型能力全貌。",
+          "编码基准的巨大进步掩盖了其他多数基准差距略有扩大的事实，整体趋势存在结构性偏差风险。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "b1b5ec40d7b4ca61"
+        ],
+        "evidence_snippets": [
+          "该基准是Artificial Analysis的头号指数，用于评估模型的整体能力，并且作者发现它与人们对模型的主观感受有很好的相关性。",
+          "在该基准上，开源与闭源LLM的差距自2024年夏季开始持续缩小，线性拟合显示2026年12月3日差距将归零。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -886,28 +1274,68 @@
     "pipeline_stage": "fact_extracted",
     "id": "d78bd17399702c87",
     "source_type": "community_discussion",
-    "tldr": "OpenTTD 16.0-Beta1 发布，新增火车倒车、多人模式改进等多项功能。",
-    "objective_summary": "OpenTTD 团队于 2026 年 6 月 25 日发布 OpenTTD 16.0 首个 Beta 版本，新增火车倒车、多人公司免邀请加入、地图生成改进、补贴支持 CargoDist、NewGRF 收藏集等功能，并同步启动了 16 代标题游戏社区竞赛。",
+    "tldr": "OpenTTD 16.0 Beta 1 正式发布，新增火车倒车、多人免邀请加入、地图生成改进、自定义 NewGRF 收藏集等多项功能，并同步启动了第 16 版标题游戏设计竞赛。",
+    "objective_summary": "OpenTTD 项目于 2026 年 6 月 25 日发布了 16.0 版本的第一个 Beta 测试版。该版本新增了火车倒车驾驶、多人公司免邀请加入、地图生成（沙漠岩石、海岸线优化、灯塔生成逻辑调整）改进、CargoDist 货运补贴、自定义 NewGRF 收藏集、货运支付老化速率缩放、下拉列表文本筛选以及合并车辆预览窗口等功能。同时，项目在 TT-Forums 上启动了 OpenTTD 16 标题游戏设计竞赛，邀请社区参与设计并在后续投票选出最终作品。",
     "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
         "OpenTTD"
       ],
-      "technologies": [],
+      "technologies": [
+        "NewGRF",
+        "CargoDist"
+      ],
       "key_people": []
     },
     "key_logic_flow": [
-      "OpenTTD 16.0 的首个 Beta 版本正式发布，面向社区公开测试。",
-      "新增火车倒车功能，这是该版本的核心特性之一。",
-      "多人模式改进：公司可设置为允许任何人免邀请直接加入。",
-      "地图生成获得多项改进：沙漠岩石、海岸线优化、灯塔生成规则、发射塔仅在1920年后出现、平均陆地高度自定义。",
-      "CargoDist 货运分配系统相关货物现在支持补贴机制。",
-      "新增 NewGRF 自定义收藏集功能，支持对象、车站和房屋类型。",
-      "货运支付老化速率可缩放，使大地图上的慢速车辆也能盈利。",
-      "同步启动 OpenTTD 16 标题游戏社区竞赛，邀请玩家设计和投票。"
+      "OpenTTD 项目发布了 16.0 的第一个 Beta 测试版，邀请社区参与测试和反馈。",
+      "新版本引入了火车可以倒车驾驶的功能，这是一个重要的游戏机制更新。",
+      "多人游戏模式新增了免邀请直接加入公司的选项，降低了多人联机的门槛。",
+      "地图生成系统在沙漠地形岩石、地图边缘海岸线、灯塔生成条件以及自定义平均陆地高度等多个方面得到改进。",
+      "游戏增加了自定义 NewGRF 收藏集、货运支付老化速率缩放和下拉列表文本过滤等用户界面与自定义功能。",
+      "项目同步在 TT-Forums 上启动了 OpenTTD 16 标题游戏设计竞赛，鼓励社区成员创作并投票选出主菜单背景游戏。"
     ],
     "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "OpenTTD 16.0-Beta1",
+        "canonical_name": "OpenTTD",
+        "url": "https://www.openttd.org/",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "OpenTTD 16 的第一个 Beta 测试版现已发布，包含火车倒车、地图生成改进等多项新功能。",
+          "该版本支持自定义 NewGRF 收藏集、货运支付老化速率缩放以及下拉列表文本筛选等用户界面改进。"
+        ],
+        "article_id": "d78bd17399702c87"
+      },
+      {
+        "object_type": "project",
+        "name": "OpenTTD 16 Title Game Competition",
+        "canonical_name": "OpenTTD Title Game Competition",
+        "url": "https://www.tt-forums.net/",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "项目在 TT-Forums 上启动了 OpenTTD 16 标题游戏设计竞赛，邀请社区设计主菜单背景游戏。",
+          "当前的 Toyland 标题游戏同样是由社区创作和投票选出的作品。"
+        ],
+        "article_id": "d78bd17399702c87"
+      },
+      {
+        "object_type": "project",
+        "name": "NewGRF",
+        "canonical_name": "NewGRF",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "玩家可以在选择窗口中创建自己的已保存 NewGRF 物品的收藏集，包括对象、车站和房屋。"
+        ],
+        "article_id": "d78bd17399702c87"
+      }
+    ],
     "impact_score": {
       "score": 1.5,
       "reason": "OpenTTD 是一个已有数十年历史的开源模拟经营游戏，16.0-Beta1 属于常规大版本 Beta 测试发布，新增火车倒车、多人模式免邀请加入、地图生成优化等社区呼声较高的功能。该事件对 AI 行业无任何直接影响，仅在小众怀旧游戏社区内有讨论热度，完全不属于 AI 领域事件。评分依据：1-3 分区间对应日常更新和小范围影响，该事件不具备跨行业影响力，属于典型的'小圈子自嗨'。"
@@ -955,7 +1383,53 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "speculative_watch"
+    "actionable_insight": "speculative_watch",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "OpenTTD 16.0-Beta1",
+        "canonical_name": "OpenTTD",
+        "url": "https://www.openttd.org/",
+        "positioning": "OpenTTD是一个开源交通运输大亨模拟游戏项目，16.0版本新增火车倒车驾驶、多人免邀请加入和地图生成优化等多项核心功能。",
+        "technical_signal": "新增火车倒车驾驶机制、CargoDist货运补贴和货运支付老化速率缩放等核心游戏系统优化，提升了大型地图的经济平衡性和可玩性。",
+        "adoption_signal": "项目已发布Beta测试版并同步启动标题游戏设计竞赛，社区测试反馈和内容创作参与积极，开发节奏保持稳定。",
+        "ecosystem_relevance": "作为经典开源模拟游戏生态的标杆项目，NewGRF自定义收藏集和标题竞赛机制持续丰富其模组生态与社区凝聚力。",
+        "target_users": [],
+        "watch_reason": "OpenTTD 16.0在经典开源游戏框架中引入多项机制创新，其社区驱动开发模式和版本迭代节奏是开源游戏项目持续运营的典型案例，值得跟踪其版本演进与社区治理实践。",
+        "risk_notes": [
+          "Beta阶段可能存在稳定性问题，需等待正式版验证后才适合广泛部署。",
+          "火车倒车等新机制的数值平衡性有待社区大规模测试验证。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "d78bd17399702c87"
+        ],
+        "evidence_snippets": [
+          "OpenTTD 16 的第一个 Beta 测试版现已发布，包含火车倒车、地图生成改进等多项新功能。",
+          "该版本支持自定义 NewGRF 收藏集、货运支付老化速率缩放以及下拉列表文本筛选等用户界面改进。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "NewGRF",
+        "canonical_name": "NewGRF",
+        "positioning": "NewGRF是OpenTTD的自定义内容模组系统，允许玩家创建和收藏自定义物件、车站和房屋等游戏资产以扩展游戏体验。",
+        "technical_signal": "新增自定义收藏集功能，玩家可以在选择窗口中保存和管理NewGRF物品，包括对象、车站和房屋等多类别资产。",
+        "ecosystem_relevance": "作为OpenTTD模组生态的核心基础设施，NewGRF收藏集功能降低了内容管理门槛，进一步激活社区模组创作生态。",
+        "target_users": [],
+        "watch_reason": "NewGRF作为开源游戏模组系统的代表性实现，其自定义收藏集功能反映了开源游戏平台对用户生成内容管理体验的持续优化趋势。",
+        "risk_notes": [
+          "NewGRF规范与兼容性由OpenTTD项目单一维护，生态存在集中在单一开源项目上的潜在风险。"
+        ],
+        "score": 2.0,
+        "article_ids": [
+          "d78bd17399702c87"
+        ],
+        "evidence_snippets": [
+          "玩家可以在选择窗口中创建自己的已保存 NewGRF 物品的收藏集，包括对象、车站和房屋。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -974,31 +1448,26 @@
     "pipeline_stage": "fact_extracted",
     "id": "f25be1ac35f6328e",
     "source_type": "community_discussion",
-    "tldr": "AI系统在数学定理证明和研究中取得里程碑式突破，数学界就学科未来展开激烈辩论",
-    "objective_summary": "Google DeepMind的Aletheia和OpenAI的AI系统在国际数学奥林匹克竞赛中达金牌水平，并自主产生可发表的博士级数学研究成果。Math Inc.的Gauss成功形式化菲尔兹奖级证明。数学界围绕AI完全替代、以人为本（AI作为工具）、人机协作三种路径产生分歧，",
+    "tldr": "AI系统在数学领域取得多项突破：DeepMind和OpenAI的系统在国际数学奥林匹克竞赛中达到金牌水平，Aletheia系统自主产生博士级研究成果，OpenAI新系统推翻了一个重要组合几何猜想。Math Inc.的Gauss智能体在两周内完成了Fields Medal级别的证明形式化。这些进展引发数学家围绕学科未来展开激烈辩论。",
+    "objective_summary": "本文报道了AI在数学领域的最新进展及其对数学学科的影响。Google DeepMind和OpenAI的AI系统已在国际数学奥林匹克竞赛中达到金牌水平，DeepMind的实验性系统Aletheia自主生成了可发表的博士级研究成果，OpenAI的通用AI系统推翻了一个重要的组合几何猜想。Math Inc.的推理智能体Gauss在两周内自主完成了Fields Medal级别的24维球体填充问题证明形式化。2025年9月海德堡桂冠论坛上，数学家们就AI是否将取代人类数学家展开辩论，形成了追求答案派、人类中心派和人机协作派三种主要立场。",
     "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
         "Google DeepMind",
         "OpenAI",
-        "Math, Inc.",
-        "Carnegie Mellon University",
-        "University of Edinburgh",
-        "University of Vermont",
+        "Math Inc.",
         "London Institute for Mathematical Sciences",
-        "Deakin University",
+        "Carnegie Mellon University",
+        "University of Vermont",
+        "University of Edinburgh",
+        "EPFL",
         "Google Developer Groups",
-        "EPFL"
+        "Deakin University"
       ],
       "technologies": [
         "LLM",
-        "Aletheia",
-        "Gauss",
-        "Lean",
-        "Isabelle",
-        "Rocq",
-        "proof assistant"
+        "Proof Assistant"
       ],
       "key_people": [
         "Jeremy Avigad",
@@ -1011,14 +1480,70 @@
       ]
     },
     "key_logic_flow": [
-      "Google DeepMind和OpenAI的AI系统已在国际数学奥林匹克竞赛中达到金牌水平，达到全球数学天赋最顶尖高中生的水准",
-      "Google DeepMind的实验性AI系统Aletheia自主产生了可发表的博士级数学研究成果，在算术几何中计算出结构常数",
-      "OpenAI的新通用AI系统推翻了一个组合几何中的重要猜想，被顶尖数学家誉为AI在数学领域的里程碑",
-      "Math Inc.的推理智能体Gauss在数天内协助完成Viazovska八维球堆积问题的形式化证明，并自主在两周内完成更复杂的24维情形",
-      "数学界存在三种立场：完全由AI替代（实用主义求知派）、以人为本（AI作为工具、人类理解至上）、人机协作（共同攻克难题）",
-      "菲尔兹奖得主Akshay Venkatesh等数学家呼吁深入反思AI对数学实践的意义，质疑数学的本质目的和人类在其中的角色"
+      "作者通过自身应用数学博士经历与纯数学同事的对比，反思了数学研究的意义来源于长期思考与理解带来的喜悦感，而非单纯的解题速度。",
+      "Google DeepMind和OpenAI的AI系统在国际数学奥林匹克竞赛中达到金牌水平，DeepMind的Aletheia系统自主产生博士级研究成果，OpenAI新系统推翻了一个重要的组合几何猜想。",
+      "结合LLM与证明助手（Isabelle、Lean、Rocq）正在消除手工形式化证明的瓶颈，Math Inc.的推理智能体Gauss在两周内自主完成了Fields Medal级别的24维球体填充问题证明形式化。",
+      "2025年海德堡桂冠论坛上，AI将取代人类数学家的预言引发了年轻数学家的存在焦虑，杨辉和提出人类数学家可能沦为神谕祭司的警示。",
+      "数学界围绕AI的角色形成了三种立场：追求答案派接受AI完成一切计算，人类中心派强调保持人类对数学的理解，人机协作派主张人与AI共同解决问题。"
     ],
     "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "Aletheia",
+        "canonical_name": "Google DeepMind Aletheia",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Google DeepMind的实验性AI系统Aletheia自主产生了可发表的博士级研究成果，展示了在处理未解决的算术几何问题时的复杂推理能力。"
+        ],
+        "article_id": "f25be1ac35f6328e"
+      },
+      {
+        "object_type": "product",
+        "name": "Gauss",
+        "canonical_name": "Math Inc. Gauss",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Math Inc.的推理智能体Gauss先帮助人类数学家数天内完成八维球体填充问题的形式化，随后在两周内自主完成了更复杂的24维情况的形式化。"
+        ],
+        "article_id": "f25be1ac35f6328e"
+      },
+      {
+        "object_type": "project",
+        "name": "Lean",
+        "canonical_name": "Lean",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Lean证明助手将欧几里得关于素数无穷性的经典证明转化为计算机可严格验证的形式化代码，使每个假设和推理步骤都变为显式表达。"
+        ],
+        "article_id": "f25be1ac35f6328e"
+      },
+      {
+        "object_type": "project",
+        "name": "Isabelle",
+        "canonical_name": "Isabelle",
+        "confidence": "low",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Isabelle是文章中提及的三种证明助手之一，这类系统是逐步骤检查数学证明逻辑正确性的专用编程语言。"
+        ],
+        "article_id": "f25be1ac35f6328e"
+      },
+      {
+        "object_type": "project",
+        "name": "Rocq",
+        "canonical_name": "Rocq",
+        "confidence": "low",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Rocq是与Isabelle和Lean同类的证明助手工具，用于将数学定理和证明转化为机器可验证的形式化代码。"
+        ],
+        "article_id": "f25be1ac35f6328e"
+      }
+    ],
     "impact_score": {
       "score": 7.5,
       "reason": "该事件标志着AI在数学推理领域实现了多重里程碑式突破：IMO金牌水平、自主产生可发表的博士级研究成果、推翻组合几何重要猜想、辅助形式化菲尔兹奖级证明。这些成就不是渐进改进，而是质变——AI从'随机鹦鹉'进化为真正的数学推理器。但学界仍在辩论AI数学能力的边界和泛化性，且目前仅限于特定系统和场景（Aletheia、Gauss均为实验性系统），尚未达到ChatGPT发布时那种全行业范式转移的冲击力。评分7.5：对数学研究领域是重磅事件，对整体AI行业属于重要但非颠覆性的信号。"
@@ -1073,7 +1598,79 @@
       "compound": "medium",
       "hype": "medium"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Aletheia",
+        "canonical_name": "Google DeepMind Aletheia",
+        "positioning": "Google DeepMind开发的实验性AI数学推理系统，能够自主产生博士级研究成果，在算术几何领域展示复杂推理能力。",
+        "technical_signal": "在未解决的算术几何问题上自主计算结构常数，展示了超越传统LLM的复杂数学推理能力。",
+        "adoption_signal": "目前仍属实验性系统，尚未被数学界广泛采用，但其研究成果已获顶级数学家认可。",
+        "ecosystem_relevance": "与Google DeepMind的AI研究生态紧密关联，推动AI在数学推理领域的前沿探索。",
+        "target_users": [],
+        "watch_reason": "作为首个自主产生可发表博士级数学研究成果的AI系统，Aletheia体现了AI在数学推理领域从模式识别到原始创新的关键突破，值得持续追踪其在更广泛数学问题上的能力演进。",
+        "risk_notes": [
+          "实验性系统的可复现性和结果可靠性尚未经过同行评议的充分验证。",
+          "当前聚焦于算术几何小众领域，能力向代数拓扑、数论等其他数学分支迁移的不确定性较高。"
+        ],
+        "score": 8.0,
+        "article_ids": [
+          "f25be1ac35f6328e"
+        ],
+        "evidence_snippets": [
+          "Google DeepMind的实验性AI系统Aletheia自主产生了可发表的博士级研究成果，展示了在处理未解决的算术几何问题时的复杂推理能力。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Gauss",
+        "canonical_name": "Math Inc. Gauss",
+        "positioning": "Math Inc.开发的推理智能体，能够在数天内协助人类数学家完成高维球体填充问题的证明形式化，并自主完成更复杂情况的证明验证。",
+        "target_users": [
+          "数学家",
+          "数学研究者",
+          "证明助手使用者"
+        ],
+        "product_signal": "能自主完成Fields Medal级别的24维球体填充问题证明形式化，大幅缩短了传统手工形式化的时间周期。",
+        "market_signal": "作为Math Inc.的核心产品，已获得顶级数学界的关注并展示了实际应用价值。",
+        "differentiation": "与通用LLM不同，Gauss专注于数学证明的端到端形式化推理，能在两周内完成此前需数月甚至数年的证明形式化工作。",
+        "watch_reason": "Gauss在极短时间内自主完成Fields Medal级别证明形式化，标志着AI在数学验证领域进入实用阶段，有望根本性降低形式化证明的门槛和成本。",
+        "risk_notes": [
+          "自主形式化的正确性和完整性保障机制尚未公开，可能存在未被发现的逻辑漏洞。",
+          "对长期依赖手工证明的传统数学社区的冲击和伦理影响有待进一步观察。"
+        ],
+        "score": 8.0,
+        "article_ids": [
+          "f25be1ac35f6328e"
+        ],
+        "evidence_snippets": [
+          "Math Inc.的推理智能体Gauss先帮助人类数学家数天内完成八维球体填充问题的形式化，随后在两周内自主完成了更复杂的24维情况的形式化。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Lean",
+        "canonical_name": "Lean",
+        "positioning": "一种专门的数学证明助手编程语言，能够逐步骤检查数学证明的逻辑正确性，将经典数学证明转化为计算机可验证的形式化代码。",
+        "technical_signal": "将经典数学证明转化为计算机可严格验证的形式化代码，使每一步推理的假设和逻辑关系都显式可查。",
+        "adoption_signal": "在数学形式化社区已有一定用户基础，与Isabelle、Rocq共同构成主流证明助手生态。",
+        "ecosystem_relevance": "作为数学形式化基础设施的关键组成部分，正被AI推理系统（如Gauss）集成以加速证明验证流程。",
+        "target_users": [],
+        "watch_reason": "作为数学证明形式化的核心基础设施之一，Lean正在被AI推理系统集成以实现自动化的证明验证，其技术演进直接影响AI在数学领域的能力上限和应用广度。",
+        "risk_notes": [
+          "学习曲线陡峭，传统数学家中掌握形式化工具的比例极低，限制了其大规模普及。",
+          "与LLM的自动推理集成仍处于早期探索阶段，端到端自动化程度尚不理想。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "f25be1ac35f6328e"
+        ],
+        "evidence_snippets": [
+          "Lean证明助手将欧几里得关于素数无穷性的经典证明转化为计算机可严格验证的形式化代码，使每个假设和推理步骤都变为显式表达。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",

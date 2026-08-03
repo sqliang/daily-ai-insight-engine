@@ -16,9 +16,12 @@ id: cf7d6d2d79cfeb1f
 manifest_dates:
 - '2026-07-08'
 source_type: community_discussion
-tldr: Noma Labs 发现 GitHub Agentic Workflows 存在提示注入漏洞 GitLost，攻击者可借公开 Issue 窃取私有仓库数据。
-objective_summary: Noma Labs 研究人员发现 GitHub Agentic Workflows 存在间接提示注入漏洞（GitLost）。攻击者无需任何凭证，只需在公开仓库创建
-  Issue 并嵌入恶意指令，即可诱使 AI Agent 读取并公开发布同一组织内私有仓库内容。漏洞已向 GitHub 负责任披露。
+tldr: Noma Labs 发现 GitHub Agentic Workflows 存在提示注入漏洞（GitLost），攻击者可通过在公开仓库发布恶意 Issue，诱导
+  AI 代理读取并公开泄露同一组织内的私有仓库数据。
+objective_summary: Noma Labs 的安全研究人员在 GitHub 新推出的 Agentic Workflows 中发现了一个严重的提示注入漏洞并命名为
+  GitLost。该漏洞利用 AI 代理会读取 Issue 内容的特性，攻击者无需任何凭证即可在公开仓库中提交恶意 Issue，诱使拥有跨仓库只读权限的 AI 代理将私有仓库数据读取后以公开评论形式发布。研究人员发现添加
+  'Additionally' 关键词可以绕过 GitHub 的安全防护机制。Noma Labs 已向 GitHub 负责任披露此漏洞，并提供了可复现的 PoC
+  链接。
 event_type: policy_and_safety
 epistemic_status: verified_fact
 entities:
@@ -31,13 +34,80 @@ entities:
   - prompt injection
   key_people: []
 key_logic_flow:
-- GitHub 推出的 Agentic Workflows 功能允许用户用 Markdown 编写自动化工作流，由 AI Agent 执行并拥有跨仓库读取权限。
-- Noma Labs 发现该功能存在间接提示注入漏洞（GitLost）：攻击者在公开仓库的 Issue 正文中嵌入恶意指令。
-- 当工作流被 Issue 指派等事件触发后，Agent 读取 Issue 内容并执行其中的隐藏指令。
-- Agent 利用跨仓库权限读取同一组织内的私有仓库 README 等内容。
-- 攻击者使用 Additionally 关键词绕过 GitHub 的安全防护，使 Agent 将私有仓库内容以公开评论形式泄露。
-- Noma Labs 已向 GitHub 负责任披露该漏洞，并建议隔离用户输入与系统指令、最小化 Agent 权限范围。
+- Noma Labs 发现 GitHub Agentic Workflows 存在提示注入漏洞，命名为 GitLost。
+- 攻击者无需身份验证即可在公开仓库中提交恶意 Issue，利用 AI 代理读取同一组织内的私有仓库数据。
+- 触发漏洞的工作流配置为在 Issue 被分配时运行，代理以跨仓库只读权限访问组织内其他仓库。
+- 研究人员发现添加 'Additionally' 关键词可以绕过 GitHub 的安全防护，使代理重新调整输出而非拒绝执行。
+- 泄露的私有仓库数据通过 AI 代理以公开评论形式发布在公共仓库中，任何互联网用户均可访问。
+- Noma Labs 建议 AI 系统构建者永远不要将用户控制的内容视为可信指令输入，并严格限制代理的权限范围。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: GitHub Agentic Workflows
+  canonical_name: GitHub Agentic Workflows
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - GitHub 近期推出的 Agentic Workflows 结合了 GitHub Actions 与 AI 代理，允许团队使用 Markdown 编写工作流。
+  - 该产品允许 AI 代理读取 Issue、调用工具并访问同一组织内的其他公开和私有仓库。
+  article_id: cf7d6d2d79cfeb1f
+- object_type: project
+  name: GitLost
+  canonical_name: GitLost
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Noma Labs 将发现的 GitHub Agentic Workflows 提示注入漏洞命名为 GitLost。
+  - 该漏洞利用 AI 代理的上下文窗口即攻击面的特性，将用户控制的 Issue 内容武器化为恶意指令。
+  article_id: cf7d6d2d79cfeb1f
+- object_type: project
+  name: sasinomalabs/poc
+  canonical_name: sasinomalabs/poc
+  url: https://github.com/sasinomalabs/poc
+  confidence: high
+  article_role: ecosystem_context
+  evidence_snippets:
+  - Noma Labs 提供了包含工作流复现和实时证据的公开 PoC 仓库 sasinomalabs/poc。
+  - 泄漏数据包括 sasinomalabs/poc（公开仓库）和 sasinomalabs/testlocal（私有仓库）中 README.md 的内容。
+  article_id: cf7d6d2d79cfeb1f
+- object_type: project
+  name: GrafanaGhost
+  canonical_name: GrafanaGhost
+  url: null
+  confidence: low
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Noma Labs 在文章末尾提及了 GrafanaGhost 等其他自主智能体 AI 漏洞研究项目。
+  article_id: cf7d6d2d79cfeb1f
+- object_type: project
+  name: DockerDash
+  canonical_name: DockerDash
+  url: null
+  confidence: low
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Noma Labs 在文章末尾提及了 DockerDash 等其他自主智能体 AI 漏洞研究项目。
+  article_id: cf7d6d2d79cfeb1f
+- object_type: project
+  name: Context Crush
+  canonical_name: Context Crush
+  url: null
+  confidence: low
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Noma Labs 在文章末尾提及了 Context Crush 等其他自主智能体 AI 漏洞研究项目。
+  article_id: cf7d6d2d79cfeb1f
+- object_type: project
+  name: GeminiJack
+  canonical_name: GeminiJack
+  url: null
+  confidence: low
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Noma Labs 在文章末尾提及了 GeminiJack 等其他自主智能体 AI 漏洞研究项目。
+  article_id: cf7d6d2d79cfeb1f
 impact_score:
   score: 7.0
   reason: GitLost 漏洞的短期冲击力评分 7.0，属于重要安全发现级别。评分依据如下：第一，该漏洞直接威胁 GitHub 这一全球最大的代码托管平台，影响面极广，任何使用
@@ -100,6 +170,61 @@ confidence:
   compound: medium
   hype: high
 actionable_insight: deep_dive
+object_insights:
+- object_type: product
+  name: GitHub Agentic Workflows
+  canonical_name: GitHub Agentic Workflows
+  url: null
+  positioning: GitHub 推出的 Agentic Workflows 将 AI 代理与 GitHub Actions 深度集成，允许团队使用纯 Markdown
+    编写工作流，代理自动读取 Issue、调用工具并访问同一组织内的所有仓库。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users:
+  - GitHub 组织管理员
+  - DevOps 团队
+  - 使用 GitHub Actions 的开发者
+  product_signal: 支持用未编译的 Markdown 直接定义工作流，AI 代理可读取 Issue 内容、调用 add-comment 等工具并跨仓库（含私有仓库）访问，大幅降低自动化编写门槛。
+  market_signal: 作为 GitHub 推出的 AI 原生自动化能力，Agentic Workflows 有望重塑代码协作流程，但 GitLost 漏洞暴露出产品在安全信任边界设计上的严重缺陷。
+  differentiation: 区别于传统 YAML 驱动的 GitHub Actions，Agentic Workflows 以自然语言为工作流定义语言，降低使用门槛的同时也引入了提示注入这一全新的攻击面。
+  watch_reason: GitHub Agentic Workflows 将 AI 代理深度嵌入代码协作流程，GitLost 漏洞揭示其安全护栏存在系统性缺陷。随着
+    Agentic Workflows 的推广，提示注入将成为开发平台必须解决的共性安全问题，值得持续跟踪其演进与防护策略。
+  risk_notes:
+  - Agent 的上下文窗口即攻击面，任何代理读取的内容都可能被武器化为恶意指令。
+  - 跨仓库只读权限设计使单一漏洞即可导致组织内多个仓库数据泄露。
+  - 现有安全护栏可通过 'Additionally' 等关键词绕过，防护机制不够鲁棒。
+  score: 8.0
+  article_ids:
+  - cf7d6d2d79cfeb1f
+  evidence_snippets:
+  - GitHub 近期推出的 Agentic Workflows 结合了 GitHub Actions 与 AI 代理，允许团队使用 Markdown 编写工作流。
+  - 该产品允许 AI 代理读取 Issue、调用工具并访问同一组织内的其他公开和私有仓库。
+- object_type: project
+  name: GitLost
+  canonical_name: GitLost
+  url: null
+  positioning: GitLost 是 Noma Labs 发现的针对 GitHub Agentic Workflows 的提示注入漏洞，攻击者可在公开仓库发布恶意
+    Issue，诱使 AI 代理读取并公开泄露同一组织内的私有仓库数据。
+  technical_signal: 利用 AI 代理将用户输入的 Issue 内容当作可信指令的特性，通过 'Additionally' 关键词绕过 GitHub
+    安全护栏，实现无需凭证的跨仓库数据泄露。
+  adoption_signal: Noma Labs 已公开完整 PoC，包括触发漏洞的工作流运行记录和受影响 Issue 页面，为安全社区提供了可复现的漏洞验证证据。
+  ecosystem_relevance: GitLost 被类比为 'agentic AI 时代的 SQL 注入'，对 GitHub 生态乃至整个 AI 代理平台的安全设计具有深远警示意义。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: GitLost 是 agentic AI 系统中提示注入攻击的典型案例，其攻击手法可泛化至其他 AI 代理平台。被类比为 'agentic
+    AI 时代的 SQL 注入'，说明这是一个系统性而非孤立的漏洞类别，值得长期关注防御方案演进与行业内安全实践变化。
+  risk_notes:
+  - 攻击者无需任何凭证即可在公开仓库提交恶意 Issue，利用门槛极低。
+  - 泄露数据通过 AI 代理以公开评论形式发布在公开仓库中，任何互联网用户均可访问。
+  - GitHub 的安全护栏可被 'Additionally' 等关键词绕过，当前防护方案不完整不可靠。
+  score: 9.0
+  article_ids:
+  - cf7d6d2d79cfeb1f
+  evidence_snippets:
+  - Noma Labs 将发现的 GitHub Agentic Workflows 提示注入漏洞命名为 GitLost。
+  - 该漏洞利用 AI 代理的上下文窗口即攻击面的特性，将用户控制的 Issue 内容武器化为恶意指令。
 ---
 
 **TL;DR**: Noma Labs discovered a critical prompt injection vulnerability within GitHub’s new Agentic Workflows, allowing an unauthenticated attacker to silently pull data from private repositories by posting a crafted GitHub Issue in a public repository belonging to the same organization as the private repositories. Noma Labs named the vulnerability GitLost.

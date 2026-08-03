@@ -14,9 +14,14 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: e11fcea9cd94bb20
 source_type: community_discussion
-tldr: Anthropic发布Claude Fable 5（通用版）和Claude Mythos 5（受限版），性能超越此前所有公开模型。
-objective_summary: Anthropic于2026年6月发布Claude Fable 5和Claude Mythos 5。Fable 5面向所有用户，配备安全分类器对高风险查询降级至Opus
-  4.8；Mythos 5通过Project Glasswing向网络防御者提供。
+tldr: Anthropic 发布 Claude Fable 5，这是首个面向普通用户的 Mythos 级别模型，在编程、知识工作、视觉和科研领域均达到业界领先水平。同时发布
+  Claude Mythos 5，解除部分安全限制，通过 Project Glasswing 为美国网络安全防御者提供，定价为每百万输入 Token 10 美元、输出
+  Token 50 美元。
+objective_summary: Anthropic 于 2026 年 7 月 21 日发布 Claude Fable 5 和 Claude Mythos 5
+  两款模型。Fable 5 是面向所有用户的 Mythos 级别模型，具备最强的编程、知识工作、视觉和科研能力，配有安全分类器拦截危险话题（触发率低于 5%）。Mythos
+  5 是同一模型但解除部分安全限制的版本，通过 Project Glasswing 与美国政府合作部署给网络防御者。定价为输入每百万 Token 10 美元、输出每百万
+  Token 50 美元，不到 Mythos Preview 的一半。Stripe 使用 Fable 5 在一天内完成了原本需团队两个多月的 5000 万行 Ruby
+  代码迁移；在药物设计中 Mythos 5 将流程加速约十倍。
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
@@ -25,21 +30,81 @@ entities:
   - Stripe
   - GitHub
   - Cursor
-  - IMC
-  - Hebbia
   - Cognition
-  technologies:
-  - Claude Fable 5
-  - Claude Mythos 5
-  - Project Glasswing
+  - Hebbia
+  - IMC
+  technologies: []
   key_people: []
 key_logic_flow:
-- Anthropic同时发布了Claude Fable 5（通用安全版）和Claude Mythos 5（受限高能力版），二者基于同一底层Mythos-class模型。
-- Fable 5配备安全分类器，对高风险查询会降级至Claude Opus 4.8响应，分类器误报率在平均不到5%的会话中触发。
-- Mythos 5通过Project Glasswing与美国政府合作部署，具备全球最强的网络安全能力，后续将通过更广泛的信任访问计划开放。
-- 定价为每百万输入token 10美元、每百万输出token 50美元，低于Claude Mythos Preview的一半。
-- Fable 5在软件工程、知识工作、视觉、记忆与长上下文、生命科学研究等多个领域的基准测试中达到业界领先水平。
-- Mythos 5在蛋白质设计中加速了约10倍的流程，能自主完成科学家级别的全流程任务，并在分子生物学假设生成和基因组学研究中取得突破。
+- Anthropic 发布 Claude Fable 5，这是首个面向大众用户的 Mythos 级别模型，在编程、知识工作、视觉和科研等领域全面超越此前所有公开发布的模型。
+- 同时发布 Claude Mythos 5，同一基础模型但解除部分安全限制，通过 Project Glasswing 与美国政府合作，面向网络防御者和关键基础设施提供商部署。
+- Fable 5 配备安全分类器，对特定危险话题拦截并回退至 Opus 4.8，触发率平均不到 5%，目前设定偏保守以减少滥用风险。
+- 定价为每百万输入 Token 10 美元、每百万输出 Token 50 美元，低于此前 Claude Mythos Preview 的价格。
+- Stripe 使用 Fable 5 在一天内完成了 5000 万行 Ruby 代码库的全量迁移，原本需要整个团队两个多月的手工工作量。
+- Mythos 5 在药物设计中将流程加速约十倍，在分子生物学假设生成中首次持续产出新颖且被独立实验室验证的科学假设。
+extract_result: success
+object_mentions:
+- object_type: product
+  name: Claude Fable 5
+  canonical_name: Claude Fable 5
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Anthropic 发布 Claude Fable 5，这是首个面向普通用户的 Mythos 级别模型，具备业界领先的软件工程、知识工作、视觉和科研能力。
+  - Fable 5 定价为每百万输入 Token 10 美元、每百万输出 Token 50 美元，不到此前 Mythos Preview 价格的一半。
+  - Stripe 使用 Fable 5 在一天内完成 5000 万行 Ruby 代码库的全量迁移，原本需要整个团队两个多月的手工工作量。
+  article_id: e11fcea9cd94bb20
+- object_type: product
+  name: Claude Mythos 5
+  canonical_name: Claude Mythos 5
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Claude Mythos 5 与 Fable 5 基于同一模型，但解除了部分安全限制，具备全球最强的网络安全能力。
+  - Mythos 5 通过 Project Glasswing 与美国政府合作，作为 Claude Mythos Preview 的升级版部署给网络防御者。
+  - 使用 Mythos 5，内部蛋白质设计专家将药物设计流程加速约十倍，且九项蛋白质靶点产生了有前景的药物设计候选方案。
+  article_id: e11fcea9cd94bb20
+- object_type: project
+  name: Project Glasswing
+  canonical_name: Project Glasswing
+  url: null
+  confidence: high
+  article_role: ecosystem_context
+  evidence_snippets:
+  - Project Glasswing 是 Anthropic 与美国政府合作的网络安全项目，Mythos 5 通过该项目作为升级版部署给网络防御者。
+  - 在 Project Glasswing 中，模型帮助网络防御者保护了关键软件安全，展现了深厚的良性社会影响潜力。
+  article_id: e11fcea9cd94bb20
+- object_type: product
+  name: Claude Opus 4.8
+  canonical_name: Claude Opus 4.8
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 当 Fable 5 的安全分类器触发时，用户的查询会回退到次强模型 Claude Opus 4.8 来响应。
+  - Fable 5 在 Slay the Spire 游戏中，使用持久文件记忆后的性能提升幅度是 Opus 4.8 的三倍。
+  article_id: e11fcea9cd94bb20
+- object_type: product
+  name: Claude Code
+  canonical_name: Claude Code
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 早期反馈指出 Claude Fable 5 以更少的交互次数处理了员工在 Claude Code 中日常运行的复杂多智能体工作流。
+  article_id: e11fcea9cd94bb20
+- object_type: product
+  name: Claude Mythos Preview
+  canonical_name: Claude Mythos Preview
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Claude Mythos Preview 是此前通过 Project Glasswing 发布的首个 Mythos 级别模型，Mythos 5 作为其升级版部署。
+  - Fable 5 和 Mythos 5 的定价低于 Claude Mythos Preview 价格的一半。
+  article_id: e11fcea9cd94bb20
 impact_score:
   score: 8.0
   reason: Anthropic 发布 Claude Fable 5（通用安全版）和 Mythos 5（受限高能力版），这是 2026 年最重要的模型发布之一。Fable
@@ -108,6 +173,136 @@ confidence:
   compound: medium
   hype: medium
 actionable_insight: deep_dive
+object_insights:
+- object_type: product
+  name: Claude Fable 5
+  canonical_name: Claude Fable 5
+  url: null
+  positioning: Anthropic 面向普通用户推出的 Mythos 级别旗舰模型，在编程、知识工作、视觉和科研领域均达到业界领先水平。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users:
+  - 软件开发者和工程师
+  - 金融分析与知识工作者
+  - 科研与药物设计人员
+  - 需要视觉理解能力的开发者
+  product_signal: 在 Stripe 5000 万行 Ruby 代码迁移中一天完成原本需团队两个多月的工作量，在 FrontierCode、Finance
+    Benchmark 等评估中取得最高分。
+  market_signal: 定价每百万输入 Token 10 美元、输出 50 美元，不到 Mythos Preview 价格的一半，大幅降低了顶级模型的使用门槛。
+  differentiation: 首个面向普通用户公开发布的 Mythos 级别模型，配有安全分类器实现可控的强能力释放，在长任务和复杂场景下优势最为显著。
+  watch_reason: Claude Fable 5 代表了 Anthropic 在保持安全的前提下大规模释放尖端能力的关键一步。其实际应用案例展示了强模型的产业价值，价格大幅下降则可能推动
+    AI 能力普及化，值得持续跟踪其安全机制效果和企业采用进展。
+  risk_notes:
+  - 安全分类器目前设定了保守的触发阈值，虽然平均触发率低于 5%，但仍可能误拦截无害请求。
+  - Fable 5 的安全回退机制依赖 Opus 4.8，回退后能力显著降级，在处理敏感但合法的任务时体验可能不佳。
+  - 模型在网络安全等领域存在双重用途风险，安全分类器的实际防护效果有待大规模部署验证。
+  score: 9.0
+  article_ids:
+  - e11fcea9cd94bb20
+  evidence_snippets:
+  - Anthropic 发布 Claude Fable 5，这是首个面向普通用户的 Mythos 级别模型，具备业界领先的软件工程、知识工作、视觉和科研能力。
+  - Fable 5 定价为每百万输入 Token 10 美元、每百万输出 Token 50 美元，不到此前 Mythos Preview 价格的一半。
+  - Stripe 使用 Fable 5 在一天内完成 5000 万行 Ruby 代码库的全量迁移，原本需要整个团队两个多月的手工工作量。
+- object_type: product
+  name: Claude Mythos 5
+  canonical_name: Claude Mythos 5
+  url: null
+  positioning: Anthropic 面向网络防御者推出的解除安全限制版顶级模型，通过 Project Glasswing 与美国政府合作部署。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users:
+  - 美国网络安全防御者
+  - 关键基础设施提供商
+  - 通过 Project Glasswing 获得准入的政府合作伙伴
+  product_signal: 在药物设计中将流程加速约十倍，九项蛋白质靶点产生有前景的药物候选方案；在分子生物学假设生成中首次持续产出被独立验证的新颖假设。
+  market_signal: 通过 Project Glasswing 与美国政府合作部署，后续计划扩展至更广泛的信任访问计划，目前不对普通用户开放。
+  differentiation: 与 Fable 5 同基础模型但解除安全限制，具备全球最强网络安全能力，在科研领域展现了远超此前模型的创新产出能力。
+  watch_reason: Mythos 5 展示了顶级模型在解除安全限制后所能达到的科研与防御能力天花板，其药物设计与分子生物学假设生成的实际成果具有重大产业和科学意义。通过
+    Project Glasswing 的安全部署模式可能成为未来强模型准出机制的样板，值得持续关注其部署范围扩展和实际效益。
+  risk_notes:
+  - 解除安全限制后的模型在网络安全等领域存在严重的双重用途风险，滥用可能造成重大损害。
+  - 目前仅通过 Project Glasswing 向特定合作伙伴开放，实际可用性有限，产业影响力兑现存在时间差。
+  - 模型在网络安全等高风险场景的防护效果和误用防护机制尚未有公开的独立评估。
+  score: 8.0
+  article_ids:
+  - e11fcea9cd94bb20
+  evidence_snippets:
+  - Claude Mythos 5 与 Fable 5 基于同一模型，但解除了部分安全限制，具备全球最强的网络安全能力。
+  - Mythos 5 通过 Project Glasswing 与美国政府合作，作为 Claude Mythos Preview 的升级版部署给网络防御者。
+  - 使用 Mythos 5，内部蛋白质设计专家将药物设计流程加速约十倍，且九项蛋白质靶点产生了有前景的药物设计候选方案。
+- object_type: product
+  name: Claude Opus 4.8
+  canonical_name: Claude Opus 4.8
+  url: null
+  positioning: Anthropic 的次强模型，作为 Fable 5 安全分类器触发时的回退模型来响应查询。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users:
+  - 通过 Fable 5 安全分类器回退获得服务的 Anthropic 用户
+  product_signal: 作为 Fable 5 安全分类器触发时的回退模型，在 Slay the Spire 任务中持久记忆提升幅度仅为 Fable 5
+    的三分之一。
+  market_signal: 从 Anthropic 旗舰模型位置被 Fable 5 取代，现作为安全回退模型继续在生态中发挥作用。
+  differentiation: 在 Anthropic 模型体系中定位为 Fable 5 的安全护栏承载模型，与 Fable 5 形成安全与能力的分层组合方案。
+  watch_reason: 作为 Fable 5 安全回退机制的承载模型，Opus 4.8 直接决定了用户在触发安全分类器时的实际体验水平，其能力是否足以匹配用户预期有待持续观察。
+  risk_notes:
+  - 作为回退模型，用户触发安全分类器时实际获得的并非 Fable 5 级别能力，可能产生体验落差。
+  - 安全分类器的保守设置意味着大量合法查询由 Opus 4.8 响应，其能力边界是否足够清晰有待验证。
+  score: 3.0
+  article_ids:
+  - e11fcea9cd94bb20
+  evidence_snippets:
+  - 当 Fable 5 的安全分类器触发时，用户的查询会回退到次强模型 Claude Opus 4.8 来响应。
+  - Fable 5 在 Slay the Spire 游戏中，使用持久文件记忆后的性能提升幅度是 Opus 4.8 的三倍。
+- object_type: product
+  name: Claude Code
+  canonical_name: Claude Code
+  url: null
+  positioning: Anthropic 推出的 AI 编程助手，Fable 5 的发布显著提升了其在复杂多智能体工作流中的交互效率。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users:
+  - 使用 Claude Code 的软件开发者和工程师
+  product_signal: 早期反馈表明 Fable 5 以更少的交互次数处理了 Claude Code 中日常运行的复杂多智能体工作流，提升了 Claude
+    Code 的整体效率。
+  market_signal: null
+  differentiation: 作为深度集成 Claude 模型的编程助手产品，Fable 5 的升级使其在复杂多智能体工作流中的效率得到显著提升。
+  watch_reason: Claude Code 作为 Fable 5 能力在编程场景中的直接载体，Fable 5 对其复杂工作流效率的提升反映了模型升级对
+    AI 编程工具的实质性影响。
+  risk_notes:
+  - 关于 Claude Code 本身的性能改进和用户增长缺乏具体数据，仅有一处来自早期反馈的定性描述，证据强度有限。
+  score: 3.0
+  article_ids:
+  - e11fcea9cd94bb20
+  evidence_snippets:
+  - 早期反馈指出 Claude Fable 5 以更少的交互次数处理了员工在 Claude Code 中日常运行的复杂多智能体工作流。
+- object_type: product
+  name: Claude Mythos Preview
+  canonical_name: Claude Mythos Preview
+  url: null
+  positioning: Anthropic 通过 Project Glasswing 发布的首个 Mythos 级别模型，现已由 Mythos 5 作为升级版本替代。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users:
+  - 通过 Project Glasswing 获得使用资格的网络防御者和政府合作伙伴
+  product_signal: 作为 Project Glasswing 的首个 Mythos 级别部署模型，为 Mythos 5 的发布铺平了道路，其定价体系被新一代产品以半价超越。
+  market_signal: 已被 Mythos 5 以更低价格和更强性能取代，生命周期相对短暂，但其开创的 Project Glasswing 合作模式得以延续。
+  differentiation: 作为首个通过 Project Glasswing 部署的 Mythos 级别模型，确立了 Anthropic 与政府合作的强模型交付模式，但快速被迭代版本替代。
+  watch_reason: Claude Mythos Preview 代表了 Anthropic 强模型政府合作部署的起点，其定价和定位直接影响了 Fable
+    5 和 Mythos 5 的发布策略，开创的 Project Glasswing 模式仍然是安全部署的关键组成部分。
+  risk_notes:
+  - 已被 Mythos 5 快速取代，市场生命周期较短，独立跟踪价值有限。
+  - 其历史数据和用户反馈已被下一代模型覆盖，难以进行独立的效果评估。
+  score: 2.0
+  article_ids:
+  - e11fcea9cd94bb20
+  evidence_snippets:
+  - Claude Mythos Preview 是此前通过 Project Glasswing 发布的首个 Mythos 级别模型，Mythos 5 作为其升级版部署。
+  - Fable 5 和 Mythos 5 的定价低于 Claude Mythos Preview 价格的一半。
 ---
 
 # Claude Fable 5 and Claude Mythos 5

@@ -96,28 +96,70 @@
     "pipeline_stage": "fact_extracted",
     "id": "265d9b7e6e17e32f",
     "source_type": "community_discussion",
-    "tldr": "Cloudflare Turnstile要求WebGL指纹识别导致WebKitGTK浏览器无法通过验证",
-    "objective_summary": "作者发现Cloudflare Turnstile设备验证机制要求获取WebGL设备指纹，由于WebKitGTK浏览器长期默认阻止WebGL指纹读取，导致该浏览器用户无法通过验证循环，实质上被禁止访问依赖Turnstile的网站。",
-    "event_type": "infrastructure_update",
+    "tldr": "Cloudflare Turnstile 近期要求通过 WebGL 进行设备指纹识别才能通过人机验证，导致 WebKitGTK 浏览器（如 WebKitGTK 用户）无法正常使用，作者认为这是以反爬为名的追踪行为。Firefox 的 WebGL 指纹保护也存在漏洞，未能有效阻断该追踪。",
+    "objective_summary": "一名 WebKitGTK 浏览器用户发现 Cloudflare Turnstile 人机验证组件在过去一周内陷入无限循环，无法通过。经排查，原因是 Cloudflare 要求获取设备 WebGL 指纹以完成验证，而 WebKit 引擎多年来一直阻止此类指纹识别。这意味着 Cloudflare 实际上封锁了所有 WebKitGTK 浏览器（可能 Safari 除外）。此外，Mozilla Firefox 的 WebGL 指纹保护存在缺陷，即使选择严格隐私保护模式也未启用 privacy.resistfingerprinting。文章作者批评 Cloudflare 以验证为名行追踪之实。",
+    "event_type": "policy_and_safety",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
-        "Cloudflare"
+        "Cloudflare",
+        "Apple",
+        "Mozilla"
       ],
       "technologies": [
-        "Turnstile",
         "WebGL",
+        "WebKitGTK",
         "WebKit",
-        "WebKitGTK"
+        "Turnstile",
+        "privacy.resistfingerprinting"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "Cloudflare Turnstile在过去约一周内开始在webkit-gtk浏览器上无限循环，导致用户无法通过设备验证并访问网站。",
-      "原因是Cloudflare要求通过WebGL获取设备指纹来进行人机验证，而WebKit已多年默认阻止WebGL指纹读取以保护隐私。",
-      "Cloudflare声称阻止指纹识别的隐私工具会使浏览器看起来像试图隐藏身份的机器人，以此为其指纹追踪行为辩护。",
-      "作者认为Cloudflare实质上封禁了所有WebKitGTK浏览器，仅可能对Safari设置了例外。",
-      "Mozilla Firefox的WebGL指纹保护也存在缺陷：即使在设置中选择\"严格\"增强隐私保护模式，privacy.resistfingerprinting选项也未被默认启用。"
+      "Cloudflare Turnstile 最近开始要求通过 WebGL 进行设备指纹识别，导致基于 WebKitGTK 的浏览器陷入无限循环，无法通过人机验证。",
+      "WebKit 引擎多年来一直阻止 WebGL 指纹识别，作者认为 Cloudflare 此举实质上封锁了所有 WebKitGTK 浏览器，仅可能对 Safari 放行。",
+      "Mozilla Firefox 的 WebGL 指纹保护存在 Bug（Bugzilla#1916271），即使用户在设置中选择严格增强隐私保护模式，privacy.resistfingerprinting 也未默认启用。",
+      "作者引用 Cloudflare 的辩护称 Turnstile 使用浏览器指纹验证用户身份，认为这实际是以反爬为名的追踪行为。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "Cloudflare Turnstile",
+        "canonical_name": "Cloudflare Turnstile",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Cloudflare Turnstile 大约一周前开始在基于 webkit-gtk 的浏览器中无限循环，阻止用户访问依赖该验证的网站。",
+          "Cloudflare 官方表示 Turnstile 使用浏览器指纹来验证用户身份，并称阻止或随机化指纹的隐私工具会让浏览器看起来像试图隐藏身份的机器人。",
+          "作者认为 Cloudflare 要求通过 WebGL 获取设备指纹的唯一目的是追踪用户。"
+        ],
+        "article_id": "265d9b7e6e17e32f"
+      },
+      {
+        "object_type": "product",
+        "name": "WebKitGTK",
+        "canonical_name": "WebKitGTK",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者的 WebKitGTK 浏览器因 Cloudflare Turnstile 要求 WebGL 指纹识别而无法通过人机验证，导致无限循环。",
+          "作者认为 Cloudflare 实际上封锁了所有 WebKitGTK 浏览器，因为 WebKit 多年来一直阻止 WebGL 指纹识别。"
+        ],
+        "article_id": "265d9b7e6e17e32f"
+      },
+      {
+        "object_type": "product",
+        "name": "Mozilla Firefox",
+        "canonical_name": "Mozilla Firefox",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Mozilla Firefox 的 WebGL 指纹保护存在缺陷（Bugzilla#1916271），即使选择严格增强隐私保护模式也未启用 privacy.resistfingerprinting。",
+          "作者指出启用 privacy.resistfingerprinting 的隐私敏感型 Firefox 用户未来可能也无法通过 Cloudflare 的设备验证。"
+        ],
+        "article_id": "265d9b7e6e17e32f"
+      }
     ],
     "impact_score": {
       "score": 3.5,
@@ -170,7 +212,85 @@
       "compound": "medium",
       "hype": "medium"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "Cloudflare Turnstile",
+        "canonical_name": "Cloudflare Turnstile",
+        "positioning": "Cloudflare 提供的人机验证服务，通过采集浏览器设备指纹（包括 WebGL 图形渲染数据）来验证用户身份，替代传统 CAPTCHA 挑战式验证。",
+        "target_users": [
+          "依赖人机验证的网站运营方",
+          "需要验证用户真实性的在线平台"
+        ],
+        "product_signal": "近期强制要求 WebGL 指纹才能完成验证，导致 WebKitGTK 浏览器用户陷入无限循环，无法正常通过验证。",
+        "market_signal": "作为全球主流 CDN 厂商的验证产品，其策略变更直接影响大量网站的用户体验与隐私保护实践走向。",
+        "differentiation": "与 reCAPTCHA 等竞品相比，Turnstile 更大胆地依赖设备指纹而非传统挑战，但这也带来了更严重的隐私争议。",
+        "watch_reason": "Cloudflare Turnstile 强制启用 WebGL 指纹识别，实质上封锁了所有 WebKitGTK 浏览器，这一策略变化反映了人机验证领域从挑战式验证向强制设备指纹追踪的转变，值得持续关注隐私与可用性平衡的走向。",
+        "risk_notes": [
+          "强制指纹识别被批评为以验证为名行追踪之实，可能面临监管与法律风险。",
+          "WebKitGTK 用户被实质封锁，缩小了产品兼容范围且未公开声明这一变更。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "265d9b7e6e17e32f"
+        ],
+        "evidence_snippets": [
+          "Cloudflare Turnstile 大约一周前开始在基于 webkit-gtk 的浏览器中无限循环，阻止用户访问依赖该验证的网站。",
+          "Cloudflare 官方表示 Turnstile 使用浏览器指纹来验证用户身份，并称阻止或随机化指纹的隐私工具会让浏览器看起来像试图隐藏身份的机器人。",
+          "作者认为 Cloudflare 要求通过 WebGL 获取设备指纹的唯一目的是追踪用户。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "WebKitGTK",
+        "canonical_name": "WebKitGTK",
+        "positioning": "基于 WebKit 引擎为 GTK 应用提供 Web 渲染能力的开源浏览器引擎，广泛应用于 Linux 桌面环境的浏览器和嵌入式 Web 视图。",
+        "target_users": [
+          "Linux 桌面浏览器用户",
+          "GTK 应用开发者和嵌入式浏览器用户"
+        ],
+        "product_signal": "WebKit 引擎多年来一直阻止 WebGL 指纹识别，这一隐私保护特性导致依赖 WebKitGTK 的浏览器无法通过 Cloudflare Turnstile 验证。",
+        "differentiation": "与 Chrome/Chromium 等不阻断 WebGL 指纹的渲染引擎形成对比，WebKit/WebKitGTK 坚持更强的隐私保护策略。",
+        "watch_reason": "WebKitGTK 因其隐私保护设计被 Cloudflare Turnstile 实质封杀，这一冲突凸显了隐私优先浏览器与主流验证服务之间的兼容性裂痕，值得关注双方是否会就此问题展开协调以及后续解决方案的走向。",
+        "risk_notes": [
+          "WebKitGTK 用户可能持续面临越来越多主流网站验证服务无法通过的问题。",
+          "如果更多验证服务效仿 Cloudflare 的策略，WebKitGTK 的可用性将进一步受限。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "265d9b7e6e17e32f"
+        ],
+        "evidence_snippets": [
+          "作者的 WebKitGTK 浏览器因 Cloudflare Turnstile 要求 WebGL 指纹识别而无法通过人机验证，导致无限循环。",
+          "作者认为 Cloudflare 实际上封锁了所有 WebKitGTK 浏览器，因为 WebKit 多年来一直阻止 WebGL 指纹识别。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Mozilla Firefox",
+        "canonical_name": "Mozilla Firefox",
+        "positioning": "Mozilla 开发的注重隐私保护的开源 Web 浏览器，以反追踪和用户数据保护为核心理念。",
+        "target_users": [
+          "注重隐私保护的互联网用户",
+          "需要强大反追踪功能的浏览器用户"
+        ],
+        "product_signal": "Mozilla Firefox 的 WebGL 指纹保护存在已知 Bug（Bugzilla#1916271），即使用户选择严格增强隐私保护模式也未启用 privacy.resistfingerprinting。",
+        "watch_reason": "Firefox 的 WebGL 指纹保护存在已知 Bug，严格隐私模式下也不生效，这削弱了其作为隐私浏览器的核心卖点，且该 Bug 若不修复，隐私敏感用户未来也可能无法通过 Cloudflare 的指纹验证。",
+        "risk_notes": [
+          "privacy.resistfingerprinting 在严格隐私保护模式下未默认启用，降低了隐私承诺的可信度。",
+          "启用该功能的隐私敏感用户未来可能无法通过 Cloudflare 等指纹验证服务。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "265d9b7e6e17e32f"
+        ],
+        "evidence_snippets": [
+          "Mozilla Firefox 的 WebGL 指纹保护存在缺陷（Bugzilla#1916271），即使选择严格增强隐私保护模式也未启用 privacy.resistfingerprinting。",
+          "作者指出启用 privacy.resistfingerprinting 的隐私敏感型 Firefox 用户未来可能也无法通过 Cloudflare 的设备验证。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -189,18 +309,15 @@
     "pipeline_stage": "fact_extracted",
     "id": "316bd0cfb9745f29",
     "source_type": "community_discussion",
-    "tldr": "AI工具使作者的原型开发速度提升约4倍，改变了工程工作的形态与思维方式",
-    "objective_summary": "Daryl Cecile 在个人博客中分享AI对其工作流程的影响。过去一年中，他使用AI代理将工程任务效率提升约4倍，完成了多个原型项目（Sakoa、Kato、Seal、Karabiner、Plim），工作重心从逐行编码转向更高层次的系统设计。",
-    "event_type": "application_landing",
+    "tldr": "作者Daryl Cecile分享AI编程工具使其原型开发速度平均提升约4倍，一年内从零构建了Sakoa、Kato、Seal、Karabiner和Plim等多个可运行原型项目，同时强调需刻意保持手动编码能力以维持技术深度。",
+    "objective_summary": "作者Daryl Cecile在其个人博客中分享了过去一年AI辅助编程对其工作流程的实际影响。他估算日常工程任务的开发速度平均提升约4倍，并开发了Sakoa（系统语言）、Kato（标记语言）、Seal（密钥管理CLI）、Karabiner（消息应用）和Plim（块编辑器）等多个可运行原型项目。AI迫使他以更高抽象层级规划系统，先定义边界和接口再生成代码。同时他刻意保留手动编码时间以维持技术敏锐度，速度提升还让他得以将内部代码空间启动时间缩短约50%。",
+    "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [
         "GitHub"
       ],
-      "technologies": [
-        "AI agents",
-        "Copilot CLI"
-      ],
+      "technologies": [],
       "key_people": [
         "Daryl Cecile",
         "Mike McQuaid",
@@ -209,12 +326,69 @@
       ]
     },
     "key_logic_flow": [
-      "Daryl Cecile 在个人博客中回顾了过去一年AI对其工程工作流程的改变，称AI代理让他的工程任务速度平均提升约4倍。",
-      "他利用AI完成了多个原型项目：编程语言 Sakoa（含效果系统、三种内存模式和MIR多后端）、配置语言 Kato、密钥管理CLI工具 Seal、iOS优先的即时通讯应用 Karabiner 和富文本编辑器 Plim。",
-      "AI改变了工程工作的形态，迫使他从逐行编码转向更高层次的抽象思考——定义系统边界、接口契约和整体规格，先描述系统再让其存在。",
-      "效率提升让他能承担原本没有时间处理的工作，包括为同事搭建自动化支持和将内部环境启动时间缩短约50%。",
-      "他刻意保留手动编码的时间，通过完整实现功能、阅读源码和使用调试器来保持技术敏锐度，避免过度依赖AI工具。",
-      "他推荐了 Mike McQuaid（Homebrew 维护者）关于代理式开发设置和 git worktree 并行化的文章，以及 Cassidy Williams 和 Simon Willison 关于AI编程能力的实践分享。"
+      "作者因AI辅助编程，原型开发速度平均提升约4倍，从'有个想法'到'验证可行'的时间大幅缩短。",
+      "AI改变了工程工作的形态，迫使作者以更高抽象层级进行规划，先描述系统整体再让AI生成具体代码。",
+      "作者在一年内创建了多个可运行的原型项目，包括Sakoa、Kato、Seal、Karabiner和Plim等。",
+      "作者刻意保留手动编码时间以维持技术敏锐度，避免完全依赖AI工具导致自身技能退化。",
+      "速度提升让作者有能力承担以前'想法很好但没时间做'的工作，包括将内部代码空间启动时间缩短约50%。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "Sakoa",
+        "canonical_name": "Sakoa",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者从零设计了一门名为Sakoa的渐进式系统语言，它包含效果系统、三种内存模式和带有多个后端的MIR中间表示。"
+        ],
+        "article_id": "316bd0cfb9745f29"
+      },
+      {
+        "object_type": "project",
+        "name": "Kato",
+        "canonical_name": "Kato",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Kato是一种介于JSON、TOML和YAML之间的标记语言，专门设计为对人类和AI智能体都同样友好易用。"
+        ],
+        "article_id": "316bd0cfb9745f29"
+      },
+      {
+        "object_type": "project",
+        "name": "Seal",
+        "canonical_name": "Seal",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Seal是一个小型CLI工具，通过将密钥存储在操作系统原生凭据存储中来悄无声息地淘汰传统的.env文件。"
+        ],
+        "article_id": "316bd0cfb9745f29"
+      },
+      {
+        "object_type": "project",
+        "name": "Karabiner",
+        "canonical_name": "Karabiner",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Karabiner是一款面向iOS平台的智能体原生消息应用，优先考虑移动端使用体验。"
+        ],
+        "article_id": "316bd0cfb9745f29"
+      },
+      {
+        "object_type": "project",
+        "name": "Plim",
+        "canonical_name": "Plim",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Plim是一个受Notion启发的可嵌入Web块编辑器，拥有框架无关的纯核心和React绑定接口。"
+        ],
+        "article_id": "316bd0cfb9745f29"
+      }
     ],
     "impact_score": {
       "score": 2.5,
@@ -269,7 +443,108 @@
       "compound": "medium",
       "hype": "medium"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Sakoa",
+        "canonical_name": "Sakoa",
+        "positioning": "一门由作者从零设计的渐进式系统语言，包含效果系统、三种内存模式和MIR中间表示架构。",
+        "technical_signal": "采用效果系统、三种内存模式和MIR后端架构，技术设计复杂度超越一般个人原型项目。",
+        "target_users": [],
+        "watch_reason": "作为AI辅助编程加速系统级语言原型开发的典型案例，展示了AI如何使个人开发者有能力构建编译器基础设施类高复杂度项目，其架构取舍值得持续跟踪。",
+        "risk_notes": [
+          "项目目前仍为个人原型阶段，尚未建立公开社区或用户基础。",
+          "系统语言领域已有Rust、Zig等成熟竞争者，新语言突破生态壁垒难度极大。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "316bd0cfb9745f29"
+        ],
+        "evidence_snippets": [
+          "作者从零设计了一门名为Sakoa的渐进式系统语言，它包含效果系统、三种内存模式和带有多个后端的MIR中间表示。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Kato",
+        "canonical_name": "Kato",
+        "positioning": "一种介于JSON、TOML和YAML之间的标记语言，专门为人类和AI智能体的双角色可读性而设计。",
+        "technical_signal": "定位填补现有配置格式对AI智能体不友好的空白，语言设计考量了人类与AI双角色可读性的独特目标。",
+        "target_users": [],
+        "watch_reason": "AI智能体与人类协作的数据格式是新兴需求场景，Kato精准切中这一空白，其双角色可读性设计思路对AI工程生态有重要参考价值。",
+        "risk_notes": [
+          "配置格式领域已有JSON、YAML、TOML等成熟标准，新格式面临极高的迁移成本。",
+          "目前仍处于个人原型阶段，尚无社区采纳或标准化推进进展。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "316bd0cfb9745f29"
+        ],
+        "evidence_snippets": [
+          "Kato是一种介于JSON、TOML和YAML之间的标记语言，专门设计为对人类和AI智能体都同样友好易用。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Seal",
+        "canonical_name": "Seal",
+        "positioning": "一个通过将密钥存储在操作系统原生凭据存储中来替代传统.env文件的小型CLI工具。",
+        "technical_signal": "利用操作系统原生凭据存储管理密钥，设计上在安全性和便捷性之间寻求实用平衡。",
+        "target_users": [],
+        "watch_reason": "密钥管理是开发流程中的基础性需求，该工具的设计理念体现了AI时代对开发者工具简洁安全的新要求，其实践思路值得持续关注。",
+        "risk_notes": [
+          "CLI工具领域竞争激烈，需与dotenv、Vault等成熟方案争夺用户。",
+          "项目规模较小，长期维护投入和跨平台兼容性仍存不确定性。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "316bd0cfb9745f29"
+        ],
+        "evidence_snippets": [
+          "Seal是一个小型CLI工具，通过将密钥存储在操作系统原生凭据存储中来悄无声息地淘汰传统的.env文件。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Karabiner",
+        "canonical_name": "Karabiner",
+        "positioning": "一款面向iOS平台的智能体原生消息应用，优先考虑移动端AI代理交互体验。",
+        "target_users": [],
+        "watch_reason": "AI智能体原生消息应用是新兴产品品类，该项目的设计理念和交互模式对理解AI原生移动应用的发展方向具有重要参考价值。",
+        "risk_notes": [
+          "移动端消息市场已由iMessage、WhatsApp等巨头主导，独立项目突围难度极高。",
+          "项目仍处于早期原型阶段，产品定义和商业模式尚不明确清晰。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "316bd0cfb9745f29"
+        ],
+        "evidence_snippets": [
+          "Karabiner是一款面向iOS平台的智能体原生消息应用，优先考虑移动端使用体验。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Plim",
+        "canonical_name": "Plim",
+        "positioning": "一个受Notion启发的可嵌入Web块编辑器，采用框架无关核心加React绑定的分层架构。",
+        "technical_signal": "采用框架无关核心加React绑定接口的分层架构设计，在可移植性和生态兼容性上做出合理取舍。",
+        "target_users": [],
+        "watch_reason": "块编辑器是AI内容生成和协作工具的关键交互组件，其框架无关架构设计思路对同类开源项目有参考借鉴价值，值得跟踪其演化。",
+        "risk_notes": [
+          "块编辑器领域已有TipTap、Slate、BlockNote等成熟开源方案，差异化空间有限。",
+          "框架无关架构的实际开发体验和性能表现尚需在实践中进一步验证。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "316bd0cfb9745f29"
+        ],
+        "evidence_snippets": [
+          "Plim是一个受Notion启发的可嵌入Web块编辑器，拥有框架无关的纯核心和React绑定接口。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -288,10 +563,10 @@
     "pipeline_stage": "fact_extracted",
     "id": "3de9a29ec1fdf282",
     "source_type": "community_discussion",
-    "tldr": "Meta 面向全球推出 Instagram/Facebook/WhatsApp 付费订阅，同步测试 AI 与创作者订阅方案",
-    "objective_summary": "Meta 于 2026 年 5 月 27 日宣布面向全球用户推出 Instagram Plus（$3.99/月）、Facebook Plus（$3.99/月）和 WhatsApp Plus（$2.99/月）三档消费级订阅，提供个性化、社交表达等增值功能，不取代现有 Meta Verified。",
+    "tldr": "Meta 正式面向全球用户推出 Instagram Plus（3.99 美元/月）、Facebook Plus（3.99 美元/月）和 WhatsApp Plus（2.99 美元/月）三项订阅服务，同时开始测试面向 AI 用户和创作者/企业的更多订阅计划，未来统一归入 Meta One 品牌。",
+    "objective_summary": "Meta 于 2026 年 5 月 27 日宣布面向全球用户推出其旗舰应用 Instagram、Facebook 和 WhatsApp 的消费级订阅计划，每项月费 2.99 至 3.99 美元，提供个性化、社交表达和消息增强等附加功能。Meta 同时开始测试面向 AI 用户的 Meta One Plus（7.99 美元/月）和 Meta One Premium（19.99 美元/月）以及面向创作者和企业的 Meta One Essential（14.99 美元/月）和 Meta One Advanced（49.99 美元/月）计划。新产品总监 Naomi Gleit 表示所有订阅未来将统一归入 Meta One 品牌下持续更新，且新计划不会取代现有的 Meta Verified 服务。",
     "event_type": "application_landing",
-    "epistemic_status": "verified_fact",
+    "epistemic_status": "pr_statement",
     "entities": {
       "companies": [
         "Meta"
@@ -304,12 +579,123 @@
       ]
     },
     "key_logic_flow": [
-      "Meta 正式面向全球推出 Instagram Plus（$3.99/月）、Facebook Plus（$3.99/月）和 WhatsApp Plus（$2.99/月）三款消费级订阅服务，提供个人资料自定义、超级反应、故事洞察等增值功能。",
-      "Meta 产品主管 Naomi Gleit 表示未来将为这些 Plus 计划添加更多功能。",
-      "新的 Plus 计划不取代现有的 Meta Verified 服务，Meta Verified 仍专注于认证、防冒名顶替和额外支持。",
-      "Meta 开始测试 AI 订阅方案 Meta One Plus（$7.99/月）和 Meta One Premium（$19.99/月），Premium 计划提供更深层次推理能力和更多视频/图像生成能力，下月将在新加坡、危地马拉和玻利维亚开始测试。",
-      "面向创作者和商家的 Meta One Essential（$14.99/月，含 Verified 徽章）和 Meta One Advanced（$49.99/月，含搜索排名提升、Reels 高亮关注按钮等）将于本周晚些时候在沙特阿拉伯、摩洛哥、泰国和孟加拉国开始测试。",
-      "Meta 计划将所有订阅方案统一归入 Meta One 品牌下，持续更新和扩展。"
+      "Meta 正式面向全球用户推出 Instagram Plus（3.99 美元/月）、Facebook Plus（3.99 美元/月）和 WhatsApp Plus（2.99 美元/月）三项消费级订阅服务。",
+      "Instagram Plus 和 Facebook Plus 侧重社交表达功能，包括故事重播统计、无限受众列表、故事置顶、自定义应用图标和字体等；WhatsApp Plus 侧重个性化，提供应用主题、自定义铃声和更多置顶聊天等功能。",
+      "新的 Plus 订阅计划不会取代现有的 Meta Verified 服务，后者仍专注于账号验证、冒充保护和额外支持。",
+      "Meta 将开始测试 AI 订阅计划 Meta One Plus（7.99 美元/月）和 Meta One Premium（19.99 美元/月），Premium 版提供更深度的 AI 推理能力和更多视频图像生成能力，初期在 Singapore、Guatemala 和 Bolivia 测试。",
+      "Meta 将测试面向创作者和企业的 Meta One Essential（14.99 美元/月）和 Meta One Advanced（49.99 美元/月），后者提供搜索排名提升、高级分析和内容保护等功能，初期在 Saudi Arabia、Morocco、Thailand 和 Bangladesh 测试。",
+      "Meta 产品负责人 Naomi Gleit 表示公司仍处于实验阶段，最终目标是将所有订阅计划统一归入 Meta One 品牌下持续更新和扩展。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "Instagram Plus",
+        "canonical_name": "Instagram Plus",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Meta 正式面向全球用户推出 Instagram Plus 订阅服务，月费 3.99 美元。",
+          "Instagram Plus 提供故事重播统计、无限受众列表、故事置顶预览、自定义应用图标和可配置个人资料字体等额外功能。"
+        ],
+        "article_id": "3de9a29ec1fdf282"
+      },
+      {
+        "object_type": "product",
+        "name": "Facebook Plus",
+        "canonical_name": "Facebook Plus",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Meta 正式面向全球用户推出 Facebook Plus 订阅服务，月费 3.99 美元。",
+          "Facebook Plus 提供与 Instagram Plus 类似的一组侧重社交表达的功能集。"
+        ],
+        "article_id": "3de9a29ec1fdf282"
+      },
+      {
+        "object_type": "product",
+        "name": "WhatsApp Plus",
+        "canonical_name": "WhatsApp Plus",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Meta 正式面向全球用户推出 WhatsApp Plus 订阅服务，月费 2.99 美元。",
+          "WhatsApp Plus 聚焦于个性化与消息增强，提供应用主题、自定义铃声、更多置顶聊天、列表自定义和高级贴纸等功能。"
+        ],
+        "article_id": "3de9a29ec1fdf282"
+      },
+      {
+        "object_type": "product",
+        "name": "Meta One",
+        "canonical_name": "Meta One",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Meta 将 Meta One 定位为其订阅产品的统一品牌，未来的所有订阅计划都将归入该品牌下。",
+          "产品负责人 Naomi Gleit 表示 Meta 的目标是将 AI 订阅和专业计划统一归入 Meta One 旗下持续更新和扩展。"
+        ],
+        "article_id": "3de9a29ec1fdf282"
+      },
+      {
+        "object_type": "product",
+        "name": "Meta One Plus",
+        "canonical_name": "Meta One Plus",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "Meta 将测试面向 AI 用户的 Meta One Plus 订阅计划，月费 7.99 美元。",
+          "Meta One Plus 与 Premium 版功能相同但计算查询容量较低，将在下个月于新加坡、危地马拉和玻利维亚开始测试。"
+        ],
+        "article_id": "3de9a29ec1fdf282"
+      },
+      {
+        "object_type": "product",
+        "name": "Meta One Premium",
+        "canonical_name": "Meta One Premium",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "Meta 将测试面向 AI 用户的 Meta One Premium 订阅计划，月费 19.99 美元。",
+          "Premium 版提供更深度的推理能力，即更多\"思考模式\"时长，以及更强的视频和图像生成能力。"
+        ],
+        "article_id": "3de9a29ec1fdf282"
+      },
+      {
+        "object_type": "product",
+        "name": "Meta One Essential",
+        "canonical_name": "Meta One Essential",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "Meta 将测试面向创作者和企业的 Meta One Essential 计划，月费 14.99 美元。",
+          "Essential 计划提供验证徽章、冒充保护和增强型链接页面，功能类似现有的 Meta Verified。"
+        ],
+        "article_id": "3de9a29ec1fdf282"
+      },
+      {
+        "object_type": "product",
+        "name": "Meta One Advanced",
+        "canonical_name": "Meta One Advanced",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "Meta 将测试面向创作者和企业的 Meta One Advanced 计划，月费 49.99 美元。",
+          "Advanced 计划包含 Essential 所有功能，并提供 Facebook 搜索排名提升、粗体关注按钮、自动发送关注邀请、深入分析和内容复用保护工具。"
+        ],
+        "article_id": "3de9a29ec1fdf282"
+      },
+      {
+        "object_type": "product",
+        "name": "Meta Verified",
+        "canonical_name": "Meta Verified",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Meta 确认新的 Plus 订阅计划不会取代现有的 Meta Verified 服务。",
+          "Meta Verified 专注于账号验证、冒充保护和额外支持，与新的订阅计划定位不同。"
+        ],
+        "article_id": "3de9a29ec1fdf282"
+      }
     ],
     "impact_score": {
       "score": 6.0,
@@ -367,7 +753,143 @@
       "compound": "medium",
       "hype": "medium"
     },
-    "actionable_insight": "strategic_invest"
+    "actionable_insight": "strategic_invest",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "Instagram Plus",
+        "canonical_name": "Instagram Plus",
+        "positioning": "Meta 旗下 Instagram 的消费级订阅服务，月费 3.99 美元，专注社交表达增强功能。",
+        "target_users": [
+          "内容创作者",
+          "重度社交媒体用户",
+          "寻求增长个人影响力的用户"
+        ],
+        "product_signal": "Instagram Plus 提供故事重播统计、无限受众列表、故事置顶预览、自定义应用图标和可配置个人资料字体等额外功能。",
+        "market_signal": "Meta 将 Plus 订阅定位为广告收入之外的多元化营收来源，从超 30 亿月活用户中挖掘更高单用户价值。",
+        "differentiation": "与 Meta Verified 的账号验证定位不同，Instagram Plus 聚焦于内容创作者和重度用户的社交表达需求。",
+        "watch_reason": "Instagram Plus 标志着 Meta 在超级应用中首次大规模推行消费级订阅，其用户留存率和付费转化率将验证社交平台订阅商业模式的可行性。",
+        "risk_notes": [
+          "3.99 美元/月的定价在用户已习惯免费服务的社交市场是否具备足够吸引力仍需验证。",
+          "Plus 功能集中在社交表达增强，长期能否维持用户续费意愿存在不确定性。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "3de9a29ec1fdf282"
+        ],
+        "evidence_snippets": [
+          "Meta 正式面向全球用户推出 Instagram Plus 订阅服务，月费 3.99 美元。",
+          "Instagram Plus 提供故事重播统计、无限受众列表、故事置顶预览、自定义应用图标和可配置个人资料字体等额外功能。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Facebook Plus",
+        "canonical_name": "Facebook Plus",
+        "positioning": "Meta 旗下 Facebook 的消费级订阅服务，月费 3.99 美元，提供社交表达类增强功能集。",
+        "target_users": [
+          "Facebook 重度用户",
+          "内容创作者",
+          "寻求社媒平台高级功能的活跃用户"
+        ],
+        "product_signal": "Facebook Plus 提供与 Instagram Plus 类似的一组侧重社交表达的功能集，为 Facebook 用户提供更多个性化选项。",
+        "market_signal": "Facebook Plus 帮助 Meta 在广告市场承压背景下开辟新收入来源，检验成熟社交平台从免费模式向混合模式转型的市场接受度。",
+        "differentiation": "Facebook Plus 通过跨平台功能协同与 Instagram Plus 形成订阅生态，但两平台用户付费意愿存在潜在差异。",
+        "watch_reason": "Facebook Plus 是 Meta 在旗舰社交平台验证订阅模式的关键试验场，其与 Instagram Plus 的协同及差异表现将影响 Meta 整体订阅策略方向。",
+        "risk_notes": [
+          "Facebook 用户群体对付费功能的接受度存在不确定性，尤其在其核心市场。",
+          "Plus 功能与其他订阅计划的定价和功能重叠可能引发用户混淆。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "3de9a29ec1fdf282"
+        ],
+        "evidence_snippets": [
+          "Meta 正式面向全球用户推出 Facebook Plus 订阅服务，月费 3.99 美元。",
+          "Facebook Plus 提供与 Instagram Plus 类似的一组侧重社交表达的功能集。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "WhatsApp Plus",
+        "canonical_name": "WhatsApp Plus",
+        "positioning": "Meta 旗下 WhatsApp 的消费级订阅服务，月费 2.99 美元，聚焦消息应用的个性化与消息增强体验。",
+        "target_users": [
+          "WhatsApp 重度用户",
+          "注重消息应用个性化体验的用户",
+          "全球即时通讯高频使用者"
+        ],
+        "product_signal": "WhatsApp Plus 聚焦于个性化与消息增强，提供应用主题、自定义铃声、更多置顶聊天、列表自定义和高级贴纸等功能。",
+        "market_signal": "WhatsApp Plus 以更低价格切入全球最大消息应用市场，测试用户为即时通讯产品付费的意愿与市场规模。",
+        "differentiation": "WhatsApp Plus 的个性化定位与 Instagram/Facebook Plus 的社交表达定位形成差异化，三款 Plus 覆盖不同使用场景。",
+        "watch_reason": "WhatsApp 拥有全球超 20 亿用户，其订阅模式的推进将极大影响 Meta 订阅收入的基本盘，也为消息类应用商业化提供重要参考。",
+        "risk_notes": [
+          "WhatsApp 用户长期享受免费服务，付费个性化功能能否撬动大规模转化存在挑战。",
+          "2.99 美元的定价策略是否足以覆盖 WhatsApp 运营成本并实现盈利有待观察。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "3de9a29ec1fdf282"
+        ],
+        "evidence_snippets": [
+          "Meta 正式面向全球用户推出 WhatsApp Plus 订阅服务，月费 2.99 美元。",
+          "WhatsApp Plus 聚焦于个性化与消息增强，提供应用主题、自定义铃声、更多置顶聊天、列表自定义和高级贴纸等功能。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Meta One",
+        "canonical_name": "Meta One",
+        "positioning": "Meta 旗下所有订阅产品的统一品牌，涵盖消费级 Plus、AI 订阅及创作者/企业专业计划的整体架构。",
+        "target_users": [
+          "Meta 旗下应用的全体用户",
+          "AI 重度用户",
+          "内容创作者与企业"
+        ],
+        "product_signal": "Meta One 品牌下将统一整合 Instagram Plus、Facebook Plus、WhatsApp Plus、AI 订阅（7.99-19.99 美元/月）和专业订阅（14.99-49.99 美元/月）。",
+        "market_signal": "Meta One 标志着 Meta 从单一广告模式向订阅生态系统的战略转型，覆盖消费者、AI 用户和商业客户三大市场。",
+        "differentiation": "Meta One 以统一品牌架构支撑多层级订阅产品矩阵，实现跨应用的功能整合与权益互通，区别于单一应用订阅模式。",
+        "watch_reason": "Meta One 是 Meta 自广告模式以来最大的商业模式变革，其订阅品牌架构设计和跨应用权益整合将定义社交平台订阅经济的未来形态。",
+        "risk_notes": [
+          "多层级订阅品牌可能造成用户认知混淆，尤其是 Plus、One 和 Verified 多个品牌并存。",
+          "AI 订阅计划目前仅在少数市场测试，大规模推广的定价和权益设计仍需验证。"
+        ],
+        "score": 8.0,
+        "article_ids": [
+          "3de9a29ec1fdf282"
+        ],
+        "evidence_snippets": [
+          "Meta 将 Meta One 定位为其订阅产品的统一品牌，未来的所有订阅计划都将归入该品牌下。",
+          "产品负责人 Naomi Gleit 表示 Meta 的目标是将 AI 订阅和专业计划统一归入 Meta One 旗下持续更新和扩展。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Meta Verified",
+        "canonical_name": "Meta Verified",
+        "positioning": "Meta 旗下专注账号验证、冒充保护和额外支持的现有订阅服务，与新的 Plus 和 One 订阅定位互补。",
+        "target_users": [
+          "需要账号身份验证的个人用户",
+          "担心冒充风险的内容创作者与公众人物"
+        ],
+        "product_signal": "Meta Verified 专注于账号验证、冒充保护和额外支持，与新的订阅计划定位不同，不会因 Plus 推出而被取代。",
+        "market_signal": "Meta 明确维持 Meta Verified 独立运营，表明公司选择多品牌订阅策略而非整合，验证期订阅体系存在并存复杂性。",
+        "differentiation": "Meta Verified 以安全验证为核心价值，与 Instagram Plus 等以功能增强为核心的订阅服务形成清晰差异化定位。",
+        "watch_reason": "Meta Verified 在 Meta One 品牌体系中的定位将影响 Meta 整体订阅策略的清晰度，其存续或整合决策值得持续关注。",
+        "risk_notes": [
+          "Meta Verified 与新的 Plus/One 订阅存在功能重叠，未来可能面临品牌整合或淘汰风险。",
+          "多品牌订阅体系可能引发用户付费选择困惑，增加用户决策成本。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "3de9a29ec1fdf282"
+        ],
+        "evidence_snippets": [
+          "Meta 确认新的 Plus 订阅计划不会取代现有的 Meta Verified 服务。",
+          "Meta Verified 专注于账号验证、冒充保护和额外支持，与新的订阅计划定位不同。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -386,30 +908,67 @@
     "pipeline_stage": "fact_extracted",
     "id": "480b4680d16efda5",
     "source_type": "community_discussion",
-    "tldr": "将系统工程中的背压概念引入AI编码代理，通过自动化检查让代理自我验证后再由人类审查。",
-    "objective_summary": "Lucas F. Costa 在其博客中提出AI编码代理的第三种使用方法：构建包含测试、类型检查、lint和审查代理在内的自动化背压机制，迫使代理在每次迭代中自我验证。作者发布了 npx @lucasfcosta/backpressured 工具包和 /backpressured Claude",
+    "tldr": "本文提出在 AI 编码代理工作流中引入\"反向压力\"（backpressure）机制——通过自动化测试、类型检查、审查代理等验证环节让代理在人类介入前自行纠错，并发布了 npm 包 @lucasfcosta/backpressured 来实现这一方法论。",
+    "objective_summary": "软件工程师 Lucas F. Costa 在 2026 年 5 月的博客文章中分析了使用 AI 编码代理的两种常见方式（完全放任运行或逐行审查每一步）各自存在的缺陷，并提出第三种方法：在代理循环中建立自动化的反向压力机制。他借鉴系统工程中的反向压力概念，将 lint 检查、自动化测试、手动测试、基准测试、审查代理、规划审阅、视觉审阅和 PR 监控等验证环节集成到 Claude 的 /goal 工作流中，形成了一个从目标到 PR 合并的多阶段自动验证流水线。他还发布了 npm 包 @lucasfcosta/backpressured，让开发者可以通过一条命令安装这套反向压力技能并在 Claude 中使用。",
     "event_type": "framework_tools",
-    "epistemic_status": "theoretical_claim",
+    "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
         "Anthropic"
       ],
       "technologies": [
-        "TypeScript",
-        "Playwright",
-        "Claude"
+        "TypeScript"
       ],
       "key_people": [
         "Lucas F. Costa"
       ]
     },
     "key_logic_flow": [
-      "作者指出AI编码代理的两种常见方法（完全自主运行或逐行人工审核）均有缺陷，前者导致低质量PR泛滥，后者速度过慢丧失效率优势。",
-      "作者将系统工程中的背压概念引入AI开发流程：背压是下游向上游发出的减速信号，在软件中表现为测试套件、类型系统和CI流水线等自动护栏。",
-      "TypeScript 类型系统是背压的典型例子：它在代码边界处捕获类型不匹配，无需昂贵的人工审查，迫使生产者提前满足消费者期望。",
-      "作者通过在每次迭代中运行 lint、测试、手动验证（cURL + 浏览器）、基准测试和审查代理，迫使编码代理在继续前进前先满足所有质量检查。",
-      "作者创建了 npx @lucasfcosta/backpressured 工具包和 /backpressured Claude 技能，使代理自动执行迭代验证循环直到所有质量标准满足。",
-      "AI辅助软件开发的下一阶段应停止让人类充当AI循环中的默认背压，转而构建自动化护栏系统，使人类专注于高层次设计和决策。"
+      "使用 AI 编码代理的两种常见方式——完全放任代理运行或逐行审查每一步——都各有缺陷，前者导致低质量 PR 泛滥，后者则让速度慢到失去代理的意义。",
+      "作者提出第三种方式：在代理循环中建立自动化反向压力机制，让代理自行验证更多工作后才需要人类介入，从而实现安全且高效的委托。",
+      "反向压力在系统工程中是指下游组件向上游发出信号迫使生产者减速或缓冲负载；自动化测试和 TypeScript 类型检查都是软件开发中成熟的反向压力实例。",
+      "目前 AI 编码代理的主要反向压力仍然是人类，这导致开发者沦为在机器之间手动复制反馈的昂贵剪贴板。",
+      "作者发布了 npm 包 @lucasfcosta/backpressured，在终端安装后可通过 Claude 的 /backpressured 命令启动包含多阶段自动验证的迭代循环。",
+      "六种具体的反向压力机制按顺序组合为完整流水线：lint/测试、手动测试（cURL 和浏览器）、基准测试、审查代理、规划审阅与视觉审阅、PR 监控。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "@lucasfcosta/backpressured",
+        "canonical_name": "lucasfcosta/backpressured",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "用户可以通过在终端中运行 npx @lucasfcosta/backpressured 来安装本文介绍的反向压力技能。",
+          "安装后在 Claude 中运行 /backpressured 命令即可启动自动化的反向压力迭代循环，持续向目标推进。",
+          "用户可以通过在项目中添加 BACKPRESSURE.md 文件来自定义检查项目和迭代过程。"
+        ],
+        "article_id": "480b4680d16efda5"
+      },
+      {
+        "object_type": "product",
+        "name": "Claude /goal",
+        "canonical_name": "Claude /goal",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Claude 的 /goal 命令可以让用户给代理设定一个目标，然后代理会持续工作直到认为目标完成。",
+          "作者最初使用 /goal 时发现代理常常过早宣布完成，缺乏对边缘用例和质量标准的覆盖。"
+        ],
+        "article_id": "480b4680d16efda5"
+      },
+      {
+        "object_type": "project",
+        "name": "obra/superpowers",
+        "canonical_name": "obra/superpowers",
+        "confidence": "low",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者使用 obra/superpowers 构建器来创建教会代理如何启动本地前后端应用和 Docker 环境的技能。"
+        ],
+        "article_id": "480b4680d16efda5"
+      }
     ],
     "impact_score": {
       "score": 6.5,
@@ -466,7 +1025,62 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "@lucasfcosta/backpressured",
+        "canonical_name": "lucasfcosta/backpressured",
+        "url": "https://www.npmjs.com/package/@lucasfcosta/backpressured",
+        "positioning": "一个基于反向压力机制的 npm 包和 Claude 技能，将自动化测试、类型检查、代码审查等验证环节集成到 AI 编码代理工作流中，实现安全高效的委托式开发。",
+        "technical_signal": "将六个验证阶段（lint/测试、手动测试、基准测试、审查代理、规划与视觉审阅、PR 监控）打包为一条 Claude 命令，并支持通过 BACKPRESSURE.md 自定义检查配置。",
+        "adoption_signal": "作为作者个人博客中提出的方法论配套工具发布，尚处于早期推广阶段，缺乏大规模社区采用证据。",
+        "ecosystem_relevance": "直接回应了 AI 编码代理领域速度与质量的核心矛盾，其结构化委托方法论可能影响团队配置 AI 代理的方式和行业最佳实践。",
+        "target_users": [],
+        "watch_reason": "提出了 AI 编码代理中\"反向压力\"这一结构化委托方法论，并提供了可即用的 npm 工具包；如果被社区采纳，可能成为 AI 辅助开发中安全委托的标准质量保障模式。",
+        "risk_notes": [
+          "工具包尚处于个人项目阶段，缺乏大规模生产环境的验证和社区贡献。",
+          "自定义检查的有效性高度依赖开发者撰写的 BACKPRESSURE.md 质量，存在使用门槛。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "480b4680d16efda5"
+        ],
+        "evidence_snippets": [
+          "用户可以通过在终端中运行 npx @lucasfcosta/backpressured 来安装本文介绍的反向压力技能。",
+          "安装后在 Claude 中运行 /backpressured 命令即可启动自动化的反向压力迭代循环，持续向目标推进。",
+          "用户可以通过在项目中添加 BACKPRESSURE.md 文件来自定义检查项目和迭代过程。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Claude /goal",
+        "canonical_name": "Claude /goal",
+        "url": "https://claude.ai",
+        "positioning": "Claude 平台的长时运行代理命令，允许用户向 AI 代理分配一个目标后让代理自主持续工作直至任务完成。",
+        "target_users": [
+          "AI 编码代理用户",
+          "Claude 高级用户",
+          "追求编码效率的开发者"
+        ],
+        "product_signal": "作为 Claude 的代理能力入口，/goal 支持长时间自主编码但早期缺乏内建质量门禁，易导致代理过早宣布完成而遗漏边缘用例。",
+        "market_signal": "代表 AI 编码代理从辅助工具向自主委托演进的重要趋势，与 GitHub Copilot、Cursor 等竞品的自主模式形成竞争。",
+        "differentiation": "与 /backpressured 结合后弥补了原始 /goal 缺乏质量验证的短板，开创了\"自主执行加自动化门禁\"的新型委托模式。",
+        "watch_reason": "作为反向压力方法论的触发场景，/goal 代表了 AI 编程工具从逐行协助到目标级委托的范式转变，其演进方向将影响整个 AI 编码工具赛道的产品设计。",
+        "risk_notes": [
+          "没有反向压力机制时，/goal 可能产生需要大量人工返工的低质量代码。",
+          "过度依赖代理自主执行可能掩盖设计层面的系统性问题。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "480b4680d16efda5"
+        ],
+        "evidence_snippets": [
+          "Claude 的 /goal 命令可以让用户给代理设定一个目标，然后代理会持续工作直到认为目标完成。",
+          "作者最初使用 /goal 时发现代理常常过早宣布完成，缺乏对边缘用例和质量标准的覆盖。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -776,24 +1390,40 @@
     "pipeline_stage": "fact_extracted",
     "id": "6606376541fa0421",
     "source_type": "community_discussion",
-    "tldr": "页面因带宽超标无法访问，无有效文章内容。",
-    "objective_summary": "jbkempf.com 上标题为 Dav2d 的页面因超出每日 160000 次文件操作限制而暂时无法访问，返回带宽超限错误提示，无实际文章内容可供提取。",
+    "tldr": "Jean-Baptiste Kempf 关于 Dav2d 的博文页面因超出带宽限制而无法访问，返回了短暂限流错误提示。",
+    "objective_summary": "2026 年 7 月 21 日，jbkempf.com 上的 Dav2d 博文页面因单日文件操作次数超过 160000 次的限制而暂时无法访问，页面向用户返回了带宽超限的错误提示，要求稍后重试。",
     "event_type": "infrastructure_update",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [],
       "technologies": [
-        "dav2d"
+        "Dav2d"
       ],
       "key_people": [
         "Jean-Baptiste Kempf"
       ]
     },
     "key_logic_flow": [
-      "目标页面标题为 Dav2d，托管于 jbkempf.com 域名下。",
-      "页面因文件操作超出每日 160000 次的带宽限制而无法访问。",
-      "服务器返回了持久的临时错误页面，无任何有效文章正文内容。",
-      "由于内容不可用，无法提取任何实质性事实或技术细节。"
+      "用户尝试访问 jbkempf.com 上标题为 Dav2d 的博文页面。",
+      "该页面因超出每日 160000 次文件操作限制而返回了带宽超限错误。",
+      "系统提示用户稍后重试访问该页面。",
+      "基于页面标题推断，该博文主题应为 Dav2d 视频编解码器相关技术内容。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "dav2d",
+        "canonical_name": "dav2d",
+        "url": "https://jbkempf.com/blog/2026/dav2d/",
+        "confidence": "medium",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "文章标题为 Dav2d，发布于 jbkempf.com 博客平台。",
+          "页面因超出带宽限制而无法访问，无法获取关于 Dav2d 的具体技术内容。"
+        ],
+        "article_id": "6606376541fa0421"
+      }
     ],
     "impact_score": {
       "score": 1.0,
@@ -840,7 +1470,31 @@
       "compound": "low",
       "hype": "low"
     },
-    "actionable_insight": "speculative_watch"
+    "actionable_insight": "speculative_watch",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "dav2d",
+        "canonical_name": "dav2d",
+        "url": "https://jbkempf.com/blog/2026/dav2d/",
+        "positioning": "Dav2d 是 Jean-Baptiste Kempf 在其个人博客上作为核心主题介绍的开源视频解码项目，延续了 dav1d 的命名体系和技术路线。",
+        "ecosystem_relevance": "Dav2d 由 dav1d 和 VLC 核心开发者主导，其技术方向对开源多媒体生态中的视频解码基础设施具有潜在影响。",
+        "target_users": [],
+        "watch_reason": "Dav2d 作为 dav1d 的后续项目，由开源视频生态核心人物主导，代表视频解码技术的演进方向；当前博客原文因带宽超限无法访问，需在可访问后深入评估其技术方案和项目状态。",
+        "risk_notes": [
+          "博客原文因带宽超限无法访问，Dav2d 的具体技术细节和项目实际进展尚未得到确认。",
+          "由于原文无法访问，仅凭项目名称和作者背景推断与 dav1d 的传承关系，存在技术路线判断偏差的风险。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "6606376541fa0421"
+        ],
+        "evidence_snippets": [
+          "文章标题为 Dav2d，发布于 jbkempf.com 博客平台，该域名由知名开源视频开发者运营。",
+          "页面因超出每日文件操作次数限制而返回带宽超限错误，无法获取关于 Dav2d 的具体技术内容。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -966,23 +1620,37 @@
     "pipeline_stage": "fact_extracted",
     "id": "6fb4960d321e6164",
     "source_type": "community_discussion",
-    "tldr": "Deflock 项目已在美国地图上标注 10 万个自动车牌识别摄像头。",
-    "objective_summary": "Deflock 宣布其平台已在美国范围内成功定位并映射 100,000 个自动车牌识别摄像头（ALPR），该项目旨在追踪监控基础设施的部署情况。",
+    "tldr": "Deflock 项目在美国地图上标记的自动车牌识别设备（ALPR）数量达到 10 万个。",
+    "objective_summary": "Deflock 是一个追踪自动车牌识别设备（ALPR）的公开地图项目，该项目宣布其在美国范围内已标记超过 10 万个 ALPR 设备。该消息在 Hacker News 上获得 158 点积分和 39 条评论讨论。",
     "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
-      "companies": [
-        "Deflock"
-      ],
+      "companies": [],
       "technologies": [
         "ALPR"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "Deflock 是一个专门追踪和映射自动车牌识别摄像头（ALPR）的项目或平台。",
-      "该项目宣布已在美国成功标注 10 万个 ALPR 设备的位置。",
-      "该消息在 Hacker News 上引发了讨论，获得了 158 个点赞和 39 条评论。"
+      "Deflock 项目宣布其在美国境内标记的自动车牌识别设备（ALPR）数量突破 10 万个。",
+      "该消息在 Hacker News 上引发了讨论，获得了 158 点积分和 39 条评论。",
+      "Deflock 是一个公开的 ALPR 设备地图项目，旨在提高公众对车牌识别监控覆盖范围的认知。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "Deflock",
+        "canonical_name": "Deflock",
+        "url": "https://deflock.org/",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Deflock 项目宣布在美国境内已标记超过 10 万个自动车牌识别设备（ALPR）。",
+          "该项目的网站为 https://deflock.org/，专门用于公开地图展示 ALPR 设备分布。"
+        ],
+        "article_id": "6fb4960d321e6164"
+      }
     ],
     "impact_score": {
       "score": 6.0,
@@ -1040,7 +1708,33 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Deflock",
+        "canonical_name": "Deflock",
+        "url": "https://deflock.org/",
+        "positioning": "Deflock 是一个公开的自动车牌识别设备（ALPR）追踪地图项目，通过聚合众包和公开数据源，可视化展示全美监控设备分布，旨在提升公众对大规模车牌识别监控覆盖范围的认知。",
+        "technical_signal": "该项目通过众包报送与公开数据整合，构建了覆盖全美的 ALPR 地理位置数据库，体现了地理空间数据聚合与可视化的工程能力。",
+        "adoption_signal": "Deflock 已在美国境内标记超过 10 万个 ALPR 设备，并在 Hacker News 上获得 158 点积分和 39 条评论，表明社区关注度和参与度较高。",
+        "ecosystem_relevance": "该项目属于公民隐私监控透明度工具生态，与电子前哨基金会等组织的隐私倡导和监控公开工作方向一致，为 AI 驱动的监控基础设施提供了可量化的公开数据。",
+        "target_users": [],
+        "watch_reason": "Deflock 以可视化方式揭露大规模 ALPR 监控网络的真实覆盖范围，填补了公众对物理世界 AI 监控基础设施认知的空白。其数据增长趋势直接反映了车牌识别监控的扩张速度，对隐私政策讨论和监管推进具有持续参考价值。",
+        "risk_notes": [
+          "ALPR 设备位置数据源可能存在时效性偏差，部分设备安装或移除后未能及时更新。",
+          "项目数据依赖众包贡献，覆盖完整性可能受限于贡献者的活跃度和地理分布均衡性。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "6fb4960d321e6164"
+        ],
+        "evidence_snippets": [
+          "Deflock 项目宣布在美国境内已标记超过 10 万个自动车牌识别设备（ALPR）。",
+          "该项目的网站为 https://deflock.org/，专门用于公开地图展示 ALPR 设备分布。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -1151,8 +1845,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "f073b9abe4a0310f",
     "source_type": "community_discussion",
-    "tldr": "《Backrooms》北美首周末 8100 万美元，创恐怖片开画纪录",
-    "objective_summary": "2026 年 5 月底，A24 发行的恐怖片《Backrooms》北美首周末票房 8100 万美元，远超 4000-5000 万美元预期，成为 A24 史上最高开画。同期《Obsession》第三周票房 2640 万美元，北美累计破亿。迪士尼《曼达洛人与古古》次周暴跌 70% 位列第三。",
+    "tldr": "低成本恐怖片《Backrooms》以8100万美元创下A24开画纪录，《Obsession》北美票房突破1亿美元，两部YouTube创作者执导的电影同时击败《星球大战》衍生片，成为周末票房冠军。",
+    "objective_summary": "2026年7月，20岁YouTube创作者Kane Parsons执导的A24恐怖片《Backrooms》在3442家北美影院以8100万美元开画，创下A24历史最高开画纪录和原创恐怖片历史最佳开画成绩。同期，Focus Features发行的《Obsession》在第三周末逆势上涨，北美票房突破1亿美元，制作成本仅100万美元。而迪士尼《曼达洛人与古古》次周暴跌70%，退居周末第三。",
     "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
@@ -1162,33 +1856,102 @@
         "Disney",
         "Sony",
         "Lionsgate",
-        "Paramount",
         "Blumhouse-Atomic Monster",
+        "Paramount",
+        "Pixar",
+        "Universal",
         "Comscore",
         "Exhibitor Relations"
       ],
       "technologies": [],
       "key_people": [
         "Kane Parsons",
+        "Chiwetel Ejiofor",
+        "Renate Reinsve",
+        "Jason Blum",
         "Jeff Bock",
         "Paul Dergarabedian",
-        "Jason Blum",
         "David A. Gross",
         "Josh Trank",
-        "Mark Fischback",
         "Nate Bargatze",
         "Brendan Fraser",
+        "Mark Fischback",
         "Steven Spielberg",
-        "Christopher Nolan"
+        "Christopher Nolan",
+        "Shawn Levy",
+        "Ryan Gosling"
       ]
     },
     "key_logic_flow": [
-      "《Backrooms》北美首周末从 3442 家影院获得 8100 万美元票房，全球累计 1.18 亿美元，制作成本仅约 1000 万美元",
-      "《Obsession》第三周票房逆势上涨至 2640 万美元，成为 1982 年《E.T.》后首部非假日档期连续三周票房增长的电影",
-      "《曼达洛人与古古》次周暴跌 70%，以 2500 万美元退居第三，显示该 IP 未能吸引核心粉丝以外的观众",
-      "20 岁导演 Kane Parsons 成为史上最年轻的票房冠军导演，打破 Josh Trank 27 岁的纪录",
-      "YouTube 创作者转型大银幕的趋势显现，此前 Mark Fischback 的《铁肺》以 300 万美元成本获得 5000 万美元票房",
-      "暑期档后续有多部大片上映，行业预计四个月票房有望达到 40 亿美元"
+      "A24的《Backrooms》在3442家影院以8100万美元开画，创下A24历史最高开画纪录，是Alex Garland 2024年《内战》2550万美元纪录的3倍以上。",
+      "该片由20岁YouTube创作者Kane Parsons执导，制作成本约1000万美元，全球票房已达1.18亿美元，成为年度最盈利影片之一。",
+      "《Backrooms》85%的观众年龄在35岁以下，Kane Parsons成为有史以来最年轻的周末票房冠军导演。",
+      "Focus Features的《Obsession》第三周末再收2640万美元，北美累计突破1亿美元，成为该发行商历史上北美票房最高的影片。",
+      "《Obsession》制作成本仅100万美元，全球票房达1.48亿美元，是1982年《E.T.》之后首部非假日档实现连续两周末逆势上涨的影片。",
+      "迪士尼《曼达洛人与古古》次周末暴跌70%仅收2500万美元，分析师认为这表明该IP未能吸引年轻观众，但迪士尼仍寄望2027年《星球大战：星际战机》重启系列。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "Backrooms",
+        "canonical_name": "Backrooms",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "A24的《Backrooms》在3442家北美影院首周末票房达8100万美元，创下A24历史最高开画纪录。",
+          "该片由20岁YouTube创作者Kane Parsons执导，制作成本约1000万美元，全球票房已达1.18亿美元。",
+          "《Backrooms》创下原创恐怖片历史最佳开画成绩，也是非系列电影新导演的最佳开画表现。"
+        ],
+        "article_id": "f073b9abe4a0310f"
+      },
+      {
+        "object_type": "product",
+        "name": "Obsession",
+        "canonical_name": "Obsession",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Focus Features的《Obsession》在第三周末再收2640万美元，北美累计突破1亿美元。",
+          "该片制作成本仅100万美元，全球票房达1.48亿美元，已是Focus历史上北美票房最高的影片。",
+          "《Obsession》连续两周末票房逆势上涨，是1982年《E.T.》之后首部非假日档实现这一成就的影片。"
+        ],
+        "article_id": "f073b9abe4a0310f"
+      },
+      {
+        "object_type": "product",
+        "name": "The Mandalorian and Grogu",
+        "canonical_name": "The Mandalorian and Grogu",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "迪士尼《曼达洛人与古古》次周末票房暴跌70%，从4300家影院仅收2500万美元，退居周末第三。",
+          "该片制作成本1.65亿美元，全球累计票房2.466亿美元，但次周表现引发对星战IP吸引力的质疑。"
+        ],
+        "article_id": "f073b9abe4a0310f"
+      },
+      {
+        "object_type": "product",
+        "name": "Iron Lung",
+        "canonical_name": "Iron Lung",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "YouTube创作者Mark Fischback执导、自筹资金并发行的恐怖片《Iron Lung》，以300万美元成本获得5000万美元票房。"
+        ],
+        "article_id": "f073b9abe4a0310f"
+      },
+      {
+        "object_type": "product",
+        "name": "Michael",
+        "canonical_name": "Michael",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "迈克尔·杰克逊传记片《Michael》上映第六周末再收1170万美元，北美累计3.399亿美元，全球累计8.513亿美元。"
+        ],
+        "article_id": "f073b9abe4a0310f"
+      }
     ],
     "impact_score": {
       "score": 1.0,
@@ -1244,6 +2007,115 @@
     "competitive_casualty": [
       "迪士尼传统高预算IP项目",
       "传统好莱坞大片厂"
+    ],
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "Backrooms",
+        "canonical_name": "Backrooms",
+        "positioning": "A24发行的低成本原创恐怖片，由20岁YouTube创作者Kane Parsons执导，以约1000万美元成本创下8100万美元首周末票房，成为年度最盈利影片之一。",
+        "target_users": [
+          "34岁以下年轻观众",
+          "YouTube创作者粉丝群体",
+          "恐怖片爱好者"
+        ],
+        "product_signal": "首周末8100万美元票房创下A24历史最高开画纪录，是非系列电影新导演的最佳开画表现。",
+        "market_signal": "全球票房已达1.18亿美元，85%观众在35岁以下，成为年度最盈利影片之一。",
+        "differentiation": "由20岁YouTube创作者执导并依托网络粉丝基础直接转化为影院票房，打破了传统电影工业对创作者年龄和资历的门槛认知。",
+        "watch_reason": "《Backrooms》证明YouTube创作者驱动的低成本恐怖片可在票房上与大型系列电影直接竞争，其续集开发进展和创作者职业路径将影响行业人才来源格局。",
+        "risk_notes": [
+          "续集开发尚未正式宣布，单一作品的可持续性和系列化能力有待验证。",
+          "年轻粉丝驱动的票房模式是否适用于其他类型或题材尚不确定。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "f073b9abe4a0310f"
+        ],
+        "evidence_snippets": [
+          "A24的《Backrooms》在3442家北美影院首周末票房达8100万美元，创下A24历史最高开画纪录。",
+          "该片由20岁YouTube创作者Kane Parsons执导，制作成本约1000万美元，全球票房已达1.18亿美元。",
+          "《Backrooms》创下原创恐怖片历史最佳开画成绩，也是非系列电影新导演的最佳开画表现。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Obsession",
+        "canonical_name": "Obsession",
+        "positioning": "Focus Features发行的低成本口碑恐怖片，由YouTube创作者执导，制作成本仅100万美元，上映第三周末北美票房突破1亿美元。",
+        "target_users": [
+          "恐怖片爱好者",
+          "寻求口碑驱动型内容的年轻观众"
+        ],
+        "product_signal": "第三周末再收2640万美元且逆势上涨，成为1982年《E.T.》之后首部非假日档连续两周末票房上涨的影片。",
+        "market_signal": "北美累计1.06亿美元，全球1.48亿美元，已成为Focus Features历史北美票房最高的影片。",
+        "differentiation": "仅100万美元制作成本取得1.48亿美元全球票房，投入产出比惊人，且连续多周票房逆行，展现了恐怖片口碑驱动的超强长尾效应。",
+        "watch_reason": "《Obsession》以极端成本创造惊人票房回报，其YouTube创作者加口碑驱动加恐怖类型的成功组合可能被行业广泛研究和复制。",
+        "risk_notes": [
+          "极端低成本策略对制作质量有天然上限，难以扩展到大制作领域。",
+          "此类成功高度依赖口碑传播和社交裂变，可复制性与可预测性较低。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "f073b9abe4a0310f"
+        ],
+        "evidence_snippets": [
+          "Focus Features的《Obsession》在第三周末再收2640万美元，北美累计突破1亿美元。",
+          "该片制作成本仅100万美元，全球票房达1.48亿美元，已是Focus历史上北美票房最高的影片。",
+          "《Obsession》连续两周末票房逆势上涨，是1982年《E.T.》之后首部非假日档实现这一成就的影片。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "The Mandalorian and Grogu",
+        "canonical_name": "The Mandalorian and Grogu",
+        "positioning": "迪士尼出品的《星球大战》宇宙衍生电影，延续Disney+热门剧集故事线，制作成本1.65亿美元，次周票房暴跌70%。",
+        "target_users": [
+          "星战系列核心粉丝",
+          "曼达洛人剧集观众"
+        ],
+        "product_signal": "次周末票房暴跌70%仅收2500万美元，从4300家影院大幅下滑，显示该IP未能有效吸引年轻观众群体。",
+        "market_signal": "全球累计2.466亿美元，次周票房表现引发对星战IP大银幕吸引力的严重质疑。",
+        "differentiation": "作为Disney+热门剧集的影院衍生作品，本应凭借IP势能取得更大成功，但次周暴跌暴露了剧集IP向大银幕转化的受众断层和品牌老化风险。",
+        "watch_reason": "《曼达洛人与古古》的票房表现可能影响迪士尼对星战IP的未来布局策略，尤其是2027年重启项目《星球大战：星际战机》的定位和市场预期。",
+        "risk_notes": [
+          "星战IP七年未登大银幕导致核心粉丝老化，对35岁以下年轻观众吸引力不足。",
+          "1.65亿美元制作成本在票房表现不佳下面临较大回收压力。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "f073b9abe4a0310f"
+        ],
+        "evidence_snippets": [
+          "迪士尼《曼达洛人与古古》次周末票房暴跌70%，从4300家影院仅收2500万美元，退居周末第三。",
+          "该片制作成本1.65亿美元，全球累计票房2.466亿美元，但次周表现引发对星战IP吸引力的质疑。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Michael",
+        "canonical_name": "Michael",
+        "positioning": "迈克尔·杰克逊传记片，聚焦流行音乐天王的传奇人生，上映第六周末持续展现强劲票房续航力，全球票房已超8.5亿美元。",
+        "target_users": [
+          "迈克尔·杰克逊粉丝",
+          "音乐传记片爱好者",
+          "怀旧情感驱动的中青年观影人群"
+        ],
+        "product_signal": "上映第六周末再收1170万美元，展现出极强的票房长线续航能力和稳定的周度票房表现。",
+        "market_signal": "北美累计3.399亿美元，全球累计8.513亿美元，作为传记片取得了超预期的全球商业成功。",
+        "differentiation": "作为音乐传记片展现了超强的票房长尾效应，第六周末仍有千万级美元入账，验证了经典音乐IP与怀旧情感驱动的长线票房模式。",
+        "watch_reason": "《Michael》全球超8.5亿美元的票房证明音乐传记片市场潜力巨大，可能推动更多同类项目进入开发流程并吸引更多资本关注。",
+        "risk_notes": [
+          "传记片类型的票房天花板有限，后续增长取决于奖项季表现。",
+          "单一艺人IP的票房潜力已接近充分释放，边际增长空间收窄。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "f073b9abe4a0310f"
+        ],
+        "evidence_snippets": [
+          "迈克尔·杰克逊传记片《Michael》上映第六周末再收1170万美元，北美累计3.399亿美元，全球累计8.513亿美元。"
+        ]
+      }
     ]
   },
   {
@@ -1263,8 +2135,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "f543520f0b824552",
     "source_type": "community_discussion",
-    "tldr": "Odysseus 是一个自托管的 AI 工作空间，本地优先、隐私优先，支持多模型聊天、Agent 和深度研究。",
-    "objective_summary": "Odysseus 项目发布 v1.0 自托管 AI 工作空间，提供类似 ChatGPT 和 Claude 的本地 UI 体验。支持 vLLM、llama.cpp、Ollama 等多模型聊天，内置 Agent（MCP/Shell/文件）、Cookbook 模型推荐下载、深度研究、文档编辑、邮件/日历集",
+    "tldr": "Odysseus 是一个自托管的 AI 工作空间，可在本地硬件上运行，提供聊天、Agent、深度研究、文档编辑、邮件处理、日历同步、笔记任务等功能，强调本地优先和隐私保护。支持 Docker 和手动部署，内置 ChromaDB 向量记忆、SearXNG 搜索和 ntfy 通知服务。",
+    "objective_summary": "Odysseus 是一个以隐私优先为设计的自托管 AI 工作空间，2026 年 7 月发布 1.0 版本。该项目提供了类 ChatGPT/Claude 的 UI 体验，但完全运行在用户自有硬件和数据之上。核心功能包括多模型聊天（支持 vLLM、llama.cpp、Ollama、OpenRouter、OpenAI）、基于 opencode 和 MCP 的 Agent 系统、硬件感知的模型推荐与下载工具 Cookbook、多步深度研究、盲测模型对比、AI 辅助文档编辑、持久化记忆与技能系统（ChromaDB + fastembed）、IMAP/SMTP 邮件智能分类与回复、CalDAV 日历同步、笔记与定时任务等。部署方式支持 Docker Compose 一键启动和 Python 手动安装，默认包含 ChromaDB、SearXNG 和 ntfy 三个附属服务。",
     "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
@@ -1274,28 +2146,112 @@
         "llama.cpp",
         "Ollama",
         "OpenRouter",
+        "OpenAI",
         "MCP",
         "ChromaDB",
+        "fastembed",
         "ONNX",
-        "GGUF",
-        "FP8",
-        "AWQ",
         "IMAP",
         "SMTP",
         "CalDAV",
-        "FastAPI",
+        "GGUF",
+        "FP8",
+        "AWQ",
         "PWA",
-        "SearXNG"
+        "RAG"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "Odysseus 是一个自托管的 AI 工作空间，提供类似 ChatGPT 和 Claude 的 UI 体验，但运行在用户自己的硬件上，数据本地优先、隐私优先。",
-      "支持与多种本地模型和远程 API 聊天（vLLM、llama.cpp、Ollama、OpenRouter、OpenAI），并内置 Agent 功能，可调用 MCP、Shell、文件、网页搜索等工具自主完成任务。",
-      "内置 Cookbook 功能，可扫描硬件规格推荐适合的模型，支持 GGUF/FP8/AWQ 格式，一键下载并启动推理服务。",
-      "还包含深度研究（多步信息采集合成）、模型盲测对比、文档编辑器、持久化记忆/技能管理、邮件自动分类、日历同步、笔记任务等功能。",
-      "支持 Docker Compose 一键部署（含 ChromaDB、SearXNG、ntfy 依赖）或手动 pip 安装，默认配置即可运行，管理界面为 Web 面板。",
-      "项目强调安全注意事项：必须启用认证、对公网部署需配置 HTTPS 反向代理、限制用户权限、避免将敏感文件提交到 Git。"
+      "Odysseus 是一个自托管的 AI 工作空间，旨在提供类似 ChatGPT 和 Claude 的 UI 体验但完全运行在用户自有硬件上，强调本地优先和隐私保护。",
+      "项目提供聊天功能，支持 vLLM、llama.cpp、Ollama、OpenRouter、OpenAI 等多种本地模型和 API 接入。",
+      "Agent 系统基于 opencode 和 MCP 协议构建，可调用网页搜索、文件读写、Shell 命令、技能和记忆等工具自主完成任务。",
+      "Cookbook 工具可扫描用户硬件配置（含 VRAM），推荐并自动下载适合的 GGUF/FP8/AWQ 格式模型，支持 vLLM 和 llama.cpp 作为推理后端。",
+      "部署支持 Docker Compose 一键启动和 Python 手动安装两种方式，默认集成 ChromaDB 向量数据库、SearXNG 元搜索引擎和 ntfy 通知服务。",
+      "项目内置安全措施：支持认证登录、基于角色的权限控制（非管理员无 Shell/文件读写权限）、APIToken 管理，且建议生产环境使用 HTTPS 反向代理。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "odysseus",
+        "canonical_name": "pewdiepie-archdaemon/odysseus",
+        "url": "https://github.com/pewdiepie-archdaemon/odysseus",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Odysseus 是一个自托管的 AI 工作空间，旨在提供类似 ChatGPT 和 Claude 的 UI 体验，但完全运行在用户自有硬件和数据之上，强调本地优先和隐私保护。",
+          "项目提供聊天、Agent、Cookbook 模型推荐、深度研究、模型盲测对比、文档编辑、持久化记忆与技能系统、邮件智能分类、CalDAV 日历同步等功能模块。",
+          "部署方式支持 Docker Compose 一键启动和 Python 手动安装，默认集成 ChromaDB、SearXNG 和 ntfy 三个附属服务。"
+        ],
+        "article_id": "f543520f0b824552"
+      },
+      {
+        "object_type": "project",
+        "name": "opencode",
+        "canonical_name": "opencode",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Odysseus 的 Agent 系统基于 opencode 和 MCP 协议构建，可自主调用网页、文件、Shell、技能和记忆等工具完成任务。"
+        ],
+        "article_id": "f543520f0b824552"
+      },
+      {
+        "object_type": "project",
+        "name": "Tongyi DeepResearch",
+        "canonical_name": "Tongyi DeepResearch",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Odysseus 的深度研究功能改编自 Tongyi DeepResearch，支持多步搜索、资料收集和综合生成可视化报告。"
+        ],
+        "article_id": "f543520f0b824552"
+      },
+      {
+        "object_type": "project",
+        "name": "llmfit",
+        "canonical_name": "llmfit",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Odysseus 的 Cookbook 模型推荐功能基于 llmfit 构建，具备 VRAM 感知、生成模型适配度评分，并支持 GGUF/FP8/AWQ 格式。"
+        ],
+        "article_id": "f543520f0b824552"
+      },
+      {
+        "object_type": "product",
+        "name": "SearXNG",
+        "canonical_name": "SearXNG",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "Docker Compose 默认集成 SearXNG 作为元搜索引擎，Odysseus 通过环境变量 SEARXNG_INSTANCE 配置其地址。"
+        ],
+        "article_id": "f543520f0b824552"
+      },
+      {
+        "object_type": "product",
+        "name": "ChromaDB",
+        "canonical_name": "ChromaDB",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "Docker Compose 默认集成 ChromaDB 作为向量存储，为 Odysseus 提供语义记忆和向量+关键词检索能力。"
+        ],
+        "article_id": "f543520f0b824552"
+      },
+      {
+        "object_type": "product",
+        "name": "ntfy",
+        "canonical_name": "ntfy",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "Docker Compose 默认集成 ntfy 作为本地通知服务，Odysseus 通过该服务发送浏览器和邮件渠道的通知。"
+        ],
+        "article_id": "f543520f0b824552"
+      }
     ],
     "impact_score": {
       "score": 5.5,
@@ -1353,7 +2309,98 @@
       "compound": "medium",
       "hype": "medium"
     },
-    "actionable_insight": "speculative_watch"
+    "actionable_insight": "speculative_watch",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Odysseus",
+        "canonical_name": "pewdiepie-archdaemon/odysseus",
+        "url": "https://github.com/pewdiepie-archdaemon/odysseus",
+        "positioning": "自托管的 AI 工作空间，在本地硬件上提供类 ChatGPT/Claude 的全功能体验，核心定位是本地优先与隐私保护。",
+        "technical_signal": "基于 opencode 和 MCP 协议构建 Agent 系统，集成 ChromaDB 向量记忆与 fastembed 语义检索，支持多模型推理后端切换。",
+        "adoption_signal": "项目于 2026 年 7 月发布 1.0 版本，以 Docker 一键部署降低自托管门槛，当前社区采纳数据尚需积累观察。",
+        "ecosystem_relevance": "与本地推理生态深度关联，支持 vLLM、llama.cpp、Ollama、OpenRouter 等主流推理后端，集成 ChromaDB、SearXNG、ntfy 等基础设施。",
+        "target_users": [],
+        "watch_reason": "自托管 AI 工作空间赛道的全面竞争者，从模型管理、Agent 协作到生产力工具的一站式本地解决方案，其功能完整度和模块化设计在同类开源项目中较为突出，值得持续跟踪其在隐私计算与本地 AI 融合方向的演进。",
+        "risk_notes": [
+          "项目于 2026 年 7 月才发布 1.0 版本，代码成熟度和生产环境稳定性有待验证。",
+          "自托管部署对用户硬件配置和运维能力有较高门槛，可能限制其用户规模与社区增长。",
+          "功能模块覆盖广泛，长期维护成本和模块间兼容性保障存在挑战。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "f543520f0b824552"
+        ],
+        "evidence_snippets": [
+          "Odysseus 是一个自托管的 AI 工作空间，旨在提供类似 ChatGPT 和 Claude 的 UI 体验，但完全运行在用户自有硬件和数据之上，强调本地优先和隐私保护。",
+          "项目提供聊天、Agent、Cookbook 模型推荐、深度研究、模型盲测对比、文档编辑、持久化记忆与技能系统、邮件智能分类、CalDAV 日历同步等功能模块。",
+          "部署方式支持 Docker Compose 一键启动和 Python 手动安装两种方式，默认集成 ChromaDB 向量数据库、SearXNG 搜索引擎和 ntfy 通知服务三个附属服务。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "opencode",
+        "canonical_name": "opencode",
+        "positioning": "AI Agent 系统的底层协议框架，为自主任务执行提供标准化的工具调用与技能扩展机制。",
+        "technical_signal": "与 MCP 协议协作驱动 Odysseus 的 Agent 系统，支持网页搜索、文件读写、Shell 命令和记忆技能等工具的自主调用与编排。",
+        "ecosystem_relevance": "作为自托管 AI 工作空间 Agent 能力的协议层基础设施，其与 MCP 的协作模式可能对本地 Agent 工具调用标准化产生影响。",
+        "target_users": [],
+        "watch_reason": "作为自托管 AI 工作空间 Odysseus 的 Agent 协议基础，opencode 与 MCP 的集成方式代表了一种本地 Agent 工具调用的实践路径，其协议设计对本地 AI 生态有参考价值。",
+        "risk_notes": [
+          "当前仅有单项目引用（Odysseus），缺乏独立社区和市场验证数据。",
+          "作为协议层项目，其标准化程度和与 MCP 的兼容演进方向尚不明确。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "f543520f0b824552"
+        ],
+        "evidence_snippets": [
+          "Odysseus 的 Agent 系统基于 opencode 和 MCP 协议构建，可自主调用网页搜索、文件读写、Shell 命令、技能和记忆等工具完成任务。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Tongyi DeepResearch",
+        "canonical_name": "Tongyi DeepResearch",
+        "positioning": "多步深度研究引擎，支持自动化搜索、资料收集整理与综合生成可视化研究报告。",
+        "technical_signal": "被 Odysseus 项目改编集成，实现多步自动化搜索、资料收集整理和可视化报告生成的端到端深度研究能力。",
+        "ecosystem_relevance": "作为开源深度研究能力的基础组件被自托管工作空间项目集成，反映了 AI 自主研究工具从专用向平台集成演进的趋势。",
+        "target_users": [],
+        "watch_reason": "作为被主流自托管项目改编选用的深度研究引擎，其多步搜索与报告生成能力在本地 AI 场景中的实际效果、可复现性和性能表现值得持续跟踪。",
+        "risk_notes": [
+          "当前仅有 Odysseus 单项目引用，缺乏独立的技术评估数据。",
+          "与 Tongyi 体系的关系不明朗，是否为独立开源项目尚需确认。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "f543520f0b824552"
+        ],
+        "evidence_snippets": [
+          "Odysseus 的深度研究功能改编自 Tongyi DeepResearch，支持多步自动化搜索、资料收集整理和综合生成可视化研究报告。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "llmfit",
+        "canonical_name": "llmfit",
+        "positioning": "硬件感知的模型推荐引擎，基于 VRAM 检测为本地部署场景生成模型适配度评分并推荐最优模型格式。",
+        "technical_signal": "具备 VRAM 感知能力，支持 GGUF、FP8、AWQ 等多种量化格式，为本地推理生成模型适配度评分并支持 vLLM 和 llama.cpp 推理后端。",
+        "ecosystem_relevance": "解决了本地模型部署中的硬件适配痛点，其 VRAM 感知与模型格式推荐能力对自托管 AI 的可用性提升具有实际价值。",
+        "target_users": [],
+        "watch_reason": "作为本地模型部署中硬件感知推荐的关键组件，llmfit 的 VRAM 检测与模型适配度评分机制对于降低自托管 AI 使用门槛有重要意义，值得关注其模型覆盖度和推荐准确性的持续优化。",
+        "risk_notes": [
+          "当前仅有 Odysseus 项目引用，缺乏独立的技术评估和模型覆盖验证。",
+          "模型适配度评分的准确性和硬件兼容性边界尚待更多实践验证。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "f543520f0b824552"
+        ],
+        "evidence_snippets": [
+          "Odysseus 的 Cookbook 模型推荐功能基于 llmfit 构建，具备 VRAM 感知能力、生成模型适配度评分，并支持 GGUF/FP8/AWQ 等多种量化格式。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -1372,27 +2419,68 @@
     "pipeline_stage": "fact_extracted",
     "id": "f9cb2c160bbcd29a",
     "source_type": "community_discussion",
-    "tldr": "一份平台无关的网站技术规范，涵盖SEO、可访问性、安全等10个类别，并提供MCP服务器接口。",
-    "objective_summary": "一份名为The Website Specification的开放技术规范发布，定义了每个网站应具备的技术特性标准，涵盖HTML基础、SEO、可访问性、安全、Well-Known URI、Agent就绪性、性能、隐私、弹性和国际化10个类别，并提供MCP服务器和Agent Skill供AI代理查询。",
+    "tldr": "The Website Specification 是一份平台无关的技术规范清单，定义了每个优秀网站应有的功能特性，涵盖 SEO、可访问性、安全、性能等十个领域，并提供 MCP 服务器和 Agent Skill 供 AI 代理查询。",
+    "objective_summary": "The Website Specification 项目发布了一份平台无关的网站技术规范，从 HTML 基础到安全头、可访问性、性能优化和国际化的完整检查清单。该规范以标准组织（WHATWG、W3C、IETF、WCAG、MDN）的官方标准为依据，适用于 WordPress、Next.js、Astro 等任意技术栈。项目同时提供了开放的 MCP 服务器（mcp.specification.website）和 Agent Skill，允许 AI 代理以编程方式查询规范，还通过 /llms.txt 和 Accept: text/markdown 提供每页的 Markdown 版本。",
     "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [],
       "technologies": [
         "MCP",
+        "llms.txt",
         "WCAG",
-        "SEO",
-        "llms.txt"
+        "SEO"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "该规范定义了每个合格网站应具备的技术特性，内容覆盖HTML基础、SEO、可访问性、安全、Well-Known URI、Agent就绪性、性能、隐私、弹性和国际化10个类别。",
-      "每个规范条目均链接回对应的权威标准来源，包括WHATWG、W3C、IETF RFC、WCAG和MDN。",
-      "该规范支持WordPress、Drupal、Next.js、Astro、Hugo、Django及纯HTML等所有平台，实现提示跟随规范而非反过来。",
-      "整套规范以开源MCP服务器形式提供，无需认证的只读访问，同时发布了Agent Skill供兼容的AI代理使用。",
-      "用户可通过llms.txt和Accept: text/markdown头获取每页的Markdown版本。",
-      "该站点提供审计清单供开发者逐项检查、点击进入学习实现细节，并通过GitHub PR接受改进建议。"
+      "The Website Specification 是一份平台无关的网站技术规范，列出了每个优秀网站应具备的功能特性。",
+      "规范涵盖十个核心领域：基础、SEO、可访问性、安全、Well-Known URIs、代理就绪、性能、隐私、弹性和国际化。",
+      "每一项都链接回 WHATWG、W3C、IETF RFC、WCAG 和 MDN 等标准机构的官方标准。",
+      "该规范通过开放的 MCP 服务器（mcp.specification.website）提供只读查询接口，无需认证。",
+      "项目还发布了 Agent Skill，可教导兼容的 AI 代理在何时以及如何使用该规范。",
+      "每页内容可通过 /llms.txt 和 Accept: text/markdown 获取 Markdown 格式。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "The Website Specification",
+        "canonical_name": "The Website Specification",
+        "url": "https://specification.website/",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "The Website Specification 是一份平台无关的技术规范清单，定义了每个优秀网站应有的功能特性。",
+          "该规范涵盖基础、SEO、可访问性、安全、性能、隐私等十个核心领域，并链接到 WHATWG、W3C 和 IETF RFC 等官方标准。"
+        ],
+        "article_id": "f9cb2c160bbcd29a"
+      },
+      {
+        "object_type": "project",
+        "name": "specification.website MCP Server",
+        "canonical_name": "specification.website MCP Server",
+        "url": "https://mcp.specification.website/mcp",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "项目提供开放的 MCP 服务器（mcp.specification.website），允许 AI 代理以只读方式查询规范，无需认证。",
+          "MCP 服务器的配置为 transport: http, url: https://mcp.specification.website/mcp。"
+        ],
+        "article_id": "f9cb2c160bbcd29a"
+      },
+      {
+        "object_type": "project",
+        "name": "llms.txt",
+        "canonical_name": "llms.txt",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "规范通过 /llms.txt 提供每页的 Markdown 内容，便于 AI 代理和爬虫读取。",
+          "llms.txt 是项目中 Agent Readiness 领域的一部分，用于让网站对 AI 代理更可读。"
+        ],
+        "article_id": "f9cb2c160bbcd29a"
+      }
     ],
     "impact_score": {
       "score": 4.5,
@@ -1449,6 +2537,77 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "The Website Specification",
+        "canonical_name": "The Website Specification",
+        "url": "https://specification.website/",
+        "positioning": "一份平台无关的网站技术规范清单，覆盖基础、SEO、可访问性、安全、性能、隐私等十个领域，以 WHATWG、W3C 和 IETF 等官方标准为基准。",
+        "technical_signal": "以 WHATWG、W3C、IETF RFC、WCAG 和 MDN 等标准机构官方文档为来源，构建了涵盖十个技术领域共上百条可验证检查项的完整体系。",
+        "adoption_signal": "项目通过开放的 MCP 服务器和 Agent Skill 降低集成门槛，但目前处于发布初期，实际社区采用情况有待进一步观察。",
+        "ecosystem_relevance": "同时对接 Web 标准机构生态和 AI 代理协议（MCP）生态，可作为网站开发标准与 AI 可发现性之间的桥梁。",
+        "target_users": [],
+        "watch_reason": "该项目创新性地将传统 Web 技术标准与 AI 代理可读性（MCP、llms.txt）结合起来，若获得社区采纳可能成为新一代网站开发质量基准，其 MCP 服务器也为标准化 AI-Web 交互提供了参考范例。",
+        "risk_notes": [
+          "作为社区驱动的规范项目缺乏官方权威机构背书，推广依赖开发者自愿采纳。",
+          "覆盖面广但深度有限，可能无法替代 MDN 等既有专业指南的参考地位。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "f9cb2c160bbcd29a"
+        ],
+        "evidence_snippets": [
+          "The Website Specification 是一份平台无关的技术规范清单，定义了每个优秀网站应有的功能特性。",
+          "该规范涵盖基础、SEO、可访问性、安全、性能、隐私等十个核心领域，并链接到 WHATWG、W3C 和 IETF RFC 等官方标准。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "specification.website MCP Server",
+        "canonical_name": "specification.website MCP Server",
+        "url": "https://mcp.specification.website/mcp",
+        "positioning": "The Website Specification 项目附属的开放 MCP 服务器，允许 AI 代理以只读方式查询网站技术规范，无需认证即可通过 HTTP 协议访问。",
+        "technical_signal": "基于 MCP HTTP 传输协议实现，提供无认证只读查询接口，配置只需一行 JSON，可作为 MCP 服务器设计与部署的参考实践。",
+        "adoption_signal": "作为主项目的附属服务，采用情况直接受 The Website Specification 推广进度影响，目前处于早期发布阶段。",
+        "ecosystem_relevance": "与 MCP 协议生态直接相关，是少数提供公开可访问 MCP 服务器的项目之一，可为社区开发者提供实现参考。",
+        "target_users": [],
+        "watch_reason": "作为首批对公众开放且无需认证的 MCP 服务器之一，其架构设计和接口规范对 MCP 生态发展具有参考价值，但独立发展空间与主项目的推广深度绑定。",
+        "risk_notes": [
+          "附属项目特性限制了独立发展空间，生命周期完全依赖主项目的维护持续性。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "f9cb2c160bbcd29a"
+        ],
+        "evidence_snippets": [
+          "项目提供开放的 MCP 服务器（mcp.specification.website），允许 AI 代理以只读方式查询规范，无需认证。",
+          "MCP 服务器的配置为 transport: http, url: https://mcp.specification.website/mcp。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "llms.txt",
+        "canonical_name": "llms.txt",
+        "positioning": "一项让网站对 AI 代理和爬虫更友好的标准化约定，通过在网站提供 Markdown 格式的内容摘要来优化 AI 的信息获取效率。",
+        "technical_signal": "采用简单的文本文件约定，通过 /llms.txt 路径提供网站内容的 Markdown 摘要，无需额外基础设施即可实现。",
+        "adoption_signal": "已被 The Website Specification 纳入 Agent Readiness 标准领域，标志着该方案在网站标准社区中获得初步认可。",
+        "ecosystem_relevance": "作为 AI 代理可发现性领域的关键组件，与 MCP 服务器互补，共同构成网站对 AI 友好的基础设施栈。",
+        "target_users": [],
+        "watch_reason": "llms.txt 作为连接 Web 内容与 AI 代理的轻量级标准，若被广泛采纳将显著提升 AI 代理获取 Web 信息的效率，值得关注其在标准社区中的推广进展。",
+        "risk_notes": [
+          "作为社区提案而非官方标准，长期推广面临与既有站点地图等主流机制的竞争。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "f9cb2c160bbcd29a"
+        ],
+        "evidence_snippets": [
+          "规范通过 /llms.txt 提供每页的 Markdown 内容，便于 AI 代理和爬虫读取。",
+          "llms.txt 是项目中 Agent Readiness 领域的一部分，用于让网站对 AI 代理更可读。"
+        ]
+      }
+    ]
   }
 ]

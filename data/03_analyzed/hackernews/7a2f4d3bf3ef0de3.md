@@ -15,9 +15,12 @@ id: 7a2f4d3bf3ef0de3
 manifest_dates:
 - '2026-07-08'
 source_type: community_discussion
-tldr: Tenda 多款固件存在隐藏后门认证漏洞（CVE-2026-11405），可绕过密码验证获取管理员权限，目前无补丁。
-objective_summary: CERT/CC 披露 Tenda 多款路由器/交换机固件（FH1201、W15E、AC10、AC5、AC6 等）的 /bin/httpd
-  中存在未记录的后门认证机制。login() 函数在 MD5 验证失败后通过 GetValue("sys.rzadmin.
+tldr: Tenda 多款路由器固件（FH1201、W15E、AC10、AC5、AC6）存在隐藏认证后门漏洞，编号 CVE-2026-11405。攻击者可绕过密码验证直接获得
+  Web 管理界面管理员权限，厂商无法联系，目前无可用补丁。
+objective_summary: CERT/CC 披露 Tenda 多款路由器固件中存在隐藏认证后门漏洞（CVE-2026-11405）。该漏洞位于 /bin/httpd
+  的 login() 函数中，在正常 MD5 密码验证失败后会从设备配置中读取 sys.rzadmin.password 字段值进行明文 strcmp() 比较，匹配成功即授予
+  role=2 管理员权限且不验证用户名。受影响固件包括 US_FH1201、US_W15E、US_AC10、US_AC5、US_AC6 等多个型号版本。CERT/CC
+  无法联系厂商进行协调，目前无正式补丁，仅建议用户禁用远程管理并更改默认 LAN IP 作为缓解措施。
 event_type: policy_and_safety
 epistemic_status: verified_fact
 entities:
@@ -28,14 +31,24 @@ entities:
   key_people:
   - Bob Kemerer
 key_logic_flow:
-- Tenda 多款固件版本（FH1201、W15E、AC10、AC5、AC6 等）存在一个未记录的后门认证漏洞，编号为 CVE-2026-11405。
-- 漏洞位于 /bin/httpd 的 login() 函数中：正常 MD5 密码验证失败后，函数调用 GetValue("sys.rzadmin.password")
-  读取设备配置中的备用密码，直接通过 strcmp() 明文比对，匹配则授予 role=2 管理员权限。
-- 该后门不验证用户名，任意用户名配合后门密码均可获得管理员访问权限，且该机制不在任何管理界面中显示。
-- 成功利用后攻击者可获得设备 Web 管理界面的完全管理员权限，可重新配置设备、更改网络设置、禁用安全功能。
-- CERT/CC 无法联系到 Tenda 进行漏洞协调，目前无官方补丁可用。
-- 缓解措施包括禁用远程管理功能和修改默认 LAN IP 地址。
+- Tenda 多款路由器固件中存在未 documented 的认证后门漏洞，编号为 CVE-2026-11405。
+- 该后门位于 /bin/httpd 二进制文件的 login() 函数中，正常 MD5 密码验证失败后会触发隐藏后门逻辑。
+- 后门逻辑通过 GetValue("sys.rzadmin.password") 从设备配置中获取备选密码，并与用户输入进行明文 strcmp() 比较。
+- 只要密码匹配，攻击者无需验证用户名即可获得 role=2 级别的完全管理员访问权限。
+- 受影响固件包括 US_FH1201、US_W15E、US_AC10、US_AC5、US_AC6 共五个型号的特定版本。
+- CERT/CC 无法联系厂商提供补丁，建议用户禁用远程管理功能并更改默认 LAN IP 地址以降低风险。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Tenda Router Firmware (multiple versions)
+  canonical_name: Tenda Router Firmware
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Tenda 多款路由器固件（FH1201、W15E、AC10、AC5、AC6）的 /bin/httpd 文件中存在隐藏认证后门，攻击者可绕过密码验证获得完全管理员权限。
+  - 该后门在正常 MD5 验证失败后读取 sys.rzadmin.password 配置值进行明文对比，匹配后授予 role=2 级别访问权限且不验证用户名。
+  article_id: 7a2f4d3bf3ef0de3
 impact_score:
   score: 5.5
   reason: 该事件是 CERT/CC 公开披露的 Tenda 多款固件隐藏后门漏洞（CVE-2026-11405），属于重大网络安全事件但并非 AI 行业核心事件。从
@@ -90,6 +103,34 @@ confidence:
   compound: medium
   hype: low
 actionable_insight: deep_dive
+object_insights:
+- object_type: product
+  name: Tenda Router Firmware (multiple versions)
+  canonical_name: Tenda Router Firmware
+  url: null
+  positioning: Tenda 多款路由器固件是面向家庭与中小企业的网络设备嵌入式操作系统，为 FH1201、W15E、AC10 等型号提供 Web 管理界面的认证与配置功能。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users:
+  - 家庭网络用户
+  - 中小企业 IT 运维人员
+  - 网络设备管理员
+  product_signal: /bin/httpd 的 login() 函数中存在隐藏后门认证机制，MD5 验证失败后通过 GetValue() 读取配置中的明文密码进行
+    strcmp() 比对，匹配即授予 role=2 管理员权限。
+  market_signal: CERT/CC 公开披露 CVE-2026-11405 漏洞后无法联系厂商协调补丁，五款受影响固件版本均无正式修复方案，仅推荐缓解措施降低风险。
+  differentiation: 该后门认证机制完全未被文档化且不可见，与正常 MD5 密码验证流程并行存在，攻击者无需提供用户名即可完全绕过身份验证。
+  watch_reason: Tenda 路由器固件的隐藏后门漏洞（CVE-2026-11405）暴露了物联网设备供应链安全风险，厂商失联与补丁缺失使大量设备长期处于暴露状态，值得持续跟踪厂商安全回应与行业响应机制演变。
+  risk_notes:
+  - CERT/CC 无法与厂商取得联系，受影响的五款固件版本均无正式补丁可用。
+  - 用户目前仅能通过禁用远程管理和更改默认 LAN IP 等缓解措施降低风险，无法根除漏洞。
+  - 攻击者获得网络访问权限后即可利用后门完全接管设备管理界面，进而渗透整个本地网络。
+  score: 7.0
+  article_ids:
+  - 7a2f4d3bf3ef0de3
+  evidence_snippets:
+  - Tenda 多款路由器固件（FH1201、W15E、AC10、AC5、AC6）的 /bin/httpd 文件中存在隐藏认证后门，攻击者可绕过密码验证获得完全管理员权限。
+  - 该后门在正常 MD5 验证失败后读取 sys.rzadmin.password 配置值进行明文对比，匹配后授予 role=2 级别访问权限且不验证用户名。
 ---
 
 ### Overview
