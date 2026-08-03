@@ -16,9 +16,10 @@ id: dc57ab8dfd78afc1
 manifest_dates:
 - '2026-07-08'
 source_type: community_discussion
-tldr: MIT OCW 发布 1986 年 SICP 视频课程，由 Hal Abelson 和 Gerald Jay Sussman 主讲
-objective_summary: MIT OpenCourseWare 发布了 Hal Abelson 与 Gerald Jay Sussman 于 1986
-  年 7 月为惠普员工录制的《计算机程序的构造与解释》视频讲座，共 20 讲，由惠普电视部门专业制作，采用知识共享许可协议（允许商业使用）。
+tldr: MIT 公开了 1986 年由 Hal Abelson 和 Gerald Jay Sussman 主讲的《计算机程序的构造与解释》20 讲完整视频，由惠普电视台为惠普员工制作，采用知识共享许可协议发布。
+objective_summary: MIT 在 OCW 平台上发布了 Hal Abelson 和 Gerald Jay Sussman 于 1986 年 7 月为惠普员工讲授的
+  6.001 课程完整视频，共 20 讲，由惠普电视台专业制作。视频采用允许商业使用的知识共享许可协议发布，内容基于 1985 年第一版教材，课程主题和讲授顺序与
+  1996 年第二版保持一致，对使用第二版的学生仍具有参考价值。
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
@@ -30,11 +31,38 @@ entities:
   - Hal Abelson
   - Gerald Jay Sussman
 key_logic_flow:
-- MIT OpenCourseWare 发布了 20 讲 SICP 视频课程，由 Hal Abelson 和 Gerald Jay Sussman 主讲
-- 该视频于 1986 年 7 月为惠普员工录制，由惠普电视部门专业制作
-- 视频基于 1985 年第一版《计算机程序的构造与解释》教材，第二版（1996 年）的部分程序已重写但仍可配套使用
-- 视频采用知识共享许可协议发布，允许商业使用
+- Hal Abelson 和 Gerald Jay Sussman 的 20 讲视频完整呈现了 MIT 6.001 课程的全部内容。
+- 该视频于 1986 年 7 月为惠普员工录制，由惠普电视台专业制作。
+- 视频以知识共享许可协议发布，兼容商业用途。
+- 视频内容基于 1985 年第一版《计算机程序的构造与解释》教材，与 1996 年第二版的课程主题和讲授顺序保持一致。
+- MIT OCW 平台提供了这些视频的免费访问渠道。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Structure and Interpretation of Computer Programs Video Lectures (1986)
+  canonical_name: SICP 1986 Video Lectures
+  url: https://ocw.mit.edu/courses/6-001-structure-and-interpretation-of-computer-programs-spring-2005/video_galleries/video-lectures/
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - These twenty video lectures by Hal Abelson and Gerald Jay Sussman are a complete
+    presentation of the course, given in July 1986 for Hewlett-Packard employees,
+    and professionally produced by Hewlett-Packard Television.
+  - These videos are also available here under a Creative Commons license compatible
+    with commercial use.
+  article_id: dc57ab8dfd78afc1
+- object_type: product
+  name: Structure and Interpretation of Computer Programs (first edition, 1985)
+  canonical_name: SICP 1st Edition
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - These lectures follow the first edition (1985) of Structure and Interpretation
+    of Computer Programs.
+  - These video lectures will still be useful for students using the second edition,
+    since the overall themes of the course and order of presentation are unchanged.
+  article_id: dc57ab8dfd78afc1
 impact_score:
   score: 2.0
   reason: SICP 是计算机科学史上最重要的教育经典之一，但此次事件仅为 1986 年旧录像的数字化公开和许可开放，属于档案整理类内容。对于 AI 行业而言，既无新研究成果发布，也无新产品或商业模式创新，短期冲击力极低。影响范围局限于
@@ -80,6 +108,63 @@ confidence:
   compound: medium
   hype: low
 actionable_insight: speculative_watch
+object_insights:
+- object_type: product
+  name: Structure and Interpretation of Computer Programs Video Lectures (1986)
+  canonical_name: SICP 1986 Video Lectures
+  url: https://ocw.mit.edu/courses/6-001-structure-and-interpretation-of-computer-programs-spring-2005/video_galleries/video-lectures/
+  positioning: 1986年由Hal Abelson和Gerald Jay Sussman主讲的MIT 6.001课程20讲完整视频，惠普电视台专业制作，以知识共享许可协议公开发布。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users:
+  - 计算机科学专业学生
+  - 编程自学者
+  - 计算机教育工作者
+  - 对编程语言原理与计算模型感兴趣的开发者
+  product_signal: 20讲视频完整覆盖SICP课程全部教学内容，按照教材章节顺序系统讲授，与1996年第二版的教学主题和讲授顺序保持一致，对使用新版教材的学生仍有参考价值。
+  market_signal: 通过MIT OCW平台向全球免费开放访问，采用允许商业用途的知识共享许可协议，大幅降低了经典计算机科学教育资源的获取门槛。
+  differentiation: 由SICP教材原作者亲自完整授课，具有不可替代的教学权威性；惠普电视台专业制作确保高质量视听呈现，区别于业余录制的教学视频。
+  watch_reason: SICP视频讲座是计算机科学教育史上最具影响力的课程资源之一，原作者完整授课的开放获取版本具有持久的教育价值，值得编程教育领域持续跟踪。
+  risk_notes:
+  - 视频录制于1986年，部分技术内容与当代编程实践存在显著差异，需结合现代教材对照学习。
+  - 视频基于1985年第一版教材，部分程序示例已在1996年第二版中重写或更新。
+  score: 3.0
+  article_ids:
+  - dc57ab8dfd78afc1
+  evidence_snippets:
+  - These twenty video lectures by Hal Abelson and Gerald Jay Sussman are a complete
+    presentation of the course, given in July 1986 for Hewlett-Packard employees,
+    and professionally produced by Hewlett-Packard Television.
+  - These videos are also available here under a Creative Commons license compatible
+    with commercial use.
+- object_type: product
+  name: Structure and Interpretation of Computer Programs (first edition, 1985)
+  canonical_name: SICP 1st Edition
+  url: null
+  positioning: 1985年出版的《计算机程序的构造与解释》第一版，由Hal Abelson和Gerald Jay Sussman编写，是MIT 6.001课程的经典教材。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users:
+  - 计算机科学教育工作者
+  - 编程教育研究者
+  - 计算机教育史学者
+  product_signal: 该教材为SICP视频讲座提供了完整的教学框架和章节体系，1986年20讲视频完全基于本书的程序示例和课程结构进行讲授。
+  market_signal: 作为计算机科学教育史上最经典的教材之一，被全球众多高校长期采用，其影响力跨越数十年，至今仍被广泛讨论和推荐。
+  differentiation: 相比1996年第二版，第一版保存了最原始的课程设计和程序示例，是理解SICP教学理念演变和计算机教育发展历史的重要文献。
+  watch_reason: 作为SICP视频讲座所依据的原始教材版本，对研究经典计算机教育资源的源起与演变具有不可替代的文献价值，适合教育史视角的持续跟踪。
+  risk_notes:
+  - 教材出版于1985年，距今超过40年，部分技术内容与当代编程环境存在明显差距。
+  - 第一版部分程序示例已在第二版中重写，单独参考时需注意版本差异带来的认知偏差。
+  score: 2.0
+  article_ids:
+  - dc57ab8dfd78afc1
+  evidence_snippets:
+  - These lectures follow the first edition (1985) of Structure and Interpretation
+    of Computer Programs.
+  - These video lectures will still be useful for students using the second edition,
+    since the overall themes of the course and order of presentation are unchanged.
 ---
 
 These twenty video lectures by Hal Abelson and Gerald Jay Sussman are a complete presentation of the course, given in July 1986 for Hewlett-Packard employees, and professionally produced by Hewlett-Packard Television. These videos are also available here under a Creative Commons license compatible with commercial use.

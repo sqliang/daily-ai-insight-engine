@@ -7,6 +7,7 @@ published: '2026-07-21'
 created: '2026-07-21'
 manifest_dates:
 - '2026-07-21'
+- '2026-07-22'
 description: 'Title: ProtoFlow: AI-powered schematic design tool for PCB making |
   Product Hunt'
 tags:

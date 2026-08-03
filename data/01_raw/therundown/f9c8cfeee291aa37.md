@@ -7,6 +7,8 @@ published: '2026-07-21'
 created: '2026-07-21'
 manifest_dates:
 - '2026-07-21'
+- '2026-07-22'
+- '2026-07-23'
 description: 'PLUS: Make AI note-taking easier with a “Captain’s Log” setup'
 tags:
 - clippings

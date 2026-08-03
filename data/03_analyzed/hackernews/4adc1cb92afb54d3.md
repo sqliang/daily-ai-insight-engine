@@ -15,8 +15,8 @@ id: 4adc1cb92afb54d3
 manifest_dates:
 - '2026-07-02'
 source_type: community_discussion
-tldr: 可搜索目录，收录22,000多款员工所有制合作社产品。
-objective_summary: WorkerOwned.info 推出一个可搜索的在线目录，收录了22,000多款来自员工所有制合作社的产品。该网站仅提供指向各公司网站的跳转链接，不直接销售商品或赚取佣金。
+tldr: workerowned.info 是一个可搜索的目录网站，收录了超过 22,000 种来自员工所有制合作社的产品，网站本身不销售商品也不赚取佣金。
+objective_summary: 该网站（workerowned.info）构建了一个可搜索的在线目录，聚合了来自全球员工所有制合作社的 22,000 多种产品。用户可以通过该平台浏览和搜索商品，所有搜索结果直接链接到合作社的公司官网，网站本身不进行任何销售活动，也不从中赚取佣金。
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
@@ -24,10 +24,22 @@ entities:
   technologies: []
   key_people: []
 key_logic_flow:
-- WorkerOwned.info 推出了一个可搜索在线目录，收录了22,000多款来自员工所有制合作社的产品。
-- 该网站仅提供指向各合作社公司官网的跳转链接，不直接销售任何商品也不赚取佣金。
-- 用户可以通过该平台搜索和浏览来自全球员工所有制企业的各类商品。
+- workerowned.info 上线了一个可搜索的目录网站，聚合了超过 22,000 种来自员工所有制合作社的产品。
+- 用户通过该平台搜索到的结果直接跳转至各合作社的公司官网，网站本身不参与销售也不赚取佣金。
+- 该目录旨在帮助消费者更方便地找到和购买员工所有制企业提供的商品和服务。
 extract_result: success
+object_mentions:
+- object_type: project
+  name: workerowned.info
+  canonical_name: workerowned.info
+  url: https://www.workerowned.info/
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - workerowned.info 是一个可搜索的目录网站，收录了超过 22,000 种来自员工所有制合作社的产品。
+  - 该网站明确说明搜索结果链接到公司官网，自己不销售任何商品也不赚取佣金。
+  - 网站以「Shop worker owned businesses online」为口号，引导用户在线购买员工所有制企业的商品。
+  article_id: 4adc1cb92afb54d3
 impact_score:
   score: 1.2
   reason: 该事件是一个面向员工所有制合作社产品的可搜索目录网站上线，属于 Show HN 社区项目发布。与 AI 行业无任何直接关联，不涉及技术突破、融资动态或产品发布，对
@@ -67,6 +79,31 @@ confidence:
   compound: low
   hype: low
 actionable_insight: speculative_watch
+object_insights:
+- object_type: project
+  name: workerowned.info
+  canonical_name: workerowned.info
+  url: https://www.workerowned.info/
+  positioning: 一个聚合了超过 22,000 种员工所有制合作社产品的可搜索在线目录平台，为消费者提供发现和购买合作社商品的统一入口。
+  technical_signal: null
+  adoption_signal: 已收录超过 22,000 种来自全球员工所有制合作社的产品，表明供给侧已有一定规模的入驻和产品上架。
+  ecosystem_relevance: 通过索引分散的合作社产品信息，构建了员工所有制经济的消费发现层，有助于降低消费者接触合作社商品的认知门槛。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: workerowned.info 以零佣金、纯目录的方式聚合了 22,000+ 员工所有制企业产品，开创了合作社经济的消费发现入口。如果该模式能持续扩大用户规模和产品覆盖面，可能改变消费者对合作社产品的可及性认知，值得持续关注其增长态势与生态扩张。
+  risk_notes:
+  - 网站不参与交易也不收取佣金，长期运营的资金来源和商业模式可持续性尚未明确。
+  - 产品信息依赖合作社自主提供或公开采集，信息完整性和时效性可能存在滞后。
+  - 目录模式缺乏交易闭环，用户跳转至第三方官网后难以追踪，平台粘性与数据积累有限。
+  score: 2.0
+  article_ids:
+  - 4adc1cb92afb54d3
+  evidence_snippets:
+  - workerowned.info 是一个可搜索的在线目录平台，目前已收录超过 22,000 种来自全球员工所有制合作社的各类产品。
+  - 该网站明确说明所有搜索结果均链接至各合作社的公司官网，平台自身不销售任何商品也不从中赚取任何佣金。
+  - 网站以「Shop worker owned businesses online」为核心口号，旨在引导消费者在线购买员工所有制企业提供的丰富商品和各类服务。
 ---
 
 Shop worker owned businesses online

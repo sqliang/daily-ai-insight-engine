@@ -70,6 +70,12 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: 5fce3c914fe93bcc
+manifest_dates:
+- '2026-06-20'
+- '2026-07-22'
+- '2026-07-23'
+- '2026-07-24'
+- '2026-07-25'
 ---
 
 **Real-time global intelligence dashboard** — AI-powered news aggregation, geopolitical monitoring, and infrastructure tracking in a unified situational awareness interface.

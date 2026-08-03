@@ -1,82 +1,6 @@
 [
   {
     "source_dir": "hackernews",
-    "title": "10Gb/s Ethernet: switching to a Broadcom SFP+ module",
-    "source": "https://www.gilesthomas.com/2026/06/10g-ethernet-switching-to-broadcom-sfp-plus",
-    "author": [
-      "[[gpjt]]"
-    ],
-    "published": "2026-06-16",
-    "created": "2026-06-17",
-    "description": "Article URL: https://www.gilesthomas.com/2026/06/10g-ethernet-switching-to-broadcom-sfp-plus Comments URL: https://news.ycombinator.com/item?id=48559083 Points: 144 # Comments: 132",
-    "tags": [
-      "clippings"
-    ],
-    "extraction_status": "success",
-    "pipeline_stage": "fact_extracted",
-    "id": "adf3496bde004423",
-    "source_type": "community_discussion",
-    "tldr": "作者将家中过热的 MikroTik S+RJ10 SFP+ 模块（Marvell 芯片）更换为 10Gtek ASF-10G-T80-INT（Broadcom BCM84891 芯片），解决了因高温导致的网络 flapping 问题，交换机 CPU 温度下降约 5°C。",
-    "objective_summary": "2026 年 4 月，作者将家庭局域网升级至 10Gb/s，使用 CAT-6 线缆和 10GBASE-T SFP+ 模块连接。路由器中的 MikroTik S+RJ10 模块（Marvell 芯片）在夏季升温后因过热（约 95°C）触发保护，导致网络反复断开与重连。根据 Hacker News 和 ServeTheHome 论坛的建议，作者于 6 月 1 日购买了采用 Broadcom BCM84891 PHY 芯片的 10Gtek ASF-10G-T80-INT 模块进行替换。更换后网络连接恢复稳定，虽无法通过 SNMP 监控新模块温度，但交换机 CPU 温度下降了约 5°C。",
-    "event_type": "infrastructure_update",
-    "epistemic_status": "verified_fact",
-    "entities": {
-      "companies": [
-        "Broadcom",
-        "Marvell Technology",
-        "MikroTik",
-        "Intel Corporation",
-        "10Gtek"
-      ],
-      "technologies": [
-        "10GBASE-T",
-        "SFP+",
-        "SNMP",
-        "InfluxDB",
-        "Grafana",
-        "Telegraf",
-        "CAT-6"
-      ],
-      "key_people": []
-    },
-    "key_logic_flow": [
-      "2026 年 4 月作者将家庭网络升级至 10Gb/s，使用 CAT-6 线缆和 10GBASE-T SFP+ 模块进行连接。",
-      "MikroTik S+RJ10 模块（Marvell 芯片）运行温度达 93°C，夏季气温升高后因过热保护反复自动关闭与重启。",
-      "Hacker News 和 ServeTheHome 论坛用户指出旧一代 Marvell 芯片模块发热严重，推荐使用 Broadcom 芯片的新一代模块。",
-      "作者从 Amazon 购买 10Gtek ASF-10G-T80-INT 模块替换 MikroTik，该模块采用 Broadcom BCM84891 PHY 芯片，功耗仅 1.6W 至 2.0W。",
-      "新模块被交换机识别为 Intel 光纤模块（EEPROM 信息不准确），因此无法通过原有 SNMP OID 读取温度数据。",
-      "更换后两周网络连接稳定无 flapping，交换机 CPU 温度下降约 5°C，成功解决过热问题。"
-    ],
-    "extract_result": "success",
-    "object_mentions": [
-      {
-        "object_type": "product",
-        "name": "MikroTik S+RJ10",
-        "canonical_name": "MikroTik S+RJ10",
-        "confidence": "high",
-        "article_role": "mentioned_reference",
-        "evidence_snippets": [
-          "作者确认 MikroTik S+RJ10 模块使用 Marvell 芯片，属于发热严重的旧一代 10GBASE-T SFP+ 模块。",
-          "该模块运行温度约 93°C，夏季升温后触发过热保护，导致网络反复断开与重连。"
-        ],
-        "article_id": "adf3496bde004423"
-      },
-      {
-        "object_type": "product",
-        "name": "10Gtek ASF-10G-T80-INT",
-        "canonical_name": "10Gtek ASF-10G-T80-INT",
-        "confidence": "high",
-        "article_role": "primary_subject",
-        "evidence_snippets": [
-          "10Gtek ASF-10G-T80 采用 Broadcom BCM84891 PHY 芯片，功耗仅 1.6W 至 2.0W，支持最长 80 米传输距离。",
-          "更换后两周内网络连接保持稳定，不再因过热而 flapping，交换机 CPU 温度下降约 5°C。"
-        ],
-        "article_id": "adf3496bde004423"
-      }
-    ]
-  },
-  {
-    "source_dir": "hackernews",
     "title": "Stop Using JWTs",
     "source": "https://gist.github.com/samsch/0d1f3d3b4745d778f78b230cf6061452",
     "author": [
@@ -92,8 +16,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "0727ad72558ccd5e",
     "source_type": "community_discussion",
-    "tldr": "JWT不适合用于用户会话管理，应改用常规Cookie会话",
-    "objective_summary": "作者论证JWT规范仅设计用于5分钟以内的短期令牌，无状态认证在安全上不可行，必须依赖数据存储。指出JWT规范本身不被安全专家信任、存在允许伪造令牌的漏洞，建议使用框架内置的Cookie会话机制，短期签名令牌场景改用PASETO。",
+    "tldr": "JWT 不适合用于用户登录会话管理，其规范仅适用于短生命周期令牌（约5分钟以内）。文章推荐使用常规的 Cookie 会话机制替代 JWT，并指出 PASETO 是更安全的短生命周期令牌规范。",
+    "objective_summary": "一篇技术博客论证了 JWT 不应被用于用户登录会话管理的原因：JWT 规范仅设计用于极短生命周期令牌；无状态认证无法安全实现，必须有数据存储来安全管理令牌；JWT 规范本身不被安全专家信任；仅存储简单会话令牌的 JWT 比常规会话 Cookie 更低效。文章推荐使用框架内置的 Cookie 会话机制，并建议在需要短生命周期签名令牌时使用 PASETO 规范。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
@@ -103,9 +27,6 @@
       "technologies": [
         "JWT",
         "PASETO",
-        "Cookie Sessions",
-        "localStorage",
-        "sessionStorage",
         "express-session",
         "connect-session-knex"
       ],
@@ -114,12 +35,48 @@
       ]
     },
     "key_logic_flow": [
-      "JWT规范设计仅用于极短生命周期的令牌（约5分钟以内），不适用于需要更长生命周期的用户会话管理。",
-      "安全实现无状态认证在现实中不可行，必须依赖数据存储来处理令牌，既然需要数据存储，不如直接存储完整会话数据。",
-      "JWT规范本身不被安全专家信任，原规范存在允许伪造令牌的安全漏洞，且可能包含其他设计缺陷。",
-      "仅存储简单会话令牌的JWT比常规Cookie会话更低效且缺乏灵活性，未带来任何实际优势。",
-      "Google等大型公司使用JWT仅用于单点登录（SSO）场景作为令牌传输载体，而非在浏览器中用于用户会话。",
-      "如需短期签名令牌，建议使用专门设计为安全的PASETO规范替代JWT。"
+      "JWT 规范设计用途仅为短生命周期令牌（约5分钟以内），不适合需要更长生命周期的会话管理。",
+      "无状态认证在安全层面上不可行，必须依赖数据存储来安全管理令牌。",
+      "仅存储简单会话令牌的 JWT 比常规会话 Cookie 更低效且缺乏灵活性。",
+      "JWT 规范不被安全专家信任，原始规范曾存在允许生成伪造令牌的漏洞。",
+      "Google 虽然使用 JWT，但仅限于单点登录传输场景，浏览器端用户会话仍使用常规 Cookie。",
+      "对于需要短生命周期签名令牌的场景，推荐使用更安全的 PASETO 规范替代 JWT。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "PASETO",
+        "canonical_name": "PASETO",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "文章指出 PASETO 是比 JWT 更安全的设计规范，适用于短生命周期的签名令牌场景，但强调不应将其用于会话管理。"
+        ],
+        "article_id": "0727ad72558ccd5e"
+      },
+      {
+        "object_type": "project",
+        "name": "express-session",
+        "canonical_name": "express-session",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "文章推荐在 Express 框架中使用 express-session 中间件配合数据库存储连接器来实现会话管理。"
+        ],
+        "article_id": "0727ad72558ccd5e"
+      },
+      {
+        "object_type": "project",
+        "name": "connect-session-knex",
+        "canonical_name": "connect-session-knex",
+        "confidence": "low",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "文章推荐 connect-session-knex 作为 Express 的会话存储连接器，可与 Postgres、MySQL 或 SQLite 配合使用。"
+        ],
+        "article_id": "0727ad72558ccd5e"
+      }
     ],
     "impact_score": {
       "score": 2.5,
@@ -174,7 +131,51 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "PASETO",
+        "canonical_name": "PASETO",
+        "positioning": "专为短生命周期签名令牌设计的安全规范，作为 JWT 的安全替代方案出现，强调从规范层面消除常见加密实现错误。",
+        "technical_signal": "采用更安全的加密原语和设计约束，避免了 JWT 规范中允许生成伪造令牌的已知漏洞，在安全设计上更为严谨。",
+        "ecosystem_relevance": "在 Web 安全令牌生态中定位为 JWT 的现代替代方案，填补了对安全设计有更高要求但不愿依赖复杂基础设施的场景空白。",
+        "target_users": [],
+        "watch_reason": "作为 JWT 的直接安全替代方案，其设计理念和社区发展值得持续跟踪，尤其在认证令牌规范演进方向上具有重要的参考价值。",
+        "risk_notes": [
+          "社区采用率远低于 JWT，生态配套（库、文档、最佳实践）尚不成熟。",
+          "文章明确警告不应将 PASETO 用于会话管理，否则可能重蹈 JWT 的安全覆辙。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "0727ad72558ccd5e"
+        ],
+        "evidence_snippets": [
+          "文章指出 PASETO 是比 JWT 更安全的设计规范，适用于短生命周期的签名令牌场景，但强调不应将其用于会话管理。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "express-session",
+        "canonical_name": "express-session",
+        "positioning": "Express.js 框架的标准会话管理中间件，通过服务器端数据库存储和 Cookie 机制实现有状态的用户会话跟踪。",
+        "technical_signal": "基于可插拔的数据库存储连接器架构将会话数据持久化到后端，避免了无状态 JWT 令牌的安全隐患和效率问题。",
+        "ecosystem_relevance": "作为 Express 生态中的核心会话管理方案，拥有丰富的存储连接器生态，可对接 Postgres、MySQL、SQLite 等主流数据库。",
+        "target_users": [],
+        "watch_reason": "文章力荐作为 JWT 的替代方案用于 Web 会话管理，代表了有状态认证的最佳实践方向，对于 Node.js Web 开发的技术选型具有参考意义。",
+        "risk_notes": [
+          "分布式环境下会话同步可能引入扩展性挑战和运维复杂度。",
+          "数据库查询延迟在高并发场景下可能成为性能瓶颈。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "0727ad72558ccd5e"
+        ],
+        "evidence_snippets": [
+          "文章推荐在 Express 框架中使用 express-session 中间件配合数据库存储连接器来实现会话管理。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -193,27 +194,44 @@
     "pipeline_stage": "fact_extracted",
     "id": "15747e96e4a82b14",
     "source_type": "community_discussion",
-    "tldr": "GrapheneOS 已完成 Android 17 移植，即将发布首个正式版",
-    "objective_summary": "GrapheneOS 团队在 Android 17 正式发布当日宣布已完成全面移植，代码正在推送到公开仓库。当天构建基于 Android 16 QPR2 的最终版本，次日发布首个 Android 17 初始版本。移植已在 Pixel 6a、7、7a、8、10a、10 和 10 Pro Fold",
-    "event_type": "infrastructure_update",
+    "tldr": "GrapheneOS 已完成对 Android 17 的移植，代码正在推送到公开仓库，最终 Android 16 QPR2 版本于今天发布，首个 Android 17 正式版本将于明天发布。已测试 Pixel 6a、7、7a、8、10a、10 和 10 Pro Fold 等设备。",
+    "objective_summary": "2026年7月21日，Android 17 正式发布当天，GrapheneOS 团队宣布已完成对 Android 17 的完整移植。团队正在将代码推送到公开仓库，今天将发布基于 Android 16 QPR2 的最终版本，明天将推出首个 Android 17 正式版本。该移植已在 Pixel 6a、7、7a、8、10a、10 和 10 Pro Fold 上完成构建和测试，明天将开始面向所有支持设备的公开测试流程。",
+    "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
         "GrapheneOS"
       ],
       "technologies": [
-        "GrapheneOS",
         "Android 17",
-        "Android 16"
+        "Android 16 QPR2"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "Android 17 正式发布当天，GrapheneOS 团队宣布已完成对该版本的全面移植。",
-      "团队正在将移植代码推送至公开仓库，用户当天晚些时候即可自行构建和测试。",
-      "团队当天先构建基于 Android 16 QPR2 的最终官方版本，次日发布首个 Android 17 版本。",
-      "移植已在 Pixel 6a、7、7a、8、10a、10 和 10 Pro Fold 共 7 款设备上通过测试。",
-      "次日将启动官方版本的公开测试流程。"
+      "Android 17 于今天（2026年7月21日）正式发布。",
+      "GrapheneOS 已完成对 Android 17 的完整移植，正在将代码推送到公开仓库。",
+      "团队今天将发布基于 Android 16 QPR2 的最终 GrapheneOS 版本。",
+      "首个基于 Android 17 的 GrapheneOS 正式版本将于明天发布。",
+      "该移植已在 Pixel 6a、7、7a、8、10a、10 和 10 Pro Fold 上完成构建和测试。",
+      "明天将开始面向所有支持设备的公开测试流程。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "GrapheneOS",
+        "canonical_name": "GrapheneOS",
+        "url": "https://grapheneos.org/",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "GrapheneOS 已完成对 Android 17 的完整移植，团队正在将代码推送到公开仓库。",
+          "今天将发布基于 Android 16 QPR2 的最终版本，明天将推出首个 Android 17 正式版本。",
+          "该移植已在 Pixel 6a、7、7a、8、10a、10 和 10 Pro Fold 上完成构建和测试。"
+        ],
+        "article_id": "15747e96e4a82b14"
+      }
     ],
     "impact_score": {
       "score": 3.0,
@@ -267,7 +285,35 @@
       "compound": "medium",
       "hype": "medium"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "GrapheneOS",
+        "canonical_name": "GrapheneOS",
+        "url": "https://grapheneos.org/",
+        "positioning": "GrapheneOS 是一个基于 AOSP 的安全强化移动操作系统发行版，通过硬件安全利用、加固内存管理和最小权限设计实现隐私保护。",
+        "technical_signal": "GrapheneOS 在 Android 17 正式发布当天即完成完整移植，展现了对新 Android 版本的极速适配能力和成熟的技术工程体系。",
+        "adoption_signal": "移植已覆盖 Pixel 6a、7、7a、8、10a、10 和 10 Pro Fold 等多款设备，并将面向全系支持设备开放公测，用户基础持续扩大。",
+        "ecosystem_relevance": "作为 Android 生态中最重要的安全增强发行版，GrapheneOS 与 Android 17 的同步适配维护了隐私安全细分生态的完整性与领先性。",
+        "target_users": [],
+        "watch_reason": "GrapheneOS 在 Android 大版本发布当天即完成移植，体现极强的技术响应能力。作为隐私安全领域的标杆项目，其 Android 17 版本的稳定性与功能完整性将直接影响移动安全社区的发展方向，公开测试反馈与正式版本表现值得持续跟踪。",
+        "risk_notes": [
+          "Android 17 新引入的安全模型变化可能与 GrapheneOS 的加固策略产生兼容性问题。",
+          "公开测试阶段可能暴露出部分 Pixel 设备的驱动或底层硬件兼容问题，影响正式版本发布节奏。",
+          "长期维护全系支持设备的最新版本需要持续投入，社区贡献的稳定性仍是潜在风险点。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "15747e96e4a82b14"
+        ],
+        "evidence_snippets": [
+          "GrapheneOS 已完成对 Android 17 的完整移植，团队正在将代码推送到公开仓库。",
+          "今天将发布基于 Android 16 QPR2 的最终版本，明天将推出首个 Android 17 正式版本。",
+          "该移植已在 Pixel 6a、7、7a、8、10a、10 和 10 Pro Fold 上完成构建和测试。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -286,16 +332,17 @@
     "pipeline_stage": "fact_extracted",
     "id": "1b09fc5b242147dd",
     "source_type": "community_discussion",
-    "tldr": "TNO联合SURF和NFI打造荷兰主权语言模型GPT-NL，获1350万欧元公共资金。",
-    "objective_summary": "TNO与SURF、荷兰法医研究所（NFI）共同构建独立荷兰语大语言模型GPT-NL，项目由荷兰企业局（RVO）代表经济与气候政策部资助1350万欧元。模型从零训练，注重主权、透明、可信和互惠四大价值观，源代码开源，模型权重受控许可发布。",
+    "tldr": "TNO联合SURF和荷兰法医研究所（NFI）正在开发荷兰主权语言模型GPT-NL，该项目从头训练荷兰语基础模型，代码开源发布，权重以受控许可提供，已获得荷兰经济事务部1350万欧元公共资金支持。",
+    "objective_summary": "TNO与SURF、荷兰法医研究所（NFI）合作开发GPT-NL，这是从零开始训练的荷兰语基础模型，旨在增强荷兰与欧洲的数字自主权。模型代码以开源方式发布，权重在受控许可下提供，数据收集严格遵循知识产权保护、个人数据匿名化和排除有害内容等标准。项目设立Content Board让数据提供方和权利人参与治理，并将部分收入回馈创作者。项目由荷兰企业局（RVO）代表经济事务部拨款1350万欧元公共资金。",
     "event_type": "infrastructure_update",
-    "epistemic_status": "verified_fact",
+    "epistemic_status": "pr_statement",
     "entities": {
       "companies": [
         "TNO",
         "SURF",
         "Netherlands Forensic Institute (NFI)",
-        "Netherlands Enterprise Agency (RVO)"
+        "Netherlands Enterprise Agency (RVO)",
+        "Ministry of Economic Affairs and Climate Policy"
       ],
       "technologies": [
         "GPT-NL"
@@ -306,11 +353,28 @@
       ]
     },
     "key_logic_flow": [
-      "TNO联合SURF和荷兰法医研究所（NFI）启动GPT-NL项目，构建独立的荷兰语大语言模型及生态系统，旨在增强荷兰和欧洲的数字自主性。",
-      "GPT-NL从零开始训练，避免继承现有模型中的数据溯源不清、版权风险或潜在个人数据问题，数据采集严格遵循知识产权保护、个人数据匿名化、排除保密和有害内容等标准。",
-      "模型源代码以开源形式发布，模型权重在受控许可下提供，数据集的详细洞察公开共享，同时不牺牲安全性和合规性。",
-      "项目设立内容委员会（Content Board），让数据提供者和权利持有人参与模型未来发展，部分收入回流给内容创作者。",
-      "项目由荷兰企业局（RVO）代表经济与气候政策部资助，公共资金总额为1350万欧元。"
+      "TNO联合SURF和荷兰法医研究所（NFI）共同开发主权语言模型GPT-NL，旨在增强荷兰和欧洲的数字自主权，减少对非欧洲供应商的依赖。",
+      "GPT-NL从头开始训练，避免继承现有模型可能存在的数据溯源不清、版权风险或个人数据问题。",
+      "模型代码以开源方式发布，模型权重在受控许可下提供，数据收集严格遵循知识产权保护、个人数据匿名化、排除有害内容和去重等标准。",
+      "项目设立Content Board，让数据提供方和权利人参与模型治理，并将部分收入回馈给内容创作者。",
+      "项目由荷兰企业局（RVO）代表经济事务部拨款1350万欧元公共资金支持，明确为公共资助并向公众负责。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "GPT-NL",
+        "canonical_name": "GPT-NL",
+        "url": "https://www.tno.nl/en/digital/artificial-intelligence/gpt-nl/",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "TNO与SURF和荷兰法医研究所（NFI）联合开发独立荷兰语言模型GPT-NL，旨在增强荷兰和欧洲的数字自主权。",
+          "GPT-NL从头开始训练，数据收集严格遵循知识产权保护、个人数据匿名化和排除有害内容等标准，模型代码以开源方式发布。",
+          "项目获得荷兰企业局代表经济事务部拨付的1350万欧元公共资金，并设立Content Board让数据提供方和权利人参与治理。"
+        ],
+        "article_id": "1b09fc5b242147dd"
+      }
     ],
     "impact_score": {
       "score": 5.0,
@@ -366,7 +430,35 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "GPT-NL",
+        "canonical_name": "GPT-NL",
+        "url": "https://www.tno.nl/en/digital/artificial-intelligence/gpt-nl/",
+        "positioning": "GPT-NL是由TNO联合SURF和荷兰法医研究所开发的荷兰语主权语言模型，从零训练、代码开源、权重受控许可，旨在增强荷兰与欧洲的数字自主权。",
+        "technical_signal": "项目从零开始训练荷兰语基础模型，避免继承现有模型可能存在的数据溯源不清和版权风险，模型代码以开源方式发布。",
+        "adoption_signal": "项目获得荷兰企业局代表经济事务部拨付1350万欧元公共资金，体现荷兰政府对主权AI基础设施的战略投入。",
+        "ecosystem_relevance": "项目设立Content Board让数据提供方和权利人参与模型治理，并将部分收入回馈内容创作者，构建公平可持续的数据创新生态。",
+        "target_users": [],
+        "watch_reason": "GPT-NL代表欧洲主权AI的重要探索，其从零训练、开源代码加受控权重的技术路线，以及Content Board治理机制和收入回馈设计，为小语种国家发展自主语言模型提供了可参考范本，值得持续跟踪模型训练进展、性能表现与生态建设成效。",
+        "risk_notes": [
+          "项目1350万欧元资金远低于硅谷大模型投入规模，模型综合能力可能面临明显天花板。",
+          "荷兰语作为小语种，高质量训练数据的规模和多样性有限，可能制约模型最终表现。",
+          "受控权重许可策略可能限制开源社区的广泛采用和外部生态建设。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "1b09fc5b242147dd"
+        ],
+        "evidence_snippets": [
+          "TNO与SURF和荷兰法医研究所（NFI）联合开发独立荷兰语言模型GPT-NL，旨在增强荷兰和欧洲的数字自主权。",
+          "GPT-NL从头开始训练，数据收集严格遵循知识产权保护、个人数据匿名化和排除有害内容等标准，模型代码以开源方式发布。",
+          "项目获得荷兰企业局代表经济事务部拨付的1350万欧元公共资金，并设立Content Board让数据提供方和权利人参与治理。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -385,43 +477,174 @@
     "pipeline_stage": "fact_extracted",
     "id": "1b694af1787f05cf",
     "source_type": "community_discussion",
-    "tldr": "本文介绍了\"剃牦牛毛\"这一概念——为完成目标而陷入连锁子任务，并以Donald Knuth创建TeX为例说明其乐趣与风险。",
-    "objective_summary": "作者以自建静态网站生成器的经历引入\"剃牦牛毛\"概念。该术语由MIT AI Lab博士生Carlin Vieri从动画片《Ren & Stimpy》中借用，指为目标做一连串子任务直至偏离初衷。文章引用Seth Godin和Frederick Brooks的例子，并以Donald",
+    "tldr": "本文探讨软件工程中的\"剃牦牛毛\"现象——为达成一个目标而不断衍生子任务，最终偏离原点。文章追溯该术语源自MIT AI Lab博士生Carlin Vieri受动画片启发后的创造，分析其利弊：商业项目应避免这种倾向，但对个人学习而言，深挖知识链路本身具有极高价值。",
+    "objective_summary": "软件工程师Parksb于2019年发表博客文章，讨论\"yak shaving\"（剃牦牛毛）现象——为达成一个目标而陷入一连串衍生子任务，最终远远偏离初衷。文章追溯该术语的起源：MIT AI Lab博士生Carlin Vieri在观看动画片《The Ren & Stimpy Show》中的\"Yak Shaving Day\"情节后，在实验室中开始使用这个说法并使其传播开来。文章以Donald Knuth为编写《计算机程序设计艺术》而创建TeX排版系统、WEB编程语言、METAFONT字体系统和Computer Modern字体的极端成功案例说明\"剃牦牛毛\"可能产生重大成果，但也指出大多数情况下这种行为会导致项目失败。作者认为尽管在商业项目中应避免剃牦牛毛，但对个人学习而言，深挖知识链路的过程本身极具价值。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [
         "MIT AI Lab",
-        "Stanford University"
+        "Stanford University",
+        "Home Depot"
       ],
       "technologies": [
         "TeX",
         "LaTeX",
         "WEB",
         "METAFONT",
+        "Computer Modern",
+        "DVI",
         "SAIL",
         "Pascal",
-        "DVI",
-        "Computer Modern"
+        "Jekyll",
+        "Hugo",
+        "Gatsby"
       ],
       "key_people": [
         "Carlin Vieri",
+        "Donald Knuth",
         "Seth Godin",
         "Frederick P. Brooks Jr.",
-        "Donald Knuth",
         "Michael Plass",
+        "Patrick Winston",
         "Noam Nisan",
-        "Shimon Schocken",
-        "Patrick Winston"
+        "Shimon Schocken"
       ]
     },
     "key_logic_flow": [
-      "作者因不满Jekyll、Hugo等现有静态网站生成器的定制自由度，选择从零自建，最终造出了一个自己的静态网站生成器。",
-      "剃牦牛毛概念源于Carlin Vieri在MIT AI Lab期间，他从动画片《Ren & Stimpy》的Yak Shaving Day剧集中借用该词，用来描述为完成一个目标而陷入一连串不相关的子任务。",
-      "工程团队常犯的错误是\"从零构建\"——因不满足现成方案或想证明自身能力而陷入剃牦牛毛，最终在有限时间和预算下偏离原始目标。",
-      "Donald Knuth为撰写《计算机程序设计艺术》第二版，因不满现有排版方案而自建TeX系统，又为此创造了WEB编程语言、Computer Modern字体、METAFONT矢量图形语言和DVI格式，耗时近十年。",
-      "Frederick Brooks在《人月神话》中总结了编程的乐趣：创造事物的纯粹喜悦、制造对他人有用的东西、搭建复杂系统的 fascination、持续学习的乐趣、使用灵活媒介的愉悦。",
-      "虽然大多数剃牦牛毛以失败告终，但对学习者而言它极为有效——如Noam Nisan和Shimon Schocken的《计算系统要素》所示，剃牦牛毛式学习让人从布尔逻辑一路学到操作系统。"
+      "Yak shaving（剃牦牛毛）指为实现一个目标而做一连串相关任务，最终完全偏离原有目的的行为。",
+      "该术语由MIT AI Lab博士生Carlin Vieri提出，灵感来自动画片《The Ren & Stimpy Show》中的Yak Shaving Day情节。",
+      "Donald Knuth为编写《计算机程序设计艺术》第二版，从零创建了TeX排版系统，并衍生出WEB编程语言、literate programming范式、Knuth-Plass换行算法、Computer Modern字体、METAFONT矢量图形语言和DVI设备无关格式，耗时近十年。",
+      "商业项目有有限预算和时间，剃牦牛毛容易导致放弃原始目标，正确做法是找到满足核心需求的替代方案并尽量削减工作量。",
+      "对于个人学习者而言，剃牦牛毛效果显著——深挖任务周边的知识总能让学习者有所收获，即使最终没有到达终点。",
+      "Frederick P. Brooks Jr.在《人月神话》中总结了编程的乐趣：创造事物的纯粹喜悦、做出对他人有用的东西、打造复杂精巧的拼图式系统、持续学习和使用灵活的表达媒介。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "TeX",
+        "canonical_name": "TeX",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "TeX是斯坦福大学教授Donald Knuth创建的排版系统，涵盖排版语言和处理该语言的编译器。",
+          "Knuth在1976年为准备《计算机程序设计艺术》第二版时不满现有数字排版方案，受Patrick Winston新书启发后决定自建数字排版系统并勾勒出TeX的基本功能。",
+          "Knuth先用SAIL语言构建了第一版TeX，随后在他自己创建的WEB编程语言中开发并完成了TeX。"
+        ],
+        "article_id": "1b694af1787f05cf"
+      },
+      {
+        "object_type": "project",
+        "name": "WEB",
+        "canonical_name": "WEB",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "WEB是Knuth为开发TeX而自创的编程语言，将文档和代码混合在一起，可通过Weave和Tangle两个程序分别提取为TeX文件和Pascal文件。",
+          "Knuth将WEB中的编程范式称为literate programming（文学编程）。"
+        ],
+        "article_id": "1b694af1787f05cf"
+      },
+      {
+        "object_type": "project",
+        "name": "METAFONT",
+        "canonical_name": "METAFONT",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "METAFONT是Knuth为TeX设计的用于定义矢量图形的语言，用于生成Computer Modern字体。"
+        ],
+        "article_id": "1b694af1787f05cf"
+      },
+      {
+        "object_type": "project",
+        "name": "LaTeX",
+        "canonical_name": "LaTeX",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "LaTeX是一组让TeX更易用的宏集，是大多数人实际使用的排版工具。"
+        ],
+        "article_id": "1b694af1787f05cf"
+      },
+      {
+        "object_type": "product",
+        "name": "Jekyll",
+        "canonical_name": "Jekyll",
+        "confidence": "low",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者最初尝试过Jekyll等静态站点生成器，但认为它们提供的定制自由度过少，最终选择从零自建。"
+        ],
+        "article_id": "1b694af1787f05cf"
+      },
+      {
+        "object_type": "product",
+        "name": "Hugo",
+        "canonical_name": "Hugo",
+        "confidence": "low",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者最初尝试过Hugo等静态站点生成器，但认为它们提供的定制自由度过少，最终选择从零自建。"
+        ],
+        "article_id": "1b694af1787f05cf"
+      },
+      {
+        "object_type": "product",
+        "name": "Gatsby",
+        "canonical_name": "Gatsby",
+        "confidence": "low",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者最初尝试过Gatsby等静态站点生成器，但认为它们提供的定制自由度过少，最终选择从零自建。"
+        ],
+        "article_id": "1b694af1787f05cf"
+      },
+      {
+        "object_type": "product",
+        "name": "Computer Modern",
+        "canonical_name": "Computer Modern",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Knuth设计了Computer Modern这套专用于TeX的字体，并通过METAFONT语言来定义。"
+        ],
+        "article_id": "1b694af1787f05cf"
+      },
+      {
+        "object_type": "project",
+        "name": "DVI (Device Independent)",
+        "canonical_name": "DVI",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Knuth开发了DVI（设备无关）格式，使TeX的输出不依赖于任何特定设备。"
+        ],
+        "article_id": "1b694af1787f05cf"
+      },
+      {
+        "object_type": "project",
+        "name": "The Elements of Computing Systems",
+        "canonical_name": "The Elements of Computing Systems",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Noam Nisan和Shimon Schocken合著的《计算系统要素》完整展示了用剃牦牛毛方式构建计算系统的过程，涵盖从布尔逻辑到操作系统的全部知识。"
+        ],
+        "article_id": "1b694af1787f05cf"
+      },
+      {
+        "object_type": "project",
+        "name": "The Mythical Man-Month",
+        "canonical_name": "The Mythical Man-Month",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Frederick P. Brooks Jr.在《人月神话》中给出了编程之所以有趣的四个理由，包括创造事物的喜悦和持续学习的乐趣。"
+        ],
+        "article_id": "1b694af1787f05cf"
+      }
     ],
     "impact_score": {
       "score": 1.8,
@@ -477,7 +700,185 @@
       "compound": "high",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "TeX",
+        "canonical_name": "TeX",
+        "positioning": "Donald Knuth创建的计算机排版系统，涵盖排版语言与编译器，是学术出版领域的基础工具。",
+        "technical_signal": "Knuth从零构建完整排版系统，先后用SAIL和自创的WEB语言实现，体现了极致的工程自驱力。",
+        "adoption_signal": "自然科学与社会科学领域学术论文排版的工业标准，数学公式排版的事实标准工具。",
+        "ecosystem_relevance": "催生了LaTeX宏集生态、CTAN包仓库和TeX Live发行版等完整排版工具链。",
+        "target_users": [],
+        "watch_reason": "TeX是软件工程史上\"剃牦牛毛\"最成功的案例，其从零构建的决策逻辑与最终成果对理解开源项目的长期价值、个人深度学习的回报具有经典参考意义。",
+        "risk_notes": [
+          "TeX核心功能已长期冻结，除安全更新外几乎不再演进，但LaTeX生态仍在持续活跃发展。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "1b694af1787f05cf"
+        ],
+        "evidence_snippets": [
+          "TeX是斯坦福大学教授Donald Knuth创建的排版系统，涵盖排版语言和处理该语言的编译器。",
+          "Knuth在1976年为准备《计算机程序设计艺术》第二版时不满现有数字排版方案，受Patrick Winston新书启发后决定自建数字排版系统并勾勒出TeX的基本功能。",
+          "Knuth先用SAIL语言构建了第一版TeX，随后在他自己创建的WEB编程语言中开发并完成了TeX。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "WEB",
+        "canonical_name": "WEB",
+        "positioning": "Knuth为开发TeX而自创的文学编程语言，将文档与源码混合，通过Weave和Tangle分别提取。",
+        "technical_signal": "提出literate programming（文学编程）范式，代码与文档同源的理念至今仍有深远影响。",
+        "adoption_signal": "文学编程范式在后来的Jupyter Notebook、Org-mode等工具中得到继承和发扬。",
+        "ecosystem_relevance": "作为TeX开发的基础工具，为TeX的长期可维护性和完整文档化提供了独特保障。",
+        "target_users": [],
+        "watch_reason": "WEB的文学编程理念影响了后续数十年的文档化编程工具，其思想价值超越了实际使用范围，是软件工程方法论演进的重要节点。",
+        "risk_notes": [
+          "WEB语言本身已基本被现代工具链取代，实际使用者极少，其思想价值大于实用价值。"
+        ],
+        "score": 2.0,
+        "article_ids": [
+          "1b694af1787f05cf"
+        ],
+        "evidence_snippets": [
+          "WEB是Knuth为开发TeX而自创的编程语言，将文档和代码混合在一起，可通过Weave和Tangle两个程序分别提取为TeX文件和Pascal文件。",
+          "Knuth将WEB中的编程范式称为literate programming（文学编程）。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "METAFONT",
+        "canonical_name": "METAFONT",
+        "positioning": "Knuth为TeX设计的矢量图形编程语言，用于参数化定义Computer Modern字体的字形描述。",
+        "technical_signal": "以编程方式定义字形，开创了参数化字体设计的方法论，与现代可变字体概念相通。",
+        "adoption_signal": "Computer Modern字体随TeX广泛传播，但METAFONT语言本身的使用者已非常有限。",
+        "ecosystem_relevance": "作为TeX字体生态的基础组件，保障了学术文档中数学符号与文字渲染的一致性。",
+        "target_users": [],
+        "watch_reason": "METAFONT的参数化字体理念是数字字体设计史上的重要里程碑，其思想对理解现代可变字体技术有历史参照价值。",
+        "risk_notes": [
+          "METAFONT使用门槛高，现代社会已基本被更直观的字体设计工具取代。"
+        ],
+        "score": 2.0,
+        "article_ids": [
+          "1b694af1787f05cf"
+        ],
+        "evidence_snippets": [
+          "METAFONT是Knuth为TeX设计的用于定义矢量图形的语言，用于生成Computer Modern字体。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "LaTeX",
+        "canonical_name": "LaTeX",
+        "positioning": "基于TeX的宏集层，大幅降低排版系统使用门槛，是学术出版实际意义上的标准工具。",
+        "technical_signal": "通过宏定义机制抽象出文档结构标记体系，简化用户与TeX底层引擎之间的交互。",
+        "adoption_signal": "全球绝大部分数学、物理和计算机科学论文通过LaTeX撰写，拥有庞大的宏包生态。",
+        "ecosystem_relevance": "连接TeX底层引擎与终端用户的关键桥梁，Overleaf等在线平台进一步扩展了其覆盖范围。",
+        "target_users": [],
+        "watch_reason": "LaTeX在学术出版领域的统治地位短期内难以撼动，且仍在通过LuaTeX等现代引擎持续演进，其生态活力远高于底层TeX。",
+        "risk_notes": [
+          "学习曲线陡峭、调试困难是LaTeX长期面临的用户体验挑战。",
+          "部分现代替代方案如Typst正在挑战其市场地位。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "1b694af1787f05cf"
+        ],
+        "evidence_snippets": [
+          "LaTeX是一组让TeX更易用的宏集，是大多数人实际使用的排版工具。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Computer Modern",
+        "canonical_name": "Computer Modern",
+        "positioning": "Knuth专为TeX设计的一整套学术排版字体，由METAFONT语言参数化定义，是数字字体设计史上的经典。",
+        "target_users": [
+          "学术论文作者",
+          "科技文档排版人员",
+          "数学与工程领域研究者"
+        ],
+        "product_signal": "作为TeX和LaTeX的默认字体在全球范围内广泛使用，以清晰的数学符号和均衡的文本阅读体验著称。",
+        "market_signal": "已有Latin Modern、Modern等OpenType衍生变体供非TeX环境使用，拓展了使用场景。",
+        "differentiation": "完全基于参数化规则生成的字体家族，与METAFONT语言深度绑定，在数字字体设计史上具有独特地位。",
+        "watch_reason": "Computer Modern是字体设计参数化思想的最经典案例，其设计理念对现代可变字体技术仍有启发价值，且仍在学术出版中广泛使用。",
+        "risk_notes": [
+          "在屏幕阅读和网页排版场景中，Computer Modern的适用性不及专门设计的屏幕字体。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "1b694af1787f05cf"
+        ],
+        "evidence_snippets": [
+          "Knuth设计了Computer Modern这套专用于TeX的字体，并通过METAFONT语言来定义。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "DVI (Device Independent)",
+        "canonical_name": "DVI",
+        "positioning": "TeX输出的设备无关中间格式，将排版结果与具体输出设备解耦，是跨平台出版技术的早期实践。",
+        "technical_signal": "通过抽象设备描述层，实现了排版结果在不同输出设备上的一致性渲染，思想超前。",
+        "adoption_signal": "DVI格式已被PDF逐渐取代，但DVI-to-PDF转换仍是许多TeX工作流的组成部分。",
+        "ecosystem_relevance": "作为TeX输出链路的中间格式，为dvips、dvipdf等驱动程序提供了统一的接口标准。",
+        "target_users": [],
+        "watch_reason": "DVI的设备无关思想是数字排版抽象层次的重要设计案例，对理解出版技术栈的演进方向有历史参考意义。",
+        "risk_notes": [
+          "DVI格式基本已被PDF取代，仅在TeX生态内部有遗产存续意义。"
+        ],
+        "score": 2.0,
+        "article_ids": [
+          "1b694af1787f05cf"
+        ],
+        "evidence_snippets": [
+          "Knuth开发了DVI（设备无关）格式，使TeX的输出不依赖于任何特定设备。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "The Elements of Computing Systems",
+        "canonical_name": "The Elements of Computing Systems",
+        "positioning": "Noam Nisan和Shimon Schocken合著的计算机科学教材，以从零构建完整计算系统为主线贯穿全部知识。",
+        "technical_signal": "以\"剃牦牛毛\"方式从布尔逻辑到操作系统的完整知识链路教学法，是项目式学习的经典范本。",
+        "adoption_signal": "作为NAND2Tetris课程的教材在全球多所大学使用，拥有活跃的学习社区和在线资源。",
+        "ecosystem_relevance": "在教育领域产生了广泛影响，但本质上更接近课程而非可跟踪的持续迭代项目。",
+        "target_users": [],
+        "watch_reason": "该书是\"剃牦牛毛式学习法\"的完整案例展示，对理解深度学习的知识建构过程和系统性学习方法论有教育参考价值。",
+        "risk_notes": [
+          "该书本质上是一本教材及配套课程，不具备独立软件项目的持续迭代属性。"
+        ],
+        "score": 2.0,
+        "article_ids": [
+          "1b694af1787f05cf"
+        ],
+        "evidence_snippets": [
+          "Noam Nisan和Shimon Schocken合著的《计算系统要素》完整展示了用剃牦牛毛方式构建计算系统的过程，涵盖从布尔逻辑到操作系统的全部知识。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "The Mythical Man-Month",
+        "canonical_name": "The Mythical Man-Month",
+        "positioning": "Frederick Brooks的软件工程经典著作，提出了人月神话等影响深远的管理观点与编程乐趣总结。",
+        "technical_signal": "归纳了编程的四大乐趣来源：创造事物、成就他人、构建复杂系统和持续学习，洞察深刻。",
+        "adoption_signal": "自1975年出版以来持续影响软件工程学术界和工业界，是软件工程领域引用率最高的著作之一。",
+        "ecosystem_relevance": "为后续敏捷开发、DevOps等方法论提供了理论参照，是软件工程管理思想的重要源头。",
+        "target_users": [],
+        "watch_reason": "虽然本文仅引用其关于编程乐趣的总结，但Brooks关于项目管理和团队协作的洞见至今仍有极高的参考意义。",
+        "risk_notes": [
+          "该书发表于1975年，部分观点在后来的软件开发实践中存在争议。"
+        ],
+        "score": 2.0,
+        "article_ids": [
+          "1b694af1787f05cf"
+        ],
+        "evidence_snippets": [
+          "Frederick P. Brooks Jr.在《人月神话》中给出了编程之所以有趣的四个理由，包括创造事物的喜悦和持续学习的乐趣。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -585,37 +986,146 @@
     "pipeline_stage": "fact_extracted",
     "id": "47ee952a927338a1",
     "source_type": "community_discussion",
-    "tldr": "安全研究员分享针对微软 IIS 服务器的漏洞挖掘实战方法论",
-    "objective_summary": "一名安全研究员撰写技术博客，详细介绍了针对 Microsoft IIS Web 服务器的漏洞挖掘方法论，包括通过 Shodan、Google Dorking 发现 IIS 目标、HTTP 指纹识别和内部 IP 泄露等信息收集技术，以及 IIS tilde 枚举、虚拟主机爆破、WAF 绕过等利用技术，",
+    "tldr": "一篇针对微软IIS服务器的漏洞赏金技术指南，详细介绍了从侦察发现、指纹识别、8.3短文件名枚举（tilde枚举）到模糊测试的完整攻击链。",
+    "objective_summary": "作者于个人博客中分享了针对IIS服务器的系统性攻击方法：通过Shodan和Google Dorking发现目标IIS服务器，利用HTTP/1.0请求泄露内部IP地址，使用shortscan工具枚举服务器上的8.3短文件名，再通过LLM猜测、GitHub代码搜索（GSNW工具）、Google BigQuery公共数据集和crunch暴力破解等多种方式解析短文件名对应的完整文件名，最后使用针对IIS生态系统的专用字典进行模糊测试来发现web.config、trace.axd等高价值敏感文件。",
     "event_type": "framework_tools",
-    "epistemic_status": "theoretical_claim",
+    "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
-        "Microsoft"
+        "Microsoft",
+        "Google"
       ],
       "technologies": [
         "IIS",
         "ASP.NET",
         "Shodan",
-        "httpx",
-        "nuclei",
-        "shortscan",
-        "ffuf",
-        "crunch",
-        "BigQuery",
-        "GSNW"
+        "BigQuery"
       ],
-      "key_people": [
-        "Godfather Orwa"
-      ]
+      "key_people": []
     },
     "key_logic_flow": [
-      "作者介绍了通过 Shodan 搜索 SSL 证书和标题特征来发现目标组织的 IIS 服务器，以及利用 Google Dorking 语法搜索 aspx、aspnet_client、_vti_bin 等 IIS 特有路径。",
-      "作者说明可通过 HTTP 响应头中的 Server 和 X-Powered-By 字段来指纹识别 IIS 服务器，并使用 httpx 或 nuclei 进行批量识别。",
-      "作者指出通过发送 HTTP/1.0 请求，某些 IIS 服务器会在 Location 头中泄露内部 IP 地址和 Exchange 服务器内部主机名。",
-      "作者详细介绍了 IIS tilde 枚举技术，利用 DOS 8.3 短文件名遗留特性，使用 shortscan 工具枚举服务器上的文件和目录短名。",
-      "作者提出了三种解析短文件名完整名称的方法：使用 LLM 生成候选词、利用 GitHub 代码搜索匹配真实文件名、使用 Google BigQuery 公共数据集查询 GitHub 仓库中的文件名模式。",
-      "作者推荐使用 IIS 专属的模糊测试词表（如 Orwa 的 iis.txt、Assetnote 词表）和扩展名列表（.asp/.aspx/.ashx/.config/.json 等），针对 web.config、trace.axd、elmah.axd 等高价值目标进行目录爆破。"
+      "作者介绍了通过Shodan搜索语法、Google Dorking和主动HTTP指纹识别来发现目标IIS服务器的三板斧方法。",
+      "发送HTTP/1.0请求可以从某些IIS配置（尤其是Exchange服务器）中泄露内部IP地址和X-FEServer主机名信息。",
+      "使用nuclei工具配合microsoft、windows、iis等相关标签可以自动化扫描IIS目标的安全漏洞。",
+      "IIS tilde枚举（8.3短文件名枚举）是该文核心技术：通过shortscan工具可枚举服务器上文件和目录的短名称，即使目录浏览已禁用。",
+      "解析短文件名有四种方法：LLM生成猜测、GitHub代码搜索（GSNW工具）、Google BigQuery公共数据集查询和crunch暴力破解。",
+      "针对IIS生态系统的模糊测试应使用专用字典，重点探测web.config、trace.axd、elmah.axd、global.asax等ASP.NET特有文件。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "shortscan",
+        "canonical_name": "shortscan",
+        "url": "https://github.com/bitquark/shortscan",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "文章详细介绍了shortscan工具的使用方法，包括使用-F -p 1参数进行目录模糊测试和短名称枚举。",
+          "shortscan可以枚举IIS服务器上的短名称片段，如WEB~1.CON对应web.config，SITEBA~1.ZIP则需进一步解析。"
+        ],
+        "article_id": "47ee952a927338a1"
+      },
+      {
+        "object_type": "project",
+        "name": "GSNW (GitHub Short Name Wordlist)",
+        "canonical_name": "GSNW",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "GSNW工具通过接收短名称片段并爬取GitHub代码搜索来匹配真实文件名，从而生成定向字典。",
+          "作者建议使用GSNW将短名称片段如siteba传入并生成候选文件名列表。"
+        ],
+        "article_id": "47ee952a927338a1"
+      },
+      {
+        "object_type": "project",
+        "name": "GitHub-IIS-Shortname-Generator",
+        "canonical_name": "GitHub-IIS-Shortname-Generator",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "该工具与GSNW功能类似，通过GitHub代码搜索匹配短名称并输出干净的字典列表。",
+          "文章展示了该工具的输出示例，如输入WEBDEV后输出WebDev.md、webdev.txt等匹配结果。"
+        ],
+        "article_id": "47ee952a927338a1"
+      },
+      {
+        "object_type": "project",
+        "name": "shortnameguesser",
+        "canonical_name": "shortnameguesser",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "shortnameguesser接收短名称扫描器的输出并通过查询多个来源来生成针对性字典。",
+          "该工具是作者推荐的解析短名称片段的工具之一，作为GSNW和GitHub-IIS-Shortname-Generator的替代方案。"
+        ],
+        "article_id": "47ee952a927338a1"
+      },
+      {
+        "object_type": "project",
+        "name": "nuclei",
+        "canonical_name": "nuclei",
+        "url": "https://github.com/projectdiscovery/nuclei",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者建议在获取IIS目标列表后使用nuclei配合microsoft、windows、asp、iis等标签进行自动化扫描。",
+          "nuclei被描述为在后台批量扫描IIS目标的同时进行手动侦察的有效工具。"
+        ],
+        "article_id": "47ee952a927338a1"
+      },
+      {
+        "object_type": "project",
+        "name": "ffuf",
+        "canonical_name": "ffuf",
+        "url": "https://github.com/ffuf/ffuf",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者使用ffuf配合Host头字典对HTTPAPI 2.0返回404的IIS服务器进行虚拟主机暴力破解。",
+          "ffuf还用于对短名称解析后的文件名进行模式化模糊测试，覆盖连字符、下划线、空格和无分隔符等多种命名惯例。"
+        ],
+        "article_id": "47ee952a927338a1"
+      },
+      {
+        "object_type": "project",
+        "name": "httpx",
+        "canonical_name": "httpx",
+        "url": "https://github.com/projectdiscovery/httpx",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者使用httpx的-td（技术检测）参数对目标列表进行大规模IIS指纹识别。",
+          "httpx配合grep命令可以从大量目标中高效筛选出运行IIS的服务器。"
+        ],
+        "article_id": "47ee952a927338a1"
+      },
+      {
+        "object_type": "product",
+        "name": "Shodan",
+        "canonical_name": "Shodan",
+        "url": "https://www.shodan.io",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者使用Shodan搜索语法如ssl:\"target.com\" http.title:\"IIS\"来发现目标组织关联的IIS服务器。",
+          "Shodan可以找到团队忘记设置为互联网对外的测试服务器、管理后台和内部工具。"
+        ],
+        "article_id": "47ee952a927338a1"
+      },
+      {
+        "object_type": "project",
+        "name": "crunch",
+        "canonical_name": "crunch",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "当LLM、GitHub和BigQuery都无法解析短名称时，作者使用crunch生成指定字符长度的所有字母组合进行暴力破解。",
+          "由于8.3短名称已显示前6个字符，crunch只需枚举剩余字符即可。"
+        ],
+        "article_id": "47ee952a927338a1"
+      }
     ],
     "impact_score": {
       "score": 3.5,
@@ -669,7 +1179,216 @@
       "compound": "low",
       "hype": "low"
     },
-    "actionable_insight": "speculative_watch"
+    "actionable_insight": "speculative_watch",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "shortscan",
+        "canonical_name": "shortscan",
+        "url": "https://github.com/bitquark/shortscan",
+        "positioning": "专注于IIS服务器的短文件名枚举（tilde枚举）开源工具，利用DOS 8.3命名约定泄露隐藏文件和目录路径信息。",
+        "technical_signal": "通过发送特制HTTP请求枚举IIS服务器上的短文件名片段，即使目录浏览已禁用也能正常工作。",
+        "adoption_signal": "被漏洞赏金社区广泛用于IIS服务器侦察阶段，是该领域公认的核心枚举工具之一。",
+        "ecosystem_relevance": "与其他IIS安全测试工具（如nuclei、ffuf）配合使用，完善了从信息收集到漏洞利用的完整工具链。",
+        "target_users": [],
+        "watch_reason": "作为IIS服务器信息泄露攻击链的核心技术环节，短文件名枚举能力直接影响企业内网暴露面评估和漏洞赏金挖掘的深度与效率。",
+        "risk_notes": [
+          "依赖旧版IIS的8.3短文件名遗留特性，现代IIS服务器配置可完全禁用此功能。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "47ee952a927338a1"
+        ],
+        "evidence_snippets": [
+          "文章详细介绍了shortscan工具的使用方法，包括使用-F -p 1参数进行目录模糊测试和短名称枚举。",
+          "shortscan可以枚举IIS服务器上的短名称片段，如WEB~1.CON对应web.config，SITEBA~1.ZIP则需进一步解析。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "GSNW (GitHub Short Name Wordlist)",
+        "canonical_name": "GSNW",
+        "positioning": "GitHub代码搜索驱动的短文件名解析工具，通过搜索开源代码匹配短名称对应的完整文件名，生成定向字典。",
+        "technical_signal": "接收IIS短文件名片段并爬取GitHub代码搜索来匹配真实文件名，从而生成定向候选字典列表。",
+        "adoption_signal": "作为短文件名解析的辅助工具，与shortscan等枚举工具配合完成攻击链的信息收集阶段。",
+        "ecosystem_relevance": "填补了从短名称片段到完整文件名解析的工具链空白，是信息收集阶段的重要环节。",
+        "target_users": [],
+        "watch_reason": "其基于GitHub代码库的自动匹配方法在短文件名逆向解析场景中具有独特工程价值，但替代工具较多。",
+        "risk_notes": [
+          "依赖GitHub代码搜索的可用性和响应速度，匹配结果质量受开源代码覆盖范围影响。"
+        ],
+        "score": 2.0,
+        "article_ids": [
+          "47ee952a927338a1"
+        ],
+        "evidence_snippets": [
+          "GSNW工具通过接收短名称片段并爬取GitHub代码搜索来匹配真实文件名，从而生成定向字典。",
+          "作者建议使用GSNW将短名称片段如siteba传入并生成候选文件名列表。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "GitHub-IIS-Shortname-Generator",
+        "canonical_name": "GitHub-IIS-Shortname-Generator",
+        "positioning": "基于GitHub代码搜索的IIS短名称字典生成器，输入短名称片段输出匹配的候选文件名列表。",
+        "technical_signal": "通过GitHub代码搜索匹配短名称，输出干净的文件名候选字典列表供后续模糊测试使用。",
+        "adoption_signal": "在短文件名解析场景中作为GSNW的功能替代方案被安全社区使用。",
+        "ecosystem_relevance": "丰富了短文件名解析工具生态，为安全研究人员提供了多样化的字典生成工具选择。",
+        "target_users": [],
+        "watch_reason": "设计简洁、输出格式清晰，但在功能和定位上与GSNW高度重叠，差异化优势不明显。",
+        "risk_notes": [
+          "功能和GSNW高度重叠，缺乏明显差异化优势；项目维护和更新状态不明。"
+        ],
+        "score": 2.0,
+        "article_ids": [
+          "47ee952a927338a1"
+        ],
+        "evidence_snippets": [
+          "该工具与GSNW功能类似，通过GitHub代码搜索匹配短名称并输出干净的字典列表。",
+          "文章展示了该工具的输出示例，如输入WEBDEV后输出WebDev.md、webdev.txt等匹配结果。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "shortnameguesser",
+        "canonical_name": "shortnameguesser",
+        "positioning": "多来源聚合的短文件名猜测工具，整合GitHub和搜索引擎等多个数据源生成针对性解析字典。",
+        "technical_signal": "接收短名称扫描器的输出，通过查询多个来源来生成针对性字典以解析短名称片段。",
+        "adoption_signal": "作为GSNW和GitHub-IIS-Shortname-Generator的替代方案被作者推荐使用。",
+        "ecosystem_relevance": "提供了多源聚合解析的差异化方案，在单一数据源失效时具有独特的兜底价值。",
+        "target_users": [],
+        "watch_reason": "多源聚合策略提高了短名称解析的成功率，在单一数据源查询无果的场景下具有实用价值。",
+        "risk_notes": [
+          "多源查询可能引入性能瓶颈，且依赖各外部API的可用性和响应速度。"
+        ],
+        "score": 2.0,
+        "article_ids": [
+          "47ee952a927338a1"
+        ],
+        "evidence_snippets": [
+          "shortnameguesser接收短名称扫描器的输出并通过查询多个来源来生成针对性字典。",
+          "该工具是作者推荐的解析短名称片段的工具之一，作为GSNW和GitHub-IIS-Shortname-Generator的替代方案。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "nuclei",
+        "canonical_name": "nuclei",
+        "url": "https://github.com/projectdiscovery/nuclei",
+        "positioning": "开源漏洞扫描框架，基于YAML模板实现大规模自动化安全检测与漏洞验证，覆盖多种协议和资产类型。",
+        "technical_signal": "使用microsoft、windows、iis等标签配合社区贡献模板可自动化扫描IIS目标的已知安全漏洞。",
+        "adoption_signal": "安全社区广泛采用的核心扫描工具，在漏洞赏金和渗透测试中处于标准工具地位。",
+        "ecosystem_relevance": "庞大的社区模板生态系统使检测逻辑持续迭代更新，是安全自动化基础设施的重要组成部分。",
+        "target_users": [],
+        "watch_reason": "作为安全测试领域的基础设施级工具，其模板生态扩展性和自动化批量扫描能力持续影响行业实践。",
+        "risk_notes": [
+          "社区贡献模板质量参差不齐，大规模自动化扫描可能产生一定比例的误报。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "47ee952a927338a1"
+        ],
+        "evidence_snippets": [
+          "作者建议在获取IIS目标列表后使用nuclei配合microsoft、windows、asp、iis等标签进行自动化扫描。",
+          "nuclei被描述为在后台批量扫描IIS目标的同时进行手动侦察的有效工具。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "ffuf",
+        "canonical_name": "ffuf",
+        "url": "https://github.com/ffuf/ffuf",
+        "positioning": "高速Web模糊测试工具，专用于目录发现、虚拟主机暴力破解和参数模糊测试等场景。",
+        "technical_signal": "通过Host头字典对HTTPAPI 2.0返回404的IIS服务器进行虚拟主机暴力破解，发现绑定域名后的真实应用。",
+        "adoption_signal": "被安全社区广泛采用，是Web应用模糊测试领域的事实标准工具之一。",
+        "ecosystem_relevance": "在IIS虚拟主机发现和短名称解析后的文件名模式化模糊测试中扮演关键角色。",
+        "target_users": [],
+        "watch_reason": "其高速灵活的模糊测试能力在各种Web安全评估场景中都是不可或缺的基础工具。",
+        "risk_notes": [
+          "暴力破解行为可能触发WAF或触发服务器端速率限制，需要配合代理和延迟策略使用。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "47ee952a927338a1"
+        ],
+        "evidence_snippets": [
+          "作者使用ffuf配合Host头字典对HTTPAPI 2.0返回404的IIS服务器进行虚拟主机暴力破解。",
+          "ffuf还用于对短名称解析后的文件名进行模式化模糊测试，覆盖多种命名惯例。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "httpx",
+        "canonical_name": "httpx",
+        "url": "https://github.com/projectdiscovery/httpx",
+        "positioning": "大规模HTTP探测与指纹识别工具，用于快速识别目标Web服务器的技术栈和响应特征。",
+        "technical_signal": "通过-td参数对目标列表进行大规模IIS指纹识别，配合grep命令可高效筛选出目标服务器。",
+        "adoption_signal": "ProjectDiscovery生态中的核心组件，与nuclei、subfinder等工具无缝集成使用。",
+        "ecosystem_relevance": "在安全测试管道中作为侦察阶段的技术指纹标准化探测入口，连接信息收集与漏洞扫描。",
+        "target_users": [],
+        "watch_reason": "作为安全测试流水线的入口级指纹识别工具，其探测准确性直接影响后续测试效率与覆盖面。",
+        "risk_notes": [
+          "指纹识别依赖HTTP响应头中的Server字段，被篡改或隐藏的响应头可能导致误识别。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "47ee952a927338a1"
+        ],
+        "evidence_snippets": [
+          "作者使用httpx的-td（技术检测）参数对目标列表进行大规模IIS指纹识别。",
+          "httpx配合grep命令可以从大量目标中高效筛选出运行IIS的服务器。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Shodan",
+        "canonical_name": "Shodan",
+        "url": "https://www.shodan.io",
+        "positioning": "互联网设备搜索引擎，持续扫描全球IP地址空间并索引联网设备和服务公开信息，用于攻击面管理。",
+        "target_users": [
+          "安全研究人员",
+          "漏洞赏金猎人",
+          "企业安全团队"
+        ],
+        "product_signal": "支持通过SSL证书和HTTP标题等复合搜索语法精准定位目标组织的IIS服务器和互联网暴露面。",
+        "market_signal": "在互联网暴露面管理和安全侦察领域处于领先地位，是企业攻击面管理的标准工具之一。",
+        "differentiation": "持续主动扫描全球IP地址空间建立设备和服务索引数据库，区别于被动爬取的通用搜索引擎。",
+        "watch_reason": "作为互联网暴露面管理的基础设施级产品，其数据覆盖范围、搜索语法演进直接影响安全研究效率。",
+        "risk_notes": [
+          "免费账户功能受限，完整的搜索能力和数据导出能力需要付费订阅。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "47ee952a927338a1"
+        ],
+        "evidence_snippets": [
+          "作者使用Shodan搜索语法如ssl:\"target.com\" http.title:\"IIS\"来发现目标组织关联的IIS服务器。",
+          "Shodan可以找到团队忘记设置为互联网对外的测试服务器、管理后台和内部工具。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "crunch",
+        "canonical_name": "crunch",
+        "positioning": "字典生成工具，可生成指定字符集和长度的所有排列组合，用于密码破解和枚举暴力破解场景。",
+        "technical_signal": "在IIS短名称解析中利用已知前缀缩小搜索空间，仅需枚举剩余未知字符即可补全完整文件名。",
+        "adoption_signal": "在密码破解和枚举场景中被长期使用，是渗透测试工具箱中经久不衰的经典工具。",
+        "ecosystem_relevance": "作为其他智能解析方法（LLM、GitHub搜索）全部失败时的最终兜底方案，填补暴力破解场景空白。",
+        "target_users": [],
+        "watch_reason": "技术原理简单但在有限字符空间的暴力破解场景中仍是可靠且有效的兜底解决方案。",
+        "risk_notes": [
+          "纯暴力破解方式效率极低，仅适用于小搜索空间场景；无网络功能需配合其他工具使用。"
+        ],
+        "score": 2.0,
+        "article_ids": [
+          "47ee952a927338a1"
+        ],
+        "evidence_snippets": [
+          "当LLM、GitHub和BigQuery都无法解析短名称时，作者使用crunch生成指定字符长度的所有字母组合进行暴力破解。",
+          "由于8.3短名称已显示前6个字符，crunch只需枚举剩余字符即可。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -688,8 +1407,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "7751c39c610618dd",
     "source_type": "community_discussion",
-    "tldr": "卡尔文与霍布斯作者瓦特森为维护艺术完整性拒绝商业化，在巅峰期终止连载",
-    "objective_summary": "比尔·瓦特森在1995年终止了其创作的漫画《卡尔文与霍布斯》，该漫画当时在全球2400多家报纸连载。他多次拒绝将角色授权用于玩具、服装等商品化开发，并与联合报业集团进行了长达六年的艺术控制权斗争，坚持亲笔完成每一格漫画的所有创作环节。",
+    "tldr": "比尔·沃特森（Bill Watterson）在《卡尔文与霍布斯》最成功时选择停更，拒绝商品化授权以维护艺术完整性，并将创作抉择视为道德问题而非商业决策。",
+    "objective_summary": "1995年，比尔·沃特森在《卡尔文与霍布斯》连载于全球超过2400家报纸、拥有数百万读者时宣布停更。沃特森坚持手绘每一格漫画的所有环节，拒绝与联合媒体集团（Universal Press Syndicate）进行玩具、T恤等周边商品化合作，为此放弃了每年数亿美元级别的授权收入。他将商业化与艺术表达的冲突视为不可调和的伦理问题，认为只有保持完整的个人创作控制才能维护作品的精神价值。查尔斯·舒尔茨曾公开赞扬沃特森对漫画细节的精致处理。",
     "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
@@ -699,17 +1418,56 @@
       "technologies": [],
       "key_people": [
         "Bill Watterson",
-        "Matthew Morgan",
         "Charles M. Schulz",
-        "Jim Davis"
+        "Jim Davis",
+        "Matthew Morgan"
       ]
     },
     "key_logic_flow": [
-      "瓦特森在大学期间花数周在宿舍天花板绘制了米开朗基罗《创世纪》的仿作，完成后又用白漆将其覆盖，体现他重视创作过程本身而非结果的一贯态度。",
-      "1995年，37岁的瓦特森写信给所有连载《卡尔文与霍布斯》的报社编辑，宣布在当年年底终止该连载，理由是创作兴趣已转移且希望在更少艺术妥协的条件下工作。",
-      "瓦特森连续六年拒绝了联合报业集团推动的角色商品化计划，坚持不让卡尔文与霍布斯形象出现在玩具、T恤等衍生品上，相当于放弃了数亿美元的收入。",
-      "瓦特森坚持《卡尔文与霍布斯》是\"单人操作\"——他亲自撰写每一句对白、绘制每一根线条、为每一幅周日版上色，以此保证作品的艺术完整性。",
-      "瓦特森将创作中的商业决策视为道德抉择，称联合报业集团为\"吸血的寄生企业\"，认为报纸的商业大众市场需求与艺术表达之间存在根本性矛盾。"
+      "比尔·沃特森在1978年于凯尼恩学院宿舍未经授权在天花板上绘制米开朗基罗《创造亚当》仿作，完工后又自行用白漆覆盖还原。",
+      "沃特森坚持《卡尔文与霍布斯》的全部创作环节——台词撰写、线条绘制、周日版上色及书籍插图——均由自己一人独立完成。",
+      "1995年，沃特森在漫画最成功时致信所有合作报社，宣布年底停更，称自己兴趣已转移且希望在更从容的节奏下减少艺术妥协。",
+      "沃特森与联合媒体集团就商品化授权产生根本分歧，拒绝将角色用于玩具、服装等周边产品，放弃巨额授权收入。",
+      "沃特森将商业化与艺术表达的冲突视为伦理道德问题，而非简单的商业决策或创作风格的调整。",
+      "查尔斯·舒尔茨在《The Essential Calvin and Hobbes》序言中称赞沃特森对床头柜、沙发等日常物品的精细描绘是伟大漫画的核心品质。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "Calvin and Hobbes",
+        "canonical_name": "Calvin and Hobbes",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "《卡尔文与霍布斯》在超过2400家报纸上连载，为数百万读者提供了超越流行文化的深层情感共鸣与精神启蒙。",
+          "沃特森坚持每一句台词、每一根线条和每一个周日版上色都由自己亲手完成，认为这是维护作品艺术完整性的唯一可行方式。",
+          "沃特森在1995年宣布停更时表示自己的兴趣已经转移，希望在更从容的节奏下工作以减少艺术妥协。"
+        ],
+        "article_id": "7751c39c610618dd"
+      },
+      {
+        "object_type": "product",
+        "name": "The Essential Calvin and Hobbes",
+        "canonical_name": "The Essential Calvin and Hobbes",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "查尔斯·舒尔茨为《The Essential Calvin and Hobbes》撰写了序言，称赞沃特森对日常物品的精细描绘能力。"
+        ],
+        "article_id": "7751c39c610618dd"
+      },
+      {
+        "object_type": "product",
+        "name": "Garfield",
+        "canonical_name": "Garfield",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "文章将加菲猫的商品化帝国作为对比案例，指出其创作者吉姆·戴维斯每年从中获得数亿美元的收入。"
+        ],
+        "article_id": "7751c39c610618dd"
+      }
     ],
     "impact_score": {
       "score": 1.5,
@@ -765,7 +1523,84 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "speculative_watch"
+    "actionable_insight": "speculative_watch",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "Calvin and Hobbes",
+        "canonical_name": "Calvin and Hobbes",
+        "positioning": "《卡尔文与霍布斯》是比尔·沃特森独立创作、在全球超过2400家报纸连载的连环漫画，以深层情感共鸣和拒绝商品化的艺术完整性著称。",
+        "target_users": [
+          "寻求深度内容与情感共鸣的连环漫画读者",
+          "关注艺术完整性与创作伦理的文化消费者"
+        ],
+        "product_signal": "沃特森坚持亲自完成每一句台词、每一根线条和每一个周日版上色，以完全的个人创作控制确保作品的艺术完整性。",
+        "market_signal": "沃特森在漫画最成功时宣布停更，拒绝与联合媒体集团进行玩具、服装等周边商品化合作，放弃每年数亿美元的授权收入。",
+        "differentiation": "与其他广泛商品化的连环漫画截然不同，沃特森将商业化与艺术表达的冲突视为不可调和的伦理问题，而非可妥协的商业决策。",
+        "watch_reason": "沃特森在商业顶峰主动停更并将艺术完整性置于经济利益之上的抉择，为内容创作者提供了关于创作伦理与商业化取舍的罕见案例研究，值得持续关注其后续影响和行业参照价值。",
+        "risk_notes": [
+          "沃特森已宣布停更并基本退出公众视野，漫画不再有新内容产出。",
+          "拒绝一切商品化授权意味着该IP不具备持续的商业变现能力和品牌延展性。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "7751c39c610618dd"
+        ],
+        "evidence_snippets": [
+          "《卡尔文与霍布斯》在超过2400家报纸上连载，为数百万读者提供了超越流行文化的深层情感共鸣与精神启蒙。",
+          "沃特森坚持每一句台词、每一根线条和每一个周日版上色都由自己亲手完成，认为这是维护作品艺术完整性的唯一可行方式。",
+          "沃特森在1995年宣布停更时表示自己的兴趣已经转移，希望在更从容的节奏下工作以减少艺术妥协。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "The Essential Calvin and Hobbes",
+        "canonical_name": "The Essential Calvin and Hobbes",
+        "positioning": "《The Essential Calvin and Hobbes》是收录《卡尔文与霍布斯》精选作品的漫画合集，由查尔斯·舒尔茨撰写序言推荐。",
+        "target_users": [
+          "卡尔文与霍布斯的忠实读者",
+          "连环漫画收藏爱好者"
+        ],
+        "product_signal": "该书以精选合集形式出版，同行漫画大师舒尔茨亲自撰写序言，为沃特森的画技和日常细节处理提供了权威背书。",
+        "market_signal": "作为沃特森停更后出版的精选集，该书延续了漫画的出版价值，但本身并非商业化IP开发的一部分。",
+        "differentiation": "与普通漫画合集不同，该书获得了舒尔茨这位同行大师的序言肯定，在漫画界具有独特的文化意义和权威认可。",
+        "watch_reason": "作为《卡尔文与霍布斯》停更后的代表性出版物，其编辑选材与舒尔茨的序言内容反映了沃特森作品在漫画界的地位和影响力。",
+        "risk_notes": [
+          "该合集出版于停更后不久，后续未见更多版本更新或关联出版计划。"
+        ],
+        "score": 2.0,
+        "article_ids": [
+          "7751c39c610618dd"
+        ],
+        "evidence_snippets": [
+          "查尔斯·舒尔茨为《The Essential Calvin and Hobbes》撰写了序言，称赞沃特森对日常物品的精细描绘能力。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Garfield",
+        "canonical_name": "Garfield",
+        "positioning": "《加菲猫》是一部在全球广泛商品化的经典连环漫画，其创作者吉姆·戴维斯通过周边产品授权每年获得数亿美元收入。",
+        "target_users": [
+          "大众流行文化消费者",
+          "漫画周边产品购买者"
+        ],
+        "product_signal": "加菲猫建立了涵盖玩具、服装、电视节目等多种形式的庞大商品化帝国，实现了漫画IP的全方位商业变现。",
+        "market_signal": "加菲猫创作者每年从商品化授权中获得数亿美元收入，代表了漫画IP商业化运作最成功的范本之一。",
+        "differentiation": "与拒绝任何商品化的《卡尔文与霍布斯》形成鲜明对比，加菲猫是漫画内容全面商业化、以授权收入为核心的极端典型案例。",
+        "watch_reason": "作为连环漫画商业化变现的经典范本，加菲猫与卡尔文与霍布斯的对比为内容创作者的变现路径选择和伦理取舍提供了重要参照。",
+        "risk_notes": [
+          "该品牌的长期价值过度依赖持续的商品化运营，与原创漫画内容的关联性逐渐弱化。"
+        ],
+        "score": 2.0,
+        "article_ids": [
+          "7751c39c610618dd"
+        ],
+        "evidence_snippets": [
+          "文章将加菲猫的商品化帝国作为对比案例，指出其创作者吉姆·戴维斯每年从中获得数亿美元的收入。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -784,33 +1619,101 @@
     "pipeline_stage": "fact_extracted",
     "id": "866ef7423e9172f1",
     "source_type": "community_discussion",
-    "tldr": "Tim Ferriss 用个人图书销量数据论证AI已导致自助类非虚构书籍销量暴跌",
-    "objective_summary": "Tim Ferriss 于2026年6月12日发表博文，引用Publishers Weekly数据和本人五本畅销书的BookScan销售数据，指出自2022年11月ChatGPT发布以来，其图书组合销量逐年加速下滑：2023年-5%、2024年-13%、2025年-46%、2026年预计-57%。",
+    "tldr": "Tim Ferriss以自己五本畅销书的销量数据（2026年运行率较2022年下降约80%）论证AI大语言模型正在摧毁自助类非虚构书籍市场，并预测规定性非虚构内容（包括YouTube教程、播客、在线课程和新闻订阅）都将面临同样的AI替代风险，唯有提供深度体验的内容可能幸存。",
+    "objective_summary": "Tim Ferriss于2026年6月12日在其博客上发表文章，以个人图书目录的BookScan销量数据为样本，论证AI大语言模型的普及正在加速摧毁自助类非虚构书籍市场。根据Publishers Weekly数据，2026年第一季度自助类图书销量同比下跌26.3%；Ferriss的五本畅销书总销量在2025年同比下跌46%，2026年运行率再跌57%，预计较2022年下降约80%。Ferriss认为LLM正在成为信息传递的默认界面，规定性非虚构内容（包括书籍、YouTube教程、播客、在线课程）都将面临AI替代，唯有娱乐、故事叙述和人格化的深度体验可能幸存。",
     "event_type": "application_landing",
-    "epistemic_status": "verified_fact",
+    "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [
-        "Amazon",
         "Publishers Weekly",
-        "Pew Research Center"
+        "Amazon",
+        "Pew Research Center",
+        "OpenAI",
+        "Anthropic"
       ],
       "technologies": [
         "LLM",
         "ChatGPT",
-        "Claude",
-        "GPT-3.5"
+        "GPT-3.5",
+        "Claude"
       ],
       "key_people": [
-        "Tim Ferriss"
+        "Tim Ferriss",
+        "Gary Brecka"
       ]
     },
     "key_logic_flow": [
-      "Tim Ferriss 公布其五本畅销书（《每周工作4小时》《身体4小时》《4小时厨师》《巨人的工具》《导师部落》）的BookScan销售数据：2022年至2026年复合下降约80%，且降速逐年加剧。",
-      "Publishers Weekly 数据显示2026年Q1成人非虚构类图书销量同比下降9%，其中自助类子类别暴跌26.3%，为所有子类别中跌幅最大。",
-      "Tim Ferriss 认为LLM（ChatGPT、Claude等）是销量崩塌的核心原因——自助类书籍本质上是决策树和查找表，而免费聊天机器人可在15秒内提供个性化建议。",
-      "Tim Ferriss 将自助类非虚构书籍视为'煤矿中的金丝雀'，预测YouTube教学视频、播客、在线课程、新闻媒体等同样面临被AI替代的风险。",
-      "他指出83%的美国人在过去一年中未为新闻付费，遇到付费墙时仅1%会付费，更多人转向LLM获取文章摘要。",
-      "Tim Ferriss 认为'信息'市场正在崩塌到聊天机器人中，而'转变'市场——深度阅读和真实故事驱动的改变——可能变得更小但更有价值。"
+      "Publishers Weekly数据显示2026年第一季度美国成人非虚构图书销量同比下降9%，自助类子品类跌幅最大达26.3%，仅手工艺/爱好/古董/游戏和宗教两个子品类实现增长。",
+      "Tim Ferriss五本畅销书在2023年总销量同比下滑5%，2024年下滑13%，2025年断崖式下跌46%，2026年运行率较2025年再跌57%，预计2026年较2022年总销量下降约80%。",
+      "ChatGPT于2022年11月30日上线，与Ferriss图书销量的下滑趋势在时间线上高度吻合。",
+      "自助类书籍本质上是查阅表和决策树，而LLM能在15秒内提供个性化方案，这构成了对规定性非虚构内容的根本性替代。",
+      "Ferriss认为规定性非虚构是煤矿中的金丝雀，YouTube教程、播客、在线课程、新闻订阅等以信息传递为核心价值的格式都将面临同样的AI替代风险。",
+      "Ferriss建议创作者回归1000个铁杆粉丝策略，专注于提供深度转变体验而非单纯的信息传递，因为信息市场正在被聊天机器人吞噬，而转变体验的市场可能变得更小、更独特。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "ChatGPT",
+        "canonical_name": "ChatGPT",
+        "url": "https://chatgpt.com",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "ChatGPT powered by the updated GPT-3.5 model launched on November 30 2022 被视为与图书销量下滑时间线高度吻合的关键变量。",
+          "作者认为LLM成为所有信息传递界面的默认入口ChatGPT代表了这一趋势的起点。"
+        ],
+        "article_id": "866ef7423e9172f1"
+      },
+      {
+        "object_type": "product",
+        "name": "Claude",
+        "canonical_name": "Claude",
+        "url": "https://claude.ai",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者表示其团队每天使用Claude和其他AI工具，且LLM的爆发式使用直接关联到图书销量的加速下滑。",
+          "作者认为Claude和ChatGPT等LLM的普及是图书销量暴跌的唯一显著环境变化因素。"
+        ],
+        "article_id": "866ef7423e9172f1"
+      },
+      {
+        "object_type": "product",
+        "name": "The 4-Hour Workweek",
+        "canonical_name": "The 4-Hour Workweek",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "The 4-Hour Workweek是Tim Ferriss的代表作之一曾是2017年亚马逊上被划线标注最多的书籍之一。",
+          "作者将该书描述为设计生活方式和自动化收入的决策树其功能正被LLM所替代。"
+        ],
+        "article_id": "866ef7423e9172f1"
+      },
+      {
+        "object_type": "product",
+        "name": "BookScan",
+        "canonical_name": "BookScan",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者使用BookScan数据展示其五本畅销书的国内印刷版销量变化作为论证AI冲击的核心数据来源。",
+          "BookScan是作者获取图书销量统计的主要工具通过其年度同比数据呈现了2022年至2026年的销量下滑曲线。"
+        ],
+        "article_id": "866ef7423e9172f1"
+      },
+      {
+        "object_type": "product",
+        "name": "The 4-Hour Body",
+        "canonical_name": "The 4-Hour Body",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "The 4-Hour Body被作者描述为一张查阅表包含减脂、改善睡眠和增肌等问题的解决方案。",
+          "该书于2010年出版共608页登上纽约时报畅销书榜首但作者收到的大量请求只是要求快速要点而非完整阅读。"
+        ],
+        "article_id": "866ef7423e9172f1"
+      }
     ],
     "impact_score": {
       "score": 6.0,
@@ -866,7 +1769,140 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "strategic_invest"
+    "actionable_insight": "strategic_invest",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "ChatGPT",
+        "canonical_name": "ChatGPT",
+        "url": "https://chatgpt.com",
+        "positioning": "ChatGPT 是 OpenAI 于 2022 年 11 月推出的对话式 AI 助手，搭载 GPT-3.5 模型，被视为 LLM 成为信息获取默认界面的标志性产品。",
+        "target_users": [
+          "需要快速获得个性化方案的信息消费者",
+          "知识工作者和内容需求者"
+        ],
+        "product_signal": "ChatGPT 可在 15 秒内根据用户体重、日程和饮食偏好提供个性化方案，展现了对传统规定性内容的根本性替代能力。",
+        "market_signal": "ChatGPT 于 2022 年 11 月上线，与自助类图书销量断崖式下跌的时间线高度吻合，被作者视为图书市场下滑的关键变量。",
+        "differentiation": "相比传统自助书籍以固定文本传递方案，ChatGPT 能以对话方式即时生成针对个人情况的定制化建议，改变了信息交付的范式。",
+        "watch_reason": "ChatGPT 作为 LLM 普及的起点产品，正在系统性重塑规定性非虚构内容（书籍、课程、播客）的市场结构，其用户增长和新功能迭代将持续影响信息类产品的商业模式。",
+        "risk_notes": [
+          "ChatGPT 提供的信息质量存在不可靠性风险，未必能完全替代经过编辑与事实核查的专业著作。",
+          "文章基于单一作者的数据样本，ChatGPT 对整体图书市场的实际影响仍需更多行业数据交叉验证。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "866ef7423e9172f1"
+        ],
+        "evidence_snippets": [
+          "ChatGPT powered by the updated GPT-3.5 model launched on November 30 2022 被视为与图书销量下滑时间线高度吻合的关键变量。",
+          "作者认为LLM成为所有信息传递界面的默认入口ChatGPT代表了这一趋势的起点。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Claude",
+        "canonical_name": "Claude",
+        "url": "https://claude.ai",
+        "positioning": "Claude 是 Anthropic 开发的对话式 AI 助手，作为市场主要 LLM 产品之一，与 ChatGPT 共同驱动着信息获取方式的结构性转变。",
+        "target_users": [
+          "需要 AI 辅助获取结构化信息的专业人士",
+          "知识工作者和内容消费者"
+        ],
+        "product_signal": "作者团队每日使用 Claude 和其他 AI 工具，且认为 Claude 等 LLM 的爆发式使用是图书销量暴跌的唯一显著环境变化因素。",
+        "market_signal": "Claude 与 ChatGPT 等 LLM 的普及被作者列为图书销量从 2022 年至 2026 年下降约 80% 的核心归因。",
+        "differentiation": "作为 ChatGPT 的主要竞品，Claude 在辅助读者获取规定性内容方面提供了同等能力，共同构成对传统出版业的系统性冲击。",
+        "watch_reason": "Claude 作为 AI 助手的代表产品之一，正在与 ChatGPT 共同推动信息消费从书籍向对话式界面的迁移，其用户采纳情况和功能演进是衡量这一趋势强度的关键指标。",
+        "risk_notes": [
+          "文章中 Claude 被归入通用的 LLM 类别讨论，未提供具体产品功能或市场份额数据。",
+          "Claude 在自助类内容替代方面的实际用户行为数据尚不明确，难以量化其独立影响。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "866ef7423e9172f1"
+        ],
+        "evidence_snippets": [
+          "作者表示其团队每天使用Claude和其他AI工具，且LLM的爆发式使用直接关联到图书销量的加速下滑。",
+          "作者认为Claude和ChatGPT等LLM的普及是图书销量暴跌的唯一显著环境变化因素。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "The 4-Hour Workweek",
+        "canonical_name": "The 4-Hour Workweek",
+        "positioning": "《The 4-Hour Workweek》是 Tim Ferriss 的代表作，曾为亚马逊上被划线标注最多的书籍之一，被视为生活方式设计和自动化收入的经典决策树式指南。",
+        "target_users": [
+          "寻求生活方式设计和自动化收入策略的创业者与职场人士"
+        ],
+        "product_signal": "作者将其描述为设计生活方式和自动化收入的决策树，其核心功能正被 LLM 以更快速、更个性化的方式替代。",
+        "market_signal": "该书作为 Ferriss 五本畅销书组合的一部分，印刷版销量在 2026 年运行率较 2022 年下降约 80%，反映出 LLM 对经典自助类书籍的毁灭性冲击。",
+        "differentiation": "曾经是解决生活方式设计问题的首选文本界面，现被免费聊天机器人取代——后者可针对用户个人情况在秒级生成定制化方案。",
+        "watch_reason": "作为自助类非虚构书籍的标杆产品，其销量崩塌速度可视作衡量 LLM 替代规定性文字内容市场进度的关键温度计，持续跟踪其数据变化有重要信号意义。",
+        "risk_notes": [
+          "销量下降可能部分源于品类自然衰退和读者注意力向其他媒介迁移，不能完全归因于 AI。",
+          "2024 年 TikTok 病毒传播曾带动姊妹书销量逆势增长，表明社交媒体仍可产生短期对冲效应。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "866ef7423e9172f1"
+        ],
+        "evidence_snippets": [
+          "The 4-Hour Workweek是Tim Ferriss的代表作之一曾是2017年亚马逊上被划线标注最多的书籍之一。",
+          "作者将该书描述为设计生活方式和自动化收入的决策树其功能正被LLM所替代。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "The 4-Hour Body",
+        "canonical_name": "The 4-Hour Body",
+        "positioning": "《The 4-Hour Body》是 Tim Ferriss 于 2010 年出版的健康与体能优化指南，曾登顶纽约时报畅销书榜首，被作者描述为一张覆盖减脂、睡眠改善和增肌等问题的综合查阅表。",
+        "target_users": [
+          "关注减脂、健身和健康优化的读者",
+          "寻求快速身体改善方案的消费者"
+        ],
+        "product_signal": "该书本质是一张查阅表，包含减脂、改善睡眠和增肌等问题的解决方案，而 LLM 可在 15 秒内针对个人情况提供个性化方案。",
+        "market_signal": "作为 Ferriss 五本畅销书之一，该书的销量共同构成了 2026 年较 2022 年下降约 80% 的断崖式曲线，验证了查阅表式书籍的 AI 替代风险。",
+        "differentiation": "608 页的纸质查阅表被免费聊天机器人替代，后者可根据读者个人身体数据在秒级生成定制化方案，无需翻页查找。",
+        "watch_reason": "《The 4-Hour Body》的案例展示了传统查阅表式非虚构书籍如何被 LLM 精准替代，是理解 AI 对出版业品类级冲击的典型样本和预警信号。",
+        "risk_notes": [
+          "该书 2024 年因 Gary Brecka 在 TikTok 的推荐曾出现逆势增长，表明社交媒体传播可暂时抵消 AI 替代压力。",
+          "健身和健康领域的个性化需求可能使该品类对 AI 替代的敏感度高于其他自助类书籍。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "866ef7423e9172f1"
+        ],
+        "evidence_snippets": [
+          "The 4-Hour Body被作者描述为一张查阅表包含减脂、改善睡眠和增肌等问题的解决方案。",
+          "该书于2010年出版共608页登上纽约时报畅销书榜首但作者收到的大量请求只是要求快速要点而非完整阅读。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "BookScan",
+        "canonical_name": "BookScan",
+        "positioning": "BookScan 是尼尔森旗下覆盖美国图书零售市场的销量统计系统，为出版行业提供实时销售追踪，是本文论证 LLM 冲击自助类图书市场的核心量化数据来源。",
+        "target_users": [
+          "出版商和作者",
+          "图书行业分析师和市场研究人员"
+        ],
+        "product_signal": "BookScan 提供的年度同比数据完整呈现了 2022 年至 2026 年 Tim Ferriss 图书目录的销量下滑曲线，成为论证 LLM 冲击的核心量化证据。",
+        "market_signal": "BookScan 数据显示自助类图书为 2026 年 Q1 跌幅最大的品类（同比下跌 26.3%），验证了 AI 对规定性非虚构内容的实质性市场影响。",
+        "differentiation": "作为图书零售数据的行业标准，BookScan 覆盖全国零售渠道的权威性使作者能够以可信数据指标论证市场趋势变化。",
+        "watch_reason": "BookScan 的品类级销量数据是跟踪 AI 对出版业冲击程度的客观量化指标，持续关注其季度和年度报告可验证 AI 替代趋势的广度与深度。",
+        "risk_notes": [
+          "BookScan 仅覆盖国内印刷版销量，未纳入电子书、有声书和国际市场数据，可能低估实际读者需求。",
+          "BookScan 数据本身不区分 AI 因素与其他市场变量，因果推论依赖外部解读。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "866ef7423e9172f1"
+        ],
+        "evidence_snippets": [
+          "作者使用BookScan数据展示其五本畅销书的国内印刷版销量变化作为论证AI冲击的核心数据来源。",
+          "BookScan是作者获取图书销量统计的主要工具通过其年度同比数据呈现了2022年至2026年的销量下滑曲线。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -885,25 +1921,82 @@
     "pipeline_stage": "fact_extracted",
     "id": "8d30a52e4e1520a3",
     "source_type": "community_discussion",
-    "tldr": "SpaceX 以 600 亿美元收购 AI 编程工具 Cursor 的母公司 Anysphere",
-    "objective_summary": "2026 年 6 月 16 日，路透社报道 SpaceX 将以 600 亿美元收购 Anysphere，该公司是 AI 编程助手 Cursor 的开发商。交易金额巨大，标志着航天与 AI 编程领域的跨界整合。",
+    "tldr": "SpaceX 以 600 亿美元全股票交易收购 AI 编程工具 Cursor（母公司 Anysphere），交易预计 2026 年第三季度完成。此次收购将增强 SpaceX 旗下 xAI 在 AI 编程领域的竞争力，对抗 Anthropic 和 OpenAI。",
+    "objective_summary": "2026 年 6 月 16 日，SpaceX 宣布以 600 亿美元全股票交易收购 AI 编程初创公司 Cursor（母公司 Anysphere），交易预计 2026 年第三季度完成。此前 SpaceX 已于 2 月收购 xAI。Cursor 年化 B2B 收入约 26 亿美元，但由于计算资源不足而增长受限。SpaceX 将把自身 AI 模型 Grok 和 xAI 的编程智能体 Grok Build 集成到 Cursor 平台上。消息公布后 SpaceX 股价上涨 10%。",
     "event_type": "capital_movement",
-    "epistemic_status": "pr_statement",
+    "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
         "SpaceX",
         "Anysphere",
-        "Reuters"
+        "xAI",
+        "Cursor",
+        "Anthropic",
+        "OpenAI",
+        "Google",
+        "Hargreaves Lansdown",
+        "D.A. Davidson"
       ],
       "technologies": [
-        "AI编程助手"
+        "Grok",
+        "Grok Build"
       ],
-      "key_people": []
+      "key_people": [
+        "Matt Britzman",
+        "Bill Ackman",
+        "Gil Luria",
+        "Deborah Sophia",
+        "Aditya Soni"
+      ]
     },
     "key_logic_flow": [
-      "路透社报道 SpaceX 将以 600 亿美元收购 Cursor 的母公司 Anysphere。",
-      "该收购发生于 2026 年 6 月 16 日前后，交易金额高达 600 亿美元。",
-      "此次收购将航天公司 SpaceX 与 AI 编程工具 Cursor 关联，属于跨界重大资本运作。"
+      "SpaceX 以 600 亿美元全股票交易收购 AI 编程工具 Cursor（母公司 Anysphere），此前 SpaceX 已于 2026 年 2 月收购 xAI。",
+      "该交易将增强 xAI 在 AI 编程领域的竞争力，直接对抗 Anthropic 和 OpenAI 的市场领先地位。",
+      "Cursor 年化 B2B 收入约 26 亿美元，企业销售增长迅速，但缺乏计算资源一直制约其发展。",
+      "SpaceX 此前在 4 月提出两种选择：以 600 亿美元收购该初创公司，或支付 100 亿美元建立合作伙伴关系。",
+      "SpaceX 将很快在 Cursor 上发布 AI 模型，同时推出 xAI 的编程智能体 Grok Build，二者已联合训练数月。",
+      "SpaceX 近期还与 Anthropic 和 Google 签订了合计约 260 亿美元的年化云计算容量租赁协议，两份协议均含 90 天终止条款。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "Cursor",
+        "canonical_name": "Cursor",
+        "url": "https://www.cursor.com",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "SpaceX 以 600 亿美元全股票交易收购 AI 编程工具 Cursor（母公司 Anysphere），交易预计 2026 年第三季度完成。",
+          "Cursor 年化 B2B 收入约 26 亿美元，企业销售增长迅速，是 Anthropic 和 OpenAI 在 AI 编程领域的主要竞争对手。",
+          "SpaceX 将很快在 Cursor 上发布 AI 模型，同时推出 xAI 的编程智能体 Grok Build。"
+        ],
+        "article_id": "8d30a52e4e1520a3"
+      },
+      {
+        "object_type": "product",
+        "name": "Grok",
+        "canonical_name": "Grok",
+        "url": "https://x.ai",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "SpaceX 此前已在 IPO 文件中表示，Cursor 对开发者数据的访问（包括编码请求和设计决策）有助于改进 Grok 等 AI 模型。",
+          "SpaceX 将很快在 Cursor 上发布 AI 模型以及 Grok Build（xAI 的编程智能体），二者已联合训练数月。"
+        ],
+        "article_id": "8d30a52e4e1520a3"
+      },
+      {
+        "object_type": "product",
+        "name": "Grok Build",
+        "canonical_name": "Grok Build",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "SpaceX 将很快在 Cursor 上发布 AI 模型以及 Grok Build（xAI 的编程智能体），二者已联合训练数月。"
+        ],
+        "article_id": "8d30a52e4e1520a3"
+      }
     ],
     "impact_score": {
       "score": 7.5,
@@ -962,7 +2055,91 @@
       "compound": "medium",
       "hype": "high"
     },
-    "actionable_insight": "strategic_invest"
+    "actionable_insight": "strategic_invest",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "Cursor",
+        "canonical_name": "Cursor",
+        "url": "https://www.cursor.com",
+        "positioning": "AI 编程工具，被 SpaceX 以 600 亿美元全股票收购后将与 xAI 深度集成，直接对抗 Anthropic 和 OpenAI 在 AI 编程领域的领先地位。",
+        "target_users": [
+          "开发者",
+          "软件工程师",
+          "企业软件开发团队"
+        ],
+        "product_signal": "年化 B2B 收入约 26 亿美元，企业销售增长迅速，是 Anthropic 和 OpenAI 在 AI 编程领域的主要竞争对手。",
+        "market_signal": "被 SpaceX 以 600 亿美元全股票交易收购，交易预计 2026 年第三季度完成，消息公布后 SpaceX 股价上涨 10%。",
+        "differentiation": "虽然企业订阅增长迅速，但计算资源不足一直制约发展；SpaceX 的算力与 Grok 模型集成有望突破此瓶颈，形成端到端优势。",
+        "watch_reason": "作为 AI 编程工具的关键玩家被 SpaceX 天价收购，与 xAI 的模型和编程智能体深度集成后将重塑 AI 编程工具市场竞争格局，值得持续关注产品整合进度与市场反应。",
+        "risk_notes": [
+          "SpaceX 与 Cursor 的组织文化差异可能影响收购后的整合效率与产品迭代节奏。",
+          "Anthropic 和 OpenAI 在 AI 编程工具领域已建立强品牌壁垒，Cursor 需持续保持产品差异化优势。"
+        ],
+        "score": 9.0,
+        "article_ids": [
+          "8d30a52e4e1520a3"
+        ],
+        "evidence_snippets": [
+          "SpaceX 以 600 亿美元全股票交易收购 AI 编程工具 Cursor（母公司 Anysphere），交易预计 2026 年第三季度完成。",
+          "Cursor 年化 B2B 收入约 26 亿美元，企业销售增长迅速，是 Anthropic 和 OpenAI 在 AI 编程领域的主要竞争对手。",
+          "SpaceX 将很快在 Cursor 上发布 AI 模型，同时推出 xAI 的编程智能体 Grok Build。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Grok",
+        "canonical_name": "Grok",
+        "url": "https://x.ai",
+        "positioning": "SpaceX/xAI 的大语言模型，通过与 Cursor 集成进入 AI 编程工具生态，利用开发者行为数据加速模型迭代。",
+        "target_users": [
+          "AI 开发者",
+          "xAI 平台用户",
+          "Cursor 生态开发者"
+        ],
+        "product_signal": "SpaceX 将很快在 Cursor 上发布 Grok 模型及编程智能体 Grok Build，二者已联合训练数月。",
+        "market_signal": "通过收购 Cursor 获得大规模开发者数据和编码请求访问权限，有助于改进 Grok 在编程场景的能力，扩大应用场景覆盖。",
+        "differentiation": "将直接嵌入 Cursor 工作流并获取开发者交互数据，有望在编程场景中形成差异化能力，区别于通用对话模型。",
+        "watch_reason": "Grok 通过与 Cursor 集成进入 AI 编程赛道，获得大规模真实开发者行为数据有助于模型快速迭代，可能改变当前 AI 编程模型的竞争格局。",
+        "risk_notes": [
+          "Grok 在代码生成与理解方面的实际能力尚未经过开发者社区充分验证，与成熟方案存在差距。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "8d30a52e4e1520a3"
+        ],
+        "evidence_snippets": [
+          "SpaceX 此前已在 IPO 文件中表示，Cursor 对开发者数据的访问（包括编码请求和设计决策）有助于改进 Grok 等 AI 模型。",
+          "SpaceX 将很快在 Cursor 上发布 AI 模型以及 Grok Build（xAI 的编程智能体），二者已联合训练数月。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Grok Build",
+        "canonical_name": "Grok Build",
+        "positioning": "xAI 推出的 AI 编程智能体，将集成到 Cursor 平台，是 SpaceX AI 编程战略中的核心产品组件。",
+        "target_users": [
+          "Cursor 用户",
+          "AI 辅助编程开发者",
+          "xAI 生态用户"
+        ],
+        "product_signal": "作为 xAI 的编程智能体，Grok Build 将与 Grok 模型一同发布在 Cursor 平台上，二者已联合训练数月。",
+        "market_signal": "通过嵌入被收购的 Cursor 平台，Grok Build 将直接触达大量开发者用户，快速进入 AI 编程智能体市场。",
+        "differentiation": "与 Grok 模型联合训练并深度嵌入 Cursor 编辑器工作流，可能在代码补全、重构和调试等场景形成端到端体验优势。",
+        "watch_reason": "作为 xAI 在编程领域的关键产品，Grok Build 与 Cursor 的深度集成效果将决定 SpaceX AI 编程战略的成败，值得关注其能力成熟度与用户接受度。",
+        "risk_notes": [
+          "Grok Build 尚未正式发布，实际代码生成与理解能力有待市场和用户验证。",
+          "面临 GitHub Copilot、Claude Code 和 Codex 等成熟编程智能体的激烈竞争，市场进入门槛较高。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "8d30a52e4e1520a3"
+        ],
+        "evidence_snippets": [
+          "SpaceX 将很快在 Cursor 上发布 AI 模型以及 Grok Build（xAI 的编程智能体），二者已联合训练数月。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -981,10 +2158,10 @@
     "pipeline_stage": "fact_extracted",
     "id": "aac83310716a739c",
     "source_type": "community_discussion",
-    "tldr": "Wolfram 发布 Version 15，内置 AI Assistant 到所有 Notebook，支持从外部 AI 环境调用 Wolfram 系统。",
-    "objective_summary": "2026 年 6 月，Stephen Wolfram 宣布发布 Wolfram Language 和 Mathematica 的 Version 15。新版内置 AI Assistant 到所有 Notebook，提供 Basic/Pro/Research 三级服务；新增 Wolfram",
-    "event_type": "application_landing",
-    "epistemic_status": "verified_fact",
+    "tldr": "Wolfram Research 发布 Wolfram Language 与 Mathematica 15，内置 AI Assistant 到每个笔记本中，并推出 Wolfram Agent Tools 框架实现与外部 AI 环境（如 Claude Code）的集成。",
+    "objective_summary": "Stephen Wolfram 于 2026 年 6 月宣布推出 Wolfram Language 与 Mathematica 15 版本，这是自 1988 年 1.0 发布以来的又一次重大更新。新版在所有 Wolfram 笔记本中内置了 AI Assistant（基础版免费），并提供 Pro 和 Research 两个付费升级层级。同时发布了 Wolfram Agent Tools 框架，支持 Claude Code 和 Codex 等外部 AI 环境通过工具调用接入桌面版 Wolfram 系统。Wolfram 官网还新增了面向 AI agent 的 Markdown 配置说明页面。",
+    "event_type": "framework_tools",
+    "epistemic_status": "pr_statement",
     "entities": {
       "companies": [
         "Wolfram Research"
@@ -992,23 +2169,109 @@
       "technologies": [
         "Wolfram Language",
         "Mathematica",
-        "AI Assistant",
         "Wolfram|Alpha",
+        "ChatGPT",
         "LLM",
-        "Wolfram Agent Tools",
-        "Notebook Assistant",
-        "Foundation Tool"
+        "Wolfram Agent Tools"
       ],
       "key_people": [
         "Stephen Wolfram"
       ]
     },
     "key_logic_flow": [
-      "Wolfram 发布 Version 15，核心亮点是内置 AI Assistant 到所有 Notebook，用户无需额外配置即可使用基础功能。",
-      "AI Assistant 提供 Basic（免费）、Pro 和 Research（付费订阅）三级服务，通过 Notebook 底部的 chatbar（聊天栏）进行交互，支持图片粘贴等输入方式。",
-      "新增 Wolfram Agent Tools 框架，使 Claude Code、Codex 等外部 AI 环境能够通过 MCP 协议自动调用 Wolfram 系统，包括代码求值、Notebook 读写等工具。",
-      "Wolfram Language 已积累 7000+ 原始函数，覆盖广泛的计算领域；AI 生成的 Wolfram Language 代码被视为精确计算的可靠载体。",
-      "Wolfram|Alpha 的 NLP 技术继续发挥作用，帮助构建 AI 与 Wolfram Language 之间的更优通信通道。"
+      "Wolfram Research 于 2026 年 6 月正式发布 Wolfram Language 与 Mathematica 15 版本，这是自 1988 年 1.0 版本以来的又一次重大更新。",
+      "新版在所有 Wolfram 笔记本中内置了 AI Assistant，用户可通过笔记本底部的 chatbar 直接输入自然语言指令并生成可执行的 Wolfram Language 代码。",
+      "AI Assistant 分为 Basic（免费）、Pro 和 Research 三个层级，其中 Pro 和 Research 需付费订阅，原有 Notebook Assistant 用户将自动升级为 AI Assistant Pro。",
+      "Wolfram 推出 Wolfram Agent Tools 框架，外部 AI 环境（如 Claude Code、Codex）可通过工具调用方式接入桌面版 Wolfram 系统。",
+      "Wolfram 官网新增 'For AIs' 页面，能够自动为请求的 AI agent 返回 Markdown 格式的技术配置文档。",
+      "Wolfram Language 拥有 7000 多个内置原语，其精确表达的特性使其在 AI 时代成为连接自然语言与精确计算的关键桥梁。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "Wolfram Language and Mathematica version 15",
+        "canonical_name": "Wolfram Language/Mathematica 15",
+        "url": "https://writings.stephenwolfram.com/2026/06/launching-version-15-of-wolfram-language-mathematica-built-in-useful-ai-lots-of-new-core-functionality/",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Wolfram Research 于 2026 年 6 月正式发布 Wolfram Language 与 Mathematica 15 版本，包含大量核心功能新增。",
+          "该版本距离 1988 年 6 月 23 日发布的 1.0 版本已接近 38 年，是 Wolfram 持续构建计算语言体系的最新里程碑。"
+        ],
+        "article_id": "aac83310716a739c"
+      },
+      {
+        "object_type": "product",
+        "name": "AI Assistant",
+        "canonical_name": "Wolfram AI Assistant",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Version 15 在所有 Wolfram 笔记本中内置了 AI Assistant，用户无需额外配置即可使用基础版功能来获取代码帮助。",
+          "AI Assistant 提供 Basic、Pro 和 Research 三个层级，其中 Pro 和 Research 需付费订阅才能使用更高级的功能。",
+          "基础版 AI Assistant 可直接通过笔记本底部的 chatbar 输入自然语言指令，系统会返回可运行的 Wolfram Language 代码。"
+        ],
+        "article_id": "aac83310716a739c"
+      },
+      {
+        "object_type": "project",
+        "name": "Wolfram Agent Tools",
+        "canonical_name": "Wolfram Agent Tools",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Wolfram Agent Tools 框架支持 Claude Code 和 Codex 等外部 AI 环境通过工具调用方式接入桌面版 Wolfram 系统。",
+          "用户可通过 Wolfram Language 函数 DeployAgentTools 一键配置所有检测到的 AI 环境并自动部署工具。"
+        ],
+        "article_id": "aac83310716a739c"
+      },
+      {
+        "object_type": "product",
+        "name": "Chatbar",
+        "canonical_name": "Wolfram Chatbar",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Chatbar 是位于笔记本底部的新 UI 元素，用户输入内容后按 Enter 即可与 AI Assistant 交互并生成 Wolfram Language 代码。",
+          "用户可以点击 chatbar 侧面的控制按钮进行设置，也可以将其最小化或通过主偏好菜单全局禁用。"
+        ],
+        "article_id": "aac83310716a739c"
+      },
+      {
+        "object_type": "product",
+        "name": "Notebook Assistant",
+        "canonical_name": "Wolfram Notebook Assistant",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Notebook Assistant 是此前作为 Wolfram 系统插件发布的 AI 集成产品，现有用户将自动升级为 AI Assistant Pro 级别。"
+        ],
+        "article_id": "aac83310716a739c"
+      },
+      {
+        "object_type": "project",
+        "name": "Foundation Tool",
+        "canonical_name": "Wolfram Foundation Tool",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Foundation Tool 技术套件于 2026 年 2 月发布，进一步增强了 Wolfram 系统与 LLM 的集成能力。"
+        ],
+        "article_id": "aac83310716a739c"
+      },
+      {
+        "object_type": "product",
+        "name": "Wolfram|Alpha",
+        "canonical_name": "Wolfram|Alpha",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Wolfram|Alpha 在 17 年前率先实现了使用自然语言指定计算任务的技术，与当前 AI 路线不同但互补。",
+          "Wolfram|Alpha 在 Wolfram Language 中已用于实体指定等场景的精确自然语言转换。"
+        ],
+        "article_id": "aac83310716a739c"
+      }
     ],
     "impact_score": {
       "score": 6.5,
@@ -1063,7 +2326,370 @@
       "compound": "medium",
       "hype": "medium"
     },
-    "actionable_insight": "strategic_invest"
+    "actionable_insight": "strategic_invest",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "Wolfram Language and Mathematica version 15",
+        "canonical_name": "Wolfram Language/Mathematica 15",
+        "url": "https://writings.stephenwolfram.com/2026/06/launching-version-15-of-wolfram-language-mathematica-built-in-useful-ai-lots-of-new-core-functionality/",
+        "positioning": "Wolfram Research 持续近 38 年构建的符号计算语言与交互式计算环境，以 7000+ 内置原语覆盖科学计算、数据处理与知识表达领域。",
+        "target_users": [
+          "科研人员与学者",
+          "数据科学家与分析师",
+          "工程技术人员",
+          "教育工作者"
+        ],
+        "product_signal": "Version 15 在所有 Wolfram 笔记本中内置 AI Assistant，用户可直接通过自然语言指令生成可执行的 Wolfram Language 代码。",
+        "market_signal": "距 1.0 版本发布已近 38 年，Wolfram Language 仍在持续发布重大版本更新并深化与 AI 生态的集成能力。",
+        "differentiation": "Wolfram Language 不仅是编程语言，更是可被人类阅读和精确理解的计算语言，为 AI 生成的代码提供可验证的精确锚点。",
+        "watch_reason": "Wolfram Language 正处于从「人类使用的计算语言」向「AI 使用的精确表达语言」转型的关键期，其内置 AI Assistant 和 Agent Tools 框架是传统计算工具拥抱 AI 的重要参考案例。",
+        "risk_notes": [
+          "高度封闭的商业生态系统限制了社区生态的自然生长。",
+          "AI Assistant 的高级功能需付费订阅，基础版功能对核心用户吸引力有限。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "aac83310716a739c"
+        ],
+        "evidence_snippets": [
+          "Wolfram Research 于 2026 年 6 月正式发布 Wolfram Language 与 Mathematica 15 版本，包含大量核心功能新增。",
+          "该版本距离 1988 年 6 月 23 日发布的 1.0 版本已接近 38 年，是 Wolfram 持续构建计算语言体系的最新里程碑。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "AI Assistant",
+        "canonical_name": "Wolfram AI Assistant",
+        "positioning": "内置于 Wolfram 笔记本的 AI 编程助手，通过自然语言交互生成 Wolfram Language 代码，分为 Basic、Pro 和 Research 三个层级。",
+        "target_users": [
+          "Wolfram 笔记本用户",
+          "科研人员与数据科学家",
+          "Wolfram Language 初学者"
+        ],
+        "product_signal": "AI Assistant 直接集成在每个 Wolfram 笔记本底部的 Chatbar 中，用户无需额外配置即可使用基础版功能获取代码帮助。",
+        "market_signal": "AI Assistant 分为 Basic（免费）、Pro 和 Research 三个层级，原有 Notebook Assistant 用户将自动升级为 AI Assistant Pro。",
+        "differentiation": "与通用 AI 编程助手不同，AI Assistant 专注于生成精确的 Wolfram Language 计算语言代码，而非传统编程语言的模糊代码。",
+        "watch_reason": "Wolfram AI Assistant 代表了传统专业计算工具嵌入 AI 能力的典型路径，其原生笔记本集成和分层付费模式为专业软件的 AI 化提供了可参考的范例。",
+        "risk_notes": [
+          "基础版 AI Assistant 功能有限，高级功能需 Pro 或 Research 付费订阅。",
+          "与 GitHub Copilot 等通用 AI 编程助手相比，Wolfram 生态的用户规模明显较小。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "aac83310716a739c"
+        ],
+        "evidence_snippets": [
+          "Version 15 在所有 Wolfram 笔记本中内置了 AI Assistant，用户无需额外配置即可使用基础版功能来获取代码帮助。",
+          "AI Assistant 提供 Basic、Pro 和 Research 三个层级，其中 Pro 和 Research 需付费订阅才能使用更高级的功能。",
+          "基础版 AI Assistant 可直接通过笔记本底部的 chatbar 输入自然语言指令，系统会返回可运行的 Wolfram Language 代码。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Wolfram Agent Tools",
+        "canonical_name": "Wolfram Agent Tools",
+        "positioning": "Wolfram Research 推出的 AI Agent 工具框架，支持外部 AI 环境通过工具调用方式接入桌面版 Wolfram 系统。",
+        "technical_signal": "通过 Wolfram Language 函数 DeployAgentTools 可一键配置检测到的 AI 环境并自动部署工具，降低了 AI 代理接入 Wolfram 系统的门槛。",
+        "adoption_signal": "该框架明确支持 Claude Code 和 Codex 等主流 AI 编码代理，表明 Wolfram 正主动拥抱外部 AI 生态。",
+        "ecosystem_relevance": "Wolfram Agent Tools 将传统计算工具的能力以工具调用形式开放给 AI 代理，是计算软件与 AI Agent 生态融合的重要探索。",
+        "target_users": [],
+        "watch_reason": "Wolfram Agent Tools 是传统专业计算软件向 AI Agent 开放能力的典型案例，其 DeployAgentTools 一键部署机制和与 Claude Code/Codex 的集成实践值得长期跟踪。",
+        "risk_notes": [
+          "Agent Tools 仅支持桌面版 Wolfram 系统，云环境的集成方案尚不明确。",
+          "外部 AI 代理通过工具调用接入的稳定性和安全性有待长期验证。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "aac83310716a739c"
+        ],
+        "evidence_snippets": [
+          "Wolfram Agent Tools 框架支持 Claude Code 和 Codex 等外部 AI 环境通过工具调用方式接入桌面版 Wolfram 系统。",
+          "用户可通过 Wolfram Language 函数 DeployAgentTools 一键配置所有检测到的 AI 环境并自动部署工具。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Chatbar",
+        "canonical_name": "Wolfram Chatbar",
+        "positioning": "Wolfram 笔记本中新增的底部聊天栏 UI 元素，用户通过它与内置 AI Assistant 交互并生成 Wolfram Language 代码。",
+        "target_users": [
+          "Wolfram 笔记本用户",
+          "AI Assistant 使用者"
+        ],
+        "product_signal": "Chatbar 位于笔记本底部，用户输入内容后按 Enter 即可与 AI Assistant 交互并生成 Wolfram Language 代码。",
+        "market_signal": "Chatbar 是 AI Assistant 的交互入口，其设计体现了 Wolfram 将 AI 对话能力无缝嵌入既有笔记本工作流的思路。",
+        "differentiation": "与独立对话框或侧边栏方案不同，Chatbar 固定于笔记本底部，与文档编辑区域保持紧邻，不干扰主工作流。",
+        "watch_reason": "Chatbar 作为 AI 助手与专业计算环境的交互入口设计，体现了桌面软件 AI 化的 UI 创新方向，值得关注其用户采纳效果。",
+        "risk_notes": [
+          "Chatbar 作为 UI 元素独立跟踪价值有限，其发展紧密依赖 AI Assistant 的迭代。",
+          "用户可能因习惯传统笔记本操作模式而忽略或禁用 Chatbar。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "aac83310716a739c"
+        ],
+        "evidence_snippets": [
+          "Chatbar 是位于笔记本底部的新 UI 元素，用户输入内容后按 Enter 即可与 AI Assistant 交互并生成 Wolfram Language 代码。",
+          "用户可以点击 chatbar 侧面的控制按钮进行设置，也可以将其最小化或通过主偏好菜单全局禁用。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Notebook Assistant",
+        "canonical_name": "Wolfram Notebook Assistant",
+        "positioning": "此前作为 Wolfram 系统插件发布的 AI 集成产品，现有用户将自动升级为 AI Assistant Pro 级别。",
+        "target_users": [
+          "现有 Notebook Assistant 用户"
+        ],
+        "product_signal": "Notebook Assistant 用户无需额外付费即可升级至 AI Assistant Pro，表明 Wolfram 正在统一其 AI 产品线。",
+        "market_signal": "Notebook Assistant 的升级路径显示 Wolfram 正在将分散的 AI 功能整合到统一的 AI Assistant 品牌下。",
+        "differentiation": "与 AI Assistant 相比，Notebook Assistant 作为插件形式存在，集成度和体验不如原生内置方案。",
+        "watch_reason": "Notebook Assistant 向 AI Assistant Pro 的升级路径展示了 Wolfram 如何整合分散的 AI 产品线，其用户迁移策略值得参考。",
+        "risk_notes": [
+          "Notebook Assistant 已不再是独立产品，未来发展方向完全取决于 AI Assistant 的迭代。",
+          "现有用户自动升级至 Pro 级别的承诺可能给 Wolfram 带来长期免费服务成本。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "aac83310716a739c"
+        ],
+        "evidence_snippets": [
+          "Notebook Assistant 是此前作为 Wolfram 系统插件发布的 AI 集成产品，现有用户将自动升级为 AI Assistant Pro 级别。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Foundation Tool",
+        "canonical_name": "Wolfram Foundation Tool",
+        "positioning": "于 2026 年 2 月发布的技术套件，旨在进一步增强 Wolfram 系统与大型语言模型（LLM）的集成能力。",
+        "technical_signal": "Foundation Tool 作为 Wolfram 与 LLM 集成的底层基础设施，为后续 AI Assistant 和 Agent Tools 的推出奠定了技术基础。",
+        "adoption_signal": "Foundation Tool 发布于 2026 年 2 月，是 Version 15 AI 功能的前置技术准备，具体用户采纳数据尚不明确。",
+        "ecosystem_relevance": "作为 Wolfram LLM 集成的基础设施套件，Foundation Tool 支撑了 Wolfram 在 AI 时代与外部 LLM 生态的对接能力。",
+        "target_users": [],
+        "watch_reason": "Foundation Tool 是 Wolfram AI 战略的技术基础设施层，其发展路线图直接影响 AI Assistant 和 Agent Tools 的能力边界。",
+        "risk_notes": [
+          "Foundation Tool 作为底层基础设施，其技术细节和独立发展路径尚不清晰。",
+          "主要服务于 Wolfram 自有生态，对外部开发者的开放程度有限。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "aac83310716a739c"
+        ],
+        "evidence_snippets": [
+          "Foundation Tool 技术套件于 2026 年 2 月发布，进一步增强了 Wolfram 系统与 LLM 的集成能力。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Wolfram|Alpha",
+        "canonical_name": "Wolfram|Alpha",
+        "positioning": "17 年前率先实现自然语言指定计算任务的知识引擎，在 Wolfram 生态中用于实体指定等场景的精确自然语言转换。",
+        "target_users": [
+          "Wolfram Language 用户",
+          "知识检索与计算查询需求者"
+        ],
+        "product_signal": "Wolfram|Alpha 的自然语言理解技术已集成到 Wolfram Language 中，用于实体指定等场景的精确自然语言转换。",
+        "market_signal": "17 年前推出的自然语言计算接口在当今 AI 时代获得新的相关性，但其技术路径与当前主流大语言模型不同。",
+        "differentiation": "与基于大语言模型的 AI 不同，Wolfram|Alpha 采用结构化知识库加精确规则的方式实现自然语言到计算的转换。",
+        "watch_reason": "Wolfram|Alpha 作为自然语言计算接口的先驱，其结构化知识与当前 LLM 技术的互补关系在 AI 时代值得持续观察。",
+        "risk_notes": [
+          "Wolfram|Alpha 的技术路线与主流大语言模型不同，在通用性和灵活性上存在明显差距。",
+          "在 LLM 时代，Wolfram|Alpha 的独立产品价值可能被 AI Assistant 逐步吸收。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "aac83310716a739c"
+        ],
+        "evidence_snippets": [
+          "Wolfram|Alpha 在 17 年前率先实现了使用自然语言指定计算任务的技术，与当前 AI 路线不同但互补。",
+          "Wolfram|Alpha 在 Wolfram Language 中已用于实体指定等场景的精确自然语言转换。"
+        ]
+      }
+    ]
+  },
+  {
+    "source_dir": "hackernews",
+    "title": "10Gb/s Ethernet: switching to a Broadcom SFP+ module",
+    "source": "https://www.gilesthomas.com/2026/06/10g-ethernet-switching-to-broadcom-sfp-plus",
+    "author": [
+      "[[gpjt]]"
+    ],
+    "published": "2026-06-16",
+    "created": "2026-06-17",
+    "description": "Article URL: https://www.gilesthomas.com/2026/06/10g-ethernet-switching-to-broadcom-sfp-plus Comments URL: https://news.ycombinator.com/item?id=48559083 Points: 144 # Comments: 132",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "adf3496bde004423",
+    "source_type": "community_discussion",
+    "tldr": "作者将家中过热的 MikroTik S+RJ10 SFP+ 模块（Marvell 芯片）更换为 10Gtek ASF-10G-T80-INT（Broadcom BCM84891 芯片），解决了因高温导致的网络 flapping 问题，交换机 CPU 温度下降约 5°C。",
+    "objective_summary": "2026 年 4 月，作者将家庭局域网升级至 10Gb/s，使用 CAT-6 线缆和 10GBASE-T SFP+ 模块连接。路由器中的 MikroTik S+RJ10 模块（Marvell 芯片）在夏季升温后因过热（约 95°C）触发保护，导致网络反复断开与重连。根据 Hacker News 和 ServeTheHome 论坛的建议，作者于 6 月 1 日购买了采用 Broadcom BCM84891 PHY 芯片的 10Gtek ASF-10G-T80-INT 模块进行替换。更换后网络连接恢复稳定，虽无法通过 SNMP 监控新模块温度，但交换机 CPU 温度下降了约 5°C。",
+    "event_type": "infrastructure_update",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [
+        "Broadcom",
+        "Marvell Technology",
+        "MikroTik",
+        "Intel Corporation",
+        "10Gtek"
+      ],
+      "technologies": [
+        "10GBASE-T",
+        "SFP+",
+        "SNMP",
+        "InfluxDB",
+        "Grafana",
+        "Telegraf",
+        "CAT-6"
+      ],
+      "key_people": []
+    },
+    "key_logic_flow": [
+      "2026 年 4 月作者将家庭网络升级至 10Gb/s，使用 CAT-6 线缆和 10GBASE-T SFP+ 模块进行连接。",
+      "MikroTik S+RJ10 模块（Marvell 芯片）运行温度达 93°C，夏季气温升高后因过热保护反复自动关闭与重启。",
+      "Hacker News 和 ServeTheHome 论坛用户指出旧一代 Marvell 芯片模块发热严重，推荐使用 Broadcom 芯片的新一代模块。",
+      "作者从 Amazon 购买 10Gtek ASF-10G-T80-INT 模块替换 MikroTik，该模块采用 Broadcom BCM84891 PHY 芯片，功耗仅 1.6W 至 2.0W。",
+      "新模块被交换机识别为 Intel 光纤模块（EEPROM 信息不准确），因此无法通过原有 SNMP OID 读取温度数据。",
+      "更换后两周网络连接稳定无 flapping，交换机 CPU 温度下降约 5°C，成功解决过热问题。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "MikroTik S+RJ10",
+        "canonical_name": "MikroTik S+RJ10",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者确认 MikroTik S+RJ10 模块使用 Marvell 芯片，属于发热严重的旧一代 10GBASE-T SFP+ 模块。",
+          "该模块运行温度约 93°C，夏季升温后触发过热保护，导致网络反复断开与重连。"
+        ],
+        "article_id": "adf3496bde004423"
+      },
+      {
+        "object_type": "product",
+        "name": "10Gtek ASF-10G-T80-INT",
+        "canonical_name": "10Gtek ASF-10G-T80-INT",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "10Gtek ASF-10G-T80 采用 Broadcom BCM84891 PHY 芯片，功耗仅 1.6W 至 2.0W，支持最长 80 米传输距离。",
+          "更换后两周内网络连接保持稳定，不再因过热而 flapping，交换机 CPU 温度下降约 5°C。"
+        ],
+        "article_id": "adf3496bde004423"
+      }
+    ],
+    "impact_score": {
+      "score": 2.0,
+      "reason": "该事件讨论的是10Gb以太网环境下更换Broadcom SFP+模块的个人经验分享，属于网络硬件领域的社区技术帖。虽然Hacker News上144分和132条评论显示有一定社区关注度，但从AI行业视角看，这是基础设施的常规技术讨论，不构成对AI行业格局或范式的任何冲击。同类内容在homelab和网络工程社区中常见，不具备短期行业冲击力。"
+    },
+    "sentiment": "neutral",
+    "developer_sentiment": {
+      "tone": "neutral",
+      "primary_focus": "Broadcom SFP+模块在10GbE环境下的兼容性和性能表现"
+    },
+    "hype_assessment": {
+      "level": "low",
+      "reason": "文章标题和来源无明显PR包装词汇，属于技术博主分享实际硬件切换经验的社区讨论帖，HN评论区以技术细节讨论为主，不存在概念炒作或夸大宣传。"
+    },
+    "information_entropy": "medium",
+    "domain_disruption": {
+      "technical_innovation": "无——该文章讨论的是现有10Gb以太网硬件模块的品牌切换经验，未涉及新的技术架构或工程突破。",
+      "business_model": "无——纯硬件部署经验分享，不涉及商业模式变革。"
+    },
+    "engineering_complexity": "production_ready",
+    "compound_value": {
+      "score": 2.5,
+      "reason": "该事件是关于10Gb以太网SFP+模块的个人技术选型记录，虽然Broadcom是数据中心网络芯片的重要玩家（其Tomahawk/Jericho系列在AI集群中广泛使用），但单篇个人博客级别的硬件更换体验分享不具备塑造行业格局的能力。没有产品发布、技术突破或商业模式变化的信息支撑。HN热度较高（144 points/132 comments）反映了技术社区对10Gb网络的兴趣，但这属于存量技术讨论而非增量创新，无法形成长期复利效应。"
+    },
+    "value_capture_layer": "hardware_compute",
+    "moat_impact": "neutral",
+    "key_beneficiaries": [
+      "Broadcom"
+    ],
+    "competitive_casualty": [
+      "无明确受损方"
+    ],
+    "market_opportunities": [
+      "数据中心和AI集群基础设施团队可借鉴该实践，评估Broadcom SFP+模块在自有网络中的兼容性与成本效益，优化10GbE网络TCO",
+      "网络设备供应商可开发针对Broadcom SFP+模块的自动化兼容性验证工具，降低企业用户的手动调优成本",
+      "AI训练集群的网络运维团队应关注SFP+模块选型对互连稳定性的影响，建立硬件兼容性白名单以减少生产环境故障"
+    ],
+    "risk_matrix": {
+      "regulatory": "半导体和光模块出口管制可能影响Broadcom SFP+模块的跨境供应链，尤其是在中美科技脱钩背景下",
+      "technological": "10GbE SFP+技术相对成熟，正被25GbE/100GbE/400GbE逐步取代，长期可能面临架构过时风险；不同厂商SFP+模块的固件兼容性差异可能导致互操作问题",
+      "competitive": "Broadcom在以太网交换芯片领域占据主导地位，存在供应商锁定风险；Intel（Silicon Photonics）、Marvell等竞品也在争夺市场份额，价格战可能压缩利润空间",
+      "ethical": "无",
+      "additional": [
+        "文章正文未被成功抓取，分析基于标题和社区讨论上下文，信息完整度受限，需进一步验证"
+      ]
+    },
+    "confidence": {
+      "impact": "low",
+      "compound": "low",
+      "hype": "low"
+    },
+    "actionable_insight": "speculative_watch",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "MikroTik S+RJ10",
+        "canonical_name": "MikroTik S+RJ10",
+        "positioning": "MikroTik 推出的 10GBASE-T SFP+ 模块，采用 Marvell 芯片方案，因发热严重在高温环境下存在可靠性不足问题。",
+        "target_users": [
+          "家庭网络用户",
+          "10GbE SFP+ 交换机用户",
+          "需铜缆连接的 10GBASE-T 模块采购者"
+        ],
+        "product_signal": "采用 Marvell 芯片的旧一代 10GBASE-T SFP+ 模块，运行温度约 93°C，夏季升温后反复触发过热保护导致网络频繁断开。",
+        "market_signal": "在 Hacker News 和 ServeTheHome 社区中被广泛认定为发热严重的旧一代方案，社区主动推荐 Broadcom 芯片替代品。",
+        "differentiation": "与 Broadcom BCM84891 芯片方案相比，功耗更高、发热更严重，在无主动散热的高温环境下难以维持稳定运行。",
+        "watch_reason": "MikroTik S+RJ10 的过热问题揭示了 10GBASE-T SFP+ 模块选型中的关键因素——芯片方案直接决定功耗与稳定性，该案例对家庭与 SOHO 网络用户在 10GbE 升级中具有警示和参考价值。",
+        "risk_notes": [
+          "Marvell 芯片方案在约 95°C 即触发过热保护，家庭无主动散热场景下难以维持 24/7 稳定运行。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "adf3496bde004423"
+        ],
+        "evidence_snippets": [
+          "作者确认 MikroTik S+RJ10 模块使用 Marvell 芯片，属于发热严重的旧一代 10GBASE-T SFP+ 模块。",
+          "该模块运行温度约 93°C，夏季升温后触发过热保护，导致网络反复断开与重连。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "10Gtek ASF-10G-T80-INT",
+        "canonical_name": "10Gtek ASF-10G-T80-INT",
+        "positioning": "10Gtek 推出的新一代 10GBASE-T SFP+ 模块，基于 Broadcom BCM84891 PHY 芯片，以超低功耗解决传统模块过热问题。",
+        "target_users": [
+          "家庭网络 10GbE 升级用户",
+          "受 10GBASE-T 模块过热困扰的运维者",
+          "SOHO 场景下的 SFP+ 交换机用户"
+        ],
+        "product_signal": "Broadcom BCM84891 PHY 芯片实现 1.6W 至 2.0W 超低功耗，支持最长 80 米传输距离，成功解决 Marvell 芯片模块的过热 flapping 问题。",
+        "market_signal": "在 Hacker News 和 ServeTheHome 等社区论坛中被广泛推荐为 Broadcom 芯片替代方案，Amazon 可购且兼容性已验证。",
+        "differentiation": "功耗从旧一代 Marvell 方案显著降低至 1.6W-2.0W，更换后交换机 CPU 温度下降约 5°C；但 EEPROM 信息模拟为 Intel 光纤模块导致 SNMP 温度监控不可用。",
+        "watch_reason": "该产品代表 10GBASE-T SFP+ 模块从 Marvell 到 Broadcom 芯片的代际升级方向，其超低功耗设计对家庭和 SOHO 网络场景下的 10GbE 普及具有实际参考价值，值得跟踪后续兼容性与产品迭代。",
+        "risk_notes": [
+          "EEPROM 信息不准确，被识别为 Intel 光纤模块而非实际铜缆模块，影响运维监控。",
+          "无法通过原有 SNMP OID 监控模块温度，用户需借助交换机命令行查看状态。",
+          "兼容性依赖厂商 EEPROM 伪装策略，不同品牌交换机上可能存在识别问题。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "adf3496bde004423"
+        ],
+        "evidence_snippets": [
+          "10Gtek ASF-10G-T80 采用 Broadcom BCM84891 PHY 芯片，功耗仅 1.6W 至 2.0W，支持最长 80 米传输距离。",
+          "更换后两周内网络连接保持稳定，不再因过热而 flapping，交换机 CPU 温度下降约 5°C。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -1082,18 +2708,13 @@
     "pipeline_stage": "fact_extracted",
     "id": "bc689c764e69a7b0",
     "source_type": "community_discussion",
-    "tldr": "欧盟拒绝 Stop Killing Games 请愿，不强制要求发行商在停服后保持游戏可玩。",
-    "objective_summary": "2026年6月16日，欧盟委员会正式回应 Stop Killing Games 欧洲公民倡议，拒绝提出立法要求发行商在停售后保持游戏可玩性，理由是比例原则、知识产权和成本考量；改为在2026年底前与行业和消费者团体起草自愿行为准则。",
+    "tldr": "Stop Killing Games 运动获得超 130 万签名后，欧盟委员会拒绝提出要求发行商在停服后保持游戏可玩性的立法提案，转而计划在 2026 年底前起草行业行为准则。",
+    "objective_summary": "Stop Killing Games 欧洲公民倡议在获得 1,294,188 份有效签名后提交欧盟审议，经过欧盟议会听证和全体辩论后，欧盟委员会正式回应称无法提出要求发行商在游戏停售后保持其可玩性的法律义务，理由是涉及知识产权、商业机密、成本及安全风险。委员会计划在 2026 年底前与游戏行业和消费者代表起草行业行为准则，但不强制要求发行商提供离线补丁或私服工具。该运动表示将继续推动欧洲议会在《数字公平法案》中纳入相关条款。",
     "event_type": "policy_and_safety",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
-        "European Commission",
-        "European Parliament",
-        "Stop Killing Games",
-        "Ubisoft",
-        "UFC-Que Choisir",
-        "Accursed Farms"
+        "Ubisoft"
       ],
       "technologies": [],
       "key_people": [
@@ -1101,12 +2722,28 @@
       ]
     },
     "key_logic_flow": [
-      "Stop Killing Games 收集到超过129万份有效签名，触发欧盟委员会必须正式审查的法定门槛。",
-      "2026年6月16日，欧盟委员会正式拒绝该倡议的核心诉求——不提出法律义务要求发行商在停售后保持游戏可玩。",
-      "欧盟委员会的理由包括比例原则、知识产权保护、企业成本以及停服后的网络安全风险。",
-      "作为替代方案，欧盟委员会将在2026年底前启动与游戏行业和消费者代表的对话，起草游戏生命周期结束时的自愿行为准则。",
-      "French消费者组织 UFC-Que Choisir 正就《The Crew》停服事件对 Ubisoft 提起法律诉讼，Ubisoft 辩称玩家购买的是有限访问权而非完整所有权。",
-      "Stop Killing Games 表示不会放弃，转而推动欧洲议会议员将相关条款纳入《数字公平法案》立法渠道。"
+      "Stop Killing Games 运动以欧洲公民倡议'Stop Destroying Videogames'形式提交欧盟，要求立法禁止发行商在停服后使已售出的游戏无法游玩。",
+      "该倡议获得 1,294,188 份有效签名，超过百万门槛，经欧盟委员会审议、议会听证和全体辩论后，于 6 月 16 日被正式拒绝。",
+      "欧盟委员会认为法律强制要求保持游戏可玩性不符合比例原则，涉及知识产权、商业机密、成本和安全风险等多方面顾虑。",
+      "委员会计划在 2026 年底前与行业和消费者代表起草游戏生命周期终止管理的行业行为准则，但不具有法律强制力。",
+      "法国消费者组织 UFC-Que Choisir 就育碧《The Crew》停服事件继续对育碧提起法律诉讼，争议焦点在于玩家购买的是使用权还是所有权。",
+      "Stop Killing Games 表示不会放弃，正转向推动欧洲议会在《数字公平法案》中纳入相关立法条款。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "Stop Killing Games",
+        "canonical_name": "Stop Killing Games",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "该运动正式以欧洲公民倡议'Stop Destroying Videogames'形式提交欧盟，要求立法禁止发行商在停服后使已售出的游戏无法游玩。",
+          "该倡议获得 1,294,188 份有效签名，超过百万门槛，经过欧盟议会听证和全体辩论后被委员会正式拒绝。",
+          "该组织表示将继续推动欧洲议会在《数字公平法案》中纳入相关条款，不会因委员会决定而放弃立法努力。"
+        ],
+        "article_id": "bc689c764e69a7b0"
+      }
     ],
     "impact_score": {
       "score": 5.5,
@@ -1162,7 +2799,35 @@
       "compound": "medium",
       "hype": "high"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Stop Killing Games",
+        "canonical_name": "Stop Killing Games",
+        "positioning": "一项以欧洲公民倡议形式推动欧盟立法的草根运动，要求游戏发行商在终止服务后保持已售出游戏的可玩性，保障消费者的数字产品所有权。",
+        "technical_signal": "该运动倡导通过离线补丁和私服工具等技术手段让停服游戏持续可玩，但发行商以网络安全和商业机密为由反对强制要求。",
+        "adoption_signal": "该倡议获得 1,294,188 份有效签名远超百万门槛，成功推动欧盟正式审议并进入议会听证和全体辩论阶段，显示广泛公众支持。",
+        "ecosystem_relevance": "该倡议推动欧盟层面关于数字所有权和游戏保存的立法讨论，并带动法国消费者组织对育碧就《The Crew》停服事件发起平行法律诉讼。",
+        "target_users": [],
+        "watch_reason": "尽管欧盟委员会拒绝了核心立法要求，该运动正转向推动欧洲议会在《数字公平法案》中纳入相关条款，同时在加州和欧洲议会层面取得进展，显示出跨区域、多渠道的立法博弈韧性，这一数字消费者权益议题持续影响游戏行业生态。",
+        "risk_notes": [
+          "欧盟委员会认为法律强制要求游戏停服后保持可玩性不符合比例原则，涉及知识产权和网络安全等多重法律与安全顾虑。",
+          "委员会计划起草的行业行为准则不具有法律强制力，无法约束发行商提供离线补丁或私服工具来保障游戏可玩性。",
+          "发行商坚称玩家购买的是有限访问权限而非完整所有权，这一法律定性争议尚无明确司法判例共识。",
+          "法国消费者组织对育碧就《The Crew》停服事件的法律诉讼结果不确定性大，但对行业惯例可能产生重要示范效应。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "bc689c764e69a7b0"
+        ],
+        "evidence_snippets": [
+          "该运动正式以欧洲公民倡议'Stop Destroying Videogames'形式提交欧盟，要求立法禁止发行商在停服后使已售出的游戏无法游玩。",
+          "该倡议获得 1,294,188 份有效签名，超过百万门槛，经过欧盟议会听证和全体辩论后最终被委员会正式拒绝。",
+          "该组织表示将继续推动欧洲议会在《数字公平法案》中纳入相关条款，不会因委员会决定而放弃立法努力。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -1285,48 +2950,130 @@
     "pipeline_stage": "fact_extracted",
     "id": "f255d254cd0add03",
     "source_type": "community_discussion",
-    "tldr": "本地模型已足够好用：Gemma 4配合LM Studio和Pi可完成约75%的agentic编码任务",
-    "objective_summary": "Vicki Boykis在2022款M2 Mac上测试Mistral 7B、Gemma 3、GPT-OSS、Qwen系列等多种本地模型后发现，自GPT-OSS起本地模型质量显著提升，Gemma 4系列配合LM Studio推理服务器和Pi agent框架可实现约75%前沿模型水平的agentic编码",
-    "event_type": "application_landing",
+    "tldr": "Vicki Boykis分享称，截至2026年6月，本地模型通过LM Studio和Pi代理框架在M2 Mac上实现了接近前沿模型75%效果的编码工作流，并提供了从Docker配置到模型选择的完整技术方案。",
+    "objective_summary": "Vicki Boykis于2026年6月在个人博客发文，总结了她从2022年起使用本地模型的经验。她在2022款M2 Mac（64GB RAM）上先后测试了Mistral 7B、Gemma 3、OpenAI OSS-20B、Qwen 3 MOE等多个模型，以及llama.cpp、Ollama、LM Studio等多种推理引擎。GPT-OSS是首个让她在多数任务中不再需要与云端API交叉验证的本地模型。Google Gemma 4系列发布后，她通过LM Studio（推理服务端）和Pi（代理框架）实现了本地代理编码工作流，效果约达前沿模型的75%。她将所有代理会话限制在Docker容器内以确保安全，并分享了完整的配置文件、Docker Compose和启动脚本。",
+    "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
         "Google",
         "OpenAI",
         "Mistral",
-        "Alibaba (Qwen)",
-        "HuggingFace",
-        "Anthropic"
+        "Alibaba",
+        "HuggingFace"
       ],
       "technologies": [
-        "Mistral 7B",
-        "Gemma 3",
-        "GPT-OSS",
-        "Qwen 3 MOE",
-        "Qwen 2.5 Coder",
-        "Gemma 4",
-        "gemma-4-26b-a4b",
-        "gemma-4-12b-qat",
         "llama.cpp",
-        "llama-cpp-python",
         "Ollama",
-        "llamafiles",
         "LM Studio",
-        "Pi",
+        "llama-cpp-python",
+        "llamafiles",
         "Docker",
-        "K-V cache"
+        "KV-cache",
+        "MOE",
+        "QAT",
+        "agentic coding"
       ],
       "key_people": [
         "Vicki Boykis"
       ]
     },
     "key_logic_flow": [
-      "作者使用2022款M2 Mac（64GB/1TB）测试Mistral 7B、Gemma 3、GPT-OSS、Qwen 3 MOE等多种本地模型，发现从GPT-OSS开始本地模型质量显著提升，不再需要频繁对照API模型进行验证。",
-      "Gemma 4系列（gemma-4-26b-a4b和gemma-4-12b-qat）使本地agentic编码达到前沿模型约75%的准确率与速度，六个月内进步巨大。",
-      "作者使用Pi作为agent框架、LM Studio作为推理服务器，所有工作流运行在Docker容器中以限制bash访问权限，增强安全性。",
-      "本地模型可完成Python脚本重构、类型提示修正、单元测试编写、博客校对和推荐系统原型开发等任务，六个月前这些任务对本地模型还不可能。",
-      "本地模型仍存在推理速度慢、上下文窗口受限于硬件（如K-V缓存占用64GB RAM）、工具生态仍在发展中等问题，尚未准备好用于生产级软件开发。",
-      "本地模型的独特优势包括可实时内省token推理过程、可调整上下文窗口和量化参数、可对比不同模型行为，且LM Studio和HuggingFace等工具大幅降低了使用门槛。"
+      "作者在2022款M2 Mac（64GB RAM, 1TB存储）上先后测试了Mistral 7B、Gemma 3、OpenAI OSS-20B、Qwen 3 MOE等模型，并使用过llama.cpp、Ollama、LM Studio等多种推理引擎。",
+      "OpenAI发布的GPT-OSS（OSS-20B）是作者体验中首个在多数编程任务上不再需要与云端API模型反复交叉验证的本地模型。",
+      "Google Gemma 4系列发布后，作者实现了本地代理编程工作流（从Jupyter Notebook重构为模块化Python项目、编写单元测试、引导代码库等），效果可达前沿模型的约75%。",
+      "作者的当前默认配置为：LM Studio作为推理服务端，Gemma-4-12b-qat作为模型，Pi作为代理框架，所有代理会话运行在Docker容器中仅暴露bash权限。",
+      "作者通过docker-compose配置了extra_hosts（host.docker.internal:host-gateway）使容器内的Pi能访问宿主机上的LM Studio推理端点，并通过volumes注入自定义models.json配置。",
+      "本地模型仍存在推理速度慢、上下文窗口受限于硬件、生态尚未完全成熟等问题，但LM Studio和HuggingFace的'Use This Model'按钮等工具已显著降低使用门槛。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "LM Studio",
+        "canonical_name": "LM Studio",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "作者将LM Studio作为本地模型的推理服务端，并使用其运行Gemma-4-12b-qat作为默认模型。",
+          "作者通过docker-compose配置extra_hosts使容器内Pi能够访问宿主机上LM Studio的1234端口推理端点。",
+          "作者认为如果直接使用llama.cpp而非LM Studio可能获得更快的推理速度，但LM Studio提供了更便捷的使用体验。"
+        ],
+        "article_id": "f255d254cd0add03"
+      },
+      {
+        "object_type": "project",
+        "name": "Pi",
+        "canonical_name": "Pi Agent",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "作者使用Pi作为代理框架（Agent Harness），将其部署在Docker容器中并配置了models.json指向LM Studio的本地推理端点。",
+          "Pi运行在Docker容器内仅有bash权限，无法直接执行Python代码或进行网页浏览，以此保证安全性。",
+          "作者推荐了一篇关于如何用Pi和LM Studio设置本地代理编码的教程，并基于该教程做了若干配置调整。"
+        ],
+        "article_id": "f255d254cd0add03"
+      },
+      {
+        "object_type": "model",
+        "name": "Gemma-4-12b-qat",
+        "canonical_name": "google/gemma-4-12b-qat",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Gemma-4-12b-qat是Google最新发布的小尺寸模型，作者认为其在不牺牲太多准确率的前提下更快更小。",
+          "作者推荐用Gemma-4-12b-qat替代较早的Gemma 26B A4B，因为前者在速度和准确率之间取得了更好的平衡。",
+          "作者在Pi的models.json中将模型ID配置为google/gemma-4-12b-qat并启用了文本和图像输入。"
+        ],
+        "article_id": "f255d254cd0add03"
+      },
+      {
+        "object_type": "model",
+        "name": "GPT-OSS",
+        "canonical_name": "OpenAI OSS-20B",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "GPT-OSS（OpenAI OSS-20B）是作者体验中第一个在多数任务上不再需要与云端API模型交叉验证的本地模型。",
+          "作者认为GPT-OSS的发布是本地模型能力显著提升的转折点，此后她开始大幅减少对云端API的依赖。"
+        ],
+        "article_id": "f255d254cd0add03"
+      },
+      {
+        "object_type": "project",
+        "name": "llama.cpp",
+        "canonical_name": "llama.cpp",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "作者早期使用过原始llama.cpp配合Open WebUI来运行本地模型，并测试了多个开源模型。",
+          "作者认为如果直接使用llama.cpp而非LM Studio作为推理后端可能获得更快的推理速度，将其列为未来实验方向。"
+        ],
+        "article_id": "f255d254cd0add03"
+      },
+      {
+        "object_type": "product",
+        "name": "Ollama",
+        "canonical_name": "Ollama",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "Ollama是作者测试过的本地模型推理系统之一，用于运行Mistral 7B、Gemma 3等开源模型。"
+        ],
+        "article_id": "f255d254cd0add03"
+      },
+      {
+        "object_type": "project",
+        "name": "Rijksearch",
+        "canonical_name": "Rijksearch",
+        "confidence": "low",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者提到正在开发Rijksearch项目，该项目与从Arxiv论文中提取和展示热点话题相关。",
+          "作者通过分析过去LM Studio的会话日志发现，大量查询与Rijksearch项目的开发工作有关。"
+        ],
+        "article_id": "f255d254cd0add03"
+      }
     ],
     "impact_score": {
       "score": 7.2,
@@ -1386,7 +3133,60 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "strategic_invest"
+    "actionable_insight": "strategic_invest",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "LM Studio",
+        "canonical_name": "LM Studio",
+        "url": "https://lmstudio.ai",
+        "positioning": "LM Studio 是一款面向开发者的本地模型推理服务端，提供图形化界面加载和运行开源模型，并通过兼容 OpenAI API 的本地端点服务于外部代理框架。",
+        "target_users": [
+          "希望在本地运行大模型并搭建代理编程工作流的开发者和技术研究者"
+        ],
+        "product_signal": "作者将 LM Studio 作为本地推理服务端，向 Docker 容器内的 Pi 代理框架提供兼容 OpenAI API 的本地推理端点，实现了完整的本地代理编码工作流。",
+        "market_signal": "作者对比指出直接使用 llama.cpp 推理速度可能更快，但 LM Studio 以牺牲部分性能换取更便捷的使用体验，说明其市场定位为易用性优先。",
+        "differentiation": "与 Ollama 和原始 llama.cpp 等竞品相比，LM Studio 提供图形化界面和模型一键加载能力，在用户体验和入门门槛方面具有明显优势。",
+        "watch_reason": "LM Studio 作为本地模型推理服务端，与 Gemma-4-12b-qat 和 Pi 代理框架的组合已实现约 75% 前沿模型效果的本地代理编码工作流，标志着本地模型从被动问答向主动代理任务的关键跨越，其易用性优势和生态整合能力值得持续跟踪。",
+        "risk_notes": [
+          "LM Studio 相较直接使用 llama.cpp 推理速度较慢，在高频代理任务或大规模代码重构场景中可能成为明显的性能瓶颈。",
+          "本地模型推理在高负载下 KV Cache 可占满 64GB 内存，长期运行对硬件资源消耗较大，限制了可处理的任务复杂度。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "f255d254cd0add03"
+        ],
+        "evidence_snippets": [
+          "作者将LM Studio作为本地模型的推理服务端，并使用其运行Gemma-4-12b-qat作为默认模型，同时通过docker-compose配置了完整的代理工作流。",
+          "作者通过docker-compose配置extra_hosts使容器内Pi能够访问宿主机上LM Studio的1234端口推理端点，从而建立了完整的本地推理服务链路。",
+          "作者认为如果直接使用llama.cpp而非LM Studio可能获得更快的推理速度，但LM Studio提供了更便捷的使用体验，这是它在易用性与性能之间的取舍。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Pi",
+        "canonical_name": "Pi Agent",
+        "positioning": "Pi 是一款面向本地模型场景的代理框架（Agent Harness），通过 Docker 容器安全隔离执行环境，连接 LM Studio 等本地推理端点实现无需云端 API 的代理编程工作流。",
+        "technical_signal": "Pi 作为代理框架部署在 Docker 容器中，通过 models.json 配置文件连接 LM Studio 的本地推理端点，容器内仅暴露 bash 权限实现安全隔离。",
+        "adoption_signal": "作者基于社区教程成功搭建了 Pi + LM Studio 的本地代理编码工作流，并已用于重构 Python 项目、编写单元测试等真实编程任务，验证了其在本地开发场景中的实用价值。",
+        "ecosystem_relevance": "Pi 作为代理框架补充了本地模型生态中的代理能力缺口，使开发者无需依赖云端 API 即可在本地完成代码重构、测试编写等代理式编程任务。",
+        "target_users": [],
+        "watch_reason": "Pi 作为连接本地推理引擎与代理工作流的关键中间层，与 LM Studio 和 Gemma-4-12b-qat 的组合证明了在消费级硬件上实现代理编程的可行性，其安全沙箱设计和容器化部署方案为本地模型代理工作流提供了可复用的参考架构。",
+        "risk_notes": [
+          "Pi 在 Docker 容器内仅暴露 bash 权限，无法直接执行 Python 代码或进行网页浏览，这限制了其可完成的代理任务类型和范围。",
+          "Pi 项目名称较为通用，在搜索引擎和开发者社区中与树莓派等多义项重叠，可能影响社区讨论和资源发现的效率。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "f255d254cd0add03"
+        ],
+        "evidence_snippets": [
+          "作者使用Pi作为代理框架（Agent Harness），将其部署在Docker容器中并配置了models.json指向LM Studio的本地推理端点，实现了容器化的安全代理环境。",
+          "Pi运行在Docker容器内仅有bash权限，无法直接执行Python代码或进行网页浏览，以此保证代理会话和宿主机的安全性。",
+          "作者推荐了一篇关于如何用Pi和LM Studio设置本地代理编码的社区教程，并基于该教程针对自身环境做了配置调整。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",

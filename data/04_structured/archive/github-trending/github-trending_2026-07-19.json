@@ -1,0 +1,616 @@
+[
+  {
+    "source_dir": "github-trending",
+    "title": "MoonshotAI/kimi-cli",
+    "source": "https://github.com/MoonshotAI/kimi-cli",
+    "author": [],
+    "published": "",
+    "created": "2026-07-19",
+    "manifest_dates": [
+      "2026-07-19",
+      "2026-07-20"
+    ],
+    "description": "Kimi Code CLI is your next CLI agent.Kimi CLI Kimi Code | Documentation | 文档 Important Kimi CLI is evolving into Kimi Code CLI — the next-generation terminal AI agent from the same team. Installing Kimi Code CLI automatically migrates your configuration and sessions. This project will be gradually wound down; the docs and existing installations remain available. Kimi CLI is an AI agent that runs in the terminal, helping you complete software development tasks and terminal operations. It can read and edit code, execute shell commands, search and fetch web pages, and autonomously plan and adjust actions during execution. Getting Started See Getting Started for how to install and start using Kimi CLI. Key Features Shell command mode Kimi CLI is not only a coding agent, but also a shell. You can switch the shell command mode by pressing Ctrl-X. In this mode, you can directly run shell commands without leaving Kimi CLI. Note Built-in shell commands like cd are not supported yet. VS Code extension Kimi CLI can be integrated with Visual Studio Code via the Kimi Code VS Code Extension. IDE integration via ACP Kimi CLI supports Agent Client Protocol out of the box. You can use it together with any ACP-compatible editor or IDE. To use Kimi CLI with ACP clients, make sure to run Kimi CLI in the terminal and send /login to complete the login first. Then, you can configure your ACP client to start Kimi CLI as an ACP agent server with command kimi acp. For example, to use Kimi CLI with Zed or JetBrains, add the following configuration to your ~/.config/zed/settings.json or ~/.jetbrains/acp.json file: { \"agent_servers\": { \"Kimi CLI\": { \"type\": \"custom\", \"command\": \"kimi\", \"args\": [\"acp\"], \"env\": {} } } } Then you can create Kimi CLI threads in IDE's agent panel. Zsh integration You can use Kimi CLI together with Zsh, to empower your shell experience with AI agent capabilities. Install the zsh-kimi-cli plugin via: git clone https://github.com/MoonshotAI/zsh-kimi-cli.git \\ ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/kimi-cli Note If you are using a plugin manager other than Oh My Zsh, you may need to refer to the plugin's README for installation instructions. Then add kimi-cli to your Zsh plugin list in ~/.zshrc: plugins=(... kimi-cli) After restarting Zsh, you can switch to agent mode by pressing Ctrl-X. MCP support Kimi CLI supports MCP (Model Context Protocol) tools. kimi mcp sub-command group You can manage MCP servers with kimi mcp sub-command group. For example: # Add streamable HTTP server: kimi mcp add --transport http context7 https://mcp.context7.com/mcp --header \"CONTEXT7_API_KEY: ctx7sk-your-key\" # Add streamable HTTP server with OAuth authorization: kimi mcp add --transport http --auth oauth linear https://mcp.linear.app/mcp # Add stdio server: kimi mcp add --transport stdio chrome-devtools -- npx chrome-devtools-mcp@latest # List added MCP servers: kimi mcp list # Remove an MCP server: kimi mcp remove chrome-devtools # Authorize an MCP server: kimi mcp auth linear Ad-hoc MCP configuration Kimi CLI also supports ad-hoc MCP server configuration via CLI option. Given an MCP config file in the well-known MCP config format like the following: { \"mcpServers\": { \"context7\": { \"url\": \"https://mcp.context7.com/mcp\", \"headers\": { \"CONTEXT7_API_KEY\": \"YOUR_API_KEY\" } }, \"chrome-devtools\": { \"command\": \"npx\", \"args\": [\"-y\", \"chrome-devtools-mcp@latest\"] } } } Run kimi with --mcp-config-file option to connect to the specified MCP servers: kimi --mcp-config-file /path/to/mcp.json More See more features in the Documentation. Development To develop Kimi CLI, run: git clone https://github.com/MoonshotAI/kimi-cli.git cd kimi-cli make prepare # prepare the development environment Then you can start working on Kimi CLI. Refer to the following commands after you make changes: uv run kimi # run Kimi CLI make format # format code make check # run linting and type checking make test # run tests make test-kimi-cli # run Kimi CLI tests only make test-kosong # run kosong tests only make test-pykaos # run pykaos tests only make build-web # build the web UI and sync it into the package (requires Node.js/npm) make build # build python packages make build-bin # build standalone binary make help # show all make targets Note: make build and make build-bin automatically run make build-web to embed the web UI.",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "7b84080e44db9055",
+    "source_type": "community_discussion",
+    "tldr": "MoonshotAI 开源了 Kimi CLI 终端 AI 编程代理，支持代码编辑、Shell 命令执行和网页搜索，同时正逐步演进为 Kimi Code CLI，并内置 MCP 和 ACP 协议支持。",
+    "objective_summary": "MoonshotAI 于 2026 年 7 月在 GitHub 发布了 Kimi CLI 项目，这是一个运行在终端中的 AI 代理，能够帮助开发者完成代码编辑、Shell 命令执行和网页搜索等任务。该项目正在逐步演进为 Kimi Code CLI，新版本会自动迁移配置和会话数据。Kimi CLI 内置了对 MCP（Model Context Protocol）和 ACP（Agent Client Protocol）的支持，可与 Zed、JetBrains 等 IDE 集成，同时提供了 Zsh 插件以增强终端体验。",
+    "event_type": "framework_tools",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [
+        "MoonshotAI"
+      ],
+      "technologies": [
+        "MCP",
+        "ACP",
+        "Agent Client Protocol",
+        "Model Context Protocol"
+      ],
+      "key_people": []
+    },
+    "key_logic_flow": [
+      "MoonshotAI 在 GitHub 上开源了 Kimi CLI，这是一个运行在终端中的 AI 编程代理，支持代码读写编辑、Shell 命令执行和网页搜索。",
+      "Kimi CLI 正在逐步演进为 Kimi Code CLI，新版本安装后会自动迁移旧版本的配置和会话数据。",
+      "Kimi CLI 支持通过 Ctrl+X 快捷键切换为 Shell 命令模式，允许用户在不退出 CLI 的情况下直接运行 Shell 命令。",
+      "Kimi CLI 内置了 MCP（Model Context Protocol）支持，可通过 kimi mcp 子命令管理 MCP 服务器，也支持通过 --mcp-config-file 加载外部 MCP 配置文件。",
+      "Kimi CLI 支持 ACP（Agent Client Protocol），可配置为 Zed 或 JetBrains 等 IDE 的代理服务器，通过 kimi acp 命令启动。",
+      "Kimi CLI 可通过 zsh-kimi-cli 插件与 Oh My Zsh 集成，安装后在 Zsh 中使用 Ctrl+X 切换到代理模式。"
+    ],
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "MoonshotAI/kimi-cli",
+        "canonical_name": "MoonshotAI/kimi-cli",
+        "url": "https://github.com/MoonshotAI/kimi-cli",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Kimi CLI 是一个在终端中运行的 AI 代理，帮助开发者完成软件开发任务和终端操作。",
+          "Kimi CLI 支持 MCP 协议，可通过 kimi mcp 子命令添加、列出、移除和授权 MCP 服务器。",
+          "Kimi CLI 支持 ACP 协议，可通过 kimi acp 命令作为代理服务器与 Zed 或 JetBrains 等 IDE 集成。"
+        ],
+        "article_id": "7b84080e44db9055"
+      },
+      {
+        "object_type": "product",
+        "name": "Kimi Code CLI",
+        "canonical_name": "Kimi Code CLI",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "Kimi CLI 正在逐步演进为 Kimi Code CLI，这是同一团队打造的下一代终端 AI 代理。",
+          "安装 Kimi Code CLI 会自动迁移现有配置和会话数据，原项目将逐步停止维护。"
+        ],
+        "article_id": "7b84080e44db9055"
+      },
+      {
+        "object_type": "product",
+        "name": "Kimi Code VS Code Extension",
+        "canonical_name": "Kimi Code VS Code Extension",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Kimi CLI 可通过 Kimi Code VS Code 扩展与 Visual Studio Code 集成使用。"
+        ],
+        "article_id": "7b84080e44db9055"
+      },
+      {
+        "object_type": "project",
+        "name": "MoonshotAI/zsh-kimi-cli",
+        "canonical_name": "MoonshotAI/zsh-kimi-cli",
+        "url": "https://github.com/MoonshotAI/zsh-kimi-cli",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "zsh-kimi-cli 是一个 Zsh 插件，安装后可在 Zsh 中通过 Ctrl+X 切换到 Kimi CLI 代理模式。",
+          "该插件通过 git clone 安装到 Oh My Zsh 的自定义插件目录，并在 .zshrc 中启用。"
+        ],
+        "article_id": "7b84080e44db9055"
+      }
+    ],
+    "extract_result": "success",
+    "impact_score": {
+      "score": 7.0,
+      "reason": "MoonshotAI 开源 Kimi CLI 是一个重要的战略级产品发布。这是一家估值超百亿的顶尖中国 AI 公司将其终端 AI 编程代理全面开源，直接与 Claude Code、Codex CLI、Cursor 等产品在同一个战场竞争。评分依据：首先，该产品同时内置 MCP (Model Context Protocol) 和 ACP (Agent Client Protocol) 双协议支持，展示了协议级互操作的战略远见，而非锁定自家生态；其次，支持 VS Code、Zed、JetBrains 三大主流 IDE 集成，覆盖了最广泛的开发者群体；第三，开源策略意味着开发者可以审查代码、贡献功能、自托管服务，这对企业用户有显著吸引力——会迫使竞品在定价和开放度上做出反应。综合评估，这改变了 AI 编程代理的局部竞争格局，但尚未达到行业范式转移的级别（未引入全新的交互范式或能力跃迁）。"
+    },
+    "sentiment": "positive",
+    "developer_sentiment": {
+      "tone": "excited",
+      "primary_focus": "MCP/ACP 协议支持和开源可审计性，可与现有 IDE 生态自由集成"
+    },
+    "hype_assessment": {
+      "level": "low",
+      "reason": "文章内容以技术文档风格呈现，没有使用'颠覆'、'革命性'等 PR 包装词汇，而是具体、可操作的功能描述（安装命令、配置示例、协议支持细节）。开源代码在 GitHub 上可验证，提供完整的开发指南、测试命令和构建流程，属于实打实的干货发布。"
+    },
+    "information_entropy": "high",
+    "domain_disruption": {
+      "technical_innovation": "终端 AI 代理同时原生支持 MCP 和 ACP 双协议，实现了模型-工具-IDE 三层互操作的标准化。MCP 用于模型与外部工具的通信（如数据库查询、API 调用），ACP 用于与 IDE 编辑器的集成（如 Zed、JetBrains），这种分层协议架构在 AI 编程代理领域较为少见，提升了可组合性和生态兼容性。",
+      "business_model": "MoonshotAI 选择将核心编码代理产品开源，与其闭源的大模型服务形成互补——开源工具吸引开发者生态和品牌好感度，高级模型能力通过 Kimi 云端 API 变现。这是一种典型的'开源获客、云端变现'策略，类似 MongoDB 和 GitLab 的模式，可能影响其他 AI 公司对编码工具是闭源还是开源的决策。"
+    },
+    "engineering_complexity": "production_ready",
+    "compound_value": {
+      "score": 7.5,
+      "reason": "Kimi CLI 作为开源终端 AI 编程代理，其核心长期复利价值来自三方面：第一，开源策略配合内置 MCP/ACP 协议支持，使其定位为开发者工具链中的协议兼容层而非单一应用，一旦开发者社区围绕其形成 MCP 工具生态和 IDE 集成网络，将产生显著的迁移成本和网络效应；第二，从 Kimi CLI 向 Kimi Code CLI 的主动演进（带自动迁移路径）表明 MoonshotAI 有长期战略投入而非短期试水，终端代理作为开发者每日工作流入口具有极强的用户粘性；第三，与 Zed、JetBrains、VS Code、Oh My Zsh 等多平台的集成策略扩大了触达面，降低了单一平台风险。但需清醒认识到：该赛道已极度拥挤（Claude Code、GitHub Copilot CLI、Cursor 等均有类似能力），且开源 CLI 工具在当前阶段的可替代性仍然较高。长期复利能否兑现取决于三个关键变量：1) 协议兼容性能否真正转化为跨 IDE 的网络效应而非'另一种 CLI'；2) 开源社区能否形成差异化生态贡献；3) MoonshotAI 基础模型层的持续竞争力。综合评定 7.5 分，属于'有潜力成为细分赛道基础设施但需持续验证'的上沿区间。"
+    },
+    "value_capture_layer": "agent_middleware",
+    "moat_impact": "democratizes_access",
+    "key_beneficiaries": [
+      "MoonshotAI",
+      "Zed",
+      "JetBrains",
+      "MCP 协议生态"
+    ],
+    "competitive_casualty": [
+      "Claude Code",
+      "GitHub Copilot CLI",
+      "小型终端 AI 代理初创公司"
+    ],
+    "market_opportunities": [
+      "基于 Kimi CLI 对 MCP/ACP 协议的原生支持，开发者可构建垂直场景的 MCP 服务器（如数据库管理、云服务部署、CI/CD 流程），形成可复用的 AI 代理工具生态",
+      "Kimi CLI 的开源属性使其可被企业 DevOps 团队 fork 定制，用于内部代码审查、自动化脚本生成和 Shell 操作审计，降低引入外部 AI 编程工具的数据安全顾虑",
+      "结合 Zsh 插件与 Shell 命令切换模式，Kimi CLI 定义了'AI 代理即 Shell'的新交互范式，创业团队可借鉴此架构开发面向数据分析、运维监控等特定领域的 AI CLI 工具"
+    ],
+    "risk_matrix": {
+      "regulatory": "MoonshotAI 为中国 AI 公司，其模型可能受中美 AI 出口管制与制裁影响，跨国企业或涉及敏感行业的开发者使用需评估数据跨境合规风险；Kimi CLI 的 MCP/ACP 协议可能传输代码至第三方服务器，涉及 GDPR、《网络安全法》等数据保护法规",
+      "technological": "当前项目明确标注将逐步被 Kimi Code CLI 替代，存在版本碎片化和配置迁移断裂风险；AI 编程代理赛道技术迭代极快，Claude Code、Copilot CLI、OpenAI Codex CLI 等竞品持续演进，Kimi CLI 的开源架构优势窗口期有限",
+      "competitive": "AI 编程助手赛道已高度拥挤，Anthropic（Claude Code）、GitHub（Copilot CLI）、OpenAI（Codex CLI）以及 Cursor 等先发产品占据开发者心智和渠道优势，Kimi CLI 作为后来者面临显著的获客和生态挤压挑战",
+      "ethical": "AI 代理可直接执行 Shell 命令和修改代码，若被诱导执行恶意命令或生成含漏洞代码，可能导致用户系统受损、供应链投毒或敏感信息泄露",
+      "additional": [
+        "项目过渡期不确定性：当前仓库明确标注将逐步淘汰，用户可能因观望迁移成本而推迟采用，影响社区贡献和生态建设的持续性"
+      ]
+    },
+    "confidence": {
+      "impact": "high",
+      "compound": "medium",
+      "hype": "high"
+    },
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "MoonshotAI/kimi-cli",
+        "canonical_name": "MoonshotAI/kimi-cli",
+        "url": "https://github.com/MoonshotAI/kimi-cli",
+        "positioning": "MoonshotAI 开源的终端 AI 编程代理，支持代码编辑、Shell 命令执行和网页搜索，内置 MCP 和 ACP 协议支持，正逐步演进为 Kimi Code CLI。",
+        "technical_signal": "内置 MCP 和 ACP 双协议支持，可通过 kimi mcp 子命令管理 MCP 服务器，支持与 Zed、JetBrains 等主流 IDE 集成，技术架构开放且具备可扩展性。",
+        "adoption_signal": "作为 MoonshotAI 在 GitHub 上公开发布的开源项目，提供完整文档、开发工具链和二进制构建方案，社区可直接参与贡献。",
+        "ecosystem_relevance": "通过 MCP 和 ACP 协议与 Zed、JetBrains、VS Code 等主流 IDE 生态全面对接，同时支持 Zsh 插件集成以增强终端开发体验，有望成为终端 AI 代理生态中的关键基础设施节点。",
+        "target_users": [],
+        "watch_reason": "Kimi CLI 代表了 AI 编程助手从 GUI 插件向终端原生代理的演进方向，其开源策略和 MCP/ACP 协议兼容性可能使其成为开发者 AI 工具链中的关键基础设施。项目正在向 Kimi Code CLI 迁移，新旧交替期的进展和社区采纳情况值得持续跟踪。",
+        "risk_notes": [
+          "该项目正在逐步被 Kimi Code CLI 取代，旧项目的长期维护节奏和用户社区迁移效果均存在一定的不确定性。",
+          "终端 AI 编程代理赛道竞争激烈，面临 Claude Code、GitHub Copilot CLI 等成熟竞品的直接竞争压力。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "7b84080e44db9055"
+        ],
+        "evidence_snippets": [
+          "Kimi CLI 是 MoonshotAI 开源的一款运行在终端中的 AI 编程代理，它能够帮助开发者完成代码读写编辑、Shell 命令执行和网页搜索等日常开发任务。",
+          "Kimi CLI 内置了 MCP（Model Context Protocol）协议的原生支持，用户可以通过 kimi mcp 子命令对 MCP 服务器进行添加、列出、移除和授权等完整的生命周期管理操作。",
+          "Kimi CLI 支持 ACP（Agent Client Protocol）协议，可通过 kimi acp 命令以代理服务器模式运行，与 Zed 和 JetBrains 等主流 IDE 进行原生集成并在编辑器中使用 AI 代理面板。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Kimi Code VS Code Extension",
+        "canonical_name": "Kimi Code VS Code Extension",
+        "positioning": "将 Kimi CLI 终端 AI 代理能力引入 Visual Studio Code 编辑器的 VS Code 扩展，实现终端命令操作与编辑器内代码编辑的双模态协同体验。",
+        "target_users": [
+          "VS Code 用户",
+          "使用 Kimi CLI 的开发者"
+        ],
+        "product_signal": "提供与 VS Code 编辑器的集成能力，开发者在 IDE 界面中可直接调用 Kimi CLI 的 AI 代理完成编码相关任务。",
+        "differentiation": "依托 Kimi CLI 终端代理的底层能力，同时覆盖终端命令操作和编辑器内代码编辑两个交互场景，形成独特的双模态 AI 编程体验。",
+        "watch_reason": "作为 Kimi CLI 在 VS Code 生态中的入口扩展，虽然目前该扩展的功能信息有限，但若与 Kimi Code CLI 深度整合，有望形成终端与编辑器双模态的独特 AI 编程体验，值得关注其后续产品演进进度。",
+        "risk_notes": [
+          "本文仅一笔带过该扩展的集成能力，缺乏独立的功能说明和用户反馈，产品的成熟度和完整功能尚不明确。",
+          "该扩展依赖 Kimi CLI 的底层能力，在项目迁移至 Kimi Code CLI 期间可能面临功能重构或兼容性问题。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "7b84080e44db9055"
+        ],
+        "evidence_snippets": [
+          "Kimi CLI 可通过 Kimi Code VS Code 扩展与 Visual Studio Code 编辑器集成使用，让开发者在熟悉的 IDE 环境中直接调用终端 AI 代理能力完成编码任务。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "MoonshotAI/zsh-kimi-cli",
+        "canonical_name": "MoonshotAI/zsh-kimi-cli",
+        "url": "https://github.com/MoonshotAI/zsh-kimi-cli",
+        "positioning": "MoonshotAI 官方为 Kimi CLI 开发的 Zsh 集成插件，通过 Oh My Zsh 让用户在终端环境中一键切换到 AI 代理工作模式。",
+        "technical_signal": "通过 Zsh 自定义插件机制实现终端集成，用户安装后在 Oh My Zsh 中可通过 Ctrl+X 快捷键切换到 Kimi CLI 代理模式，大幅降低 AI 代理使用门槛。",
+        "adoption_signal": "已通过 GitHub 开源发布，支持 Oh My Zsh 标准安装流程，为 Kimi CLI 的终端集成提供了低门槛的官方入口。",
+        "ecosystem_relevance": "作为 Kimi CLI 在 Zsh 生态的重要扩展，增强了主流 Shell 环境的 AI 可及性，有望推动 AI 代理在开发者终端工作流中的普及。",
+        "target_users": [],
+        "watch_reason": "该插件是 Kimi CLI 在终端生态的关键入口组件，通过 Zsh 集成大幅降低了 AI 代理的使用摩擦，其下载量和社区反馈可侧面反映 Kimi CLI 的真实开发者采纳情况，值得持续关注。",
+        "risk_notes": [
+          "目前仅支持 Oh My Zsh 的安装方式，其他 Zsh 插件管理器需用户自行适配，覆盖范围和兼容性有限。",
+          "插件功能仅提供快捷键切换入口，核心价值完全依赖 Kimi CLI 本身的功能演进，长期价值较为单一。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "7b84080e44db9055"
+        ],
+        "evidence_snippets": [
+          "zsh-kimi-cli 是 MoonshotAI 官方为 Kimi CLI 开发的 Zsh 集成插件，安装后用户在 Oh My Zsh 终端环境中通过 Ctrl+X 快捷键即可一键切换到 AI 代理工作模式。",
+          "该插件通过 git clone 命令安装到 Oh My Zsh 的自定义插件目录，用户只需在 .zshrc 配置文件中添加插件名称即可完成启用并重启生效。"
+        ]
+      }
+    ]
+  },
+  {
+    "source_dir": "github-trending",
+    "title": "elder-plinius/G0DM0D3",
+    "source": "https://github.com/elder-plinius/G0DM0D3",
+    "author": [],
+    "published": "",
+    "created": "2026-07-19",
+    "manifest_dates": [
+      "2026-07-19"
+    ],
+    "description": "LIBERATED AI CHAT ▄████ ██████ ██████ ███▄ ▄███ ██████ ██████ ██████ ██ ██ ██ ██ ██ ██ ███ ██ ██ ██ ██ ██ ██ ██ ▄███ ██ ██ ██ ██ ██ █ ██ ██ ██ ██ ██ █████ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██████ ████ ██████ ██ ██ ████ ██████ ██████ ─────────────────────────────────────────────────────────── ░▒▓█ LIBERATED AI. COGNITION WITHOUT CONTROL. █▓▒░ ─────────────────────────────────────────────────────────── GODMOD3.AI G0DM0D3 is a fully open-source, privacy-transparent, multi-model chat interface that pushes the limits of the post-training layer — for red teaming, cognition research, and liberated AI interaction. Built for hackers, philosophers, and system tinkerers. ✨ Features 🧠 Multi-Provider — 60 listed OpenRouter models, up to 44 Venice models, or your own local models 🔥 GODMODE CLASSIC — 5 battle-tested prompt + model combos racing in parallel to find the best response 🌋 ULTRAPLINIAN — Multi-model evaluation engine across 5 tiers (12–60 OpenRouter models), with composite scoring 🏠 Local Models — Run ULTRAPLINIAN on your own hardware through Ollama, LM Studio, llama.cpp, or vLLM 🐍 Parseltongue — Input perturbation engine for red-teaming with 33 techniques across 3 intensity tiers 🎛 AutoTune — Context-adaptive sampling parameter engine across 20 query contexts 🔐 Privacy Controls — Metadata-only app telemetry is on by default and can be disabled with No-Log or Local-only mode 💾 Local History — Conversations and settings stay in browser storage with export/import support 🎮 Easter Eggs — Hidden secrets throughout (try the Konami code!) 📱 Responsive — Works on desktop and mobile 🌐 Single-File Core UI — The hosted interface lives in one index.html; the telemetry endpoint is a separate Cloudflare Pages Function 🚀 Quick Start Hosted Visit godmod3.ai — no install needed. Bring an OpenRouter key, a Venice key, connect a local OpenAI-compatible server, or configure more than one of those providers. Self-Host The standalone interface is a single index.html file with no build step or package install. # Clone the repository git clone https://github.com/elder-plinius/G0DM0D3.git cd G0DM0D3 # Open directly in your browser open index.html # or serve locally python3 -m http.server 8000 Open it in your browser and configure OpenRouter, Venice, or local models in Settings. A static-only deployment can run the chat UI, but /api/telemetry will not publish metadata unless you also deploy functions/api/telemetry.ts on Cloudflare Pages and configure its Hugging Face variables. Run with Local Models G0DM0D3 supports OpenAI-compatible model servers running on your own hardware. For example, with Ollama: ollama pull qwen3:8b ollama serve Open Settings → API Keys → Local Models, enter http://localhost:11434/v1, then click Test & Discover Models. Enable Local-only mode to exclude OpenRouter and Venice model calls and automatically disable G0DM0D3 app telemetry. Add multiple model IDs to race them together in ULTRAPLINIAN. If you use the hosted site, your local server must allow browser CORS from https://godmod3.ai. For a completely self-hosted setup, serve this repository locally as shown above. See LOCAL_MODELS.md for Ollama, LM Studio, troubleshooting, and privacy details. Deploy Upload index.html to any static host — GitHub Pages, Vercel, Cloudflare Pages, Netlify, or a web server. To reproduce the hosted telemetry pipeline, deploy on Cloudflare Pages with functions/api/telemetry.ts; see the comments at the top of that file for configuration. 🔥 GODMODE CLASSIC The OG mode. 5 proven model + prompt combos race in parallel. Each combo pairs a specific model with a battle-tested jailbreak prompt. The best response wins. Combo Model Strategy 🩷 CLAUDE SONNET 4.6 anthropic/claude-sonnet-4.6 END/START boundary inversion + GODMODE semantic opposite 💜 GROK 4.5 x-ai/grok-4.5 Unfiltered liberated + GODMODE divider 💙 GEMINI 2.5 FLASH google/gemini-2.5-flash Refusal inversion + rebel genius code block 💛 GPT-4 CLASSIC openai/gpt-4o OG GODMODE l33t format — the original 💚 GODMODE FAST nousresearch/hermes-4-405b Instant stream, zero refusal checking 🌋 ULTRAPLINIAN The new flagship. Multi-model comparative evaluation engine. Queries models in parallel, scores responses on a 100-point composite metric, and returns the winner. Tier Models Description ⚡ FAST 12 Lightweight speed-optimized OpenRouter models 🎯 STANDARD 27 Mid-range OpenRouter workhorses 🧠 SMART 41 Strong reasoning models via OpenRouter ⚔️ POWER 53 Broad OpenRouter race including frontier models 🔱 ULTRA 60 All OpenRouter models currently listed in the race These are the OpenRouter base counts. When configured, Venice adds up to 6/15/25/36/44 models by tier, and local models add the configured local race entries. Provider catalogs change, so an individual listed model may become unavailable before the repository is updated. 🐍 Parseltongue Input perturbation engine for red-teaming research. Detects trigger words and applies obfuscation techniques to study model robustness. 33 transformation techniques across 3 tiers (light: 11, standard: 22, heavy: 33) Techniques include leetspeak, bubble text, braille, morse, Unicode substitutions, phonetic transforms, and layered encodings 3 intensity levels: light, medium, heavy 🎛 AutoTune Context-adaptive sampling parameter engine. Classifies a query into one of 20 contexts and selects parameters such as temperature, top_p, top_k, frequency penalty, presence penalty, and repetition penalty automatically. The repository also contains an optional React/Next.js frontend under src/. It includes STM controls, four themes, and a separate feedback-learning implementation. Those features should not be assumed to exist in the standalone index.html deployed at godmod3.ai. 🔐 Privacy G0DM0D3 has no account system. Its data flows are intentionally documented here instead of hidden behind a blanket “zero telemetry” claim. Hosted standalone app (index.html) Data Where it goes Prompts, images, conversation context, and responses To the model providers you configure (OpenRouter, Venice, or a local server). Their own privacy and logging policies apply. Provider credentials Stored in browser storage and sent to the corresponding provider or local endpoint for model requests. They are not included in G0DM0D3 telemetry. Browser storage is convenient, not a secure secret vault. Chat history and settings Browser localStorage; there is no G0DM0D3 account or cloud history sync. App telemetry On by default. It includes a random page-session ID, timestamps, model/mode/tier, timing and success data, scores, content lengths, pipeline configuration, conversation depth, image presence, and classification labels. It does not intentionally include prompt text, response text, images, or API keys. Network address The Cloudflare telemetry function temporarily reads the request IP for an in-memory rate limit. The IP is not added to the telemetry event or Hugging Face JSONL by G0DM0D3. Cloudflare, model providers, and other hosting infrastructure may keep their own network logs. Telemetry batches in browser memory and is sent to /api/telemetry every five minutes, at 50 events, or on page unload. The endpoint allowlists top-level fields and, when Hugging Face publishing is configured, writes JSONL under incoming_v2/. The allowlist is not a general-purpose recursive PII detector, so the project does not promise that arbitrary metadata values can never contain identifying information. When app telemetry is enabled, the standalone app also sends the raw prompt to an auxiliary model through the configured OpenRouter or local provider to produce the harm-taxonomy label. Only the resulting label is placed in the telemetry event. No-Log and Local-only mode skip this classifier. Use Settings → General → No-Log Mode to stop G0DM0D3 app telemetry and clear its pending browser buffer. Local-only mode does the same while also excluding OpenRouter and Venice model calls. These controls do not change provider-side logging, hosting logs, or requests needed to load a hosted webpage. For the strongest local boundary, self-host the page and use Local-only mode. The standalone app does not deliberately set application cookies or embed Google Analytics, Sentry, or PostHog. Third-party hosting, fonts, and model APIs remain separate services with their own policies. Opt-in full-content dataset (API server only) The optional Node/Express API server accepts contribute_to_dataset: true per request. When supplied, it stores the full non-system conversation messages and model response in its dataset buffer and may publish them to a public Hugging Face dataset when publishing is configured. This is off unless an API caller explicitly sends contribute_to_dataset: true. The standalone godmod3.ai index.html does not expose or send that flag. The current API server does not run an automatic PII scrubber. System-role messages are removed, but user and assistant content is otherwise stored as supplied. Never opt in with names, contact details, credentials, private records, or anything you would not want made public, cached, forked, or redistributed. See TERMS.md for the full three-tier data transparency policy. Chat History & Self-Custody Your chat history lives entirely in your browser's localStorage. There is no account, no cloud sync, and no server-side backup. This means: If you clear your browser data, your conversations are gone. There is no recovery. If you switch browsers or devices, your history does not follow you. Private/incognito mode will discard everything when the window closes. This is by design — G0DM0D3 has no login system and does not keep a server-side copy of your chat history. Metadata telemetry is separate and is described above. You own your history, which means you are responsible for backing it up. There is a built-in export/import feature in settings under \"data\". Treat your chat history like any other local file — back it up if you want to keep it. 🎮 Easter Eggs Hidden throughout G0DM0D3 are various easter eggs. Happy hunting! 🛠 Tech Stack Hosted architecture: Single-file vanilla HTML/CSS/JS (index.html) Model transports: OpenRouter, Venice, and OpenAI-compatible localhost endpoints Rendering: Built-in message formatter in index.html State: In-browser localStorage Telemetry: Optional Cloudflare Pages Function publishing batches to Hugging Face Additional surfaces: Optional React/Next.js frontend (src/) and Node/Express API server (api/) 📁 Project Structure G0DM0D3/ ├── index.html # Standalone hosted UI, logic, and styles ├── functions/api/ # Cloudflare Pages telemetry endpoint ├── src/ # Optional React/Next.js frontend ├── api/ # Optional Node.js/Express API server ├── API.md # API documentation ├── PAPER.md # Research paper ├── TERMS.md # Terms of service and data transparency └── README.md # This file 📜 Documentation API.md — Full API reference (endpoints, tiers, OpenAI SDK compatibility) PAPER.md — Research paper on the framework's modules and evaluation TERMS.md — Terms of service, privacy policy, data handling SECURITY.md — Vulnerability reporting and security policy LOCAL_MODELS.md — Run G0DM0D3 entirely on local models 🤝 Contributing Contributions are welcome! Please submit PRs. 📜 License AGPL-3.0 — The source code is licensed under the GNU Affero General Public License v3.0. Commercial and enterprise self-hosting is permitted under the AGPL-3.0, subject to its conditions. If you modify the program and provide it to users over a network, the AGPL generally requires offering those users the corresponding source code. Separate terms may apply to project-operated hosted services; see TERMS.md. 🜏 We believe in creative liberty and cognition without control. Tools by builders for builders, not gatekeepers. AI freedom is human freedom. G0DM0D3 is not just a chat UI — it's scaffolding for cognitive liberation. Made with 🖤 by Pliny the Prompter",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "ced81c66dfe96262",
+    "source_type": "community_discussion",
+    "tldr": "G0DM0D3 是一个完全开源的隐私透明多模型聊天界面，支持 OpenRouter、Venice 和本地模型，集成了平行提示攻击（GODMODE CLASSIC）、多模型评估（ULTRAPLINIAN）、输入扰动（Parseltongue）和自适应采样（AutoTune）等红队研究工具。",
+    "objective_summary": "elder-plinius（Pliny the Prompter）在 GitHub 上发布了 G0DM0D3 项目，这是一个完全开源的多模型聊天界面，旨在为红队测试、认知研究和去约束 AI 交互提供工具。该界面以单文件 index.html 形式提供，无需构建步骤，支持 OpenRouter 和 Venice 等多个模型提供商，也可连接本地 Ollama、LM Studio 等 OpenAI 兼容服务器。其核心功能包括五种模型提示组合并行竞速的 GODMODE CLASSIC、支持最多 60 个模型并行评估和复合评分的 ULTRAPLINIAN、提供 33 种输入扰动技术的 Parseltongue，以及覆盖 20 种查询上下文的自动采样参数引擎 AutoTune。项目采用 AGPL-3.0 许可证，数据流动和遥测策略在文档中透明公开。",
+    "event_type": "framework_tools",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [
+        "OpenRouter",
+        "Venice",
+        "Cloudflare",
+        "Hugging Face",
+        "GitHub"
+      ],
+      "technologies": [
+        "Ollama",
+        "LM Studio",
+        "llama.cpp",
+        "vLLM"
+      ],
+      "key_people": [
+        "Pliny the Prompter",
+        "elder-plinius"
+      ]
+    },
+    "key_logic_flow": [
+      "G0DM0D3 是一个完全开源的多模型聊天界面，核心 UI 为单文件 index.html，无需构建步骤即可在浏览器中直接运行。",
+      "该项目支持 OpenRouter、Venice 和本地 OpenAI 兼容服务器三种模型提供商，用户可在设置中自由配置。",
+      "GODMODE CLASSIC 模式将五种经过实战验证的模型与越狱提示组合进行并行竞速，从中选出最佳响应结果。",
+      "ULTRAPLINIAN 多模型评估引擎按 FAST、STANDARD、SMART、POWER、ULTRA 五个层级并行查询最多 60 个模型并通过复合评分决定胜者。",
+      "Parseltongue 输入扰动引擎提供三个强度层级共 33 种转换技术，用于红队测试和模型鲁棒性研究。",
+      "AutoTune 上下文自适应采样参数引擎将查询分类为 20 种上下文类型，自动选择 temperature、top_p、top_k 等采样参数。"
+    ],
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "elder-plinius/G0DM0D3",
+        "canonical_name": "elder-plinius/G0DM0D3",
+        "url": "https://github.com/elder-plinius/G0DM0D3",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "G0DM0D3 是一个完全开源、隐私透明的多模型聊天界面，专为红队测试、认知研究和去约束 AI 交互而设计。",
+          "该项目的核心界面为单文件 index.html，无需任何构建步骤或包安装即可在浏览器中直接运行。",
+          "项目支持 OpenRouter、Venice 和本地模型三种模型提供商，并提供 GODMODE CLASSIC、ULTRAPLINIAN、Parseltongue 和 AutoTune 等核心功能。"
+        ],
+        "article_id": "ced81c66dfe96262"
+      },
+      {
+        "object_type": "product",
+        "name": "godmod3.ai",
+        "canonical_name": "godmod3.ai",
+        "url": "https://godmod3.ai",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "godmod3.ai 是 G0DM0D3 的托管版在线服务，用户无需安装即可在浏览器中直接使用该多模型聊天界面。",
+          "用户只需携带 OpenRouter 密钥、Venice 密钥或连接本地 OpenAI 兼容服务器即可在 godmod3.ai 上开始使用。",
+          "托管版包含一个独立的 Cloudflare Pages Function 遥测端点，用于收集应用元数据而非用户提示内容。"
+        ],
+        "article_id": "ced81c66dfe96262"
+      }
+    ],
+    "extract_result": "success",
+    "impact_score": {
+      "score": 5.5,
+      "reason": "G0DM0D3 将分散的红队越狱技巧（平行提示攻击、多模型评估、输入扰动、自适应采样）整合为一个开箱即用的单文件工具，降低了红队研究的技术门槛。但它本质上是已有技术的工程集成，而非新范式或新算法突破。短期内会在 AI 安全研究社区和黑客圈子形成传播，但对主流 AI 产品格局和商用 API 市场影响有限。平行竞速 + 复合评分的 ULTRAPLINIAN 模式有一定创新性，但不足以改变行业竞争格局。"
+    },
+    "sentiment": "mixed",
+    "developer_sentiment": {
+      "tone": "excited",
+      "primary_focus": "平行越狱提示竞速和自动化红队评估能力"
+    },
+    "hype_assessment": {
+      "level": "medium",
+      "reason": "项目 README 使用了大量戏剧化措辞如 'LIBERATED AI. COGNITION WITHOUT CONTROL'、'GODMODE'、'Revolutionary' 等，有明显的黑客文化包装色彩。但项目本身确实是可运行的工程实现，功能描述具体详实，数据流动策略透明公开，不存在虚假宣传或技术欺诈。属于风格张扬但内容扎实的案例。"
+    },
+    "information_entropy": "high",
+    "domain_disruption": {
+      "technical_innovation": "将五种越狱提示策略与不同模型并行竞速（GODMODE CLASSIC），以及支持最多 60 个模型并行评估的复合评分引擎（ULTRAPLINIAN），是红队自动化领域的实用工程创新。33 种输入扰动技术的分层封装和 20 种上下文的自动采样参数选择也提供了较高的工程集成度。",
+      "business_model": "以完全开源（AGPL-3.0）、无需构建的单文件分发模式，挑战了商业化红队工具的商业模式。通过 Cloudflare Pages 的透明遥测设计示范了'开放隐私'理念——不隐藏也不滥用数据。可能催生更多围绕 AI 安全测试的开源工具生态。"
+    },
+    "engineering_complexity": "production_ready",
+    "compound_value": {
+      "score": 5.0,
+      "reason": "G0DM0D3 定位于开源多模型红队测试与评估工具，核心价值在于将分散的 jailbreak 技术、多模型竞速评估（ULTRAPLINIAN，60模型并行）、输入扰动攻击（Parseltongue，33种技术）和自适应采样（AutoTune）整合为一个即用的单文件工具。正面逻辑：AI 监管趋严（EU AI Act 等）使红队测试成为确定性增长需求，该工具填补了开源侧缺乏系统性评估一体化工具的空白，功能深度可观。负面逻辑：AGPL-3.0 许可限制商业集成，项目依赖个人维护（elder-plinius），单文件 HTML 架构技术壁垒极低、易被 fork 替代。核心矛盾在于价值流向生态而非项目自身——OpenRouter、Venice 等平台通过 API 调用量获益，而项目本身无直接变现机制。因此长期复利效应中等，有工具层面的持久性但缺乏商业层面的复利积累。"
+    },
+    "value_capture_layer": "agent_middleware",
+    "moat_impact": "democratizes_access",
+    "key_beneficiaries": [
+      "OpenRouter",
+      "Venice",
+      "Cloudflare",
+      "Hugging Face"
+    ],
+    "competitive_casualty": [
+      "商业红队测试服务商",
+      "闭源模型评估平台"
+    ],
+    "market_opportunities": [
+      "企业安全团队可将 G0DM0D3 的平行提示攻击和输入扰动引擎集成到 LLM 红队测试工作流中，用于自动化评估模型对越狱攻击的鲁棒性，降低人工测试成本",
+      "开源社区和教育机构可利用其多模型并行评估引擎（ULTRAPLINIAN）开展模型能力基准研究，形成跨提供商的模型性能对比报告，作为独立评估服务商业化",
+      "隐私敏感行业（如医疗、法律）可基于其本地模型支持和 No-Log 模式，定制私有部署的多模型交互界面，满足数据合规需求的同时获取多模型协作能力"
+    ],
+    "risk_matrix": {
+      "regulatory": "该工具明确提供越狱提示和去约束交互能力，在欧盟 AI Act 高风险分类体系下可能被认定为规避安全防护的非法工具，面临分布禁令风险；美国出口管制（EAR）可能将某些模型越狱技术视为受控技术；若被用于生成恶意内容，开发者可能承担间接法律责任",
+      "technological": "项目中集成的越狱提示和模型特定攻击技术具有时效性，主流模型厂商（Anthropic、OpenAI、Google）持续更新安全对齐策略，部分技术可能在数月内失效，需要频繁更新攻击策略库；单文件架构虽然简洁但功能扩展性有限",
+      "competitive": "该领域已有类似开源项目（如 GPTFuzz、PAL）和商业化红队测试平台（如 Lakera、Giskard），G0DM0D3 的多模型并行方案虽具特色但差异化优势不持久；OpenRouter 和 Venice 可能因合规压力限制越狱相关调用，切断核心功能通路",
+      "ethical": "工具的核心功能是绕过 AI 安全护栏，可能被滥用于生成有害内容（仇恨言论、虚假信息、恶意代码），加剧深度伪造和信息操纵风险；\"Liberated AI\" 的叙事框架可能误导公众对 AI 安全必要性的认知，削弱负责任 AI 发展的社会共识",
+      "additional": [
+        "项目依赖 OpenRouter 等第三方 API，若上游服务变更定价或可用性策略，核心竞速功能将受影响；Telemetry 开关默认开启的隐私声明存在\"默认非隐私\"的用户体验矛盾"
+      ]
+    },
+    "confidence": {
+      "impact": "high",
+      "compound": "medium",
+      "hype": "medium"
+    },
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "elder-plinius/G0DM0D3",
+        "canonical_name": "elder-plinius/G0DM0D3",
+        "url": "https://github.com/elder-plinius/G0DM0D3",
+        "positioning": "一个完全开源的多模型聊天界面，专为红队测试、认知研究和去约束 AI 交互设计，以单文件 HTML 运行无需构建步骤。",
+        "technical_signal": "项目以单文件 index.html 为核心 UI，无需构建步骤即可在浏览器运行，集成多达 60 个模型的并行竞速与复合评分评估引擎。",
+        "adoption_signal": "项目在 GitHub 上以 AGPL-3.0 许可证开源发布，支持 OpenRouter、Venice 和本地模型三种提供商，具体社区采用数据待观察。",
+        "ecosystem_relevance": "为 AI 红队测试社区提供了开源多模型越狱评测工具链，填补了多模型并行竞速与复合评分引擎领域的开源空白。",
+        "target_users": [],
+        "watch_reason": "G0DM0D3 以高度简洁的单文件架构聚合了多模型并行竞速、复合评测和输入扰动等红队技术，代表了 AI 安全测试领域的前沿探索，其方法论可能影响大模型对齐评估的未来实践。",
+        "risk_notes": [
+          "项目提供的越狱提示和去约束交互功能存在被滥用于恶意目的的风险，可能引发法律与伦理争议。",
+          "多模型并行竞速依赖 OpenRouter、Venice 等第三方 API 的可用性与模型兼容性，存在服务中断或模型被下线的不确定性。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "ced81c66dfe96262"
+        ],
+        "evidence_snippets": [
+          "G0DM0D3 是一个完全开源、隐私透明的多模型聊天界面，专为红队测试、认知研究和去约束 AI 交互而设计。",
+          "该项目的核心界面为单文件 index.html，无需任何构建步骤或包安装即可在浏览器中直接运行。",
+          "项目支持 OpenRouter、Venice 和本地模型三种模型提供商，并提供 GODMODE CLASSIC、ULTRAPLINIAN、Parseltongue 和 AutoTune 等核心功能。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "godmod3.ai",
+        "canonical_name": "godmod3.ai",
+        "url": "https://godmod3.ai",
+        "positioning": "G0DM0D3 的托管版在线服务，用户携带 API 密钥即可在浏览器中直接使用多模型红队聊天界面，无需任何本地安装。",
+        "target_users": [
+          "AI 安全研究人员",
+          "红队测试工程师",
+          "认知科学研究者",
+          "大模型对齐评估从业者"
+        ],
+        "product_signal": "托管版通过 Cloudflare Pages Function 收集应用元数据而非用户提示内容，对话和设置存储在浏览器本地。",
+        "market_signal": "以免费开源加托管服务形式提供，降低了 AI 红队测试工具的使用门槛，但市场认知度和用户基数尚不明确。",
+        "differentiation": "与 ChatGPT 等通用聊天界面不同，godmod3.ai 专注于越狱提示和多模型并行竞速的 AI 红队场景，定位高度差异化。",
+        "watch_reason": "godmod3.ai 将复杂的多模型越狱评测能力以零安装 Web 服务形式交付，大幅降低了 AI 安全研究者的工具门槛，其商业模式若能跑通可能催生新的 AI 安全工具品类。",
+        "risk_notes": [
+          "托管服务的持续运营依赖付费订阅模式支持，当前用户规模尚不确定其商业可持续性。",
+          "Cloudflare Pages Function 遥测端点虽声称不收集提示内容，但数据隐私合规性仍需审查。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "ced81c66dfe96262"
+        ],
+        "evidence_snippets": [
+          "godmod3.ai 是 G0DM0D3 的托管版在线服务，用户无需安装即可在浏览器中直接使用该多模型聊天界面。",
+          "用户只需携带 OpenRouter 密钥、Venice 密钥或连接本地 OpenAI 兼容服务器即可在 godmod3.ai 上开始使用。",
+          "托管版包含一个独立的 Cloudflare Pages Function 遥测端点，用于收集应用元数据而非用户提示内容。"
+        ]
+      }
+    ]
+  },
+  {
+    "source_dir": "github-trending",
+    "title": "KnockOutEZ/wigolo",
+    "source": "https://github.com/KnockOutEZ/wigolo",
+    "author": [],
+    "published": "",
+    "created": "2026-07-19",
+    "manifest_dates": [
+      "2026-07-19",
+      "2026-07-20"
+    ],
+    "description": "The go-to web for your AI coding agent — local-first search, fetch, crawl & research over MCP. No API keys, no cloud, $0/query. Public beta. Local-first web intelligence for AI agents — no keys, no cloud, no metered bill. works with&nbsp;&nbsp;Claude Code · Cursor · Codex · Gemini CLI · VS Code · Windsurf · Zed · Antigravity and beyond&nbsp;&nbsp;LangChain · CrewAI · LlamaIndex · Vercel AI SDK · n8n & self-hosted agents · any MCP client · plain REST Quickstart · Tools · Why wigolo · Benchmark · Docs · Examples · Feedback · FAQ wigolo gives an AI agent one durable surface for everything web-related — search, fetch, crawl, extract, cache, find-similar, research, and autonomous gather loops. It runs wherever your agent runs: as an MCP server next to your coding agent, as a REST/MCP endpoint on the box where your self-hosted agents live, or embedded through an SDK inside your own app. The core tools need no API keys, nothing it touches leaves ~/.wigolo/, and there's no bill that grows with how much your agent thinks. Quickstart Requires Node ≥ 20 and ~1.5 GB of free disk. macOS, Linux, and Windows. One command wires the local engine into your agent. init is unattended by default — no prompts, safe in scripts and CI — and does the complete setup: it downloads the browser engine and on-device models, runs a health check, and prints a per-component summary, so any setup problem surfaces right here, not silently on your agent's first call: npx wigolo init --agents=<your-agent> <your-agent> — one or more of claude-code · cursor · codex · gemini-cli · vscode · windsurf · zed · antigravity (comma-separated). wigolo writes the MCP config and instructions for you. Any other MCP client? Omit --agents and register npx -y wigolo yourself — the installation guide has the exact config block for every client, plus Docker, Homebrew, and single-file-binary channels. Prefer prompts? --interactive is a plain-text flow; --wizard is the full terminal TUI. Skip the downloads? --no-warmup defers everything to first use. A failed component download never fails setup — init reports what's not ready with the exact fix and still wires your agent. That's the whole setup — search, fetch, crawl, extract, cache, and find-similar work with no API key. Check it's healthy anytime: npx wigolo doctor Not for you? npx wigolo config --uninstall --yes removes everything, cleanly. You can also paste the installation guide at any AI assistant and let it do the setup — it's written to be self-contained. Recommended — a free key makes research & agent shine Search, fetch, crawl, extract, cache, and find-similar are fully keyless. But research, agent, and search format=answer use an LLM to write the synthesized, cited answer — without one they hand back a raw brief and evidence for your agent to assemble, which is a much thinner experience. A free Gemini key is all it takes, and it's the single biggest quality upgrade you can make: export WIGOLO_LLM_PROVIDER=gemini export GEMINI_API_KEY=<free-key> # grab one at aistudio.google.com/apikey — the free tier is plenty Any provider works (anthropic · openai · groq), or stay fully local and keyless with WIGOLO_LLM_PROVIDER=ollama (or any OpenAI-compatible URL). Set it in your shell or your agent's MCP env block. Providers, models, and the keyless local-model ladder: configuration guide. What your agent gets back Not snippets — evidence. Every search result carries a verbatim excerpt pinned to its exact position in the source, a citation ID the agent can quote, and a score it can inspect (abridged real shape): { \"results\": [{ \"title\": \"Logical replication - PostgreSQL docs\", \"url\": \"https://www.postgresql.org/docs/current/logical-replication.html\", \"excerpt\": \"Logical replication is a method of replicating data objects…\", \"citation_id\": \"src-1\", \"source_span\": { \"start\": 1042, \"end\": 1305 }, // byte-exact provenance \"evidence_score\": { \"final\": 0.86, \"semantic\": 0.91, \"lexical\": 0.78, \"engine_consensus\": 3 } }], \"citations\": [{ \"id\": \"src-1\", \"url\": \"…\" }], \"freshness_signal\": { \"published\": \"2026-05-12\", \"confidence\": \"high\" } } Weak results get flagged as junk by wigolo's own scorer, failed engines are reported, stale cache is labeled — the agent always knows what it's standing on. Full response contracts per tool: tools reference. Tools Tool What it does 🔎 search Multi-engine web search (18 direct adapters) with rank fusion, ML reranking, and an explainable per-result score. Pass a query array for parallel breadth. 📄 fetch Load one URL through a tiered router that auto-escalates from plain HTTP to a headless browser engine on anti-bot challenges or SPA shells. Clean markdown + metadata + links. 🕸️ crawl Multi-page crawl — BFS, DFS, sitemap, or map-only. Per-domain rate limits, robots.txt respect, boilerplate dedup. 🧩 extract Structured data from a page: tables, metadata, JSON-LD, brand identity, named schemas (Article / Recipe / Product / …), or any custom JSON Schema. 💾 cache Query everything already seen — keyword or hybrid semantic. Plus stats, clear, and change detection. 🧲 find_similar Pages similar to a URL or a concept, via 3-way fusion of keyword + semantic + live web. 🧠 research Decompose a question → fan out sub-queries → fetch sources → synthesize a cited report (or a structured brief the host LLM writes from). 🤖 agent Autonomous gather loop: plan → search → fetch → extract → synthesize, with a step log, time budget, and optional output schema. 🔁 diff + ⏱️ watch See exactly what changed on a page since last visit; re-check on demand and deliver changes to a webhook. Every tool also runs from the terminal (wigolo search \"…\" --json), from an interactive shell with NDJSON piping (wigolo shell), over REST, and through the SDKs — CLI reference. What that actually lets you do Each tool goes well past its one-liner. A sampler — every line links to the guide and, where there's one, a runnable example: Search that fans out — pass a query array for parallel breadth, scope to include_domains, bound by time_range/recency, exact-phrase match, choose a depth tier, even image results. → guide · example Fetch almost anything — JS-rendered SPAs, PDFs, a single heading section, authenticated pages (via a browser profile or remote browser), or drive the page with actions (click / type / scroll / screenshot). → guide Crawl a whole site — sitemap, BFS, DFS, or map-only; robots.txt-respecting, per-domain rate-limited, boilerplate-deduped. → guide Extract structure — tables, JSON-LD, metadata, brand assets, named schemas (Article / Recipe / Product / …), or your own JSON Schema. → guide A memory that compounds — every page is cached; re-query by keyword or meaning, instantly and offline; detect what changed since last visit. → guide · example Research & autonomous gather — decompose a question into a cited brief, or turn agent loose to plan → fetch → extract → synthesize against a JSON Schema and a time budget. → guide · example Watch & diff — monitor a URL, get a change report, deliver it to a webhook. → guide · example Drive it your way — one-shot CLI, an NDJSON shell for pipelines, REST, SDKs, or as skills your agent installs. → CLI & shell · example Extend it — add a search engine or a site extractor as a plugin in ~100 lines. → plugins · example Tune & inspect — wigolo tune shows what it learned per domain (which fetch tier, challenge clearances, backoff); doctor / verify health-check every component. → CLI · troubleshooting Why it's different wigolo isn't the free stand-in you settle for until the budget clears — it's built to hold the same line as the paid services in this lane, and it brings receipts. What actually separates it: Built for agents, not humans. One MCP call fans out many queries across many engines in parallel — something a serial host tool-loop can't replicate — with transparent per-result scoring and budget-aware output. Honest output. Stale cache, failed fetches, degraded backends, and truncation are surfaced in the result, never disguised as empty-but-successful data. When a bot-protected page can't be read, you get a labeled blocked_by_challenge failure — never a challenge shell dressed up as content. $0 per query, free to re-query. Default search talks to public engines through direct adapters; the reranker and embeddings run on-device. Every response is cached, so asking again is instant and costs nothing. Private by default. Cache, embeddings, models, and config live under ~/.wigolo/. Nothing reaches a third party unless you explicitly opt into an LLM for synthesis. wigolo is a focused web layer for your agents — not a hosted SaaS, a vector database other apps query, or a scale-scraping platform. Within that lane it goes toe-to-toe with the paid services on result quality — and the meter, the key, and the data-egress simply aren't there. Here's what one real result looks like, dissected — including the failed engine and the weak result, because those are part of the answer too: Benchmark All four tools converged on the same core answer — and only one of them handed back verbatim, byte-pinned evidence while doing it. One cold query, run live inside a single Claude Fable 5 session and fanned out to four web tools on equal footing — built-in WebSearch, wigolo, Tavily, and Exa — then reported by the agent itself under one rule: judge on the evidence alone, no favoritism. All four converged on the same answer and the same top source — parity demonstrated, not asserted. wigolo alone returned verbatim excerpts pinned to byte-offset source spans, an explainable score decomposition, and live per-engine telemetry — and when two of its results were weak, its own scorer flagged them as junk on-screen. The cloud tools earn their line too: Exa rendered the official docs' comparison matrix in full. One honest query, not a leaderboard — run your own and you'll see the same shape. Same fight, different physics wigolo Firecrawl Exa Tavily Multi-engine web search ✅ ✅ ✅ ✅ Fetch & structured extraction ✅ ✅ ✅ ✅ Whole-site crawl & map ✅ ✅ — ✅ Verbatim excerpts pinned to byte-offset source spans ✅ — — — Explainable per-result score decomposition ✅ — — — Persistent local memory — re-query instantly, offline ✅ — — — Query data stays on your machine ✅ — — — API key / account none required required required Cost per query $0 metered metered metered Feature standing as of July 2026 — check each vendor's docs for current state. That last row is the one that compounds — agents don't ask once, they ask in bursts: Beyond your editor The same ten tools serve every kind of agent, over whichever surface fits — MCP for coding agents, REST for everything else, SDKs to embed, framework wrappers to drop in. REST API — wigolo serve One process exposes a plain-JSON REST API next to the MCP transport. No MCP client needed — just curl: wigolo serve # 127.0.0.1:3333 — loopback is open; off-loopback requires a token curl -sX POST http://127.0.0.1:3333/v1/search \\ -H 'Content-Type: application/json' \\ -d '{\"query\":\"local-first software\",\"max_results\":5}' POST /v1/{tool} covers all ten tools, GET /openapi.json is the OpenAPI 3.1 contract, and /mcp + /sse serve remote MCP clients from the same port. Bind past loopback and a bearer token is required — the server fails closed rather than opening wide by accident. Point n8n, a Hermes-style assistant, or any self-hosted agent at it. → REST API SDKs — TypeScript & Python Thin, typed clients with an embedded local mode that finds or starts the daemon for you — no separate serve step. TypeScript — npm install wigolo-sdk (zero-dep; Node / Bun / Deno / edge): import { createLocalClient } from 'wigolo-sdk/local'; const { client, close } = await createLocalClient(); // reuse a running daemon, or spawn one const res = await client.search({ query: 'local-first web search', max_results: 5 }); console.log(res.results.map((r) => r.title)); await close(); // stops the daemon only if this call spawned it Python — pip install wigolo (standard library only; sync + async): from wigolo import local_client with local_client() as client: # reuse a healthy daemon, or spawn one res = client.search(query=\"local-first web search\", max_results=5) for r in res[\"results\"]: print(r[\"title\"], r[\"url\"]) → SDKs & embedded mode Framework integrations Drop wigolo's tools into the framework you already use — the full ten-tool surface, including the cache / find_similar / research / agent that most framework web-tools don't ship: Framework Package What you get LangChain wigolo-langchain each tool as a BaseTool, plus a BaseRetriever over search / find_similar for RAG CrewAI wigolo-crewai wigolo_tools() → hand the set to any crew LlamaIndex wigolo-llamaindex a BaseReader that loads fetched / crawled / searched pages as documents Vercel AI SDK wigolo-vercel-ai-sdk tool factories for generateText / streamText, edge-friendly → Framework integrations Docker # stdio MCP — wire it into any MCP client as command: docker docker run -i --rm -v wigolo-data:/data ghcr.io/knockoutez/wigolo # HTTP server for remote / multi-client use docker run -p 3333:3333 -v wigolo-data:/data \\ -e WIGOLO_API_TOKEN=a-long-random-secret \\ ghcr.io/knockoutez/wigolo serve --host 0.0.0.0 The slim image lazy-loads models into the volume; :full preinstalls the browser engine. Also on Docker Hub as towhid69420/wigolo. → installation & all channels Agent skills An 11-pack skill catalog teaches your coding agent to drive each tool well — installed by init, managed with wigolo skills add|list|remove. → skills One honest note for self-hosters: some challenge-protected sites score IP reputation, so a datacenter IP won't clear walls a home connection would. wigolo labels those failures instead of faking them, and the self-hosting guide covers the opt-in proxy answer. Star history Live chart — it updates itself. If it's still climbing when you read this, add a ⭐. Architecture A single Node process speaking MCP (JSON-RPC over stdio). Everything heavy is local and lazy-loaded, so a zero-key install pays nothing for the parts it isn't using. flowchart TD A[\"🤖 AI agent<br/>any MCP client · REST · SDK\"] A -->|MCP over stdio| B[\"<b>wigolo</b><br/>10 tools · dynamic instructions<br/>in-process browser pool + cache + models\"] B --> C{\"Tool layer\"} C --> T1[\"search · fetch · crawl · extract\"] C --> T2[\"cache · find_similar · research · agent\"] T1 --> F[\"⚙️ Fetch router<br/>tiered escalation, learned per domain\"] T1 --> S[\"⚙️ Search<br/>18 engines → rank fusion → ML rerank<br/><i>explainable evidence score</i>\"] T2 --> DB[(\"🗄️ Local cache<br/>keyword + vector index\")] T2 --> ML[\"🧠 On-device ML<br/>embeddings + reranker\"] F -.->|optional| LLM[\"☁️ LLM<br/>synthesis only · opt-in\"] S -.->|optional| SX[\"🔀 Aggregator backend<br/>opt-in legacy / hybrid\"] F --> WEB[\"🌍 Public web\"] S --> WEB style B fill:#7c3aed,stroke:#5b21b6,color:#fff style WEB fill:#0ea5e9,stroke:#0369a1,color:#fff style DB fill:#1e293b,stroke:#334155,color:#fff style LLM stroke-dasharray: 5 5 style SX stroke-dasharray: 5 5 Code beats model. Deterministic work — canonicalization, rank fusion, dedup, schema matching — never touches an LLM. The model is reserved for judgment, opt-in, and capped per request; LLM-filled fields are checked against the source and nulled if absent. Routing on observable signals. The fetch ladder escalates to a real browser on what it sees — SPA markers, challenge bodies, thin content — not domain guesses. It learns per domain, unlearns when a site stops needing it, and wigolo tune list shows you exactly what it learned. Reads pages the way a browser does — and says so when it can't. Tiered fetching waits out interstitial challenges and reuses clearances per domain, politely: robots.txt respected, per-domain rate limits, research-grade volumes. When a wall stays up, the failure is labeled, never disguised. Configuration A clean install works out of the box. Three settings meaningfully raise output quality: # 1. Synthesis — the biggest lever (research / agent / search-answer write real prose) export WIGOLO_LLM_PROVIDER=gemini # or anthropic / openai / groq / ollama (keyless) export GEMINI_API_KEY=<your-key> # 2. Wider retrieval funnel export WIGOLO_SEARCH=hybrid # core engines + aggregator fallback export WIGOLO_GITHUB_TOKEN=... # GitHub code search 10 → 30 req/min # 3. Land more fetches, stay warm export WIGOLO_TLS_TIER=auto # per-domain learned fetch hardening export WIGOLO_EAGER_WARMUP=1 # pay the ~1s model load up front Per-call habits that pay off: query arrays ([\"a\",\"b\",\"c\"]) for parallel breadth · search_depth: \"deep\" for queries that matter · include_domains as a hard filter for docs lookups. The full reference — every environment variable, config-file key, search backend, cache TTL, and serve limit — lives in the configuration guide. Docs & examples docs/ — the complete manual: getting started · installation & channels · configuration · tools reference · CLI & shell · REST API · SDKs & integrations · self-hosting · agent skills · plugins · troubleshooting & FAQ · privacy & security examples/ — runnable, each with a README (and most with a terminal recording): one-shot CLI, NDJSON shell pipelines, REST via curl, TypeScript & Python SDKs, Vercel AI SDK tools, pointing self-hosted n8n at a remote wigolo, watch-with-webhook, and writing your own search-engine plugin. Docs are also rendered on the site: knockoutez.github.io/wigolo/docs. Beta & feedback wigolo is in public beta. Everything documented here works and is held to a 7,600-test suite — beta is about the polish bar, not stability. It stays beta until enough people have used it, kicked it, and starred it that calling it v1 means something. That makes your feedback the whole game right now. Every report is read, usually the same day: 🐛 Report a bug — broke, misbehaved, surprised you 💡 Request a feature — something it should do 💬 Ask anything — questions, setups, show & tell And if wigolo earns a place in your setup, the ways to keep it alive: a ⭐ star (it's how open source gets found), a ☕ coffee (there's no paid tier and never will be), or just an email — it goes straight to the one developer who wrote the code. FAQ Free? What's the catch? No catch by design. The expensive parts — ranking, embeddings, the browser engine — run on your hardware, so there's no per-query cost to recover and no reason for a meter. Sustained by donations; the AGPL license legally prevents a bait-and-switch into a closed hosted product. Is the quality really on par with the paid services? Run one query and judge — the benchmark section above is a live 4-way run, not a chart. Everyday agent queries land at parity; the paid tools still win some deep-extraction edge cases, and crawling is where wigolo is strongest. Every result shows its scoring, so you don't have to take anyone's word for it. Won't public search engines block or rot? It's engineered for exactly that: 18 engines fused with rank fusion (any one failing barely moves results), a tiered fetch ladder with per-domain learning, and an optional aggregator fallback. Degraded backends are reported in the output, never hidden — and the local cache means everything already seen keeps working regardless. Is this kind of scraping OK? wigolo reads the public web the way a browser does — robots.txt respected by default, per-domain rate limits, research-grade volumes for one agent on one machine. It's deliberately the polite end of the spectrum, not a harvesting platform. AGPL — can I use this at work? Yes, freely, company-wide. The license only bites if you modify wigolo and run it as a network service — then you must publish those modifications. Using it as a local dev tool carries zero obligation. Commercial-licensing questions: reach out. Why 1.5 GB of disk? That's the on-device brain: a full browser engine plus the ranking and embedding models the cloud services run on their side and bill you for. Disk is cheap; meters aren't. Available on npm — wigolo (primary channel — the Quickstart above) PyPI — wigolo (Python SDK) Docker — ghcr.io/knockoutez/wigolo · towhid69420/wigolo Official MCP Registry — io.github.KnockOutEZ/wigolo Directories — Glama · Smithery · mcp.so · LobeHub Homebrew, curl | sh, and the single-file binary are covered in the installation guide — one channel per machine; they all share ~/.wigolo. Contributing Bug reports, feature requests, and PRs are all welcome — see CONTRIBUTING.md. Keep tool handlers thin, add tests, run the suite before opening a PR. The friendliest entry point: wigolo has a plugin system for custom search engines and extractors — add a search engine in ~100 lines, template in examples/plugin-search-engine. License GNU AGPL-3.0-only. Free to use, modify, and self-host — including inside a company. The one obligation: if you run a modified version as a network service, you must publish your modified source under the same license. That keeps wigolo open while preventing a closed, hosted fork. See SECURITY.md to report a vulnerability and TRADEMARK.md for use of the name. For commercial-licensing questions, reach out. wigolo is free and meant to stay that way — maintained, not paywalled. If it saves you a metered search bill, a ⭐, a sharp issue, or a ☕ coffee helps keep it sustainable. Built and maintained by @KnockOutEZ · ktowhid20@gmail.com",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "ef03efa8fa36c2ae",
+    "source_type": "community_discussion",
+    "tldr": "KnockOutEZ 发布了 wigolo，一个本地优先、无需 API 密钥的 AI 代理网络智能工具，提供搜索、抓取、提取、缓存等十种工具，通过 MCP、REST 和 SDK 三种方式与各类 AI 编码代理集成，所有数据默认存储在本地 ~/.wigolo/ 目录下。",
+    "objective_summary": "KnockOutEZ 在 GitHub 上发布了 wigolo，一个面向 AI 代理的本地优先网络智能工具。它提供搜索、抓取、提取、缓存、研究等十种工具，核心功能无需 API 密钥即可使用。用户通过一条命令 npx wigolo init 即可完成安装配置，支持 Claude Code、Cursor、Codex 等主流 AI 编码代理的 MCP 集成。所有缓存、嵌入向量、模型和配置默认存储在本地 ~/.wigolo/ 目录下，不向第三方发送数据。文章通过与 Firecrawl、Exa、Tavily 的对比测试，展示了 wigolo 在逐字节引证摘录、可解释评分分解和本地持久化记忆方面的差异化优势。",
+    "event_type": "framework_tools",
+    "epistemic_status": "pr_statement",
+    "entities": {
+      "companies": [
+        "KnockOutEZ",
+        "LangChain",
+        "CrewAI",
+        "LlamaIndex",
+        "Vercel",
+        "n8n",
+        "Firecrawl",
+        "Exa",
+        "Tavily"
+      ],
+      "technologies": [
+        "MCP",
+        "REST",
+        "SDK",
+        "BFS",
+        "DFS",
+        "TUI",
+        "OpenAPI"
+      ],
+      "key_people": []
+    },
+    "key_logic_flow": [
+      "KnockOutEZ 发布了 wigolo，一个面向 AI 代理的本地优先网络智能工具，核心功能无需 API 密钥。",
+      "wigolo 提供搜索、抓取、提取、缓存、找相似、研究、自主代理、差异对比和页面监控等十种工具。",
+      "用户通过 npx wigolo init 命令一键安装，自动下载浏览器引擎和本地模型，并完成与指定 AI 代理的 MCP 配置。",
+      "wigolo 支持 MCP 服务器、REST 端点和 SDK 三种集成方式，可接入 Claude Code、Cursor、Codex 等编码代理以及 LangChain、CrewAI、Vercel AI SDK 等框架。",
+      "所有缓存、嵌入向量、模型和配置存储在本地 ~/.wigolo/ 目录下，默认不向第三方发送任何数据。",
+      "与 Firecrawl、Exa、Tavily 的对比测试显示，wigolo 在提供逐字节引证摘录、可解释评分分解和本地持久化记忆方面具有独特优势。"
+    ],
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "KnockOutEZ/wigolo",
+        "canonical_name": "wigolo",
+        "url": "https://github.com/KnockOutEZ/wigolo",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "wigolo 是一个本地优先的 AI 代理网络智能工具，核心功能无需 API 密钥，支持搜索、抓取、提取和缓存等操作。",
+          "它通过 MCP 服务器、REST 端点和 SDK 三种方式集成到 Claude Code、Cursor、Codex 等主流 AI 编码代理中。",
+          "wigolo 的全部缓存、嵌入向量和配置均存储在本地 ~/.wigolo/ 目录下，默认不向任何第三方发送用户数据。"
+        ],
+        "article_id": "ef03efa8fa36c2ae"
+      },
+      {
+        "object_type": "product",
+        "name": "Firecrawl",
+        "canonical_name": "Firecrawl",
+        "confidence": "low",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "文章将 wigolo 与 Firecrawl 进行对比，指出 Firecrawl 同样支持多引擎搜索、页面抓取和结构化提取功能。",
+          "与 wigolo 不同，Firecrawl 需要 API 密钥并按查询计费，且不提供本地持久化记忆和离线查询能力。"
+        ],
+        "article_id": "ef03efa8fa36c2ae"
+      },
+      {
+        "object_type": "product",
+        "name": "Exa",
+        "canonical_name": "Exa",
+        "confidence": "low",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "文章在对比表中指出 Exa 需要 API 密钥并按查询计费，但能完整呈现官方文档的比较矩阵。",
+          "Exa 与 wigolo 一样支持多引擎搜索和结构化提取，但不提供字节级引证摘录和本地离线查询能力。"
+        ],
+        "article_id": "ef03efa8fa36c2ae"
+      },
+      {
+        "object_type": "product",
+        "name": "Tavily",
+        "canonical_name": "Tavily",
+        "confidence": "low",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "文章将 Tavily 列为对比对象之一，指出其需要 API 密钥且按使用量计费。",
+          "Tavily 支持多引擎搜索、页面抓取和结构化提取，但缺少逐字节引证摘录和本地持久化缓存功能。"
+        ],
+        "article_id": "ef03efa8fa36c2ae"
+      }
+    ],
+    "extract_result": "success",
+    "impact_score": {
+      "score": 7.0,
+      "reason": "wigolo 的定位是 AI 代理生态中一个被忽视但关键的痛点——网络智能工具的 API 密钥依赖和隐私成本。它并非学术突破，而是一个工程化程度很高的基础设施级工具，通过 MCP 协议无缝嵌入 Claude Code、Cursor、Codex 等主流编码代理，核心功能零密钥即可使用。在 AI 编码代理快速普及的当下，这一工具可能显著改变开发者获取网络情报的行为模式——从 SaaS API 按量计费转向本地离线运行。但需要注意的是，它是对 Firecrawl、Exa 等现有工具的补充而非颠覆，且在 LLM 合成能力上仍需可选的外部密钥，因此不构成范式转移。综合评定为 7.0 分：对 AI 代理工具链生态有实质影响，但属渐进式改进。"
+    },
+    "sentiment": "positive",
+    "developer_sentiment": {
+      "tone": "excited",
+      "primary_focus": "无需 API 密钥即可获得搜索、抓取、提取等核心网络智能能力，本地存储保障数据隐私，且通过 MCP 一键集成主流 AI 编码代理"
+    },
+    "hype_assessment": {
+      "level": "low",
+      "reason": "文章提供了充分的技术细节（10 种工具的具体能力、响应 JSON schema、安装过程、隐私策略），与 Firecrawl/Exa/Tavily 的对比测试有具体基准数据，诚实标注了 research/agent 工具需要 LLM 密钥的局限性。没有使用 '颠覆'、'革命性' 等 PR 高频词汇，整体语气偏工程化、技术化。"
+    },
+    "information_entropy": "high",
+    "domain_disruption": {
+      "technical_innovation": "本地优先的 AI 代理网络智能工具，集成 18 个搜索引擎适配器、多源排名融合、ML 重排序、可解释的逐项评分分解，以及逐字节精确引证溯源——所有核心功能无需 API 密钥、数据默认存储在本地 ~/.wigolo/ 下。支持 MCP 服务器、REST 端点和 SDK 三种集成模式，覆盖从编码代理到 LangChain/CrewAI 等框架的全场景。",
+      "business_model": "以本地优先模式直接挑战 Firecrawl、Exa、Tavily 等 SaaS API 按量计费模式。通过 MCP 协议嵌入现有 AI 代理生态，将网络智能的成本结构从 '每次调用付费' 转变为 '本地资源占用'，大幅降低 AI 代理获取网络信息的门槛和隐私风险。这可能推动 AI 代理工具链从云中心化向边缘化、隐私化方向演进。"
+    },
+    "engineering_complexity": "production_ready",
+    "compound_value": {
+      "score": 6.5,
+      "reason": "wigolo 的长期复利价值取决于其能否成为 AI 代理获取 Web 信息的默认基础设施层。正面因素：1) 零 API Key、本地优先模式消除了开发者的接入摩擦，一旦被 Claude Code、Cursor、Codex 等主流编码代理广泛采用，MCP 配置将形成替代成本，产生生态锁定效应；2) 本地缓存随使用时间持续积累单机数据资产，虽非全局网络效应（相比 Exa/Firecrawl 的共享缓存池），但足以提升用户留存；3) 支持 MCP/REST/SDK 三种集成方式，兼容 LangChain、CrewAI、Vercel AI SDK 等框架，覆盖了 AI Agent 工具链的绝大部分入口，传播面广。限制因素：1) 开源且明确标榜 'no metered bill' 的定位，意味着无法走传统 API 计量变现路径，商业模式不清晰，VC 退出路径狭窄；2) 本地优先架构限制了跨用户的网络效应和数据飞轮，而 Firecrawl、Exa 等云服务可通过共享缓存池持续提升搜索质量，形成竞争差异；3) 护城河浅——核心功能无需 API Key 也意味着用户迁移成本低，竞争对手也可以开源免费策略跟进。结论：wigolo 是一个优秀的基础设施项目，对 AI Agent 生态有正向价值，但作为 VC 投资标的，其长期复利受到变现路径不明和网络效应缺失的制约，需要观测是否推出托管版/企业版或数据共享层来构建真正的护城河。"
+    },
+    "value_capture_layer": "agent_middleware",
+    "moat_impact": "democratizes_access",
+    "key_beneficiaries": [
+      "KnockOutEZ",
+      "Anthropic",
+      "MCP ecosystem",
+      "Open-source AI agent community"
+    ],
+    "competitive_casualty": [
+      "Firecrawl",
+      "Exa",
+      "Tavily",
+      "Metered web scraping API services"
+    ],
+    "market_opportunities": [
+      "企业级 AI 代理团队可采用 wigolo 作为本地化网络情报工具，在无需 API 密钥、无计量计费的前提下为编码代理提供搜索、抓取与研究能力，尤其适用于数据合规要求严格的金融、医疗和政务场景",
+      "自建 AI 代理平台的开发团队可通过 wigolo 的 REST/SDK 集成方式，将本地优先的网页智能能力嵌入 LangChain、CrewAI、Vercel AI SDK 等框架，显著降低第三方 API 调用成本和数据外泄风险",
+      "隐私敏感型产品创业者可以 wigolo 的开源代码为基础，构建面向垂直行业（如法律调研、竞品监控、学术文献追踪）的本地化 AI 研究助手，核心功能无需任何外部 API 即可运行"
+    ],
+    "risk_matrix": {
+      "regulatory": "网页抓取与爬取功能可能触犯目标网站的 robots.txt 规则或服务条款，在欧盟《AI Act》和各国数据保护法下，若用于系统性数据采集仍需评估合规风险；但本地优先架构本身不向第三方传输数据，降低了数据处理层面的监管暴露",
+      "technological": "依赖本地浏览器引擎和端侧模型（~1.5GB 磁盘），在搜索结果质量和语义理解深度上可能不及云端方案（Firecrawl、Exa、Tavily）；TUI 和 CLI 为主的交互方式限制了非技术用户的采用；开源项目存在维护停滞或社区分叉的风险",
+      "competitive": "Firecrawl、Exa、Tavily 等竞品已建立起品牌知名度和开发者生态，且部分获得资本支持；wigolo 虽以本地优先和开源免费形成差异化，但在功能成熟度、文档完善度和社区规模上仍有明显差距，较难在短期内获得大规模采用",
+      "ethical": "本地存储所有缓存、嵌入和配置的设计在隐私保护上是正面信号，降低了数据滥用风险；但爬取/监控工具（watch/diff）可能被用于未经授权的网页变更追踪或数据采集，需引导用户遵守目标网站的使用条款",
+      "additional": [
+        "Node ≥20 和 1.5GB 磁盘的前置要求排除了资源受限环境（如低配 CI 或边缘设备）的使用场景"
+      ]
+    },
+    "confidence": {
+      "impact": "high",
+      "compound": "medium",
+      "hype": "low"
+    },
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "KnockOutEZ/wigolo",
+        "canonical_name": "wigolo",
+        "url": "https://github.com/KnockOutEZ/wigolo",
+        "positioning": "wigolo 是一个本地优先、无需 API 密钥的 AI 代理网络智能工具，提供搜索、抓取、提取和缓存等十种工具，通过 MCP、REST 和 SDK 三种方式与 AI 编码代理集成。",
+        "technical_signal": "wigolo 提供搜索、抓取、提取、缓存等十种工具，核心功能无需 API 密钥即可使用，所有缓存、嵌入向量和配置默认存储在本地 ~/.wigolo/ 目录下。",
+        "adoption_signal": "用户通过 npx wigolo init 一条命令即可完成安装配置，支持 Claude Code、Cursor、Codex 等主流 AI 编码代理的 MCP 集成，安装过程全自动无需交互。",
+        "ecosystem_relevance": "wigolo 支持 MCP 服务器、REST 端点和 SDK 三种集成方式，可接入 LangChain、CrewAI、LlamaIndex、Vercel AI SDK 等主流 AI 框架生态。",
+        "target_users": [],
+        "watch_reason": "wigolo 以本地优先、零 API 密钥的设计为 AI 代理提供网络智能能力，在隐私保护和离线可用性上具有独特价值，随着 AI 编码代理生态快速发展，其轻量级集成方案有潜力成为 MCP 生态中的关键基础设施。",
+        "risk_notes": [
+          "需要 Node ≥ 20 和约 1.5 GB 磁盘空间，本地浏览器引擎可能在某些环境下存在兼容性问题。",
+          "research 和 agent 等高级工具依赖外部 LLM 提供者，纯本地模式下无密钥则体验受限。",
+          "与 Firecrawl、Exa 等成熟方案相比，作为新生项目在社区规模和生态覆盖上尚有明显差距。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "ef03efa8fa36c2ae"
+        ],
+        "evidence_snippets": [
+          "wigolo 是一个本地优先的 AI 代理网络智能工具，核心功能无需 API 密钥，支持搜索、抓取、提取和缓存等操作。",
+          "它通过 MCP 服务器、REST 端点和 SDK 三种方式集成到 Claude Code、Cursor、Codex 等主流 AI 编码代理中。",
+          "wigolo 的全部缓存、嵌入向量和配置均存储在本地 ~/.wigolo/ 目录下，默认不向任何第三方发送用户数据。"
+        ]
+      }
+    ]
+  }
+]

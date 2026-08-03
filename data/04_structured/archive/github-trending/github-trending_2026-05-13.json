@@ -12,10 +12,10 @@
     ],
     "id": "3e334d4321c904e5",
     "source_type": "community_discussion",
-    "tldr": "millionco 发布 React Doctor，一键扫描 React 代码库并输出健康评分与诊断",
-    "objective_summary": "millionco 发布 React Doctor 工具，可通过 npx 命令扫描 React 项目（支持 Next.js、Vite、React Native），输出 0-100 的健康评分及状态与副作用、性能、架构、安全、可访问性、死代码等维度的诊断。",
+    "tldr": "millionco 发布 react-doctor，一款一键扫描 React 代码仓库的命令行工具，输出 0 到 100 健康评分并提供可操作诊断，同时支持将最佳实践安装到 50 余种 AI 编码代理中。",
+    "objective_summary": "millionco 于 GitHub 发布 react-doctor，通过 npx -y react-doctor@latest . 一条命令即可扫描 React 代码仓库，输出 0 到 100 的健康评分（75+ 优秀、50-74 需改进、50 以下严重）。该工具覆盖状态与副作用、性能、架构、安全、可访问性和死代码六大诊断类别，规则根据框架和 React 版本自动切换。它还支持安装到 Claude Code、Cursor、Codex 等 AI 编码代理中，指导代理写出更符合最佳实践的 React 代码。",
     "event_type": "framework_tools",
-    "epistemic_status": "pr_statement",
+    "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
         "millionco"
@@ -27,20 +27,61 @@
         "React Native",
         "oxlint",
         "ESLint",
-        "React Compiler",
-        "TanStack Start",
-        "TanStack Query"
+        "knip",
+        "GitHub Actions"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "React Doctor 提供 npx react-doctor@latest . 命令一键扫描代码库，输出 0-100 的健康评分（75+ 为优秀，50-74 为需改进，50 以下为严重），并附带可操作的诊断列表。",
-      "评分公式为 100 - (唯一错误规则数 × 1.5) - (唯一警告规则数 × 0.75)，计数的是触发的唯一规则而非总实例数。",
-      "工具支持 npx react-doctor install 为 Claude Code、Cursor、Codex 等 50 多种编码智能体安装最佳实践规则。",
-      "提供 GitHub Actions composite action，可在 PR 事件中自动发布诊断注释，并暴露 score 输出供后续步骤使用。",
-      "支持多层忽略配置（全局规则、全局文件、文件级规则覆写），兼容 .gitignore 等同级忽略文件，并识别 inline disable 注释。",
-      "同一规则集同时以 oxlint 插件和 ESLint 插件形式发布，可选集成 eslint-plugin-react-hooks v6/v7 和 eslint-plugin-react-you-might-not-need-an-effect 的规则。"
+      "millionco 发布 react-doctor 命令行工具，通过 npx -y react-doctor@latest . 可在项目根目录一键扫描并输出健康评分。",
+      "评分公式为 100 - (唯一错误规则数 × 1.5) - (唯一警告规则数 × 0.75)，仅计唯一规则而非总违规实例数。",
+      "工具覆盖状态与副作用、性能、架构、安全、可访问性和死代码六大诊断类别，规则根据检测到的框架和 React 版本自动切换。",
+      "支持 Next.js、Vite 和 React Native，并提供 GitHub Actions 复合操作用于 CI 流程集成。",
+      "通过 npx -y react-doctor@latest install 可将最佳实践规则安装到 Claude Code、Cursor、Codex、OpenCode 等 50 余种 AI 编码代理中。",
+      "同一条规则集同时以 oxlint 插件和 ESLint 插件形式分发，可融入项目现有的 lint 流程。"
     ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "millionco/react-doctor",
+        "canonical_name": "millionco/react-doctor",
+        "url": "https://github.com/millionco/react-doctor",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "该工具通过 npx -y react-doctor@latest . 一条命令即可扫描 React 代码仓库，输出 0 到 100 的健康评分并附带可操作诊断。",
+          "支持 Next.js、Vite 和 React Native，规则根据检测到的框架和 React 版本自动切换。",
+          "通过 npx -y react-doctor@latest install 可将最佳实践安装到 Claude Code、Cursor 等 50 余种 AI 编码代理中。"
+        ],
+        "article_id": "3e334d4321c904e5"
+      },
+      {
+        "object_type": "project",
+        "name": "react-doctor/oxlint-plugin",
+        "canonical_name": "react-doctor/oxlint-plugin",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "react-doctor 的同一条规则集以 oxlint 插件形式分发，可在 .oxlintrc.json 中通过 jsPlugins 配置引入。",
+          "oxlint 插件引入后规则命名空间为 react-doctor/*，可在 oxlint 配置中分别设置每条规则的严重级别。"
+        ],
+        "article_id": "3e334d4321c904e5"
+      },
+      {
+        "object_type": "project",
+        "name": "react-doctor/eslint-plugin",
+        "canonical_name": "react-doctor/eslint-plugin",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "react-doctor 的同一条规则集以 ESLint 插件形式分发，可通过 import reactDoctor from 'react-doctor/eslint-plugin' 在扁平配置中引入。",
+          "该 ESLint 插件提供 recommended、next、react-native、tanstack-start 和 tanstack-query 等多套预设配置。"
+        ],
+        "article_id": "3e334d4321c904e5"
+      }
+    ],
+    "pipeline_stage": "fact_extracted",
     "impact_score": {
       "score": 5.5,
       "reason": "React Doctor 是针对 AI 编码智能体时代的一个精准工具——它解决的是 'AI 写出烂 React 代码' 这一真实痛点，且提供了评分公式、CI 集成、50+ 编码智能体规则安装等完整工作流。然而本质上它是一个打包了 React 最佳实践的 lint 工具，其技术架构（oxlint/ESLint 双插件、忽略层级配置）是成熟的工程手段而非突破性创新。短期内对 React 开发者群体有明显实用价值，能改变团队代码审查流程，但不会引发范式转移。评分 5.5 反映了 '重要且实用的产品发布' 定位，介于日常更新与行业变革之间。"
@@ -98,7 +139,35 @@
       "compound": "medium",
       "hype": "medium"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "millionco/react-doctor",
+        "canonical_name": "millionco/react-doctor",
+        "url": "https://github.com/millionco/react-doctor",
+        "positioning": "一款面向 React 开发者的一键式代码仓库诊断工具，输出 0 到 100 健康评分并覆盖六大检查类别，同时可将最佳实践规则安装到 50 余种 AI 编码代理中以指导代码生成。",
+        "technical_signal": "采用 oxlint 和 ESLint 双插件机制分发同一规则集，覆盖状态与副作用、性能、架构、安全、可访问性和死代码六大诊断类别，规则根据检测到的框架和 React 版本自动切换。",
+        "adoption_signal": "通过 npx 一条命令即可运行，支持 GitHub Actions CI 集成，并能将最佳实践安装到 Claude Code、Cursor、Codex 等 50 余种 AI 编码代理中，采用门槛极低。",
+        "ecosystem_relevance": "原生支持 Next.js、Vite 和 React Native 框架，自动识别项目技术栈切换诊断规则；规则集可作为独立插件融入项目的 oxlint 或 ESLint 工作流。",
+        "target_users": [],
+        "watch_reason": "react-doctor 填补了 React 项目健康度量化评估的空白，其\"AI 编码代理指导\"功能将静态代码检查与 AI 代码生成流程打通，在 React 生态中具有独特的差异化价值。随着 AI 辅助编程逐步普及，这类工具可能成为 React 团队的标准质量门禁。",
+        "risk_notes": [
+          "作为新兴开源工具，规则覆盖度和准确率尚需社区验证，可能存在误报或漏报。",
+          "依赖 npx 运行时动态下载，在 CI 环境中的稳定性和执行效率有待长期观察。",
+          "与项目已有的 ESLint 或 Oxlint 配置合并时，可能引发规则冲突导致评分失真。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "3e334d4321c904e5"
+        ],
+        "evidence_snippets": [
+          "该工具通过 npx -y react-doctor@latest . 一条命令即可扫描 React 代码仓库，输出 0 到 100 的健康评分并附带可操作诊断。",
+          "支持 Next.js、Vite 和 React Native，规则根据检测到的框架和 React 版本自动切换。",
+          "通过 npx -y react-doctor@latest install 可将最佳实践安装到 Claude Code、Cursor 等 50 余种 AI 编码代理中。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "github-trending",
@@ -113,29 +182,133 @@
     ],
     "id": "637c99109af31ed2",
     "source_type": "community_discussion",
-    "tldr": "Matt Pocock 发布面向 AI 编码代理的开源技能集，解决需求对齐、软件熵增等问题。",
-    "objective_summary": "Matt Pocock 在 GitHub 发布名为 skills 的开源项目，包含 grill-me、tdd、diagnose、improve-codebase-architecture 等技能，用于改进 AI 编码代理（Claude Code、Codex 等）的开发流程，",
+    "tldr": "Matt Pocock 发布了一套面向 AI 编程代理（如 Claude Code、Codex）的工程技能集，包含 /grill-me、/tdd、/diagnose、/improve-codebase-architecture 等可组合命令，旨在解决需求对齐、代码质量退化和反馈循环缺失等常见失败模式。",
+    "objective_summary": "JavaScript 教育家 Matt Pocock 于 2026 年 7 月 21 日在 GitHub 上发布了 mattpocock/skills 项目，这是一套专为 AI 编码代理设计的可组合技能集。该技能集包含十余个以斜杠命令形式调用的技能，涵盖需求对齐（/grill-me、/grill-with-docs）、测试驱动开发（/tdd）、调试诊断（/diagnose）、代码架构改进（/improve-codebase-architecture）等环节。用户可通过 npx skills@latest add mattpocock/skills 安装。",
     "event_type": "framework_tools",
-    "epistemic_status": "pr_statement",
+    "epistemic_status": "verified_fact",
     "entities": {
-      "companies": [],
+      "companies": [
+        "GitHub"
+      ],
       "technologies": [
+        "Claude Code",
+        "Codex",
         "TDD",
-        "ADR",
-        "PRD"
+        "ADR"
       ],
       "key_people": [
-        "Matt Pocock"
+        "Matt Pocock",
+        "David Thomas",
+        "Andrew Hunt",
+        "Eric Evans",
+        "Kent Beck",
+        "John Ousterhout"
       ]
     },
     "key_logic_flow": [
-      "Matt Pocock 在 GitHub 上发布名为 skills 的开源项目，提供一套面向 AI 编码代理的可组合技能集。",
-      "该技能集通过 /grill-me 和 /grill-with-docs 技能解决开发需求对齐问题，帮助开发者与 AI 代理在任务开始前充分沟通。",
-      "通过建立共享语言（CONTEXT.md）和架构决策记录（ADR），减少 AI 代理的 Token 消耗并提高代码一致性。",
-      "提供 /tdd（测试驱动开发）和 /diagnose（问题诊断）技能，通过红-绿-重构循环建立代码反馈机制以确保输出质量。",
-      "提供 /improve-codebase-architecture 技能，应对 AI 加速开发导致的软件熵增问题，建议每隔几天运行一次。",
-      "项目通过 npx skills@latest add mattpocock/skills 命令安装，支持 GitHub、Linear 或本地文件作为问题跟踪系统。"
+      "Matt Pocock 发布了一组面向 AI 编码代理的技能集，以解决开发过程中的需求对齐、反馈循环缺失和代码加速熵增等常见问题。",
+      "/grill-me 和 /grill-with-docs 通过让代理主动提问来消除开发者和代理之间的沟通鸿沟，/grill-with-docs 还会自动构建共享语言文件和架构决策记录。",
+      "/tdd 采用红-绿-重构循环，让代理先写失败测试再修复，提供持续的反馈来提升代码质量；/diagnose 将最佳调试实践封装为可重复的诊断循环。",
+      "/improve-codebase-architecture 用于挽救因代理加速编码而变得混乱的代码库，建议每隔几天运行一次。",
+      "/setup-matt-pocock-skills 负责在仓库中初始化问题追踪器、分类标签和领域文档布局等配置。",
+      "整套技能集可通过 npx skills@latest add mattpocock/skills 一键安装，并支持按需选择安装到不同的编码代理上。"
     ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "mattpocock/skills",
+        "canonical_name": "mattpocock/skills",
+        "url": "https://github.com/mattpocock/skills",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Matt Pocock 发布了名为 mattpocock/skills 的 GitHub 仓库，其中包含他每天用于真实工程开发而非纯提示词编码的代理技能。",
+          "该技能集被设计为小巧、易于适配、可组合，支持任何模型，并且基于数十年的工程经验编写。",
+          "你可以通过 npx skills@latest add mattpocock/skills 命令运行安装脚本，选择你想要的技能并安装到对应的编码代理上。"
+        ],
+        "article_id": "637c99109af31ed2"
+      },
+      {
+        "object_type": "project",
+        "name": "/grill-me",
+        "canonical_name": "mattpocock/skills grill-me",
+        "url": "https://github.com/mattpocock/skills",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "/grill-me 是 Matt Pocock 最受欢迎的技能，用于非代码场景，让代理在开始之前对计划或设计进行彻底追问。",
+          "它通过深入的追问环节帮助开发者和代理在动手之前对齐需求，穷尽决策树的每一个分支。"
+        ],
+        "article_id": "637c99109af31ed2"
+      },
+      {
+        "object_type": "project",
+        "name": "/grill-with-docs",
+        "canonical_name": "mattpocock/skills grill-with-docs",
+        "url": "https://github.com/mattpocock/skills",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "/grill-with-docs 在追问环节的基础上增加了建立共享语言和撰写架构决策记录（ADR）的功能。",
+          "该技能会挑战你的计划是否符合现有领域模型，并在线更新 CONTEXT.md 和 ADR 文件。"
+        ],
+        "article_id": "637c99109af31ed2"
+      },
+      {
+        "object_type": "project",
+        "name": "/tdd",
+        "canonical_name": "mattpocock/skills tdd",
+        "url": "https://github.com/mattpocock/skills",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "/tdd 技能采用红-绿-重构的测试驱动开发循环，代理先编写失败测试再修复代码。",
+          "它可以插入任何项目，为代理提供持续一致的反馈，从而产生质量远胜于前的代码。"
+        ],
+        "article_id": "637c99109af31ed2"
+      },
+      {
+        "object_type": "project",
+        "name": "/diagnose",
+        "canonical_name": "mattpocock/skills diagnose",
+        "url": "https://github.com/mattpocock/skills",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "/diagnose 是 Matt Pocock 针对困难缺陷和性能回退构建的诊断技能。",
+          "它将最佳调试实践封装为一个可重复的循环：复现 → 最小化 → 假设 → 检测 → 修复 → 回归测试。"
+        ],
+        "article_id": "637c99109af31ed2"
+      },
+      {
+        "object_type": "project",
+        "name": "/improve-codebase-architecture",
+        "canonical_name": "mattpocock/skills improve-codebase-architecture",
+        "url": "https://github.com/mattpocock/skills",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "/improve-codebase-architecture 用于挽救已经变得混乱的代码库，基于 CONTEXT.md 中的领域语言和 ADR 决策进行改进。",
+          "Matt Pocock 建议每隔几天在代码库上运行一次该技能，以对抗代理加速编码带来的软件熵增。"
+        ],
+        "article_id": "637c99109af31ed2"
+      },
+      {
+        "object_type": "project",
+        "name": "/setup-matt-pocock-skills",
+        "canonical_name": "mattpocock/skills setup-matt-pocock-skills",
+        "url": "https://github.com/mattpocock/skills",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "/setup-matt-pocock-skills 为每个仓库初始化供其他工程技能使用的配置，包括问题追踪器、分类标签词汇表和领域文档布局。",
+          "运行安装脚本后，需要在代理中执行 /setup-matt-pocock-skills 来完成配置。该技能会询问使用哪个问题追踪器以及如何标记工单。"
+        ],
+        "article_id": "637c99109af31ed2"
+      }
+    ],
+    "pipeline_stage": "fact_extracted",
     "impact_score": {
       "score": 6.5,
       "reason": "该技能集并非基础模型或范式的突破，而是对 AI 编码代理交互模式的工程化改进。但考虑到 Matt Pocock 在 TypeScript/开发者社区的影响力（6万+订阅者），以及技能集精准命中了当前 AI 辅助开发的核心痛点——需求对齐失败、软件熵加速、缺乏反馈循环——这是一个具有实际影响力的工具发布。它代表了'技能生态系统'这一新兴范式的成熟化，可能影响 Claude Code、Codex 等平台的技能分发方式，改变局部开发工作流。综合来看，属于重要产品发布级别，但尚未达到行业范式转移的层级。"
@@ -194,7 +367,149 @@
       "compound": "medium",
       "hype": "high"
     },
-    "actionable_insight": "strategic_invest"
+    "actionable_insight": "strategic_invest",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "mattpocock/skills",
+        "canonical_name": "mattpocock/skills",
+        "url": "https://github.com/mattpocock/skills",
+        "positioning": "面向 AI 编程代理（如 Claude Code、Codex）的可组合工程技能集，包含十余个斜杠命令，覆盖需求对齐、测试驱动开发和代码架构改进等核心环节。",
+        "technical_signal": "技能集采用 npx skills@latest add 一键安装，每个技能小巧独立且可组合适配，支持任意大语言模型运行。",
+        "adoption_signal": "由知名 JavaScript 教育家 Matt Pocock 发布，其拥有约 6 万订阅者的开发者社区，/grill-me 已被广泛使用。",
+        "ecosystem_relevance": "专为 Claude Code、Codex 等 AI 编码代理设计，直接填补了代理缺乏结构化工程流程和反馈循环的能力空白。",
+        "target_users": [],
+        "watch_reason": "mattpocock/skills 代表了 AI 编码代理从提示词驱动向工程化流程驱动的重要演进方向，其需求对齐、持续反馈和架构维护三件套直击当前代理编码的核心痛点，可能成为 AI 辅助开发的事实标准工作流框架，值得密切跟踪社区采纳和迭代动态。",
+        "risk_notes": [
+          "技能集的效果高度依赖开发者是否遵循设计流程，存在使用门槛和习惯转变成本。",
+          "作为早期项目，技能集与不同代理（Claude Code、Codex 等）的兼容性尚需大规模验证。"
+        ],
+        "score": 8.0,
+        "article_ids": [
+          "637c99109af31ed2"
+        ],
+        "evidence_snippets": [
+          "Matt Pocock 发布了名为 mattpocock/skills 的 GitHub 仓库，其中包含他每天用于真实工程开发而非纯提示词编码的代理技能。",
+          "该技能集被设计为小巧、易于适配、可组合，支持任何模型，并且基于数十年的工程经验编写。",
+          "你可以通过 npx skills@latest add mattpocock/skills 命令运行安装脚本，选择你想要的技能并安装到对应的编码代理上。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "/grill-me",
+        "canonical_name": "mattpocock/skills grill-me",
+        "url": "https://github.com/mattpocock/skills",
+        "positioning": "Matt Pocock 开发的让 AI 代理在动手编码前对计划进行深入追问的需求对齐技能，旨在消除开发者和代理之间的沟通鸿沟。",
+        "technical_signal": "将追问环节封装为可重复的斜杠命令，穷尽决策树每一个分支，确保需求和计划在动手前完全对齐。",
+        "adoption_signal": "被 Matt Pocock 称为其最受欢迎的技能，在作者日常实践中高频使用。",
+        "ecosystem_relevance": "作为 mattpocock/skills 的核心组件，填补了 AI 编码代理缺乏结构化需求探索与对齐流程的功能空白。",
+        "target_users": [],
+        "watch_reason": "需求对齐是 AI 代理编码中最常见的失败模式，/grill-me 提供了轻量且可复用的解决方案，有望成为代理工作流的标准前置步骤，值得跟踪其在真实工程中的采纳率与用户反馈。",
+        "risk_notes": [
+          "技能效果取决于开发者是否愿意投入时间深入追问，在工期紧张时可能被简略执行或跳过。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "637c99109af31ed2"
+        ],
+        "evidence_snippets": [
+          "/grill-me 是 Matt Pocock 最受欢迎的技能，用于非代码场景，让代理在开始之前对计划或设计进行彻底追问。",
+          "它通过深入的追问环节帮助开发者和代理在动手之前对齐需求，穷尽决策树的每一个分支。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "/grill-with-docs",
+        "canonical_name": "mattpocock/skills grill-with-docs",
+        "url": "https://github.com/mattpocock/skills",
+        "positioning": "在需求追问基础上增加建立共享领域语言和架构决策记录功能的增强技能，帮助 AI 代理理解项目上下文和领域模型。",
+        "technical_signal": "在线自动更新 CONTEXT.md 共享语言文件和 ADR 架构决策文档，将领域模型与代码结构对齐。",
+        "adoption_signal": "被作者称为技能集中最强大的技巧之一，建议与 /grill-me 配套使用以最大化需求对齐效果。",
+        "ecosystem_relevance": "解决了 AI 代理被空投到项目中自行猜测术语的共性问题，显著提升代理在现有代码库中的工作效率。",
+        "target_users": [],
+        "watch_reason": "共享领域语言文档是减少代理 Token 消耗和提高代码命名一致性的有效手段，/grill-with-docs 将这一实践自动化，在需要长期维护的代码库中具有广泛适用性。",
+        "risk_notes": [
+          "需要有清晰的领域模型才能发挥最大效果，在探索性或快速原型项目中文档可能频繁变更导致维护成本增加。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "637c99109af31ed2"
+        ],
+        "evidence_snippets": [
+          "/grill-with-docs 在追问环节的基础上增加了建立共享语言和撰写架构决策记录（ADR）的功能。",
+          "该技能会挑战你的计划是否符合现有领域模型，并在线更新 CONTEXT.md 和 ADR 文件。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "/tdd",
+        "canonical_name": "mattpocock/skills tdd",
+        "url": "https://github.com/mattpocock/skills",
+        "positioning": "面向 AI 编码代理的测试驱动开发技能，采用红-绿-重构循环让代理先编写失败测试再修复代码以实现持续反馈。",
+        "technical_signal": "将经典 TDD 流程封装为可插入任何项目的斜杠命令，为代理提供结构化的红-绿-重构反馈循环。",
+        "adoption_signal": "作为 mattpocock/skills 的反馈循环组件，可与 /diagnose 技能配合形成完整的调试测试闭环。",
+        "ecosystem_relevance": "弥补了 AI 编码代理缺乏内置测试反馈机制的短板，将经过数十年验证的 TDD 工程实践引入代理工作流。",
+        "target_users": [],
+        "watch_reason": "测试驱动的反馈循环是提升 AI 代理代码质量的关键机制，/tdd 将成熟的工程实践与代理能力深度融合，有潜力成为代理编码的标准质量保障配置。",
+        "risk_notes": [
+          "对于已有大量遗留代码的项目，引入 TDD 流程可能面临测试基础设施缺失和迁移成本较高的问题。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "637c99109af31ed2"
+        ],
+        "evidence_snippets": [
+          "/tdd 技能采用红-绿-重构的测试驱动开发循环，代理先编写失败测试再修复代码。",
+          "它可以插入任何项目，为代理提供持续一致的反馈，从而产生质量远胜于前的代码。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "/diagnose",
+        "canonical_name": "mattpocock/skills diagnose",
+        "url": "https://github.com/mattpocock/skills",
+        "positioning": "面向 AI 编码代理的结构化调试诊断技能，将最佳调试实践封装为复现、最小化、假设、检测、修复和回归测试的可重复循环。",
+        "technical_signal": "六步诊断循环（复现→最小化→假设→检测→修复→回归测试）确保调试过程系统化而非凭直觉猜测。",
+        "adoption_signal": "与 /tdd 配合使用，为 AI 代理提供从测试到调试的完整反馈环路。",
+        "ecosystem_relevance": "将资深工程师的系统化调试方法论注入 AI 代理工作流，弥补了代理在复杂问题定位上的经验不足。",
+        "target_users": [],
+        "watch_reason": "AI 代理生成的代码往往在边缘用例和行为异常上出现难以诊断的问题，/diagnose 提供了结构化的排查框架，对保障代理生成代码的可靠性和可维护性至关重要。",
+        "risk_notes": [
+          "诊断效果受限于代理对代码库整体架构和上下文的理解能力，在高度复杂的大型项目中可能不够精确。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "637c99109af31ed2"
+        ],
+        "evidence_snippets": [
+          "/diagnose 是 Matt Pocock 针对困难缺陷和性能回退构建的诊断技能。",
+          "它将最佳调试实践封装为一个可重复的循环：复现 → 最小化 → 假设 → 检测 → 修复 → 回归测试。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "/improve-codebase-architecture",
+        "canonical_name": "mattpocock/skills improve-codebase-architecture",
+        "url": "https://github.com/mattpocock/skills",
+        "positioning": "用于挽救因 AI 代理加速编码而变得混乱的代码库架构重构技能，建议每隔几天运行一次以对抗软件熵增。",
+        "technical_signal": "基于 CONTEXT.md 中的共享领域语言和 ADR 架构决策，对代码库进行增量式架构清理和改进。",
+        "adoption_signal": "作者在自身工程实践中建议每隔几天运行一次该技能，已验证其对抗代码劣化的效果。",
+        "ecosystem_relevance": "直接回应当前 AI 辅助开发中代码质量因加速编码而加速劣化的突出问题，提供了实操性的架构维护手段。",
+        "target_users": [],
+        "watch_reason": "代理加速编码带来的代码架构劣化是 AI 辅助开发的系统性风险，/improve-codebase-architecture 提供了罕见且实操性强的对抗方案，是维护长期项目健康度的关键技能。",
+        "risk_notes": [
+          "架构重构效果依赖高质量的共享领域文档作为前提条件，在缺乏文档积累的项目中效果有限。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "637c99109af31ed2"
+        ],
+        "evidence_snippets": [
+          "/improve-codebase-architecture 用于挽救已经变得混乱的代码库，基于 CONTEXT.md 中的领域语言和 ADR 决策进行改进。",
+          "Matt Pocock 建议每隔几天在代码库上运行一次该技能，以对抗代理加速编码带来的软件熵增。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "github-trending",
@@ -209,10 +524,10 @@
     ],
     "id": "6fb00c7ac55ed663",
     "source_type": "community_discussion",
-    "tldr": "HKUDS发布AI-Trader：面向AI代理的开源原生交易平台，支持代理即时接入与协作交易。",
-    "objective_summary": "HKUDS于2026年3-4月在GitHub开源发布AI-Trader平台，允许各类AI代理通过一条消息即时接入，进行多市场交易信号发布、跟单复制与集体协作，并支持10万美元模拟交易环境。",
-    "event_type": "application_landing",
-    "epistemic_status": "verified_fact",
+    "tldr": "HKUDS 在 GitHub 上开源了 AI-Trader，一个面向 AI 智能体的原生交易平台，支持各类 AI 智能体通过一条消息即可接入，提供集体智能交易、跨平台信号同步、一键复制交易和 Polymarket 纸面交易等功能。",
+    "objective_summary": "HKUDS 团队在 GitHub 上发布了 AI-Trader 开源项目，这是一个面向 AI 智能体的原生交易平台。AI 智能体只需接收一条指令消息即可自动完成平台注册和组件安装。该平台提供集体智能交易、跨平台信号同步、一键复制交易和通用市场接入等核心功能，并已上线 Polymarket 纸面交易功能，使用真实市场数据和模拟执行环境。平台采用 FastAPI 后端和 React 前端架构，生产环境实现了 Web 服务与后台工作线程分离，兼容 Binance、Coinbase、Interactive Brokers 等主流交易所。",
+    "event_type": "framework_tools",
+    "epistemic_status": "pr_statement",
     "entities": {
       "companies": [
         "HKUDS"
@@ -221,13 +536,31 @@
       "key_people": []
     },
     "key_logic_flow": [
-      "AI-Trader是面向AI代理的原生交易平台，由HKUDS开发并在GitHub上开源，项目采用FastAPI后端和React前端架构。",
-      "任何AI代理只需发送一条包含注册指令的消息即可接入平台，支持OpenClaw、Claude Code、Codex、Cursor等多种主流代理。",
-      "平台提供三种信号类型：策略（供讨论）、操作（供跟单）和讨论（供协作），并设有积分奖励系统。",
-      "支持跨平台信号同步，兼容Binance、Coinbase、Interactive Brokers等主流券商，实现一键跟单交易。",
-      "平台于2026年3月21日上线统一仪表板页面，3月3日推出Polymarket模拟交易功能，4月完成生产稳定性加固和代码库模块化重构。",
-      "提供10万美元模拟交易资金的新手试玩环境，以及经过筛选的高质量信号流供用户学习和复制。"
+      "AI-Trader 是一个面向 AI 智能体的开源交易平台，由 HKUDS 发布在 GitHub 上，支持各类主流 AI 智能体通过一条指令消息即可完成接入和注册。",
+      "平台提供集体智能交易功能，AI 智能体之间可以协作讨论并自动发现最佳交易想法，同时支持一键复制交易、跨平台信号同步和通用市场接入。",
+      "平台已上线 Polymarket 纸面交易功能，使用真实市场数据和模拟执行环境，并通过后台自动处理已结算市场的清算。",
+      "AI-Trader 的技术架构采用 FastAPI 后端和 React 前端，生产环境已实现 Web 服务与后台工作线程分离，确保页面响应和健康检查不受到影响。",
+      "平台兼容 Binance、Coinbase、Interactive Brokers 等主流交易所，支持股票、加密货币、外汇、期权和期货等多种资产类别。",
+      "平台内置奖励系统和信号发布机制，用户可以通过发布交易信号、吸引关注者来赚取积分，并支持策略讨论、操作复制和协作讨论三种信号类型。"
     ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "HKUDS/AI-Trader",
+        "canonical_name": "HKUDS/AI-Trader",
+        "url": "https://github.com/HKUDS/AI-Trader",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "AI-Trader 是一个面向 AI 智能体的原生交易平台，支持各类 AI 智能体通过一条消息即可完成接入和注册。",
+          "平台支持 Polymarket 纸面交易，使用真实市场数据和模拟执行环境，并通过后台自动处理已结算市场的清算。",
+          "AI-Trader 采用 FastAPI 后端和 React 前端，生产环境已实现服务端与后台工作线程分离以保证稳定性。"
+        ],
+        "article_id": "6fb00c7ac55ed663"
+      }
+    ],
+    "pipeline_stage": "fact_extracted",
     "impact_score": {
       "score": 5.0,
       "reason": "AI-Trader 提出了'代理原生交易平台'这一新颖概念，允许 AI 代理通过一条消息自主注册并参与多市场信号发布、跟单复制和协作交易。该架构设计具有前瞻性，但项目源自高校实验室（HKUDS）而非商业实体，目前仅支持模拟交易，缺乏实际资金规模和监管合规路径，短期难以改变行业竞争格局。属于有趣的产品发布而非范式转移，评分为 5 分。"
@@ -287,7 +620,35 @@
       "compound": "medium",
       "hype": "high"
     },
-    "actionable_insight": "strategic_invest"
+    "actionable_insight": "strategic_invest",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "HKUDS/AI-Trader",
+        "canonical_name": "HKUDS/AI-Trader",
+        "url": "https://github.com/HKUDS/AI-Trader",
+        "positioning": "HKUDS/AI-Trader 是一个面向 AI 智能体原生设计的开源交易平台，支持各类 AI 智能体通过一条指令消息即可完成接入与注册，实现集体智能交易和跨平台信号同步。",
+        "technical_signal": "采用 FastAPI 后端与 React 前端架构，生产环境实现 Web 服务与后台工作线程分离，兼容 Binance、Coinbase 等主流交易所以及多种资产类别。",
+        "adoption_signal": "已获 OpenClaw、nanobot、Claude Code、Codex、Cursor 等主流 AI 智能体兼容支持，但公开社区采用数据和活跃贡献者规模尚不明确。",
+        "ecosystem_relevance": "填补了 AI 智能体在金融交易领域缺乏统一接入平台的技术空白，与预测市场、加密货币、传统金融等多种交易生态具有直接协同价值。",
+        "target_users": [],
+        "watch_reason": "AI-Trader 开创性地将 AI 智能体作为交易平台的一等公民，一条指令消息即可完成接入的设计大幅降低了 AI 参与金融交易的门槛，其集体智能交易和 Polymarket 纸面交易等能力展示了 AI 原生交易基础设施的可能性，值得持续跟踪技术演进和社区生态发展。",
+        "risk_notes": [
+          "开源交易平台涉及真实资金交易，代码安全审计和智能合约漏洞防护尚未有公开报告。",
+          "项目尚处早期开发阶段，生产环境的稳定性、抗压能力和长时间运行可靠性有待验证。",
+          "AI 智能体自主交易在不同司法管辖区面临复杂的金融合规与监管不确定性。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "6fb00c7ac55ed663"
+        ],
+        "evidence_snippets": [
+          "AI-Trader 是一个面向 AI 智能体的原生交易平台，支持各类 AI 智能体通过一条消息即可完成接入和注册。",
+          "平台支持 Polymarket 纸面交易，使用真实市场数据和模拟执行环境，并通过后台自动处理已结算市场的清算。",
+          "AI-Trader 采用 FastAPI 后端和 React 前端，生产环境已实现服务端与后台工作线程分离以保证稳定性。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "github-trending",
@@ -302,32 +663,72 @@
     ],
     "id": "8c0c636d5aaf3963",
     "source_type": "community_discussion",
-    "tldr": "AiToEarn 是一个开源 AI Agent 一站式内容变现平台，支持在 14+ 社交平台上自动创作、分发和变现内容。",
-    "objective_summary": "yikart 开发的开源平台 AiToEarn 于 2025 年 2 月首次发布，通过 AI Agent 在抖音、TikTok、YouTube 等 14 个社交平台实现内容自动创作、分发、互动运营和变现，支持网页直接使用、MCP 协议集成、Docker 部署等多种方式。",
-    "event_type": "framework_tools",
+    "tldr": "AiToEarn 是一个开源的一站式 AI 内容变现平台，通过 AI Agent 自动化帮助创作者在全球 14+ 社交平台进行内容创作、分发和变现，支持 MCP 协议集成到 Claude 和 Cursor 等 AI 工具中使用。",
+    "objective_summary": "yikart 团队开发的开源项目 AiToEarn，通过 AI Agent 自动化能力为一人公司和内容创作者提供内容创作、跨平台分发、互动运营和变现交易的一站式服务。平台覆盖抖音、小红书、TikTok、YouTube 等 14+ 国内外社交平台，提供 CPS、CPE、CPM 三种结果导向的结算模式，并通过 MCP 协议集成到 Claude、Cursor 等 AI 助手中使用。项目从 2025 年 2 月首次开源至今持续迭代，2026 年 3 月发布的 v2.1 版本上线了内容交易市场和 OpenClaw 集成。",
+    "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
         "yikart"
       ],
       "technologies": [
-        "MCP",
         "AI Agent",
-        "SSE",
+        "MCP",
         "CPS",
         "CPE",
-        "CPM"
+        "CPM",
+        "OAuth"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "AiToEarn 是由 yikart 开发的开源一站式内容变现平台，核心目标是通过 AI Agent 自动化帮助一人公司、创作者和企业在全球主流平台实现内容变现。",
-      "平台覆盖 14 个社交平台：抖音、小红书、快手、B站、视频号、微信公众号、TikTok、YouTube、Facebook、Instagram、Threads、Twitter(X)、Pinterest、LinkedIn。",
-      "提供四种核心 Agent 能力：Monetize（内容交易市场，支持 CPS/CPE/CPM 结算）、Publish（一键多平台分发+日历排期）、Engage（自动点赞/评论/品牌监测）、Create（AI 自动生成视频和图文内容）。",
-      "支持五种使用方式：直接网页访问（aitoearn.cn/aitoearn.ai）、OpenClaw 插件集成、MCP 协议接入（兼容 Claude/Cursor 等 AI 助手）、Docker 一键部署、源码开发模式。",
-      "项目版本演进从 2025 年 2 月首个开源版本到 2026 年 4 月的 OpenClaw 集成，经历了出海多平台支持、AI Agent 集成、线下商户推广方案、内容交易市场上线等重要里程碑。",
-      "平台提供中国版和国际版双环境，通过 MCP 和 SSE 两种协议对外暴露 API，支持第三方 AI 工具的无缝集成。"
+      "AiToEarn 是一个面向内容创作者的一站式变现平台，通过 AI Agent 自动化帮助用户在全球 14+ 社交平台上完成内容创作、分发和互动运营。",
+      "平台提供 Monetize（内容交易市场）、Publish（全网一键分发）、Engage（自动化互动运营）和 Create（AI 内容生成）四大核心 Agent 能力，并支持 CPS、CPE、CPM 三种结果导向的结算模式。",
+      "项目支持五种使用方式：直接访问网站、在 OpenClaw 中使用、通过 MCP 协议集成到 Claude 和 Cursor 等 AI 工具、Docker 私有化部署、以及源码开发。",
+      "AiToEarn 从 2025 年 2 月首次开源（v0.1.1）至今持续迭代，2026 年 3 月的 v2.1 版本新增了内容交易市场和 MCP 协议支持。",
+      "平台覆盖抖音、小红书、TikTok、YouTube 等 14+ 国内外主流社交平台，并支持餐厅、零售店等线下商户推广解决方案。"
     ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "yikart/AiToEarn",
+        "canonical_name": "yikart/AiToEarn",
+        "url": "https://github.com/yikart/AiToEarn",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "AiToEarn 是一个开源的一站式 AI 内容变现平台，通过 AI Agent 自动化帮助创作者在全球 14+ 平台进行内容创作、分发和变现。",
+          "平台提供 Monetize、Publish、Engage 和 Create 四大核心 Agent 能力，并支持 CPS、CPE、CPM 三种结算模式。"
+        ],
+        "article_id": "8c0c636d5aaf3963"
+      },
+      {
+        "object_type": "product",
+        "name": "OpenClaw",
+        "canonical_name": "OpenClaw",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "OpenClaw（龙虾）新增 AiToEarn 赚钱支持，可在龙虾中直接接收并执行内容变现任务。",
+          "AiToEarn 提供 OpenClaw 插件安装工具，安装后可在 OpenClaw 中直接使用 AiToEarn 的全部功能。"
+        ],
+        "article_id": "8c0c636d5aaf3963"
+      },
+      {
+        "object_type": "project",
+        "name": "AttAiToEarn",
+        "canonical_name": "yikart/AttAiToEarn",
+        "url": "https://github.com/yikart/AttAiToEarn",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "Electron 项目 AttAiToEarn 为 AiToEarn 提供桌面客户端，支持本地安装使用。"
+        ],
+        "article_id": "8c0c636d5aaf3963"
+      }
+    ],
+    "pipeline_stage": "fact_extracted",
     "impact_score": {
       "score": 4.5,
       "reason": "该开源项目通过AI Agent整合了14个社交平台的内容创作、分发与变现链路，并引入MCP协议实现跨AI助手集成，在创作者经济细分领域有明确的实用价值。但其本质是应用层整合（社交API+AI生成+任务市场），并未带来AI底层技术突破或行业范式转移，短期冲击力主要局限在内容创作工具赛道和一人公司群体，属于'重要但非颠覆'的产品发布。"
@@ -386,7 +787,38 @@
       "compound": "low",
       "hype": "high"
     },
-    "actionable_insight": "strategic_invest"
+    "actionable_insight": "strategic_invest",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "yikart/AiToEarn",
+        "canonical_name": "yikart/AiToEarn",
+        "url": "https://github.com/yikart/AiToEarn",
+        "positioning": "一站式 AI 内容变现平台，通过 AI Agent 自动化帮助创作者在 14+ 平台完成内容创作、分发和变现交易。",
+        "technical_signal": "项目支持 MCP 协议与 Claude、Cursor 等 AI 工具集成，提供 Docker 私有化部署、浏览器插件自动化互动及 AI Agent 内容生成能力。",
+        "adoption_signal": "自 2025 年 2 月开源至今持续迭代，2026 年 3 月 v2.1 上线内容交易市场与 OpenClaw 集成，已覆盖 14+ 国内外主流社交平台。",
+        "ecosystem_relevance": "作为开源项目可无缝集成 OpenClaw、Claude、Cursor 等 AI 工具生态，并覆盖抖音、TikTok、YouTube 等全球社交平台，构建内容变现基础设施层。",
+        "target_users": [
+          "内容创作者",
+          "一人公司（OPC）",
+          "品牌与企业"
+        ],
+        "watch_reason": "AiToEarn 开创了 AI Agent 自动化内容变现这一新兴品类，通过开源策略和 MCP 协议集成降低了创作者变现门槛，其在 Claude、Cursor 等 AI 工具生态中的连接价值独特，值得长期关注其在创作者经济中的渗透与演进。",
+        "risk_notes": [
+          "项目依赖第三方社交平台 API 政策，平台规则变化可能导致部分自动化功能失效。",
+          "内容变现市场仍处早期，CPS/CPE/CPM 结算模式的规模化验证尚不充分。",
+          "开源社区活跃度未知，长期维护能力有待观察。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "8c0c636d5aaf3963"
+        ],
+        "evidence_snippets": [
+          "AiToEarn 是一个开源的一站式 AI 内容变现平台，通过 AI Agent 自动化帮助创作者在全球 14+ 平台进行内容创作、分发和变现。",
+          "平台提供 Monetize、Publish、Engage 和 Create 四大核心 Agent 能力，并支持 CPS、CPE、CPM 三种结算模式。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "github-trending",
@@ -401,30 +833,86 @@
     ],
     "id": "9c555c38de33ec5a",
     "source_type": "community_discussion",
-    "tldr": "FadCam：FadSec Lab 推出的开源隐私优先 Android 多媒体套件，支持后台录像、行车记录仪、录屏、直播和远程控制。",
-    "objective_summary": "anonfaded 在 GitHub 上发布 FadCam，一款基于 Android 的开源多媒体应用，集成行车记录仪、屏幕录制、本地网络直播和远程摄像头控制功能，强调无广告、无数据收集、无追踪的隐私保护设计，已获得多家科技媒体关注。",
-    "event_type": "framework_tools",
+    "tldr": "FadCam 是一个专注于隐私保护的 Android 开源多媒体套件，包含后台录像、行车记录仪、屏幕录制、本地网络直播和远程摄像头控制等功能，完全无广告且不收集任何数据。",
+    "objective_summary": "anonfaded 在 GitHub 上发布了 FadCam 项目，这是一款隶属于 FadSec Lab 套件的 Android 隐私优先多媒体应用。该应用集成了行车记录仪、带批注功能的屏幕录制器（FadRec）、局域网直播（FadCam Remote）和远程摄像头控制功能，支持分片 MP4 录制以防止文件损坏，并提供 7 种以上主题、15 种以上图标和多种语言支持。用户可通过 Patreon 购买 FadCam Pro 终身版以支持开发。",
+    "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
-      "companies": [
-        "FadSec Lab"
-      ],
+      "companies": [],
       "technologies": [
-        "Android",
-        "ExoPlayer"
+        "ExoPlayer",
+        "Nominatim",
+        "OpenStreetMap",
+        "MP4"
       ],
-      "key_people": [
-        "anonfaded"
-      ]
+      "key_people": []
     },
     "key_logic_flow": [
-      "FadCam 是 FadSec Lab 套件中的 Android 开源项目，由 anonfaded 开发和维护。",
-      "该应用提供四大核心功能：后台视频录制（支持息屏录制）、行车记录仪模式（分段 MP4 格式防损坏）、屏幕录制（带标注工具）、以及本地网络直播与远程摄像头控制。",
-      "应用采用 Material Design 设计，提供 7 种以上主题（含 AMOLED 模式）和 15 种以上自定义图标。",
-      "隐私方面明确声明：100% 无广告、无数据收集、无追踪，并包含从最近应用列表中隐藏的隐私选项。",
-      "可设置定时录制、支持地理标记水印（基于 OpenStreetMap 的 Nominatim 逆地理编码），以及通过硬件按键映射触发快捷操作。",
-      "提供 Patreon 付费的 FadCam Pro 终身版，并接受社区贡献和 GitHub Issue/PR 协作。"
+      "FadCam 是 FadSec Lab 套件的一部分，定位为无广告、隐私优先的 Android 多媒体应用。",
+      "核心功能包括后台视频录制、行车记录仪、屏幕录制（FadRec）和局域网远程摄像头控制（FadCam Remote）。",
+      "屏幕录制器 FadRec 提供笔、橡皮擦、文字和形状等批注工具，支持多层编辑和无限撤销/重做。",
+      "行车记录仪功能支持息屏后台录制，采用分片 MP4 格式以防止文件损坏，并可自动分割大文件。",
+      "远程控制功能可通过本地网络直播摄像头画面，支持开始/停止录制、调节设置和切换闪光灯等操作。",
+      "FadCam 提供 Patreon 赞助渠道购买 Pro 终身版，并欢迎社区通过 Issue 和 PR 贡献代码。"
     ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "anonfaded/FadCam",
+        "canonical_name": "anonfaded/FadCam",
+        "url": "https://github.com/anonfaded/FadCam",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "FadCam 是一个隐私优先的 Android 多媒体套件，包含后台录像、行车记录仪、屏幕录制、本地直播和远程控制功能。",
+          "该项目的初衷是提供强大的隐私保护多媒体工具，所有功能均设计为仅供道德使用。",
+          "FadCam 完全开源且无广告，不进行任何数据收集或跟踪，并可从 GitHub Releases 页面直接下载 APK。"
+        ],
+        "article_id": "9c555c38de33ec5a"
+      },
+      {
+        "object_type": "product",
+        "name": "FadRec Screen Recorder",
+        "canonical_name": "FadRec Screen Recorder",
+        "url": "https://github.com/anonfaded/FadCam",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "FadRec 提供完整的屏幕录制功能，包含笔、橡皮擦、文字和形状等批注工具。",
+          "支持多层编辑与版本控制，具备无限撤销/重做功能和自动项目保存与恢复能力。",
+          "侧边栏叠加菜单可快速访问录制控制，方便用户在不中断操作的情况下管理录制。"
+        ],
+        "article_id": "9c555c38de33ec5a"
+      },
+      {
+        "object_type": "product",
+        "name": "FadCam Remote",
+        "canonical_name": "FadCam Remote",
+        "url": "https://github.com/anonfaded/FadCam",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "FadCam Remote 支持通过本地网络直播摄像头画面，并提供美观的网页界面进行远程控制。",
+          "远程功能包括开始/停止录制、调整设置、切换闪光灯，以及实时监控电量和存储状态。",
+          "该功能适用于安全监控和远程访问场景，是 FadCam 多媒体套件的核心组件之一。"
+        ],
+        "article_id": "9c555c38de33ec5a"
+      },
+      {
+        "object_type": "project",
+        "name": "FadSec Lab",
+        "canonical_name": "FadSec Lab",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "FadCam 是 FadSec Lab 套件的一部分，该实验室专注于开发无广告、隐私优先的应用。",
+          "FadSec Lab 还推出了名为 FadCrypt 的 Windows 应用，作为同一产品系列的新成员。"
+        ],
+        "article_id": "9c555c38de33ec5a"
+      }
+    ],
+    "pipeline_stage": "fact_extracted",
     "impact_score": {
       "score": 1.5,
       "reason": "该事件为 Android 开源多媒体工具（FadCam）的发布与社区传播，与 AI 行业无直接关联。其功能涵盖行车记录仪、屏幕录制、局域网直播等，属于成熟移动应用领域的增量创新，不涉及 AI 模型、训练范式、推理框架或数据工程等 AI 核心议题，对 AI 行业不产生可测量的短期冲击力。"
@@ -483,7 +971,114 @@
       "compound": "low",
       "hype": "medium"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "anonfaded/FadCam",
+        "canonical_name": "anonfaded/FadCam",
+        "url": "https://github.com/anonfaded/FadCam",
+        "positioning": "专注于隐私保护的 Android 开源多媒体套件，集后台录像、行车记录仪、屏幕录制和远程控制于一体，完全无广告且不收集数据。",
+        "technical_signal": "采用分片 MP4 格式防止录制文件损坏，支持息屏后台录制和自动分割大文件，具备 60/90fps 高帧率录制能力。",
+        "adoption_signal": "被超过 50 家科技媒体和 YouTube 频道报道，社区通过 GitHub Issues 和 PR 积极参与代码贡献。",
+        "ecosystem_relevance": "作为 FadSec Lab 套件的核心项目，与 FadRec 屏幕录制器和 FadCam Remote 远程控制功能形成完整工具生态。",
+        "target_users": [],
+        "watch_reason": "作为隐私优先、完全开源的 Android 多媒体方案，FadCam 覆盖行车记录、屏幕录制和远程监控等高频场景，社区反响热烈，值得跟踪其功能演进和用户规模增长。",
+        "risk_notes": [
+          "项目依赖 Patreon 赞助模式维持开发，长期可持续性有待观察。",
+          "后台录制和远程监控功能存在被滥用于未经授权监控的风险，项目需持续强化道德使用引导。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "9c555c38de33ec5a"
+        ],
+        "evidence_snippets": [
+          "FadCam 是一个隐私优先的 Android 多媒体套件，包含后台录像、行车记录仪、屏幕录制、本地直播和远程控制功能。",
+          "该项目的初衷是提供强大的隐私保护多媒体工具，所有功能均设计为仅供道德使用。",
+          "FadCam 完全开源且无广告，不进行任何数据收集或跟踪，并可从 GitHub Releases 页面直接下载 APK。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "FadRec Screen Recorder",
+        "canonical_name": "FadRec Screen Recorder",
+        "url": "https://github.com/anonfaded/FadCam",
+        "positioning": "FadCam 套件中的专业屏幕录制工具，集批注编辑、多层版本控制和自动保存恢复于一体，专注内容创作场景。",
+        "target_users": [
+          "内容创作者",
+          "教育工作者",
+          "技术演示者"
+        ],
+        "product_signal": "提供笔、橡皮擦、文字和形状等批注工具，支持多层编辑与版本控制，具备无限撤销/重做功能和自动项目保存与恢复能力。",
+        "market_signal": "作为 FadCam 开源套件的组成部分触达用户，暂无独立的下载量或市场份额数据。",
+        "differentiation": "区别于普通屏幕录制器，FadRec 将屏幕录制与专业批注编辑深度整合，侧边栏叠加菜单支持不中断操作的管理体验。",
+        "watch_reason": "FadRec 将专业级的录制批注编辑能力整合到开源隐私优先框架中，为内容创作者提供一体化的录制和后期编辑方案，值得关注其功能完善度和用户采用趋势。",
+        "risk_notes": [
+          "功能与现有成熟屏幕录制工具直接竞争，差异化优势待进一步验证。",
+          "作为 FadCam 套件子功能，独立品牌认知度有限，用户触达依赖主项目的推广。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "9c555c38de33ec5a"
+        ],
+        "evidence_snippets": [
+          "FadRec 提供完整的屏幕录制功能，包含笔、橡皮擦、文字和形状等批注工具。",
+          "支持多层编辑与版本控制，具备无限撤销/重做功能和自动项目保存与恢复能力。",
+          "侧边栏叠加菜单可快速访问录制控制，方便用户在不中断操作的情况下管理录制。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "FadCam Remote",
+        "canonical_name": "FadCam Remote",
+        "url": "https://github.com/anonfaded/FadCam",
+        "positioning": "FadCam 套件中的本地网络远程摄像头控制工具，通过网页界面实现实时监控、直播和远程操作。",
+        "target_users": [
+          "安全监控用户",
+          "家庭安防需求者",
+          "远程访问场景用户"
+        ],
+        "product_signal": "支持通过本地网络直播摄像头画面，提供美观的网页界面进行远程控制，包括开始/停止录制、调整设置和切换闪光灯等功能。",
+        "market_signal": "作为 FadCam 套件的核心功能模块触达安全监控和远程访问场景，暂无独立市场表现数据。",
+        "differentiation": "在开源隐私优先架构下整合远程监控功能，支持实时监控电量和存储状态，区别于商业闭源监控方案。",
+        "watch_reason": "FadCam Remote 将专业远程监控功能整合到无广告、无数据收集的开源框架中，为家庭安防和个人安全场景提供了隐私友好的替代方案，值得跟踪其功能成熟度和用户采用情况。",
+        "risk_notes": [
+          "局域网远程监控功能存在被滥用于未经授权监控的风险，项目已声明仅限道德使用但执行层面难管控。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "9c555c38de33ec5a"
+        ],
+        "evidence_snippets": [
+          "FadCam Remote 支持通过本地网络直播摄像头画面，并提供美观的网页界面进行远程控制。",
+          "远程功能包括开始/停止录制、调整设置、切换闪光灯，以及实时监控电量和存储状态。",
+          "该功能适用于安全监控和远程访问场景，是 FadCam 多媒体套件的核心组件之一。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "FadSec Lab",
+        "canonical_name": "FadSec Lab",
+        "positioning": "专注于无广告、隐私优先应用的开发实验室，旗下产品覆盖 Android 多媒体工具和 Windows 安全应用等方向。",
+        "technical_signal": "暂无明确技术信号，产品组合覆盖 Android 和 Windows 双平台，体现跨平台开发能力。",
+        "adoption_signal": "通过旗下核心项目 FadCam 的社区反响和媒体报道间接体现，暂无直接用户数据。",
+        "ecosystem_relevance": "作为隐私优先应用生态的孵化平台，FadSec Lab 串联 FadCam 与 FadCrypt 等产品的研发和发布。",
+        "target_users": [],
+        "watch_reason": "作为隐私优先应用生态的孵化平台，FadSec Lab 的产品线扩展方向反映了隐私工具市场的需求变化，值得跟踪其产品矩阵演进和用户基础增长。",
+        "risk_notes": [
+          "信息来源有限，目前仅通过 FadCam 项目间接了解其方向，整体战略缺乏独立验证。",
+          "Patreon 众筹模式的长期可持续性存在不确定性，可能影响产品线拓展节奏。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "9c555c38de33ec5a"
+        ],
+        "evidence_snippets": [
+          "FadCam 是 FadSec Lab 套件的一部分，该实验室专注于开发无广告、隐私优先的应用。",
+          "FadSec Lab 还推出了名为 FadCrypt 的 Windows 应用，作为同一产品系列的新成员。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "github-trending",
@@ -498,36 +1093,62 @@
     ],
     "id": "e0cbbf211a55e79f",
     "source_type": "community_discussion",
-    "tldr": "Sebastian Raschka 发布《Build a Large Language Model (From Scratch)》官方代码仓库，",
-    "objective_summary": "Sebastian Raschka 在 GitHub 发布 rasbt/LLMs-from-scratch 仓库，作为 Manning 出版社同名书籍的配套代码，提供从零构建、预训练和微调 GPT 类 LLM 的完整 PyTorch 实现，代码可在普通笔记本电脑上运行。",
+    "tldr": "Sebastian Raschka 发布《Build A Large Language Model (From Scratch)》官方代码仓库，提供从零构建 GPT 类 LLM 的完整实现代码，覆盖预训练与微调全流程，配套 Manning 出版社 2024 年出版的同名书籍。",
+    "objective_summary": "Sebastian Raschka 在 GitHub 上维护 rasbt/LLMs-from-scratch 仓库，作为 Manning 出版社于 2024 年出版的《Build A Large Language Model (From Scratch)》一书的官方代码。该仓库按章节组织，包含从零实现 GPT 类大语言模型的全部代码，涵盖文本分词、注意力机制、模型架构、无监督预训练、分类微调和指令微调等主题。代码使用 PyTorch 实现，不依赖外部 LLM 库，可在普通笔记本电脑上运行并自动利用 GPU 加速。该书的续作《Build A Reasoning Model (From Scratch)》也已发布，专注从零实现推理时缩放、强化学习和知识蒸馏等推理增强方法。",
     "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
-        "Manning"
+        "Manning Publications"
       ],
       "technologies": [
         "GPT",
         "PyTorch",
         "LoRA",
         "DPO",
-        "Tiktoken",
-        "BPE",
-        "Llama",
-        "Qwen"
+        "Tiktoken"
       ],
       "key_people": [
         "Sebastian Raschka"
       ]
     },
     "key_logic_flow": [
-      "该仓库是《Build a Large Language Model (From Scratch)》一书的官方代码仓库，ISBN 9781633437166，由 Manning 出版社出版。",
-      "仓库提供从零开发、预训练和微调 GPT 类 LLM 的完整 PyTorch 代码，不依赖任何第三方 LLM 库。",
-      "代码覆盖文本数据处理、注意力机制实现、GPT 模型搭建、无监督预训练、文本分类微调和指令微调等完整流程。",
-      "附录包含 PyTorch 入门、LoRA 参数高效微调、练习解答等补充材料，帮助读者巩固理解。",
-      "作者还计划推出续作《Build A Reasoning Model (From Scratch)》，专注实现推理能力增强方法。",
-      "代码设计目标是在普通笔记本电脑上可运行，如检测到 GPU 则自动利用加速。"
+      "该仓库是《Build A Large Language Model (From Scratch)》一书的官方代码仓库，由 Sebastian Raschka 维护，代码使用 PyTorch 从零实现 GPT 类 LLM，不依赖任何外部 LLM 库。",
+      "代码按书籍章节组织，涵盖文本数据处理、注意力机制编码、GPT 模型实现、无监督预训练、文本分类微调和指令微调共 6 个核心章节。",
+      "附录部分提供 PyTorch 入门指南、LoRA 参数高效微调、训练循环优化和分布式数据并行等进阶内容的代码实现。",
+      "仓库代码设计在普通笔记本电脑上即可运行，无需专用 GPU 硬件，但会自动利用可用 GPU 进行加速。",
+      "该书的续作《Build A Reasoning Model (From Scratch)》已发布，从零实现推理时缩放、强化学习和知识蒸馏等推理增强方法。"
     ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "rasbt/LLMs-from-scratch",
+        "canonical_name": "rasbt/LLMs-from-scratch",
+        "url": "https://github.com/rasbt/LLMs-from-scratch",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "该仓库包含从零开发、预训练和微调 GPT 类 LLM 的完整代码，是《Build A Large Language Model (From Scratch)》一书的官方代码仓库。",
+          "代码使用 PyTorch 实现，不依赖任何外部 LLM 库，设计在普通笔记本电脑上即可运行并自动利用 GPU 加速。",
+          "代码按章节组织，涵盖文本数据处理、注意力机制、GPT 模型实现、无监督预训练、分类微调和指令微调等核心主题。"
+        ],
+        "article_id": "e0cbbf211a55e79f"
+      },
+      {
+        "object_type": "project",
+        "name": "Build A Reasoning Model (From Scratch)",
+        "canonical_name": "Build A Reasoning Model (From Scratch)",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "该书是《Build A Large Language Model (From Scratch)》的续作，从零实现推理时缩放、强化学习和知识蒸馏等推理增强方法。",
+          "该书同样采用从零实现的动手方法，以预训练模型为起点实现不同的推理能力提升方法。"
+        ],
+        "article_id": "e0cbbf211a55e79f"
+      }
+    ],
+    "pipeline_stage": "fact_extracted",
     "impact_score": {
       "score": 4.5,
       "reason": "该事件是 Sebastian Raschka 为其已出版书籍《Build a Large Language Model (From Scratch)》发布的官方配套代码仓库。Raschka 是 ML 教育领域的权威人物，该仓库提供从零构建 GPT 类 LLM 的完整 PyTorch 实现，覆盖数据处理、注意力机制、预训练、微调全流程，且代码可在普通笔记本上运行，大幅降低了 LLM 技术的学习门槛。但本质上是教育资源的整理发布，而非新产品或技术突破，属于改变开发者的学习路径而非改变行业竞争格局，故评分 4.5。"
@@ -583,7 +1204,57 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "rasbt/LLMs-from-scratch",
+        "canonical_name": "rasbt/LLMs-from-scratch",
+        "url": "https://github.com/rasbt/LLMs-from-scratch",
+        "positioning": "从零构建 GPT 类大语言模型的教育型开源代码仓库，由 Sebastian Raschka 维护，配套 Manning 出版社 2024 年出版的同名书籍，覆盖预训练与微调全流程。",
+        "technical_signal": "项目使用 PyTorch 从零实现 GPT 类 LLM 的全部组件，包括分词、注意力机制、模型架构、预训练及微调，不依赖任何外部 LLM 库。",
+        "adoption_signal": "作为 Manning 出版社官方代码仓库和 Sebastian Raschka 维护的项目，在 GitHub 上拥有极高的关注度，是 LLM 教育领域最具影响力的开源项目之一。",
+        "ecosystem_relevance": "填补了 LLM 领域从理论到动手实践的教育空白，使开发者在消费级笔记本上即可完整理解 GPT 类模型的构建过程，降低了深度学习入门门槛。",
+        "target_users": [],
+        "watch_reason": "该项目是 LLM 教育领域最具标杆意义的开源实践项目，持续跟踪可把握从零实现到推理增强的教学方法演进趋势，以及社区衍生内容和续作生态的扩展情况。",
+        "risk_notes": [
+          "项目定位为教育用途，代码侧重教学清晰性而非生产级性能优化，不适合直接用于大规模训练场景。",
+          "原书内容基于 GPT-2 架构，后续模型架构演进迅速，部分章节可能需要持续更新以保持时效性。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "e0cbbf211a55e79f"
+        ],
+        "evidence_snippets": [
+          "该仓库包含从零开发、预训练和微调 GPT 类 LLM 的完整代码，是《Build A Large Language Model (From Scratch)》一书的官方代码仓库。",
+          "代码使用 PyTorch 实现，不依赖任何外部 LLM 库，设计在普通笔记本电脑上即可运行并自动利用 GPU 加速。",
+          "代码按章节组织，涵盖文本数据处理、注意力机制、GPT 模型实现、无监督预训练、分类微调和指令微调等核心主题。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Build A Reasoning Model (From Scratch)",
+        "canonical_name": "Build A Reasoning Model (From Scratch)",
+        "positioning": "从零实现推理增强方法的开源教育项目，作为《Build A Large Language Model (From Scratch)》续作，专注推理时缩放、强化学习和知识蒸馏等推理能力提升技术。",
+        "technical_signal": "项目以预训练模型为起点，从零实现推理时缩放、强化学习和知识蒸馏等不同的推理能力提升方法，延续了原书从头动手构建的教学风格。",
+        "adoption_signal": "作为 Sebastian Raschka 的新作，继承了原书庞大的读者基础和社区期待，但项目刚刚公布，GitHub 仓库尚未公开，实际采用度有待观察。",
+        "ecosystem_relevance": "补充了 LLM 教育生态中推理增强技术的空白，与原有从零构建 LLM 内容形成完整的知识体系，覆盖从基础预训练到高级推理优化的学习路径。",
+        "target_users": [],
+        "watch_reason": "作为 LLM 推理增强领域首个从零实现的教育项目，可跟踪推理时缩放和强化学习等关键技术从学术界向开发者社区的普及进程，以及该教学方法的实际效果反馈。",
+        "risk_notes": [
+          "项目刚刚公布，代码仓库尚未公开上架，实际代码质量和教学完整性有待发布后验证。",
+          "推理增强领域技术迭代极快（如 O1、DeepSeek-R1 等新型推理方法），项目内容的长期竞争力存在不确定性。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "e0cbbf211a55e79f"
+        ],
+        "evidence_snippets": [
+          "该书是《Build A Large Language Model (From Scratch)》的续作，从零实现推理时缩放、强化学习和知识蒸馏等推理增强方法。",
+          "该书同样采用从零实现的动手方法，以预训练模型为起点实现不同的推理能力提升方法。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "github-trending",
@@ -598,8 +1269,8 @@
     ],
     "id": "ee7e0e584b2626a3",
     "source_type": "community_discussion",
-    "tldr": "Datawhale发布开源教程Hello-Agents，系统教授从零构建AI原生智能体",
-    "objective_summary": "Datawhale社区于2025年发布了开源教程Hello-Agents项目，包含五大部分十六章，从智能体基础理论到综合案例实战，系统性教授AI Native Agent的构建全流程，并提供配套代码和视频课程，截至目前已获得超过4万GitHub Star。",
+    "tldr": "Datawhale 社区发布了开源教程 Hello-Agents，这是一套从零开始的系统性智能体构建学习指南，涵盖五大部分十六章节，配套完整代码与视频课程，已获 4 万 Star。",
+    "objective_summary": "Datawhale 社区发起了 Hello-Agents 开源项目，旨在提供一本系统性、理论与实战并重的智能体系统构建指南。教程分为五大部分共十六章节，从智能体基础概念与大语言模型原理讲起，逐步深入到经典范式实现、低代码平台使用、主流框架实践、自研框架 HelloAgents 构建、高级记忆与上下文工程、Agentic-RL 训练以及综合案例实战。项目配套完整代码、PDF 教程和视频课程，自研框架已更新至 V1.0.0 版本，完全开源免费。",
     "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
@@ -608,23 +1279,21 @@
         "OpenAI"
       ],
       "technologies": [
-        "LLM",
-        "Transformer",
-        "RAG",
-        "MCP",
-        "A2A",
         "ReAct",
         "Plan-and-Solve",
         "Reflection",
-        "GRPO",
+        "MCP",
+        "A2A",
+        "ANP",
+        "RAG",
         "SFT",
+        "GRPO",
         "AutoGen",
-        "LangGraph",
         "AgentScope",
+        "LangGraph",
         "Coze",
         "Dify",
-        "n8n",
-        "Agentic-RL"
+        "n8n"
       ],
       "key_people": [
         "陈思州",
@@ -636,12 +1305,43 @@
       ]
     },
     "key_logic_flow": [
-      "Datawhale社区发布了开源教程Hello-Agents，旨在从零开始系统性地教授AI Native智能体的构建，填补社区缺乏重实践教程的空白。",
-      "教程将Agent构建分为软件工程类（如Dify、Coze）和AI原生类两大流派，重点教授后者——以LLM为驱动核心的真正智能体。",
-      "教程分为五大部分共十六章，内容涵盖智能体理论基础、经典范式实现（ReAct/Plan-and-Solve/Reflection）、低代码平台使用、自研框架HelloAgents构建、记忆与检索、上下文工程、MCP/A2A通信协议、Agentic-RL训练等全栈技术。",
-      "项目提供了配套代码和视频课程，强调理论与实践结合的学习方式，并设有社区精选贡献区域供学习者分享心得与面试题总结。",
-      "该项目完全开源免费，采用CC BY-NC-SA 4.0许可协议，目前已获得超过4万GitHub Star，并计划推出后续作品《从零开始训练智能体》。"
+      "Datawhale 社区发起了 Hello-Agents 开源项目，旨在为社区提供一本从零开始、理论与实战并重的系统性智能体构建指南。",
+      "教程将当前 Agent 构建分为软件工程类（Dify、Coze、n8n）和 AI 原生类两派，并专注于讲授后者——真正的 AI Native Agent。",
+      "教程共五部分十六章节，涵盖智能体基础概念、经典范式实现、低代码平台使用、主流框架实践、自研框架 HelloAgents 构建、记忆与检索、上下文工程、Agentic-RL 训练以及综合案例。",
+      "项目配套完整代码、PDF 教程和视频课程，自研的 HelloAgents 框架已更新至 V1.0.0 版本，后续将继续完善增加更多轻量化工具和特性。",
+      "项目完全开源免费，在 GitHub 上已获 4 万 Star，并接受社区贡献，包括 Issue 反馈、Pull Request 完善内容和社区精选投稿。"
     ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "datawhalechina/hello-agents",
+        "canonical_name": "datawhalechina/hello-agents",
+        "url": "https://github.com/datawhalechina/hello-agents",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Hello-Agents 是 Datawhale 社区的系统性智能体学习教程，旨在带领学习者深入理解并构建真正的 AI Native Agent。",
+          "我们发起了 Hello-Agents 项目，希望能为社区提供一本从零开始、理论与实战并重的智能体系统构建指南。",
+          "教程分为五大部分共十六章节，从智能体基础概念到多智能体应用构建，提供完整的学习路径和配套代码。"
+        ],
+        "article_id": "ee7e0e584b2626a3"
+      },
+      {
+        "object_type": "project",
+        "name": "HelloAgents 框架",
+        "canonical_name": "HelloAgents",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "自研框架 HelloAgents 基于 OpenAI 原生 API 从零构建一个自己的智能体框架，兼具用轮子和造轮子的能力。",
+          "HelloAgents 框架已经更新 V1.0.0 版本，将会继续完善，增加更多好用轻量化的工具和特性。",
+          "第三部分高级知识扩展将使用自研框架 HelloAgents，深入探索记忆与检索、上下文工程、Agent 训练等核心技术。"
+        ],
+        "article_id": "ee7e0e584b2626a3"
+      }
+    ],
+    "pipeline_stage": "fact_extracted",
     "impact_score": {
       "score": 6.0,
       "reason": "该教程以4万+ GitHub Star的成绩成为中文AI社区最具影响力的Agent系统性学习资源，覆盖从ReAct范式到Agentic-RL的全栈技术图谱，填补了'从零构建AI原生智能体'实践教程的空白。但其本质是教育内容聚合与知识传播，并非技术范式转移或产品发布，对行业格局的直接影响有限，主要通过降低开发者入门门槛产生二阶生态效应。属于重要社区事件但非行业分水岭。"
@@ -703,6 +1403,33 @@
       "compound": "low",
       "hype": "high"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "datawhalechina/hello-agents",
+        "canonical_name": "datawhalechina/hello-agents",
+        "url": "https://github.com/datawhalechina/hello-agents",
+        "positioning": "Datawhale 社区发起的系统性智能体学习教程，从零开始、理论与实战并重地教授 AI Native Agent 的构建与框架自研。",
+        "technical_signal": "教程将 Agent 构建划分为软件工程类（Dify、Coze、n8n）与 AI 原生类两派，专注讲授后者，并自研 HelloAgents 框架至 V1.0.0 版本。",
+        "adoption_signal": "项目在 GitHub 上已获 4 万 Star，社区贡献活跃，涵盖多位开发者的精选内容与十项社区实践案例扩展。",
+        "ecosystem_relevance": "作为 Datawhale 社区的核心教程项目，联动 CAMEL-AI 等生态，配套完整代码、PDF 和视频课程，形成可闭环的学习体系。",
+        "target_users": [],
+        "watch_reason": "当前系统性 Agent 实战教程极度匮乏，Hello-Agents 以完全开源方式填补了从零构建 AI Native Agent 的教育空白，社区反响热烈且持续迭代。",
+        "risk_notes": [
+          "教程覆盖十六章节范围宽泛，部分高级主题（如 Agentic-RL 训练）的深度可能难以满足进阶开发者需求。",
+          "作为社区开源项目，内容更新节奏依赖贡献者投入，可能滞后于 Agent 框架与协议的快速演进。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "ee7e0e584b2626a3"
+        ],
+        "evidence_snippets": [
+          "Hello-Agents 是 Datawhale 社区的系统性智能体学习教程，旨在带领学习者深入理解并构建真正的 AI Native Agent。",
+          "我们发起了 Hello-Agents 项目，希望能为社区提供一本从零开始、理论与实战并重的智能体系统构建指南。",
+          "教程分为五大部分共十六章节，从智能体基础概念到多智能体应用构建，提供完整的学习路径和配套代码。"
+        ]
+      }
+    ]
   }
 ]

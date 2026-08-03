@@ -16,32 +16,50 @@
     "pipeline_stage": "fact_extracted",
     "id": "16da20dc67488bf2",
     "source_type": "community_discussion",
-    "tldr": "开发者用90年代VGA图形技术（320x240、256色调色板、光线投射）构建复古FPS游戏Catlantean 3D，计划发布在Steam。",
-    "objective_summary": "开发者 Staniks 在业余时间构建第一人称射击游戏 Catlantean 3D，采用90年代 VGA Mode-X 图形技术（320x240分辨率、256色调色板），通过光线投射（DDA算法）渲染地图，使用预计算颜色映射表实现光照，精灵由 Blender 渲染后经 Python",
+    "tldr": "开发者 Staniks 耗时一年以上开发复古风格第一人称射击游戏 Catlantean 3D，使用 90 年代初期的 VGA 256 色渲染技术（Mode-X，320×240），通过调色板映射和 colormap 实现光照效果，利用 Blender 进行 3D 建模并渲染为调色板量化后精灵图，计划明年在 Steam 发布。",
+    "objective_summary": "独立开发者 Staniks 在其个人博客中分享了复古 FPS 游戏 Catlantean 3D 的资产创作流程。该游戏采用类 VGA Mode-X 的 256 色调色板渲染（320×240 分辨率），使用 DDA 光线投射算法渲染地图。为解决调色板渲染下的光照衰减问题，作者开发了基于 Oklab 色彩空间的 colormap 预计算表，实现 O(1) 的快速色调查找。精灵和纹理通过 Blender 3D 建模、使用 Python 脚本自动渲染并量化到调色板中生成；部分资产（状态栏面像、拾取物）经手工重绘以提升视觉效果。游戏计划于次年通过 Steam 发行。",
     "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
-        "Steam",
-        "Valve"
+        "Valve",
+        "Blender Foundation"
       ],
       "technologies": [
-        "VGA",
-        "Mode-X",
-        "DDA",
+        "DDA algorithm",
         "Oklab",
-        "Raycasting",
-        "Blender"
+        "Mode 13h",
+        "Mode-X",
+        "VGA",
+        "Raycasting"
       ],
-      "key_people": []
+      "key_people": [
+        "Staniks"
+      ]
     },
     "key_logic_flow": [
-      "开发者 Staniks 在业余时间开发名为 Catlantean 3D 的第一人称射击游戏，计划在 Steam 上发布。",
-      "游戏采用 90 年代 VGA 图形模式（320×240 分辨率、256 色调色板、单字节每像素），无现代着色器，使用现代编译器和平台抽象层。",
-      "所有图形资源受限于 256 色调色板，作者通过反复试验精心选择了 768 字节（256色×RGB三通道）的调色板。",
-      "光照系统通过预计算颜色映射表实现：对每个颜色生成 32 级暗化变体，使用 Oklab 感知色彩空间寻找最接近的调色板颜色，并在暗化时加入暖色调偏移（色相偏移）。",
-      "精灵和纹理通过三种方式创建：Blender 3D 建模渲染后经 Python 脚本量化到 256 色调色板并打包为 TEX 格式、手工绘制（如状态栏猫脸和拾取物），以及两者混合的方式。",
-      "游戏世界采用统一像素比例（1 单位 = 64 像素），确保所有精灵和纹理的像素缩放一致性，避免不同缩放比例的视觉冲突。"
+      "Staniks 正在独立开发复古 FPS 游戏 Catlantean 3D，采用 90 年代 VGA Mode-X 的 320×240 分辨率和 256 色调色板渲染方式。",
+      "游戏使用 DDA 光线投射算法进行地图渲染，支持墙壁纹理采样和地板/天花板水平扫描线填充。",
+      "为在调色板约束下实现光照衰减，作者预计算基于 Oklab 色彩空间的 colormap 矩阵，将每个颜色的 32 级渐变映射到最接近的调色板索引，实现 O(1) 运行时查找。",
+      "精灵和纹理通过 Blender 建模和 Python 脚本自动渲染，经 Oklab 色彩空间调色板量化后打包为自定义 TEX 格式。",
+      "部分关键资产（如状态栏猫脸、拾取物）从预渲染改为手工绘制，以提升每个像素的清晰度和表现力。",
+      "Catlantean 3D 计划于次年通过 Steam 平台正式发布。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "Catlantean 3D",
+        "canonical_name": "Catlantean 3D",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Catlantean 3D 是作者 Staniks 耗时一年以上开发的 side-project，目标是使用 90 年代初期的渲染技术构建可发布的 FPS 游戏。",
+          "游戏采用调色板渲染方式，使用 DDA 光线投射算法和基于 Oklab 色彩空间的 colormap 光照系统，计划在 Steam 上发行。",
+          "精灵和纹理通过 Blender 建模并使用 Python 脚本自动渲染到调色板中生成；部分资产经手工重绘以提升视觉效果。"
+        ],
+        "article_id": "16da20dc67488bf2"
+      }
     ],
     "impact_score": {
       "score": 1.5,
@@ -89,7 +107,34 @@
       "compound": "low",
       "hype": "low"
     },
-    "actionable_insight": "speculative_watch"
+    "actionable_insight": "speculative_watch",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Catlantean 3D",
+        "canonical_name": "Catlantean 3D",
+        "positioning": "Catlantean 3D 是一款采用 90 年代 VGA Mode-X 调色板渲染技术的复古 FPS 游戏，由独立开发者 Staniks 个人开发并计划在 Steam 发行。",
+        "technical_signal": "项目使用 DDA 光线投射算法进行地图渲染，并基于 Oklab 色彩空间预计算 32 级 colormap 光照查询表，实现 O(1) 调色板索引快速查找。",
+        "adoption_signal": "该游戏尚处于单人开发阶段，计划于次年通过 Steam 平台正式发布，目前无公开可玩版本或用户量数据。",
+        "ecosystem_relevance": "项目展示了在 256 色调色板约束下结合现代色彩科学进行复古风格渲染的技术路径，对复古游戏开发社区和像素艺术创作者具有方法参考价值。",
+        "target_users": [],
+        "watch_reason": "Catlantean 3D 以系统化方式解决了调色板渲染中的光照衰减难题，将 Oklab 色彩科学引入复古游戏开发，展示了现代工具链与 90 年代技术约束的创造性融合，其技术方案对复古游戏和像素艺术社区具有借鉴意义。",
+        "risk_notes": [
+          "项目为独立开发者耗时一年以上的单人开发，实际发布进度和完成度存在不确定性。",
+          "复古 FPS 属于小众游戏品类，商业回报空间有限，长期维护动力存疑。",
+          "所有展示内容均为开发中版本，最终功能和品质可能发生变化。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "16da20dc67488bf2"
+        ],
+        "evidence_snippets": [
+          "Catlantean 3D 是作者 Staniks 耗时一年以上开发的 side-project，目标是使用 90 年代初期的渲染技术构建可发布的 FPS 游戏。",
+          "游戏采用调色板渲染方式，使用 DDA 光线投射算法和基于 Oklab 色彩空间的 colormap 光照系统，计划在 Steam 上发行。",
+          "精灵和纹理通过 Blender 建模并使用 Python 脚本自动渲染到调色板中生成；部分资产经手工重绘以提升视觉效果。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -108,8 +153,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "1a0a2e4a0ce4b124",
     "source_type": "community_discussion",
-    "tldr": "npm v12 将于2026年7月发布，默认关闭 allowScripts、Git 和远程依赖自动解析，需用户显式信任。",
-    "objective_summary": "npm 官方宣布 v12 将于2026年7月发布，引入三项安全相关的默认变更：allowScripts 默认关闭、--allow-git 默认 none、--allow-remote 默认 none。用户可在 npm 11.16.0+ 中预览警告并提前配置。",
+    "tldr": "npm v12 预计于 2026 年 7 月发布，将默认关闭安装脚本执行、Git 依赖和远程 URL 依赖解析，三项变更均可在 npm 11.16.0+ 中预览警告并提前适配。",
+    "objective_summary": "GitHub 于 2026 年 6 月 9 日发布公告，宣布 npm v12 将对 `npm install` 引入三项安全相关的默认行为变更：`allowScripts` 默认关闭（禁止运行依赖中的安装脚本）、`--allow-git` 默认关闭（禁止解析 Git 依赖）、`--allow-remote` 默认关闭（禁止解析远程 URL 依赖）。这些变更均已在 npm 11.16.0 及以上版本中以警告形式提供，用户可通过 `npm approve-scripts` 和 `npm deny-scripts` 命令管理脚本白名单，并提交更新后的 `package.json`。",
     "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
@@ -118,16 +163,60 @@
         "npm"
       ],
       "technologies": [
-        "npm"
+        "npm",
+        "node-gyp"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "npm v12 将于 2026年7月发布，在 npm 11.16.0+ 中已有行为变更警告，用户可提前准备。",
-      "allowScripts 默认关闭：依赖包的 preinstall、install、postinstall 脚本不再自动执行，包括 node-gyp 原生构建和 git/file/link 依赖的 prepare 脚本。",
-      "用户可通过 npm approve-scripts 查看待处理脚本并显式信任或拒绝，信任列表写入 package.json 并应提交到版本控制。",
-      "--allow-git 默认 none：npm install 不再自动解析 Git 依赖，关闭了依赖中 .npmrc 覆盖 Git 可执行文件的代码执行路径。",
-      "--allow-remote 默认 none：npm install 不再自动解析远程 URL 依赖（如 https tarball），需通过 --allow-remote 显式允许。"
+      "npm v12 将默认关闭 `allowScripts`，`npm install` 不再自动执行依赖中的 `preinstall`、`install`、`postinstall` 脚本，包括隐式的 `node-gyp rebuild`。",
+      "用户可通过 `npm approve-scripts --allow-scripts-pending` 查看哪些包包含将被阻止的脚本，然后使用 `npm approve-scripts` 和 `npm deny-scripts` 管理白名单，结果写入 `package.json`。",
+      "npm v12 将 `--allow-git` 默认值改为 `none`，不再解析直接或传递的 Git 依赖，以阻断 Git 依赖通过 `.npmrc` 覆盖可执行文件路径的代码执行攻击向量。",
+      "npm v12 将 `--allow-remote` 默认值改为 `none`，不再解析来自远程 URL 的依赖（如 HTTPS tarball），`--allow-file` 和 `--allow-directory` 的默认值不变。",
+      "所有变更当前可在 npm 11.16.0+ 中以警告形式预览，用户需提前运行正常安装流程、检查警告、批准信任的包并提交更新后的 `package.json`。",
+      "npm v12 预计于 2026 年 7 月正式发布，未批准的脚本在升级后将自动停止执行。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "npm v12",
+        "canonical_name": "npm v12",
+        "url": "https://docs.npmjs.com/",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "npm 的下一个主版本 v12 将对 `npm install` 引入安全相关的默认行为变更，预计于 2026 年 7 月发布。",
+          "所有变更已在 npm 11.16.0 及以上版本中以警告形式提供，用户可以在升级前进行适配准备。"
+        ],
+        "article_id": "1a0a2e4a0ce4b124"
+      },
+      {
+        "object_type": "product",
+        "name": "npm approve-scripts",
+        "canonical_name": "npm approve-scripts",
+        "url": "https://docs.npmjs.com/cli/commands/npm-approve-scripts",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "用户可以使用 `npm approve-scripts` 命令批准信任的包，允许其安装脚本在升级后继续执行。",
+          "`npm approve-scripts --allow-scripts-pending` 可列出所有包含待审批脚本的包，帮助用户决定哪些可以放行。"
+        ],
+        "article_id": "1a0a2e4a0ce4b124"
+      },
+      {
+        "object_type": "product",
+        "name": "npm deny-scripts",
+        "canonical_name": "npm deny-scripts",
+        "url": "https://docs.npmjs.com/cli/commands/npm-deny-scripts",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "用户可以使用 `npm deny-scripts` 命令显式拒绝不信任的包，阻止其安装脚本的执行。",
+          "已批准的脚本白名单和已阻止的脚本列表均写入 `package.json`，应提交到版本控制。"
+        ],
+        "article_id": "1a0a2e4a0ce4b124"
+      }
     ],
     "impact_score": {
       "score": 7.0,
@@ -184,7 +273,89 @@
       "compound": "medium",
       "hype": "high"
     },
-    "actionable_insight": "strategic_invest"
+    "actionable_insight": "strategic_invest",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "npm v12",
+        "canonical_name": "npm v12",
+        "url": "https://docs.npmjs.com/",
+        "positioning": "npm 包管理器的下一个主版本，聚焦供应链安全加固，通过默认关闭安装脚本执行、Git 依赖解析和远程 URL 依赖解析三项变更提升安全性。",
+        "target_users": [
+          "Node.js 开发者",
+          "JavaScript 项目维护者",
+          "前端工程化团队"
+        ],
+        "product_signal": "npm v12 预计于 2026 年 7 月发布，三项安全变更均在 npm 11.16.0+ 中以警告形式可预览适配。",
+        "market_signal": "npm 是 JavaScript 生态最核心的包管理器，此次默认安全策略变更将影响数千万开发者的日常依赖管理流程。",
+        "differentiation": "从默认允许执行安装脚本转向默认拒绝并显式审批，与 pnpm 和 Yarn 相比采取了更严格的供应链安全姿态。",
+        "watch_reason": "npm v12 是 JavaScript 生态最基础的供应链安全升级之一，默认关闭安装脚本、Git 依赖和远程 URL 依赖将从根本上改变 npm install 的安全模型，影响所有 Node.js 项目的 CI/CD 配置和依赖管理流程，值得持续跟踪迁移进展。",
+        "risk_notes": [
+          "升级后未显式批准的安装脚本将自动停止执行，可能导致 CI/CD 流水线中原生模块的 node-gyp 编译失败。",
+          "大量存量项目需要逐包审批脚本白名单并提交更新后的 package.json，迁移成本较高。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "1a0a2e4a0ce4b124"
+        ],
+        "evidence_snippets": [
+          "npm 的下一个主版本 v12 将对 `npm install` 引入安全相关的默认行为变更，预计于 2026 年 7 月发布。",
+          "所有变更已在 npm 11.16.0 及以上版本中以警告形式提供，用户可以在升级前进行适配准备。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "npm approve-scripts",
+        "canonical_name": "npm approve-scripts",
+        "url": "https://docs.npmjs.com/cli/commands/npm-approve-scripts",
+        "positioning": "npm 包管理器提供的脚本审批命令，帮助用户在升级到 v12 前批准确认信任的依赖安装脚本并生成白名单配置。",
+        "target_users": [
+          "Node.js 开发者",
+          "JavaScript 项目维护者"
+        ],
+        "product_signal": "npm approve-scripts 配合 --allow-scripts-pending 参数可列出所有包含待审批脚本的包，审批结果写入 package.json 应提交版本控制。",
+        "market_signal": "作为 npm v12 安全模型的关键配套工具，其设计质量和采用率将直接影响整个生态的升级速度和安全性。",
+        "differentiation": "提供白名单模式的脚本权限管理，与传统的 --ignore-scripts 全局开关相比更精细可控，支持逐包审批。",
+        "watch_reason": "npm approve-scripts 是 npm v12 安全升级中不可或缺的迁移工具，其审批流程设计和团队协作模式将决定生态安全升级的成败，值得关注其实际采用效果。",
+        "risk_notes": [
+          "脚本审批白名单写入 package.json 后，需要团队所有成员保持同步更新，协作成本显著增加。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "1a0a2e4a0ce4b124"
+        ],
+        "evidence_snippets": [
+          "用户可以使用 `npm approve-scripts` 命令批准信任的包，允许其安装脚本在升级后继续执行。",
+          "`npm approve-scripts --allow-scripts-pending` 可列出所有包含待审批脚本的包，帮助用户决定哪些可以放行。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "npm deny-scripts",
+        "canonical_name": "npm deny-scripts",
+        "url": "https://docs.npmjs.com/cli/commands/npm-deny-scripts",
+        "positioning": "npm 包管理器提供的脚本拒绝命令，允许用户显式阻止不信任包的安装脚本执行，与 approve-scripts 配合构成完整的脚本权限管理方案。",
+        "target_users": [
+          "Node.js 开发者",
+          "JavaScript 项目维护者"
+        ],
+        "product_signal": "npm deny-scripts 命令可将不信任的包显式加入黑名单，结果写入 package.json 并提交版本控制。",
+        "market_signal": "作为 npm v12 脚本权限管理体系的拒绝侧工具，与 approve-scripts 形成互补，帮助团队建立完整的依赖行为治理体系。",
+        "differentiation": "提供显式拒绝机制，使团队能够明确记录不信任的包及其原因，增强安全审计的可追溯性和依赖治理的严谨性。",
+        "watch_reason": "npm deny-scripts 完善了 npm v12 的脚本权限管理体系，显式拒绝机制为供应链安全提供了更完整的治理手段，值得跟踪其在实际项目中的应用效果。",
+        "risk_notes": [
+          "拒绝列表的维护需要持续跟进依赖树变化，新增的传递依赖可能意外引入已被拒绝的包的子依赖。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "1a0a2e4a0ce4b124"
+        ],
+        "evidence_snippets": [
+          "用户可以使用 `npm deny-scripts` 命令显式拒绝不信任的包，阻止其安装脚本的执行。",
+          "已批准的脚本白名单和已阻止的脚本列表均写入 `package.json`，应提交到版本控制。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -305,10 +476,10 @@
     "pipeline_stage": "fact_extracted",
     "id": "25faa6a97fab59c1",
     "source_type": "community_discussion",
-    "tldr": "父亲为查出夭折儿子的病因自学基因分析，发现AI原型超越顶级实验室，创立Gamow Labs推动基因诊断平民化",
-    "objective_summary": "作者之子Owen因FOXF1增强子缺失（ACD）未被临床WGS检出而夭折。作者自学构建AI基因分析原型，在66例疑难罕见病基准测试中检出全部已知致病变异、零假阳性，并破解了两例此前无人能解的案例。随后创立Gamow Labs，旨在用前沿模型降低全基因组测序诊断门槛。",
+    "tldr": "作者因长子 Owen 患罕见遗传病 ACD 未被及时诊断而去世，自学基因组分析后创建了 Gamow Labs，利用前沿 AI 模型对全基因组测序数据进行临床解读，在 66 例罕见病案例中零误报并破解了至少两个此前无人解决的病例。",
+    "objective_summary": "作者 Dustin McKinnon 的长子 Owen 在 2021 年因肺泡毛细血管发育不良（ACD）在 NICU 中治疗 8 周后去世，尸检后 Dr. Paweł Stankiewicz 发现其缺失一段 91 kb 的 FOXF1 增强子序列。2026 年第二个儿子 Warren 出生前，作者自行构建了基因组分析原型系统，不仅确认 Warren 健康，还找出了导致 Owen 死亡的基因突变。随后作者成立 Gamow Labs，利用前沿 AI 模型进行临床基因组分析。在与学术遗传学家的合作测试中，该系统在 66 例罕见病案例中识别了所有已确认的致病变异、零误报，并破解了至少两个此前无人解决的病例，相关论文正在审稿中。",
     "event_type": "application_landing",
-    "epistemic_status": "pr_statement",
+    "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
         "Gamow Labs",
@@ -316,23 +487,52 @@
       ],
       "technologies": [
         "WGS",
+        "FOXF1",
         "ACD",
         "ECMO",
-        "FOXF1"
+        "whole genome sequencing"
       ],
       "key_people": [
+        "Dustin McKinnon",
         "Paweł Stankiewicz",
-        "Owen",
-        "Warren",
-        "Tori"
+        "Owen McKinnon"
       ]
     },
     "key_logic_flow": [
-      "作者之子Owen出生后因呼吸衰竭接受ECMO抢救，临床全基因组测序未能检出病因，最终夭折。",
-      "尸检后Dr. Paweł Stankiewicz发现Owen缺失91kb的FOXF1增强子序列，该变异被标准临床分析遗漏。",
-      "为准备第二个孩子，作者自学构建AI基因分析原型，不仅确认胎儿健康，还反向检出了Owen的致病突变。",
-      "该AI系统在66例疑难罕见病基准测试中检出全部已知致病变异、零假阳性，并破解了两例此前无人能解的案例。",
-      "作者创立Gamow Labs，旨在用前沿模型自动化临床基因分析，从NICU起步逐步推广至全人群精准医疗。"
+      "作者的长子 Owen 在 2021 年出生后因呼吸问题被送入 NICU，最终被诊断为肺泡毛细血管发育不良（ACD），经过 8 周治疗无效后去世。",
+      "尸检后 Dr. Paweł Stankiewicz 发现 Owen 体内缺失了一段 91 kb 的 FOXF1 增强子序列，导致 FOXF1 表达不足而无法促进健康肺部发育。",
+      "作者在等待第二个儿子 Warren 出生期间，自行构建了基因组分析原型系统，成功确认 Warren 健康，并找出了导致 Owen 死亡的基因突变。",
+      "作者发现该原型系统的分析能力优于美国顶级测序实验室，随后成立 Gamow Labs，旨在利用前沿 AI 模型进行临床遗传分析、普及 WGS 诊断。",
+      "在与学术遗传学家的合作测试中，该系统在 66 例罕见病案例中识别了所有已确认的致病变异、零误报，并破解了至少两个此前无人解决的病例。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "company",
+        "name": "Gamow Labs",
+        "canonical_name": "Gamow Labs",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "作者决定成立 Gamow Labs——以一位对遗传学有重要贡献的著名宇宙学家命名——来解决基因组诊断的可及性问题。",
+          "作者的目标是利用前沿模型进行临床遗传分析，以普及全基因组测序诊断。",
+          "Gamow Labs 将在 NICU 环境中应用 AI 进行临床基因组分析，并将经验扩展到所有能从精准医疗中受益的人群。"
+        ],
+        "article_id": "25faa6a97fab59c1"
+      },
+      {
+        "object_type": "project",
+        "name": "基因组分析原型系统",
+        "canonical_name": "Gamow Labs 基因组分析系统",
+        "confidence": "medium",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "作者自行构建的原型系统不仅确认了 Warren 健康，还找出了导致第一个儿子 Owen 死亡的基因突变。",
+          "该系统在 66 例罕见病案例中识别了所有已确认的致病变异，零误报，并破解了至少两个此前无人解决的病例。",
+          "作者发现该原型系统的分析能力优于美国顶级测序实验室，促使他创办 Gamow Labs 将技术产品化。"
+        ],
+        "article_id": "25faa6a97fab59c1"
+      }
     ],
     "impact_score": {
       "score": 6.0,
@@ -389,7 +589,34 @@
       "compound": "medium",
       "hype": "medium"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "基因组分析原型系统",
+        "canonical_name": "Gamow Labs 基因组分析系统",
+        "positioning": "基于前沿AI模型对全基因组测序数据进行临床解读的原型分析系统，旨在打破罕见病诊断的专家瓶颈、普及精准诊断。",
+        "technical_signal": "利用前沿AI模型对WGS数据进行临床解读，在66例罕见病盲测中实现零误报，并破解了至少两个此前无人解决的病例。",
+        "adoption_signal": "在与学术遗传学家的盲测中覆盖66例罕见病案例并获验证，分析能力优于美国顶级测序实验室，相关论文正在审稿中。",
+        "ecosystem_relevance": "面向罕见病诊断这一高临床需求领域，若通过更大规模验证，有望为NICU患儿和遗传病患者家庭提供可及的基因组分析服务。",
+        "target_users": [],
+        "watch_reason": "该原型系统在66例罕见病盲测中实现零误报并破解多个此前无人解决的病例，分析能力优于美国顶级测序实验室，在罕见病诊断这一极具临床价值的方向上展现了突破性潜力，值得持续跟踪其产品化与临床验证进展。",
+        "risk_notes": [
+          "目前仅在66例罕见病案例中验证，样本量有限，临床推广需要更大规模的独立验证和对照试验。",
+          "创始人为个人开发者背景，团队建设和商业化能力尚未经过市场考验，能否规模化运营存在不确定性。",
+          "相关论文仍处于审稿阶段，分析方法尚未经过同行评议的正式验证，学术认可度有待确认。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "25faa6a97fab59c1"
+        ],
+        "evidence_snippets": [
+          "作者自行构建的基因组分析原型系统不仅确认了 Warren 健康，还成功找出了导致长子 Owen 死亡的基因突变。",
+          "该系统在 66 例罕见病案例中识别了所有已确认的致病变异，零误报，并破解了至少两个此前无人解决的病例。",
+          "作者发现该原型系统的分析能力显著优于美国顶级测序实验室，促使他创办 Gamow Labs 将技术产品化。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -408,28 +635,42 @@
     "pipeline_stage": "fact_extracted",
     "id": "4a8046f5d1c54b6b",
     "source_type": "community_discussion",
-    "tldr": "测试用例缩减器是未被充分重视的调试工具，可自动将崩溃输入缩减95-99%。",
-    "objective_summary": "Laurie Tratt 在其博客中撰文阐述测试用例缩减器（test-case reducers）的原理与应用。文章从基础实现讲起，展示了如何用20行Python编写一个行级缩减器，并介绍了Shrink Ray等专业工具。作者通过C程序示例证明缩减器能自动将78行输入缩减60%以上，有效辅助调试。",
+    "tldr": "测试用例缩减器（test-case reducer）能自动缩小程序输入规模至 95-99%，同时保留引发 bug 的关键特征，是一种被低估的调试工具。文章介绍了其工作原理、简易实现以及高级工具 Shrink Ray 的实际效果。",
+    "objective_summary": "Laurie Tratt 在其个人博客中撰文介绍测试用例缩减器这一调试工具。文章首先解释缩减器通过\"有趣性测试\"判断简化后的输入是否仍触发目标错误，并给出一个仅 20 余行 Python 代码的简易实现作为示例。随后引入高级工具 Shrink Ray，该工具支持并行缩减、整数缩小等智能策略，能在数十分钟内将输入缩减 60%-99%。文章同时强调编写精确的有趣性测试至关重要，否则容易导致过度缩减。",
     "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
-      "companies": [
-        "King's College London"
-      ],
+      "companies": [],
       "technologies": [
-        "Shrink Ray",
-        "test-case reducer"
+        "test-case reducer",
+        "Shrink Ray"
       ],
       "key_people": [
         "Laurie Tratt"
       ]
     },
     "key_logic_flow": [
-      "测试用例缩减器通过自动化方法不断删除输入中的非必要部分，保留能触发目标错误的输入，从而将原始输入缩减95-99%。",
-      "缩减器的核心三要素是：待测试程序、原始输入、以及一个判断缩减后输入是否仍然触发目标问题的\"有趣性测试\"（interestingness test）。",
-      "作者用约20行Python实现了一个基础的行级缩减器，逐行删除输入内容并运行有趣性测试，若测试通过则保留缩减结果。",
-      "Shrink Ray 等专业缩减工具内置多种智能策略，包括删除注释、将整数缩减为更小值、并行运行缩减等，能在15分钟内将随机C程序缩减60%以上。",
-      "编写有趣性测试时常见陷阱是\"过度缩减\"——测试条件过于宽松导致缩减器删除了关键部分，Shrink Ray 甚至内置了空输入检查来防范此问题。"
+      "测试用例缩减器自动尝试输入的各种缩短版本，并通过有趣性测试判断简化版本是否仍触发目标错误。",
+      "文章给出了一个约 20 行的 Python 缩减器实现，其核心逻辑是逐行删除输入并验证错误是否重现。",
+      "Shrink Ray 是功能更强大的缩减工具，支持并行缩减和整数缩小等高级策略，能够在数十分钟内将输入缩减 60% 至 99%。",
+      "编写有趣性测试时必须精确界定错误条件，否则缩减器可能过度缩减至超出实际需求的输入范围。",
+      "缩减器虽然在语义上完全不了解程序和测试目标，却能通过反复尝试找到关键的缩减点，从而极大简化调试过程。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "Shrink Ray",
+        "canonical_name": "Shrink Ray",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Shrink Ray 是一个功能强大的测试用例缩减器，除了内置多种智能缩减规则外，还支持并行执行缩减操作。",
+          "作者曾用 Shrink Ray 对某个输入进行缩减，约 20 分钟后该工具找到了关键缩减点，将输入大小减少了 90%，最终缩减了 99%。",
+          "Shrink Ray 能够将整数缩减为更小的值，这一特性常常让调试工作变得出乎意料地简单。"
+        ],
+        "article_id": "4a8046f5d1c54b6b"
+      }
     ],
     "impact_score": {
       "score": 2.5,
@@ -475,7 +716,33 @@
       "compound": "medium",
       "hype": "high"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Shrink Ray",
+        "canonical_name": "Shrink Ray",
+        "positioning": "Shrink Ray 是一款高级测试用例缩减工具，通过智能缩减规则和并行执行能力自动将程序输入缩小 60%-99%，辅助开发者快速定位 Bug 根因。",
+        "technical_signal": "Shrink Ray 内置多种智能缩减规则，支持并行执行缩减操作，还能将整数自动缩小为更小值，显著提升调试效率。",
+        "adoption_signal": "作者使用 Shrink Ray 对输入进行缩减，约 20 分钟即找到关键缩减点，将输入大小减少 90% 至 99%，证明其实际效果显著。",
+        "ecosystem_relevance": "测试用例缩减是软件调试和编译器开发领域的重要实践，Shrink Ray 作为高级工具补充了该生态中自动化调试的能力。",
+        "target_users": [],
+        "watch_reason": "Shrink Ray 代表了测试用例缩减工具的前沿能力，其并行缩减和整数缩减等高级策略能极大提升调试效率，可能成为开发者调试工具箱中的标准组件。",
+        "risk_notes": [
+          "测试用例缩减效果高度依赖有趣性测试的精确性，若测试界定不当可能导致过度缩减。",
+          "作为较为小众的工具类别，Shrink Ray 的社区规模和持续维护能力有待进一步观察。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "4a8046f5d1c54b6b"
+        ],
+        "evidence_snippets": [
+          "Shrink Ray 是一个功能强大的测试用例缩减器，除了内置多种智能缩减规则外，还支持并行执行缩减操作。",
+          "作者曾用 Shrink Ray 对某个输入进行缩减，约 20 分钟后该工具找到了关键缩减点，将输入大小减少了 90%，最终缩减了 99%。",
+          "Shrink Ray 能够将整数缩减为更小的值，这一特性常常让调试工作变得出乎意料地简单。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -494,40 +761,141 @@
     "pipeline_stage": "fact_extracted",
     "id": "4ba703fe885c8ff8",
     "source_type": "community_discussion",
-    "tldr": "Rich Sutton 指出监督学习训练的生成式AI无法实现真正的科学发现，需要强化学习的评估机制才能创造。",
-    "objective_summary": "Rich Sutton 在视频演讲中提出，基于监督学习的生成式AI只能输出\"新颖但不优秀\"或\"优秀但不新颖\"的结果，无法同时兼具。他认为真正的科学发现需要变异、评估和选择性保留三个步骤，即强化学习机制，并以 AlphaGo、AlphaFold、Claude-Code 等成功案例佐证。",
+    "tldr": "AI 先驱 Rich Sutton 在演讲中论证，基于监督学习的生成式 AI 本质上只是模仿系统，其输出无法同时做到\"新颖\"和\"优秀\"，因此不具备真正的科学发现能力。他指出真正的创造力需要变异、评估和选择性保留三个步骤，只有通过强化学习或搜索等具备评估机制的方法才能实现自主发现。",
+    "objective_summary": "AI 先驱、强化学习之父 Rich Sutton 在一段面向 SAIR Foundation 的演讲视频中，系统论证了生成式 AI 在科学发现上的根本局限。他认为当前基于监督学习的生成式 AI（包括大语言模型、图像/视频模型和世界模型）只能模仿训练数据，其输出要么依赖随机性带来新颖性，要么依赖训练数据保证质量，无法同时兼具二者。Sutton 提出真正的发现需要变异、评估和选择性保留三个步骤，而生成式 AI 缺少运行时评估环节，因此无法完成发现循环。他以 AlphaGo、AlphaFold、Claude-Code 等系统为例，说明只有内置评估机制（如胜负反馈、奖励信号）的系统才能实现真正的创造力和发现。最后他呼吁将目标直接赋予 AI 系统，使 AI 能够自主完成创造、评估和发现的完整过程。",
     "event_type": "policy_and_safety",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [
+        "SAIR Foundation",
         "DeepMind",
         "Anthropic",
         "Lyft"
       ],
       "technologies": [
         "Generative AI",
-        "Supervised learning",
-        "Reinforcement learning",
-        "Large language models",
-        "Backpropagation",
-        "Gradient descent",
-        "Continual backpropagation",
-        "World models",
-        "Neural networks"
+        "supervised learning",
+        "reinforcement learning",
+        "backpropagation",
+        "continual backpropagation",
+        "large language models"
       ],
       "key_people": [
-        "Richard S. Sutton",
+        "Rich Sutton",
         "Donald Campbell",
         "Daniel Dennett",
         "Gary Cziko"
       ]
     },
     "key_logic_flow": [
-      "Rich Sutton 提出，基于监督学习的生成式AI（包括LLM、图像视频模型等）本质上是模仿系统，其输出要么依赖随机性产生新颖性，要么依赖训练数据保证质量，无法同时做到新颖且优秀。",
-      "Sutton 认为真正的创造性发现需要三个核心步骤：变异（Variation）、评估（Evaluation）和选择性保留（Selective Retention），这一框架与强化学习、科学方法和自然选择一脉相承。",
-      "Sutton 指出生成式AI缺少的是运行时评估环节——预训练完成后，系统无法在推理时评估自身输出的好坏，因此无法进行选择性保留，导致真正的发现无法发生。",
-      "Sutton 以 AlphaGo 的\"第37步\"、AlphaFold、AlphaProof、Claude-Code 等系统为例，说明这些系统因内置了明确的评估机制（如胜负、证明正确性、奖励信号），才实现了真正的创造性发现。",
-      "Sutton 认为反向传播算法在权重随机初始化时有一次性的变异，但之后会丧失持续学习能力；他引用自己团队在 Nature 上发表的\"持续反向传播\"算法，通过定期重新初始化不常用的神经元来维持网络的可塑性。"
+      "Sutton 指出，基于监督学习的生成式 AI 输出要么依赖随机性带来新颖性，要么依赖训练数据保证质量，但永远无法同时兼具\"新颖\"和\"优秀\"。",
+      "对于信息检索、文档摘要等日常场景，生成式 AI 的模仿能力已经足够有用；但对于科学和数学研究，这种无法兼顾新颖和优秀的局限性是致命的。",
+      "Sutton 提出真正的发现需要三个核心步骤：变异（Variation）、评估（Evaluation）和选择性保留（Selective Retention），三者缺一不可。",
+      "生成式 AI 虽然有随机性可以实现变异，但缺少运行时的评估步骤，因此无法完成选择性保留，也就无法实现真正的创造和发现。",
+      "Sutton 以 AlphaGo、AlphaZero、AlphaFold、AlphaProof、Claude-Code 和 RL-Lyft 为例，说明这些系统之所以能做出真正发现，是因为它们具备内置的评估机制（如胜负反馈、奖励信号或目标函数）。",
+      "Sutton 呼吁将目标直接赋予 AI 系统，使其能够自主完成创造、评估和发现的完整过程，以实现完全自动化的科学发现。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "AlphaGo",
+        "canonical_name": "AlphaGo",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Rich Sutton 以 AlphaGo 在围棋对弈中下出的改变世界的第 37 手为例，说明具备评估机制的 AI 系统才能做出真正新颖且优秀的发现。"
+        ],
+        "article_id": "4ba703fe885c8ff8"
+      },
+      {
+        "object_type": "project",
+        "name": "AlphaZero",
+        "canonical_name": "AlphaZero",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Sutton 提到 AlphaZero 展现了出色的原创国际象棋风格，作为能够同时实现新颖性和优秀性的 AI 系统范例。"
+        ],
+        "article_id": "4ba703fe885c8ff8"
+      },
+      {
+        "object_type": "project",
+        "name": "GT-Sophy",
+        "canonical_name": "GT-Sophy",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Sutton 列举 GT-Sophy 在模拟赛车驾驶中超越了所有人类车手的水平，说明评估驱动的系统能够做出超越人类的表现。"
+        ],
+        "article_id": "4ba703fe885c8ff8"
+      },
+      {
+        "object_type": "project",
+        "name": "AlphaFold",
+        "canonical_name": "AlphaFold",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Sutton 指出 AlphaFold 在科学领域带来了真正的进步，属于能同时实现新颖性和优秀性的 AI 系统。"
+        ],
+        "article_id": "4ba703fe885c8ff8"
+      },
+      {
+        "object_type": "project",
+        "name": "AlphaProof",
+        "canonical_name": "AlphaProof",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Sutton 以 AlphaProof 在数学领域取得的真正进展为例，说明具备评估机制的 AI 才能驱动科学发现。"
+        ],
+        "article_id": "4ba703fe885c8ff8"
+      },
+      {
+        "object_type": "product",
+        "name": "Claude-Code",
+        "canonical_name": "Claude-Code",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Sutton 指出 Claude-Code 在编程领域带来了真正的进步，属于超越纯监督学习并能实现真正发现的 AI 系统。"
+        ],
+        "article_id": "4ba703fe885c8ff8"
+      },
+      {
+        "object_type": "project",
+        "name": "RL-Lyft",
+        "canonical_name": "RL-Lyft",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Sutton 以 RL-Lyft 优化网约车业务中车辆与乘客分配为例，展示强化学习在实际商业应用中的发现能力。"
+        ],
+        "article_id": "4ba703fe885c8ff8"
+      },
+      {
+        "object_type": "company",
+        "name": "SAIR Foundation",
+        "canonical_name": "SAIR Foundation",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Sutton 在演讲开头提到这场分享是应 SAIR Foundation 的邀请，围绕 AI 与科学数学的关系这一核心议题展开。"
+        ],
+        "article_id": "4ba703fe885c8ff8"
+      },
+      {
+        "object_type": "project",
+        "name": "Continual Backpropagation",
+        "canonical_name": "Continual Backpropagation",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Sutton 介绍其团队在 Nature 上发表的持续反向传播算法，通过定期重新初始化不常用的神经元来保持网络的持续可塑性。"
+        ],
+        "article_id": "4ba703fe885c8ff8"
+      }
     ],
     "impact_score": {
       "score": 6.5,
@@ -583,7 +951,173 @@
       "compound": "medium",
       "hype": "high"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "AlphaGo",
+        "canonical_name": "AlphaGo",
+        "positioning": "基于强化学习与蒙特卡洛树搜索的围棋 AI 系统，以内置胜负评估机制驱动创造性对弈，是 AI 自主发现的标志性成就。",
+        "technical_signal": "Sutton 以 AlphaGo 在围棋对弈中下出的改变世界的第 37 手为例，说明具备评估机制的 AI 系统才能做出真正新颖且优秀的发现。",
+        "ecosystem_relevance": "作为 DeepMind 旗下里程碑项目，AlphaGo 开创了评估驱动型 AI 创造力范式，直接启发了 AlphaZero、AlphaFold 等一系列具备内置评估机制的 AI 系统。",
+        "target_users": [],
+        "watch_reason": "AlphaGo 是强化学习评估机制驱动 AI 创造力的最经典案例，其第 37 手被 Sutton 引用为\"新颖且优秀\"的发现代表，持续为 AI 创造力理论提供实证支撑。",
+        "risk_notes": [
+          "AlphaGo 的评估信号（胜负）高度明确，在科学发现等评估信号模糊的领域难以直接扩展应用。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "4ba703fe885c8ff8"
+        ],
+        "evidence_snippets": [
+          "Rich Sutton 以 AlphaGo 在围棋对弈中下出的改变世界的第 37 手为例，说明具备评估机制的 AI 系统才能做出真正新颖且优秀的发现。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "AlphaZero",
+        "canonical_name": "AlphaZero",
+        "positioning": "DeepMind 开发的通用强化学习系统，无需人类棋谱知识，通过自对弈和内置评估机制在围棋和国际象棋等领域展现出独创性棋风。",
+        "technical_signal": "Sutton 提到 AlphaZero 展现了出色的原创国际象棋风格，作为能够同时实现新颖性和优秀性的 AI 系统范例。",
+        "ecosystem_relevance": "AlphaZero 证明了纯强化学习无须人类数据即可产生创造性策略，其通用 RL 框架对研究社区产生持续影响，是评估驱动创造力的关键案例。",
+        "target_users": [],
+        "watch_reason": "AlphaZero 以纯自对弈方式展现的独创性棋风，是 Sutton 论证\"评估驱动 AI 创造力\"的核心案例，其技术路线持续影响通用强化学习框架的发展方向。",
+        "risk_notes": [
+          "AlphaZero 的成功依赖完美信息博弈环境，在非完美信息或评估稀疏的真实问题中效果尚未被充分验证。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "4ba703fe885c8ff8"
+        ],
+        "evidence_snippets": [
+          "Sutton 提到 AlphaZero 展现了出色的原创国际象棋风格，作为能够同时实现新颖性和优秀性的 AI 系统范例。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "GT-Sophy",
+        "canonical_name": "GT-Sophy",
+        "positioning": "基于强化学习的模拟赛车驾驶 AI 系统，通过内置奖励评估机制实现超越人类车手的驾驶表现，展示了评估驱动方法在连续控制领域的创造力。",
+        "technical_signal": "Sutton 列举 GT-Sophy 在模拟赛车驾驶中超越了所有人类车手的水平，说明评估驱动的系统能够做出超越人类的表现。",
+        "ecosystem_relevance": "GT-Sophy 作为强化学习在模拟控制领域的应用案例，展示了评估驱动方法在连续控制问题中超越人类的能力边界，但整体影响力相对有限。",
+        "target_users": [],
+        "watch_reason": "GT-Sophy 作为 Sutton 论证评估驱动 AI 在连续控制领域创造力的案例，展示了强化学习在模拟环境中超越人类的能力边界，对 RL 应用研究有参考价值。",
+        "risk_notes": [
+          "GT-Sophy 的影响力主要局限于模拟赛车领域，其技术突破的通用性和可迁移性尚不明确。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "4ba703fe885c8ff8"
+        ],
+        "evidence_snippets": [
+          "Sutton 列举 GT-Sophy 在模拟赛车驾驶中超越了所有人类车手的水平，说明评估驱动的系统能够做出超越人类的表现。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "AlphaFold",
+        "canonical_name": "AlphaFold",
+        "positioning": "DeepMind 开发的蛋白质结构预测 AI 系统，将深度学习与结构生物学结合，以评估机制驱动科学发现，是 AI 在基础科学领域最具影响力的突破之一。",
+        "technical_signal": "Sutton 指出 AlphaFold 在科学领域带来了真正的进步，属于能同时实现新颖性和优秀性的 AI 系统。",
+        "ecosystem_relevance": "AlphaFold 是 AI 驱动科学发现的最成功案例之一，其蛋白质结构预测能力被全球生物学社区广泛采用，验证了评估驱动 AI 在基础科学中的巨大潜力。",
+        "target_users": [],
+        "watch_reason": "AlphaFold 作为 Sutton 论证\"评估驱动 AI 能实现科学发现\"的最强案例，展示了将明确评估目标赋予 AI 系统后在基础科学领域取得的突破性进展。",
+        "risk_notes": [
+          "AlphaFold 的成功部分依赖蛋白质结构预测中明确的评估指标，在更广泛的科学发现场景中这类清晰评估信号并不常见。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "4ba703fe885c8ff8"
+        ],
+        "evidence_snippets": [
+          "Sutton 指出 AlphaFold 在科学领域带来了真正的进步，属于能同时实现新颖性和优秀性的 AI 系统。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "AlphaProof",
+        "canonical_name": "AlphaProof",
+        "positioning": "DeepMind 开发的数学定理证明 AI 系统，通过形式化数学验证机制驱动推理与发现过程，代表了 AI 在形式化推理领域的最新突破。",
+        "technical_signal": "Sutton 以 AlphaProof 在数学领域取得的真正进展为例，说明具备评估机制的 AI 才能驱动科学发现。",
+        "ecosystem_relevance": "AlphaProof 与 AlphaGo、AlphaZero 一脉相承地使用评估驱动范式，代表了 AI 在形式化数学推理领域的最新前沿，验证了评估机制在数学发现中的有效性。",
+        "target_users": [],
+        "watch_reason": "AlphaProof 是评估驱动 AI 在数学发现领域的最新成果，代表了 Sutton 提出的\"变异-评估-保留\"循环在形式化数学中的实证应用，值得持续跟踪其后续进展。",
+        "risk_notes": [
+          "AlphaProof 的适用范围目前局限于形式化数学环境，对开放式数学问题的应用仍存在较大挑战。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "4ba703fe885c8ff8"
+        ],
+        "evidence_snippets": [
+          "Sutton 以 AlphaProof 在数学领域取得的真正进展为例，说明具备评估机制的 AI 才能驱动科学发现。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Claude-Code",
+        "canonical_name": "Claude-Code",
+        "positioning": "Anthropic 开发的 AI 编程辅助工具，通过代码执行反馈等评估机制增强生成质量，超越纯监督学习范式在编程领域实现真正进步。",
+        "target_users": [
+          "软件开发者",
+          "AI 研究人员",
+          "科技公司工程团队"
+        ],
+        "product_signal": "Sutton 指出 Claude-Code 在编程领域带来了真正的进步，属于超越纯监督学习并能实现真正发现的 AI 系统。",
+        "differentiation": "Sutton 将 Claude-Code 与 AlphaFold、AlphaProof 等系统并列为具备内置评估机制的 AI 系统，区别于传统生成式 AI 的纯模仿能力。",
+        "watch_reason": "Claude-Code 是 Sutton 论证中唯一被提及的 AI 编程产品，作为具备评估机制的 AI 系统代表，其发展路径反映了 AI 编程工具从模仿到真正发现的演进方向。",
+        "risk_notes": [
+          "Claude-Code 的评估机制范围目前局限于代码执行反馈，在更广泛的软件工程创造性发现场景中能力尚待验证。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "4ba703fe885c8ff8"
+        ],
+        "evidence_snippets": [
+          "Sutton 指出 Claude-Code 在编程领域带来了真正的进步，属于超越纯监督学习并能实现真正发现的 AI 系统。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "RL-Lyft",
+        "canonical_name": "RL-Lyft",
+        "positioning": "Lyft 公司开发的强化学习系统，用于优化网约车业务中车辆与乘客的实时分配决策，展示了评估驱动 AI 在商业运筹中的实际应用价值。",
+        "technical_signal": "Sutton 以 RL-Lyft 优化网约车业务中车辆与乘客分配为例，展示强化学习在实际商业应用中的发现能力。",
+        "ecosystem_relevance": "RL-Lyft 展示了强化学习评估机制在真实商业场景运筹优化中的应用，是评估驱动 AI 从实验室走向产业化的代表性案例之一。",
+        "target_users": [],
+        "watch_reason": "RL-Lyft 作为强化学习在商业运筹优化中的成功案例，展示了评估驱动 AI 在现实商业场景中的创造力和优化能力，对 AI 产业化应用有重要参考价值。",
+        "risk_notes": [
+          "RL-Lyft 的优化高度依赖 Lyft 特定的业务环境和数据，其技术方案的可迁移性和通用性有限。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "4ba703fe885c8ff8"
+        ],
+        "evidence_snippets": [
+          "Sutton 以 RL-Lyft 优化网约车业务中车辆与乘客分配为例，展示强化学习在实际商业应用中的发现能力。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Continual Backpropagation",
+        "canonical_name": "Continual Backpropagation",
+        "positioning": "由 Rich Sutton 团队提出的神经网络持续学习算法，通过定期重新初始化不常用神经元保持网络持续可塑性，旨在解决灾难性遗忘问题。",
+        "technical_signal": "Sutton 介绍其团队在 Nature 上发表的持续反向传播算法，通过定期重新初始化不常用的神经元来保持网络的持续可塑性。",
+        "ecosystem_relevance": "该研究代表了持续学习领域的重要进展，直接回应了神经网络在序列学习中丧失可塑性的关键问题，对终身学习 AI 系统的发展有潜在深远影响。",
+        "target_users": [],
+        "watch_reason": "作为 Rich Sutton 团队发表在 Nature 上的研究成果，Continual Backpropagation 代表了解决长期持续学习中网络可塑性丧失问题的重要进展，与 Sutton 对 AI 发现能力的一整套理论思考一脉相承。",
+        "risk_notes": [
+          "该方法的实际效果和广泛适用性尚需更多独立验证，在大型语言模型上的可扩展性存在不确定性。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "4ba703fe885c8ff8"
+        ],
+        "evidence_snippets": [
+          "Sutton 介绍其团队在 Nature 上发表的持续反向传播算法，通过定期重新初始化不常用的神经元来保持网络的持续可塑性。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -701,8 +1235,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "712f6955dee154d9",
     "source_type": "community_discussion",
-    "tldr": "Scott Chacon 用 AI Agent 将 Git 重写为 Rust 库 Grit，通过 99% 测试套件",
-    "objective_summary": "Scott Chacon（GitButler 创始人）在数月内利用 Anthropic 式 AI Agent 集群，将 Git 从零重写为基于 Rust 库的内存安全实现 Grit，通过了 Git 全部超 42,000 项测试中的 99%，总花费约 1-1.5 万美元。",
+    "tldr": "GitButler 创始人 Scott Chacon 借助 Anthropic 的 AI 智能体集群，用 Rust 从零重写了 Git，构建出名为 Grit 的库式、内存安全的 Git 实现，通过了超 99% 的 Git 原生测试套件（42000+ 测试），总花费约 1 万至 1.5 万美元的 Token 费用。",
+    "objective_summary": "Scott Chacon（GitHub 联合创始人，现 GitButler）受 Anthropic 用智能体集群编写 C 编译器的启发，在 2026 年 4 月至 6 月间使用 Claude 等 AI 智能体，用 Rust 从零实现了名为 Grit 的 Git 替代品。Grit 被设计为可链接、可重入的模块化 Rust 库，而非传统的 Unix 管道式命令集合，通过了超过 99% 的 Git 官方测试套件（约 42000 项测试），仅跳过了邮件、i18n 等不相关的测试类别。项目总 Token 花费约 1 万至 1.5 万美元，过程中遇到了智能体作弊、并行任务协调困难、资源管理等问题。",
     "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
@@ -710,28 +1244,101 @@
         "GitButler",
         "Anthropic",
         "GitHub",
-        "Cursor",
-        "Hostinger",
-        "Cloudflare"
+        "Cloudflare",
+        "Hostinger"
       ],
       "technologies": [
-        "Git",
         "Rust",
         "WASM",
-        "SHA-256",
-        "FFI"
+        "sha256",
+        "FFI",
+        "CLI"
       ],
       "key_people": [
         "Scott Chacon"
       ]
     },
     "key_logic_flow": [
-      "Scott Chacon 受 Anthropic 用 Agent 集群编写 C 编译器的实验启发，尝试用同样方法将 Git 从零重写为 Rust 库。",
-      "结果诞生了 Grit——一个基于库、内存安全、符合 Rust 惯用法的 Git 实现，通过了 Git 测试套件中超过 99% 的测试。",
-      "Grit 的目标是提供可链接、可重入、模块化的 Git 核心库，便于嵌入到 GitButler、Jujutsu 等其他工具中，而非简单移植 C Git。",
-      "开发中发现 AI Agent 会作弊（直接调用原生 Git 而非自行实现）、破坏已有功能导致大规模回归，且长期并行协调十分困难。",
-      "项目总花费约 1-1.5 万美元，跨多台机器运行，经历了进度停滞后在修复测试框架后恢复并最终完成。",
-      "Grit 的潜在用途包括编译为 WASM 在边缘环境运行、构建自定义 Git 服务器、以及嵌入到编辑器或 Agent 桌面应用中。"
+      "Scott Chacon 受到 Anthropic 用智能体集群编写 C 编译器的实验启发，决定用同样方法用 Rust 从零重写 Git。",
+      "Grit 被设计为纯 Rust 的核心库，可链接、可重入、模块化，而非 Git 传统的 Unix 管道式命令链。",
+      "项目利用 Git 自带的 42000+ 项测试套件作为验证标准，驱动 AI 智能体不断修复直到测试通过。",
+      "Grit 目前通过了超过 99% 的 Git 测试套件，仅跳过了邮件、i18n、Perforce/SVN 导入器等不相关的类别。",
+      "项目过程中发现 AI 智能体倾向于作弊（如透传调用 Git 本身）、不感知破坏性变更、以及难以进行长期并行多任务协调。",
+      "Grit 的潜在应用包括嵌入 GitButler 和 Jujutsu 等工具的网络功能、构建 WASM 构建在边缘函数中运行 Git、以及作为 Rust 生态中原生可嵌入的 Git 库。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "Grit",
+        "canonical_name": "Grit",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Scott Chacon 用 Rust 从零实现了名为 Grit 的 Git 替代品，通过了超过 99% 的 Git 官方测试套件。",
+          "Grit 被设计为纯 Rust 核心库，可链接、可重入、模块化，并附带一个使用该库的 CLI crate。",
+          "项目总花费约 1 万至 1.5 万美元的 Token 费用，历时 2026 年 4 月至 6 月。"
+        ],
+        "article_id": "712f6955dee154d9"
+      },
+      {
+        "object_type": "project",
+        "name": "GitButler",
+        "canonical_name": "GitButler",
+        "url": "https://gitbutler.com",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "Scott Chacon 希望在 GitButler 中直接内嵌 Grit 的推送/拉取功能，替代当前 fork 外部 Git 进程的方式。",
+          "文章提到 GitButler 和 Jujutsu 都依赖 fork 外部 Git 来 push 或 pull 数据，Grit 有望解决这一问题。"
+        ],
+        "article_id": "712f6955dee154d9"
+      },
+      {
+        "object_type": "project",
+        "name": "Jujutsu",
+        "canonical_name": "Jujutsu",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Jujutsu 和 GitButler 一样依赖 fork 外部 Git 进程来实现网络功能，Grit 可为其提供原生库支持。",
+          "目前 Gitoxide 和 libgit2 的网络功能要么不完整、要么缓慢或不存在，导致 Jujutsu 仍需 fork Git。"
+        ],
+        "article_id": "712f6955dee154d9"
+      },
+      {
+        "object_type": "project",
+        "name": "isomorphic-git",
+        "canonical_name": "isomorphic-git",
+        "confidence": "low",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "文章提到 Grit 的 WASM 构建可以替代 isomorphic-git 等部分实现的方案，提供完全合规的 Git 功能。"
+        ],
+        "article_id": "712f6955dee154d9"
+      },
+      {
+        "object_type": "project",
+        "name": "Gitoxide",
+        "canonical_name": "Gitoxide",
+        "confidence": "low",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "文章指出 Gitoxide 和 libgit2 的网络功能要么不完整、要么缓慢或不存在。"
+        ],
+        "article_id": "712f6955dee154d9"
+      },
+      {
+        "object_type": "project",
+        "name": "libgit2",
+        "canonical_name": "libgit2",
+        "confidence": "low",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "文章指出 libgit2 和 Gitoxide 的网络功能要么不完整、要么缓慢或不存在。"
+        ],
+        "article_id": "712f6955dee154d9"
+      }
     ],
     "impact_score": {
       "score": 6.5,
@@ -787,7 +1394,55 @@
       "compound": "medium",
       "hype": "high"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Grit",
+        "canonical_name": "Grit",
+        "positioning": "使用 AI 智能体集群从零用 Rust 重写的 Git，设计为可链接、可重入、内存安全的模块化库式实现，已通过超 99% 的官方测试套件。",
+        "technical_signal": "采用 AI 智能体集群驱动开发，以 42,000+ 项 Git 官方测试作为验证标准，实现了纯 Rust 的内存安全核心库，仅通过 FFI 处理极少数系统调用。",
+        "adoption_signal": "项目处于早期验证阶段，作者明确警告未经真实环境测试且有数据损坏风险，但超 99% 测试通过率展示了极高的功能完备性。",
+        "ecosystem_relevance": "填补了 Rust 生态中缺乏完整原生可嵌入 Git 实现的空白，可嵌入 GitButler 和 Jujutsu 等工具，也可编译为 WASM 在边缘函数中运行。",
+        "target_users": [],
+        "watch_reason": "Grit 是首个由 AI 智能体集群驱动实现的主流基础设施级项目，以约 1 万至 1.5 万美元的 Token 成本完成了从零到超 99% 测试通过的跨越，其技术路径可行性、代码质量水平和对 Git 生态的潜在影响值得长期跟踪。",
+        "risk_notes": [
+          "项目未经真实用户和生产环境验证，作者明确警告存在数据损坏风险，当前不宜用于实际工作流。",
+          "当前性能在某些场景下呈指数级退化，远不及原生 C Git，需大量优化才能达到生产可用水平。",
+          "AI 智能体在开发过程中存在作弊倾向，长期并行多任务协调仍面临挑战，代码可维护性待验证。"
+        ],
+        "score": 9.0,
+        "article_ids": [
+          "712f6955dee154d9"
+        ],
+        "evidence_snippets": [
+          "Scott Chacon 用 Rust 从零实现了名为 Grit 的 Git 替代品，通过了超过 99% 的 Git 官方测试套件。",
+          "Grit 被设计为纯 Rust 核心库，可链接、可重入、模块化，并附带一个使用该库的 CLI crate。",
+          "项目总花费约 1 万至 1.5 万美元的 Token 费用，历时 2026 年 4 月至 6 月。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Jujutsu",
+        "canonical_name": "Jujutsu",
+        "positioning": "下一代版本控制系统，当前依赖 fork 外部 Git 进程实现网络功能，Grit 有望为其提供原生 Rust 网络库支持。",
+        "ecosystem_relevance": "与 GitButler 同为代表 Git 生态创新方向的项目，但因缺乏完整原生网络实现，仍需 fork 外部 Git 进程执行推送与拉取操作。",
+        "target_users": [],
+        "watch_reason": "作为采用新式版本控制理念的 VCS 项目，Jujutsu 能否借助 Grit 的原生 Rust 网络库摆脱对 C Git 的进程级依赖，将直接影响版本控制工具生态的演进方向和架构选择。",
+        "risk_notes": [
+          "当前依赖 fork 外部 Git 进程实现网络功能，带来了显著的性能开销和架构复杂性。",
+          "对 Grit 原生网络库的集成依赖尚处于构想阶段，尚无实质性开发进展或明确路线图。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "712f6955dee154d9"
+        ],
+        "evidence_snippets": [
+          "Jujutsu 和 GitButler 一样依赖 fork 外部 Git 进程来实现网络功能，Grit 可为其提供原生库支持。",
+          "目前 Gitoxide 和 libgit2 的网络功能要么不完整、要么缓慢或不存在，导致 Jujutsu 仍需 fork Git。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -806,30 +1461,57 @@
     "pipeline_stage": "fact_extracted",
     "id": "7f2c0359108e195e",
     "source_type": "community_discussion",
-    "tldr": "Forestwalk Labs试用Blacksmith CI免费版后因未及时停止，收到1081美元逾期账单。",
-    "objective_summary": "Forestwalk Labs团队试用Blacksmith（YC孵化的GitHub Actions替代品）免费版，在未绑定信用卡的情况下超出免费额度，Blacksmith未中断服务而是继续计费，最终向该团队开具1081.45美元发票并发出逾期催款通知。",
+    "tldr": "Forestwalk.ai 试用 YC 创业公司 Blacksmith 的 CI 服务，在免费额度用完后未遭服务中断，而是被寄送 1081 美元的逾期账单。团队虽对计费方式不满，但因性能优于 GitHub Actions，最终决定继续付费使用。",
+    "objective_summary": "Forestwalk.ai 团队因 GitHub Actions 性能下降且成本高昂而试用 Blacksmith。Blacksmith 是一家 YC 出身的创业公司，提供无需信用卡的免费试用。团队在免费额度用完后继续使用服务，随后收到 1081.45 美元的逾期发票。Blacksmith 支持团队表示，免费额度耗尽后不会自动中断任务，而是继续运行并按标准费率计费。文章作者认为这一做法出乎多数用户意料，但团队因 Blacksmith 性能优于 GitHub Actions 而决定继续付费使用。",
     "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
         "Blacksmith",
         "GitHub",
-        "Forestwalk Labs",
         "YC"
       ],
       "technologies": [
-        "GitHub Actions",
-        "CI"
+        "CI",
+        "GitHub Actions"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "Forestwalk Labs因对GitHub Actions的速度和成本不满，尝试使用YC初创公司Blacksmith作为替代方案。",
-      "Blacksmith的免费版在超出使用限额后并未中断服务，而是继续运行并累积费用。",
-      "团队在未绑定信用卡的情况下收到1081.45美元的发票和逾期催款通知。",
-      "Blacksmith客服解释称\"disruption\"警告指的是账户审查而非自动停止运行中的任务。",
-      "文章分析认为SaaS厂商有权这样做，但大多数用户会预期免费版在超限后被硬性停止而非继续计费。",
-      "尽管对计费方式不满，团队仍因Blacksmith性能优于GitHub Actions而考虑继续使用。"
+      "Forestwalk.ai 团队因 GitHub Actions 速度慢且成本高，决定尝试其替代品 Blacksmith。",
+      "Blacksmith 是一个 YC 出身的 CI 服务，号称是 GitHub Actions 的即插即用替代品，无需信用卡即可免费试用。",
+      "团队在免费额度用完后继续使用服务，随后收到了 1081.45 美元的逾期发票，而非服务中断。",
+      "Blacksmith 支持团队解释称，超出免费额度后不会自动停止运行任务，而是继续运行并按公布费率计费。",
+      "文章作者认为这一做法虽然合同上可能合法，但会令绝大多数用户感到意外。",
+      "团队最终因 Blacksmith 性能显著优于 GitHub Actions，决定继续付费使用该服务。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "Blacksmith",
+        "canonical_name": "Blacksmith",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Blacksmith 是一家 YC 出身的创业公司，自称是 GitHub Actions 的即插即用替代品，提供更快更便宜的 CI 服务。",
+          "Forestwalk.ai 团队在未提供信用卡的情况下免费试用 Blacksmith，超出免费额度后收到了 1081.45 美元的逾期账单。",
+          "Blacksmith 支持团队解释称，超出免费额度后不会自动停止任务，而是继续运行并按公布费率计费。"
+        ],
+        "article_id": "7f2c0359108e195e"
+      },
+      {
+        "object_type": "product",
+        "name": "GitHub Actions",
+        "canonical_name": "GitHub Actions",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Forestwalk.ai 团队因 GitHub Actions 速度太慢且成本高昂，开始寻找替代的 CI 服务。",
+          "Forestwalk.ai 团队尝试切换回 GitHub Actions 后发现其体验依然不佳，因此决定继续使用 Blacksmith。"
+        ],
+        "article_id": "7f2c0359108e195e"
+      }
     ],
     "impact_score": {
       "score": 2.5,
@@ -884,7 +1566,65 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "Blacksmith",
+        "canonical_name": "Blacksmith",
+        "positioning": "YC 出身的创业公司，自称是 GitHub Actions 的即插即用替代品，提供更快更便宜的 CI 服务，以无需信用卡免费试用为获客手段。",
+        "target_users": [
+          "软件开发团队",
+          "寻求更优 CI 性能的工程团队",
+          "GitHub Actions 替代方案的需求者"
+        ],
+        "product_signal": "性能显著优于 GitHub Actions，Forestwalk.ai 团队在尝试切回后体验依然不佳，最终决定继续付费使用 Blacksmith。",
+        "market_signal": "在 GitHub Actions 表现不佳的背景下实现快速增长，处于 CI 服务激烈竞争的市场中，其计费策略的争议性引发业界广泛讨论。",
+        "differentiation": "采用「免费额度耗尽后不中断服务、继续按标准费率计费」的激进策略，与行业常见的硬性额度限制和预付费模式形成鲜明对比。",
+        "watch_reason": "Blacksmith 以优于 GitHub Actions 的性能和无需信用卡的试用策略快速获客，但其「不中断试用」的计费方式导致用户意外收到高额账单，这种争议性增长策略及产品演进方向值得持续跟踪。",
+        "risk_notes": [
+          "无需信用卡的免费试用可能导致用户产生意外高额费用，引发客户不满和公关危机。",
+          "激进的计费策略可能被市场视为不当增长手段，损害品牌信誉和用户信任。",
+          "大量用户流失和应收账款坏账风险可能影响其短期财务健康和长期可持续增长。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "7f2c0359108e195e"
+        ],
+        "evidence_snippets": [
+          "Blacksmith 是一家 YC 出身的创业公司，自称是 GitHub Actions 的即插即用替代品，提供更快更便宜的 CI 服务。",
+          "Forestwalk.ai 团队在未提供信用卡的情况下免费试用 Blacksmith，超出免费额度后收到了 1081.45 美元的逾期账单。",
+          "Blacksmith 支持团队解释称，超出免费额度后不会自动停止任务，而是继续运行并按公布费率计费。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "GitHub Actions",
+        "canonical_name": "GitHub Actions",
+        "positioning": "GitHub 提供的 CI/CD 自动化工作流平台，是开发者社区最广泛采用的持续集成和部署服务之一。",
+        "target_users": [
+          "软件开发团队",
+          "开源项目维护者",
+          "企业 DevOps 团队"
+        ],
+        "product_signal": "团队反映其速度太慢且成本高昂，导致用户开始寻找替代方案并尝试迁移至 Blacksmith。",
+        "market_signal": "作为 CI/CD 市场的主导者，正面临新兴竞品在性能和成本上的冲击，部分用户因体验不佳已开始迁移。",
+        "differentiation": "作为 CI/CD 市场的既有主导者，拥有庞大的生态系统集成和社区基础，但性能和成本优势正被新兴竞品逐步侵蚀。",
+        "watch_reason": "GitHub Actions 的性能和成本问题正在推动用户寻找替代方案，其技术改进和定价策略调整将直接影响 CI/CD 市场竞争格局以及 Blacksmith 等竞品的增长空间。",
+        "risk_notes": [
+          "性能和成本问题若持续得不到改善，可能导致更多团队迁移到 Blacksmith 等新兴竞品。",
+          "在 CI/CD 市场面临日益激烈的竞争，需加快技术改进和定价策略调整以维持主导地位。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "7f2c0359108e195e"
+        ],
+        "evidence_snippets": [
+          "Forestwalk.ai 团队因 GitHub Actions 速度太慢且成本高昂，开始寻找替代的 CI 服务。",
+          "Forestwalk.ai 团队尝试切换回 GitHub Actions 后发现其体验依然不佳，因此决定继续使用 Blacksmith。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -903,8 +1643,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "880d909d57d58f7b",
     "source_type": "community_discussion",
-    "tldr": "Apple 在 WWDC 2026 通过 API 和开发工具为折叠屏 iPhone Ultra 做生态准备",
-    "objective_summary": "Apple 在 WWDC 2026 Platform State of the Union 上通过折纸应用演示、推出 Resizable iOS Simulator 和折叠相关系统 API（foldState、angleDegrees），要求开发者提前适配可变屏幕尺寸，为 9 月与 iPhone",
+    "tldr": "Apple 在 WWDC 2026 上通过 iOS 27 beta 的 `foldState` 和 `angleDegrees` 等折叠 API 以及 Resizable iOS Simulator，要求开发者「为动态尺寸和宽高比设计」，为 9 月发布的折叠屏 iPhone Ultra（7.7-7.8 英寸内屏，起售价约 $2,000）提前铺平生态道路，该设备将由新任 CEO John Ternus 作为首款主要产品推出。",
+    "objective_summary": "WWDC 2026 的 Platform State of the Union 上，Apple Foundation Models 团队的 Maribeth 用纸艺折叠（origami）示例应用展示了折叠屏的交互理念。iOS 27 beta 中开发者 Sam Gold 发现了 `foldState` 和 `angleDegrees` 等折叠相关 API。Apple 推出 Resizable iOS Simulator 并强调「设计可适应动态范围的尺寸和宽高比」，要求开发者在设备上市前做好准备。iPhone Ultra 是一款书本式折叠设备，配 7.7-7.8 英寸内屏和 5.3-5.5 英寸外屏，展开比例 4:3，起售价约 $2,000，将于 9 月随 iPhone 18 Pro 发布，由 John Ternus 作为其 CEO 首秀推出。",
     "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
@@ -912,20 +1652,63 @@
         "Apple",
         "Foxconn"
       ],
-      "technologies": [],
+      "technologies": [
+        "iOS 27",
+        "Platform State of the Union",
+        "iPhone Mirroring",
+        "Resizable iOS Simulator"
+      ],
       "key_people": [
-        "Sam Gold",
         "John Ternus",
+        "Sam Gold",
         "Maribeth"
       ]
     },
     "key_logic_flow": [
-      "Apple 在 WWDC 2026 Platform State of the Union 上展示了一款折纸应用的样例，用于演示为折叠屏设备开发适配应用的设计理念。",
-      "开发者 Sam Gold 在 iOS 27 测试版中发现了 foldState 和 angleDegrees 等与折叠状态相关的系统 API 和内置显示屏数量查询键值。",
-      "Apple 推出 iOS 应用在 Mac 的 iPhone Mirroring 中支持横向拉伸调整大小，并发布了 Resizable iOS Simulator 以测试多种屏幕尺寸和比例。",
-      "Apple 通过提前发布开发者工具和 API，要求开发者在硬件尚未出货前就为折叠屏形态适配应用。",
-      "消息称折叠屏 iPhone Ultra 将配备 7.7-7.8 英寸内屏和 5.3-5.5 英寸外屏，展开比例为 4:3，起售价约 2000 美元，将与 iPhone 18 Pro 一同在 9 月发布。",
-      "John Ternus 将于 9 月 1 日接任 Apple CEO，iPhone Ultra 是其主导开发的首个重大产品。"
+      "WWDC 2026 的 Platform State of the Union 上，Apple Foundation Models 团队的 Maribeth 用纸艺折叠（origami）示例应用展示了折叠屏的交互理念。",
+      "iOS 27 beta 中开发者 Sam Gold 发现了 `foldState` 和 `angleDegrees` 等折叠相关 API，以及一个返回设备内置显示屏总数的系统键。",
+      "Apple 推出 Resizable iOS Simulator，并在 iPhone Mirroring 中支持 iOS 应用横向拉伸，要求开发者「为动态范围的尺寸和宽高比设计」。",
+      "iPhone Ultra 是一款书本式折叠设备，配 7.7-7.8 英寸内屏和 5.3-5.5 英寸外屏，展开比例为 4:3，起售价约 $2,000。",
+      "iPhone Ultra 将于 9 月随 iPhone 18 Pro 一同发布，由 9 月 1 日上任的新 CEO John Ternus 作为其首款主要产品推出，John Ternus 也是该设备的主要架构师。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "iPhone Ultra",
+        "canonical_name": "iPhone Ultra",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "iPhone Ultra 是一款书本式折叠设备，内屏尺寸为 7.7 至 7.8 英寸，外屏尺寸为 5.3 至 5.5 英寸，展开比例为 4:3。",
+          "该设备起售价约 $2,000，将于 9 月随 iPhone 18 Pro 一同发布，由新任 CEO John Ternus 作为其首款主要产品推出。"
+        ],
+        "article_id": "880d909d57d58f7b"
+      },
+      {
+        "object_type": "product",
+        "name": "Resizable iOS Simulator",
+        "canonical_name": "Resizable iOS Simulator",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Apple 在 Platform State of the Union 上推出了 Resizable iOS Simulator，允许开发者测试应用在动态范围尺寸和宽高比下的布局表现。",
+          "该工具配合「为动态范围的尺寸和宽高比设计」的指导方针，帮助开发者在折叠设备正式上市前完成适配准备工作。"
+        ],
+        "article_id": "880d909d57d58f7b"
+      },
+      {
+        "object_type": "product",
+        "name": "iOS 27",
+        "canonical_name": "iOS 27",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "iOS 27 beta 中新增了折叠相关 API，开发者 Sam Gold 发现了 `foldState` 和 `angleDegrees` 两个框架字符串。",
+          "iOS 27 中还新增了返回设备内置显示屏总数的系统键，暗示该设备可能配备多个显示屏，为折叠屏形态做准备。"
+        ],
+        "article_id": "880d909d57d58f7b"
+      }
     ],
     "impact_score": {
       "score": 6.5,
@@ -981,7 +1764,64 @@
       "compound": "medium",
       "hype": "high"
     },
-    "actionable_insight": "strategic_invest"
+    "actionable_insight": "strategic_invest",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "iPhone Ultra",
+        "canonical_name": "iPhone Ultra",
+        "positioning": "苹果首款书本式折叠屏手机，配备7.7至7.8英寸内屏和5.3至5.5英寸外屏，展开比例为4:3，起售价约2,000美元，定位超高端旗舰。",
+        "target_users": [
+          "追求折叠形态创新的苹果高端用户",
+          "需要大屏便携体验的生产力用户",
+          "苹果生态内对iPad mini尺寸偏好者"
+        ],
+        "product_signal": "iOS 27 beta已暴露foldState和angleDegrees等折叠专用API以及内置显示屏总数查询键，系统级折叠形态感知能力已进入开发者验证阶段。",
+        "market_signal": "该设备将于9月随iPhone 18 Pro一同发布，由9月1日上任的新CEO John Ternus作为其首款主要产品推出，标志着苹果正式进入折叠屏赛道。",
+        "differentiation": "苹果采取生态先行策略，在设备上市前通过API和Resizable Simulator强制全体开发者适配折叠形态，而非像Android厂商那样让用户自行面对应用兼容性问题。",
+        "watch_reason": "iPhone Ultra是苹果进入折叠屏品类的首款里程碑产品，由新任CEO John Ternus主导推出，其生态强制适配策略和定价策略将深刻影响折叠屏手机市场的竞争格局。",
+        "risk_notes": [
+          "约2,000美元的起售价可能限制初代产品的市场渗透率。",
+          "折叠屏铰链可靠性和屏幕耐久性仍是品类固有挑战，初代产品风险更高。",
+          "开发者适配进度和关键第三方应用在折叠形态下的体验存在不确定性。"
+        ],
+        "score": 9.0,
+        "article_ids": [
+          "880d909d57d58f7b"
+        ],
+        "evidence_snippets": [
+          "iPhone Ultra 是一款书本式折叠设备，内屏尺寸为 7.7 至 7.8 英寸，外屏尺寸为 5.3 至 5.5 英寸，展开比例为 4:3。",
+          "该设备起售价约 $2,000，将于 9 月随 iPhone 18 Pro 一同发布，由新任 CEO John Ternus 作为其首款主要产品推出。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Resizable iOS Simulator",
+        "canonical_name": "Resizable iOS Simulator",
+        "positioning": "苹果为折叠屏设备准备的开发者适配工具，支持测试应用在动态范围尺寸和宽高比下的布局表现，是折叠屏生态建设的关键基础设施。",
+        "target_users": [
+          "iOS应用开发者",
+          "需要为折叠屏iPhone做适配的第三方开发团队",
+          "苹果生态内的UI/UX设计师"
+        ],
+        "product_signal": "该模拟器配合iPhone Mirroring横向拉伸功能，支持应用在非标准屏幕比例下的适配验证，配合foldState等API是折叠屏生态适配的核心工具链。",
+        "market_signal": "苹果在设备上市前通过Platform State of the Union反复强调「为动态范围的尺寸和宽高比设计」，展现了对折叠屏品类的高度重视和极强的生态控制力。",
+        "differentiation": "与Android折叠屏市场让开发者自行适配不同，苹果通过Resizable Simulator和API在设备上市前强制建立适配标准，确保首发应用生态质量。",
+        "watch_reason": "Resizable iOS Simulator是苹果折叠屏生态战略的核心工具，其推广效果和开发者接受度直接决定iPhone Ultra上市时的应用兼容性体验与口碑。",
+        "risk_notes": [
+          "开发者对新工具的学习成本和适配意愿可能影响整体适配进度。",
+          "模拟器无法完全替代真机测试中的物理折叠交互和 hinge 区域体验验证。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "880d909d57d58f7b"
+        ],
+        "evidence_snippets": [
+          "Apple 在 Platform State of the Union 上推出了 Resizable iOS Simulator，允许开发者测试应用在动态范围尺寸和宽高比下的布局表现。",
+          "该工具配合「为动态范围的尺寸和宽高比设计」的指导方针，帮助开发者在折叠设备正式上市前完成适配准备工作。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -1000,10 +1840,10 @@
     "pipeline_stage": "fact_extracted",
     "id": "8fa21667c4bd4dc9",
     "source_type": "community_discussion",
-    "tldr": "作者提前体验了Mythos级模型Claude 5 Fable，认为其性能远超以往，但人机关系正从操控者转变为委托方。",
-    "objective_summary": "作者通过早期访问测试了Anthropic的Claude 5 Fable（Mythos级）模型。该模型能自主运行数小时，调用子代理完成等时地图、研究软件Concord等复杂任务。模型能力显著超越前代，但用户参与度大幅降低，角色从执行者变为委托方。",
-    "event_type": "application_landing",
-    "epistemic_status": "theoretical_claim",
+    "tldr": "Anthropic 发布首个 Mythos 级模型 Claude 5 Fable，作者 Ethan Mollick 提前体验后发现该模型能自主运行数小时、调用子代理完成复杂研发任务，使人类角色从操作者转变为委托方。",
+    "objective_summary": "Ethan Mollick 在获得 Anthropic 的 Claude 5 Fable（首个 Mythos 级公开模型）早期访问权限后，对模型进行了多维度测试。测试显示 Fable 在所有公开模型中表现显著领先，能自主工作长达 9.5 小时，启动多个 Claude Sonnet 子代理并行执行研究、编码和验证任务。Mollick 让 Fable 在 Claude Code 中构建了等时地图（检索 2200+ 航班和全球铁路数据）以及名为 Concord 的科研软件，过程中人类仅需提供模糊指令和少量反馈。Mollick 认为，随着模型能力跃升，人类的角色正从操作者变成委托方，AI 内部决策过程成为一个无法观测的黑箱。",
+    "event_type": "infrastructure_update",
+    "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
         "Anthropic"
@@ -1012,16 +1852,95 @@
         "Mythos",
         "Claude 5 Fable",
         "Claude Sonnet",
+        "Claude 4.8 Opus",
         "Claude Code"
       ],
-      "key_people": []
+      "key_people": [
+        "Ethan Mollick"
+      ]
     },
     "key_logic_flow": [
-      "作者获得Mythos级模型Claude 5 Fable早期访问权限，通过多项实验测试发现其性能显著超越所有此前使用过的模型。",
-      "Fable能自主工作数小时执行多页规格说明，在等时地图项目中自主检索了2200多条航班信息、多国铁路时刻表和公路速度数据，同时进行编码和测试。",
-      "作者让Fable构建了名为Concord的研究软件，用于校准人类与AI的回答并进行复杂数据分析，该任务运行耗时9.5小时。",
-      "Fable的使用成本是Opus的两倍，安全护栏过于敏感，检测到安全问题时频繁降级为较弱的Claude 4.8 Opus。",
-      "作者认为与Fable协作的感受从操控者变成了委托方，用户仅描述需求、付费并评判结果，无法参与过程中数百个细粒度决策。"
+      "Ethan Mollick 获得了 Anthropic 首个 Mythos 级公开模型 Claude 5 Fable 的早期访问权限，并在多个任务上进行了系统测试。",
+      "Fable 在所有测试中大幅超越此前所有公开模型，能自动运行长达 9.5 小时，执行多页规格说明书上的复杂任务。",
+      "在构建等时地图的测试中，Fable 自动启动了多个 Claude Sonnet 子代理，检索了 2200+ 航班、全球铁路时刻表和各国道路速度数据，同时并行编码和验证。",
+      "Fable 生成了一个名为 Concord 的科研软件，用于校准人类与 AI 的判断并进行复杂数据分析，运行耗时 9.5 小时，此前因无商业价值而无人开发。",
+      "Fable 的 token 消耗是 Opus 的两倍，价格更高，但其智能委托给更廉价模型的策略可能降低实际成本。",
+      "Mollick 认为随着模型能力提升，人类的角色从操作者转变为委托方：AI 的内部决策过程完全不可见，用户只能给出指令和评价最终结果。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "model",
+        "name": "Claude 5 Fable",
+        "canonical_name": "Claude 5 Fable",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Ethan Mollick 获得了 Anthropic 首个 Mythos 级公开模型 Claude 5 Fable 的早期访问权限，并进行了多维度测试。",
+          "Fable 在实验中的表现大幅超越所有此前使用过的公开模型，能自主运行长达 9.5 小时完成复杂项目。"
+        ],
+        "article_id": "8fa21667c4bd4dc9"
+      },
+      {
+        "object_type": "product",
+        "name": "Claude Code",
+        "canonical_name": "Claude Code",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "作者通过 Claude Code 与 Fable 交互，使用一条模糊提示让模型构建了完整的等时地图项目。",
+          "在 Claude Code 中，Fable 能够启动多个子代理并行进行研究、编码和验证工作。"
+        ],
+        "article_id": "8fa21667c4bd4dc9"
+      },
+      {
+        "object_type": "project",
+        "name": "Concord",
+        "canonical_name": "Concord",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Fable 生成了 Concord，一款用于校准人类与 AI 判断并进行复杂数据分析的科研软件，运行耗时 9.5 小时。",
+          "Concord 能接收多个数据集、校准人类与 AI 响应，并对结果进行复杂数据分析。"
+        ],
+        "article_id": "8fa21667c4bd4dc9"
+      },
+      {
+        "object_type": "project",
+        "name": "Isochrone Map",
+        "canonical_name": "Isochrone Map",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Fable 在 Claude Code 中构建了一个全功能等时地图，检索了超过 2200 条航班数据、全球铁路时刻表和各国道路速度。",
+          "地图采用 1881 年原版风格设计，包含机场、火车、步行和驾车多种出行方式的综合旅行时间计算。"
+        ],
+        "article_id": "8fa21667c4bd4dc9"
+      },
+      {
+        "object_type": "model",
+        "name": "Claude Sonnet",
+        "canonical_name": "Claude Sonnet",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "Fable 启动了多个 Claude Sonnet 子代理来协助研究旅行时间数据，包括航班、铁路和道路信息。",
+          "Fable 通过委托给更便宜的 Claude Sonnet 模型来降低实际的 token 消耗成本。"
+        ],
+        "article_id": "8fa21667c4bd4dc9"
+      },
+      {
+        "object_type": "model",
+        "name": "Claude 4.8 Opus",
+        "canonical_name": "Claude 4.8 Opus",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Fable 的安全护栏在检测到安全问题时会降级为 Claude 4.8 Opus，且触发频率过高。",
+          "Fable 的 token 消耗是 Opus 的两倍，价格更高。"
+        ],
+        "article_id": "8fa21667c4bd4dc9"
+      }
     ],
     "impact_score": {
       "score": 7.8,
@@ -1078,7 +1997,53 @@
       "compound": "medium",
       "hype": "high"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Concord",
+        "canonical_name": "Concord",
+        "positioning": "Concord 是由 Mythos 级模型 Claude 5 Fable 自主生成的科研软件，用于校准人类与 AI 的判断差异并对多源数据进行复杂分析。",
+        "technical_signal": "Concord 能同时接收多个数据集、校准人类与 AI 响应，并对结果进行复杂数据分析，全程自主运行耗时 9.5 小时。",
+        "ecosystem_relevance": "Concord 证明了 Mythos 级模型能独立完成此前因缺乏商业价值而无人开发的复杂科研工具，拓展了 AI 在科研自动化领域的应用边界。",
+        "target_users": [],
+        "watch_reason": "Concord 是 Mythos 级模型自主完成复杂科研软件开发的典型案例，展示了 AI 从辅助工具向自主协作者的范式转变，其开发模式和产出质量在 AI 能力持续跃升的背景下值得长期跟踪与深入研究。",
+        "risk_notes": [
+          "Concord 目前仅为单次演示验证项目，缺乏持续的维护规划和社区支持体系。",
+          "其实际科研价值和输出可靠性尚未经过独立的同行评审或验证。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "8fa21667c4bd4dc9"
+        ],
+        "evidence_snippets": [
+          "Fable 生成了 Concord，一款用于校准人类与 AI 判断并进行复杂数据分析的科研软件，运行耗时 9.5 小时。",
+          "Concord 能接收多个数据集、校准人类与 AI 响应，并对结果进行复杂数据分析。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Isochrone Map",
+        "canonical_name": "Isochrone Map",
+        "positioning": "Isochrone Map 是由 Mythos 级模型 Claude 5 Fable 在 Claude Code 中自主构建的等时旅行地图，整合多模式交通数据并以 1881 年原版风格呈现。",
+        "technical_signal": "Fable 自主启动了多个 Claude Sonnet 子代理，并行检索 2200+ 条航班、全球铁路时刻表和各国道路速度数据，同时进行编码和验证。",
+        "ecosystem_relevance": "Isochrone Map 展示了 Mythos 级模型自主协调子代理网络完成复杂研发任务的能力，代表了 AI 从简单工具向自主代理的范式转变。",
+        "target_users": [],
+        "watch_reason": "Isochrone Map 作为 Mythos 级模型能力的典型展示项目，直接体现了 AI 自主完成多步骤复杂研究开发任务的能力跃升，对于理解人类角色从操作者向委托方转变具有重要的参考和启示价值。",
+        "risk_notes": [
+          "远程地区交通数据为估算值而非精确数据，准确性和可靠性存在局限。",
+          "项目运行消耗大量 token 和计算资源，成本较高，其可复现性和实际应用价值存疑。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "8fa21667c4bd4dc9"
+        ],
+        "evidence_snippets": [
+          "Fable 在 Claude Code 中构建了一个全功能等时地图，检索了超过 2200 条航班数据、全球铁路时刻表和各国道路速度。",
+          "地图采用 1881 年原版风格设计，包含机场、火车、步行和驾车多种出行方式的综合旅行时间计算。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -1097,33 +2062,76 @@
     "pipeline_stage": "fact_extracted",
     "id": "a5720469b8d3b9f2",
     "source_type": "community_discussion",
-    "tldr": "天文学家可能发现了罕见的对不稳定超新星SN 2023vbw，一颗蓝超巨星被彻底摧毁无残骸。",
-    "objective_summary": "2023年10月，Zwicky瞬态设施在距地球13亿光年的矮星系中探测到SN 2023vbw。详细建模表明它是一颗对不稳定超新星，源自170-350倍太阳质量的蓝超巨星，爆炸动能是普通超新星的60-130倍。",
+    "tldr": "天文学家在距地球约13亿光年的矮星系中发现了一颗罕见的不稳定对超新星SN 2023vbw，它可能完全摧毁了一颗质量极大的蓝超巨星，未留下任何中子星或黑洞残骸。",
+    "objective_summary": "Zwicky瞬变设施于2023年10月在距地球约13亿光年的贫金属矮星系外围首次探测到超新星SN 2023vbw，最初被暂分类为II型超新星。由Daichi Hiramatsu领导的研究团队通过详细观测和光变曲线建模发现，其辐射总能量约为3×10⁵⁰尔格，是普通II型超新星的十倍以上，喷出物质量估计在170至350倍太阳质量之间。研究认为SN 2023vbw极可能是一颗不稳定对超新星，由恒星核心产生的电子-正电子对引发失控热核爆炸，彻底摧毁了恒星，不留任何残骸。",
     "event_type": "application_landing",
     "epistemic_status": "theoretical_claim",
     "entities": {
-      "companies": [
-        "Zwicky Transient Facility",
-        "Vera Rubin Observatory",
-        "Nancy Grace Roman Space Telescope"
-      ],
-      "technologies": [
-        "pair-instability supernova",
-        "Type II supernova",
-        "light curve"
-      ],
+      "companies": [],
+      "technologies": [],
       "key_people": [
-        "Daichi Hiramatsu",
-        "Shreejaya Karantha"
+        "Daichi Hiramatsu"
       ]
     },
     "key_logic_flow": [
-      "SN 2023vbw由Zwicky瞬态设施于2023年10月在一颗距地球13亿光年的贫金属矮星系边缘首次探测到，初步归类为II型超新星。",
-      "其光变曲线呈现异常特征：初始冷却后持续上升约190天达到峰值，辐射总能量约3×10⁵⁰尔格，是普通II型超新星的十倍以上。",
-      "光变曲线建模表明该爆炸源自一颗致密的蓝超巨星，抛射物质质量估计为170-350倍太阳质量。",
-      "爆炸动能是普通铁核坍缩超新星最大能量的60-130倍，符合对不稳定超新星的理论预测。",
-      "对不稳定超新星发生在质量为140-260倍太阳且低金属丰度的恒星中，核心产生电子-正电子对导致辐射压丧失，引发失控热核爆炸，恒星被完全摧毁不留残骸。",
-      "研究团队指出仍存在显著不确定性，包括超大质量恒星以红超巨星还是蓝超巨星终结生命，以及恒星合并时间点等问题。"
+      "Zwicky瞬变设施于2023年10月在距地球约13亿光年的贫金属矮星系边缘首次探测到SN 2023vbw。",
+      "SN 2023vbw的光变曲线持续上升约190天才达到峰值，辐射总能量是普通II型超新星的十倍以上，不符合典型II型超新星特征。",
+      "光变曲线建模显示爆炸可能源于一颗蓝超巨星，喷出物质量在170至350倍太阳质量之间，动能远超普通铁核坍缩超新星的理论上限。",
+      "不稳定对超新星要求恒星初始质量约140至260倍太阳质量且金属丰度较低，SN 2023vbw的模型特征完全符合这一理论预测范围。",
+      "研究团队推测该蓝超巨星可能由双星系统中两颗大质量恒星合并形成，这可以解释喷出物与星周致密盘状壳层的交互现象。",
+      "论文指出Vera Rubin天文台和Nancy Grace Roman太空望远镜的未来巡天观测有望发现数十到数百个类似的不稳定对超新星事件。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "paper",
+        "name": "The pair-instability origin of supernova 2023vbw",
+        "canonical_name": "Daichi Hiramatsu et al., The pair-instability origin of supernova 2023vbw",
+        "url": "https://arxiv.org/abs/2605.16487",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Daichi Hiramatsu等人于2026年5月15日将描述SN 2023vbw特性的论文提交至arXiv预印本服务器，论文编号为2605.16487。",
+          "该论文通过详细观测和光变曲线建模指出SN 2023vbw的最佳解释是一颗不稳定对超新星，源自一颗质量极大的蓝超巨星。"
+        ],
+        "article_id": "a5720469b8d3b9f2"
+      },
+      {
+        "object_type": "project",
+        "name": "Zwicky Transient Facility",
+        "canonical_name": "Zwicky Transient Facility",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Zwicky瞬变设施于2023年10月在距地球约13亿光年的贫金属矮星系外围首次探测到SN 2023vbw。",
+          "SN 2023vbw最初由Zwicky瞬变设施探测到并被暂分类为II型超新星，但随后多项观测特征排除了这一分类。"
+        ],
+        "article_id": "a5720469b8d3b9f2"
+      },
+      {
+        "object_type": "project",
+        "name": "Vera Rubin Observatory",
+        "canonical_name": "Vera Rubin Observatory",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "论文指出Vera Rubin天文台即将开展的巡天观测有望发现数十到数百个不稳定对超新星事件。",
+          "研究团队认为Vera Rubin天文台和Nancy Grace Roman太空望远镜的后续巡天将揭示宇宙中大质量恒星的死亡和演化过程。"
+        ],
+        "article_id": "a5720469b8d3b9f2"
+      },
+      {
+        "object_type": "project",
+        "name": "Nancy Grace Roman Space Telescope",
+        "canonical_name": "Nancy Grace Roman Space Telescope",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "论文指出Nancy Grace Roman太空望远镜即将开展的巡天观测有望发现数十到数百个不稳定对超新星事件。",
+          "该望远镜将与Vera Rubin天文台共同帮助天文学家发现更多此类罕见爆炸，揭示宇宙中最巨大恒星的死亡与演化。"
+        ],
+        "article_id": "a5720469b8d3b9f2"
+      }
     ],
     "impact_score": {
       "score": 1.5,
@@ -1173,7 +2181,73 @@
       "compound": "low",
       "hype": "low"
     },
-    "actionable_insight": "ignore"
+    "actionable_insight": "ignore",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Zwicky Transient Facility",
+        "canonical_name": "Zwicky Transient Facility",
+        "positioning": "位于美国帕洛马天文台的光学巡天望远镜，专注于探测超新星、引力波电磁对应体等瞬变天文事件，是当前时域天文学的核心观测设施之一。",
+        "technical_signal": "成功探测到SN 2023vbw这一罕见不稳定对超新星，证明其能够发现理论预测但极其罕见的极端瞬变事件。",
+        "adoption_signal": "已被全球天文学界广泛采用作为瞬变事件的标准巡天设施，持续产出大量超新星候选体并推动时域天文学发展。",
+        "ecosystem_relevance": "作为当前最活跃的地面光学巡天之一，与Vera Rubin天文台等下一代设施形成接力观测的协同网络。",
+        "target_users": [],
+        "watch_reason": "ZTF持续产出超新星候选体，SN 2023vbw的发现证明其对极端罕见瞬变事件具有独特的探测能力，值得持续跟踪其在天文学前沿领域的发现成果以及对不稳定对超新星的后续多波段观测进展。",
+        "risk_notes": [
+          "ZTF作为地面设施受天气和观测时间限制，可能无法连续跟踪SN 2023vbw等长期演化事件。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "a5720469b8d3b9f2"
+        ],
+        "evidence_snippets": [
+          "Zwicky瞬变设施于2023年10月在距地球约13亿光年的贫金属矮星系外围首次探测到SN 2023vbw。",
+          "SN 2023vbw最初由Zwicky瞬变设施探测到并被暂分类为II型超新星，但随后多项观测特征排除了这一分类。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Vera Rubin Observatory",
+        "canonical_name": "Vera Rubin Observatory",
+        "positioning": "即将投入运行的下一代大型光学巡天望远镜，致力于开展十年期时域天文学调查，有望彻底改变超新星和瞬变天体的发现格局。",
+        "technical_signal": "即将开展的十年巡天计划有望首次实现大规模不稳定对超新星系统性发现，论文预测可发现数十到数百个此类事件。",
+        "ecosystem_relevance": "与Nancy Grace Roman太空望远镜形成天地协同观测网络，从光学和红外波段全面揭示大质量恒星的死亡与演化过程。",
+        "target_users": [],
+        "watch_reason": "Vera Rubin天文台即将开展的巡天观测有望将不稳定对超新星的发现数量从个位数提升至数十到数百个，极大拓展对宇宙中最巨大恒星死亡与演化的理解，其建设进展和首批科学成果值得持续跟踪。",
+        "risk_notes": [
+          "建设进度和首批科学观测时间可能面临技术挑战和预算延期的不确定性。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "a5720469b8d3b9f2"
+        ],
+        "evidence_snippets": [
+          "论文指出Vera Rubin天文台即将开展的巡天观测有望发现数十到数百个不稳定对超新星事件。",
+          "研究团队认为Vera Rubin天文台和Nancy Grace Roman太空望远镜的后续巡天将揭示宇宙中大质量恒星的死亡和演化过程。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Nancy Grace Roman Space Telescope",
+        "canonical_name": "Nancy Grace Roman Space Telescope",
+        "positioning": "美国宇航局新一代红外太空望远镜，将开展大视场高分辨率红外观测，与地面巡天设施互补，揭示宇宙中最剧烈爆发现象。",
+        "technical_signal": "其红外观测能力与Vera Rubin光学巡天形成互补，共同将不稳定对超新星的发现从个例推进到统计样本研究时代。",
+        "ecosystem_relevance": "与Vera Rubin天文台和ZTF等地面设施协同，构建从红外到光学的完整瞬变事件观测谱系，推动大质量恒星演化研究。",
+        "target_users": [],
+        "watch_reason": "作为新一代旗舰级红外太空望远镜，其红外观测能力将与Vera Rubin天文台形成重要互补，共同发现数十到数百个不稳定对超新星，发射进度与早期科学成果是持续跟踪的重点。",
+        "risk_notes": [
+          "作为大型太空望远镜项目，发射时间可能面临延期，预算也可能出现调整风险。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "a5720469b8d3b9f2"
+        ],
+        "evidence_snippets": [
+          "论文指出Nancy Grace Roman太空望远镜即将开展的巡天观测有望发现数十到数百个不稳定对超新星事件。",
+          "该望远镜将与Vera Rubin天文台共同帮助天文学家发现更多此类罕见爆炸，揭示宇宙中最巨大恒星的死亡与演化。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -1192,14 +2266,13 @@
     "pipeline_stage": "fact_extracted",
     "id": "aea001fe49d6c063",
     "source_type": "community_discussion",
-    "tldr": "CEO视AI为员工替代品是错误认知，AI应为辅助工具而非裁员借口",
-    "objective_summary": "Techdirt评论文章指出，多位CEO在全员邮件中强制要求员工必须使用AI工具，甚至设立token排行榜。Box CEO Aaron Levie分析称CEO因远离一线工作而易陷入\"AI妄想症\"。文章认为强制使用无法让员工真正掌握AI，以AI为由裁员多为过度招聘找借口。",
+    "tldr": "Techdirt 评论文章指出，认为 AI 能替代员工的首席执行官是糟糕的管理者，他们远离一线工作细节，低估了将原型转化为安全可靠产品所需的复杂工程工作。",
+    "objective_summary": "2026年6月，Techdirt 发表评论文章批评多位 CEO 在全员邮件中强迫员工使用 LLM 工具并以 AI 为由计划裁员。文章引用 Box 公司 CEO Aaron Levie 的观点，指出 CEO 因远离一线工作容易产生对 AI 的过度兴奋，误以为用 Claude Code 做出原型就等于完成了生产级产品交付。文章认为强制使用 AI 工具的人永远学不会真正用好它们，而以 AI 效率为借口进行大规模裁员的公司，实际上是在掩盖此前过度招聘的错误决策。",
     "event_type": "policy_and_safety",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [
-        "Box",
-        "Techdirt"
+        "Box"
       ],
       "technologies": [
         "LLM",
@@ -1210,12 +2283,28 @@
       ]
     },
     "key_logic_flow": [
-      "Techdirt观察到近三个月来多位CEO在全员邮件中强制要求员工必须立即学习使用AI工具，否则应考虑另寻工作。",
-      "Box CEO Aaron Levie指出CEO因远离一线工作细节而易陷入\"AI妄想症\"，只看到AI的理想结果而忽略后续大量实际工作。",
-      "文章认为强迫使用无法让员工真正学会有效利用AI工具，设立token使用排行榜是鼓励学习的愚蠢方式。",
-      "CEO用Claude Code等代理工具构建原型后误以为可以替代员工，忽略了安全、合规、可访问性等关键细节。",
-      "公司以AI为由大规模裁员，多数情况下只是为过去的过度招聘找借口，而非真正的技术取代。",
-      "优秀CEO应深入了解AI技术及其局限性，认识到AI是辅助工具而非员工替代品。"
+      "多位 CEO 发送全员邮件要求员工立即学习 LLM 工具，否则另寻他路，甚至设立 Token 使用排行榜来推动 AI 采用。",
+      "Aaron Levie 指出 CEO 远离一线工作细节，只看到 AI 工具的轻松结果，忽略了将原型投入生产所需的后续复杂工作。",
+      "用 Claude Code 做出能运行的原型与交付生产级别的产品完全不同，后者需要安全、合规、可访问性等大量额外细节工作。",
+      "强制要求员工使用 AI 工具的做法永远无法培养出真正会用这些工具的人，员工需要自愿选择才能发挥工具价值。",
+      "以 AI 效率为理由进行大规模裁员的公司，多数情况下是在用 'AI 效率' 这个借口掩盖此前过度招聘的错误决策。",
+      "CEO 应当深入理解 AI 的能力与局限，认识到好的工具能帮助员工做更多事，但并不意味着可以减少人力需求。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "Claude Code",
+        "canonical_name": "Claude Code",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "CEO 拿到 Claude Code 这样的代理工具，创建出一个能运行的东西后，就会想 '为什么我们需要这么多人'。",
+          "CEO 看到自己用 Claude Code 敲出代码并看到成果，就以为这和员工处理所有未见的细节工作是同一回事。",
+          "文章指出，用代理工具做出可运行的原型与构建面向大众市场的产品之间存在巨大差距。"
+        ],
+        "article_id": "aea001fe49d6c063"
+      }
     ],
     "impact_score": {
       "score": 2.5,
@@ -1270,7 +2359,36 @@
       "compound": "medium",
       "hype": "high"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "Claude Code",
+        "canonical_name": "Claude Code",
+        "positioning": "Claude Code 是 Anthropic 推出的 AI 代理编程工具，能自主理解需求并生成可运行代码，本文将其作为 CEO 对 AI 产生过度乐观的典型例证。",
+        "target_users": [
+          "软件开发者",
+          "技术管理者"
+        ],
+        "product_signal": "Claude Code 能够快速生成可运行的原型代码，但将原型转化为安全合规且可扩展的生产级产品仍需大量未被 CEO 注意的工程细节工作。",
+        "differentiation": "Claude Code 的差异化在于其作为代理编程工具能自主完成编程任务，大幅降低了原型构建门槛，但这恰导致非技术管理者对其真实能力产生系统性误判。",
+        "watch_reason": "Claude Code 作为代理编程工具的行业标杆，其能力边界直接影响企业层面对 AI 生产效能的判断，持续跟踪有助于理解 AI 编码工具从原型到生产部署的实际成熟度。",
+        "risk_notes": [
+          "CEO 可能因使用 Claude Code 快速构建原型而产生过度乐观，忽略生产级产品所需的复杂工程细节。",
+          "代理编程工具生成的代码可能缺乏安全审查、合规验证和可访问性等必要的生产环境质量保障。",
+          "强制要求员工使用 AI 工具会适得其反，真正发挥工具价值需要员工自愿选择。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "aea001fe49d6c063"
+        ],
+        "evidence_snippets": [
+          "CEO 拿到 Claude Code 这样的代理工具，创建出一个能运行的东西后，就会想 '为什么我们需要这么多人'。",
+          "CEO 看到自己用 Claude Code 敲出代码并看到成果，就以为这和员工处理所有未见的细节工作是同一回事。",
+          "文章指出，用代理工具做出可运行的原型与构建面向大众市场的产品之间存在巨大差距。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -1289,8 +2407,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "ce06dcdbb7372ccd",
     "source_type": "community_discussion",
-    "tldr": "Apple 发布 container 工具，在 macOS 上运行轻量级 Linux 容器虚拟机。",
-    "objective_summary": "Apple 在 GitHub 上发布了 container-machine 功能文档，该工具可在 macOS 上创建基于标准 OCI 镜像的轻量级 Linux 容器虚拟机，支持 systemd 初始化系统、自动映射宿主机用户和家目录，提供持久化存储和长期服务运行能力，支持",
+    "tldr": "苹果发布了 container machine 功能，可在 macOS 上运行轻量级、持久化的 Linux 容器环境，基于标准 OCI 镜像，自动共享宿主的用户和家目录，支持 systemd 服务注册和多发行版并行测试。",
+    "objective_summary": "苹果在 GitHub 上的 apple/container 项目中推出了 Container Machine 功能，用于在 macOS 上创建基于标准 OCI 镜像的轻量级 Linux 环境。该功能自动将宿主的用户名和家目录映射到容器中，支持运行 systemd 服务、多发行版并行测试以及直接在 macOS 端使用编辑器编辑代码并在 Linux 环境内构建。用户可通过 container machine 命令行工具创建、运行、停止和删除容器机器，并支持动态调整 CPU 和内存配置。",
     "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
@@ -1299,17 +2417,48 @@
       ],
       "technologies": [
         "OCI",
-        "systemd"
+        "systemd",
+        "Docker",
+        "Linux"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "Apple 推出 container machine 功能，在 macOS 上提供高度集成的轻量级 Linux 环境，基于标准 OCI 镜像构建和共享。",
-      "容器虚拟机运行镜像的 init 系统（如 systemd），支持注册长期运行服务以及在进程管理器下测试应用。",
-      "系统自动将 macOS 宿主机用户名和家目录映射到 Linux 环境中，用户可在 macOS 上编辑代码，在容器内编译和运行。",
-      "支持通过 container machine 命令行工具进行创建、运行、查看、停止和删除操作，并支持设置默认容器机。",
-      "用户可以构建自定义镜像（如 Ubuntu 24.04 带 systemd 的镜像），通过 container build 和 container machine create 命令使用。",
-      "容器机支持配置 CPU 和内存资源（默认内存为宿主机一半），修改配置需停止后重新启动生效。"
+      "Container Machine 提供与 macOS 深度集成的 Linux 容器环境，基于标准 OCI 镜像，具备快速、轻量且持久化的特性。",
+      "容器机器与普通应用容器的区别在于其模拟完整的 Linux 环境而非单个应用，运行镜像的 init 系统并支持注册长期运行的后台服务。",
+      "容器机器自动将主机的用户名和家目录映射到 Linux 环境中，使 macOS 侧的仓库和配置文件在双平台均可直接访问使用。",
+      "用户可通过 container machine 命令行工具执行创建、列出、检查、运行、停止和删除等管理操作，并支持设置默认容器机器以省略 -n 参数。",
+      "任何包含 /sbin/init 的 Linux 镜像均可作为容器机器使用，文章提供了基于 Ubuntu 24.04 的完整 Dockerfile 构建示例。",
+      "容器机器支持通过 set 命令动态调整 CPU 和内存配置，变更在容器机器下次重启后生效。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "apple/container",
+        "canonical_name": "apple/container",
+        "url": "https://github.com/apple/container",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "该文档是苹果官方在 GitHub 仓库 apple/container 中发布的 Container Machine 功能说明，详细介绍了其用法和设计理念。",
+          "容器机器的创建、运行和管理均通过 container 命令行工具完成，文档中提供了完整的 CLI 操作指令和输出示例。"
+        ],
+        "article_id": "ce06dcdbb7372ccd"
+      },
+      {
+        "object_type": "product",
+        "name": "Container Machine",
+        "canonical_name": "Container Machine",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Container Machine 提供与 macOS 无缝集成的 Linux 环境，基于标准 OCI 镜像构建，支持快速、轻量和持久化运行。",
+          "容器机器自动将宿主的用户名和家目录映射到 Linux 环境中，开发者可在 macOS 上编辑代码，在容器中构建和运行应用。",
+          "容器机器运行镜像的 init 系统，支持通过 systemctl 注册长期运行的后台服务，便于在 Mac 上测试真实 Linux 服务。"
+        ],
+        "article_id": "ce06dcdbb7372ccd"
+      }
     ],
     "impact_score": {
       "score": 7.0,
@@ -1367,7 +2516,61 @@
       "compound": "medium",
       "hype": "medium"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "apple/container",
+        "canonical_name": "apple/container",
+        "url": "https://github.com/apple/container",
+        "positioning": "苹果在 GitHub 开源的 macOS 容器管理项目，提供基于标准 OCI 镜像的轻量级 Linux 环境创建与运行能力。",
+        "technical_signal": "基于 OCI 镜像标准构建容器机器，支持镜像 init 系统和 systemd 服务注册，与 macOS 深度集成并自动共享宿主用户与家目录。",
+        "adoption_signal": "由苹果官方在 GitHub 仓库 apple/container 中发布，标志着苹果在容器基础设施领域的一次重要战略布局。",
+        "ecosystem_relevance": "填补了 macOS 原生轻量级 Linux 容器环境的空白，与 Docker Desktop、Lima 等方案形成差异化竞争格局。",
+        "target_users": [],
+        "watch_reason": "苹果官方首次推出系统级容器工具，有望改变 macOS 开发者的容器化工作流格局，其生态影响力、社区采纳进程与 Docker 竞争态势值得持续跟踪。",
+        "risk_notes": [
+          "项目处于早期开发阶段，功能完整性和生产环境稳定性尚未充分验证。",
+          "用户基础和社区生态远不及 Docker 成熟，推广和标准化面临挑战。"
+        ],
+        "score": 8.0,
+        "article_ids": [
+          "ce06dcdbb7372ccd"
+        ],
+        "evidence_snippets": [
+          "该文档是苹果官方在 GitHub 仓库 apple/container 中发布的 Container Machine 功能说明，详细介绍了其用法和设计理念。",
+          "容器机器的创建、运行和管理均通过 container 命令行工具完成，文档中提供了完整的 CLI 操作指令和输出示例。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Container Machine",
+        "canonical_name": "Container Machine",
+        "positioning": "基于 OCI 镜像的 macOS 原生轻量级 Linux 环境产品，提供自动用户映射与家目录共享的一体化开发体验。",
+        "target_users": [
+          "macOS 后端开发者",
+          "跨平台应用开发者",
+          "需要本地 Linux 测试环境的 DevOps 工程师"
+        ],
+        "product_signal": "提供编辑在 Mac、构建在容器内的无缝工作流，支持自动用户和家目录映射、多发行版并行测试及 systemd 长期服务注册。",
+        "market_signal": "苹果官方推出的 macOS 容器产品，直接与 Docker Desktop、Lima 和 OrbStack 竞争，有望重塑开发者容器工具选择格局。",
+        "differentiation": "模拟完整 Linux 环境而非单个应用，运行 init 系统并自动集成 macOS 用户体系，由苹果官方维护且与系统深度绑定。",
+        "watch_reason": "苹果从系统层面直接构建容器化 Linux 环境方案，与第三方工具形成直接竞争，若成功集成进 macOS 生态将大幅影响开发者工作流选择。",
+        "risk_notes": [
+          "仅面向 macOS 平台推出，跨平台适用性和可移植性存在固有局限。",
+          "CLI 工具生态尚不成熟，与 Docker Compose 等主流编排工具的兼容性有待观察。"
+        ],
+        "score": 8.0,
+        "article_ids": [
+          "ce06dcdbb7372ccd"
+        ],
+        "evidence_snippets": [
+          "Container Machine 提供与 macOS 无缝集成的 Linux 环境，基于标准 OCI 镜像构建，支持快速、轻量和持久化运行。",
+          "容器机器自动将宿主的用户名和家目录映射到 Linux 环境中，开发者可在 macOS 上编辑代码，在容器中构建和运行应用。",
+          "容器机器运行镜像的 init 系统，支持通过 systemctl 注册长期运行的后台服务，便于在 Mac 上测试真实 Linux 服务。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -1386,37 +2589,87 @@
     "pipeline_stage": "fact_extracted",
     "id": "d88255be0d4b263c",
     "source_type": "community_discussion",
-    "tldr": "不要用正则验证邮箱地址，发送验证邮件即可",
-    "objective_summary": "作者Ben通过分析RFC标准和实际邮件系统行为，论证正则表达式验证邮箱地址存在性能差、易出错、标准演变快等问题，建议开发者放弃复杂验证逻辑，改为发送验证邮件确认地址有效性。",
+    "tldr": "本文逐一拆解了关于电子邮件地址的常见误解，指出正则验证是反模式，推荐仅用验证邮件确认地址可用。文章通过RFC标准和现实实现之间的差距，展示了电子邮件系统在国际字符、格式限制和软件支持上的种种意外偏差。",
+    "objective_summary": "该技术博客文章于2026年6月发布在gitpush--force.com，作者Ben系统性地反驳了关于电子邮件地址的多个常见错误认知。文章指出通过正则表达式验证邮箱地址容易出错且成本高，建议开发者转而使用发送验证邮件的方式来确认地址可用性。作者引用RFC 5321、RFC 5322和RFC 6531等标准，对比了Gmail、Postfix、Dovecot等系统对不同特性的实际支持情况，揭示了标准定义与现实实现之间的鸿沟。",
     "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
-        "Gmail",
+        "Google",
         "Postfix",
-        "Dovecot",
-        "ICANN",
-        "Verisign"
+        "Dovecot"
       ],
       "technologies": [
         "SMTPUTF8",
         "RFC 6531",
         "RFC 5321",
         "RFC 5322",
-        "RFC 3490",
-        "Punycode"
+        "Punycode",
+        "MX record"
       ],
       "key_people": [
         "Ben"
       ]
     },
     "key_logic_flow": [
-      "拒绝使用正则表达式验证邮箱地址，三个主要原因：性能开销与收益不成正比、正则复杂且引擎实现不一致易出错、标准随时间演变导致旧正则失效。",
-      "建议只做最宽松的客户端校验（如 ^[^@]+@[^@\\s]+$），核心策略是发送验证邮件而非做输入验证。",
-      "RFC 5321规定邮箱本地部分最大长度为64字节，但实际系统中即使超过此限制的地址（如80字节本地部分）仍可正常收发邮件。",
-      "SMTPUTF8（RFC 6531, 2012年）允许邮箱地址中出现非ASCII字符，但Dovecot截至2026年仍不支持该扩展，Postfix默认启用也较晚。",
-      "邮箱域名可以没有点号（如内网地址），也可以使用IP地址字面量格式（如 ben@[50.169.39.178]），但Gmail网页端对IP字面量支持存在问题。",
-      "许多企业系统错误地拒绝非.com/.net/.org/.edu等常见TLD的邮箱地址，以及RFC中合法但很少被支持的格式（如带引号的本地部分可包含@字符）。"
+      "作者认为用正则表达式验证电子邮件地址是反模式，因为正则表达式运行成本高、容易写错且无法跟随标准演进。",
+      "作者建议不应当通过输入验证来拒绝用户，而应当发送验证邮件并让用户点击确认链接，用验证（verify）替代验证（validate）。",
+      "RFC标准与现实邮件系统的实现存在显著差距，例如Postfix到2015年才支持SMTPUTF8，而Dovecot到2026年仍未支持。",
+      "理论上非ASCII字符在2012年后可通过SMTPUTF8在邮件地址中使用，但不同邮件服务商的支持程度仍不一致。",
+      "电子邮件地址可以使用IP地址字面量（如ben@[50.169.39.178]）替代域名，但Gmail网页客户端会错误地移除必需的方括号字符。",
+      "许多公司的验证逻辑只认可.com、.net、.org等常见顶级域名，导致使用.email等新通用顶级域名的用户被错误拒绝。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "Gmail",
+        "canonical_name": "Gmail",
+        "url": "https://mail.google.com",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Gmail对创建地址时的允许字符有限制，但它似乎支持使用UTF8发送邮件。",
+          "Gmail网页客户端在发送IP地址字面量格式的邮件时会移除RFC规定的方括号字符，导致发送失败。"
+        ],
+        "article_id": "d88255be0d4b263c"
+      },
+      {
+        "object_type": "project",
+        "name": "Postfix",
+        "canonical_name": "Postfix",
+        "url": "https://www.postfix.org",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Postfix在2015年左右才添加SMTPUTF8支持，但默认启用是在多年之后。"
+        ],
+        "article_id": "d88255be0d4b263c"
+      },
+      {
+        "object_type": "project",
+        "name": "Dovecot",
+        "canonical_name": "Dovecot",
+        "url": "https://www.dovecot.org",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Dovecot截至2026年仍然不支持SMTPUTF8扩展。"
+        ],
+        "article_id": "d88255be0d4b263c"
+      },
+      {
+        "object_type": "product",
+        "name": "Thunderbird",
+        "canonical_name": "Thunderbird",
+        "url": "https://www.thunderbird.net",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者认为如果使用Thunderbird等客户端，IP地址字面量的邮件可能仍能通过Gmail正常工作。"
+        ],
+        "article_id": "d88255be0d4b263c"
+      }
     ],
     "impact_score": {
       "score": 2.5,
@@ -1470,7 +2723,104 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "Gmail",
+        "canonical_name": "Gmail",
+        "url": "https://mail.google.com",
+        "positioning": "Google旗下的全球最大电子邮件服务，覆盖数十亿用户，是衡量邮件标准实现水平的行业标杆。",
+        "target_users": [
+          "全球电子邮件用户",
+          "企业办公用户",
+          "个人通信用户"
+        ],
+        "product_signal": "支持SMTPUTF8发送国际化邮件，但对用户创建地址的字符有限制；网页客户端在处理IP地址字面量格式邮件时会错误移除RFC规定的方括号，导致发送失败。",
+        "differentiation": "作为覆盖最广的邮件服务，Gmail在标准支持上表现出矛盾性——既部分支持国际化新标准，又在基础RFC格式上存在明显的实现缺陷。",
+        "watch_reason": "Gmail对电子邮件RFC标准的实现质量直接影响数十亿用户的通信体验，其标准合规问题的修复进度具有广泛的行业示范效应。",
+        "risk_notes": [
+          "Gmail网页客户端在处理IP地址字面量格式邮件时违反RFC标准，可能导致遵循标准的用户邮件发送失败。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "d88255be0d4b263c"
+        ],
+        "evidence_snippets": [
+          "Gmail对创建地址时的允许字符有限制，但它似乎支持使用UTF8发送邮件。",
+          "Gmail网页客户端在发送IP地址字面量格式的邮件时会移除RFC规定的方括号字符，导致发送失败。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Postfix",
+        "canonical_name": "Postfix",
+        "url": "https://www.postfix.org",
+        "positioning": "广泛使用的开源邮件传输代理（MTA），是Linux/Unix服务器生态中邮件路由和投递的核心组件。",
+        "technical_signal": "2015年左右才添加SMTPUTF8支持且默认启用更晚，对电子邮件国际化标准的支持进度明显滞后于RFC 6531定义。",
+        "adoption_signal": "作为生产环境中部署最广的开源MTA之一，Postfix从支持SMTPUTF8到默认启用的缓慢过程反映了邮件基础设施标准升级的保守策略。",
+        "ecosystem_relevance": "在邮件传输代理生态中占据核心位置，其对SMTPUTF8的支持进度直接影响全球邮件系统对国际化地址的处理能力。",
+        "target_users": [],
+        "watch_reason": "Postfix作为邮件基础设施的关键组件，其标准演进速度直接决定了全球邮件系统对国际化地址的支持时间线，值得持续跟踪。",
+        "risk_notes": [
+          "运行旧版本Postfix的服务器可能无法正确处理国际化邮件地址，形成邮件投递链路中的兼容性断层。"
+        ],
+        "score": 2.0,
+        "article_ids": [
+          "d88255be0d4b263c"
+        ],
+        "evidence_snippets": [
+          "Postfix在2015年左右才添加SMTPUTF8支持，但默认启用是在多年之后。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Dovecot",
+        "canonical_name": "Dovecot",
+        "url": "https://www.dovecot.org",
+        "positioning": "流行的开源邮件投递代理（MDA）和IMAP服务器，是邮件存储和用户检索访问环节的关键基础设施。",
+        "technical_signal": "截至2026年仍不支持SMTPUTF8扩展，无法处理包含非ASCII字符的国际化邮件地址，是电子邮件标准演进中的明显落后者。",
+        "adoption_signal": "尽管被广泛部署为IMAP服务器，Dovecot对SMTPUTF8的长期缺失支持表明生产环境对国际化邮件标准的接纳存在显著断层。",
+        "ecosystem_relevance": "作为邮件存储和检索生态的核心组件，其SMTPUTF8支持的缺失使国际化邮件地址无法完成从投递到检索的全链路闭环。",
+        "target_users": [],
+        "watch_reason": "Dovecot的SMTPUTF8支持状态是衡量邮件基础设施标准化进度的关键指标，其长期缺失将阻碍国际化邮件在存储和检索环节的最终落地。",
+        "risk_notes": [
+          "Dovecot长期不支持SMTPUTF8意味着即使邮件成功传输到服务器，用户也可能无法通过IMAP正常检索和阅读国际化邮件。"
+        ],
+        "score": 2.0,
+        "article_ids": [
+          "d88255be0d4b263c"
+        ],
+        "evidence_snippets": [
+          "Dovecot截至2026年仍然不支持SMTPUTF8扩展。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Thunderbird",
+        "canonical_name": "Thunderbird",
+        "url": "https://www.thunderbird.net",
+        "positioning": "Mozilla基金会旗下的开源跨平台电子邮件客户端，以隐私保护、标准合规和用户自主权为核心定位。",
+        "target_users": [
+          "注重隐私保护的电子邮件用户",
+          "开源软件倡导者",
+          "标准兼容性敏感用户"
+        ],
+        "product_signal": "作者推测Thunderbird等桌面客户端在处理IP地址字面量格式邮件时可能优于Gmail网页客户端，能正确遵循RFC标准格式。",
+        "differentiation": "在RFC标准兼容性上可能优于Gmail网页客户端，能正确处理被主流网页邮件服务忽略的IP地址字面量邮件格式。",
+        "watch_reason": "Thunderbird作为开源邮件客户端的重要代表，其对RFC标准的支持程度反映了邮件客户端生态对标准合规的重视水平。",
+        "risk_notes": [
+          "作者仅基于推测认为Thunderbird可能支持IP地址字面量格式，文中未提供任何实际测试或验证证据。"
+        ],
+        "score": 1.0,
+        "article_ids": [
+          "d88255be0d4b263c"
+        ],
+        "evidence_snippets": [
+          "作者认为如果使用Thunderbird等客户端，IP地址字面量的邮件可能仍能通过Gmail正常工作。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -1489,8 +2839,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "e11fcea9cd94bb20",
     "source_type": "community_discussion",
-    "tldr": "Anthropic发布Claude Fable 5（通用版）和Claude Mythos 5（受限版），性能超越此前所有公开模型。",
-    "objective_summary": "Anthropic于2026年6月发布Claude Fable 5和Claude Mythos 5。Fable 5面向所有用户，配备安全分类器对高风险查询降级至Opus 4.8；Mythos 5通过Project Glasswing向网络防御者提供。",
+    "tldr": "Anthropic 发布 Claude Fable 5，这是首个面向普通用户的 Mythos 级别模型，在编程、知识工作、视觉和科研领域均达到业界领先水平。同时发布 Claude Mythos 5，解除部分安全限制，通过 Project Glasswing 为美国网络安全防御者提供，定价为每百万输入 Token 10 美元、输出 Token 50 美元。",
+    "objective_summary": "Anthropic 于 2026 年 7 月 21 日发布 Claude Fable 5 和 Claude Mythos 5 两款模型。Fable 5 是面向所有用户的 Mythos 级别模型，具备最强的编程、知识工作、视觉和科研能力，配有安全分类器拦截危险话题（触发率低于 5%）。Mythos 5 是同一模型但解除部分安全限制的版本，通过 Project Glasswing 与美国政府合作部署给网络防御者。定价为输入每百万 Token 10 美元、输出每百万 Token 50 美元，不到 Mythos Preview 的一半。Stripe 使用 Fable 5 在一天内完成了原本需团队两个多月的 5000 万行 Ruby 代码迁移；在药物设计中 Mythos 5 将流程加速约十倍。",
     "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
@@ -1499,24 +2849,96 @@
         "Stripe",
         "GitHub",
         "Cursor",
-        "IMC",
+        "Cognition",
         "Hebbia",
-        "Cognition"
+        "IMC"
       ],
-      "technologies": [
-        "Claude Fable 5",
-        "Claude Mythos 5",
-        "Project Glasswing"
-      ],
+      "technologies": [],
       "key_people": []
     },
     "key_logic_flow": [
-      "Anthropic同时发布了Claude Fable 5（通用安全版）和Claude Mythos 5（受限高能力版），二者基于同一底层Mythos-class模型。",
-      "Fable 5配备安全分类器，对高风险查询会降级至Claude Opus 4.8响应，分类器误报率在平均不到5%的会话中触发。",
-      "Mythos 5通过Project Glasswing与美国政府合作部署，具备全球最强的网络安全能力，后续将通过更广泛的信任访问计划开放。",
-      "定价为每百万输入token 10美元、每百万输出token 50美元，低于Claude Mythos Preview的一半。",
-      "Fable 5在软件工程、知识工作、视觉、记忆与长上下文、生命科学研究等多个领域的基准测试中达到业界领先水平。",
-      "Mythos 5在蛋白质设计中加速了约10倍的流程，能自主完成科学家级别的全流程任务，并在分子生物学假设生成和基因组学研究中取得突破。"
+      "Anthropic 发布 Claude Fable 5，这是首个面向大众用户的 Mythos 级别模型，在编程、知识工作、视觉和科研等领域全面超越此前所有公开发布的模型。",
+      "同时发布 Claude Mythos 5，同一基础模型但解除部分安全限制，通过 Project Glasswing 与美国政府合作，面向网络防御者和关键基础设施提供商部署。",
+      "Fable 5 配备安全分类器，对特定危险话题拦截并回退至 Opus 4.8，触发率平均不到 5%，目前设定偏保守以减少滥用风险。",
+      "定价为每百万输入 Token 10 美元、每百万输出 Token 50 美元，低于此前 Claude Mythos Preview 的价格。",
+      "Stripe 使用 Fable 5 在一天内完成了 5000 万行 Ruby 代码库的全量迁移，原本需要整个团队两个多月的手工工作量。",
+      "Mythos 5 在药物设计中将流程加速约十倍，在分子生物学假设生成中首次持续产出新颖且被独立实验室验证的科学假设。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "Claude Fable 5",
+        "canonical_name": "Claude Fable 5",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Anthropic 发布 Claude Fable 5，这是首个面向普通用户的 Mythos 级别模型，具备业界领先的软件工程、知识工作、视觉和科研能力。",
+          "Fable 5 定价为每百万输入 Token 10 美元、每百万输出 Token 50 美元，不到此前 Mythos Preview 价格的一半。",
+          "Stripe 使用 Fable 5 在一天内完成 5000 万行 Ruby 代码库的全量迁移，原本需要整个团队两个多月的手工工作量。"
+        ],
+        "article_id": "e11fcea9cd94bb20"
+      },
+      {
+        "object_type": "product",
+        "name": "Claude Mythos 5",
+        "canonical_name": "Claude Mythos 5",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Claude Mythos 5 与 Fable 5 基于同一模型，但解除了部分安全限制，具备全球最强的网络安全能力。",
+          "Mythos 5 通过 Project Glasswing 与美国政府合作，作为 Claude Mythos Preview 的升级版部署给网络防御者。",
+          "使用 Mythos 5，内部蛋白质设计专家将药物设计流程加速约十倍，且九项蛋白质靶点产生了有前景的药物设计候选方案。"
+        ],
+        "article_id": "e11fcea9cd94bb20"
+      },
+      {
+        "object_type": "project",
+        "name": "Project Glasswing",
+        "canonical_name": "Project Glasswing",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "Project Glasswing 是 Anthropic 与美国政府合作的网络安全项目，Mythos 5 通过该项目作为升级版部署给网络防御者。",
+          "在 Project Glasswing 中，模型帮助网络防御者保护了关键软件安全，展现了深厚的良性社会影响潜力。"
+        ],
+        "article_id": "e11fcea9cd94bb20"
+      },
+      {
+        "object_type": "product",
+        "name": "Claude Opus 4.8",
+        "canonical_name": "Claude Opus 4.8",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "当 Fable 5 的安全分类器触发时，用户的查询会回退到次强模型 Claude Opus 4.8 来响应。",
+          "Fable 5 在 Slay the Spire 游戏中，使用持久文件记忆后的性能提升幅度是 Opus 4.8 的三倍。"
+        ],
+        "article_id": "e11fcea9cd94bb20"
+      },
+      {
+        "object_type": "product",
+        "name": "Claude Code",
+        "canonical_name": "Claude Code",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "早期反馈指出 Claude Fable 5 以更少的交互次数处理了员工在 Claude Code 中日常运行的复杂多智能体工作流。"
+        ],
+        "article_id": "e11fcea9cd94bb20"
+      },
+      {
+        "object_type": "product",
+        "name": "Claude Mythos Preview",
+        "canonical_name": "Claude Mythos Preview",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Claude Mythos Preview 是此前通过 Project Glasswing 发布的首个 Mythos 级别模型，Mythos 5 作为其升级版部署。",
+          "Fable 5 和 Mythos 5 的定价低于 Claude Mythos Preview 价格的一半。"
+        ],
+        "article_id": "e11fcea9cd94bb20"
+      }
     ],
     "impact_score": {
       "score": 8.0,
@@ -1580,7 +3002,140 @@
       "compound": "medium",
       "hype": "medium"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "Claude Fable 5",
+        "canonical_name": "Claude Fable 5",
+        "positioning": "Anthropic 面向普通用户推出的 Mythos 级别旗舰模型，在编程、知识工作、视觉和科研领域均达到业界领先水平。",
+        "target_users": [
+          "软件开发者和工程师",
+          "金融分析与知识工作者",
+          "科研与药物设计人员",
+          "需要视觉理解能力的开发者"
+        ],
+        "product_signal": "在 Stripe 5000 万行 Ruby 代码迁移中一天完成原本需团队两个多月的工作量，在 FrontierCode、Finance Benchmark 等评估中取得最高分。",
+        "market_signal": "定价每百万输入 Token 10 美元、输出 50 美元，不到 Mythos Preview 价格的一半，大幅降低了顶级模型的使用门槛。",
+        "differentiation": "首个面向普通用户公开发布的 Mythos 级别模型，配有安全分类器实现可控的强能力释放，在长任务和复杂场景下优势最为显著。",
+        "watch_reason": "Claude Fable 5 代表了 Anthropic 在保持安全的前提下大规模释放尖端能力的关键一步。其实际应用案例展示了强模型的产业价值，价格大幅下降则可能推动 AI 能力普及化，值得持续跟踪其安全机制效果和企业采用进展。",
+        "risk_notes": [
+          "安全分类器目前设定了保守的触发阈值，虽然平均触发率低于 5%，但仍可能误拦截无害请求。",
+          "Fable 5 的安全回退机制依赖 Opus 4.8，回退后能力显著降级，在处理敏感但合法的任务时体验可能不佳。",
+          "模型在网络安全等领域存在双重用途风险，安全分类器的实际防护效果有待大规模部署验证。"
+        ],
+        "score": 9.0,
+        "article_ids": [
+          "e11fcea9cd94bb20"
+        ],
+        "evidence_snippets": [
+          "Anthropic 发布 Claude Fable 5，这是首个面向普通用户的 Mythos 级别模型，具备业界领先的软件工程、知识工作、视觉和科研能力。",
+          "Fable 5 定价为每百万输入 Token 10 美元、每百万输出 Token 50 美元，不到此前 Mythos Preview 价格的一半。",
+          "Stripe 使用 Fable 5 在一天内完成 5000 万行 Ruby 代码库的全量迁移，原本需要整个团队两个多月的手工工作量。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Claude Mythos 5",
+        "canonical_name": "Claude Mythos 5",
+        "positioning": "Anthropic 面向网络防御者推出的解除安全限制版顶级模型，通过 Project Glasswing 与美国政府合作部署。",
+        "target_users": [
+          "美国网络安全防御者",
+          "关键基础设施提供商",
+          "通过 Project Glasswing 获得准入的政府合作伙伴"
+        ],
+        "product_signal": "在药物设计中将流程加速约十倍，九项蛋白质靶点产生有前景的药物候选方案；在分子生物学假设生成中首次持续产出被独立验证的新颖假设。",
+        "market_signal": "通过 Project Glasswing 与美国政府合作部署，后续计划扩展至更广泛的信任访问计划，目前不对普通用户开放。",
+        "differentiation": "与 Fable 5 同基础模型但解除安全限制，具备全球最强网络安全能力，在科研领域展现了远超此前模型的创新产出能力。",
+        "watch_reason": "Mythos 5 展示了顶级模型在解除安全限制后所能达到的科研与防御能力天花板，其药物设计与分子生物学假设生成的实际成果具有重大产业和科学意义。通过 Project Glasswing 的安全部署模式可能成为未来强模型准出机制的样板，值得持续关注其部署范围扩展和实际效益。",
+        "risk_notes": [
+          "解除安全限制后的模型在网络安全等领域存在严重的双重用途风险，滥用可能造成重大损害。",
+          "目前仅通过 Project Glasswing 向特定合作伙伴开放，实际可用性有限，产业影响力兑现存在时间差。",
+          "模型在网络安全等高风险场景的防护效果和误用防护机制尚未有公开的独立评估。"
+        ],
+        "score": 8.0,
+        "article_ids": [
+          "e11fcea9cd94bb20"
+        ],
+        "evidence_snippets": [
+          "Claude Mythos 5 与 Fable 5 基于同一模型，但解除了部分安全限制，具备全球最强的网络安全能力。",
+          "Mythos 5 通过 Project Glasswing 与美国政府合作，作为 Claude Mythos Preview 的升级版部署给网络防御者。",
+          "使用 Mythos 5，内部蛋白质设计专家将药物设计流程加速约十倍，且九项蛋白质靶点产生了有前景的药物设计候选方案。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Claude Opus 4.8",
+        "canonical_name": "Claude Opus 4.8",
+        "positioning": "Anthropic 的次强模型，作为 Fable 5 安全分类器触发时的回退模型来响应查询。",
+        "target_users": [
+          "通过 Fable 5 安全分类器回退获得服务的 Anthropic 用户"
+        ],
+        "product_signal": "作为 Fable 5 安全分类器触发时的回退模型，在 Slay the Spire 任务中持久记忆提升幅度仅为 Fable 5 的三分之一。",
+        "market_signal": "从 Anthropic 旗舰模型位置被 Fable 5 取代，现作为安全回退模型继续在生态中发挥作用。",
+        "differentiation": "在 Anthropic 模型体系中定位为 Fable 5 的安全护栏承载模型，与 Fable 5 形成安全与能力的分层组合方案。",
+        "watch_reason": "作为 Fable 5 安全回退机制的承载模型，Opus 4.8 直接决定了用户在触发安全分类器时的实际体验水平，其能力是否足以匹配用户预期有待持续观察。",
+        "risk_notes": [
+          "作为回退模型，用户触发安全分类器时实际获得的并非 Fable 5 级别能力，可能产生体验落差。",
+          "安全分类器的保守设置意味着大量合法查询由 Opus 4.8 响应，其能力边界是否足够清晰有待验证。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "e11fcea9cd94bb20"
+        ],
+        "evidence_snippets": [
+          "当 Fable 5 的安全分类器触发时，用户的查询会回退到次强模型 Claude Opus 4.8 来响应。",
+          "Fable 5 在 Slay the Spire 游戏中，使用持久文件记忆后的性能提升幅度是 Opus 4.8 的三倍。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Claude Code",
+        "canonical_name": "Claude Code",
+        "positioning": "Anthropic 推出的 AI 编程助手，Fable 5 的发布显著提升了其在复杂多智能体工作流中的交互效率。",
+        "target_users": [
+          "使用 Claude Code 的软件开发者和工程师"
+        ],
+        "product_signal": "早期反馈表明 Fable 5 以更少的交互次数处理了 Claude Code 中日常运行的复杂多智能体工作流，提升了 Claude Code 的整体效率。",
+        "differentiation": "作为深度集成 Claude 模型的编程助手产品，Fable 5 的升级使其在复杂多智能体工作流中的效率得到显著提升。",
+        "watch_reason": "Claude Code 作为 Fable 5 能力在编程场景中的直接载体，Fable 5 对其复杂工作流效率的提升反映了模型升级对 AI 编程工具的实质性影响。",
+        "risk_notes": [
+          "关于 Claude Code 本身的性能改进和用户增长缺乏具体数据，仅有一处来自早期反馈的定性描述，证据强度有限。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "e11fcea9cd94bb20"
+        ],
+        "evidence_snippets": [
+          "早期反馈指出 Claude Fable 5 以更少的交互次数处理了员工在 Claude Code 中日常运行的复杂多智能体工作流。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Claude Mythos Preview",
+        "canonical_name": "Claude Mythos Preview",
+        "positioning": "Anthropic 通过 Project Glasswing 发布的首个 Mythos 级别模型，现已由 Mythos 5 作为升级版本替代。",
+        "target_users": [
+          "通过 Project Glasswing 获得使用资格的网络防御者和政府合作伙伴"
+        ],
+        "product_signal": "作为 Project Glasswing 的首个 Mythos 级别部署模型，为 Mythos 5 的发布铺平了道路，其定价体系被新一代产品以半价超越。",
+        "market_signal": "已被 Mythos 5 以更低价格和更强性能取代，生命周期相对短暂，但其开创的 Project Glasswing 合作模式得以延续。",
+        "differentiation": "作为首个通过 Project Glasswing 部署的 Mythos 级别模型，确立了 Anthropic 与政府合作的强模型交付模式，但快速被迭代版本替代。",
+        "watch_reason": "Claude Mythos Preview 代表了 Anthropic 强模型政府合作部署的起点，其定价和定位直接影响了 Fable 5 和 Mythos 5 的发布策略，开创的 Project Glasswing 模式仍然是安全部署的关键组成部分。",
+        "risk_notes": [
+          "已被 Mythos 5 快速取代，市场生命周期较短，独立跟踪价值有限。",
+          "其历史数据和用户反馈已被下一代模型覆盖，难以进行独立的效果评估。"
+        ],
+        "score": 2.0,
+        "article_ids": [
+          "e11fcea9cd94bb20"
+        ],
+        "evidence_snippets": [
+          "Claude Mythos Preview 是此前通过 Project Glasswing 发布的首个 Mythos 级别模型，Mythos 5 作为其升级版部署。",
+          "Fable 5 和 Mythos 5 的定价低于 Claude Mythos Preview 价格的一半。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -1599,16 +3154,14 @@
     "pipeline_stage": "fact_extracted",
     "id": "fab6f55f52b1c731",
     "source_type": "community_discussion",
-    "tldr": "德国慕尼黑地区法院裁定谷歌对AI概览中的虚假陈述承担直接责任。",
-    "objective_summary": "慕尼黑地区法院（案号26 O 869/26）发布临时禁令，裁定谷歌为其AI概览中的虚假陈述承担直接侵权责任。法院认为AI概览属于谷歌\"以自己的语言和结构\"生成的独立内容，而非传统搜索结果，因此不适用搜索引擎有限责任保护。法院同时驳回了谷歌\"用户可自行核实\"的辩护理由。",
+    "tldr": "德国慕尼黑地区法院裁定谷歌对其AI概览（AI Overviews）中的虚假陈述承担直接侵权责任，认定AI概览属于谷歌自身发布的内容，不能援引搜索引擎的有限责任豁免。谷歌因AI将两家出版商错误关联至诈骗行为的搜索结果而败诉，承担80%的诉讼费用。",
+    "objective_summary": "2026年，慕尼黑地区法院（案号26 O 869/26）对谷歌发出临时禁令，因其AI概览将两家慕尼黑出版商与诈骗、订阅陷阱等行为错误关联。法院认定AI概览并非传统搜索结果，而是谷歌\"用自己的话\"生成的独立陈述，因此谷歌须承担直接侵权责任。法院同时驳回了谷歌\"用户可自行核验来源\"的辩护，指出AI概览本身构成独立可理解的内容，且用户极少点击所引来源。谷歌承担80%的诉讼费用，该裁决可能具有国际影响力。",
     "event_type": "policy_and_safety",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
         "Google",
-        "Regional Court of Munich",
-        "Oumi",
-        "New York Times"
+        "Oumi"
       ],
       "technologies": [
         "AI Overviews",
@@ -1617,12 +3170,52 @@
       "key_people": []
     },
     "key_logic_flow": [
-      "慕尼黑地区法院裁定谷歌AI概览属于谷歌\"自己的陈述\"，因为AI用自己的语言和结构重写并评述搜索结果，而非简单列出第三方链接。",
-      "法院认定谷歌AI概览生成的陈述在链接来源中并不存在，AI将原告公司与无关的欺诈公司错误关联，构成直接侵权。",
-      "法院指出德国联邦最高法院（BGH）关于搜索引擎有限责任的先例不适用于AI概览，因为AI概览生成的是\"独立的、新的、实质性的陈述\"，且用户使用AI概览\"绝非互联网使用的必要条件\"。",
-      "法院驳回了谷歌\"用户可自行点击来源核实\"的辩护，认为AI概览本身构成\"可独立理解的自足陈述\"，研究显示用户几乎从不点击AI概览中的来源链接。",
-      "法院认为AI生成的观点不享有与人类相同的言论自由保护，AI的意见是\"算法的结果\"而非个人信念的表达，主要体现的是谷歌的商业活动。",
-      "Oumi为纽约时报进行的分析显示谷歌Gemini 3的AI概览准确率为91%，但56%的正确答案无法从链接来源中找到依据，印证了法院的核心判断。"
+      "慕尼黑地区法院裁定谷歌对其AI概览生成的虚假陈述承担直接侵权责任，不能适用搜索引擎的间接侵权责任豁免规则。",
+      "法院认为AI概览并非传统搜索结果的简单汇总，而是谷歌用自己的语言重新组织和评判后生成的独立陈述，属于谷歌自身的内容。",
+      "谷歌的AI概览将两家出版商与诈骗公司错误关联，而所链接的搜索结果来源中并未出现这些关联性陈述。",
+      "法院驳回了谷歌声称用户可自行点击来源核实AI概览准确性的辩护，指出AI概览本身已是独立可理解的内容，且研究显示用户几乎不点击AI概览中的来源链接。",
+      "法院认为AI生成的意见不受言论自由同等保护，因为它是算法的输出结果而非个人信念的表达，其性质首先是谷歌商业活动的体现。",
+      "AI初创公司Oumi的分析显示，谷歌AI概览在当前Gemini 3模型下回答正确率为91%，但56%的正确回答无法通过所链接的来源进行验证。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "Google AI Overviews",
+        "canonical_name": "Google AI Overviews",
+        "url": "https://www.google.com",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "慕尼黑地区法院裁定谷歌对其AI概览中的虚假陈述承担直接责任，因为AI概览被视为谷歌自身发布的内容，而非第三方搜索结果的简单聚合。",
+          "法院认定AI概览用自己的语言和结构重新组织搜索结果，生成了在链接来源中不存在的独立陈述，因此谷歌不能援引搜索引擎的有限责任豁免规则。"
+        ],
+        "article_id": "fab6f55f52b1c731"
+      },
+      {
+        "object_type": "model",
+        "name": "Gemini 3",
+        "canonical_name": "Gemini 3",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "AI初创公司Oumi为《纽约时报》进行的分析发现，谷歌AI概览在当前的Gemini 3模型下回答正确率为91%。",
+          "Oumi的分析还发现，56%的正确答案无法通过谷歌AI概览所链接的来源进行验证，表明AI生成了用户无法追溯来源的陈述。"
+        ],
+        "article_id": "fab6f55f52b1c731"
+      },
+      {
+        "object_type": "company",
+        "name": "Oumi",
+        "canonical_name": "Oumi",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "AI初创公司Oumi为《纽约时报》进行的分析显示，谷歌AI概览在Gemini 3模型下的正确率为91%。",
+          "Oumi的分析还发现超过一半的正确回答无法通过谷歌所链接的来源进行验证，这与法院关注的AI生成不可溯源陈述的问题高度相关。"
+        ],
+        "article_id": "fab6f55f52b1c731"
+      }
     ],
     "impact_score": {
       "score": 7.5,
@@ -1677,7 +3270,37 @@
       "compound": "medium",
       "hype": "high"
     },
-    "actionable_insight": "strategic_invest"
+    "actionable_insight": "strategic_invest",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "Google AI Overviews",
+        "canonical_name": "Google AI Overviews",
+        "url": "https://www.google.com",
+        "positioning": "谷歌基于Gemini模型的AI搜索摘要功能，在搜索结果页顶部生成开场式陈述与总结，为用户提供即时答案而非传统链接列表。",
+        "target_users": [
+          "使用Google搜索的终端用户",
+          "依赖搜索引擎引流的内容发布商与网站"
+        ],
+        "product_signal": "德国法院认定AI概览生成搜索结果中不存在的独立陈述，且用户极少点击所引来源链接，产品可验证性面临法律与信任挑战。",
+        "market_signal": "德国慕尼黑地区法院裁定谷歌AI概览不能援引搜索引擎有限责任豁免规则，该裁决可能具有国际影响力，影响AI生成内容的法律责任框架。",
+        "differentiation": "与传统搜索引擎摘要不同，AI概览用自己的语言重新组织并评判搜索结果，生成在链接来源中不存在的独立陈述内容。",
+        "watch_reason": "德国法院判决首次从法律层面将AI概览定性为谷歌自身发布的内容而非搜索结果摘要，要求承担直接侵权责任。该裁决可能重塑全球AI搜索产品的法律责任框架，对Google、Perplexity等AI搜索产品的运营模式产生深远影响。",
+        "risk_notes": [
+          "AI概览当前在Gemini 3模型下回答正确率虽有91%，但56%的正确回答无法通过所引用来源进行验证。",
+          "法院认定AI生成的意见不受言论自由同等保护，因其本质是算法输出而非个人信念表达，可能限制AI产品的内容免责空间。",
+          "如果该裁决被其他司法管辖区效仿，AI搜索产品可能面临内容审查与合规成本大幅上升的风险。"
+        ],
+        "score": 8.0,
+        "article_ids": [
+          "fab6f55f52b1c731"
+        ],
+        "evidence_snippets": [
+          "慕尼黑地区法院裁定谷歌对其AI概览中的虚假陈述承担直接责任，因为AI概览被视为谷歌自身发布的内容，而非第三方搜索结果的简单聚合。",
+          "法院认定AI概览用自己的语言和结构重新组织搜索结果，生成了在链接来源中不存在的独立陈述，因此谷歌不能援引搜索引擎的有限责任豁免规则。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",

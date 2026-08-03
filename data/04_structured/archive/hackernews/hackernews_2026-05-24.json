@@ -314,19 +314,15 @@
     "pipeline_stage": "fact_extracted",
     "id": "5dd4c28c55828390",
     "source_type": "community_discussion",
-    "tldr": "一个开源工具 Hengefinder，可在任意地点计算日落与街道对齐的日期，灵感来自曼哈顿巨石阵现象。",
-    "objective_summary": "Victoria Ritvo 在 Recurse Center 期间开发了 Hengefinder，一个用于计算任意地点日落与街道完美对齐日期的工具。项目通过三个技术步骤实现：计算道路方位角（考虑地球曲率）、计算太阳日落方位角（用二分查找精确定位日轮接触地平线的时刻）、以及用两阶段搜索匹配两者。",
+    "tldr": "Victoria Ritvo 在 Recurse Center 期间开发了 Hengefinder 工具，用于计算全球任意地点街道与日落方向对齐的日期（即类似 Manhattanhenge 的现象）。文章详细介绍了计算过程中的三个核心挑战：道路方位角计算、太阳方位角的确定以及两者匹配日期的搜索算法。",
+    "objective_summary": "Victoria Ritvo 在 Recurse Center 期间构建了名为 Hengefinder 的工具，用于计算任意地点街道与日落方向对齐的日期。工具需解决三个核心问题：计算道路相对于真北的方位角（需考虑地球曲率，通过余弦纬度缩放修正）、确定太阳在日落时的方位角（使用 Astral Python 库，并通过二分搜索找到太阳恰好接触地平线的精确时刻）、以及通过两阶段搜索（粗粒度采样检测潜在交集 + 细粒度逐日搜索）匹配道路方位角与太阳方位角。最终结果通过网站和移动应用呈现。",
     "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
-      "companies": [
-        "Recurse Center"
-      ],
+      "companies": [],
       "technologies": [
         "Astral",
-        "Python",
-        "atan2",
-        "binary search"
+        "Python"
       ],
       "key_people": [
         "Victoria Ritvo",
@@ -334,11 +330,51 @@
       ]
     },
     "key_logic_flow": [
-      "项目灵感来自曼哈顿巨石阵（Manhattanhenge）现象——每年两次日落与曼哈顿东西向街道网格完美对齐，人群聚集观看。",
-      "第一步计算道路方位角时，发现不能直接将经纬度差值代入 atan2，因为经度线在高纬度会聚，需用 cos(latitude) 缩放经度以统一单位。",
-      "第二步计算太阳方位角时，天文标准定义的日落是太阳完全沉入地平线以下，而 henge 需要日轮恰好接触地平线，因此采用边界二分查找寻找最后一个满足条件的时刻。",
-      "第三步匹配道路方位角与太阳方位角时，由于一年中太阳方位角曲线非单调，采用两阶段搜索：粗粒度 30 天采样识别可能错过对齐的区间，再细粒度逐日搜索精确定位。",
-      "最终产出 Hengefinder 网站供用户输入地址查询下一次 henge 日期，John Pribyl 进一步开发了移动端应用，将功能扩展至月球对齐（Sauron Henges）。"
+      "Hengefinder 需要计算道路的方位角，即相对于真北的角度，但由于经纬度坐标在地球球面上的不均匀性（经度随纬度升高而收缩），直接使用平面三角法计算会出错。",
+      "修正方法是将经度差值乘以纬度的余弦值（cos(latitude)），使经度和纬度处于可比单位后再使用 atan2 计算方位角。",
+      "太阳方位角的计算使用 Astral Python 库，但天文定义的日落比理想 henge 时刻（太阳圆盘恰好接触地平线）晚，因此需要以分钟级精度执行边界二分搜索。",
+      "由于太阳方位角随日期变化是非单调的，无法直接做二分搜索，因此采用两阶段方案：粗粒度采样（每30天）检测潜在的交叉区间，再对检测到的窗口进行细粒度逐日搜索。",
+      "John Pribyl 基于 Hengefinder 网站构建了移动应用，扩展了月球功能和\"Sauron Henges\"（日月与建筑物顶端对齐的效应）。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "Hengefinder",
+        "canonical_name": "Hengefinder",
+        "url": "https://victoriaritvo.com/blog/hengefinder/",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Victoria Ritvo 在 Recurse Center 期间构建了 Hengefinder，一个可以计算全球任意地点街道与日落方向对齐日期的工具。",
+          "Hengefinder 需要解决三个核心挑战：计算道路方位角、计算日落时太阳的方位角，以及搜索两者匹配的日期。"
+        ],
+        "article_id": "5dd4c28c55828390"
+      },
+      {
+        "object_type": "product",
+        "name": "Hengefinder mobile app",
+        "canonical_name": "Hengefinder Mobile App",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Recurse Center 同学 John Pribyl 基于 Hengefinder 网站构建了移动应用，扩展了月球对齐功能和 Sauron Henges 功能。",
+          "移动应用允许用户更广泛地探索所在城市的 henge 现象。"
+        ],
+        "article_id": "5dd4c28c55828390"
+      },
+      {
+        "object_type": "project",
+        "name": "Astral",
+        "canonical_name": "Astral Python Library",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "作者使用 Python 库 Astral 来计算给定地点太阳事件的时间、高度和方位角。",
+          "Astral 使用天文学标准定义的日落时刻（太阳完全沉入地平线），比 Hengefinder 所需的理想时刻偏晚。"
+        ],
+        "article_id": "5dd4c28c55828390"
+      }
     ],
     "impact_score": {
       "score": 1.5,
@@ -384,7 +420,56 @@
       "compound": "low",
       "hype": "low"
     },
-    "actionable_insight": "speculative_watch"
+    "actionable_insight": "speculative_watch",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Hengefinder",
+        "canonical_name": "Hengefinder",
+        "url": "https://victoriaritvo.com/blog/hengefinder/",
+        "positioning": "基于曼哈顿悬日现象启发，可计算全球任意地点街道与日落方向对齐日期的开源计算工具。",
+        "technical_signal": "采用余弦纬度缩放修正地球曲率导致的方位角计算偏差，并结合 Astral 库与两阶段搜索算法匹配太阳与道路角度。",
+        "ecosystem_relevance": "已衍生出移动应用扩展，增加月球对齐等新功能，展现社区驱动的生态扩展能力。",
+        "target_users": [],
+        "watch_reason": "该项目以优雅的数学方法解决了一个直观易懂的地理空间问题，并已产出网站和移动应用等多形态产品，展示了从个人实验到社区扩展的完整路径。",
+        "risk_notes": [
+          "计算基于球面近似模型，对长距离街道的方位角计算可能存在精度偏差。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "5dd4c28c55828390"
+        ],
+        "evidence_snippets": [
+          "Victoria Ritvo 在 Recurse Center 期间构建了名为 Hengefinder 的计算工具，能够计算全球任意地点街道与日落方向对齐的确切日期和时间。",
+          "Hengefinder 需要解决三个核心挑战：计算道路方位角、计算日落时太阳的方位角，以及搜索两者相互匹配的具体日期。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Hengefinder mobile app",
+        "canonical_name": "Hengefinder Mobile App",
+        "positioning": "基于 Hengefinder 核心算法构建的移动端应用，新增月球对齐与建筑物顶端对齐等扩展功能。",
+        "target_users": [
+          "城市居民",
+          "天文摄影爱好者",
+          "城市探索者"
+        ],
+        "product_signal": "在继承网站核心功能基础上，新增月球对齐和日月与建筑物顶端对齐的 Sauron Henges 功能。",
+        "differentiation": "相对于网页版，移动端提供更便捷的探索体验和更丰富的天体对齐类型。",
+        "watch_reason": "该移动应用代表了 Hengefinder 从网页工具向移动生态的自然延伸，新增的月球功能拓宽了应用场景，展现了社区驱动的产品演进能力。",
+        "risk_notes": [
+          "仅为项目衍生应用，缺乏独立的市场验证和用户规模数据。"
+        ],
+        "score": 2.0,
+        "article_ids": [
+          "5dd4c28c55828390"
+        ],
+        "evidence_snippets": [
+          "Recurse Center 的同学 John Pribyl 基于 Hengefinder 网站开发了移动应用，扩展了月球对齐功能以及日月与建筑物顶端对齐的 Sauron Henges 天文现象。",
+          "移动应用允许用户更广泛地探索所在城市中各种天体与街道或建筑物对齐的天文现象与日期。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -403,40 +488,98 @@
     "pipeline_stage": "fact_extracted",
     "id": "6d054060f496123f",
     "source_type": "community_discussion",
-    "tldr": "将旧 System76 笔记本改装为基于 Debian tty 的离线无干扰写作设备，搭配 neovim/tmux/vimwiki 工具链。",
-    "objective_summary": "作者 Veronica 于 2026 年将一台六年前的 System76 Galago Pro 笔记本电脑改装为专用写作设备（writerdeck），通过安装 Debian Trixie 纯控制台模式（无 GUI）、neovim 编辑器、tmux 终端复用器、kmscon",
-    "event_type": "framework_tools",
+    "tldr": "作者将一台闲置的 System76 Galago Pro 笔记本电脑改造成纯命令行写作用设备（writerdeck），运行无桌面环境的 Debian Trixie，使用 neovim、tmux、kmscon 和 Syncthing 实现离线写作与文件同步。",
+    "objective_summary": "作者 Veronica 将一台六年前的 System76 Galago Pro 笔记本改造成专注写作的 writerdeck。她安装了无图形桌面的 Debian Trixie 系统，配置 neovim 和 vimwiki 作为写作编辑器，tmux 实现终端分屏和自定义状态栏，kmscon 提供可缩放文本终端，并通过 Syncthing 将写作文件同步到服务器。经过一周使用，她成功用该设备完成了本文和配套视频脚本等多个写作项目。",
+    "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
         "System76"
       ],
       "technologies": [
-        "Debian Trixie",
         "neovim",
         "tmux",
         "kmscon",
+        "syncthing",
         "vimwiki",
-        "Syncthing",
-        "LUKS",
-        "acpi",
-        "light",
         "network-manager",
         "nm-tui",
-        "systemd",
-        "bash"
+        "acpi",
+        "LUKS"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "作者因注意力问题，决定将一台闲置六年的 System76 Galago Pro 笔记本改造为专用写作设备，利用其优秀键盘和磨砂屏幕的硬件优势",
-      "放弃桌面操作系统，选择 Debian Trixie 纯控制台模式安装，彻底移除浏览器和 GUI，打破桌面操作系统的肌肉记忆",
-      "安装 network-manager 和 nm-tui 以便偶尔联网备份文件，日常写作保持离线状态",
-      "安装 neovim 作为编辑器并配置 vimwiki 插件管理写作内容，替代传统桌面写作软件",
-      "通过 kmscon 实现终端字体缩放（Ctrl+/-），提升长时间写作的视觉舒适度",
-      "配置 tmux 状态栏显示电池电量（acpi）和屏幕亮度快捷键（light），并设置自动登录后自动启动 tmux + vimwiki 会话",
-      "通过 Syncthing 将 writerdeck 的 vimwiki 文件夹同步到服务器，实现写作内容的安全备份",
-      "使用约一周后已完成本篇博客文章、配套视频脚本及另一未来脚本的写作，验证了该方案的实际可用性"
+      "作者将旧 System76 Galago Pro 笔记本电脑改造为纯写作用 writerdeck，选择无桌面环境的 Debian Trixie 文本模式安装。",
+      "安装 network-manager 并通过 nm-tui 管理网络连接，保证必要时能联网备份文件。",
+      "安装 neovim 作为主要编辑器，配置 blue 配色方案和 vimwiki 插件用于维基式写作管理。",
+      "从 Debian backports 安装 kmscon 替代默认 tty，获得可随 Ctrl+/- 缩放字体的终端。",
+      "配置 tmux 实现终端分屏，顶部状态栏显示电池百分比，并绑定 F8/F9 快捷键控制屏幕亮度。",
+      "安装 Syncthing 将 writerdeck 的 vimwiki 文件夹与服务器 writing 目录同步，并设置 kmscon 自动登录和 tmux 自启动进入 vimwiki 索引。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "neovim",
+        "canonical_name": "neovim",
+        "url": "https://neovim.io/",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者通过 apt 安装 neovim 作为 writerdeck 的主要文本编辑器，并配置了 blue 配色方案和 set linebreak 自动换行。",
+          "作者表示自己一直是 vim 用户，此次选择 neovim 是为了更深入了解这款编辑器。"
+        ],
+        "article_id": "6d054060f496123f"
+      },
+      {
+        "object_type": "project",
+        "name": "tmux",
+        "canonical_name": "tmux",
+        "url": "https://github.com/tmux/tmux",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者安装 tmux 实现终端分屏，在顶部状态栏配置了 acpi 电池百分比读和白 light 亮度控制快捷键（F8/F9）。",
+          "tmux 被设置为在自动登录后立即启动并打开 vimwiki 索引页面，使作者开机即可写作。"
+        ],
+        "article_id": "6d054060f496123f"
+      },
+      {
+        "object_type": "project",
+        "name": "syncthing",
+        "canonical_name": "syncthing",
+        "url": "https://syncthing.net/",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者安装 Syncthing 将 writerdeck 的 vimwiki 文件夹与服务器的 writing 目录同步，并特意隔离了私人笔记以保护隐私。"
+        ],
+        "article_id": "6d054060f496123f"
+      },
+      {
+        "object_type": "project",
+        "name": "kmscon",
+        "canonical_name": "kmscon",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者从 Debian Trixie backports 安装 kmscon，以获得可随 Ctrl+/- 缩放字体大小的现代终端体验。"
+        ],
+        "article_id": "6d054060f496123f"
+      },
+      {
+        "object_type": "project",
+        "name": "vimwiki",
+        "canonical_name": "vimwiki",
+        "url": "https://github.com/vimwiki/vimwiki",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者通过 apt 安装 vim-vimwiki 包作为维基式写作管理工具，并配置 tmux 自动启动时执行 VimwikiIndex 命令。"
+        ],
+        "article_id": "6d054060f496123f"
+      }
     ],
     "impact_score": {
       "score": 1.5,
@@ -484,7 +627,125 @@
       "compound": "low",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "neovim",
+        "canonical_name": "neovim",
+        "url": "https://neovim.io/",
+        "positioning": "基于 Vim 的现代化文本编辑器，在 writerdeck 项目中作为纯终端写作环境的核心编辑工具。",
+        "technical_signal": "支持通过 apt 在 Debian Trixie 无桌面环境中直接安装，可配置 blue 配色方案和 linebreak 自动换行，纯 tty 模式下运行稳定。",
+        "adoption_signal": "作者从长期使用的传统 vim 主动迁移至 neovim，并作为 writerdeck 唯一编辑器完成了本文及配套视频脚本的写作。",
+        "ecosystem_relevance": "与 vimwiki 维基插件、tmux 终端复用器和 kmscon 现代终端深度集成，构成完整的离线写作工具链。",
+        "target_users": [],
+        "watch_reason": "传统 vim 用户主动迁移至 neovim 用于专注写作场景，展示了其在纯终端编辑领域的生态成熟度和用户迁移吸引力。",
+        "risk_notes": [
+          "纯终端环境下依赖 GUI 的插件无法使用，功能范围受限。",
+          "作为已成熟的开源项目，新的突破性方向关注度有限。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "6d054060f496123f"
+        ],
+        "evidence_snippets": [
+          "作者通过 apt 安装 neovim 作为 writerdeck 的主要文本编辑器，并配置了 blue 配色方案和 set linebreak 自动换行。",
+          "作者表示自己一直是 vim 用户，此次选择 neovim 是为了更深入了解这款编辑器。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "tmux",
+        "canonical_name": "tmux",
+        "url": "https://github.com/tmux/tmux",
+        "positioning": "终端复用器，在 writerdeck 中提供分屏管理、系统状态监控和快捷键控制等桌面级能力。",
+        "technical_signal": "通过 apt 安装并在 .tmux.conf 中集成 acpi 电池读数和 light 背光控制，支持 F8/F9 亮度快捷键绑定，纯终端下实现系统管理功能。",
+        "adoption_signal": "被配置为 writerdeck 自动登录后立即启动并打开 vimwiki 索引页面，实现即开即写的零障碍写作流。",
+        "ecosystem_relevance": "与 neovim、kmscon 和系统工具（acpi/light）组合，在无桌面环境中替代了图形桌面的窗口管理和信息展示功能。",
+        "target_users": [],
+        "watch_reason": "在无桌面 writerdeck 中承担窗口管理和系统监控重任，展示了 tmux 作为纯终端生产力工具的深度定制潜力和生态延展性。",
+        "risk_notes": [
+          "功能定位成熟稳定，短期内缺乏颠覆性新功能预期。",
+          "高度自定义的配置文件对新手存在学习门槛。"
+        ],
+        "score": 2.0,
+        "article_ids": [
+          "6d054060f496123f"
+        ],
+        "evidence_snippets": [
+          "作者安装 tmux 实现终端分屏，在顶部状态栏配置了 acpi 电池百分比读和白 light 亮度控制快捷键（F8/F9）。",
+          "tmux 被设置为在自动登录后立即启动并打开 vimwiki 索引页面，使作者开机即可写作。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "syncthing",
+        "canonical_name": "syncthing",
+        "url": "https://syncthing.net/",
+        "positioning": "开源去中心化文件同步工具，在 writerdeck 中作为离线写作环境与服务器之间的按需同步桥梁。",
+        "technical_signal": "通过 apt 安装，仅同步 vimwiki 文件夹到服务器 writing 目录，并特意隔离私人笔记以保护隐私，部署方式轻量。",
+        "adoption_signal": "在 writerdeck 偶尔联网备份文件的场景中替代了云同步方案，借助 nm-tui 连接网络后即可触发同步。",
+        "ecosystem_relevance": "与 vimwiki 协作完成写作文件的跨设备同步和备份，是 writerdeck 生态中唯一需联网的组件。",
+        "target_users": [],
+        "watch_reason": "在以离线为主的 writerdeck 项目中承担按需文件同步角色，展示了 Syncthing 在受限网络环境下的灵活部署与隐私保护能力。",
+        "risk_notes": [
+          "完全依赖网络连接，离线时无法执行文件同步。",
+          "需要服务端配合部署，增加了额外维护成本。"
+        ],
+        "score": 2.0,
+        "article_ids": [
+          "6d054060f496123f"
+        ],
+        "evidence_snippets": [
+          "作者安装 Syncthing 将 writerdeck 的 vimwiki 文件夹与服务器的 writing 目录同步，并特意隔离了私人笔记以保护隐私。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "kmscon",
+        "canonical_name": "kmscon",
+        "positioning": "基于 KMS 的现代化虚拟终端实现，在 writerdeck 无桌面环境中提供可缩放字体的高可读性终端体验。",
+        "technical_signal": "从 Debian Trixie backports 安装，支持 Ctrl+/- 快捷键缩放字体大小，替代系统默认 tty，安装后自动设为启动终端。",
+        "adoption_signal": "作为 writerdeck 核心人机交互界面，解决了无桌面环境下纯文本终端字体过小或不可调的关键可用性问题。",
+        "ecosystem_relevance": "与 neovim 和 tmux 协同工作，为 writerdeck 的纯终端写作环境提供了对标现代图形终端的视觉舒适度。",
+        "target_users": [],
+        "watch_reason": "在 writerdeck 这类无桌面 Linux 设备中，kmscon 以字体缩放能力填补了默认 tty 的关键可用性缺口，是纯终端场景的重要基建。",
+        "risk_notes": [
+          "项目维护活跃度不如主流终端模拟器，需从 backports 仓库安装。",
+          "功能范围局限于纯终端场景，与桌面终端模拟器差距较大。"
+        ],
+        "score": 2.0,
+        "article_ids": [
+          "6d054060f496123f"
+        ],
+        "evidence_snippets": [
+          "作者从 Debian Trixie backports 安装 kmscon，以获得可随 Ctrl+/- 缩放字体大小的现代终端体验。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "vimwiki",
+        "canonical_name": "vimwiki",
+        "url": "https://github.com/vimwiki/vimwiki",
+        "positioning": "Vim 的维基式个人笔记与写作管理插件，在 writerdeck 中作为写作项目组织和快速导航的核心入口。",
+        "technical_signal": "通过 apt 安装 vim-vimwiki 包，提供维基式写作管理能力，启动时自动执行 VimwikiIndex 命令进入管理页面。",
+        "adoption_signal": "被配置为 writerdeck 开机自动启动的第一个命令，成为写作工作流的默认入口界面。",
+        "ecosystem_relevance": "与 neovim、tmux 和 Syncthing 深度配合，既管理写作文件结构，又通过同步机制实现跨设备文件一致性。",
+        "target_users": [],
+        "watch_reason": "在 writerdeck 项目中作为写作内容的组织与导航层，展示了 vimwiki 在专注写作工作流中作为内容中枢的整合价值。",
+        "risk_notes": [
+          "自建的维基语法与其他笔记工具不兼容，迁移成本较高。",
+          "项目社区规模较小，更新频率和扩展生态有限。"
+        ],
+        "score": 2.0,
+        "article_ids": [
+          "6d054060f496123f"
+        ],
+        "evidence_snippets": [
+          "作者通过 apt 安装 vim-vimwiki 包作为维基式写作管理工具，并配置 tmux 自动启动时执行 VimwikiIndex 命令。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -503,8 +764,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "6d953819f9e6b88f",
     "source_type": "community_discussion",
-    "tldr": "P.T. Barnum 1880年著作《赚钱的艺术》总结了20条基于一生经验的致富法则，核心为择业从天赋、避债如避疫、全力投入、诚信为本。",
-    "objective_summary": "1880年，70岁的P.T. Barnum将毕生商业经验浓缩为《赚钱的艺术》一书，提出20条致富法则。书中强调选择与天赋匹配的职业、避免债务侵蚀自由、做事必须全力以赴、诚信是长期声誉资产。该内容由Cool Tools Lab旗下Book Freak简报于2026年5月摘录发布。",
+    "tldr": "P.T. Barnum 在1880年70岁时将其最受欢迎的演讲整理成《The Art of Money Getting》一书，浓缩了20条务实的致富规则，核心包括选择适合的职业、像躲避瘟疫一样远离债务、全力以赴做事和保持正直。",
+    "objective_summary": "P.T. Barnum 于1880年以70岁高龄出版了《The Art of Money Getting》，将他从纽约博物馆创办、破产到联合创办 Barnum & Bailey Circus 的毕生商业经验提炼为20条直白的致富规则。文章详细阐述了四条核心原则：选择自己适合的职业并做到最好、像躲避瘟疫一样避免债务、全力以赴做事、以及保持正直保护声誉。每一条规则都以 Barnum 的个人亲身经历为支撑。",
     "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
@@ -517,12 +778,52 @@
       ]
     },
     "key_logic_flow": [
-      "P.T. Barnum在70岁时将毕生商业经验写成《赚钱的艺术》，于1880年出版，书中包含20条敛财法则。",
-      "第一条法则强调选择与自身天赋匹配的职业，而非盲目追求高薪岗位，找到擅长的领域再深耕。",
-      "第二条法则警告债务如同瘟疫，会剥夺个人自由与自尊，核心原则是保持收入大于支出。",
-      "第三条法则要求做事必须全力以赴，半途而废的代价高昂，全情投入者终将领先。",
-      "第四条法则指出诚信是商人的核心资产，欺骗可能短期获利，但长期会摧毁客户信任与个人声誉。",
-      "文章由Cool Tools Lab的Book Freak简报发布，该公司同时运营Recomendo、Cool Tools网站等多个内容产品。"
+      "P.T. Barnum 在1880年70岁时将其最受欢迎的演讲整理成《The Art of Money Getting》一书。",
+      "第一条原则是不要选错职业，要找到自己天生擅长的领域并力争成为最好。",
+      "第二条原则是像躲避瘟疫一样避免债务，因为债务会侵蚀自尊和自由。",
+      "第三条原则是无论做什么都要全力以赴，半心半意做事是贫困的根源。",
+      "第四条原则是保持正直，因为声誉才是真正的资产，失信会导致客户流失。",
+      "这本书来自 Cool Tools Lab 旗下的 Book Freak 通讯，内容源自 Barnum 数十年商业生涯的真实教训。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "The Art of Money Getting",
+        "canonical_name": "The Art of Money Getting",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "P.T. Barnum 在1880年70岁时将其最受欢迎的演讲整理成《The Art of Money Getting》一书，压缩了一生的拼搏经验。",
+          "该书包含20条直白的致富规则，核心包括选择适合的职业、避免债务、全力以赴和保持正直。"
+        ],
+        "article_id": "6d953819f9e6b88f"
+      },
+      {
+        "object_type": "product",
+        "name": "Book Freak",
+        "canonical_name": "Book Freak",
+        "url": "https://kk.org/cooltools/book-freak-210-the-art-of-money-getting/",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "本文是 Cool Tools Lab 旗下 Book Freak 通讯的第210期，专注于推荐书籍的核心观点。",
+          "Book Freak 由 Cool Tools Lab 运营，该团队还运营 Recomendo、Cool Tools 网站等多个通讯产品。"
+        ],
+        "article_id": "6d953819f9e6b88f"
+      },
+      {
+        "object_type": "company",
+        "name": "Cool Tools Lab",
+        "canonical_name": "Cool Tools Lab",
+        "url": "https://kk.org/cooltools/",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "Book Freak 由 Cool Tools Lab 出版，这是一个三人小团队，还运营 Recomendo、Cool Tools 网站、YouTube 频道和播客等多个项目。"
+        ],
+        "article_id": "6d953819f9e6b88f"
+      }
     ],
     "impact_score": {
       "score": 1.0,
@@ -573,7 +874,37 @@
       "compound": "low",
       "hype": "low"
     },
-    "actionable_insight": "ignore"
+    "actionable_insight": "ignore",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "The Art of Money Getting",
+        "canonical_name": "The Art of Money Getting",
+        "positioning": "一本于1880年出版的经典致富指南，浓缩了 P.T. Barnum 从破产到联合创办 Barnum & Bailey Circus 的毕生商业经验，以20条直白规则系统阐述个人财务自由与职业发展原则。",
+        "target_users": [
+          "追求个人财务自由的读者",
+          "对经典商业智慧感兴趣的创业者与职场人士",
+          "关注跨时代理财原则的文化研究者"
+        ],
+        "product_signal": "该书以 Barnum 亲身经历为支撑，核心提出四条原则：选择适合自身的职业、像躲避瘟疫一样避免债务、全力以赴做事和保持正直以保护声誉。",
+        "market_signal": "该著作通过 Cool Tools Lab 旗下的 Book Freak 通讯周刊向科技与创意工作者社群推荐传播，借助 Kevin Kelly 的读者网络获得持续曝光。",
+        "differentiation": "区别于现代理财畅销书，该书以19世纪美国商业大亨从破产到东山再起的真实实践为基石，每条规则均可追溯至 Barnum 数十年商业成败的具体经历。",
+        "watch_reason": "虽然该书出版于1880年且与AI领域无直接关联，但其关于债务规避、职业匹配与信誉积累的核心理念在当代仍具跨时代参考价值，Cool Tools Lab 的推荐使其在科技社群中持续获得文化关注，可作为泛商业素养信号进行低频追踪。",
+        "risk_notes": [
+          "部分规则基于19世纪美国商业环境，可能不完全适用于当代数字经济和零工经济模式。",
+          "Barnum 作为历史人物，其部分商业伦理实践（如猎奇展览）与今日企业社会责任标准存在显著差异。",
+          "该书作为古典出版物缺乏与现代投资工具、科技行业的衔接与更新，受众群体相对有限。"
+        ],
+        "score": 2.0,
+        "article_ids": [
+          "6d953819f9e6b88f"
+        ],
+        "evidence_snippets": [
+          "P.T. Barnum 在1880年70岁时将其最受欢迎的演讲整理成《The Art of Money Getting》一书，压缩了从创办纽约博物馆到联合创办马戏团的毕生拼搏经验。",
+          "该书包含20条直白的致富规则，核心原则包括选择适合自身的职业、像躲避瘟疫一样避免债务、全力以赴做事和保持正直以保护声誉。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -592,24 +923,18 @@
     "pipeline_stage": "fact_extracted",
     "id": "9141d95c533aa509",
     "source_type": "community_discussion",
-    "tldr": "前AWS开源社区联络人离职，揭露公司GenAI战略转向导致客户关注丧失与组织文化恶化",
-    "objective_summary": "一名在AWS工作四年的开源社区联络人员于2026年5月被解雇，回顾了其2022年入职以来AWS的组织变迁：直属经理David Nalley晋升后失去有效指导、公司全面转向GenAI导致客户焦点偏移、2025年10月和2026年1月两轮大规模裁员、以及个人健康因工作压力恶化。",
-    "event_type": "application_landing",
+    "tldr": "一位在AWS担任开源战略与营销联络官四年的员工被解雇。他认为AWS已背离客户至上的原则，全速转向生成式AI后公司文化剧变，组织架构调整和两轮裁员让他失去工作动力，被解雇反而是一种解脱。",
+    "objective_summary": "一位名为\"作者\"的AWS员工于2022年入职，在David Nalley领导的开放源代码战略与营销团队（OSSM）担任商业开源公司联络人。2023年David Nalley晋升后作者失去直接管理支持，同期AWS全面转向生成式AI战略，作者认为这导致公司丧失客户焦点、视员工为可替换资源。经历2023年10月和2024年1月两轮大规模裁员后，作者的健康状况恶化，最终被AWS解雇。作者对被解雇感到如释重负，计划回归开源社区。",
+    "event_type": "policy_and_safety",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
-        "Amazon Web Services",
-        "Amazon",
-        "Sun Microsystems",
-        "Dell"
+        "Amazon Web Services (AWS)",
+        "Amazon"
       ],
       "technologies": [
-        "Generative AI",
-        "S3",
-        "EC2",
-        "RDS",
-        "cloud computing",
-        "open source"
+        "Generative AI (GenAI)",
+        "cloud computing"
       ],
       "key_people": [
         "David Nalley",
@@ -618,12 +943,59 @@
       ]
     },
     "key_logic_flow": [
-      "作者于2022年受David Nalley招募加入AWS的开源战略与营销团队（OSSM），负责在开源社区中改善AWS形象并充当商业开源客户联络人",
-      "2025年David Nalley因业绩出色晋升为AWS开发者体验部门负责人，作者与其直接互动骤降至几乎为零，组织归属感减弱",
-      "同期AWS战略全面且急切地转向GenAI，内部推行用AI生成邮件摘要、会议演示等内容，作者认为这背离了对客户的真正关注",
-      "亚马逊将多数员工视为可替换的 fungible 资源，与IT行业依赖长期积累的制度知识这一特性存在根本冲突",
-      "2025年10月和2026年1月AWS发生两轮大规模裁员，后者影响多位作者的同事好友，导致工作压力严重损害其身体健康",
-      "作者在2026年5月被解雇，视其为一种解脱，并计划回归开源领域，同时对GenAI时代开源精神能否存续表达深切忧虑"
+      "作者于2022年加入AWS，被David Nalley招入开放源代码战略与营销团队（OSSM），负责在商业开源公司与AWS之间担任联络人。",
+      "David Nalley晋升为AWS开发者体验部门负责人后，作者失去了直接管理支持，工作方向变得模糊。",
+      "AWS在2023年全面转向生成式AI战略，员工被要求尽可能使用AI工具，作者认为这削弱了人的创造力和客户聚焦。",
+      "作者认为AWS将员工视为\"可替换资源\"（fungible），这种零售业的用人思维不适用于信息技术行业。",
+      "作者在任期间最自豪的成就是帮助一位非洲客户恢复了被错误关闭的AWS账户，但高层对此毫无兴趣。",
+      "2023年10月和2024年1月的两轮裁员导致作者多位朋友失业，作者健康恶化（体重增加、血压升高、失眠），最终被解雇，作者视之为解脱。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "Amazon S3",
+        "canonical_name": "Amazon S3",
+        "confidence": "low",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "AWS曾以S3、EC2、RDS等服务树立行业标准，但如今re:Invent大会上已很难找到不包含AI内容的演讲。"
+        ],
+        "article_id": "9141d95c533aa509"
+      },
+      {
+        "object_type": "product",
+        "name": "Amazon EC2",
+        "canonical_name": "Amazon EC2",
+        "confidence": "low",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "AWS曾以S3、EC2、RDS等服务树立行业标准，作者认为这些核心服务已被生成式AI主题所掩盖。"
+        ],
+        "article_id": "9141d95c533aa509"
+      },
+      {
+        "object_type": "product",
+        "name": "Amazon RDS",
+        "canonical_name": "Amazon RDS",
+        "confidence": "low",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "AWS曾以S3、EC2、RDS等服务树立行业标准，但如今公司的关注点已从这些基础设施服务转向AI。"
+        ],
+        "article_id": "9141d95c533aa509"
+      },
+      {
+        "object_type": "project",
+        "name": "Open Source Strategy and Marketing (OSSM)",
+        "canonical_name": "AWS OSSM",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者被David Nalley说服加入了开放源代码战略与营销团队（OSSM），该团队致力于让AWS在开源社区中成为更好的参与者。"
+        ],
+        "article_id": "9141d95c533aa509"
+      }
     ],
     "impact_score": {
       "score": 3.8,
@@ -681,7 +1053,31 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "strategic_invest"
+    "actionable_insight": "strategic_invest",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Open Source Strategy and Marketing (OSSM)",
+        "canonical_name": "AWS OSSM",
+        "positioning": "AWS内部负责开放源代码战略与营销的团队，致力于改善AWS在开源社区中的参与度和合作关系，是连接AWS与商业开源公司的桥梁。",
+        "technical_signal": "OSSM团队通过设立商业开源公司联络官角色，在AWS内部建立了一套与开源社区对话和协作的正式机制。",
+        "adoption_signal": "文章作者作为OSSM团队成员，曾帮助非洲客户恢复被错误关闭的十年AWS账户，体现了该团队在客户支持方面的独特价值。",
+        "ecosystem_relevance": "在AWS全面转向生成式AI的背景下，OSSM团队所代表的以客户和开源社区为中心的理念正在被边缘化，反映了云厂商开源战略面临的普遍挑战。",
+        "target_users": [],
+        "watch_reason": "AWS开源战略团队的变迁反映了大型云厂商在生成式AI浪潮下的文化转型阵痛，OSSM团队从受到重视到被边缘化的过程为观察云厂商与开源社区关系演变提供了独特视角，该团队的经历也揭示了企业开源战略在技术浪潮更迭中的脆弱性。",
+        "risk_notes": [
+          "OSSM团队在AWS全面转向生成式AI战略后影响力明显减弱，组织架构调整导致团队失去直接高层管理支持。",
+          "该团队的存续状态依赖于AWS高层的战略优先级，在GenAI优先的背景下可能面临进一步边缘化或裁撤的风险。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "9141d95c533aa509"
+        ],
+        "evidence_snippets": [
+          "作者被David Nalley说服加入了开放源代码战略与营销团队（OSSM），该团队致力于让AWS在开源社区中成为更好的参与者。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -700,38 +1096,49 @@
     "pipeline_stage": "fact_extracted",
     "id": "a10ea9d96a9881b2",
     "source_type": "community_discussion",
-    "tldr": "独立研究者团队从80386芯片显微图像中提取并反汇编了全部微码，发现215个入口点和一处潜伏40余年的IO权限位图处理漏洞。",
-    "objective_summary": "在8086微码反汇编成果发表后，Ken Shirriff提供了80386微码ROM的高分辨率芯片图像（94720比特）。研究者Daniel Balsom（GloriousCow）、Smartest Blob等人利用图像处理、神经网络和人工辅助自动化，从芯片照片中提取并交叉验证了二进制数据。",
+    "tldr": "团队成功从高分辨率芯片照片中提取并反汇编了 Intel 80386 微码 ROM（94720 位），发现了 215 个微码入口点和一个潜伏超过 40 年的 I/O 权限位图安全漏洞。",
+    "objective_summary": "reenigne 与 Daniel Balsom (gloriouscow)、Smartest Blob、nand2mario 及 Ken Shirriff 等人合作，利用图像处理、神经网络和人工辅助自动化方法，从 80386 芯片显微照片中提取二进制微码，并完成反汇编。反汇编显示 80386 微码拥有 215 个入口点（远多于 8086 的 60 个），且每条指令都有微码实现。团队还发现了一个潜在的 I/O 权限位图缺陷，可能允许用户态进程越界访问硬件寄存器。",
     "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
-      "companies": [],
+      "companies": [
+        "Intel"
+      ],
       "technologies": [
-        "80386",
-        "microcode ROM",
-        "PLA",
-        "binary blob extraction",
-        "image processing",
-        "neural networks",
-        "x86 microcode",
-        "protection test PLA",
-        "barrel shifter"
+        "microcode",
+        "PLA"
       ],
       "key_people": [
         "Ken Shirriff",
-        "Daniel Balsom (GloriousCow)",
+        "Daniel Balsom (gloriouscow)",
         "Smartest Blob",
-        "nand2mario",
-        "reenigne"
+        "nand2mario"
       ]
     },
     "key_logic_flow": [
-      "Ken Shirriff在作者发布8086微码反汇编成果后，提供了一张80386微码ROM的高分辨率芯片显微图像，包含94720比特数据，远超8086的10752比特。",
-      "GloriousCow与Smartest Blob结合图像处理、神经网络和人工辅助自动化方法，在数日内从芯片图像中提取出二进制数据并完成交叉验证。",
-      "团队通过识别微码中的规律模式，逐步将二进制数据重组为μ-op维度矩阵，确定μ-op读取顺序，并划分出源/目标寄存器、ALU第二输入、指令结束标记等字段。",
-      "Ken Shirriff通过追踪80386芯片上的物理走线和逻辑电路，帮助团队理解微码与乘法/除法硬件、桶形移位器、保护测试单元等加速器之间的接口关系。",
-      "反汇编结果显示80386微码有215个入口点（8086仅60个），微码覆盖每一条指令的执行，仅有一段未使用例程（0x849-0x856），且发现一处IO权限位图检查可能遗漏4字节端口访问最后一个字节的安全漏洞，该漏洞可能已存在超过40年。",
-      "完整反汇编成果已发布在GitHub上的x86 microcode仓库中，nand2mario基于该成果撰写了多篇技术博客进行解读。"
+      "Ken Shirriff 提供了 80386 微码 ROM 的高分辨率显微照片，团队利用图像处理和神经网络技术从中提取出二进制数据并交叉校验。",
+      "反汇编工作从识别微码比特的组织模式入手，逐步确定微操作顺序和字段划分，Ken Shirriff 帮助追踪芯片上的逻辑连线。",
+      "80386 微码共有 215 个入口点，远超 8086 的 60 个，这是由新增指令以及针对实模式/保护模式、寄存器/内存操作数等不同情况的分支处理造成的。",
+      "与 8086 和现代 CPU 不同，80386 始终执行微操作，每条指令都有对应的微码实现。",
+      "微码中发现了一段未被使用的代码（0x849-0x856），其功能与缺页处理程序类似但行为略有差异。",
+      "团队发现了一个潜在的安全缺陷：在执行 4 字节 I/O 端口访问时，微码仅检查前 3 个地址的权限位图，可能导致第 4 字节越界访问成功。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "x86 microcode repository",
+        "canonical_name": "x86-microcode-repository",
+        "url": "https://github.com/reenigne/x86-microcode",
+        "confidence": "medium",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "团队将 80386 微码反汇编结果发布在 GitHub 的 x86 microcode repository 中，包含 parts.txt 和 microcode_10.txt 等文件。",
+          "该仓库还提供了基于反汇编的说明文档 fields.txt，其中列出了全部微码入口点和子程序。",
+          "nand2mario 基于该反汇编撰写了多篇博客文章，帮助读者理解微码反汇编内容。"
+        ],
+        "article_id": "a10ea9d96a9881b2"
+      }
     ],
     "impact_score": {
       "score": 2.5,
@@ -787,7 +1194,34 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "x86 microcode repository",
+        "canonical_name": "x86-microcode-repository",
+        "url": "https://github.com/reenigne/x86-microcode",
+        "positioning": "一个专注于提取并反汇编 Intel x86 处理器微码的开源知识库项目，已成功完成 80386 微码 ROM 的二进制提取与完整反汇编。",
+        "technical_signal": "团队利用图像处理、神经网络和人工辅助自动化方法，从 80386 芯片显微照片中提取出 94720 位二进制微码数据并完成交叉校验。",
+        "adoption_signal": "反汇编成果已在 GitHub 上以开源形式公开发布，提供完整的微码入口点列表、字段定义文档及子程序说明，社区成员还撰写了多篇解读文章。",
+        "ecosystem_relevance": "该项目属于底层芯片逆向工程与计算机架构研究领域，为 x86 CPU 微码安全分析和硬件漏洞发现提供了可溯源的基础数据。",
+        "target_users": [],
+        "watch_reason": "反汇编揭示了 80386 微码中存在一个潜伏超过 40 年的 I/O 权限位图安全缺陷，并且发现了一段未被使用的微码代码区，持续跟踪有助于深入理解 x86 架构安全演进历史及微码逆向工程方法论。",
+        "risk_notes": [
+          "反汇编结果的完整性和准确性尚需在实际物理芯片上运行测试进行验证。",
+          "项目目前仅覆盖 80386 单一代际处理器，后续 x86 处理器微码架构的逆向分析仍需要大量独立工作。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "a10ea9d96a9881b2"
+        ],
+        "evidence_snippets": [
+          "团队将 80386 微码反汇编结果发布在 GitHub 的 x86 microcode repository 中，包含 parts.txt 和 microcode_10.txt 等文件。",
+          "该仓库还提供了基于反汇编的说明文档 fields.txt，其中列出了全部微码入口点和子程序。",
+          "nand2mario 基于该反汇编撰写了多篇博客文章，帮助读者理解微码反汇编内容。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -806,39 +1240,73 @@
     "pipeline_stage": "fact_extracted",
     "id": "bc2197128103ef22",
     "source_type": "community_discussion",
-    "tldr": "一个16字节x86 DOS程序，用XOR在显存上生成Sierpinski分形并同步驱动PC喇叭发声。",
-    "objective_summary": "HellMood于2026年5月在荷兰Outline Demoparty发布了16字节的x86实模式DOS汇编程序\"Wake up! 16b\"。程序将VGA文本显存(0xB800)作为计算空间，以-56字节步长反向遍历，用XOR累积运算在显存中生成Sierpinski分形图案（Rule",
+    "tldr": "开发者 HellMood 在 2026 年 5 月的 Outline Demoparty 上发布了一款仅 16 字节的 x86 实模式 DOS 演示程序 \"wake up!\"，该程序利用视频内存作为计算空间生成无限谢尔宾斯基分形，同时通过 PC 扬声器输出同一几何结构所产生的音频，实现视听联觉效果。",
+    "objective_summary": "HellMood 于 2026 年 5 月在荷兰 Ommen 举行的 Outline Demoparty 上发布了 16 字节 x86 汇编演示程序 \"wake up!\"。该程序通过 BIOS 中断设置 40×25 文本模式，将数据段指向 0xB800（VGA/CGA 文本缓冲区），使用 XOR 替代 ADD 实现无进位加法，从而生成元胞自动机规则 60 对应的谢尔宾斯基三角形。程序以 `out 61h, al` 指令将计算结果直送 PC 扬声器端口，使位 1 控制扬声器振膜伸缩，产生自相似方波节拍。通过逆向步进 56 字节而非正向 16 字节，程序将循环周期延长至 8192 步，使音高降低一个八度，并在屏幕上形成 10 列对角线字符柱。",
     "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
-      "companies": [
-        "Outline Demoparty",
-        "Plex"
-      ],
+      "companies": [],
       "technologies": [
         "x86 assembly",
         "Sierpinski fractal",
         "cellular automaton",
-        "Rule 60",
-        "XOR",
-        "PC speaker",
-        "bytebeat",
-        "BIOS interrupt",
-        "DOS real mode",
-        "VGA text buffer"
+        "BIOS",
+        "DOS",
+        "VGA"
       ],
       "key_people": [
         "HellMood",
-        "miragept"
+        "miragept",
+        "Plex"
       ]
     },
     "key_logic_flow": [
-      "HellMood于2026年5月在荷兰Outline Demoparty发布了一个仅16字节的x86实模式DOS汇编程序，受Plex的\"Rainbow Surf\"（同为16字节）启发而作",
-      "程序将数据段指向VGA文本显存地址0xB800，以`lodsb`加载字节后通过XOR指令写入-56字节偏移位置，步长与段大小(65536)不整除使得遍历周期延长至8192步，声音频率降低一个八度",
-      "在模2下XOR等价于无进位加法，二项式系数序列在显存中自然形成Sierpinski分形图案，映射为Rule 60细胞自动机——仅bit 1在0x00与0x02间切换",
-      "端口61h的bit 1直接控制PC喇叭振膜推拉，分形图案中的0/1序列被转换为频率与脉宽自相似变化的方波声音，形成近乎节奏不变的字节节拍",
-      "80字节宽的屏幕上，-56步长等价于向前24字节（12列），仅访问10个不同列，分形图案被剪切为对角线上移的10列字符柱",
-      "显存段中混杂的BIOS ROM影子代码与分形数据XOR后，为声音加入了不属于纯Sierpinski波形的粗糙质感；miragept在真实286+EGA/MDA硬件上捕获验证了程序行为"
+      "程序开头使用 BIOS 中断 int 10h 设置视频模式 0（40×25 文本模式），然后将数据段寄存器指向 0xB800（VGA/CGA 文本缓冲区的内存地址）。",
+      "程序使用 XOR 替代 ADD 来实现无进位加法，配合起始累加器值为 2（二进制 00000010）的条件，仅对位 1 进行翻转，从而精确映射到初等元胞自动机规则 60，生成谢尔宾斯基三角形。",
+      "`out 61h, al` 指令将计算所得的字节直接发送到 PC 扬声器端口 61h，其中位 1 控制扬声器振膜的推出与拉回，将分形的 0/1 序列转换为具有自相似性的方波节拍。",
+      "程序使用 `sub si, byte 57` 加 `lodsb` 实现每次逆向步进 56 字节，由于 56 不能整除 65536，程序需要 8192 步并回绕 7 次才重置，使声音降低一个八度。",
+      "在 80 字节宽的屏幕上逆向移动 56 字节等效于正向移动 24 字节（12 列），最终仅访问 10 个不同列，使谢尔宾斯基分形以 10 列对角线字符柱的形式沿屏幕上移。",
+      "不同 BIOS 版本和模拟器在内存中留下的初始数据不同，程序通过 XOR 与这些遗留数据进行运算，因此输出高度依赖于运行环境，这被视作 sizecoding 文化的一部分。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "wake up!",
+        "canonical_name": "wake up!",
+        "url": "https://hellmood.111mb.de/wake_up_16b_writeup.html",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "该程序仅用 16 字节的 x86 实模式 DOS 汇编代码，利用视频内存作为计算空间绘制无限谢尔宾斯基分形。",
+          "程序通过 `out 61h, al` 指令将计算得到的字节直接发送到 PC 扬声器端口，实现视听联觉效果。",
+          "该程序在 2026 年 5 月荷兰 Ommen 举行的 Outline Demoparty 上正式发布。"
+        ],
+        "article_id": "bc2197128103ef22"
+      },
+      {
+        "object_type": "project",
+        "name": "M8trix",
+        "canonical_name": "M8trix",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者 HellMood 的原创作品 \"M8trix\" 于 2014 年发布，仅用 8 字节（后压缩至 7 字节）即可在屏幕上涂抹伪随机字母。",
+          "作者在开发 \"wake up!\" 时始终思考如何让 \"M8trix\" 的效果听起来更好，但本次声音部分优先于画面创作。"
+        ],
+        "article_id": "bc2197128103ef22"
+      },
+      {
+        "object_type": "project",
+        "name": "Rainbow Surf",
+        "canonical_name": "Rainbow Surf",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Plex 的作品 \"Rainbow Surf\" 仅用 16 字节即实现了出色的演示效果，这促使作者重新翻出旧草图开始创作。"
+        ],
+        "article_id": "bc2197128103ef22"
+      }
     ],
     "impact_score": {
       "score": 1.5,
@@ -888,7 +1356,77 @@
       "compound": "low",
       "hype": "low"
     },
-    "actionable_insight": "speculative_watch"
+    "actionable_insight": "speculative_watch",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "wake up!",
+        "canonical_name": "wake up!",
+        "url": "https://hellmood.111mb.de/wake_up_16b_writeup.html",
+        "positioning": "一款仅16字节的x86实模式DOS演示程序，利用视频内存作为计算空间生成无限谢尔宾斯基分形，并通过PC扬声器同步输出音频，实现视听联觉效果。",
+        "technical_signal": "使用XOR替代ADD实现无进位加法，精确映射到初等元胞自动机规则60，仅16字节即可生成谢尔宾斯基三角形分形。",
+        "adoption_signal": "于2026年5月在荷兰Ommen举行的Outline Demoparty上正式发布，获得业内人士在真实硬件上运行验证。",
+        "ecosystem_relevance": "代表了sizecoding和demoscene文化的前沿，展示了极端算法密度与数学优雅性的完美结合，是16字节演示领域的重要突破。",
+        "target_users": [],
+        "differentiation": "将视觉分形生成与同一计算产生的音频输出同步结合，实现真正的视听联觉效果，作者声称其深度远超其他微型演示程序。",
+        "watch_reason": "这款16字节程序展示了极致的算法密度与数学优雅性；其将视频内存作为计算空间并实现视听联觉的创新方法，使其成为demoscene极简主义领域具有里程碑意义的作品，值得持续关注其技术影响与文化传承。",
+        "risk_notes": [
+          "不同BIOS版本和模拟器在内存中留下的初始数据存在差异，程序通过XOR与这些遗留数据进行运算，输出高度依赖运行环境。",
+          "程序仅适用于x86实模式DOS环境，在现代操作系统上运行需要模拟器或虚拟机支持，使用场景受限。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "bc2197128103ef22"
+        ],
+        "evidence_snippets": [
+          "该程序仅用 16 字节的 x86 实模式 DOS 汇编代码，利用视频内存作为计算空间绘制无限谢尔宾斯基分形。",
+          "程序通过 `out 61h, al` 指令将计算得到的字节直接发送到 PC 扬声器端口，实现视听联觉效果。",
+          "该程序在 2026 年 5 月荷兰 Ommen 举行的 Outline Demoparty 上正式发布。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "M8trix",
+        "canonical_name": "M8trix",
+        "positioning": "HellMood于2014年发布的仅8字节（后压缩至7字节）的x86实模式DOS演示程序，在屏幕上涂抹伪随机字母，是sizecoding领域的早期里程碑作品。",
+        "technical_signal": "仅用8字节x86汇编代码即实现在DOS文本屏幕上涂抹伪随机字母的效果，展现了极致的代码压缩能力。",
+        "ecosystem_relevance": "作为sizecoding历史的早期里程碑，M8trix为作者后续16字节作品\"wake up!\"的创作奠定了技术基础与创意方向。",
+        "target_users": [],
+        "differentiation": "在2014年即实现仅8字节的伪随机字母涂抹效果，将sizecoding推向新的极限，体现了极简代码表现力的突破性。",
+        "watch_reason": "作为HellMood在sizecoding领域的早期里程碑，M8trix以仅8字节展示了极简代码的无限可能，并与\"wake up!\"共同呈现了从2014到2026年间的技术演进脉络，对于研究demoscene文化传承具有参考价值。",
+        "risk_notes": [
+          "作为仅8字节的极简演示程序，其功能较为单一，仅限于屏幕涂抹伪随机字母，技术复杂度远低于后续同类作品。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "bc2197128103ef22"
+        ],
+        "evidence_snippets": [
+          "作者 HellMood 的原创作品 \"M8trix\" 于 2014 年发布，仅用 8 字节（后压缩至 7 字节）即可在屏幕上涂抹伪随机字母。",
+          "作者在开发 \"wake up!\" 时始终思考如何让 \"M8trix\" 的效果听起来更好，但本次声音部分优先于画面创作。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Rainbow Surf",
+        "canonical_name": "Rainbow Surf",
+        "positioning": "Plex创作的16字节x86实模式DOS演示程序，以其出色的视觉效果重新激发HellMood的创作热情，是\"wake up!\"项目诞生的重要灵感来源。",
+        "technical_signal": "在16字节代码限制内实现了令人印象深刻的视觉效果，展示了sizecoding中创意与技术的精妙平衡。",
+        "ecosystem_relevance": "作为demoscene中16字节演示的标杆，Rainbow Surf直接激发了HellMood创作\"wake up!\"，体现了sizecoding创作者之间的技术传承。",
+        "target_users": [],
+        "watch_reason": "作为直接激发\"wake up!\"创作的灵感来源，Rainbow Surf代表了16字节sizecoding领域的重要参考标准，对于理解demoscene社区的创意传承和技术演进脉络具有独特价值。",
+        "risk_notes": [
+          "文章仅将其作为创作灵感来源提及，未说明具体技术实现方式和视觉效果细节，可独立分析的信息较为有限。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "bc2197128103ef22"
+        ],
+        "evidence_snippets": [
+          "Plex 的作品 \"Rainbow Surf\" 仅用 16 字节即实现了出色的演示效果，这促使作者重新翻出旧草图开始创作。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -1007,8 +1545,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "e344bcc2fda636ef",
     "source_type": "community_discussion",
-    "tldr": "C# 15/.NET 11 预览版正式引入 union 关键字，支持可穷尽模式匹配的联合类型。",
-    "objective_summary": "2026年，.NET 11 预览版 4 中 C# 15 引入了 union 关键字，允许开发者声明可表示多种不相关类型的联合类型。编译器生成实现 IUnion 接口的 struct，通过 [Union] 属性驱动隐式转换和 switch 表达式穷尽检查。",
+    "tldr": "C# 15（.NET 11 Preview 4）通过 union 关键字正式引入内置的判别联合类型支持，编译器自动生成带有 [Union] 属性的 struct 并实现 IUnion 接口，配合 switch 表达式可实现穷举模式匹配，无需提供默认分支。",
+    "objective_summary": "2026年7月，.NET 11 Preview 4 为 C# 15 带来了内置的判别联合类型（可区分联合）支持。开发者使用 union 关键字声明联合类型，编译器自动生成带有 [Union] 特性的 struct，将各子类型实例以 object? 形式存储并通过 IUnion 接口暴露。该特性配合 switch 表达式可实现穷举模式匹配，编译器会自动检查所有分支是否已覆盖，未覆盖时发出警告。虽然需要 .NET 11 SDK 并启用预览语言版本，但联合类型可作为纯粹的编译器功能面向旧版本 .NET 运行时运行。默认生成的联合类型会对值类型参数进行装箱操作，开发者可通过自定义实现来避免这一性能开销。",
     "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
@@ -1016,25 +1554,46 @@
         "Microsoft"
       ],
       "technologies": [
-        "C# 15",
         ".NET 11",
-        "union types",
+        "C# 15",
+        "union",
         "IUnion",
-        "UnionAttribute",
-        "OneOf",
-        "Sasa"
+        "switch 表达式"
       ],
-      "key_people": [
-        "Andrew Lock"
-      ]
+      "key_people": []
     },
     "key_logic_flow": [
-      "联合类型允许一个类型表示多种可能不相关的数据类型，常见例子包括 Option<T> 和 Result<TSuccess, TError>。",
-      "C# 15 通过 union 关键字声明联合类型，语法为 `public union TypeName(CaseType1, CaseType2, ...)`。",
-      "编译器将 union 声明生成为一个实现 IUnion 接口的 struct，包含 object? Value 属性和每个 case 类型的构造函数，并标注 [Union] 属性。",
-      "[Union] 属性驱动隐式转换（从 case 类型到 union 类型）和 switch 表达式的穷尽性检查，遗漏 case 会触发 CS8509 警告。",
-      "默认实现将值类型参数装箱为 object 存储在 Value 属性中，在值类型较多的场景下会产生不必要的堆分配。",
-      "开发者可通过手动实现 IUnion 接口并添加 [Union] 属性来创建自定义联合类型，以此避免装箱开销并复用编译器的模式匹配支持。"
+      "C# 15 通过 union 关键字支持判别联合类型，可将多个不相关的 record 或 class 类型组合为一个联合类型。",
+      "编译器为 union 声明生成带有 [Union] 属性的 struct，内部包含一个只读的 object? Value 属性并实现 IUnion 接口。",
+      "联合类型支持隐式转换：将子类型实例赋值给联合类型变量时，编译器自动包装为对应的构造函数调用。",
+      "配合 switch 表达式可实现穷举模式匹配，编译器检查所有分支覆盖情况，遗漏时发出警告 CS8509。",
+      "使用联合类型需要安装 .NET 11 Preview 2+ SDK 并在 .csproj 中设置 LangVersion 为 preview。",
+      "默认生成的联合类型会对值类型参数进行装箱（heap 分配），开发者可以通过自定义实现加上 [Union] 属性来避免此开销。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "OneOf",
+        "canonical_name": "OneOf",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "文章提到 OneOf 是社区中已有的自定义联合类型实现库之一，可以通过添加 [Union] 属性和实现 IUnion 接口来利用新的语言支持。"
+        ],
+        "article_id": "e344bcc2fda636ef"
+      },
+      {
+        "object_type": "project",
+        "name": "Sasa",
+        "canonical_name": "Sasa",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "文章提到 Sasa 是作者之前使用过的另一个自定义联合类型实现库，同样可以受益于内置的联合类型语言支持。"
+        ],
+        "article_id": "e344bcc2fda636ef"
+      }
     ],
     "impact_score": {
       "score": 3.5,
@@ -1092,7 +1651,53 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "OneOf",
+        "canonical_name": "OneOf",
+        "positioning": "OneOf 是 .NET 生态中社区驱动的判别联合类型实现库，在 C# 15 原生 union 支持出现前为缺少此特性的 C# 版本提供替代方案。",
+        "technical_signal": "C# 15 的 union 关键字发布后，OneOf 仍可通过添加 [Union] 属性并实现 IUnion 接口来适配新的语言级联合类型支持，实现向前兼容。",
+        "adoption_signal": "作为社区中已有的自定义联合类型实现库之一，OneOf 曾被广泛用于在缺少原生联合类型的 C# 版本中实现函数式模式匹配。",
+        "ecosystem_relevance": "C# 15 原生联合类型将编译器穷举检查引入生态，降低了对 OneOf 等第三方库的依赖，改变了 .NET 类型系统生态格局。",
+        "target_users": [],
+        "watch_reason": "C# 15 引入内置联合类型后，OneOf 作为社区方案的核心价值面临根本性挑战。该库能否通过适配新语言特性找到新的生态定位，值得持续观察其迁移策略和维护状态。",
+        "risk_notes": [
+          "C# 15 原生 union 关键字使编译器提供穷举模式匹配检查，可能大幅削弱 OneOf 的采用必要性。",
+          "OneOf 的社区活跃度和维护力度可能因语言原生联合类型支持而持续下降。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "e344bcc2fda636ef"
+        ],
+        "evidence_snippets": [
+          "文章提到 OneOf 是社区中已有的自定义联合类型实现库之一，可以通过添加 [Union] 属性和实现 IUnion 接口来利用新的语言支持。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Sasa",
+        "canonical_name": "Sasa",
+        "positioning": "Sasa 是 .NET 生态中作者 Andrew Lock 曾使用的自定义联合类型实现库，为缺少原生联合类型支持的 C# 版本提供解决方案。",
+        "technical_signal": "Sasa 与 OneOf 类似，可通过添加 [Union] 属性和实现 IUnion 接口来兼容 C# 15 的新联合类型语言特性。",
+        "adoption_signal": "文章指出作者本人曾使用 Sasa 处理联合类型场景，表明该库在社区中有一定的实际使用基础。",
+        "ecosystem_relevance": "C# 15 内置联合类型对 Sasa 等社区库的替代效应明显，但经验证的 API 设计思路仍可影响 .NET 生态中的最佳实践。",
+        "target_users": [],
+        "watch_reason": "Sasa 作为作者曾使用的联合类型库，在 C# 15 原生支持后展示了社区方案到语言特性的演进路径。其维护者如何应对原生特性冲击是观察 .NET 生态兼容性的一个窗口。",
+        "risk_notes": [
+          "Sasa 因原生语言支持的引入面临被弃用的风险，社区贡献和维护可能停滞。",
+          "该库在文章中被提及为过往方案，缺乏明确的新版本规划证据。"
+        ],
+        "score": 2.0,
+        "article_ids": [
+          "e344bcc2fda636ef"
+        ],
+        "evidence_snippets": [
+          "文章提到 Sasa 是作者之前使用过的另一个自定义联合类型实现库，同样可以受益于内置的联合类型语言支持。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -1111,8 +1716,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "e60b985a02c56b99",
     "source_type": "community_discussion",
-    "tldr": "微软开源了迄今为止发现的最早DOS源代码——86-DOS 1.00内核及PC-DOS 1.00开发快照",
-    "objective_summary": "2026年4月，微软发布了迄今为止发现的最早DOS源代码，包括86-DOS 1.00内核源代码、PC-DOS 1.00内核开发快照以及CHKDSK等实用工具。该操作系统最初由Tim Paterson为Seattle Computer Products创建，微软获得授权后买断版权，",
+    "tldr": "微软开源了迄今为止发现的最早的 DOS 源代码，包括 86-DOS 1.00 内核、PC-DOS 1.00 内核开发快照及 CHKDSK 等工具。这段代码早于 MS-DOS 品牌命名，是微软与 IBM 合作开发 PC 时期的历史产物。",
+    "objective_summary": "微软于 2026 年 4 月通过官方博客宣布开源了迄今为止发现的最早的 DOS 源代码。此次发布的代码早于 MS-DOS 品牌命名，包括 86-DOS 1.00 内核源码、PC-DOS 1.00 内核的多个开发快照以及 CHKDSK 等经典工具。86-DOS 最初由程序员 Tim Paterson 为 Seattle Computer Products 的 Intel 8086 计算机套件开发，原名 QDOS。微软为向仍在开发中的 IBM PC 5150 提供操作系统，获得了 86-DOS 的授权并聘请 Paterson 继续开发，随后买断了其所有权。微软将系统授权给 IBM 作为 PC-DOS，同时保留向其他公司销售的权利，其自售版本即为 MS-DOS。",
     "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
@@ -1122,26 +1727,40 @@
         "Seattle Computer Products"
       ],
       "technologies": [
-        "86-DOS",
         "MS-DOS",
+        "86-DOS",
         "PC-DOS",
         "QDOS",
-        "CHKDSK",
-        "Intel 8086"
+        "CHKDSK"
       ],
       "key_people": [
-        "Tim Paterson",
         "Stacey Haffner",
-        "Scott Hanselman"
+        "Scott Hanselman",
+        "Tim Paterson"
       ]
     },
     "key_logic_flow": [
-      "微软在过去二十年中多次发布MS-DOS历史源代码，本周发布了迄今为止发现的最早版本",
-      "本次发布内容包括86-DOS 1.00内核源代码、PC-DOS 1.00内核的多个开发快照以及CHKDSK等知名实用工具",
-      "86-DOS原名QDOS，由程序员Tim Paterson为Seattle Computer Products的Intel 8086计算机套件创建",
-      "微软为给IBM PC 5150提供操作系统而获得86-DOS授权，随后聘请Paterson继续开发并最终买断了该操作系统的全部版权",
-      "微软将该操作系统授权给IBM以PC-DOS名义销售，同时保留向其他公司销售的权利并以MS-DOS名义发行",
-      "上世纪八九十年代大量IBM PC兼容机的出现使MS-DOS成为大多数用户实际使用的操作系统版本"
+      "微软开源了迄今为止发现的最早的 DOS 源代码，包括 86-DOS 1.00 内核源码和 PC-DOS 1.00 内核的开发快照。",
+      "此次发布的代码还包括 CHKDSK 等经典工具，其历史早于 MS-DOS 品牌的正式命名。",
+      "86-DOS 最初由 Tim Paterson 为 Seattle Computer Products 的 Intel 8086 计算机套件开发，最初名为 QDOS。",
+      "微软为给正在开发中的 IBM PC 5150 提供操作系统，获得了 86-DOS 的授权并聘请 Paterson 继续开发。",
+      "微软随后买断了 86-DOS 的所有权，将其授权给 IBM 作为 PC-DOS，同时以 MS-DOS 品牌向其他公司销售。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "86-DOS 1.00 kernel source code",
+        "canonical_name": "86-DOS 1.00",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "微软发布了 86-DOS 1.00 内核的源代码，这是迄今为止发现的最早的 DOS 源代码版本。",
+          "此次开源发布还包括 PC-DOS 1.00 内核的多个开发快照以及 CHKDSK 等经典工具。",
+          "86-DOS 最初由 Tim Paterson 为 Seattle Computer Products 开发，原名 QDOS，后被微软授权并买断以用于 IBM PC。"
+        ],
+        "article_id": "e60b985a02c56b99"
+      }
     ],
     "impact_score": {
       "score": 2.0,
@@ -1188,6 +1807,32 @@
       "compound": "low",
       "hype": "low"
     },
-    "actionable_insight": "ignore"
+    "actionable_insight": "ignore",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "86-DOS 1.00 kernel source code",
+        "canonical_name": "86-DOS 1.00",
+        "positioning": "微软开源的历史性操作系统内核源码，包含 86-DOS 1.00 及 PC-DOS 1.00 开发快照，是个人计算机操作系统起源的重要见证。",
+        "technical_signal": "源码使用 8086 汇编语言编写，展现了早期操作系统内核的极简架构设计，是理解个人计算机软件起源的珍贵技术标本。",
+        "adoption_signal": "此次开源发布获得了开发者社区和历史爱好者的广泛关注，是微软持续推动其早期软件遗产开放的重要举措。",
+        "ecosystem_relevance": "作为 MS-DOS 和 PC-DOS 的共同前身，86-DOS 的源码开源对理解 IBM PC 兼容机生态的兴起具有独特的历史参考价值。",
+        "target_users": [],
+        "watch_reason": "微软持续挖掘并开源其早期操作系统的核心源码，对计算机历史研究和开源文化传承具有独特价值。虽无现代开发意义，但作为理解 PC 产业起源的关键史料，值得技术史爱好者长期关注。",
+        "risk_notes": [
+          "代码基于 8086 汇编语言编写，现代开发者直接阅读和理解的门槛较高。",
+          "该开源更多出于历史纪念意义，不具备活跃的社区维护或后续技术迭代预期。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "e60b985a02c56b99"
+        ],
+        "evidence_snippets": [
+          "微软发布了 86-DOS 1.00 内核的源代码，这是迄今为止发现的最早的 DOS 源代码版本。",
+          "此次开源发布还包括 PC-DOS 1.00 内核的多个开发快照以及 CHKDSK 等经典工具。",
+          "86-DOS 最初由 Tim Paterson 为 Seattle Computer Products 开发，原名 QDOS，后被微软授权并买断以用于 IBM PC。"
+        ]
+      }
+    ]
   }
 ]

@@ -14,8 +14,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "270262b342662472",
     "source_type": "tech_blog",
-    "tldr": "AWS 发布 Strands Robots SDK，集成 LeRobot 实现从 Hugging Face Hub 数据集到实体机器人的单一智能体闭环",
-    "objective_summary": "AWS 发布了开源的 Strands Robots SDK（Apache 2.0），将 LeRobot 堆栈封装为 AgentTools，允许用户通过单一智能体循环完成从 Hub 数据集加载、仿真演示录制、策略推理到实体机器人（SO-101）部署的全流程，并支持通过 Zenoh",
+    "tldr": "AWS 发布了开源 Strands Robots SDK，将 LeRobot 框架封装为 AgentTools，实现从 Hugging Face Hub 数据集到实体机器人的单代理全流程：仿真录制、策略推理、一键切换硬件部署，并通过 Zenoh 网格协调机群。",
+    "objective_summary": "AWS 在 Hugging Face 博客上发布了 Strands Robots SDK（Apache 2.0 开源），该 SDK 将 LeRobot 机器人框架暴露为 AgentTools，使开发者可组合成单个 Strands 代理完成从数据集到硬件部署的全流程。核心工作流包括在 MuJoCo 仿真中录制 LeRobotDataset、将数据推送到 Hugging Face Hub、运行策略推理，以及通过修改一个关键字参数将相同代理代码部署到实体 SO-101 机器人上。多机器人场景下，代理可通过内置的 Zenoh 点对点网格协调整个机群。",
     "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
@@ -25,22 +25,72 @@
       ],
       "technologies": [
         "LeRobot",
-        "Strands Robots SDK",
-        "MuJoCo",
+        "Strands Robots",
         "AgentTools",
+        "MuJoCo",
+        "MolmoAct2",
         "GR00T",
-        "Zenoh",
-        "MolmoAct2"
+        "LerobotLocal",
+        "Zenoh"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "AWS 发布 Strands Robots SDK（Apache 2.0 开源许可），将 LeRobot 堆栈封装为 AgentTools，支持组合成单一 Strands 智能体。",
-      "仿真环境（MuJoCo）和实体硬件使用相同的 LeRobotDataset 磁盘格式，演示数据可在仿真和硬件之间无缝互通。",
-      "GR00T 和 LerobotLocal 提供统一的策略推理接口，MolmoAct2 检查点通过 LerobotLocal 路径运行。",
-      "同一份智能体代码只需修改一个关键字参数（mode=\"real\"）即可从仿真切换到实体 SO-101 机器人部署。",
-      "通过内置的 Zenoh 点对点网状网络，智能体可以协调整个机器人集群的指令广播。",
-      "默认示例应用无需硬件、GPU 或 Hugging Face 凭据即可在笔记本的仿真环境中完整运行，代码托管在 GitHub 上。"
+      "Strands Robots 是 AWS 发布的开源 SDK（Apache 2.0），将机器人抽象、仿真环境和 LeRobot 框架包装为 AgentTools，供开发者组合成单一 Strands 代理。",
+      "该代理支持五项核心操作：在 MuJoCo 仿真中录制示范数据为 LeRobotDataset、将数据集推送到 Hugging Face Hub、在仿真中运行策略、修改一个关键字参数后部署到实体 SO-101 机器人，以及通过 Zenoh 网格广播命令到整个机群。",
+      "GR00T 和 LerobotLocal 作为统一的策略推理接口，MolmoAct2 检查点通过 LerobotLocal 路径运行，两者可在同一代理中切换。",
+      "仿真环境中录制的 LeRobotDataset 与实体硬件上 LeRobot 写入的数据格式完全一致，确保 sim-to-real 数据互通。",
+      "开发者无需硬件、GPU 或 Hugging Face 凭证即可在笔记本电脑上运行仿真示例，配套代码位于 GitHub 仓库的 examples/lerobot/hub_to_hardware.py 和 hub_to_hardware.ipynb。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "Strands Robots",
+        "canonical_name": "Strands Robots",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Strands Robots 是 AWS 发布的开源 SDK（Apache 2.0），将机器人抽象、仿真环境和 LeRobot 框架封装为 AgentTools。",
+          "通过修改一个关键字参数，相同的代理代码即可从 MuJoCo 仿真部署到实体 SO-101 机器人上。",
+          "代理可通过内置的 Zenoh 点对点网格协调多台机器人，广播命令到整个机群。"
+        ],
+        "article_id": "270262b342662472"
+      },
+      {
+        "object_type": "project",
+        "name": "LeRobot",
+        "canonical_name": "LeRobot",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "LeRobot 自身的 CLI 工具（lerobot-record、lerobot-calibrate）负责实体硬件的录制和校准。",
+          "仿真环境中录制的 LeRobotDataset 与实体硬件上 LeRobot 写入的数据格式完全一致，确保数据互通。"
+        ],
+        "article_id": "270262b342662472"
+      },
+      {
+        "object_type": "model",
+        "name": "MolmoAct2",
+        "canonical_name": "MolmoAct2",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "MolmoAct2 检查点通过 LerobotLocal 路径运行策略推理，作为 Strands 代理中的可用策略之一。"
+        ],
+        "article_id": "270262b342662472"
+      },
+      {
+        "object_type": "project",
+        "name": "GR00T",
+        "canonical_name": "GR00T",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "GR00T 和 LerobotLocal 作为统一的策略推理接口，在 Strands 代理中通过字符串切换即可互换。"
+        ],
+        "article_id": "270262b342662472"
+      }
     ],
     "impact_score": {
       "score": 5.8,
@@ -98,7 +148,77 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Strands Robots",
+        "canonical_name": "Strands Robots",
+        "positioning": "AWS 发布的开源机器人代理 SDK（Apache 2.0），将机器人抽象、仿真环境和 LeRobot 框架封装为 AgentTools，实现从数据集到实体机器人的一站式编排。",
+        "technical_signal": "将 LeRobot 框架暴露为 AgentTools，支持单代理完成仿真录制、Hub 推送、策略推理和硬件部署，仅修改一个关键字参数即可切换仿真与实体环境。",
+        "adoption_signal": "以 Apache 2.0 许可证在 Hugging Face 博客正式发布，配套 GitHub 仓库提供完整可运行的示例代码和 Jupyter 笔记本，开发者无需硬件即可在本地运行。",
+        "ecosystem_relevance": "深度集成 Hugging Face Hub 数据集、LeRobot 框架、MuJoCo 仿真环境和 SO-101 实体机器人，通过 Zenoh 点对点网格支持多机协调。",
+        "target_users": [],
+        "watch_reason": "Strands Robots 将机器人开发从多工具碎片化整合为单一代理流程，其仿真与硬件一键切换和 Zenoh 机群协调能力显著降低了机器人软件栈门槛，AWS 的背书和开源策略使其有潜力成为机器人 Agent 领域的基础设施层。",
+        "risk_notes": [
+          "目前仅验证 SO-101 单一机器人平台，在工业级多场景中的可移植性尚未验证。",
+          "作为 AWS 主导的开源项目，长期社区治理的中立性和外部贡献激励仍需观察。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "270262b342662472"
+        ],
+        "evidence_snippets": [
+          "Strands Robots 是 AWS 发布的开源 SDK（Apache 2.0），将机器人抽象、仿真环境和 LeRobot 框架封装为 AgentTools。",
+          "通过修改一个关键字参数，相同的代理代码即可从 MuJoCo 仿真部署到实体 SO-101 机器人上。",
+          "代理可通过内置的 Zenoh 点对点网格协调多台机器人，广播命令到整个机群。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "LeRobot",
+        "canonical_name": "LeRobot",
+        "positioning": "开源机器人学习框架，提供统一的 LeRobotDataset 数据集格式和完善的 CLI 工具链，被 AWS 选为 Strands Robots 核心组件，支撑仿真与硬件间的数据互通。",
+        "technical_signal": "提供 lerobot-record 和 lerobot-calibrate 等 CLI 工具负责实体硬件录制和校准，仿真与硬件使用完全一致的 LeRobotDataset 格式，确保 sim-to-real 数据互通。",
+        "adoption_signal": "被 AWS 选为 Strands Robots 的核心机器人框架，通过 AgentTools 封装后可直接用于仿真和硬件两类场景，体现其在机器人学习社区中的认可度。",
+        "ecosystem_relevance": "与 Hugging Face Hub 数据集标准、MuJoCo 仿真环境和 SO-101 实体机器人形成完整数据闭环，通过 Strands Robots 进入 AWS 机器人生态体系。",
+        "target_users": [],
+        "watch_reason": "LeRobot 被 AWS 选为 Strands Robots 的核心框架，其统一的 LeRobotDataset 格式打通了仿真录制与硬件采集的数据壁垒，标准化潜力使其有望成为机器人 Agent 时代的数据基础设施。",
+        "risk_notes": [
+          "数据格式标准化程度取决于社区采纳速度，单一厂商背书尚不足以形成行业标准。",
+          "与 Strands Robots 强绑定可能限制其在 AWS 生态之外的独立发展空间。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "270262b342662472"
+        ],
+        "evidence_snippets": [
+          "LeRobot 自身的 CLI 工具（lerobot-record、lerobot-calibrate）负责实体硬件的录制和校准。",
+          "仿真环境中录制的 LeRobotDataset 与实体硬件上 LeRobot 写入的数据格式完全一致，确保数据互通。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "GR00T",
+        "canonical_name": "GR00T",
+        "positioning": "机器人策略推理接口，在 Strands 代理中与 LerobotLocal 作为统一的推理后端，可通过字符串参数互换使用。",
+        "technical_signal": "与 LerobotLocal 共同作为 Strands 代理的策略推理接口，通过字符串参数即可切换，MolmoAct2 检查点通过 LerobotLocal 路径运行。",
+        "ecosystem_relevance": "作为 Strands Robots 中可互换的策略推理接口之一，被整合进 AWS 机器人 SDK 生态，与 LeRobot 框架形成互补。",
+        "target_users": [],
+        "watch_reason": "GR00T 作为机器人基础模型策略接口被整合进 AWS Strands Robots 生态，体现 AI 大模型在机器人推理中的应用趋势，但目前仅作为可互换接口之一，未来集成深度和战略价值尚待观察。",
+        "risk_notes": [
+          "目前在 Strands 代理中仅作为可选策略接口之一，差异化优势不明确。",
+          "被 LerobotLocal 路径覆盖了 MolmoAct2 等实际模型运行，角色定位偏薄。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "270262b342662472"
+        ],
+        "evidence_snippets": [
+          "GR00T 和 LerobotLocal 作为统一的策略推理接口，在 Strands 代理中通过字符串切换即可互换。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "huggingface-blog",
@@ -115,9 +235,9 @@
     "pipeline_stage": "fact_extracted",
     "id": "b59b3271b775356f",
     "source_type": "tech_blog",
-    "tldr": "微软、谷歌、Hugging Face 等联合发布 ARD 开放规范，让 AI 代理在运行时动态发现工具，无需预安装。",
-    "objective_summary": "Microsoft、Google、GoDaddy、Hugging Face 等联合发布了 Agentic Resource Discovery (ARD) 开放规范草案，定义代理和工具的编目、索引和跨联邦注册表搜索标准。Hugging Face 发布了参考实现 Hugging Face",
-    "event_type": "infrastructure_update",
+    "tldr": "Agentic Resource Discovery (ARD) 是一个由 Microsoft、Google、GoDaddy、Hugging Face 等多家公司联合贡献的开放规范草案，为 AI 代理提供运行时能力发现层，替代传统的手动安装模式。Hugging Face 已推出参考实现 Discover Tool，支持通过自然语言搜索数千个 Skill、ML 应用和 MCP 服务器。",
+    "objective_summary": "Microsoft、Google、GoDaddy、Hugging Face 等多家机构联合发布了 Agentic Resource Discovery (ARD) 开放规范草案，定义了静态清单 `ai-catalog.json` 和动态注册 API `POST /search` 两套机制。该规范将代理能力选择从 LLM 上下文窗口外部化，通过意图搜索让代理在运行时动态发现能力。Hugging Face 发布了参考实现 Discover Tool，集成 Hub 的语义搜索和 Agent Skills，实现对数千个 Spaces、MCP 服务器和应用的跨注册表检索。",
+    "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
@@ -129,18 +249,47 @@
       "technologies": [
         "ARD",
         "MCP",
-        "A2A",
-        "Agentic Resource Discovery"
+        "A2A"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "ARD 是一个开放规范草案，由 Microsoft、Google、GoDaddy、Hugging Face 等贡献者联合制定，定义了代理和工具在联邦注册表中的编目、索引和搜索标准。",
-      "当前代理工具模型是\"先安装后使用\"模式，开发者将 MCP 服务器 URL 硬编码到配置中，这种模式无法扩展到数千个临时交互场景。",
-      "另一种替代方案是将所有工具描述塞入 LLM 上下文窗口让模型选择，但受限于上下文预算且描述过于单薄。",
-      "ARD 将选择过程移出 LLM：注册表用发布者身份、代表查询、合规证明和标签等更丰富的信号索引能力，客户端通过自然语言搜索，代理使用搜索结果调用工具。",
-      "规范定义了两个核心内容：静态清单格式 ai-catalog.json（发布者在已知 URL 托管能力信息）和动态注册表 API POST /search（提供实时排序的发现能力）。",
-      "Hugging Face 发布了参考实现 Hugging Face Discover Tool，结合 Hub 的语义搜索和 Agent Skills，提供对数千个 Gradio 应用、MCP 服务器和演示的搜索访问。"
+      "ARD 是一个由 Microsoft、Google、GoDaddy、Hugging Face 等公司联合贡献的开放规范草案，定义了代理能力的发现层。",
+      "当前代理能力模型是\"先安装、后使用\"，通过硬编码 MCP 服务器 URL 或插件方式工作，无法扩展到数千个临时集成场景。",
+      "ARD 将能力选择从 LLM 上下文窗口中迁移出来，通过注册表索引发布者身份、代表性查询、合规证明和标签等富信号来实现运行时动态发现。",
+      "规范定义了两个核心组成部分：静态清单格式 `ai-catalog.json` 和动态注册 API `POST /search`，分别支持托管发布和实时排名搜索。",
+      "Hugging Face 发布了参考实现 Discover Tool，整合 Hub 的语义搜索和 Agent Skills，对外暴露 ARD 标准接口。",
+      "Discover Tool 仅返回运行阶段为 RUNNING 的 Space，并根据请求的媒体类型（application/ai-skill 等）驱动响应格式。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "Agentic Resource Discovery",
+        "canonical_name": "Agentic Resource Discovery",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "ARD 是一个由 Microsoft、Google、GoDaddy、Hugging Face 等公司联合贡献的开放规范草案，定义了代理和工具的编目、索引和跨联邦注册表搜索方式。",
+          "规范定义了静态清单格式 ai-catalog.json 和动态注册 API POST /search，分别用于托管发布能力和实时排名搜索。",
+          "ARD 将能力选择从 LLM 上下文窗口外部化，通过意图搜索让代理在运行时动态发现能力，无需预先配置。"
+        ],
+        "article_id": "b59b3271b775356f"
+      },
+      {
+        "object_type": "product",
+        "name": "Hugging Face Discover Tool",
+        "canonical_name": "Hugging Face Discover Tool",
+        "url": "https://huggingface.co",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Hugging Face Discover Tool 是 ARD 的参考实现，提供对数千个 Skill、ML 应用和 MCP 服务器的搜索访问。",
+          "Discover Tool 通过 Hub 现有的语义搜索和 Agent Skills 来提供结果，并翻译为 ARD 规范格式。",
+          "该工具仅返回运行阶段为 RUNNING 的 Space，并根据请求的媒体类型（如 application/ai-skill）驱动响应格式。"
+        ],
+        "article_id": "b59b3271b775356f"
+      }
     ],
     "impact_score": {
       "score": 7.0,
@@ -196,6 +345,61 @@
       "compound": "medium",
       "hype": "medium"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Agentic Resource Discovery",
+        "canonical_name": "Agentic Resource Discovery",
+        "positioning": "ARD 是由 Microsoft、Google、GoDaddy、Hugging Face 等多家公司联合贡献的开放规范草案，为 AI 代理定义运行时的能力发现层，实现意图驱动的动态能力选择。",
+        "technical_signal": "定义了静态清单格式 ai-catalog.json 和动态注册 API POST /search 两套互补机制，分别支持托管发布和实时排名搜索，将能力选择从 LLM 上下文窗口外部化。",
+        "adoption_signal": "由 Microsoft、Google、GoDaddy、Hugging Face 等多家科技公司联合贡献，具有广泛的行业参与基础，目前处于开放规范草案阶段。",
+        "ecosystem_relevance": "使 AI 代理能够在运行时动态发现 MCP 工具、A2A 代理和其他注册表中的服务，无需预先配置或硬编码依赖关系。",
+        "target_users": [],
+        "watch_reason": "ARD 试图解决当前代理工具的安装优先和上下文窗口瓶颈两大痛点，且由多个行业巨头联合推动，如果被广泛采纳将根本改变 AI 代理的能力接入方式，形成新的生态标准。",
+        "risk_notes": [
+          "目前仍为开放规范草案阶段，尚未形成正式标准，存在被其他方案替代的风险。",
+          "需要广泛的行业采纳和跨平台兼容性验证，实际落地效果有待观察。"
+        ],
+        "score": 8.0,
+        "article_ids": [
+          "b59b3271b775356f"
+        ],
+        "evidence_snippets": [
+          "ARD 是一个由 Microsoft、Google、GoDaddy、Hugging Face 等公司联合贡献的开放规范草案，定义了代理和工具的编目、索引和跨联邦注册表搜索方式。",
+          "规范定义了静态清单格式 ai-catalog.json 和动态注册 API POST /search，分别用于托管发布能力和实时排名搜索。",
+          "ARD 将能力选择从 LLM 上下文窗口外部化，通过意图搜索让代理在运行时动态发现能力，无需预先配置。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Hugging Face Discover Tool",
+        "canonical_name": "Hugging Face Discover Tool",
+        "url": "https://huggingface.co",
+        "positioning": "Hugging Face 发布的 ARD 参考实现 Discover Tool，集成 Hub 语义搜索和 Agent Skills，为 AI 代理提供对数千 Spaces、MCP 服务器和应用的跨注册表检索。",
+        "target_users": [
+          "AI 代理开发者",
+          "MCP 工具构建者",
+          "AI 应用集成开发者"
+        ],
+        "product_signal": "整合 Hub 的语义搜索和 Agent Skills 能力，将结果翻译为 ARD 规范格式对外暴露标准接口，支持三种媒体类型驱动响应格式，仅返回处于 RUNNING 状态的 Space。",
+        "market_signal": "作为 Hugging Face 官方推出的产品，天然受益于 Hub 生态的庞大 Space 和模型社区，具备用户基础和品牌信任优势。",
+        "differentiation": "不同于传统的插件市场手动集成模式，Discover Tool 通过运行时动态搜索让代理按需发现能力，无需预先安装和配置，降低了集成门槛。",
+        "watch_reason": "作为 ARD 规范的官方参考实现，Discover Tool 的搜索量和使用模式直接反映代理发现标准的落地进度，也是 Hugging Face 从模型托管平台向代理基础设施平台演进的重要布局。",
+        "risk_notes": [
+          "Discover Tool 目前仅在 Hugging Face 生态内运行，对其他注册表的搜索能力取决于跨联邦 ARD 的普及程度。",
+          "作为规范草案的参考实现，其接口和功能可能随 ARD 标准的演进发生较大变更。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "b59b3271b775356f"
+        ],
+        "evidence_snippets": [
+          "Hugging Face Discover Tool 是 ARD 的参考实现，提供对数千个 Skill、ML 应用和 MCP 服务器的搜索访问。",
+          "Discover Tool 通过 Hub 现有的语义搜索和 Agent Skills 来提供结果，并翻译为 ARD 规范格式。",
+          "该工具仅返回运行阶段为 RUNNING 的 Space，并根据请求的媒体类型（如 application/ai-skill）驱动响应格式。"
+        ]
+      }
+    ]
   }
 ]

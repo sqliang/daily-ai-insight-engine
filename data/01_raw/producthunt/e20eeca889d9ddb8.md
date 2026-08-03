@@ -8,6 +8,7 @@ created: '2026-07-20'
 manifest_dates:
 - '2026-07-20'
 - '2026-07-21'
+- '2026-07-22'
 description: 'Title: Rex: AI agents that run order-to-cash operations | Product Hunt'
 tags:
 - clippings

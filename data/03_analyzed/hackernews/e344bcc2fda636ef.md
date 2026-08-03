@@ -14,32 +14,51 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: e344bcc2fda636ef
 source_type: community_discussion
-tldr: C# 15/.NET 11 预览版正式引入 union 关键字，支持可穷尽模式匹配的联合类型。
-objective_summary: 2026年，.NET 11 预览版 4 中 C# 15 引入了 union 关键字，允许开发者声明可表示多种不相关类型的联合类型。编译器生成实现
-  IUnion 接口的 struct，通过 [Union] 属性驱动隐式转换和 switch 表达式穷尽检查。
+tldr: C# 15（.NET 11 Preview 4）通过 union 关键字正式引入内置的判别联合类型支持，编译器自动生成带有 [Union] 属性的 struct
+  并实现 IUnion 接口，配合 switch 表达式可实现穷举模式匹配，无需提供默认分支。
+objective_summary: 2026年7月，.NET 11 Preview 4 为 C# 15 带来了内置的判别联合类型（可区分联合）支持。开发者使用 union
+  关键字声明联合类型，编译器自动生成带有 [Union] 特性的 struct，将各子类型实例以 object? 形式存储并通过 IUnion 接口暴露。该特性配合
+  switch 表达式可实现穷举模式匹配，编译器会自动检查所有分支是否已覆盖，未覆盖时发出警告。虽然需要 .NET 11 SDK 并启用预览语言版本，但联合类型可作为纯粹的编译器功能面向旧版本
+  .NET 运行时运行。默认生成的联合类型会对值类型参数进行装箱操作，开发者可通过自定义实现来避免这一性能开销。
 event_type: framework_tools
 epistemic_status: verified_fact
 entities:
   companies:
   - Microsoft
   technologies:
-  - C# 15
   - .NET 11
-  - union types
+  - C# 15
+  - union
   - IUnion
-  - UnionAttribute
-  - OneOf
-  - Sasa
-  key_people:
-  - Andrew Lock
+  - switch 表达式
+  key_people: []
 key_logic_flow:
-- 联合类型允许一个类型表示多种可能不相关的数据类型，常见例子包括 Option<T> 和 Result<TSuccess, TError>。
-- C# 15 通过 union 关键字声明联合类型，语法为 `public union TypeName(CaseType1, CaseType2, ...)`。
-- 编译器将 union 声明生成为一个实现 IUnion 接口的 struct，包含 object? Value 属性和每个 case 类型的构造函数，并标注 [Union]
-  属性。
-- '[Union] 属性驱动隐式转换（从 case 类型到 union 类型）和 switch 表达式的穷尽性检查，遗漏 case 会触发 CS8509 警告。'
-- 默认实现将值类型参数装箱为 object 存储在 Value 属性中，在值类型较多的场景下会产生不必要的堆分配。
-- 开发者可通过手动实现 IUnion 接口并添加 [Union] 属性来创建自定义联合类型，以此避免装箱开销并复用编译器的模式匹配支持。
+- C# 15 通过 union 关键字支持判别联合类型，可将多个不相关的 record 或 class 类型组合为一个联合类型。
+- 编译器为 union 声明生成带有 [Union] 属性的 struct，内部包含一个只读的 object? Value 属性并实现 IUnion 接口。
+- 联合类型支持隐式转换：将子类型实例赋值给联合类型变量时，编译器自动包装为对应的构造函数调用。
+- 配合 switch 表达式可实现穷举模式匹配，编译器检查所有分支覆盖情况，遗漏时发出警告 CS8509。
+- 使用联合类型需要安装 .NET 11 Preview 2+ SDK 并在 .csproj 中设置 LangVersion 为 preview。
+- 默认生成的联合类型会对值类型参数进行装箱（heap 分配），开发者可以通过自定义实现加上 [Union] 属性来避免此开销。
+extract_result: success
+object_mentions:
+- object_type: project
+  name: OneOf
+  canonical_name: OneOf
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 文章提到 OneOf 是社区中已有的自定义联合类型实现库之一，可以通过添加 [Union] 属性和实现 IUnion 接口来利用新的语言支持。
+  article_id: e344bcc2fda636ef
+- object_type: project
+  name: Sasa
+  canonical_name: Sasa
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 文章提到 Sasa 是作者之前使用过的另一个自定义联合类型实现库，同样可以受益于内置的联合类型语言支持。
+  article_id: e344bcc2fda636ef
 impact_score:
   score: 3.5
   reason: C# 联合类型是 .NET 生态期待已久的语言特性，但其对 AI 行业的短期冲击有限。一方面，C# 并非 AI/ML 主流开发语言（Python
@@ -102,6 +121,50 @@ confidence:
   compound: medium
   hype: low
 actionable_insight: monitor
+object_insights:
+- object_type: project
+  name: OneOf
+  canonical_name: OneOf
+  url: null
+  positioning: OneOf 是 .NET 生态中社区驱动的判别联合类型实现库，在 C# 15 原生 union 支持出现前为缺少此特性的 C# 版本提供替代方案。
+  technical_signal: C# 15 的 union 关键字发布后，OneOf 仍可通过添加 [Union] 属性并实现 IUnion 接口来适配新的语言级联合类型支持，实现向前兼容。
+  adoption_signal: 作为社区中已有的自定义联合类型实现库之一，OneOf 曾被广泛用于在缺少原生联合类型的 C# 版本中实现函数式模式匹配。
+  ecosystem_relevance: C# 15 原生联合类型将编译器穷举检查引入生态，降低了对 OneOf 等第三方库的依赖，改变了 .NET 类型系统生态格局。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: C# 15 引入内置联合类型后，OneOf 作为社区方案的核心价值面临根本性挑战。该库能否通过适配新语言特性找到新的生态定位，值得持续观察其迁移策略和维护状态。
+  risk_notes:
+  - C# 15 原生 union 关键字使编译器提供穷举模式匹配检查，可能大幅削弱 OneOf 的采用必要性。
+  - OneOf 的社区活跃度和维护力度可能因语言原生联合类型支持而持续下降。
+  score: 3.0
+  article_ids:
+  - e344bcc2fda636ef
+  evidence_snippets:
+  - 文章提到 OneOf 是社区中已有的自定义联合类型实现库之一，可以通过添加 [Union] 属性和实现 IUnion 接口来利用新的语言支持。
+- object_type: project
+  name: Sasa
+  canonical_name: Sasa
+  url: null
+  positioning: Sasa 是 .NET 生态中作者 Andrew Lock 曾使用的自定义联合类型实现库，为缺少原生联合类型支持的 C# 版本提供解决方案。
+  technical_signal: Sasa 与 OneOf 类似，可通过添加 [Union] 属性和实现 IUnion 接口来兼容 C# 15 的新联合类型语言特性。
+  adoption_signal: 文章指出作者本人曾使用 Sasa 处理联合类型场景，表明该库在社区中有一定的实际使用基础。
+  ecosystem_relevance: C# 15 内置联合类型对 Sasa 等社区库的替代效应明显，但经验证的 API 设计思路仍可影响 .NET 生态中的最佳实践。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: Sasa 作为作者曾使用的联合类型库，在 C# 15 原生支持后展示了社区方案到语言特性的演进路径。其维护者如何应对原生特性冲击是观察
+    .NET 生态兼容性的一个窗口。
+  risk_notes:
+  - Sasa 因原生语言支持的引入面临被弃用的风险，社区贡献和维护可能停滞。
+  - 该库在文章中被提及为过往方案，缺乏明确的新版本规划证据。
+  score: 2.0
+  article_ids:
+  - e344bcc2fda636ef
+  evidence_snippets:
+  - 文章提到 Sasa 是作者之前使用过的另一个自定义联合类型实现库，同样可以受益于内置的联合类型语言支持。
 ---
 
 Unions are one of those features that have been requested for years, and in .NET 11 (or rather, C# 15) they're *finally* here. In this post I describe what that support looks like, how you can use them, how they're implemented, and how you can implement your own custom types.

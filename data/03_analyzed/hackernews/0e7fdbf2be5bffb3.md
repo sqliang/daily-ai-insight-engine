@@ -16,26 +16,37 @@ id: 0e7fdbf2be5bffb3
 manifest_dates:
 - '2026-07-03'
 source_type: community_discussion
-tldr: 专家开发者应全程参与AI编程，审查每次diff，拒绝不良变更以产出高质量代码。
-objective_summary: okTurtles 的 Greg Slepak 基于一年以上研究，提出"短绳"AI 编程方法论。该方法要求专家开发者的人工介入保持在循环中，审查
-  AI 的每次 diff 变更并拒绝不良提议，替代当前流行的"氛围编程"方式。同时提出 AI 与人类联合审查 PR 的流程，要求 AI 辅助的 PR
+tldr: okTurtles 团队提出"短 leash"AI 编码方法，要求专业开发者全程参与并逐行审查 AI 生成的代码改动，通过频繁干预防止 AI 偏离轨道。该方法强调人机协作审查流程，声称即使不使用前沿模型也能产出优于纯
+  AI 生成代码的质量。
+objective_summary: okTurtles 团队在博文中提出了一套名为"短 leash"的 AI 编码方法论。该方法要求专业软件开发者全程监控 AI
+  编码代理的每一步操作，通过审查权限提示中的 diff 来保持对代码库的理解，并在发现不合理操作时拒绝权限。作者主张 AI 审查应作为 linter 配合人类审查使用，且所有
+  AI 辅助生成的 PR 必须由提交者自行逐行审查后才能提交给维护者。
 event_type: framework_tools
 epistemic_status: theoretical_claim
 entities:
   companies:
   - okTurtles
   technologies:
-  - AI coding agents
+  - Crush
   - Fable
-  key_people:
-  - Greg Slepak
+  key_people: []
 key_logic_flow:
-- 作者 Greg Slepak 经过一年研究，认为当前 AI 编程的"氛围编程"方式（多智能体并行、开发者脱离代码审查）无法产出高质量代码，仅适用于不关注质量的场景。
-- 短绳方法要求开发者全程参与：使用规划阶段制定任务计划，从不使用"YOLO"模式，AI 从不脱离人工监控独立工作。
-- 开发者必须坐在屏幕前逐行审查 AI 提出的每次 diff 变更，随时拒绝不良变更以防止 AI 偏离轨道，每个子任务结束时提交一次 commit 以保护已完成的代码。
-- AI 代码审查应作为"linter"角色快速捕获常见错误，而人类审查者负责发现高层次问题和方向性变更，两者结合优于单一审查方式。
-- 使用 AI 辅助的 PR 作者必须以审查他人 PR 的态度逐行自审自己的 PR，确认理解后再提交给维护者，并在 PR 描述中披露所用 AI 模型。
+- 作者认为传统"Vibe"AI 编码方法（让多个 AI 代理并行工作、开发者不参与过程）会导致代码质量低下，因为开发者无法真正理解代码库的变化。
+- 作者提出"短 leash"方法的核心是开发者必须全程参与 AI 编码过程，通过审查每次改动的 diff 来保持对代码库的理解并及时阻止 AI 偏离预期方向。
+- 短 leash 方法要求开发者频繁审查并拒绝 AI 的不合理操作，在每完成一个子任务后提交代码以防止 AI 破坏已有工作。
+- 作者主张 AI 代码审查应作为 linter 使用，负责快速捕获常见低级错误，而人类审查则负责更高级的结构性和方向性问题。
+- 使用 AI 辅助生成的 PR 必须由提交者在 PR 描述的"AI Disclosure"部分披露所用模型，并自行逐行审查后确认批准，再提交给维护者。
 extract_result: success
+object_mentions:
+- object_type: project
+  name: Crush
+  canonical_name: Crush
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 作者提到他维护了一个名为 Crush 的 AI 编码代理的自定义分支，作为其 AI 编码实践的核心工具之一。
+  article_id: 0e7fdbf2be5bffb3
 impact_score:
   score: 3.5
   reason: 这是一篇来自个人技术博客的方法论文章，提出了'短绳编程'概念作为对'氛围编程'的反拨。文章本身不涉及新产品发布、融资或技术突破，其影响力受限于作者个人影响力（okTurtles）和传播渠道。虽然'人工监督回归'是业界正在讨论的趋势，但该文更多是对已有实践的系统化总结，而非开创性贡献。短期行业冲击力有限，属于小圈子内的方法论讨论。
@@ -80,6 +91,29 @@ confidence:
   compound: medium
   hype: low
 actionable_insight: deep_dive
+object_insights:
+- object_type: project
+  name: Crush
+  canonical_name: Crush
+  url: null
+  positioning: Crush 是一款 AI 编码代理工具，okTurtles 团队维护其自定义分支，用于支撑"短 leash"编码方法论，强调人机协作与逐行审查。
+  technical_signal: 作为 AI 编码代理，支持在权限提示中展示代码 diff，使开发者可在批准前逐行审查 AI 的每次改动，实现细粒度控制。
+  adoption_signal: null
+  ecosystem_relevance: 与"短 leash"编码方法论深度绑定，代表 AI 辅助编码从纯自动化向人机协作审查的演进方向，适用于安全关键系统开发。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: Crush 作为"短 leash"编码方法论的实践载体，体现了 AI 编码代理从自动化向人机协作审查的重要转向。该方法要求开发者全程参与并逐行审查
+    AI 代码，有望在安全关键系统开发领域建立更可靠的 AI 辅助编码范式。
+  risk_notes:
+  - 文章仅提及 Crush 作为作者维护的自定义分支，未披露其与上游版本的差异及独立能力边界，信息量有限。
+  - 目前仅作为个人项目被提及，缺乏社区采用证据和第三方验证，项目真实活跃度与影响力难以评估。
+  score: 4.0
+  article_ids:
+  - 0e7fdbf2be5bffb3
+  evidence_snippets:
+  - 作者提到他维护了一个名为 Crush 的 AI 编码代理的自定义分支，作为其 AI 编码实践的核心工具之一使用。
 ---
 
 This post is the culmination of over a year of research into how to properly use AI agents to write high-quality software in security-critical systems.

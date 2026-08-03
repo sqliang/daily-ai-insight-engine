@@ -673,31 +673,58 @@
     "pipeline_stage": "fact_extracted",
     "id": "2d8d29aa6086259b",
     "source_type": "academic_paper",
-    "tldr": "通过规则规划器的决策轨迹监督驾驶VLA模型，提升推理与动作的因果一致性。",
-    "objective_summary": "该论文提出Neuro-Symbolic Drive框架，从经典规则规划器中提取结构化推理轨迹，用于微调Qwen3.5-4B作为驾驶VLA模型。在三摄像头感知设定下，ADE@3s从0.47降至0.26，丢失率从8.30%降至6.40%。",
+    "tldr": "提出 Neuro-Symbolic Drive 神经符号驾驶框架，从经典规则规划器中提取内部决策轨迹作为规则化推理监督信号，用于微调 Qwen3.5-4B 作为驾驶 VLA 模型。在模拟器基准中，三摄像头场景下 ADE@3s 从 0.47 降至 0.26，失效率从 8.30% 降至 6.40%。",
+    "objective_summary": "该论文提出 Neuro-Symbolic Drive 框架，将经典规则规划器在执行过程中的安全约束评估、候选操作搜索和轨迹选择等内部状态序列化为结构化推理数据，并与轨迹数据配对，用于微调 Qwen3.5-4B 作为驾驶 VLA 模型。该方法确保推理过程与运动生成在结构上耦合而非事后对齐。在模拟器基准测试中，三摄像头感知条件下 ADE@3s 从 0.47 降至 0.26，失效率从 8.30% 降至 6.40%；八摄像头条件下 ADE@3s 从 0.54 降至 0.26，失效率从 10.13% 降至 5.99%。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
-      "companies": [
-        "Alibaba"
-      ],
+      "companies": [],
       "technologies": [
         "VLA",
+        "VLM",
+        "Chain-of-Thought",
         "CoT",
         "Neuro-Symbolic",
-        "Qwen3.5-4B"
+        "Rule-Based Planning"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "现有的驾驶VLA模型虽引入Chain-of-Thought推理，但推理与最终运动规划之间缺乏因果关联。",
-      "规则规划器本身是符号AI系统，在执行过程中会产生可解释的决策轨迹。",
-      "该框架在模拟环境中对规则规划器进行插桩，捕获其执行轨迹及每一步规则评估的内部决策记录。",
-      "将每条决策轨迹序列化为结构化规则推理链，并与对应轨迹配对作为训练数据。",
-      "使用这些规则推理数据微调Qwen3.5-4B作为驾驶VLA模型，使推理与运动生成天然耦合。",
-      "在模拟器基准测试中，三摄像头感知下ADE@3s从0.47降至0.26，丢失率从8.30%降至6.40%。"
+      "现有驾驶 VLA 模型的 Chain-of-Thought 推理缺乏与规划动作之间的因果连接，推理过程与运动生成脱节。",
+      "Neuro-Symbolic Drive 从经典规则规划器中提取内部决策轨迹作为规则化推理监督信号。",
+      "规则规划器在执行过程中依次评估安全约束、搜索候选操作并选择最终轨迹，其内部状态可被序列化为结构化推理数据。",
+      "将规则化推理轨迹与执行轨迹配对，用于微调 Qwen3.5-4B 作为驾驶 VLA 模型。",
+      "由于推理轨迹直接源自决定动作的规划器状态，该方法确保推理与运动生成在结构上耦合而非事后对齐。",
+      "在模拟器基准测试中，该方法在三种和八种摄像头配置下均显著降低了平均位移误差 ADE@3s 和失效率。"
     ],
     "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "Neuro-Symbolic Drive",
+        "canonical_name": "Neuro-Symbolic Drive",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Neuro-Symbolic Drive 是一种神经符号驾驶框架，通过从经典规则规划器中提取规则化推理轨迹来监督驾驶 VLA 模型。",
+          "该方法将规则规划器的内部决策轨迹序列化为结构化推理数据，确保推理过程与运动生成在结构上耦合。",
+          "Neuro-Symbolic Drive 将神经符号规划逻辑转换为结构化监督信号，用于微调驾驶 VLA 模型。"
+        ],
+        "article_id": "2d8d29aa6086259b"
+      },
+      {
+        "object_type": "model",
+        "name": "Qwen3.5-4B",
+        "canonical_name": "Qwen3.5-4B",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "论文将规则化推理轨迹与轨迹数据配对，用于微调 Qwen3.5-4B 作为驾驶 VLA 模型。",
+          "Qwen3.5-4B 作为基础 VLM 模型，通过规则化推理数据进行微调以增强驾驶决策的因果一致性。"
+        ],
+        "article_id": "2d8d29aa6086259b"
+      }
+    ],
     "impact_score": {
       "score": 5.5,
       "reason": "该论文解决了一个真实痛点——驾驶VLA模型的CoT推理与运动规划之间存在因果脱节，提出的神经符号方案（用规则规划器执行轨迹监督VLA训练）思路新颖且效果显著（ADE降低44%~52%）。但局限性也很明显：仅在模拟器验证、模型规模仅4B、依赖已有规则规划器作为教师信号。短期内对自动驾驶研发社区有方法论启发意义，但距离改变行业格局（如量产车部署）还有距离，故评分落在'重要研究但非范式转移'区间。"
@@ -752,7 +779,33 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Neuro-Symbolic Drive",
+        "canonical_name": "Neuro-Symbolic Drive",
+        "url": "https://arxiv.org/abs/2606.23938",
+        "positioning": "Neuro-Symbolic Drive 是一种神经符号驾驶框架，通过从经典规则规划器中提取内部决策轨迹作为规则化推理监督信号，用于训练驾驶 VLA 模型，实现推理过程与运动生成的结构化因果耦合。",
+        "technical_signal": "该框架将规则规划器的安全约束评估、候选操作搜索与轨迹选择等内部状态序列化为结构化推理数据，用于微调 Qwen3.5-4B 作为驾驶 VLA 模型，并显著降低了平均位移误差和失效率。",
+        "ecosystem_relevance": "该研究连接了经典符号规划与端到端驾驶 VLA 两条技术路线，为自动驾驶领域提升决策可解释性和可信推理能力提供了不同于纯 CoT 的结构化方法路径。",
+        "target_users": [],
+        "watch_reason": "Neuro-Symbolic Drive 通过规则规划器提取因果耦合的推理轨迹来监督驾驶 VLA，在模拟器中 ADE@3s 从 0.47 降至 0.26、失效率从 8.30% 降至 6.40%，为自动驾驶可信推理提供了区别于传统 CoT 的结构化范式，值得持续跟踪其在真实场景中的落地进展。",
+        "risk_notes": [
+          "该方法仅在模拟器环境中验证，未在真实道路数据集上进行测试，其实际驾驶性能和泛化能力尚不明确。",
+          "依赖规则规划器的内部状态提取可能引入额外系统复杂度，且规则覆盖范围有限，难以应对长尾交通场景。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "2d8d29aa6086259b"
+        ],
+        "evidence_snippets": [
+          "Neuro-Symbolic Drive 是一种神经符号驾驶框架，通过从经典规则规划器中提取规则化推理轨迹来监督驾驶 VLA 模型。",
+          "该方法将规则规划器的内部决策轨迹序列化为结构化推理数据，确保推理过程与运动生成在结构上耦合。",
+          "Neuro-Symbolic Drive 将神经符号规划逻辑转换为结构化监督信号，用于微调驾驶 VLA 模型。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -866,32 +919,47 @@
     "pipeline_stage": "fact_extracted",
     "id": "3517cd107ba5be3b",
     "source_type": "academic_paper",
-    "tldr": "T2D-Bench 是一个评估 LLM 对2型糖尿病输出的证据门控基准框架",
-    "objective_summary": "研究人员提出了 T2D-Bench，一个基于多层临床-生活方式知识图谱的可复现基准，用于测试 LLM 输出是否满足可图检查的证据要求。在100个临床场景中，GPT-4o-mini 和 GPT-4o 分别有35%和33%的输出未能通过证据路径检查。",
-    "event_type": "framework_tools",
-    "epistemic_status": "theoretical_claim",
+    "tldr": "研究人员提出了 T2D-Bench，一个基于多层临床生活方式知识图谱的基准测试框架，用于检验 LLM 对 2 型糖尿病的输出是否满足可验证的证据路径约束。在 100 个结构化测试场景中，GPT-4o-mini 和 GPT-4o 分别有 35% 和 33% 的案例未能通过证据路径检查。",
+    "objective_summary": "该论文提出了 T2D-Bench，一个可复现的基准测试与证据门控评估框架，用于检验大语言模型对 2 型糖尿病的输出是否满足显式的图可查证据要求。该框架构建了一个多层临床生活方式知识图谱，融合了 UMLS、DrugBank、SIDER 等生物医学骨干数据、可计算的 ADA 护理标准规则，以及通过机制桥接与血糖实验室效应相连的生活方式知识。在涵盖诊断、用药安全与对抗性生活方式冲突的 100 个结构化临床场景中，GPT-4o-mini 和 GPT-4o 的基线输出分别有 35% 和 33% 的案例未通过基准定义的证据路径检查。证据门控机制能够检测无支持的遗漏并通过约束修订使输出达到验证器级别的合规水平。",
+    "event_type": "application_landing",
+    "epistemic_status": "verified_fact",
     "entities": {
-      "companies": [
-        "ADA",
-        "UMLS",
-        "DrugBank",
-        "SIDER"
-      ],
+      "companies": [],
       "technologies": [
         "LLM",
         "Knowledge Graph",
-        "GPT-4o-mini",
-        "GPT-4o"
+        "UMLS",
+        "DrugBank",
+        "SIDER",
+        "ADA Standards of Care"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "T2D-Bench 是一个用于评估大语言模型对2型糖尿病临床输出的可重复基准测试和证据门控评估框架。",
-      "该基准基于多层临床-生活方式知识图谱构建，融合了 UMLS、DrugBank、SIDER 的生物医学主干、可计算的 ADA 诊疗标准规则以及通过机制桥接关联到血糖实验室效应的生活方式知识。",
-      "在100个涵盖诊断、用药安全和对抗性生活方式冲突的结构化临床场景中，GPT-4o-mini 的基线输出有35%未通过基准定义的证据路径检查，GPT-4o 有33%未通过。",
-      "证据门控机制可检测出缺乏证据支持的遗漏，并通过受限修正使输出达到基准定义的证据要求合规水平。"
+      "大语言模型能够生成临床上流畅的 2 型糖尿病建议，但可能无法满足指南约束或为生活方式相关的血糖主张提供明确依据。",
+      "T2D-Bench 构建了一个多层临床生活方式知识图谱，融合了生物医学骨干数据（UMLS、DrugBank、SIDER）、可计算的 ADA 护理标准规则，以及通过机制桥接与血糖实验室效应相连的生活方式知识。",
+      "该框架在 100 个结构化临床场景（涵盖诊断、用药安全与对抗性生活方式冲突）中评估 LLM 输出，通过证据门控机制检测无支持的遗漏。",
+      "GPT-4o-mini 和 GPT-4o 的基线输出分别有 35% 和 33% 的案例未通过基准定义的证据路径检查。",
+      "证据门控使用约束修订使 LLM 输出达到验证器级别的证据要求合规水平。",
+      "研究表明可计算的证据约束能够使无支持的临床遗漏变得显式、可测量且可纠正。"
     ],
     "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "T2D-Bench",
+        "canonical_name": "T2D-Bench",
+        "url": "https://arxiv.org/abs/2606.24145",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "T2D-Bench 是一个可复现的基准测试和证据门控评估框架，用于检验 LLM 对 2 型糖尿病的输出是否满足显式的图可查证据要求。",
+          "该框架基于多层临床生活方式知识图谱，融合了 UMLS、DrugBank、SIDER 生物医学数据和可计算的 ADA 护理标准规则。",
+          "在 100 个结构化临床场景中，GPT-4o-mini 和 GPT-4o 分别有 35% 和 33% 的基线输出未通过证据路径检查。"
+        ],
+        "article_id": "3517cd107ba5be3b"
+      }
+    ],
     "impact_score": {
       "score": 5.5,
       "reason": "该论文提出的证据门控评估框架（T2D-Bench）是AI医疗安全领域的一项重要贡献，但属于特定疾病（2型糖尿病）的垂直场景，不具备跨领域范式转移效应。它揭示了GPT-4o等前沿模型在临床建议中高达33-35%的证据缺失率，这对医疗AI的可信度评估有警示意义，但短期内不会改变行业格局。得分处于'重要产品/研究发布、改变局部竞争格局'区间，临床AI评估赛道会因此出现新的基准工具，但影响力限定在医疗AI合规评估这一子领域。"
@@ -945,7 +1013,33 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "T2D-Bench",
+        "canonical_name": "T2D-Bench",
+        "url": "https://arxiv.org/abs/2606.24145",
+        "positioning": "T2D-Bench 是一个可复现的基准测试和证据门控评估框架，通过多层临床生活方式知识图谱检验 LLM 对 2 型糖尿病输出是否满足显式的图可查证据要求。",
+        "technical_signal": "该框架融合了 UMLS、DrugBank、SIDER 生物医学骨干数据和可计算的 ADA 护理标准规则，构建多层知识图谱并通过机制桥接将生活方式知识与血糖实验室效应相连。",
+        "ecosystem_relevance": "T2D-Bench 填补了 LLM 在特定慢性病领域输出证据可验证性的评估空白，其方法可推广至其他需要可计算临床指南约束的医学 AI 场景。",
+        "target_users": [],
+        "watch_reason": "随着 LLM 越来越多地被用于医疗建议场景，T2D-Bench 提出的证据门控机制为检测和修正 LLM 的无支撑临床遗漏提供了具体可操作的方法论框架，其后续扩展方向和社区采用情况值得重点关注。",
+        "risk_notes": [
+          "当前基准仅覆盖 100 个结构化临床场景，覆盖范围有限，尚不能全面反映真实临床复杂性。",
+          "知识图谱的持续更新维护需要与最新 ADA 护理标准对齐，长期维护成本较高。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "3517cd107ba5be3b"
+        ],
+        "evidence_snippets": [
+          "T2D-Bench 是一个可复现的基准测试和证据门控评估框架，用于检验 LLM 对 2 型糖尿病的输出是否满足显式的图可查证据要求。",
+          "该框架基于多层临床生活方式知识图谱，融合了 UMLS、DrugBank、SIDER 生物医学数据和可计算的 ADA 护理标准规则。",
+          "在 100 个结构化临床场景中，GPT-4o-mini 和 GPT-4o 分别有 35% 和 33% 的基线输出未通过证据路径检查。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -964,27 +1058,52 @@
     "pipeline_stage": "fact_extracted",
     "id": "3e39ee2bd04068ae",
     "source_type": "academic_paper",
-    "tldr": "提出假设约束的多智能体自动化形式化验证流程，用 Lean 4 完成了渐近统计理论的形式化证明。",
-    "objective_summary": "研究者提出了一种假设约束的多智能体 Lean 4 形式化流程，包含 7 个专家角色和一个审计器智能体。每个定理的假设都必须溯源到原文、被编码为 Lean 适配器、标记为隐含或被拒绝。该流程完成了参量和半参量模型渐近分布与效率结果的系统形式化，证明经 Lean 检查和人工审计。",
+    "tldr": "该论文提出了一种假设约束的多智能体自动化形式化验证流水线，用于在 Lean 4 中形式化渐近统计理论，核心机制是审计智能体确保每个定理假设都能追溯到源数学文本，最终生成了经过 Lean 检查器和人工双重验证的形式化证明代码。",
+    "objective_summary": "该研究提出了一个由多智能体驱动的假设约束形式化验证流水线，用于在 Lean 4 证明助手中形式化渐近统计理论。流水线包含一个管理器协调七个专业角色，核心是审计智能体实施的假设约束审计机制，要求每个主定理的假设和概念层字段都必须锚定在来源数学文本中。研究成功形式化了参数模型和半参数模型的渐近分布与效率结果，生成的 Lean 代码通过了自动检查器和人工审计双重验证。",
     "event_type": "framework_tools",
-    "epistemic_status": "verified_fact",
+    "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
         "Lean 4",
-        "Multi-Agent System",
-        "Automated Formalization"
+        "Multi-Agent System"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "渐近统计理论因其收敛性陈述、渐近展开、泛函分析和正则条件等特征，是 AI 辅助形式化的难点领域。",
-      "研究团队设计了一个假设约束的多智能体 Lean 4 形式化流程，由一个管理智能体协调七个专家角色：证明规划、骨架搭建、Mathlib 探查、证明构建、集成、独立评审和审计。",
-      "核心方法论是审计器智能体执行的假设约束审计：每个主定理的假设和概念层字段必须锚定到原始数学文本、被证明为 Lean 编码适配器、标记为原文隐含，或被拒绝为无依据的强化。",
-      "该方法被用于系统形式化渐近统计理论，特别是参量和半参量模型的渐近分布与效率结果。",
-      "最终实现的 Lean 代码公理干净且忠实于原文，核心定理的证明经 Lean 检查和人工审计，且定理无关的基础设施与统计概念定义被分离于定理特定的装配代码之外。"
+      "论文提出了一个假设约束的多智能体形式化验证流水线，包含一个管理器协调七个专业角色，覆盖证明规划、骨架搭建、Mathlib 侦察、证明构造、集成、独立评审和审计。",
+      "审计智能体负责执行假设约束审计：每个主定理的假设和概念层字段必须锚定在源数学文本中，并标注为 Lean 编码适配器、源隐含或拒绝作为无根据的强化。",
+      "该流水线成功形式化了渐近统计理论的核心定理，特别是参数模型和半参数模型的渐近分布与效率结果。",
+      "生成的 Lean 4 形式化代码同时通过了 Lean 检查器的自动验证和人工审计，保证了公理干净和忠实于原始数学来源。",
+      "形式化结果采用模块化设计，将定理无关的基础设施和统计概念定义与特定定理的组装代码分离。"
     ],
     "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "paper",
+        "name": "Hypothesis-Disciplined Multi-Agent Automated Formalization of Asymptotic Statistical Theory",
+        "canonical_name": "Hypothesis-Disciplined Multi-Agent Formalization of Asymptotic Statistical Theory",
+        "url": "https://arxiv.org/abs/2606.20642",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "论文标题为 Hypothesis-Disciplined Multi-Agent Automated Formalization of Asymptotic Statistical Theory，发表于 arXiv，编号 2606.20642，属于计算机科学人工智能子领域。"
+        ],
+        "article_id": "3e39ee2bd04068ae"
+      },
+      {
+        "object_type": "project",
+        "name": "Asymptotic Statistical Theory Formalization in Lean 4",
+        "canonical_name": "asymptotic-statistical-theory-lean4",
+        "confidence": "medium",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "论文使用假设约束多智能体流水线在 Lean 4 中形式化了参数和半参数模型的渐近分布与效率结果，代码经过 Lean 检查器和人工审计双重验证。",
+          "论文声明形式化结果已公开发布，但提取文本中未提供完整 URL，仅注明可从此 https URL 获取。"
+        ],
+        "article_id": "3e39ee2bd04068ae"
+      }
+    ],
     "impact_score": {
       "score": 5.5,
       "reason": "该论文提出了一种假设约束的多智能体形式化验证方法论，在 Lean 4 生态中完成了渐近统计理论这一高难度领域的系统形式化。核心贡献在于审计器智能体对假设锚定过程的强制约束，有效解决了 LLM 在形式化证明中常见的幻觉问题。这对于形式化验证社区是一个有价值的工程范式，但整体属于方法论层面的增量贡献——多智能体协作形式化已有先例（GPT-f、Lean Copilot），渐近统计理论虽难但用户群体较小。短期行业冲击力有限，不足以改变 AI 或形式化验证的竞争格局。"
@@ -1039,7 +1158,32 @@
       "compound": "low",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Asymptotic Statistical Theory Formalization in Lean 4",
+        "canonical_name": "asymptotic-statistical-theory-lean4",
+        "positioning": "该研究提出的假设约束多智能体流水线，专用于在 Lean 4 证明助手中自动化形式化渐近统计理论的参数与半参数模型核心定理。",
+        "technical_signal": "流水线由七个专业角色智能体组成，管理器协调全局流程，审计智能体执行假设约束审计，确保每个主定理假设锚定于源数学文本。",
+        "adoption_signal": "生成的 Lean 4 形式化证明代码同时通过了 Lean 检查器自动验证和人工审计双重检验，验证了流水线的有效性和输出的忠实性。",
+        "ecosystem_relevance": "该项目将 Lean 4 数学形式化覆盖范围拓展到渐近统计理论领域，其假设约束审计机制为 AI 辅助形式化验证提供了可借鉴的方法论创新。",
+        "target_users": [],
+        "watch_reason": "该流水线将假设约束审计引入多智能体形式化验证框架，为渐近统计理论提供了可复现的自动化形式化方案，对 AI 辅助数学形式化领域具有方法创新价值，但需观察其向其他数学分支的泛化能力。",
+        "risk_notes": [
+          "该方法对源数学文本的清晰度和严谨性有较高依赖，处理非形式化或含糊表述时可能面临适配困难。",
+          "目前仅验证于渐近统计理论单一领域，尚未证明可迁移至泛函分析、代数拓扑等其他数学分支。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "3e39ee2bd04068ae"
+        ],
+        "evidence_snippets": [
+          "论文使用假设约束多智能体流水线在 Lean 4 中形式化了参数和半参数模型的渐近分布与效率结果，代码经过 Lean 检查器和人工审计双重验证。",
+          "论文声明形式化结果已公开发布，但提取文本中未提供完整 URL，仅注明可从此 https URL 获取。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -1153,32 +1297,57 @@
     "pipeline_stage": "fact_extracted",
     "id": "514f0c202af87988",
     "source_type": "academic_paper",
-    "tldr": "论文揭示DPTS和SSDP两种ToT推理方法存在互补性缺陷，需自适应搜索策略",
-    "objective_summary": "该论文评估了两种思维树(ToT)推理方法DPTS(蒙特卡洛树搜索)和SSDP(语义去重)，在Math500和GSM8K基准上使用Llama-3B/8B模型和3k-10k token预算进行测试。结果显示DPTS低预算下冷启动慢，SSDP激进剪枝导致无法随预算增加而改进。",
+    "tldr": "该论文系统评估了两种思维树（ToT）推理策略（DPTS 和 SSDP）在不同计算预算、模型规模和问题难度下的表现，发现 DPTS 在低预算下存在冷启动瓶颈，而 SSDP 则面临前沿耗尽问题，两种策略均无法在全计算区间保持有效。",
+    "objective_summary": "研究者在 arXiv 发表了一项针对思维树推理策略的系统性评估工作。他们选取了基于蒙特卡洛树搜索的 DPTS 和基于语义去重的 SSDP 两种代表性方法，在 Math500 和 GSM8K 两个数学推理基准上，使用 Llama-3B 和 Llama-8B 两种规模的模型，在 3000 到 10000 token 的四种计算预算下进行了对比实验。实验结果表明，DPTS 在低预算时因需要充分探索才能获得可靠估值而表现不佳，SSDP 虽然能快速找到候选解但容易因激进合并节点而永久丢弃未探索路径。研究者据此认为，有效的科学推理搜索需要能根据搜索进度和可用资源自适应调整的策略。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
-        "Tree-of-Thought",
+        "ToT",
         "DPTS",
         "SSDP",
-        "Monte Carlo Tree Search",
-        "Math500",
-        "GSM8K",
-        "Llama"
+        "Monte Carlo Tree Search"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "论文评估了两种代表性思维树(ToT)推理方法：基于蒙特卡洛树搜索的DPTS和基于语义去重的SSDP。",
-      "实验覆盖两个数学推理基准(Math500和GSM8K)、两种模型规模(Llama-3B和Llama-8B)以及四种token预算(3k-10k)。",
-      "DPTS在低预算下存在冷启动瓶颈，需要足够探索才能获得可靠价值估计，不适合资源受限场景。",
-      "SSDP虽能高效找到候选解，但激进节点合并导致前沿耗尽，永久丢弃未探索路径，无法随预算增加改进。",
-      "两种方法在计算连续体上呈现出互补性缺陷：固定探索或固定剪枝策略均不具备普适性。",
-      "论文主张科学推理代理需要能够根据搜索进展和可用资源自适应调整行为的搜索策略。"
+      "研究者基于蒙特卡洛树搜索的 DPTS 和基于语义去重的 SSDP 两种方法，在 Math500 和 GSM8K 基准上使用 Llama-3B 和 Llama-8B 模型进行了四种计算预算下的对比实验。",
+      "DPTS 在低计算预算下存在冷启动瓶颈，需要足够多的探索步数才能使估值变得可靠，不适合资源受限场景。",
+      "SSDP 能够高效地找到候选解，但其激进的节点合并策略会永久丢弃未探索路径，导致即使剩余预算充足也无法继续改进。",
+      "DPTS 在高计算预算下展现出良好的扩展性，而 SSDP 在达到解质量上限后无论增加多少预算都无法进一步提升。",
+      "两种策略的局限性呈相反方向：固定探索策略和固定剪枝策略均无法在全计算预算区间内保持有效。",
+      "研究者认为有效的科学推理搜索需要能根据搜索进度和可用资源自适应调整策略的搜索方法。"
     ],
     "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "DPTS",
+        "canonical_name": "DPTS",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "DPTS 是一种基于蒙特卡洛树搜索的思维树推理方法，其核心依赖价值估计来指导搜索方向。",
+          "DPTS 在低计算预算下存在冷启动瓶颈，因为它在价值估值变得可靠之前需要足够的探索步数。",
+          "DPTS 在高计算预算下展现出良好的扩展性，适用于资源充足的应用场景。"
+        ],
+        "article_id": "514f0c202af87988"
+      },
+      {
+        "object_type": "project",
+        "name": "SSDP",
+        "canonical_name": "SSDP",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "SSDP 是一种基于语义去重的思维树推理方法，能够高效地到达候选解。",
+          "SSDP 面临前沿耗尽问题，其激进的节点合并策略会永久丢弃未探索的路径。",
+          "SSDP 一旦达到解质量上限就无法通过增加计算预算来进一步提升表现。"
+        ],
+        "article_id": "514f0c202af87988"
+      }
+    ],
     "impact_score": {
       "score": 3.5,
       "reason": "该论文系统评估了DPTS（蒙特卡洛树搜索）和SSDP（语义去重）两种ToT推理方法在不同计算预算、模型规模和问题难度下的行为表现，揭示了DPTS低预算冷启动瓶颈和SSDP前沿耗尽这两个互补性失败模式。虽然未提出新方法或突破性成果，但为固定搜索策略的非普适性提供了实证证据，对小众推理研究社区有一定参考价值，属于渐进式学术贡献，远未达到改变局部竞争格局的级别。"
@@ -1232,7 +1401,57 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "DPTS",
+        "canonical_name": "DPTS",
+        "positioning": "DPTS是一种基于蒙特卡洛树搜索（MCTS）的思维树推理方法，通过迭代价值估计引导搜索方向，在数学推理任务中验证了计算预算与推理质量的正相关关系。",
+        "technical_signal": "DPTS在低计算预算下存在冷启动瓶颈，需要充分探索步数才能获得可靠价值估计。",
+        "adoption_signal": "研究者在Math500和GSM8K基准上使用Llama-3B和Llama-8B模型对DPTS进行了系统评估。",
+        "ecosystem_relevance": "该研究揭示了固定探索策略在计算预算连续谱上的局限性，为自适应推理搜索策略的研发提供了关键实验证据。",
+        "target_users": [],
+        "watch_reason": "DPTS揭示了思维树推理中固定策略的根本性局限——冷启动瓶颈与扩展性优势并存，这一矛盾推动了自适应搜索策略的研究方向，对提升LLM科学推理的效率和可靠性具有重要指导意义。",
+        "risk_notes": [
+          "DPTS的研究仅基于Math500和GSM8K两个数学推理基准，在更广泛推理场景上的有效性尚待验证。",
+          "实验仅使用了Llama-3B和Llama-8B两种模型规模，更大参数模型下的行为模式可能存在显著差异。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "514f0c202af87988"
+        ],
+        "evidence_snippets": [
+          "DPTS 是一种基于蒙特卡洛树搜索的思维树推理方法，其核心依赖价值估计来指导搜索方向。",
+          "DPTS 在低计算预算下存在冷启动瓶颈，因为它在价值估值变得可靠之前需要足够的探索步数。",
+          "DPTS 在高计算预算下展现出良好的扩展性，适用于计算资源充足的应用场景，但低预算时的冷启动瓶颈限制了其适用范围。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "SSDP",
+        "canonical_name": "SSDP",
+        "positioning": "SSDP是一种基于语义去重的思维树推理方法，通过激进的节点合并策略高效找到候选解，但同时面临前沿耗尽这一结构性局限。",
+        "technical_signal": "SSDP能够高效找到候选解，但其激进的节点合并策略会永久丢弃未探索路径，导致前沿耗尽问题。",
+        "adoption_signal": "研究者在Math500和GSM8K基准上使用Llama-3B和Llama-8B模型对SSDP与DPTS进行了对比评估。",
+        "ecosystem_relevance": "SSDP的前沿耗尽问题揭示了固定剪枝策略在动态计算预算下的根本性局限，为发展自适应推理方法提供了重要反面案例。",
+        "target_users": [],
+        "watch_reason": "SSDP的前沿耗尽问题凸显了激进剪枝策略在思维树推理中的根本性缺陷——达到解质量上限后无法通过增加计算预算继续改进，这一发现为自适应推理策略的研发提供了关键反面证据，对构建更鲁棒的LLM推理系统具有深远影响。",
+        "risk_notes": [
+          "SSDP的实验仅基于数学推理任务，其在代码生成、逻辑推理等更广泛领域的表现尚未充分验证。",
+          "SSDP的激进合并策略在某些特定问题上可能恰是优势，该研究的评估框架可能未覆盖此类有利场景。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "514f0c202af87988"
+        ],
+        "evidence_snippets": [
+          "SSDP 是一种基于语义去重的思维树推理方法，能够高效地到达候选解，但其效率优势伴随着前沿耗尽的结构性缺陷。",
+          "SSDP 面临前沿耗尽问题，其激进的节点合并策略会永久丢弃未探索的路径，导致即使剩余预算充足也无法继续改进搜索结果。",
+          "SSDP 一旦达到解质量上限就无法通过增加计算预算来进一步提升表现，这使其在资源充足的场景下反而受限。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -1735,27 +1954,45 @@
     "pipeline_stage": "fact_extracted",
     "id": "671190a2d1fd1d1b",
     "source_type": "academic_paper",
-    "tldr": "Darwin Mobile Agent 提出通过移动GUI环境实现智能体自我进化的开源基础设施与路线图",
-    "objective_summary": "arXiv 发表论文提出 Darwin Mobile Agent 开源框架，通过异步云手机并行的智能体-环境循环解决真实世界移动交互的数据采集瓶颈，并规划了从任务课程、结果验证、记忆管理三个维度逐步去除人类先验以实现智能体自主强化学习的路线图。",
-    "event_type": "infrastructure_update",
-    "epistemic_status": "theoretical_claim",
+    "tldr": "论文提出Darwin Mobile Agent，一个用于移动GUI领域自主强化学习的开源框架，通过异步智能体-环境循环在并行云手机实例上解决数据收集瓶颈，并规划了逐步消除任务课程、结果验证和记忆管理中人类先验的路线图。",
+    "objective_summary": "该论文于2026年6月在arXiv发表，提出以移动GUI作为「大世界」代理来实现通用自适应智能体。作者发布了Darwin Mobile Agent开源基础设施，利用并行云手机实例上的异步智能体-环境循环来解决真实移动交互中的数据收集瓶颈，并验证了该框架在GUI领域策略优化中的稳定性和可扩展性。论文还规划了一条系统性地从任务课程、结果验证和记忆管理三个支柱中消除人类先验的路线图。",
+    "event_type": "framework_tools",
+    "epistemic_status": "verified_fact",
     "entities": {
-      "companies": [],
+      "companies": [
+        "arXiv"
+      ],
       "technologies": [
         "GUI",
-        "reinforcement learning",
-        "asynchronous agent-environment loop"
+        "Reinforcement Learning",
+        "Mobile Agent"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "论文认为实现通用自适应智能体的最有效路径是系统性移除人类先验，让智能体通过与复杂度远超自身的\"大世界\"交互自然产生智能。",
-      "提出将移动图形用户界面(GUI)作为\"大世界\"的实用代理环境，并基于此设计开放源代码基础设施 Darwin Mobile Agent。",
-      "Darwin 框架使用跨并行云手机实例的异步智能体-环境循环，解决真实世界移动交互中的数据采集瓶颈问题。",
-      "论文给出概念性路线图，计划从任务课程(task curricula)、结果验证(outcome verification)和记忆管理(memory management)三个基础支柱系统性地移除人类先验。",
-      "实验验证 Darwin 基础设施能够为路线图的第一阶段（GUI 领域的策略优化）提供所需的稳定性和可扩展性。"
+      "论文认为实现通用自适应智能体的最有效路径是系统性地消除人类先验，让智能体通过与比自身复杂多个数量级的「大世界」交互自然涌现智能。",
+      "作者提出将移动图形用户界面（GUI）作为「大世界」的实用代理，并发布了Darwin Mobile Agent开源基础设施。",
+      "该框架通过并行云手机实例上的异步智能体-环境循环，解决了真实移动交互中的数据收集瓶颈问题。",
+      "论文提出了一条概念性路线图，计划从任务课程、结果验证和记忆管理三个支柱中逐步消除人类先验。",
+      "作者验证了Darwin基础设施在GUI领域策略优化阶段所需的稳定性和可扩展性。",
+      "该工作为走向真正自主、自我进化的GUI智能体建立了实践和理论基础。"
     ],
     "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "Darwin Mobile Agent",
+        "canonical_name": "Darwin Mobile Agent",
+        "url": "https://arxiv.org/abs/2606.20622",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "论文提出Darwin Mobile Agent，一个作为自主强化学习基础的开源基础设施，专为移动GUI领域设计。",
+          "该框架通过并行云手机实例上的异步智能体-环境循环来解决真实移动交互中的数据收集瓶颈。"
+        ],
+        "article_id": "671190a2d1fd1d1b"
+      }
+    ],
     "impact_score": {
       "score": 4.5,
       "reason": "本文提出通过移动GUI环境实现智能体自主强化学习的框架和路线图，属于有趣的研究方向但尚处概念验证阶段。核心贡献是Darwin开源基础设施（异步云手机并行架构解决数据采集瓶颈），但自主进化路线图中的三个支柱（任务课程、结果验证、记忆管理）均未得到实证验证，论文仅验证了基础设施对第一阶段（策略优化）的稳定性和可扩展性。这不是范式转移级别的突破，而是为未来研究铺设基础设施的学术论文，短期行业冲击力有限。"
@@ -1808,7 +2045,33 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Darwin Mobile Agent",
+        "canonical_name": "Darwin Mobile Agent",
+        "url": "https://arxiv.org/abs/2606.20622",
+        "positioning": "面向移动GUI领域的自主强化学习开源基础设施，通过并行云手机实例解决真实交互数据收集瓶颈，致力于逐步消除人类先验实现智能体自我进化。",
+        "technical_signal": "采用异步智能体-环境循环架构在并行云手机实例上运行，已验证在GUI策略优化阶段具备所需的稳定性和可扩展性。",
+        "adoption_signal": "论文于2026年6月在arXiv发表并开源发布，尚未观测到显著的社区采用或第三方集成案例。",
+        "ecosystem_relevance": "填补了移动GUI领域自主强化学习基础设施的空白，与通用自主智能体和GUI智能体研究社区高度相关。",
+        "target_users": [],
+        "watch_reason": "Darwin Mobile Agent提出了从任务课程、结果验证和记忆管理中系统性消除人类先验的路线图，为移动GUI智能体走向真正自主进化建立了实践与理论基础，代表了\"苦涩教训\"在移动端的具体实现路径。",
+        "risk_notes": [
+          "路线图中消除人类先验的三个支柱仍处于概念阶段，实际可行性尚未在复杂场景中得到验证。",
+          "当前仅验证了策略优化阶段的稳定性和可扩展性，记忆管理与结果验证等关键环节尚待实证。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "671190a2d1fd1d1b"
+        ],
+        "evidence_snippets": [
+          "论文提出Darwin Mobile Agent，一个作为自主强化学习基础的开源基础设施，专为移动GUI领域设计。",
+          "该框架通过并行云手机实例上的异步智能体-环境循环来解决真实移动交互中的数据收集瓶颈。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -1827,30 +2090,66 @@
     "pipeline_stage": "fact_extracted",
     "id": "6994038cbdb08443",
     "source_type": "academic_paper",
-    "tldr": "研究评估LM Agent作为机械可解释性中电路解释器的能力，提出HyVE方法和AgenticInterpBench基准。",
-    "objective_summary": "该论文研究语言模型智能体能否辅助机械可解释性中的电路解释任务。作者构建了含84个半合成Transformer电路和163个组件级标注的基准AgenticInterpBench，提出HyVE（假设-验证-解释）方法，通过观察、假设生成和因果验证的迭代循环分析每个组件。",
+    "tldr": "该论文研究了语言模型代理能否协助机械可解释性中的电路解释任务，提出了AgenticInterpBench基准和HyVE方法，发现强模型能生成有用解释但可靠验证仍是主要瓶颈。",
+    "objective_summary": "研究者提出了AgenticInterpBench基准和HyVE（Hypothesize, Validate, Explain）方法，用于解决机械可解释性中电路组件解释的自动化和标准化问题。AgenticInterpBench包含84个半合成Transformer电路和163个组件级标注。HyVE通过观察、假设生成和因果验证的迭代循环来分析每个组件，最终产出组件级解释和电路级任务描述。在四种语言模型主干上的实验表明，HyVE能够恢复有用的解释，但没有一个主干在所有方面表现最佳，可靠验证仍然是主要瓶颈。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
-        "Mechanistic Interpretability",
-        "HyVE",
-        "AgenticInterpBench",
         "Transformer",
-        "Llama-3-8B"
+        "LM Agent",
+        "Mechanistic Interpretability",
+        "Causal Abstraction"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "机械可解释性在自动定位电路方面取得进展，但解释已定位组件的功能仍然劳动密集且难以标准化。",
-      "论文提出AgenticInterpBench基准，包含84个半合成Transformer电路和163个组件级标注，用于评估电路解释能力。",
-      "提出HyVE方法，通过\"假设-验证-解释\"的迭代循环（观察→假设生成→因果验证）生成组件级解释和电路级任务描述。",
-      "实验表明没有单一LM backbone在所有维度上表现最佳，强backbone通常能形成基于观察的假设，失败多发生在验证循环阶段。",
-      "在Llama-3-8B算术电路上的案例研究表明该方法可推广至自然训练模型。",
-      "总体结论是LM Agent是有前景的电路解释器，但可靠的因果验证仍是关键障碍。"
+      "机械可解释性在自动定位电路方面取得了显著进展，但解释已定位组件的功能仍然劳动密集且难以标准化。",
+      "研究者提出了AgenticInterpBench基准，包含84个半合成Transformer电路和163个组件级标注，用于评估电路解释能力。",
+      "研究者提出了HyVE方法，这是一种通过观察、假设生成和因果验证的迭代循环来分析组件功能的代理解释器。",
+      "在四种语言模型主干上的测试表明，HyVE能够恢复有用的组件级和电路级解释，但没有一个主干在所有方面表现最佳。",
+      "强主干模型通常能形成基于观察的假设，失败更多发生在后续验证环节，包括不完整的验证计划、代码执行错误或未解决的假设。",
+      "在Llama-3-8B算术电路上的案例研究表明，该方法可以扩展到自然训练的模型而不仅限于半合成基准。"
     ],
     "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "dataset",
+        "name": "AgenticInterpBench",
+        "canonical_name": "AgenticInterpBench",
+        "url": "https://arxiv.org/abs/2606.24026",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "AgenticInterpBench是一个用于电路解释的基准，由84个半合成Transformer电路和163个组件级标注构成。"
+        ],
+        "article_id": "6994038cbdb08443"
+      },
+      {
+        "object_type": "project",
+        "name": "HyVE",
+        "canonical_name": "HyVE",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "HyVE（Hypothesize, Validate, Explain）是一种代理解释器，通过观察、假设生成和因果验证的迭代循环来分析每个组件。",
+          "HyVE最终产生组件级解释和电路级任务描述，在四种语言模型主干上测试均能恢复有用的解释。"
+        ],
+        "article_id": "6994038cbdb08443"
+      },
+      {
+        "object_type": "model",
+        "name": "Llama-3-8B",
+        "canonical_name": "Llama-3-8B",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "在Llama-3-8B算术电路上的案例研究表明，HyVE方法可以扩展到自然训练的模型而不仅限于半合成基准。"
+        ],
+        "article_id": "6994038cbdb08443"
+      }
+    ],
     "impact_score": {
       "score": 3.5,
       "reason": "该论文聚焦于机械可解释性中一个狭窄的子任务——解释已被定位的电路组件的功能，而非定位电路本身。虽然AgenticInterpBench基准（84个半合成电路）和HyVE方法为MI社区提供了标准化的评估框架，但这属于渐进式学术贡献，对AI行业的产品、商业格局或工程实践在短期内几乎没有冲击力。论文结论也诚实指出可靠验证仍是关键障碍，说明该方法距离实用化还有明显距离。"
@@ -1906,7 +2205,33 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "speculative_watch"
+    "actionable_insight": "speculative_watch",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "HyVE",
+        "canonical_name": "HyVE",
+        "positioning": "HyVE是一个面向机械可解释性领域的代理解释器，通过观察、假设生成和因果验证的迭代循环，自动分析Transformer电路组件功能并输出解释。",
+        "technical_signal": "HyVE将语言模型代理引入电路解释任务，实现了从观察到验证的自动化解释闭环，在四种语言模型主干上均能恢复有用的组件级和电路级解释。",
+        "adoption_signal": "在Llama-3-8B算术电路上的案例研究证明其可扩展到自然训练模型，但当前应用仍局限于研究领域基准测试，未见更广泛的社区采用。",
+        "ecosystem_relevance": "HyVE与AgenticInterpBench基准共同填补了电路自动化定位与解释之间的空白，为机械可解释性社区提供了标准化解释工具。",
+        "target_users": [],
+        "watch_reason": "HyVE开创了语言模型代理辅助机械可解释性电路解释的新范式，有望大幅提升解释自动化程度和标准化水平，但可靠验证瓶颈尚未突破，其方法演进和社区采用情况值得持续关注。",
+        "risk_notes": [
+          "可靠验证是当前主要瓶颈，包括验证计划不完整、代码执行错误和假设未解决等问题。",
+          "在四种语言模型主干上均未在所有方面表现最佳，方法的鲁棒性和通用性有待更多验证。",
+          "当前基准基于半合成Transformer电路，向复杂自然训练模型推广需要更多案例支撑。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "6994038cbdb08443"
+        ],
+        "evidence_snippets": [
+          "HyVE（Hypothesize, Validate, Explain）是一种代理解释器，通过观察、假设生成和因果验证的迭代循环来分析每个组件。",
+          "HyVE最终产生组件级解释和电路级任务描述，在四种语言模型主干上测试均能恢复有用的解释。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -2011,26 +2336,50 @@
     "pipeline_stage": "fact_extracted",
     "id": "6c55a3d12c04f3c0",
     "source_type": "academic_paper",
-    "tldr": "NaviGen：通过用户交互历史生成个性化多模态内容的双标识符框架",
-    "objective_summary": "arXiv 论文提出 NaviGen 框架，利用双标识符（协作编码+文本编码）将用户交互历史转化为可执行指令，通过两阶段 SFT+RL 管线训练，在商品、游戏、短视频领域提升个性化图像和视频生成效果。",
+    "tldr": "arXiv 论文提出 NaviGen 系统，通过双标识编码（协同代码+文本代码）将用户交互历史转化为可执行指令，利用两阶段 SFT+RL 流水线实现个性化多模态内容生成，在商品、游戏和短视频领域验证了有效性。",
+    "objective_summary": "Hengji Zhou 等人于 2026 年 6 月在 arXiv 提交论文，提出 NaviGen 方法解决个性化内容生成问题。该方法为每个物品分配协同代码和文本代码组成的双标识符，在此基础上通过两阶段监督微调与强化学习流水线蒸馏偏好推理和指令写作能力，并使用分层和自一致性奖励对齐用户意图。实验覆盖商品、游戏和短视频三个领域，结果显示 NaviGen 在个性化图像和视频生成、下一物品预测以及指令质量方面均有提升。代码开源在 GitHub 上。",
     "event_type": "framework_tools",
-    "epistemic_status": "theoretical_claim",
+    "epistemic_status": "verified_fact",
     "entities": {
       "companies": [],
       "technologies": [
         "AIGC",
         "SFT",
-        "RL"
+        "RL",
+        "Dual Identifier"
       ],
-      "key_people": []
+      "key_people": [
+        "Hengji Zhou",
+        "Yufeng Liu",
+        "Ye Liu",
+        "Yong Xu",
+        "Lianghao Xia",
+        "Liqiang Nie"
+      ]
     },
     "key_logic_flow": [
-      "现代 AIGC 管线能生成高保真图像和视频，但预设用户能提供格式良好的创作指令，而终端用户很少能清晰描述视觉细节，导致生成结果与用户需求不一致。",
-      "NaviGen 提出双标识符表示方法，为每个项目分配协作编码和文本编码，将行为数据和语义桥接统一到同一令牌流中。",
-      "采用两阶段 SFT+RL 训练管线，先从演化搜索的监督信号中蒸馏偏好推理和指令编写能力，再通过分层自一致奖励对齐生成与用户意图。",
-      "在商品、游戏和短视频三个领域的实验表明，NaviGen 提升了个性化图像和视频生成质量，增强了下个项目预测准确率，并生成了更具体、相关且可视觉化生成的指令。"
+      "NaviGen 识别出现代 AIGC 流水线的核心矛盾：末端用户难以表达视觉细节，导致生成结果与用户需求错位。",
+      "NaviGen 提出双标识编码方案，为每个物品耦合一个协同代码（反映行为模式）和一个文本代码（提供语义桥接），使行为可被语言推理理解。",
+      "NaviGen 采用两阶段 SFT+RL 流水线：第一阶段从进化搜索得到的监督信号中蒸馏偏好推理与指令写作能力，第二阶段通过分层和自一致性奖励对齐生成结果与用户意图。",
+      "在商品、游戏和短视频三个领域的实验表明，NaviGen 能够改进个性化图像和视频生成质量，增强下一物品预测能力，并产生更具体、相关且可视觉生成的指令。"
     ],
     "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "NaviGen",
+        "canonical_name": "NaviGen",
+        "url": "https://github.com/iLearn-Lab/NaviGen",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "NaviGen 提出了双标识编码方案，将每个物品的协同代码和文本代码耦合为单一 token 流，以此作为行为基底和语义桥梁。",
+          "NaviGen 通过两阶段 SFT+RL 流水线蒸馏偏好推理和指令写作能力，并用分层和自一致性奖励对齐用户意图。",
+          "在商品、游戏和短视频领域的实验显示，NaviGen 在个性化图像和视频生成、下一物品预测和指令质量上均有提升。"
+        ],
+        "article_id": "6c55a3d12c04f3c0"
+      }
+    ],
     "impact_score": {
       "score": 4.5,
       "reason": "该论文针对AIGC领域一个真实痛点——终端用户难以提供格式良好的创作指令——提出了双标识符表示方法，将用户交互历史转化为可执行生成指令。这一思路在个性化内容生成方向上有一定启发性，实验覆盖商品、游戏、短视频三个领域且公开了代码。但整体仍处于学术研究阶段，尚未看到产品化落地或业界大规模采用，距改变竞争格局还有距离。综合评定4.5分。"
@@ -2086,7 +2435,34 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "NaviGen",
+        "canonical_name": "NaviGen",
+        "url": "https://github.com/iLearn-Lab/NaviGen",
+        "positioning": "NaviGen 是一种个性化多模态内容生成系统，通过双标识编码方案将用户交互历史转化为可执行指令，在商品、游戏和短视频领域实现个性化图像与视频生成。",
+        "technical_signal": "NaviGen 提出双标识编码方案，将协同代码与文本代码耦合为统一 token 流，使行为序列可被语言模型推理和理解。",
+        "adoption_signal": "NaviGen 已在商品、游戏和短视频三个领域完成实验验证并取得明显提升，代码已开源在 GitHub 供学术社区复现和进一步研究。",
+        "ecosystem_relevance": "NaviGen 解决了 AIGC 流水线中末端用户难以表达视觉细节的核心矛盾，与个性化推荐、多模态生成等领域的发展高度协同。",
+        "target_users": [],
+        "watch_reason": "NaviGen 提出的双标识编码和两阶段 SFT+RL 流水线为个性化多模态生成提供了新的技术范式，其在商品、游戏和短视频领域的广泛验证表明该方法具有较强的通用性，值得持续关注后续扩展和实际部署进展。",
+        "risk_notes": [
+          "NaviGen 目前仅在商品、游戏和短视频三个领域完成实验，在更多实际场景中的泛化能力仍需进一步验证。",
+          "该方案依赖用户行为数据构建双标识编码，在真实部署中可能面临数据稀疏、冷启动和用户隐私保护等工程挑战。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "6c55a3d12c04f3c0"
+        ],
+        "evidence_snippets": [
+          "NaviGen 提出了双标识编码方案，将每个物品的协同代码和文本代码耦合为单一 token 流，以此作为行为基底和语义桥梁。",
+          "NaviGen 通过两阶段 SFT+RL 流水线蒸馏偏好推理和指令写作能力，并用分层和自一致性奖励对齐用户意图。",
+          "在商品、游戏和短视频领域的实验显示，NaviGen 在个性化图像和视频生成、下一物品预测和指令质量上均有提升。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -2199,8 +2575,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "a355635ce80cbc52",
     "source_type": "academic_paper",
-    "tldr": "ReMMD 提出多语言多图像的多模态虚假信息检测框架，含 500 样本基准和持久记忆验证 Agent，GPT-5.2 实现 41.80% 准确率。",
-    "objective_summary": "研究者提出 ReMMD，一个面向现实场景的多模态虚假信息检测框架，包含含 500 个样本、2756 张图片的 ReMMDBench 基准和持久记忆 Agent ReMMD-Agent。该 Agent 将帖子分解为原子点、构建可复用证据集、输出三层结构化预测，在五类真实性分类中以 GPT-5.",
+    "tldr": "ReMMD 是一个面向多语言、多图像、多模态虚假信息检测的验证框架，包含含 500 个样本和 2756 张图像的基准测试集 ReMMDBench，以及一个持久化记忆验证智能体 ReMMD-Agent。ReMMD-Agent 在五类真实性分类中达到 41.80% 准确率和 39.12% 宏平均 F1，成本较 MMD-Agent 降低 17.5%。",
+    "objective_summary": "该论文于 2026 年在 arXiv 上发表，提出了 ReMMD 框架以解决现有多模态虚假信息检测基准和方法在长文本、多语言、多图像场景下的不足。该框架包含两个核心组件：ReMMDBench 是一个包含 500 个样本、2756 张图像、五种语言和三类文本长度的真实世界基准测试集；ReMMD-Agent 是一个将帖子分解为原子断言并构建可复用证据集的持久化记忆验证智能体。实验结果显示，ReMMD-Agent 在五类真实性分类任务上使用 GPT-5.2 取得了最优性能，同时推理成本相比 MMD-Agent 和 T2-Agent 分别降低 17.5% 和 79.9%。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
@@ -2209,21 +2585,60 @@
         "ReMMD",
         "ReMMDBench",
         "ReMMD-Agent",
+        "LVLM",
         "MMD-Agent",
         "T2-Agent",
-        "GPT-5.2",
-        "LVLM"
+        "GPT-5.2"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "现有多模态虚假信息检测基准和方法无法处理长文本多语言叙述、多张图像、混合来源和图文错位等现实场景。",
-      "ReMMD 包含两个核心组件：ReMMDBench（500 样本、2756 张图片、5 种单语和 2 种跨语言设置、多张图片帖子、五类真实性标签、八类失真标签）和 ReMMD-Agent（持久记忆验证 Agent）。",
-      "ReMMD-Agent 将帖子分解为原子声明点，构建可复用证据集，并输出结构化的 L1/L2/L3 三层预测结果。",
-      "在对比测试中，ReMMD-Agent 在使用 GPT-5.2 时取得五类真实性分类最优性能（准确率 41.80%，macro-F1 39.12%）。",
-      "ReMMD-Agent 的推理成本相比 MMD-Agent 降低 17.5%，相比 T2-Agent 降低 79.9%。"
+      "现有多模态虚假信息检测基准和方法的局限在于：通常仅处理短文本描述、单张图像、二元标签或单一操纵来源，与真实世界的长篇多语言多图像帖子不匹配。",
+      "ReMMD 框架包含 ReMMDBench 基准测试集，该基准包含 500 个样本、2756 张图像、五种单语语言及两种跨语言设置，并提供五类真实性标签和八类失真标签。",
+      "ReMMD-Agent 是一个持久化记忆验证智能体，通过将帖子分解为原子断言、构建可复用证据集，并输出结构化的 L1/L2/L3 预测结果来实现检测。",
+      "在与闭源系统、开源 LVLM、MMD-Agent 和 T2-Agent 的对比中，ReMMD-Agent 使用 GPT-5.2 取得了最佳的五类真实性分类性能，准确率为 41.80%，宏平均 F1 为 39.12%。",
+      "ReMMD-Agent 的推理成本相比 MMD-Agent 降低了 17.5%，相比 T2-Agent 降低了 79.9%，表明其具有显著的成本效率优势。"
     ],
     "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "ReMMD",
+        "canonical_name": "ReMMD",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "ReMMD 是一个面向多语言多图像场景的多模态虚假信息检测验证框架，旨在解决现有基准与方法在长文本和多种语言组合下不匹配的问题。",
+          "ReMMD 包含两个核心组件：ReMMDBench 基准测试集和 ReMMD-Agent 持久化记忆验证智能体，分别用于评估和自动化检测虚假信息。"
+        ],
+        "article_id": "a355635ce80cbc52"
+      },
+      {
+        "object_type": "dataset",
+        "name": "ReMMDBench",
+        "canonical_name": "ReMMDBench",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "ReMMDBench 是一个真实世界多模态虚假信息检测基准测试集，包含 500 个样本、2756 张图像、五种单语语言和两种跨语言设置。",
+          "该基准提供三类文本长度分级、多图像帖子、五类真实性标签、八类失真标签、证据溯源和推理依据等丰富标注信息。"
+        ],
+        "article_id": "a355635ce80cbc52"
+      },
+      {
+        "object_type": "project",
+        "name": "ReMMD-Agent",
+        "canonical_name": "ReMMD-Agent",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "ReMMD-Agent 是一个持久化记忆验证智能体，将帖子分解为原子断言并构建可复用的证据集，最终输出结构化的 L1/L2/L3 预测结果。",
+          "ReMMD-Agent 使用 GPT-5.2 在五类真实性分类上达到 41.80% 准确率和 39.12% 宏平均 F1，性能优于对比的所有基线系统。",
+          "该智能体的推理成本相比 MMD-Agent 降低 17.5%，相比 T2-Agent 降低 79.9%，在提升检测性能的同时显著降低了计算开销。"
+        ],
+        "article_id": "a355635ce80cbc52"
+      }
+    ],
     "impact_score": {
       "score": 4.5,
       "reason": "该论文提出了一个面向现实场景的多语言多图像多模态虚假信息检测框架，包含 ReMMDBench（500 样本/2756 张图片）和 ReMMD-Agent 持久记忆验证 Agent。这是一个有价值的学术贡献，填补了现有基准无法处理长文本、多图像、图文错位等现实场景的空白。但 500 样本的基准规模偏小，GPT-5.2 下五类真实性分类准确率仅 41.80%，说明问题难度极大且方法仍处早期阶段，短期内难以产生行业级冲击。Agent 推理成本相比基线降低 17.5%-79.9% 是务实亮点，但整体属于细分领域的渐进式推进，而非范式转移。"
@@ -2276,7 +2691,54 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "ReMMD",
+        "canonical_name": "ReMMD",
+        "positioning": "面向多语言多图像场景的多模态虚假信息检测验证框架，整合ReMMDBench基准测试集与ReMMD-Agent持久化记忆验证智能体。",
+        "technical_signal": "框架整合ReMMDBench基准测试集（500样本、2756张图像、五种语言）与ReMMD-Agent智能体，在五类真实性分类中达到41.80%准确率和39.12%宏平均F1。",
+        "ecosystem_relevance": "针对现有多模态虚假信息检测基准仅处理短文本、单图像、二元标签的局限，填补了长文本、多语言、多图像场景的系统性评估空白。",
+        "target_users": [],
+        "watch_reason": "ReMMD首次系统性地构建了多语言多图像场景的虚假信息检测基准和验证框架，其智能体在五类真实性分类中达到41.80%准确率并降低推理成本17.5%，代表多模态虚假信息检测向真实世界场景迈出的重要一步。",
+        "risk_notes": [
+          "五类真实性分类准确率仅41.80%，宏平均F1为39.12%，在复杂场景下性能距离实用化部署仍有较大差距。",
+          "框架依赖GPT-5.2等闭源大模型作为推理引擎，存在成本可控性和可复现性方面的不确定性。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "a355635ce80cbc52"
+        ],
+        "evidence_snippets": [
+          "ReMMD 是一个面向多语言多图像场景的多模态虚假信息检测验证框架，旨在解决现有基准与方法在长文本和多种语言组合下不匹配的问题。",
+          "ReMMD 包含两个核心组件：ReMMDBench 基准测试集和 ReMMD-Agent 持久化记忆验证智能体，分别用于评估和自动化检测虚假信息。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "ReMMD-Agent",
+        "canonical_name": "ReMMD-Agent",
+        "positioning": "持久化记忆验证智能体，通过将帖子分解为原子断言并构建可复用证据集，实现结构化多层级真实性检测。",
+        "technical_signal": "采用原子断言分解与持久化记忆证据集机制，输出结构化的L1/L2/L3预测结果，使用GPT-5.2在五类真实性分类中达到41.80%准确率和39.12%宏平均F1。",
+        "ecosystem_relevance": "作为ReMMD框架的核心验证引擎，其原子断言分解和持久化记忆方法为多模态虚假信息检测提供了新的技术范式。",
+        "target_users": [],
+        "watch_reason": "ReMMD-Agent以原子断言分解和持久化记忆机制创新性地解决了多语言多图像场景的虚假信息验证问题，推理成本较MMD-Agent降低17.5%、较T2-Agent降低79.9%，在性能提升和成本控制上均有突破。",
+        "risk_notes": [
+          "在五类真实性分类中仅41.80%准确率，面对更复杂的真实世界虚假信息场景，检测能力仍有显著局限。",
+          "依赖GPT-5.2闭源模型，在不同模型版本间的可迁移性和离线部署能力存在不确定性。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "a355635ce80cbc52"
+        ],
+        "evidence_snippets": [
+          "ReMMD-Agent 是一个持久化记忆验证智能体，将帖子分解为原子断言并构建可复用的证据集，最终输出结构化的 L1/L2/L3 预测结果。",
+          "ReMMD-Agent 使用 GPT-5.2 在五类真实性分类上达到 41.80% 准确率和 39.12% 宏平均 F1，性能优于对比的所有基线系统。",
+          "该智能体的推理成本相比 MMD-Agent 降低 17.5%，相比 T2-Agent 降低 79.9%，在提升检测性能的同时显著降低了计算开销。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -2473,32 +2935,48 @@
     "pipeline_stage": "fact_extracted",
     "id": "d6a39e9071049bfd",
     "source_type": "academic_paper",
-    "tldr": "OmniPath 融合 OSM 与航空 LiDAR 实现轮椅通行自动化审计",
-    "objective_summary": "研究者提出 OmniPath 框架，融合 OpenStreetMap 网络拓扑与 USGS 3DEP 高密度航空 LiDAR 数据，构建高保真三维行人环境模型，以 0.5 米间隔量化分析路面坡度、横坡和垂直不连续面，对照 ADA 合规标准计算加权严重性评分。",
-    "event_type": "application_landing",
+    "tldr": "OmniPath 是一个融合 OpenStreetMap 路网拓扑与 USGS 3DEP 机载 LiDAR 数据的多模态智能框架，能够以 0.5 米粒度自动检测轮椅通行障碍，依据 ADA 标准对斜坡坡度、横向坡度和垂直断差进行严重等级分类，并通过 200 次实地调查验证了有效性。",
+    "objective_summary": "该论文提出了 OmniPath 框架，将 OpenStreetMap（OSM）的网络拓扑与 USGS 3DEP 高密度机载 LiDAR 点云数据融合，构建高保真三维行人环境模型。系统以 0.5 米为步长沿路径虚拟遍历，量化跑步坡度、横向坡度和垂直断差等物理摩擦点，并对照 ADA 合规标准计算加权严重度评分，将障碍从\"轻微\"到\"临界\"进行分类。研究者在国家广场进行了 200 次分层随机抽样实地调查验证，系统对高严重度障碍的诊断 F1 分数达到 0.60（严重）和 0.58（临界级）。",
+    "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
         "OpenStreetMap",
-        "USGS"
+        "USGS",
+        "arXiv"
       ],
       "technologies": [
         "LiDAR",
+        "ADA",
         "OSM",
-        "3DEP",
-        "ADA"
+        "3DEP"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "OmniPath 将 OpenStreetMap 的路径网络与 USGS 3DEP 高精度航空 LiDAR 数据融合，构建高保真三维行人环境模型。",
-      "系统以 0.5 米为间隔沿路径虚拟遍历，量化分析运行坡度、横坡和垂直不连续面三类物理摩擦点。",
-      "OmniPath 对照 ADA 合规标准计算加权严重性评分，将障碍物从'轻度'到'严重'进行分级。",
-      "团队在国家广场通过分层随机抽样采集 200 份实地调查数据对系统进行验证。",
-      "系统在检测高风险障碍方面表现出较强诊断可靠性：Severe 类别 F1 为 0.60，Critical 类别 F1 为 0.58。",
-      "OmniPath 旨在将静态地图数据转化为主动式无障碍预测数据源，在用户出发前识别标准地图遗漏的'隐形'障碍。"
+      "OmniPath 将 OpenStreetMap 的路网拓扑与 USGS 3DEP 机载 LiDAR 数据进行融合，构建高保真三维行人环境模型。",
+      "系统以 0.5 米为增量沿路径虚拟遍历，分析跑步坡度、横向坡度和垂直断差等物理摩擦点。",
+      "框架对照 ADA 合规标准计算加权严重度评分，将障碍从\"轻微\"到\"临界\"进行分类。",
+      "研究者通过国家广场的 200 次分层随机抽样实地调查进行验证，高严重度障碍的 F1 分数达到 0.60 和 0.58。",
+      "OmniPath 旨在将静态地图数据转化为主动的无障碍数据源，在用户出行前预判通行障碍。"
     ],
     "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "OmniPath",
+        "canonical_name": "OmniPath",
+        "url": "https://arxiv.org/abs/2606.24129",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "OmniPath 将 OpenStreetMap 的网络拓扑与 USGS 3DEP 高密度机载 LiDAR 数据融合，构建高保真三维行人环境模型。",
+          "系统以 0.5 米为步长沿路径虚拟遍历，量化跑步坡度、横向坡度和垂直断差等物理摩擦点，并对照 ADA 合规标准计算加权严重度评分。",
+          "研究者在国家广场进行了 200 次实地调查验证，系统对高严重度障碍的 F1 分数达到 0.60 和 0.58。"
+        ],
+        "article_id": "d6a39e9071049bfd"
+      }
+    ],
     "impact_score": {
       "score": 4.0,
       "reason": "OmniPath 是一个针对轮椅通行无障碍审计的垂直领域应用框架，并非 AI 基础能力层面的突破。其创新在于将 OSM 网络拓扑与航空 LiDAR 数据融合，以 0.5 米粒度量化路面摩擦点——这是空间智能与辅助技术交叉领域的有益实践，但不会改变 AI 行业整体格局。200 份实地验证和 Moderate F1 分数（Severe 0.60, Critical 0.58）表明该研究扎实但处于早期阶段，行业影响力局限于无障碍计算与智慧城市子领域。"
@@ -2554,7 +3032,35 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "OmniPath",
+        "canonical_name": "OmniPath",
+        "url": "https://arxiv.org/abs/2606.24129",
+        "positioning": "一个融合OpenStreetMap路网拓扑与机载LiDAR数据的多模态框架，通过0.5米粒度虚拟遍历自动检测轮椅通行障碍，将静态地图转化为主动的无障碍数据源。",
+        "technical_signal": "创新融合OSM路网拓扑与USGS 3DEP机载LiDAR点云数据，以0.5米步长虚拟遍历构建高保真三维行人环境模型，实现微观无障碍自动化审计。",
+        "adoption_signal": "通过国家广场200次分层随机抽样实地调查验证，系统对高严重度障碍诊断F1达0.60，临界级达0.58，验证了方法的现实可靠性。",
+        "ecosystem_relevance": "填补了无障碍地图从静态路径展示到微观物理环境分析的空白，为智慧城市包容性基础设施评估提供了创新方法论参考。",
+        "target_users": [],
+        "watch_reason": "OmniPath开创性地将政府公开LiDAR数据用于自动化无障碍审计，以0.5米粒度发现传统地图不可见的通行障碍。该方法论可推广至城市基础设施评估，但当前验证仅限国家广场区域，跨城市泛化能力有待验证。",
+        "risk_notes": [
+          "当前实地验证仅覆盖国家广场单一区域，跨城市和不同地形环境的泛化能力尚未得到验证。",
+          "系统依赖USGS 3DEP机载LiDAR数据的可用性和分辨率，数据覆盖限制可能阻碍推广应用。",
+          "高严重度障碍诊断F1分数仅为0.60和0.58，存在误检和漏检风险，尚不足以完全替代人工实地审计。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "d6a39e9071049bfd"
+        ],
+        "evidence_snippets": [
+          "OmniPath 将 OpenStreetMap 的网络拓扑与 USGS 3DEP 高密度机载 LiDAR 数据融合，构建高保真三维行人环境模型。",
+          "系统以 0.5 米为步长沿路径虚拟遍历，量化跑步坡度、横向坡度和垂直断差等物理摩擦点，并对照 ADA 合规标准计算加权严重度评分。",
+          "研究者在国家广场进行了 200 次实地调查验证，系统对高严重度障碍的 F1 分数达到 0.60 和 0.58。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -2856,27 +3362,46 @@
     "pipeline_stage": "fact_extracted",
     "id": "f0260357633d9368",
     "source_type": "academic_paper",
-    "tldr": "RIZZ 提出零干扰路由框架，通过记忆分支和验证器门控实现黑盒语言模型代理的持续在线适应。",
-    "objective_summary": "arXiv 论文提出 RIZZ 框架，针对无法访问权重的黑盒语言模型代理，通过动态生成记忆分支、上下文感知路由和验证器门控更新机制，实现在线持续适应，并在评测中超越现有基线方法。",
+    "tldr": "RIZZ 是一种针对黑盒大语言模型智能体的持续适应框架，通过动态记忆分支、上下文感知路由和验证器门控机制实现零干扰学习，在竞争性基准上优于现有方法。",
+    "objective_summary": "该论文提出 RIZZ（Routing Interactions to Near Zero-Interference Zones）框架，旨在解决黑盒 LLM 智能体在非平稳输入流、稀疏反馈和任务间干扰下的持续适应问题。RIZZ 将输入流组织为动态生成的内存分支，通过上下文感知路由器在推理时选择或创建分支，并编译边界提示词。模型输出由任务验证器评分，仅已验证的交互才能更新记忆、提升或降级可复用规则或创建反模式。实验结果表明该框架在竞争性基准上优于现有最先进方法。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
+        "RIZZ",
         "LLM",
-        "RIZZ"
+        "continual adaptation",
+        "black-box adaptation",
+        "memory-augmented agents"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "RIZZ 针对黑盒语言模型代理在非平稳输入流、稀疏反馈和任务间干扰下的持续适应问题提出解决方案。",
-      "框架核心结构包括动态生成记忆分支、上下文感知路由器和验证器门控更新机制。",
-      "推理时，路由器根据上下文选择或创建分支，整合分支本地、全局、图结构和工作记忆四种上下文，编译为有界提示。",
-      "模型输出后由任务验证器评分，仅通过验证的交互才能更新记忆、提升有用规则、降级有害规则或创建反模式。",
-      "RIZZ 在在线上下文预算限制下通过自然语言反馈实现持续改进，同时显式控制任务间干扰。",
-      "实验表明 RIZZ 在竞争性基准测试中优于现有最先进的基线方法。"
+      "RIZZ 是一个针对复合语言模型系统的持续适应框架，完全通过验证器门控的记忆、路由和提示词编译进行学习。",
+      "该框架将输入流组织为动态生成的内存分支，在推理时通过上下文感知路由器选择或创建合适的分支。",
+      "RIZZ 在编译为边界提示词时，会检索分支本地、全局、图结构和工作记忆四种上下文以及任务证据。",
+      "模型输出后，任务验证器对结果进行评分，仅已验证的交互才能更新记忆、推广或降级规则或创建反模式。",
+      "该方法专为黑盒智能体设计，无需访问模型权重，仅通过持续的自然语言反馈实现改进并明确控制任务间干扰。",
+      "实验在竞争性基准上展现了该框架相对于现有最先进方法的有效性。"
     ],
     "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "RIZZ",
+        "canonical_name": "RIZZ",
+        "url": "https://arxiv.org/abs/2606.20638",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "RIZZ（Routing Interactions to Near Zero-Interference Zones）是一个针对复合语言模型系统的持续适应框架，完全通过验证器门控的记忆、路由和提示词编译进行学习。",
+          "RIZZ 将输入流组织为动态生成的内存分支，在推理时通过上下文感知路由器选择或创建分支，并编译边界提示词及任务证据。",
+          "实验结果表明 RIZZ 框架在竞争性基准上优于现有最先进的持续适应方法。"
+        ],
+        "article_id": "f0260357633d9368"
+      }
+    ],
     "impact_score": {
       "score": 5.5,
       "reason": "RIZZ 提出了黑盒LLM代理持续在线适应的系统性框架，核心创新在于通过动态记忆分支、上下文感知路由和验证器门控机制，显式控制任务间干扰。这解决了LLM代理部署中的一个真实痛点——在非平稳输入流和稀疏反馈下持续改进而不污染已有能力。但属于渐进式组合创新（将记忆路由、验证器门控、多类上下文编译等现有思想系统化整合），并非范式突破。作为arXiv预印本，缺乏大规模生产验证和开源实现，行业影响短期内局限于学术圈和前沿工程团队。"
@@ -2930,7 +3455,34 @@
       "compound": "low",
       "hype": "medium"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "RIZZ",
+        "canonical_name": "RIZZ",
+        "url": "https://arxiv.org/abs/2606.20638",
+        "positioning": "RIZZ 是一个针对黑盒大语言模型智能体的持续适应框架，通过验证器门控的记忆、路由和提示词编译实现零干扰学习。",
+        "technical_signal": "RIZZ 采用动态内存分支、上下文感知路由和验证器门控机制，完全通过持续自然语言反馈改进黑盒智能体行为，无需访问模型权重。",
+        "adoption_signal": "论文在竞争性基准上展示了优于现有最先进方法的效果，但目前仅停留在学术验证阶段，尚未观察到实际部署案例。",
+        "ecosystem_relevance": "RIZZ 解决了 LLM 智能体在非平稳输入流和任务间干扰下的持续适应难题，对 Agent 生态系统的长期自主运行具有重要支撑价值。",
+        "target_users": [],
+        "watch_reason": "RIZZ 提出了无需模型权重访问的持续适应范式，通过显式控制任务干扰解决黑盒 Agent 生产化的关键瓶颈，若验证有效将大幅降低 Agent 运维成本。",
+        "risk_notes": [
+          "验证器质量直接决定记忆更新的可靠性，在复杂开放域场景下设计精准验证器仍是一个开放挑战。",
+          "动态分支机制在极端长尾输入流下可能引发分支膨胀，带来记忆管理和检索效率的潜在问题。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "f0260357633d9368"
+        ],
+        "evidence_snippets": [
+          "RIZZ（Routing Interactions to Near Zero-Interference Zones）是一个针对复合语言模型系统的持续适应框架，完全通过验证器门控的记忆、路由和提示词编译进行学习。",
+          "RIZZ 将输入流组织为动态生成的内存分支，在推理时通过上下文感知路由器选择或创建分支，并编译边界提示词及任务证据。",
+          "实验结果表明 RIZZ 框架在竞争性基准上优于现有最先进的持续适应方法。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",

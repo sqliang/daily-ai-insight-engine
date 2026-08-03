@@ -16,9 +16,9 @@
     "pipeline_stage": "fact_extracted",
     "id": "003043e1b7370ce3",
     "source_type": "community_discussion",
-    "tldr": "GitHub 用户请求 Anthropic 发布官方 Linux 版 Claude Desktop",
-    "objective_summary": "一名开发者在 Anthropic 的 GitHub 仓库提交 feature request，要求官方发布 Linux 版 Claude Desktop。作者指出 Anthropic 已为 Claude Code CLI 提供 Linux 签名仓库，Cowork 功能在 macOS 上通过",
-    "event_type": "framework_tools",
+    "tldr": "一名开发者向 Anthropic 提交 GitHub Issue，要求为 Linux 发布官方 Claude Desktop 构建版本，指出当前仅支持 macOS 和 Windows，而 Claude Code CLI 已原生支持 Linux。作者同时提醒第三方非官方打包（如 aaddrick/claude-desktop-debian）存在安全隐患，呼吁 Anthropic 至少公开说明 Linux 支持路线图。",
+    "objective_summary": "2026 年 7 月，一名 Linux 开发者在 Anthropic 的 claude-code 仓库提交 Issue #65697，要求官方发布 Linux 版 Claude Desktop。作者指出当前官方下载页面标注 Linux 不可用，但 Claude Code CLI 已通过签名 apt/dnf/apk 仓库分发 Linux 二进制文件，且 Claude Cowork 在 macOS 上本身通过 Apple Virtualization.framework 启动 Ubuntu 22.04 VM 运行 Claude Code。作者引用 Stack Overflow 2025 年调查显示 27.7% 的专业开发者以 Ubuntu 为主力系统，认为缺乏官方版本迫使 Linux 用户使用第三方非签名打包（如 aaddrick/claude-desktop-debian），产生凭据和本地文件访问的安全风险。作者建议至少发布官方 apt 仓库签名构建，或公开说明不支持的理由并提供安全指引。",
+    "event_type": "infrastructure_update",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [
@@ -27,23 +27,87 @@
       "technologies": [
         "Claude Desktop",
         "Claude Code",
-        "Cowork",
-        "MCP",
-        "Computer Use",
-        "bubblewrap",
-        "seccomp"
+        "Claude Cowork",
+        "MCP"
       ],
       "key_people": [
         "Simon Willison"
       ]
     },
     "key_logic_flow": [
-      "Anthropic 为 macOS 和 Windows 发布 Claude Desktop，但 Linux 版本官方标注\"不可用\"。",
-      "Claude Code CLI 已在 Linux 上通过签名 apt/dnf/apk 仓库分发，证明 Anthropic 已具备 Linux 软件构建和分发能力。",
-      "Cowork 功能在 macOS 上通过 Apple Virtualization Framework 启动 Ubuntu 22.04 VM 并运行 Claude Code 二进制文件，Linux 执行路径已存在于产品内部。",
-      "由于没有官方版本，Linux 用户依赖第三方重新打包（如 aaddrick/claude-desktop-debian，约 4500 star），存在凭证和文件系统访问的安全风险。",
-      "Linux 是重要的开发者平台：Stack Overflow 2025 调查显示 27.7% 的专业开发者以 Ubuntu 为主系统。",
-      "作者要求 Anthropic 给出明确公开立场，要么发布官方 Linux 版本，要么说明不支持的理由并提出安全建议。"
+      "Anthropic 目前仅提供 macOS 和 Windows 版 Claude Desktop，官方下载页面标注 Linux 不可用。",
+      "Claude Code CLI 已通过签名 apt/dnf/apk 仓库为 Linux 分发二进制文件（linux-x64、linux-arm64 等），发布管道已存在。",
+      "Claude Cowork 在 macOS 上依赖 Apple Virtualization.framework 启动 Ubuntu 22.04 VM 并在其中运行 Claude Code 二进制，Linux 执行路径已内置于产品中。",
+      "Linux 用户当前依赖非官方社区打包（如 aaddrick/claude-desktop-debian，约 4500 星），这些版本处理 OAuth 令牌和 API 密钥但未经 Anthropic 签名和审计。",
+      "Stack Overflow 2025 调查显示 27.7% 的专业开发者以 Ubuntu 为主力操作系统，Linux 非边缘平台。",
+      "作者提出最低要求：Anthropic 应至少发布公开声明说明 Linux 支持计划，或提供安全指引并推荐社区项目。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "Claude Desktop",
+        "canonical_name": "Claude Desktop",
+        "url": "https://claude.com/download",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Anthropic 当前仅分发 macOS 和 Windows 版 Claude Desktop，官方下载页面标注 Linux 不可用。",
+          "Linux 用户缺乏官方桌面 GUI 途径来测试 Claude Code 插件作为桌面扩展、使用 computer use 和 Cowork 等功能。"
+        ],
+        "article_id": "003043e1b7370ce3"
+      },
+      {
+        "object_type": "product",
+        "name": "Claude Code",
+        "canonical_name": "Claude Code",
+        "url": "https://code.claude.com",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Claude Code CLI 已通过签名 apt/dnf/apk 仓库分发 Linux 二进制，支持 Ubuntu 20.04+ 和 Debian 10+。",
+          "Claude Code 插件需要在 Claude Desktop 扩展环境中开发和测试，而后者没有 Linux 版本。"
+        ],
+        "article_id": "003043e1b7370ce3"
+      },
+      {
+        "object_type": "product",
+        "name": "Claude Cowork",
+        "canonical_name": "Claude Cowork",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Claude Cowork 在 macOS 上通过 Apple Virtualization.framework 启动自定义 Ubuntu 22.04 VM，并在 bubblewrap 和 seccomp 下运行 Claude Code 二进制。",
+          "社区项目 johnzfitch/claude-cowork-linux 通过 stub macOS 原生模块直接在 Linux x86_64 上运行 Cowork，无需 VM。"
+        ],
+        "article_id": "003043e1b7370ce3"
+      },
+      {
+        "object_type": "project",
+        "name": "aaddrick/claude-desktop-debian",
+        "canonical_name": "aaddrick/claude-desktop-debian",
+        "url": "https://github.com/aaddrick/claude-desktop-debian",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "该项目约 4500 星，提供签名 apt/dnf 仓库、.deb/.rpm/AppImage/AUR/Nix 构建、CI 测试和上游追踪，最新版本跟踪 Claude Desktop 1.11187.1。",
+          "它是目前 Linux 用户获取 Claude Desktop 的主要途径，但未经 Anthropic 签名和审计，存在凭据处理的安全风险。"
+        ],
+        "article_id": "003043e1b7370ce3"
+      },
+      {
+        "object_type": "project",
+        "name": "johnzfitch/claude-cowork-linux",
+        "canonical_name": "johnzfitch/claude-cowork-linux",
+        "url": "https://github.com/johnzfitch/claude-cowork-linux",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "该项目通过 stub macOS 原生模块并跳过 VM，直接在 Linux x86_64 上原生运行 Claude Cowork 模式。",
+          "该社区端口证明了 Linux 上的 Cowork 能力已在产品内部存在，缺的只是官方发布的 Linux 目标。"
+        ],
+        "article_id": "003043e1b7370ce3"
+      }
     ],
     "impact_score": {
       "score": 4.0,
@@ -97,7 +161,136 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "Claude Desktop",
+        "canonical_name": "Claude Desktop",
+        "url": "https://claude.com/download",
+        "positioning": "Anthropic 推出的桌面端 AI 客户端，提供 GUI 界面、桌面扩展、computer use 和 Cowork 等能力，目前仅支持 macOS 和 Windows。",
+        "target_users": [
+          "Linux 开发者",
+          "AI 编程用户",
+          "Claude Code 插件开发者"
+        ],
+        "product_signal": "官方下载页面标注 Linux 不可用，但社区非官方打包项目已积累约 4500 星，反映 Linux 用户对该产品的强烈需求。",
+        "market_signal": "Stack Overflow 2025 调查显示 27.7% 的专业开发者以 Ubuntu 为主力系统，Linux 版缺失导致大量用户被迫使用非签名第三方打包。",
+        "differentiation": "相比 Web 客户端，Claude Desktop 是唯一支持桌面扩展、computer use 和 Cowork 的官方 GUI 入口，Linux 版本缺位形成了产品体验断层。",
+        "watch_reason": "Linux 版 Claude Desktop 的发布将深刻影响 AI 开发者在 Linux 生态中的工作效率与安全体验，但 Anthropic 至今未公开任何 Linux 支持路线图或时间承诺。",
+        "risk_notes": [
+          "Anthropic 未公开 Linux 版 Claude Desktop 的开发计划或时间表，社区诉求长期未获官方回应。",
+          "Linux 用户当前依赖非官方打包版本，存在 OAuth 令牌和 API 密钥被第三方处理的安全风险。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "003043e1b7370ce3"
+        ],
+        "evidence_snippets": [
+          "Anthropic 当前仅分发 macOS 和 Windows 版 Claude Desktop，官方下载页面标注 Linux 不可用。",
+          "Linux 用户缺乏官方桌面 GUI 途径来测试 Claude Code 插件作为桌面扩展、使用 computer use 和 Cowork 等功能。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Claude Code",
+        "canonical_name": "Claude Code",
+        "url": "https://code.claude.com",
+        "positioning": "Anthropic 推出的命令行 AI 编程助手，已通过签名 apt/dnf/apk 仓库原生支持 Linux 分发。",
+        "target_users": [
+          "AI 辅助编程开发者",
+          "Linux 命令行用户"
+        ],
+        "product_signal": "Claude Code CLI 已通过签名仓库为 Linux 分发二进制，支持 Ubuntu 20.04+ 和 Debian 10+，发布管道成熟且运行稳定。",
+        "market_signal": "CLI 工具已完整支持 Linux，但其插件开发依赖 Claude Desktop 扩展环境，导致 Linux 上插件生态受限。",
+        "differentiation": "在 Linux 上仅有 CLI 终端版本，缺少桌面 GUI 支持，插件开发与 computer use 等功能无法在 Linux 上完成。",
+        "watch_reason": "Claude Code 的 Linux 二进制管道虽已就绪，但其插件生态和桌面功能扩展受限于 Claude Desktop 的跨平台缺失，影响 Linux 开发者的完整使用体验。",
+        "risk_notes": [
+          "Claude Code 插件在 Linux 上无法利用桌面扩展环境进行开发和测试，需切换操作系统。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "003043e1b7370ce3"
+        ],
+        "evidence_snippets": [
+          "Claude Code CLI 已通过签名 apt/dnf/apk 仓库分发 Linux 二进制，支持 Ubuntu 20.04+ 和 Debian 10+。",
+          "Claude Code 插件需要在 Claude Desktop 扩展环境中开发和测试，而后者没有 Linux 版本。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Claude Cowork",
+        "canonical_name": "Claude Cowork",
+        "positioning": "Anthropic 推出的协作式 AI 代理功能，在 macOS 上通过 Apple Virtualization.framework 启动 Ubuntu VM 运行 Claude Code。",
+        "target_users": [
+          "协作式 AI 代理用户",
+          "需要持久化 AI 辅助的开发团队"
+        ],
+        "product_signal": "社区逆向工程项目 johnzfitch/claude-cowork-linux 已证明 Cowork 可在 Linux x86_64 上原生运行，无需 VM 开销。",
+        "market_signal": "Cowork 的 Linux 执行路径已内置于产品之中，但作为桌面 GUI 功能被锁定在 macOS 和 Windows 版本上。",
+        "differentiation": "Cowork 模式在产品内部已依赖 Linux 运行时环境，技术上发布 Linux 原生版本的门槛很低。",
+        "watch_reason": "Cowork 在 Linux 上的原生运行能力已被社区独立验证，唯一缺失的是 Anthropic 将其列为官方发布目标，这将显著降低跨平台工作流切换成本。",
+        "risk_notes": [
+          "当前 Linux 用户运行 Cowork 需依赖社区反向工程项目，稳定性和安全性无官方保障。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "003043e1b7370ce3"
+        ],
+        "evidence_snippets": [
+          "Claude Cowork 在 macOS 上通过 Apple Virtualization.framework 启动自定义 Ubuntu 22.04 VM，并在 bubblewrap 和 seccomp 下运行 Claude Code 二进制。",
+          "社区项目 johnzfitch/claude-cowork-linux 通过 stub macOS 原生模块直接在 Linux x86_64 上运行 Cowork，无需 VM。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "aaddrick/claude-desktop-debian",
+        "canonical_name": "aaddrick/claude-desktop-debian",
+        "url": "https://github.com/aaddrick/claude-desktop-debian",
+        "positioning": "社区维护的非官方 Claude Desktop Linux 打包项目，提供签名 apt/dnf 仓库和多种发行版构建格式。",
+        "technical_signal": "项目提供 .deb/.rpm/AppImage/AUR/Nix 构建、CI 测试、诊断工具和上游追踪，技术成熟度较高。",
+        "adoption_signal": "约 4500 GitHub 星，是 Linux 用户获取 Claude Desktop 的主要途径，最新版本跟踪至 Claude Desktop 1.11187.1。",
+        "ecosystem_relevance": "填补了 Anthropic 官方生态中 Linux 桌面端的空白，但也暴露了非签名第三方打包的安全隐患。",
+        "target_users": [],
+        "watch_reason": "作为 Linux 生态中 Claude Desktop 的事实标准分发渠道，该项目的质量、安全性和维护状态直接影响大量 AI 开发者的桌面环境安全。",
+        "risk_notes": [
+          "未经 Anthropic 签名和审计，用户需将 OAuth 令牌和 API 密钥交给第三方打包版本处理。",
+          "一旦 Anthropic 发布官方 Linux 版，该项目可能失去维护动力和社区支持。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "003043e1b7370ce3"
+        ],
+        "evidence_snippets": [
+          "该项目约 4500 星，提供签名 apt/dnf 仓库、.deb/.rpm/AppImage/AUR/Nix 构建、CI 测试和上游追踪，最新版本跟踪 Claude Desktop 1.11187.1。",
+          "它是目前 Linux 用户获取 Claude Desktop 的主要途径，但未经 Anthropic 签名和审计，存在凭据处理的安全风险。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "johnzfitch/claude-cowork-linux",
+        "canonical_name": "johnzfitch/claude-cowork-linux",
+        "url": "https://github.com/johnzfitch/claude-cowork-linux",
+        "positioning": "社区逆向工程项目，通过 stub macOS 原生模块在 Linux x86_64 上原生运行 Claude Cowork 模式。",
+        "technical_signal": "通过绕过 Apple Virtualization.framework 依赖直接运行 Cowork，证明 Linux 执行路径已存在于产品内部。",
+        "adoption_signal": "相对小众的社区验证项目，但其技术发现降低了 Anthropic 发布官方 Linux 版 Cowork 的工程不确定性。",
+        "ecosystem_relevance": "作为技术可行性验证，该项目为 Anthropic 的 Linux 支持决策提供了直接的产品内证据。",
+        "target_users": [],
+        "watch_reason": "该项目揭示了 Cowork 的 Linux 原生运行能力已被社区独立验证，为 Anthropic 是否将 Linux 列为官方发布目标提供了有力的技术论据。",
+        "risk_notes": [
+          "依赖反向工程和模拟 macOS 原生模块，可能因 Claude Desktop 核心更新而失效。",
+          "项目规模较小，长期维护和跨版本兼容性保障有限。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "003043e1b7370ce3"
+        ],
+        "evidence_snippets": [
+          "该项目通过 stub macOS 原生模块并跳过 VM，直接在 Linux x86_64 上原生运行 Claude Cowork 模式。",
+          "该社区端口证明了 Linux 上的 Cowork 能力已在产品内部存在，缺的只是官方发布的 Linux 目标。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -116,33 +309,64 @@
     "pipeline_stage": "fact_extracted",
     "id": "04d11d45bec33e25",
     "source_type": "community_discussion",
-    "tldr": "Ohio Valley 10万瓦 FM 电台主传输线被铜缆窃贼切断，信号中断",
-    "objective_summary": "2026年5月底，Kindred Communications 旗下位于肯塔基州的 FM 电台 93.7 WDGG 的10万瓦主传输线被嫌疑人 Paul Crisp 切断，导致广播信号中断。窃贼提前破坏了监控摄像头，将铜线拖回家中切割变卖。电台以约10瓦备用功率运行，修复费用估计7-10万美元。",
+    "tldr": "肯塔基州阿什兰市的10万瓦调频电台93.7 WDGG(FM)的主传输线被一名窃贼在光天化日之下切断，嫌疑人Paul Crisp试图盗取铜线卖钱，导致电台信号中断，修复费用估计在7万至10万美元之间。",
+    "objective_summary": "Kindred Communications旗下电台93.7 WDGG(FM)的总裁Mike Kirtner接到工程总监Evan Adkins的电话，得知电台主传输线被切断。嫌疑人Paul Crisp事先破坏了监控系统，将传输线拖回家中并切割成小段准备当废铜出售。博伊德县警局通过搜查令发现赃物并逮捕了嫌疑人。电台目前以约10瓦的低功率通过备用设备维持广播，Kirtner预计6月5日前恢复传输线路，但全功率运行仍需更长时间。",
     "event_type": "infrastructure_update",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
         "Kindred Communications",
-        "WDGG",
-        "WSAZ",
+        "93.7 WDGG(FM)",
+        "WSAZ(TV)",
         "Boyd County Sheriff's Office",
         "Daystar Television Networks"
       ],
-      "technologies": [],
+      "technologies": [
+        "FM广播传输"
+      ],
       "key_people": [
         "Mike Kirtner",
         "Evan Adkins",
         "Paul Crisp",
-        "Virgil Adkins"
+        "Virgil Adkins",
+        "Kathy Mattea"
       ]
     },
     "key_logic_flow": [
-      "工程总监 Evan Adkins 在午餐前致电总裁 Mike Kirtner，通报93.7 WDGG 的10万瓦 FM 主传输线被切断。",
-      "嫌疑人 Paul Crisp 被指控切断传输线后将铜缆拖回家中切割成小段，准备当作废铜出售。",
-      "窃贼提前破坏了现场视频监控系统，该站点在5月23日已发生过一起铜缆盗窃案。",
-      "Boyd County 警局通过搜查令发现被切割的传输线，Crisp 被捕并面临二级逃避警方追捕等指控。",
-      "电台目前以约10瓦功率通过备用发射机与辅助天线运行，修复费用预计在7万至10万美元之间。",
-      "Kirtner 计划在6月5日前恢复直连传输路径，但完全恢复满功率广播需更长时间。"
+      "上周四午餐前，Kindred Communications工程总监Evan Adkins致电总裁Mike Kirtner，报告93.7 WDGG(FM)的主传输线被切断。",
+      "嫌疑人Paul Crisp事先破坏了电台的监控系统，将传输线从桥上拖到数百码外的家中并切割成小段，企图盗取铜线卖钱。",
+      "博伊德县警局获得搜查令后在被嫌疑人院子里发现被切割的传输线，经过短途追捕后将其逮捕，嫌疑人面临二级逃避警察等指控。",
+      "电台目前信号完全中断，仅能以约10瓦功率通过备用发射机和辅助天线维持广播，预计6月5日前安装好直接传输路径。",
+      "修复费用估计在7万到10万美元之间，因为传输线规格特殊且含加压气体，简单地拼接切割部分存在气体泄漏风险。",
+      "Kirtner表示作为本地拥有的社区电台，听众将此次事件视为对社区企业的攻击，教会成员和社区居民纷纷表达了支持。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "93.7 WDGG(FM) The Dawg",
+        "canonical_name": "93.7 WDGG(FM)",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "93.7 WDGG(FM) 是一座10万瓦的乡村音乐调频电台，授权给肯塔基州阿什兰市，以\"The Dawg\"为昵称运营。",
+          "该电台的主传输线被切断后完全停播，目前仅能通过备用发射机和辅助天线以约10瓦的低功率维持广播。",
+          "该电台正在举办第22届年度\"Dawg Dazzle\"活动，预计吸引约1.5万人参加，由西弗吉尼亚州本土乡村音乐明星Kathy Mattea领衔演出。"
+        ],
+        "article_id": "04d11d45bec33e25"
+      },
+      {
+        "object_type": "company",
+        "name": "Kindred Communications",
+        "canonical_name": "Kindred Communications",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "Kindred Communications由Mike Kirtner担任总裁，在肯塔基州、西弗吉尼亚州和俄亥俄州三州地区运营包括WDGG在内的七家电台。",
+          "Kirtner表示由于Kindred是本地拥有的企业，听众将此次事件视为对社区企业的攻击，社区成员在教堂等场合纷纷表达支持。"
+        ],
+        "article_id": "04d11d45bec33e25"
+      }
     ],
     "impact_score": {
       "score": 1.2,
@@ -194,7 +418,37 @@
       "compound": "medium",
       "hype": "high"
     },
-    "actionable_insight": "speculative_watch"
+    "actionable_insight": "speculative_watch",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "93.7 WDGG(FM) The Dawg",
+        "canonical_name": "93.7 WDGG(FM)",
+        "positioning": "93.7 WDGG(FM)是一座10万瓦的乡村音乐调频电台，以\"The Dawg\"为昵称面向肯塔基州阿什兰及三州地区运营。",
+        "target_users": [
+          "肯塔基州阿什兰及三州地区广播听众",
+          "亨廷顿市社区活动与本地商业参与者"
+        ],
+        "product_signal": "主传输线被切断后信号完全中断，目前仅能以约10瓦功率通过备用发射机和辅助天线维持基本广播服务。",
+        "market_signal": "修复费用估计在7万至10万美元之间，因传输线规格特殊且含加压气体，简单拼接存在气体泄漏风险。",
+        "differentiation": "作为本地拥有和运营的社区电台，听众将其视为社区企业，年度\"Dawg Dazzle\"活动预计吸引约1.5万人参与，增强了社区凝聚力。",
+        "watch_reason": "这起针对广播基础设施的铜线盗窃导致10万瓦电台信号完全中断且修复成本高达10万美元，凸显了关键通信基础设施面临的物理安全风险，但社区的积极响应也体现了本地电台在社会凝聚力中的独特价值。",
+        "risk_notes": [
+          "修复费用高达7万至10万美元，且传输线规格特殊难以快速替换。",
+          "主天线是否因事件遭受电气或物理损坏尚不明确。",
+          "全功率恢复时间不确定，6月5日前仅能完成直接传输路径安装。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "04d11d45bec33e25"
+        ],
+        "evidence_snippets": [
+          "93.7 WDGG(FM) 是一座10万瓦的乡村音乐调频电台，授权给肯塔基州阿什兰市，以\"The Dawg\"为昵称运营。",
+          "该电台的主传输线被切断后完全停播，目前仅能通过备用发射机和辅助天线以约10瓦的低功率维持广播。",
+          "该电台正在举办第22届年度\"Dawg Dazzle\"活动，预计吸引约1.5万人参加，由西弗吉尼亚州本土乡村音乐明星Kathy Mattea领衔演出。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -213,8 +467,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "0dfc6138c44c640a",
     "source_type": "community_discussion",
-    "tldr": "Jane Street设计师发现用Claude Code做交互原型已取代Figma成为主要设计工具",
-    "objective_summary": "Jane Street一位设计师讲述了自去年入职以来，设计工作流从Figma转向Claude Code的过程。通过直接构建可运行的原型代码而非制作设计稿和文档，设计师能够更高效地迭代功能并与团队协作验证想法。",
+    "tldr": "Jane Street的一位设计师详细描述了工作流从Figma转向Claude的转变，她通过Claude直接在实际代码库中构建可工作原型，替代了传统的设计稿制作和文档编写流程，大幅提升了设计迭代效率。",
+    "objective_summary": "Jane Street的一位设计师于2025年夏季加入该公司，从最初对LLM持怀疑态度到如今依赖Claude进行日常设计工作。她使用Claude直接编写原型代码，包括为一个内部JSQL输入框添加LLM提示功能，完成了2000行以上的代码变更。这一工作流让设计验证成本大幅降低，但也带来了代码审查角色变化和创造性可能受限等新问题。",
     "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
@@ -222,22 +476,77 @@
         "Jane Street"
       ],
       "technologies": [
-        "Claude Code",
+        "Claude",
         "Figma",
         "OCaml",
         "Bonsai",
-        "LLM",
-        "JSQL"
+        "JSQL",
+        "React"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "作者加入Jane Street前对LLM持怀疑态度，之前的尝试（Copilot、Cursor、Gemini）均未产生可用结果。",
-      "加入Jane Street后，作者发现Claude Code彻底改变了自己的设计流程：不再花时间写规范文档和Figma线框图，而是直接构建可运行的原型功能。",
-      "新工作流为：写问题描述→打开编辑器启动Claude→实现基本功能→自由迭代→推送到开发环境收集反馈→提交功能。",
-      "作者用Claude为JSQL输入框添加了LLM提示功能原型，实现了按钮优化、快捷键、文案调整等细节改进，这些在以前需要数天甚至不可能完成。",
-      "这种方式将所有精力投入改善真实产物本身，而非Figma组件或格式文档等辅助工作。",
-      "作者指出挑战在于评审者面对的是完全成型的功能而非设计稿，团队通过将原型代码视为可丢弃的提案文档来解决，同时作者也担忧这种迭代式设计可能限制创造性探索。"
+      "作者过去对LLM持怀疑态度，曾尝试Copilot、Cursor和Gemini但效果不佳，认为LLM在她擅长的领域表现不如自己。",
+      "加入Jane Street后，作者发现AI在自己不擅长的OCaml和Bonsai领域帮助巨大，并意外改变了最擅长的设计工作流程。",
+      "作者的工作流从制作Figma设计稿和编写规范文档，转变为直接使用Claude在实际代码库中构建可工作的原型功能。",
+      "作者使用Claude为JSQL输入框添加LLM提示功能，实现了提交按钮、键盘快捷键、提示词等细节的无限次快速迭代。",
+      "新工作流让设计方案的验证成本大幅降低，任何人可以直接使用原型评估设计，但带来了代码审查者角色变化的挑战。",
+      "作者担心使用Claude设计可能让她困在迭代思维中而非创造性思维，但也认为重新直接构建真实产品让她比以往更加自由。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "Claude",
+        "canonical_name": "Claude (Anthropic)",
+        "url": "https://claude.ai",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "作者详细描述了使用Claude在实际代码库中构建原型的工作流程：先写问题描述，再以该描述为提示词启动Claude进行编码。",
+          "Claude让作者获得了免费且无限的迭代能力，当她第50次改变主意或请求微小调整时，Claude都毫无怨言地执行。",
+          "作者使用Claude构建了一个在JSQL输入框中添加LLM提示功能的原型，该原型实际可运行且作者花费数天时间使用和测试。"
+        ],
+        "article_id": "0dfc6138c44c640a"
+      },
+      {
+        "object_type": "product",
+        "name": "Figma",
+        "canonical_name": "Figma",
+        "url": "https://figma.com",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者之前的工作流程主要围绕Figma设计稿和规范文档展开，但现在使用Figma的场景在过去两个月里急剧减少。",
+          "作者之前的常规工作包括在Figma中构建设计稿、编写提案文档，以及与开发者一起审查实现。",
+          "对于一些新应用，作者甚至完全跳过了Figma，从设计初期就使用Claude进行视觉设计迭代。"
+        ],
+        "article_id": "0dfc6138c44c640a"
+      },
+      {
+        "object_type": "project",
+        "name": "Bonsai",
+        "canonical_name": "Jane Street Bonsai",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者提到OCaml和Bonsai对她来说完全是新技术领域，如果是在LLM出现前加入Jane Street，她会在技术上更难做出贡献。",
+          "作者认为Claude帮助她跨过了OCaml和Bonsai的技术门槛，让她能够以设计师身份直接参与代码级贡献。"
+        ],
+        "article_id": "0dfc6138c44c640a"
+      },
+      {
+        "object_type": "project",
+        "name": "JSQL",
+        "canonical_name": "Jane Street JSQL",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "JSQL是Jane Street内部使用的一种SQL方言，被用于多种面向用户的工具中。",
+          "作者使用Claude在一个JSQL输入框中添加了LLM提示功能作为原型，该原型实际可运行。"
+        ],
+        "article_id": "0dfc6138c44c640a"
+      }
     ],
     "impact_score": {
       "score": 4.5,
@@ -293,7 +602,110 @@
       "compound": "medium",
       "hype": "medium"
     },
-    "actionable_insight": "strategic_invest"
+    "actionable_insight": "strategic_invest",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "Claude",
+        "canonical_name": "Claude (Anthropic)",
+        "url": "https://claude.ai",
+        "positioning": "Anthropic公司开发的AI对话助手产品，在本文中帮助设计师直接在实际代码库中构建可工作原型，实现从Figma设计稿到代码实现的无缝设计交付模式。",
+        "target_users": [
+          "专业设计师和产品设计师",
+          "需要快速构建可运行原型的创意角色",
+          "希望跨越技术门槛直接参与代码级实现的非工程人员"
+        ],
+        "product_signal": "设计师使用Claude完成了2000行以上的代码变更，为JSQL输入框添加LLM提示功能，实现了从设计概念到可运行原型的直接转化能力，让设计验证成本大幅降低。",
+        "market_signal": "Jane Street设计师的工作流从Figma全面转向Claude，过去两个月Figma的使用频次急剧下降，显示出AI编码工具对专业设计流程的渗透能力正在不断增强。",
+        "differentiation": "Claude让设计师无需工程团队介入即可独立构建可运行原型，将设计验证成本降至接近于零，这是传统设计工具和规范文档无法提供的从想法到可运行产品的闭环能力。",
+        "watch_reason": "Claude正在改变专业设计师的核心工作流程，让设计师从传统的Figma设计稿交付模式转变为直接在实际代码库中构建可工作原型。这种设计师与AI深度协作的新模式消除了设计到工程之间的转换损耗，可能重新定义设计行业的角色分工、能力边界和团队协作方式，属于AI改变知识工作范式的标志性案例。",
+        "risk_notes": [
+          "设计师过度依赖Claude进行设计可能导致困在迭代式思维中而非保持创造性思维，这是一个值得关注的认知风险。",
+          "代码审查者的角色定位变得模糊，需要建立全新的协作规范来适应AI辅助下的设计工作流。"
+        ],
+        "score": 8.0,
+        "article_ids": [
+          "0dfc6138c44c640a"
+        ],
+        "evidence_snippets": [
+          "作者详细描述了使用Claude在实际代码库中构建原型的工作流程：先写问题描述，再以该描述为提示词启动Claude进行编码。",
+          "Claude让作者获得了免费且无限的迭代能力，当她第50次改变主意或请求微小调整时，Claude都毫无怨言地执行。",
+          "作者使用Claude构建了一个在JSQL输入框中添加LLM提示功能的原型，该原型实际可运行且作者花费数天时间使用和测试。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Figma",
+        "canonical_name": "Figma",
+        "url": "https://figma.com",
+        "positioning": "Figma是协作式界面设计工具，长期作为设计师的核心工作平台，但在本文中设计师的工作流已全面转向Claude直接编码，Figma的使用量急剧减少。",
+        "target_users": [
+          "界面设计师",
+          "产品设计团队",
+          "需要协作式设计工具的组织"
+        ],
+        "product_signal": "设计师在过去两个月使用Figma的场景急剧减少，部分新应用甚至完全跳过Figma阶段，从设计初期就直接使用Claude进行视觉设计迭代。",
+        "market_signal": "Jane Street设计师的日常工作已从依赖Figma设计稿和规范文档为主，转变为直接使用Claude编码实现产品功能，Figma在设计工具链中的核心地位受到AI工具的明显挑战。",
+        "differentiation": "Figma专注于视觉设计和规范文档交付协作，但无法像Claude那样让设计师直接创建可运行的产品原型，在AI时代面临从设计到实现一体化的闭环能力缺口。",
+        "watch_reason": "Figma作为设计工具市场领导者的地位，正面临AI代码生成工具从设计到实现一体化的工作流冲击。设计师跳过Figma直接做产品级实现的现象如果成为趋势，将重塑整个设计工具市场的竞争格局。",
+        "risk_notes": [
+          "工作流转变主要集中于Jane Street单一个例，Figma在企业级设计协作和设计系统管理方面仍有不可替代的优势。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "0dfc6138c44c640a"
+        ],
+        "evidence_snippets": [
+          "作者之前的工作流程主要围绕Figma设计稿和规范文档展开，但现在使用Figma的场景在过去两个月里急剧减少。",
+          "作者之前的常规工作包括在Figma中构建设计稿、编写提案文档，以及与开发者一起审查实现。",
+          "对于一些新应用，作者甚至完全跳过了Figma，从设计初期就使用Claude进行视觉设计迭代。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Bonsai",
+        "canonical_name": "Jane Street Bonsai",
+        "positioning": "Jane Street内部使用的OCaml Web框架，为该公司的内部工具和应用程序提供前端界面开发基础设施。",
+        "technical_signal": "Bonsai构建于OCaml语言之上，是Jane Street内部Web前端开发的核心技术框架，对非OCaml背景的开发者具有较高的学习门槛。",
+        "adoption_signal": "Jane Street设计师借助Claude跨过了Bonsai的技术门槛，直接参与该框架下的应用代码开发，显著降低了非工程团队采用该框架的参与门槛。",
+        "ecosystem_relevance": "Bonsai是Jane Street内部技术生态的关键组成部分，作为OCaml生态中少有的Web UI框架，具有独特的技术定位和内部采用价值。",
+        "target_users": [],
+        "watch_reason": "Bonsai代表了OCaml在Web UI领域的实际应用实践，AI编码工具帮助非专家跨过专业框架技术门槛的模式，可能改变内部框架的采用和推广方式，值得持续关注OCaml生态中的AI辅助开发趋势。",
+        "risk_notes": [
+          "Bonsai作为OCaml生态中的Web前端框架，技术栈相对小众，外部社区发展和可借鉴的实践经验较为有限。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "0dfc6138c44c640a"
+        ],
+        "evidence_snippets": [
+          "作者提到OCaml和Bonsai对她来说完全是新技术领域，如果是在LLM出现前加入Jane Street，她会在技术上更难做出贡献。",
+          "作者认为Claude帮助她跨过了OCaml和Bonsai的技术门槛，让她能够以设计师身份直接参与代码级贡献。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "JSQL",
+        "canonical_name": "Jane Street JSQL",
+        "positioning": "Jane Street内部使用的一种SQL方言，被用于多种面向用户的工具中，是其数据查询和操作的基础设施组件。",
+        "technical_signal": "JSQL作为Jane Street内部SQL方言，设计师借助Claude为其输入框添加了LLM提示功能，展现了AI辅助增强内部工具交互能力的可行性。",
+        "adoption_signal": "设计师通过Claude为JSQL输入框添加LLM提示功能原型后投入数天时间使用和测试，表明该原型已具备实际生产价值和日常可用性。",
+        "ecosystem_relevance": "JSQL是Jane Street内部工具链中的关键数据查询组件，LLM集成能力为其用户界面交互体验带来了显著的提升。",
+        "target_users": [],
+        "watch_reason": "JSQL的LLM集成案例展示了AI辅助内部工具迭代的全新模式——设计师绕过漫长工程排期直接实现功能原型，这种无需经过完整开发流程即可验证产品创意的模式，对未来企业内部工具建设和迭代效率提升具有重要的示范意义。",
+        "risk_notes": [
+          "JSQL是Jane Street内部专用SQL方言工具，具体实现细节和代码架构不对外公开，外部难以评估其技术先进性和创新程度。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "0dfc6138c44c640a"
+        ],
+        "evidence_snippets": [
+          "JSQL是Jane Street内部使用的一种SQL方言，被用于多种面向用户的工具中。",
+          "作者使用Claude在一个JSQL输入框中添加了LLM提示功能作为原型，该原型实际可运行。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -312,31 +724,112 @@
     "pipeline_stage": "fact_extracted",
     "id": "14a3979cc40c8718",
     "source_type": "community_discussion",
-    "tldr": "一名10年经验的软件工程师反思LLM如何逐步侵蚀其领域专长、调试能力和架构价值的职业危机。",
-    "objective_summary": "一名拥有10年经验的金融支付领域软件工程师在2025-2026年间观察到，LLM（Claude 4.5/4.6/4.7、GPT 5.5、Opus 4.8）配合MCP和Agentic工作流，已能完成其积累多年的领域知识工作（系统设计、支付合规）和90%的分布式系统调试，",
+    "tldr": "一位拥有10年金融支付领域经验的软件工程师撰文反思，认为LLM已经侵蚀了其领域知识、调试能力和架构设计三大专业壁垒，导致其沦为普通工程师。公司招聘不再要求领域专长，仅招通用软件工程师。",
+    "objective_summary": "一位在金融和支付领域拥有10年经验的软件工程师在个人博客上发文，详细描述了LLM对其职业发展的冲击。作者在2024年加入一家全面拥抱AI的金融公司，先后经历了三个专业壁垒的崩塌：领域知识（LLM能独立完成支付系统架构设计）、调试能力（Claude Code等工具能一次性解决90%的分布式系统bug）、以及代码质量与架构设计（行业已不重视人类可读的高质量代码）。作者称其所在公司招聘时已不再要求领域专长，仅招聘通用软件工程师，团队分配在录用后才确定。作者考虑转向数学和机器学习研究但受限于现实条件。",
     "event_type": "application_landing",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [
         "Anthropic",
         "OpenAI",
-        "Sentry",
-        "DataDog"
+        "Datadog",
+        "Sentry"
       ],
       "technologies": [
         "LLM",
         "MCP",
         "Claude Code",
-        "Codex"
+        "Codex",
+        "GPT-5",
+        "Opus 4.8",
+        "Sentry MCP",
+        "Datadog MCP",
+        "Claude 4.5",
+        "Claude 4.6",
+        "Claude 4.7",
+        "GPT 5.5"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "该工程师发现，LLM已能直接生成其多年积累的金融支付领域知识（PCI合规、双重记账、交易幂等性等）的系统设计方案，使其领域专长不再构成竞争优势。",
-      "从2025年下半年开始，Claude Code、Codex等编码工具配合MCP协议和后续模型（Claude 4.5-4.7、GPT 5.5、Opus 4.8），已能一次性解决90%的分布式系统调试问题，包括竞态条件、第三方集成边缘情况等。",
-      "代码质量和软件架构（被业界简化为'品味'）是该工程师最后未被侵蚀的支柱，但行业趋势表明代码正从面向人类阅读转向面向机器阅读，代码组织的重要性正在下降。",
-      "该工程师所在公司裁员后重新招聘，职位名称已从'软件工程师-特定领域'简化为'软件工程师'，领域熟悉度不再作为重要的区分因素。",
-      "该工程师认为LLM正在将所有人塑造成通才，在供需关系下通才价格将下降，而市场需求正在萎缩。"
+      "作者拥有10年软件工程经验，专精金融和支付领域，累积了PCI合规、复式记账、资金托管等大量领域专业知识。",
+      "作者发现LLM在设计文档编写和支付系统架构规划方面已经能匹敌领域专家，导致其第一个专业壁垒（领域知识）被侵蚀。",
+      "随着Claude Code、Codex等工具以及Sentry MCP、Datadog MCP等协议的发展，LLM能一次性解决90%的分布式系统调试问题，侵蚀了作者的第二个专业壁垒。",
+      "代码质量和软件架构（被简称为'品味'）成为作者仅存的专业支柱，但行业已不再重视高质量的代码组织，因为代码正在被写给LLM阅读而非人类。",
+      "作者所在公司招聘时仅标注'软件工程师'而不再要求领域专长，团队分配在录用后才确定，表明领域知识不再是重要区分因素。",
+      "作者认为唯一出路是转向LLM难以替代的领域，但举家迁移至有前沿实验室的国家面临现实困难。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "Claude Code",
+        "canonical_name": "Anthropic Claude Code",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者提到Claude Code能一次性地解决过去需要一整天全职调试的bug。",
+          "作者描述Claude Code结合Sentry MCP后，能够一次性解决分布式系统中的竞态条件和第三方集成问题。"
+        ],
+        "article_id": "14a3979cc40c8718"
+      },
+      {
+        "object_type": "product",
+        "name": "Codex",
+        "canonical_name": "OpenAI Codex",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者提到从2025年下半年开始，Claude Code和Codex等工具让LLM变得擅长编码。"
+        ],
+        "article_id": "14a3979cc40c8718"
+      },
+      {
+        "object_type": "product",
+        "name": "Datadog",
+        "canonical_name": "Datadog",
+        "url": "https://www.datadoghq.com/",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者提到通过Datadog MCP，CLI工具能够一次性地解决跨分布式系统的bug。"
+        ],
+        "article_id": "14a3979cc40c8718"
+      },
+      {
+        "object_type": "product",
+        "name": "Sentry",
+        "canonical_name": "Sentry",
+        "url": "https://sentry.io/",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者描述Sentry MCP启用后，结合Claude Code能一次性解决大部分bug。"
+        ],
+        "article_id": "14a3979cc40c8718"
+      },
+      {
+        "object_type": "product",
+        "name": "ChatGPT Enterprise",
+        "canonical_name": "OpenAI ChatGPT Enterprise",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者进入公司第一天就获得了ChatGPT和Claude Enterprise企业账号，并被鼓励使用。"
+        ],
+        "article_id": "14a3979cc40c8718"
+      },
+      {
+        "object_type": "product",
+        "name": "Claude Enterprise",
+        "canonical_name": "Anthropic Claude Enterprise",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者进入公司第一天就获得了ChatGPT和Claude Enterprise企业账号，并被鼓励用于研究、探索和编码。"
+        ],
+        "article_id": "14a3979cc40c8718"
+      }
     ],
     "impact_score": {
       "score": 5.0,
@@ -394,7 +887,170 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "Claude Code",
+        "canonical_name": "Anthropic Claude Code",
+        "positioning": "Anthropic 推出的命令行 AI 编程助手，通过 MCP 协议生态接入可观测性工具，实现从编码到分布式调试的全链路自动化。",
+        "target_users": [
+          "软件工程师",
+          "后端开发工程师",
+          "DevOps 工程师"
+        ],
+        "product_signal": "结合 Sentry MCP 和 Datadog MCP 后，Claude Code 能一次性解决 90% 的分布式系统 bug，包括竞态条件和第三方集成边缘情况。",
+        "market_signal": "自 2025 年下半年起引发行业广泛关注，已被金融科技企业采纳并深度融入工程师日常编码与调试工作流。",
+        "differentiation": "通过 MCP 协议将代码生成与可观测性工具（Sentry、Datadog）打通，实现从错误发现到自动修复的端到端闭环，超越纯代码补全工具。",
+        "watch_reason": "Claude Code 结合 MCP 生态系统性侵蚀了资深工程师的领域知识和调试能力两大核心壁垒，代表 AI 编码工具从辅助到自主调试的范式跃迁，直接重构软件工程职业价值。",
+        "risk_notes": [
+          "MCP 生态的稳定性和兼容性依赖第三方可观测性工具的接口维护。",
+          "高复杂度业务逻辑下的修复方案仍需人工审核，完全自主修复尚不可靠。"
+        ],
+        "score": 8.0,
+        "article_ids": [
+          "14a3979cc40c8718"
+        ],
+        "evidence_snippets": [
+          "作者提到Claude Code能一次性地解决过去需要一整天全职调试的bug。",
+          "作者描述Claude Code结合Sentry MCP后，能够一次性解决分布式系统中的竞态条件和第三方集成问题。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Codex",
+        "canonical_name": "OpenAI Codex",
+        "positioning": "OpenAI 推出的 AI 代码生成工具，基于 GPT 系列模型提供对话式编程能力，推动 LLM 编码能力从辅助走向完整实现。",
+        "target_users": [
+          "软件工程师",
+          "AI 应用开发者"
+        ],
+        "product_signal": "文章指出从 2025 年下半年开始，Codex 和 Claude Code 等工具让 LLM 从擅长写单元测试进化到可以编写完整的代码实现。",
+        "market_signal": "作为 OpenAI 在 AI 编码领域的关键产品，与 Claude Code 形成直接竞争，共同推动 AI 编程能力的快速迭代和边界扩展。",
+        "differentiation": "依托 OpenAI 的 GPT 系列模型基础能力，以对话式编程体验降低编码门槛，但文章未提供独立于 Claude Code 的差异化特征。",
+        "watch_reason": "Codex 是 OpenAI 争夺 AI 编程市场的核心产品，与 Claude Code 的竞争态势将直接影响 AI 编码工具的技术路线和行业格局。",
+        "risk_notes": [
+          "文章仅从单一用户视角提及，缺乏大规模采用或对比数据支撑。",
+          "与 Claude Code 的实际功能差异尚不明确，竞争定位有待观察。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "14a3979cc40c8718"
+        ],
+        "evidence_snippets": [
+          "作者提到从2025年下半年开始，Claude Code和Codex等工具让LLM变得擅长编码。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Datadog",
+        "canonical_name": "Datadog",
+        "url": "https://www.datadoghq.com/",
+        "positioning": "云应用分布式可观测性平台，通过 MCP 协议向 AI 代理标准化暴露监控数据，赋能 AI 工具实现跨系统自动调试与修复。",
+        "target_users": [
+          "DevOps 工程师",
+          "SRE 工程师",
+          "平台工程团队",
+          "后端开发工程师"
+        ],
+        "product_signal": "Datadog MCP 使 CLI 工具能一次性解决跨分布式系统的复杂 bug，包括缺乏端到端可观测性环境下的竞态条件和第三方集成问题。",
+        "market_signal": "可观测性工具通过 MCP 协议与 AI 编程助手深度整合，正在成为 AI 驱动开发工作流的关键基础设施，标志着行业从被动监控走向主动修复。",
+        "differentiation": "通过 MCP 标准化接口将可观测性数据直接暴露给 AI 代理，实现从故障发现到自动调试的闭环，区别于传统需人工解读仪表盘的监控工具。",
+        "watch_reason": "Datadog MCP 的实践表明可观测性行业正从\"人看仪表盘调试\"向\"AI 读取数据并自动修复\"结构性转型，将深刻改变 DevOps 和 SRE 的日常工作模式。",
+        "risk_notes": [
+          "MCP 接口暴露敏感生产数据可能带来安全隐患和合规风险。",
+          "跨系统自动修复在金融等严格合规场景下的审计追溯机制尚不完善。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "14a3979cc40c8718"
+        ],
+        "evidence_snippets": [
+          "作者提到通过Datadog MCP，CLI工具能够一次性地解决跨分布式系统的bug。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Sentry",
+        "canonical_name": "Sentry",
+        "url": "https://sentry.io/",
+        "positioning": "应用错误追踪和性能监控平台，通过 MCP 协议将错误上下文标准化输出给 AI 编程工具，实现从异常捕获到自动修复的闭环。",
+        "target_users": [
+          "软件开发工程师",
+          "DevOps 工程师",
+          "SRE 工程师"
+        ],
+        "product_signal": "Sentry MCP 与 Claude Code 集成后，仅需一个 Sentry 链接即可让 AI 自动获取栈追踪和错误上下文并给出修复方案，覆盖大部分常见 bug。",
+        "market_signal": "错误监控平台通过 MCP 协议成为 AI 编程工作流的必要数据源，改变了传统人工查阅 Sentry 日志再定位代码的调试模式。",
+        "differentiation": "通过 MCP 将错误追踪数据标准化投喂给 AI 代理，实现从错误捕获到自动修复的闭环体验，传统 APM 工具不具备此原生 AI 集成能力。",
+        "watch_reason": "Sentry MCP 展示了错误监控行业从被动记录向主动修复演进的可行路径，是 AI 代理驱动开发工作流中连接监控与编码的关键桥梁。",
+        "risk_notes": [
+          "自动修复可能引入新缺陷，人工审核在核心生产环境中仍不可或缺。",
+          "MCP 协议作为新兴接口标准，长期兼容性和安全性有待生产环境验证。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "14a3979cc40c8718"
+        ],
+        "evidence_snippets": [
+          "作者描述Sentry MCP启用后，结合Claude Code能一次性解决大部分bug。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "ChatGPT Enterprise",
+        "canonical_name": "OpenAI ChatGPT Enterprise",
+        "positioning": "OpenAI 面向企业提供的数据安全合规版 AI 对话平台，使企业在受控环境中释放 GPT 系列模型的编码与研究价值。",
+        "target_users": [
+          "企业技术团队",
+          "软件工程师",
+          "产品经理",
+          "研究人员"
+        ],
+        "product_signal": "在金融科技公司，新员工入职第一天即获得 ChatGPT Enterprise 账号并被鼓励用于研究、探索和编码。",
+        "market_signal": "企业级 AI 工具已成为金融科技等合规敏感行业的入职标配，体现了企业 AI 采纳从\"禁止使用\"向\"鼓励使用\"的重大转变。",
+        "differentiation": "提供数据隐私保护和企业安全管理能力，区别于免费版和个人订阅，满足金融等行业的合规要求。",
+        "watch_reason": "ChatGPT Enterprise 在金融合规行业的普及代表着企业 AI 工具采纳的关键风向标，其与 Claude Enterprise 的竞争将定义下一代企业 AI 工作流标准。",
+        "risk_notes": [
+          "文章未提及具体的隐私合规细节和行业认证，单一企业数据不具广泛性。",
+          "金融行业对 AI 输出可审计性的要求比一般行业更为严格，产品适配度待验证。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "14a3979cc40c8718"
+        ],
+        "evidence_snippets": [
+          "作者进入公司第一天就获得了ChatGPT和Claude Enterprise企业账号，并被鼓励使用。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Claude Enterprise",
+        "canonical_name": "Anthropic Claude Enterprise",
+        "positioning": "Anthropic 面向企业推出的安全可控版 AI 平台，以 Claude 模型的安全对齐优势为核心，深度融入企业编码与研究流程。",
+        "target_users": [
+          "企业技术团队",
+          "软件工程师",
+          "产品经理",
+          "研究人员"
+        ],
+        "product_signal": "在金融科技公司，新员工第一天即获得 Claude Enterprise 账号并被积极鼓励用于研究、探索和编码工作。",
+        "market_signal": "Anthropic 的企业级产品正在进入金融等高度合规行业，与 ChatGPT Enterprise 在企业市场形成正面竞争，推动双寡头格局。",
+        "differentiation": "依托 Claude 系列模型在安全对齐方面的差异化优势，在合规敏感行业（如金融支付）中为 Anthropic 构建竞争壁垒。",
+        "watch_reason": "Claude Enterprise 是企业 AI 平台双寡头格局中的关键一极，其在金融行业的落地情况将直接反映 Anthropic 的企业市场拓展能力和产品竞争力。",
+        "risk_notes": [
+          "仅反映单一企业的使用情况，无法代表广泛的企业采纳趋势。",
+          "企业级 AI 工具在生产环境中的实际投资回报率和价值评估体系尚未成熟。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "14a3979cc40c8718"
+        ],
+        "evidence_snippets": [
+          "作者进入公司第一天就获得了ChatGPT和Claude Enterprise企业账号，并被鼓励用于研究、探索和编码。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -413,47 +1069,145 @@
     "pipeline_stage": "fact_extracted",
     "id": "33ee17f668ca3dcb",
     "source_type": "community_discussion",
-    "tldr": "Linear通过浏览器端数据库、乐观更新和激进代码分割实现毫秒级响应",
-    "objective_summary": "技术作者通过对Linear应用的逆向分析，详细阐述其性能优化的核心技术方案：浏览器端IndexedDB作为主数据库、乐观更新消除网络等待、多轮构建工具迁移减少50%代码体积、modulepreload并行预加载以及Service Worker全量缓存策略。",
+    "tldr": "作者从技术层面剖析了 Linear 的快速性能，核心在于将数据库放在浏览器端（IndexedDB），通过本地优先架构消除网络延迟对 UI 响应的影响，并辅以极端代码分割、modulepreload 预加载和 service worker 缓存等策略实现秒级体验。",
+    "objective_summary": "作者通过分析 Linear 的产品行为、博客文章和公开演讲，还原了其高性能的技术架构。Linear 的核心策略是将 IndexedDB 作为浏览器端数据库，UI 从本地 MobX observable 同步读取，再通过自定义同步引擎异步推送至服务端并通过 WebSocket 广播增量。Linear 的构建管线历经 Parcel 到 Rolldown 的四次迁移，实现了 59% 的首屏时间下降，并通过 modulepreload 预加载和 service worker 预缓存约 1200 个静态资源来实现秒级冷启动。作者强调大多数应用无需构建自定义同步引擎，使用 TanStack Query 或 SWR 配合乐观更新即可大幅提升感知性能。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [
-        "Linear",
-        "Google Cloud",
-        "Cloudflare",
-        "Sentry"
+        "Linear"
       ],
       "technologies": [
         "IndexedDB",
-        "WebSocket",
         "MobX",
-        "React",
+        "WebSocket",
         "PostgreSQL",
-        "CRDT",
-        "Yjs",
-        "Vite",
-        "Rolldown",
-        "Service Worker",
         "GraphQL",
-        "SWR",
-        "TanStack Query",
-        "TypeScript",
-        "ProseMirror",
-        "Emotion",
-        "StyleX",
-        "Comlink"
+        "CRDT",
+        "Service Worker",
+        "ESM",
+        "Cloud SQL",
+        "Redis"
       ],
       "key_people": [
-        "Tuomas Artman"
+        "Tuomas"
       ]
     },
     "key_logic_flow": [
-      "Linear将数据库核心放置在浏览器端的IndexedDB中，UI直接读取本地数据，变异操作先同步更新内存状态再异步推送至服务器，从根本上消除了网络延迟对UI响应的影响。",
-      "Linear采用乐观更新策略，每次操作直接更新本地状态后立即渲染，网络请求在后台异步批处理推送，用户无需等待任何spinner或骨架屏。",
-      "Linear从Parcel到Rolldown经历了四次构建工具迁移，目标是减少JavaScript和CSS体积，最终实现代码量减少50%、冷缓存页面加载速度提升10-30%、内存使用降低70-80%。",
-      "Linear将约21MB的minified JavaScript激进拆分为数百个路由级chunk按需加载，并在入口HTML中使用modulepreload标签在脚本解析前并行预下载所有关键chunk，将网络瀑布流变为单次批量并行下载。",
-      "Linear通过Service Worker预缓存约1200个资源（路由chunk、图标、字体），用户在登录页面的几秒内后台完成全量应用缓存，后续页面导航完全跳过网络请求。"
+      "Linear 性能最核心的架构决策是将数据库放在浏览器端（IndexedDB），UI 从本地内存读取，通过网络异步同步而非阻塞用户操作。",
+      "Linear 的同步引擎让数据变更先在本地 MobX observable 中生效，再异步批量推送到服务端并通过 WebSocket 广播给其他客户端。",
+      "Linear 经历了 Parcel → Rollup → Vite → Rolldown 四次构建工具迁移，实现了 50% 的代码体积缩减和 59% 的首屏时间下降。",
+      "Linear 通过 modulepreload 在 HTML 中声明数百个关键路径 chunk，让浏览器提前并行加载，消除冷启动时的网络瀑布效应。",
+      "Linear 使用 service worker 预缓存约 1200 个静态资源，用户在登录页面停留的几秒内即可完成全量应用缓存，实现后续导航的秒级加载。",
+      "作者建议大多数应用无需构建自定义同步引擎，使用 TanStack Query 或 SWR 配合乐观更新即可大幅提升感知性能。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "Linear",
+        "canonical_name": "Linear",
+        "url": "https://linear.app",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Linear 的核心策略是将 IndexedDB 作为浏览器的本地数据库，UI 从本地 MobX observable 读取并同步更新，再通过同步引擎异步推送至服务端并通过 WebSocket 广播增量。",
+          "Linear 经历了 Parcel 到 Rolldown 的四次构建工具迁移，实现了 50% 的代码体积缩减和 59% 的首屏时间下降。",
+          "Linear 使用 service worker 预缓存约 1200 个静态资源，用户在登录页面停留的几秒内即可完成全量应用缓存。"
+        ],
+        "article_id": "33ee17f668ca3dcb"
+      },
+      {
+        "object_type": "project",
+        "name": "MobX",
+        "canonical_name": "MobX",
+        "url": "https://mobx.js.org",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "MobX 作为 Linear 的可观测数据层，当 issue.title 被修改时，UI 会同步重新渲染而无需等待网络响应。",
+          "Linear 使用 MobX 管理 in-memory datastore，数据变更先作用于本地 observable，再通过同步引擎异步推送至服务端。"
+        ],
+        "article_id": "33ee17f668ca3dcb"
+      },
+      {
+        "object_type": "project",
+        "name": "Rolldown",
+        "canonical_name": "Rolldown",
+        "url": "https://rolldown.rs",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Linear 的构建管线历经 Parcel → Rollup → Vite → Rolldown 四次迁移，每次都以减少 JavaScript 和 CSS 体积为目标。",
+          "Rolldown 结合 Vite 和 plugin-react-oxc 是 Linear 在 2025 年中期采用的构建方案，替代了此前的 Rollup 和 Parcel。"
+        ],
+        "article_id": "33ee17f668ca3dcb"
+      },
+      {
+        "object_type": "product",
+        "name": "turbopuffer",
+        "canonical_name": "turbopuffer",
+        "url": "https://turbopuffer.com",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Linear 使用 turbopuffer 作为向量数据库来执行相似问题检测（similar-issue detection）的功能。",
+          "turbopuffer 被列在 Linear 后端技术栈中，用于支撑其类似问题的搜索和匹配能力。"
+        ],
+        "article_id": "33ee17f668ca3dcb"
+      },
+      {
+        "object_type": "project",
+        "name": "TanStack Query",
+        "canonical_name": "TanStack Query",
+        "url": "https://tanstack.com/query",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者认为大多数 Web 应用无需构建自定义同步引擎，使用 TanStack Query 配合乐观更新即可大幅提升感知性能。",
+          "TanStack Query 与 SWR 被作者推荐为接近 Linear 本地优先体验的替代方案，适用于大多数应用场景。"
+        ],
+        "article_id": "33ee17f668ca3dcb"
+      },
+      {
+        "object_type": "project",
+        "name": "SWR",
+        "canonical_name": "SWR",
+        "url": "https://swr.vercel.app",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者展示了使用 SWR 进行乐观更新的代码示例：先通过 mutate 立即更新本地状态，再在后台异步同步至服务端。",
+          "SWR 与 TanStack Query 被作者推荐为接近 Linear 本地优先体验的替代方案，适用于大多数应用场景。"
+        ],
+        "article_id": "33ee17f668ca3dcb"
+      },
+      {
+        "object_type": "project",
+        "name": "Yjs",
+        "canonical_name": "Yjs",
+        "url": "https://yjs.dev",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Yjs 的 CRDT 技术被 Linear 用于协同编辑场景，与 ProseMirror 配合实现实时协作编辑功能。",
+          "y-prosemirror 作为 Yjs 与 ProseMirror 的桥接层，被列入 Linear 的技术栈中用于富文本实时协作。"
+        ],
+        "article_id": "33ee17f668ca3dcb"
+      },
+      {
+        "object_type": "project",
+        "name": "ProseMirror",
+        "canonical_name": "ProseMirror",
+        "url": "https://prosemirror.net",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "ProseMirror 结合 y-prosemirror 和 Yjs 的 CRDT 技术，为 Linear 提供富文本编辑器与实时协作编辑能力。",
+          "ProseMirror 被列在 Linear 前端技术栈中，作为其富文本编辑器的核心组件。"
+        ],
+        "article_id": "33ee17f668ca3dcb"
+      }
     ],
     "impact_score": {
       "score": 5.0,
@@ -510,7 +1264,209 @@
       "compound": "medium",
       "hype": "high"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "Linear",
+        "canonical_name": "Linear",
+        "url": "https://linear.app",
+        "positioning": "Linear 是一款基于本地优先架构的项目管理工具，通过将数据库放在浏览器端和自定义同步引擎实现零等待的 UI 交互体验。",
+        "target_users": [
+          "软件工程团队",
+          "技术管理者",
+          "产品经理"
+        ],
+        "product_signal": "Linear 将 IndexedDB 作为浏览器端数据库，UI 从本地 MobX observable 实时读取，再通过同步引擎异步推送至服务端并通过 WebSocket 广播增量。",
+        "market_signal": "Linear 被广泛视为高性能项目管理的标杆产品，其本地优先技术架构已成为行业参考案例和设计范式。",
+        "differentiation": "与依赖网络请求的传统 CRUD 应用不同，Linear 通过浏览器端数据库从根本上消除了网络延迟对 UI 响应的影响，实现了原生般的交互体验。",
+        "watch_reason": "Linear 的本地优先架构是 Web 应用性能设计的典型范例，其四次构建工具迁移和自定义同步引擎等实践对新一代协作工具的产品架构有深远影响。",
+        "risk_notes": [
+          "自定义同步引擎的维护成本较高，对团队技术能力和初期投入要求严格。",
+          "本地优先架构在多人实时协作场景中可能面临冲突解决的复杂性挑战。"
+        ],
+        "score": 8.0,
+        "article_ids": [
+          "33ee17f668ca3dcb"
+        ],
+        "evidence_snippets": [
+          "Linear 的核心策略是将 IndexedDB 作为浏览器的本地数据库，UI 从本地 MobX observable 读取并同步更新，再通过同步引擎异步推送至服务端并通过 WebSocket 广播增量。",
+          "Linear 经历了 Parcel 到 Rolldown 的四次构建工具迁移，实现了 50% 的代码体积缩减和 59% 的首屏时间下降。",
+          "Linear 使用 service worker 预缓存约 1200 个静态资源，用户在登录页面停留的几秒内即可完成全量应用缓存。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "MobX",
+        "canonical_name": "MobX",
+        "url": "https://mobx.js.org",
+        "positioning": "MobX 是一个基于可观测数据图的状态管理库，通过细粒度响应式追踪实现 UI 自动同步更新，是 Linear 本地优先架构的核心基础设施。",
+        "technical_signal": "MobX 作为 Linear 的可观测数据层，当 issue.title 被修改时，UI 会同步重新渲染而无需等待网络响应。",
+        "adoption_signal": "MobX 被 Linear 用作 in-memory datastore 的状态管理方案，支撑整个浏览器端数据库到 UI 的实时数据流。",
+        "ecosystem_relevance": "MobX 与 React 生态系统深度集成，在需要细粒度响应式状态管理的高性能 Web 应用中具有不可替代的位置。",
+        "target_users": [],
+        "watch_reason": "MobX 在 Linear 这类极致性能应用中的实践验证了其响应式数据流在本地优先架构中的核心价值，值得关注其生态演进和与新兴框架的集成进展。",
+        "risk_notes": [
+          "MobX 的响应式追踪模式在复杂嵌套数据结构中可能导致调试困难。",
+          "随着 React Server Components 和 Signal 方案的兴起，MobX 的适用场景受到一定挤压。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "33ee17f668ca3dcb"
+        ],
+        "evidence_snippets": [
+          "MobX 作为 Linear 的可观测数据层，当 issue.title 被修改时，UI 会同步重新渲染而无需等待网络响应。",
+          "Linear 使用 MobX 管理 in-memory datastore，数据变更先作用于本地 observable，再通过同步引擎异步推送至服务端。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Rolldown",
+        "canonical_name": "Rolldown",
+        "url": "https://rolldown.rs",
+        "positioning": "Rolldown 是一个基于 Rust 的高性能 JavaScript 打包工具，作为 Linear 构建管线演化至第四代的最终选择，大幅减少了代码体积和首屏时间。",
+        "technical_signal": "Linear 的构建管线历经 Parcel → Rollup → Vite → Rolldown 四次迁移，每次都以减少 JavaScript 和 CSS 体积为目标。",
+        "adoption_signal": "Rolldown 结合 Vite 和 plugin-react-oxc 是 Linear 在 2025 年中期采用的构建方案，替代了此前的 Rollup 方案。",
+        "ecosystem_relevance": "Rolldown 作为 Rust 生态中新兴的构建工具，与 Vite 深度整合，代表了前端构建工具向编译型语言迁移的关键趋势。",
+        "target_users": [],
+        "watch_reason": "Rolldown 在 Linear 这种高复杂度生产环境中经受住了实践检验，其发展轨迹对前端构建工具链的演进方向具有指标性意义。",
+        "risk_notes": [
+          "Rolldown 尚处于早期发展阶段，插件生态和社区成熟度不及 Rollup 和 Webpack。",
+          "前端构建工具频繁迁移本身就反映出该领域仍未形成稳定共识。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "33ee17f668ca3dcb"
+        ],
+        "evidence_snippets": [
+          "Linear 的构建管线历经 Parcel → Rollup → Vite → Rolldown 四次迁移，每次都以减少 JavaScript 和 CSS 体积为目标。",
+          "Rolldown 结合 Vite 和 plugin-react-oxc 是 Linear 在 2025 年中期采用的构建方案，替代了此前的 Rollup 和 Parcel。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "turbopuffer",
+        "canonical_name": "turbopuffer",
+        "url": "https://turbopuffer.com",
+        "positioning": "turbopuffer 是一个面向低延迟向量搜索的数据库产品，被 Linear 用于相似问题检测，支撑其智能搜索和匹配能力。",
+        "target_users": [
+          "需要实时向量搜索的技术团队",
+          "构建智能推荐和搜索功能的机器学习工程师"
+        ],
+        "product_signal": "turbopuffer 被列为 Linear 后端技术栈中的向量数据库，用于执行类似问题的搜索和匹配能力。",
+        "market_signal": "turbopuffer 获得 Linear 这样的标杆团队选用于生产环境，说明其在向量检索性能和可靠性方面具备竞争力。",
+        "differentiation": "turbopuffer 专注于低延迟向量搜索场景，与通用向量数据库相比在特定速度敏感型应用中追求极致性能。",
+        "watch_reason": "turbopuffer 被 Linear 采用表明其在向量数据库领域的差异化定位有效，值得跟踪其在 AI 驱动搜索场景中的市场拓展情况。",
+        "risk_notes": [
+          "向量数据库市场竞争激烈，Pinecone 和 Weaviate 等主流竞品生态更加成熟。",
+          "类似功能也可通过 PostgreSQL pgvector 等通用方案实现，替代选择较多。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "33ee17f668ca3dcb"
+        ],
+        "evidence_snippets": [
+          "Linear 使用 turbopuffer 作为向量数据库来执行相似问题检测（similar-issue detection）的功能。",
+          "turbopuffer 被列在 Linear 后端技术栈中，用于支撑其类似问题的搜索和匹配能力。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "TanStack Query",
+        "canonical_name": "TanStack Query",
+        "url": "https://tanstack.com/query",
+        "positioning": "TanStack Query 是一个数据获取和缓存管理库，通过乐观更新机制让普通 Web 应用接近 Linear 的即时响应体验，无需构建自定义同步引擎。",
+        "technical_signal": "作者认为大多数 Web 应用无需构建自定义同步引擎，使用 TanStack Query 配合乐观更新即可大幅提升感知性能。",
+        "adoption_signal": "TanStack Query 被作者推荐为接近 Linear 本地优先体验的最佳现成替代方案，适用于大多数无需自定义引擎的应用场景。",
+        "ecosystem_relevance": "TanStack Query 是 React 生态中数据获取层的事实标准之一，与 SWR 共同定义了乐观更新和缓存失效的最佳实践。",
+        "target_users": [],
+        "watch_reason": "TanStack Query 在本地优先架构潮流中扮演着关键桥接角色，让普通团队无需自定义同步引擎即可大幅提升交互响应速度，其演进方向值得持续关注。",
+        "risk_notes": [
+          "TanStack Query 的乐观更新仍需配合服务端 API，无法完全消除网络延迟。",
+          "对于需要离线优先和实时双向同步的应用场景，TanStack Query 的原生能力仍然有限。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "33ee17f668ca3dcb"
+        ],
+        "evidence_snippets": [
+          "作者认为大多数 Web 应用无需构建自定义同步引擎，使用 TanStack Query 配合乐观更新即可大幅提升感知性能。",
+          "TanStack Query 与 SWR 被作者推荐为接近 Linear 本地优先体验的替代方案，适用于大多数应用场景。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "SWR",
+        "canonical_name": "SWR",
+        "url": "https://swr.vercel.app",
+        "positioning": "SWR 是一个基于 stale-while-revalidate 策略的轻量级数据请求库，通过乐观更新帮助 Web 应用在数据变更时实现即时 UI 反馈。",
+        "technical_signal": "作者展示了使用 SWR 进行乐观更新的代码示例：先通过 mutate 立即更新本地状态，再在后台异步同步至服务端。",
+        "adoption_signal": "SWR 与 TanStack Query 被作者推荐为接近 Linear 本地优先体验的替代方案，适用于大多数应用场景。",
+        "ecosystem_relevance": "SWR 由 Vercel 团队维护，在 Next.js 生态中具有天然集成优势，是 React 应用数据获取层的主流选择之一。",
+        "target_users": [],
+        "watch_reason": "SWR 的乐观更新能力让普通 Web 应用可以极低改造成本获得接近 Linear 的交互体验，其与 Next.js 生态的融合深度值得持续跟踪。",
+        "risk_notes": [
+          "SWR 主要解决数据获取场景，对于双向同步和离线优先的应用架构能力有限。",
+          "SWR 的乐观更新策略在网络不稳定场景中可能导致 UI 状态与服务端数据不一致。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "33ee17f668ca3dcb"
+        ],
+        "evidence_snippets": [
+          "作者展示了使用 SWR 进行乐观更新的代码示例：先通过 mutate 立即更新本地状态，再在后台异步同步至服务端。",
+          "SWR 与 TanStack Query 被作者推荐为接近 Linear 本地优先体验的替代方案，适用于大多数应用场景。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Yjs",
+        "canonical_name": "Yjs",
+        "url": "https://yjs.dev",
+        "positioning": "Yjs 是一个基于 CRDT（无冲突复制数据类型）的实时协作框架，为 Linear 的富文本协同编辑提供底层的无冲突数据合并能力。",
+        "technical_signal": "Yjs 的 CRDT 技术被 Linear 用于协同编辑场景，与 ProseMirror 配合实现实时协作编辑功能。",
+        "adoption_signal": "y-prosemirror 作为 Yjs 与 ProseMirror 的桥接层，被列入 Linear 的技术栈中用于富文本实时协作。",
+        "ecosystem_relevance": "Yjs 是 JavaScript 生态中最成熟的 CRDT 实现之一，在实时协作编辑场景中与 ProseMirror、Slate 等编辑器框架深度集成。",
+        "target_users": [],
+        "watch_reason": "Yjs 在 Linear 这类高性能产品中的成功应用验证了 CRDT 技术在实时协作场景中的生产就绪性，其性能优化和生态扩展值得跟踪。",
+        "risk_notes": [
+          "CRDT 技术在文档规模较大时可能出现内存占用和性能瓶颈。",
+          "Yjs 的学习曲线较陡，开发者需要理解 CRDT 的冲突解决模型才能有效使用。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "33ee17f668ca3dcb"
+        ],
+        "evidence_snippets": [
+          "Yjs 的 CRDT 技术被 Linear 用于协同编辑场景，与 ProseMirror 配合实现实时协作编辑功能。",
+          "y-prosemirror 作为 Yjs 与 ProseMirror 的桥接层，被列入 Linear 的技术栈中用于富文本实时协作。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "ProseMirror",
+        "canonical_name": "ProseMirror",
+        "url": "https://prosemirror.net",
+        "positioning": "ProseMirror 是一个可扩展的富文本编辑器框架，为 Linear 提供高性能编辑基础，并通过 Yjs CRDT 桥接实现实时协作编辑能力。",
+        "technical_signal": "ProseMirror 结合 y-prosemirror 和 Yjs 的 CRDT 技术，为 Linear 提供富文本编辑器与实时协作编辑能力。",
+        "adoption_signal": "ProseMirror 被列在 Linear 前端技术栈中，作为其富文本编辑器的核心组件。",
+        "ecosystem_relevance": "ProseMirror 是 JavaScript 生态中最强大和灵活的富文本编辑器框架之一，广泛用于需要深度定制编辑体验的产品中。",
+        "target_users": [],
+        "watch_reason": "ProseMirror 在 Linear 等高质量产品中的采用验证了其在复杂编辑场景中的成熟度，其持续演进和插件生态扩展值得关注。",
+        "risk_notes": [
+          "ProseMirror 的 API 设计和数据模型较为底层，学习成本和开发复杂度高于 TipTap 等上层封装。",
+          "富文本编辑器领域竞争激烈，TipTap 和 Slate 等开源替代方案也在持续进步。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "33ee17f668ca3dcb"
+        ],
+        "evidence_snippets": [
+          "ProseMirror 结合 y-prosemirror 和 Yjs 的 CRDT 技术，为 Linear 提供富文本编辑器与实时协作编辑能力。",
+          "ProseMirror 被列在 Linear 前端技术栈中，作为其富文本编辑器的核心组件。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -529,8 +1485,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "4515f7e69a060117",
     "source_type": "community_discussion",
-    "tldr": "Claude 开发的全开源 Office Open XML 浏览器端查看器，Rust→WASM 解析，Canvas 2D 渲染",
-    "objective_summary": "yukiyokotani 在 GitHub 发布了一个由 Claude（Anthropic 的 AI 助手）通过迭代提示完全实现的 Office XML 文档查看器。该项目包含 Rust 编写的解析器（编译为 WebAssembly）和 TypeScript 编写的 Canvas 2D 渲染器，",
+    "tldr": "yukiyokotani 发布了 office-open-xml-viewer，一个基于浏览器的 Office Open XML 文档查看器，使用 Rust 解析器编译为 WebAssembly 并通过 Canvas 2D API 渲染，支持 DOCX、XLSX、PPTX 三种格式，整个代码库由 Claude AI 助手生成。",
+    "objective_summary": "开发者 yukiyokotani 在 GitHub 上发布了 office-open-xml-viewer 项目，这是一个完全由 Anthropic 的 Claude AI 助手通过迭代提示生成的 Office Open XML 文档查看器。该项目将 Rust 编写的解析器编译为 WebAssembly，在 Web Worker 中完成文档解析，然后在主线程通过 Canvas 2D API 渲染到 HTML Canvas 元素上。项目以 npm 包 @silurus/ooxml 发布，支持 DOCX、XLSX 和 PPTX 三种格式，数学公式引擎为可选导入以避免不必要的包体积膨胀。",
     "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
@@ -541,20 +1497,58 @@
         "WebAssembly",
         "Canvas 2D API",
         "MathJax",
-        "STIX Two Math",
-        "Web Worker"
+        "STIX Two Math"
       ],
-      "key_people": [
-        "yukiyokotani",
-        "Claude"
-      ]
+      "key_people": []
     },
     "key_logic_flow": [
-      "该项目全部代码（Rust 解析器、TypeScript 渲染器、测试和工具链）均由 Anthropic 的 AI 助手 Claude 通过迭代提示生成，仓库中不存在人类编写的应用代码。",
-      "项目采用 Rust→WebAssembly 架构，分别在 Web Worker 中解析 DOCX/XLSX/PPTX 的 ZIP 压缩包，在主线程使用 Canvas 2D API 渲染，保证字体注册和文本测量的一致性。",
-      "以 npm 包 @silurus/ooxml 发布，支持按格式按需导入（@silurus/ooxml/docx / xlsx / pptx），OMML 数学公式引擎（~3 MB）作为可选入口 @silurus/ooxml/math，未使用时被 tree-shake 完全移除。",
-      "每种格式同时暴露无头引擎 API（DocxDocument/XlsxWorkbook/PptxPresentation），允许调用者自定义 UI 而无需绑定内置查看器。",
-      "提供了 React 19、Vue 3.5、Angular 19、Svelte 5、SolidJS 1.9、Qwik 2 六个前端框架的完整集成示例代码。"
+      "该项目提供了一个基于浏览器的 Office Open XML 文档查看器，使用 Rust 编写的解析器编译为 WebAssembly，并通过 Canvas 2D API 进行渲染。",
+      "项目支持 DOCX、XLSX 和 PPTX 三种格式，每种格式都提供头尾型引擎和独立的 Viewer API，开发者可按需导入。",
+      "解析过程在 Web Worker 中通过 WASM 完成以不阻塞主线程，渲染在主线程上进行以共享文档的 FontFaceSet 保证字体测量一致。",
+      "数学公式渲染引擎基于 MathJax 和 STIX Two Math 字体，为独立可选入口，约 3 MB 大小，可通过 tree-shaking 在未使用时完全移除。",
+      "项目提供了 React 19、Vue 3.5、Angular 19、Svelte 5、SolidJS 1.9 和 Qwik 2 等多种前端框架的集成使用示例。",
+      "整个代码库（包括 Rust 解析器、TypeScript 渲染器、测试和工具链）均由 Anthropic 的 Claude AI 助手通过迭代提示实现，仓库中不存在人工编写的应用代码。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "yukiyokotani/office-open-xml-viewer",
+        "canonical_name": "yukiyokotani/office-open-xml-viewer",
+        "url": "https://github.com/yukiyokotani/office-open-xml-viewer",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "该项目是一个基于浏览器的 Office Open XML 文档查看器，其解析器使用 Rust 编写并编译为 WebAssembly，渲染器使用 Canvas 2D API。",
+          "整个代码库——包括 Rust 解析器、TypeScript 渲染器、测试和工具链——均由 Claude AI 助手通过迭代提示实现，仓库中不存在人工编写的应用代码。"
+        ],
+        "article_id": "4515f7e69a060117"
+      },
+      {
+        "object_type": "product",
+        "name": "@silurus/ooxml",
+        "canonical_name": "@silurus/ooxml",
+        "url": "https://www.npmjs.com/package/@silurus/ooxml",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "该 npm 包以 ESM-only 格式发布，支持按需导入 DOCX、XLSX、PPTX 等不同格式的查看器，且数学公式引擎为可选入口可被 tree-shaking 完全移除。",
+          "使用者可以通过 import { DocxViewer } from '@silurus/ooxml/docx' 等语句分别导入对应格式的查看器，无需加载全部格式的代码。"
+        ],
+        "article_id": "4515f7e69a060117"
+      },
+      {
+        "object_type": "product",
+        "name": "@silurus/ooxml/math",
+        "canonical_name": "@silurus/ooxml/math",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "数学公式渲染引擎基于 MathJax 和 STIX Two Math 字体，大小约 3 MB，仅在开发者主动导入并传递给查看器时才会被打包。",
+          "该引擎完全自包含，无需网络请求或跨域请求，开发者通过 import { math } from '@silurus/ooxml/math' 导入后传递给 DocxViewer 或 PptxViewer 即可启用公式渲染。"
+        ],
+        "article_id": "4515f7e69a060117"
+      }
     ],
     "impact_score": {
       "score": 6.0,
@@ -611,7 +1605,87 @@
       "compound": "low",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "yukiyokotani/office-open-xml-viewer",
+        "canonical_name": "yukiyokotani/office-open-xml-viewer",
+        "url": "https://github.com/yukiyokotani/office-open-xml-viewer",
+        "positioning": "基于 Rust 解析器编译为 WebAssembly，通过 Canvas 2D API 在浏览器端渲染 Office Open XML 文档的纯前端查看器项目，全部代码由 AI 生成。",
+        "technical_signal": "解析在 Web Worker 中通过 WASM 完成以不阻塞主线程，渲染在主线程进行以共享文档的 FontFaceSet 保证字体测量一致性。",
+        "adoption_signal": "项目提供了 React 19、Vue 3.5、Angular 19、Svelte 5、SolidJS 1.9 和 Qwik 2 等六大主流框架的集成示例，覆盖了主要前端技术栈。",
+        "ecosystem_relevance": "作为纯前端 Office 文档查看方案，填补了浏览器端无需服务端转换即可解析渲染 OOXML 文档的技术空白，拓展了 WASM 在前端文档处理领域的应用边界。",
+        "target_users": [],
+        "watch_reason": "整个代码库由 Claude AI 通过迭代提示生成，展示了 AI 生成完整生产级应用的能力边界；同时该项目的 WASM+Canvas 架构为浏览器端文档处理提供了高价值技术参考，具有双重关注意义。",
+        "risk_notes": [
+          "数学公式引擎约 3 MB 体积，虽为可选模块可被 tree-shake，但启用时对性能敏感场景仍可能构成挑战。",
+          "Canvas 渲染在复杂排版（如嵌套表格、首字下沉等）场景下与原生 Office 渲染效果可能存在差异。"
+        ],
+        "score": 8.0,
+        "article_ids": [
+          "4515f7e69a060117"
+        ],
+        "evidence_snippets": [
+          "该项目是一个基于浏览器的 Office Open XML 文档查看器，其解析器使用 Rust 编写并编译为 WebAssembly，渲染器使用 Canvas 2D API。",
+          "整个代码库——包括 Rust 解析器、TypeScript 渲染器、测试和工具链——均由 Claude AI 助手通过迭代提示实现，仓库中不存在人工编写的应用代码。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "@silurus/ooxml",
+        "canonical_name": "@silurus/ooxml",
+        "url": "https://www.npmjs.com/package/@silurus/ooxml",
+        "positioning": "以 ESM-only 格式发布的 Office Open XML 文档查看器 npm 包，支持 DOCX、XLSX、PPTX 三种格式的按需导入与渲染。",
+        "target_users": [
+          "前端开发者",
+          "需要浏览器内查看 Office 文档的 Web 应用团队",
+          "对纯前端方案有技术偏好的开发组织"
+        ],
+        "product_signal": "支持按格式分别导入 DocxViewer、XlsxViewer、PptxViewer，数学公式引擎为独立可选入口，可通过 tree-shaking 完全移除约 3 MB 体积。",
+        "market_signal": "覆盖了三大主流 Office 格式，通过 Storybook 提供了六大前端框架的集成示例，技术文档和集成引导较为完整。",
+        "differentiation": "相比传统的服务端文档转换方案，该包实现了纯浏览器端解析与渲染，无需后端参与即可查看 Office 文档，大幅降低了部署与维护复杂度。",
+        "watch_reason": "纯前端 Office 文档渲染方案在技术选型上具有创新性，WASM+Canvas 架构可能成为浏览器端文档处理的新范式，值得持续关注其在实际项目中的落地效果与社区反馈。",
+        "risk_notes": [
+          "WASM 文件需要构建工具额外配置（Vite 需 vite-plugin-wasm，webpack 需 asyncWebAssembly），增加了一定的接入成本。",
+          "Canvas 渲染在复杂文档排版上可能无法完全对齐 Microsoft Office 原生渲染效果，在精确度要求高的场景下可能不适用。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "4515f7e69a060117"
+        ],
+        "evidence_snippets": [
+          "该 npm 包以 ESM-only 格式发布，支持按需导入 DOCX、XLSX、PPTX 等不同格式的查看器，且数学公式引擎为可选入口可被 tree-shaking 完全移除。",
+          "使用者可以通过 import { DocxViewer } from '@silurus/ooxml/docx' 等语句分别导入对应格式的查看器，无需加载全部格式的代码。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "@silurus/ooxml/math",
+        "canonical_name": "@silurus/ooxml/math",
+        "positioning": "@silurus/ooxml 的可选数学公式渲染引擎，基于 MathJax 和 STIX Two Math 字体实现 OMML 方程的纯前端渲染。",
+        "target_users": [
+          "需要在浏览器中查看含数学公式的 Office 文档的开发者",
+          "学术出版和教育领域的 Web 应用开发团队"
+        ],
+        "product_signal": "完全自包含实现，无需网络请求或跨域请求，仅在被开发者主动导入并传递给查看器时才会被打包，可被 tree-shaking 完全移除。",
+        "market_signal": "作为 @silurus/ooxml 生态的可选能力模块，填补了浏览器端 Office 查看场景中高质量数学公式渲染的空白需求。",
+        "differentiation": "采用 MathJax + STIX Two Math 方案实现 OMML 公式渲染，在浏览器端 Office 文档查看方案中属于少见的高质量公式渲染实现。",
+        "watch_reason": "数学公式渲染是 Office 文档查看中高难度但必备的能力，该引擎的可选导入设计兼顾了功能完整性与包体积控制，是模块化设计思路的良好实践案例。",
+        "risk_notes": [
+          "约 3 MB 的体积在弱网环境或低端设备上可能成为加载瓶颈，需要开发者权衡使用场景决定是否启用。",
+          "基于 MathJax 这一重库实现，后续性能优化和技术升级路径可能受限，且与其他公式渲染方案的可替换性较低。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "4515f7e69a060117"
+        ],
+        "evidence_snippets": [
+          "数学公式渲染引擎基于 MathJax 和 STIX Two Math 字体，大小约 3 MB，仅在开发者主动导入并传递给查看器时才会被打包。",
+          "该引擎完全自包含，无需网络请求或跨域请求，开发者通过 import { math } from '@silurus/ooxml/math' 导入后传递给 DocxViewer 或 PptxViewer 即可启用公式渲染。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -630,29 +1704,45 @@
     "pipeline_stage": "fact_extracted",
     "id": "6f864fc5033d7500",
     "source_type": "community_discussion",
-    "tldr": "Lathe 是一款结合 LLM 和 Golang CLI 的开源工具，用于生成动手实践的多部分技术教程并本地学习",
-    "objective_summary": "开发者 devenjarvis 发布了 Lathe 开源工具，通过 LLM 生成多部分动手技术教程，用户可在本地 Golang CLI 驱动的 Web UI 中亲手跟学，支持自定义教程语音风格、问答验证和扩展。",
+    "tldr": "Lathe 是一个开源的 CLI 工具，结合 LLM 技能生成动手实践的多部分技术教程，用户可在本地 Web UI 中边学边做，旨在用 LLM 教学而非替用户思考。",
+    "objective_summary": "开发者 devenjarvis 发布了名为 Lathe 的开源工具，它通过 Golang CLI 和 LLM 技能（适用于 Claude Code、Cursor、Codex）相结合的方式，根据用户提示生成多部分技术教程。用户可以在本地 Web UI 中按教程手动操作学习，并可使用内置技能提问、验证和扩展教程。该项目旨在帮助学习者在人写教程稀缺的领域从零到一掌握新知识，定位为「用 LLM 教学而非替用户思考」的实验性工具。",
     "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [],
       "technologies": [
         "LLM",
-        "Claude Code",
-        "Cursor",
-        "Codex",
-        "Golang"
+        "Golang",
+        "CLI"
       ],
       "key_people": [
         "devenjarvis"
       ]
     },
     "key_logic_flow": [
-      "Lathe 将 LLM 技能与 Golang CLI 相结合，通过 `/lathe` 技能生成多部分技术教程，用户可在本地 Web UI 中亲手跟学。",
-      "Lathe 提供了 `/lathe-ask`、`/lathe-verify`、`/lathe-extend` 等交互技能，支持在教程中提问、验证和扩展新章节。",
-      "教程采用“语音风格”（voice）机制，默认提供 plainspoken（平实）和 companion（陪伴）两种风格，并支持用户自定义。",
-      "所有教程记录来源、使用的模型和驱动教程语音的提示词，便于追溯和信任评估。",
-      "Lathe 定位为在人类撰写教程稀缺的冷门或新兴领域（如嵌入式 Zig 开发）中弥合从零到一的学习鸿沟，但作者明确建议优先使用人类编写的教程。"
+      "Lathe 是一个开源的 CLI 工具（使用 Golang 编写），结合 LLM 技能（SKILL.md 格式）为用户生成动手实践的多部分技术教程。",
+      "用户通过提示如「/lathe build a 3D Slicer in Erlang」触发教程生成，然后在本地 Web UI（地址 localhost:4242）中手动操作学习和操作。",
+      "Lathe 提供 /lathe、/lathe-extend、/lathe-verify、/lathe-ask、/lathe-tag 等 LLM 技能，分别用于创建、扩展、验证、提问和标记教程。",
+      "教程支持多种「声音」风格（plainspoken 和 companion），用户也可通过 /lathe-voice 技能创建自定义声音控制教程措辞风格。",
+      "Lathe 定位为「用 LLM 教学而非替用户思考」的实验性工具，特别适用于人写教程稀缺的冷门或新兴技术领域。",
+      "项目以单一二进制文件分发，支持 Homebrew（macOS）、安装脚本和 Go 安装方式，暂无 macOS 以外的官方验证。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "devenjarvis/lathe",
+        "canonical_name": "devenjarvis/lathe",
+        "url": "https://github.com/devenjarvis/lathe",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Lathe 是一个开源的 CLI 工具，结合 LLM 技能生成动手实践的多部分技术教程，用户可在本地 Web UI 中边学边做。",
+          "Lathe 通过 LLM 技能（适用于 Claude Code、Cursor 和 Codex）与 Golang CLI 相结合的方式，根据用户提示生成并管理技术教程。",
+          "该项目定位为「用 LLM 教学而非替用户思考」的实验性工具，特别适用于人写教程稀缺的冷门或新兴技术领域。"
+        ],
+        "article_id": "6f864fc5033d7500"
+      }
     ],
     "impact_score": {
       "score": 3.5,
@@ -705,7 +1795,35 @@
       "compound": "low",
       "hype": "low"
     },
-    "actionable_insight": "speculative_watch"
+    "actionable_insight": "speculative_watch",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "devenjarvis/lathe",
+        "canonical_name": "devenjarvis/lathe",
+        "url": "https://github.com/devenjarvis/lathe",
+        "positioning": "面向冷门或新兴技术领域学习者的开源CLI工具，结合LLM技能生成动手实践的多部分技术教程，用户可在本地Web UI中边学边做。",
+        "technical_signal": "使用Golang编写为单一二进制文件分发，通过LLM技能（SKILL.md格式）与CLI相结合的方式管理教程的完整生命周期。",
+        "adoption_signal": "以Homebrew（macOS）、安装脚本和Go install方式分发，面向Claude Code、Cursor和Codex用户群体提供技能集成。",
+        "ecosystem_relevance": "与Claude Code、Cursor和Codex等主流AI编码工具的技能系统深度集成，探索了LLM在技术教育领域的新型应用范式。",
+        "target_users": [],
+        "watch_reason": "探索了LLM在教育中的一个独特方向——利用LLM生成动手教程而非替代用户思考，在人写教程稀缺的冷门领域具有独特价值，是AI辅助动手学习的创新尝试。",
+        "risk_notes": [
+          "项目仍处早期实验阶段，暂无macOS以外的官方验证和测试。",
+          "教程内容质量完全依赖底层LLM能力，存在事实准确性和教学有效性的不确定性。",
+          "与特定LLM编码工具深度绑定，跨平台和跨模型的兼容性有待持续验证。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "6f864fc5033d7500"
+        ],
+        "evidence_snippets": [
+          "Lathe 是一个开源的 CLI 工具，结合 LLM 技能生成动手实践的多部分技术教程，用户可在本地 Web UI 中边学边做。",
+          "Lathe 通过 LLM 技能（适用于 Claude Code、Cursor 和 Codex）与 Golang CLI 相结合的方式，根据用户提示生成并管理技术教程。",
+          "该项目定位为「用 LLM 教学而非替用户思考」的实验性工具，特别适用于人写教程稀缺的冷门或新兴技术领域。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -724,8 +1842,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "9655ae0b2e326372",
     "source_type": "community_discussion",
-    "tldr": "逆向拆解并3D打印克隆了Sennheiser BA2015高价电池包",
-    "objective_summary": "作者拆解了售价高昂的Sennheiser BA2015电池包，发现内部仅含两节Panasonic Ni-MH AA电池和一个0.02美元的NTC温度传感器，随后使用OpenSCAD设计外壳并通过3D打印成功制作了可替代的电池包。",
+    "tldr": "博主逆向拆解森海塞尔BA2015高价电池包，发现内部仅有两节松下镍氢AA电池和一个NTC温度传感器，用OpenSCAD建模并3D打印外壳自制了可替代的克隆版本。",
+    "objective_summary": "一位硬件爱好者于博客文章中，逆向拆解了森海塞尔BA2015无线麦克风电池包，发现内部仅为两节标准镍氢AA电池串联加一个NTC温度传感器（第三方触点用于识别电池包）。作者用OpenSCAD设计3D打印外壳，以回形针作跨接导线、磁铁作正极触点、10kΩ NTC热敏电阻作温度传感，成功制作了功能可用的克隆电池包，但承认自制方案的机械强度不如市售第三方替代品，且制作耗时较长。",
     "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
@@ -735,17 +1853,49 @@
       ],
       "technologies": [
         "OpenSCAD",
-        "NTC"
+        "3D打印",
+        "NTC温度传感器",
+        "镍氢电池"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "Sennheiser BA2015电池包售价极高，但内部仅含两节标准Ni-MH AA电池和一个NTC温度传感器，高价主要源于专用外壳和防误充设计。",
-      "电池包顶部的第三个触点用于检测是否插入专用电池包，若该触点被遮挡，充电底座会拒绝充电以防止非充电电池被误充。",
-      "作者拆解原装电池包后确认内部为两节Panasonic Ni-MH电芯，NTC为10kΩ且β值约为3200K的热敏电阻。",
-      "作者使用OpenSCAD设计3D打印外壳，通过将打印方向旋转90度解决了薄壁结构易沿层线断裂的问题。",
-      "作者用回形针作为电池间的跨接导线，配合3D打印外壳和NTC温度传感器，成功制作了功能完整的替代电池包。",
-      "作者总结认为虽然自制方案在技术上可行，但考虑到时间成本，购买第三方成品替代电池更加实际。"
+      "森海塞尔BA2015电池包官方售价极高，但内部仅包含两节标准镍氢AA电池和一个成本约0.02美元的NTC温度传感器。",
+      "电池包上的第三个触点通过NTC温度传感器实现充电检测，若用胶带遮挡该触点，麦克风会将其识别为不可充电的普通AA电池。",
+      "作者拆解原装电池包后，用OpenSCAD设计3D打印外壳，并将打印方向旋转90度以增强薄壁结构的层间强度。",
+      "自制方案使用两节平头镍氢电池配合磁铁作为正极触点，用回形针作为电池间跨接导线。",
+      "作者测量原装NTC参数为10kΩ（Beta值约3200k），并以此选配了替代的温度传感器。",
+      "最终结论是自制克隆电池包功能可行但机械强度不如第三方替代品，从投入产出比看并不划算。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "Sennheiser BA2015",
+        "canonical_name": "Sennheiser BA2015 电池包",
+        "url": "https://www.sennheiser.com/en-us/catalog/products/microphone-accessories/ba-2015-accu-pack-ba-2015-504029",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "森海塞尔BA2015电池包内部仅包含两节标准镍氢AA电池和一个NTC温度传感器，但官方售价极高。",
+          "该电池包第三个触点通过NTC温度传感器实现充电检测，若用胶带遮挡则麦克风会将其识别为不可充电的普通AA电池。",
+          "作者拆解原装电池包后成功制作了功能可用的克隆版本，但机械强度不如市售第三方替代品。"
+        ],
+        "article_id": "9655ae0b2e326372"
+      },
+      {
+        "object_type": "project",
+        "name": "BA2015 OpenSCAD 3D打印外壳",
+        "canonical_name": "BA2015 3D打印电池包",
+        "confidence": "medium",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "作者用OpenSCAD建模了BA2015电池包的3D打印外壳，并将打印方向从立式改为侧卧以增强薄壁结构的层间强度。",
+          "外壳设计中正极端子带有45度倒角以便悬空打印，只有温度传感器接触片需要额外的树状支撑。",
+          "作者在文章末尾附带了完整的OpenSCAD代码，供其他人自行打印制作。"
+        ],
+        "article_id": "9655ae0b2e326372"
+      }
     ],
     "impact_score": {
       "score": 1.2,
@@ -799,7 +1949,60 @@
       "compound": "low",
       "hype": "low"
     },
-    "actionable_insight": "speculative_watch"
+    "actionable_insight": "speculative_watch",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "Sennheiser BA2015",
+        "canonical_name": "Sennheiser BA2015 电池包",
+        "url": "https://www.sennheiser.com/en-us/catalog/products/microphone-accessories/ba-2015-accu-pack-ba-2015-504029",
+        "positioning": "森海塞尔为无线麦克风系统设计的专用可充电电池包，内部仅含两节标准镍氢AA电池与一个NTC温度传感器，但官方定价远高于组件成本。",
+        "target_users": [
+          "使用森海塞尔无线麦克风系统的专业音频用户",
+          "需要更换BA2015电池包的麦克风用户"
+        ],
+        "product_signal": "电池包通过第三触点的NTC温度传感器实现充电检测与不可充电电池识别，该传感器成本仅约0.02美元。",
+        "market_signal": "市场已有价格远低于官方的第三方兼容替代品，说明该封闭配件生态的定价壁垒已被打破。",
+        "differentiation": "核心差异化仅在于第三触点内置的NTC温度传感器，用于区分专用电池包与普通AA电池，电路设计极为简单。",
+        "watch_reason": "该产品是消费电子\"高价封闭配件\"的典型案例，展示了品牌厂商如何通过一个不足0.02美元的NTC温度传感器实现高利润配件生态锁定，对理解硬件封闭生态策略有参考价值。",
+        "risk_notes": [
+          "官方电池包内部结构极为简单，第三方厂商复刻门槛极低，正品市场面临持续的替代品价格侵蚀压力。",
+          "产品定价与内部组件成本严重不成比例，随着产品透明度提升，用户可能质疑其定价合理性。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "9655ae0b2e326372"
+        ],
+        "evidence_snippets": [
+          "森海塞尔BA2015电池包内部仅包含两节标准镍氢AA电池和一个NTC温度传感器，但官方售价极高。",
+          "该电池包第三个触点通过NTC温度传感器实现充电检测，若用胶带遮挡则麦克风会将其识别为不可充电的普通AA电池。",
+          "作者拆解原装电池包后成功制作了功能可用的克隆版本，但机械强度不如市售第三方替代品。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "BA2015 OpenSCAD 3D打印外壳",
+        "canonical_name": "BA2015 3D打印电池包",
+        "positioning": "基于OpenSCAD建模和3D打印技术逆向复刻森海塞尔BA2015电池包的开源硬件项目，使用标准镍氢电池与常见电子元件实现功能完整的替代方案。",
+        "technical_signal": "采用打印方向旋转90度的方式增强薄壁结构层间强度，使用磁铁作为正极触点、回形针作为跨接导线，并用10kΩ NTC热敏电阻复现温度传感功能。",
+        "ecosystem_relevance": "项目提供了完整的OpenSCAD开源代码和设计方案，降低了社区复刻门槛，体现了开源硬件社区对抗封闭配件生态的实践。",
+        "target_users": [],
+        "watch_reason": "该开源项目展示了逆向工程与3D打印技术如何打破品牌厂商的封闭硬件配件壁垒，对推动消费者自主维修权和开放硬件生态具有示范意义，但制作复杂度较高。",
+        "risk_notes": [
+          "自制方案的机械强度明显不如市售第三方替代品，长期使用的结构强度与电气接触可靠性仍存在不确定性。",
+          "从投入产出比来看，自行制作耗时较长且需要3D打印设备，对普通用户而言并不划算。"
+        ],
+        "score": 2.0,
+        "article_ids": [
+          "9655ae0b2e326372"
+        ],
+        "evidence_snippets": [
+          "作者用OpenSCAD建模了BA2015电池包的3D打印外壳，并将打印方向从立式改为侧卧以增强薄壁结构的层间强度。",
+          "外壳设计中正极端子带有45度倒角以便悬空打印，只有温度传感器接触片需要额外的树状支撑。",
+          "作者在文章末尾附带了完整的OpenSCAD代码和设计文件，供其他人自行打印和制作。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -818,8 +2021,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "a41e99d31fde317a",
     "source_type": "community_discussion",
-    "tldr": "加文·雷讲述他从14岁入狱、吸毒成瘾到通过编程重建人生的经历。",
-    "objective_summary": "加文·雷在14-16岁因17项毒品指控在最高安全级别青少年监狱服刑，19岁成为重罪犯。经历多次吸毒和被捕后，通过一篇新闻报道获得软件实习机会，进入科技行业。多次因重罪犯身份被撤销录用后，最终被初创公司聘用，后通过贡献开源获得Hasura高级工程师职位，重建人生。",
+    "tldr": "加文·雷（Gavin Ray）14岁因毒品犯罪在最高安全级别少年监狱服刑2年，19岁成为重罪犯，后通过自学编程和参与开源社区逐步重建职业生涯，最终加入Hasura公司。",
+    "objective_summary": "加文·雷14岁开始吸毒并贩卖处方药，在科罗拉多州Lookout Mountain少年监狱服刑2年。19岁再次因毒品罪名入狱，成为重罪犯。在狱中读到一篇科技公司为高危青少年提供实习机会的新闻文章，出狱后成功获得Techtonic的全栈网页开发实习生职位。经历多次吸毒复发后彻底戒断，从洗碗工重新开始，妻子独自工作支撑家庭数月。他发出数百份求职申请，8次因重罪犯背景在最终轮被撤回录用。最终被迈阿密一家初创公司以5万美元年薪聘用，工作期间发现Hasura并深度参与社区贡献，后被Hasura以双倍薪资聘用。",
     "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
@@ -831,12 +2034,8 @@
       "technologies": [
         "Ruby on Rails",
         "MongoDB",
-        "Postgres",
         "React",
-        "jQuery",
-        "ES6",
-        "Hasura",
-        "CRUD"
+        "jQuery"
       ],
       "key_people": [
         "Gavin Ray",
@@ -844,12 +2043,40 @@
       ]
     },
     "key_logic_flow": [
-      "加文·雷从14岁开始吸毒并贩卖处方药，被控17项持有并意图制造或分发受控物质罪名，在最高安全级别青少年监狱服刑2年并取得GED。",
-      "出狱后再次因毒品相关罪名被捕，18-19岁在县监狱服刑，正式成为重罪犯。",
-      "在监狱中看到一篇关于科技公司为弱势青少年提供实习的新闻报道，出狱后通过工作释放项目进入该公司成为全栈网页开发实习生。",
-      "经历吸毒复发、被解雇、失去一切后，在餐厅洗碗重新开始，妻子独自承担家庭开支支持他寻找技术工作。",
-      "先后收到8家公司的录用通知，均因重罪犯政策被撤销，最终被一家迈阿密初创公司以5万美元年薪聘用。",
-      "在工作中发现Hasura并积极参与社区贡献，最终获得Hasura的工作机会，薪资是原来的两倍以上。"
+      "加文·雷14岁时因贩卖处方药被捕，面临17项持有并意图制造或分销二级管制毒品的指控，在最高安全级别少年监狱服刑2年。",
+      "19岁时再次因毒品相关罪名入狱成为重罪犯，在县监狱服刑期间读到一篇科技公司为高危青少年提供实习机会的新闻文章。",
+      "出狱后加入Techtonic公司成为全栈网页开发实习生，学习前端、后端和运维，但不久后因吸毒复发被解雇。",
+      "经历彻底破产后终于戒断成功，从洗碗工重新开始，妻子独自工作支撑家庭，他发出数百份求职申请。",
+      "8次因公司'不录用重罪犯'政策在最终轮被撤回录用，最终被迈阿密一家初创公司以5万美元年薪聘用。",
+      "工作期间发现Hasura并深度参与社区贡献（回答问题、提交PR），一年后获Hasura以双倍薪资聘用。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "Hasura",
+        "canonical_name": "Hasura",
+        "url": "https://hasura.io",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "加文·雷在评估V2重写技术时发现了Hasura，它自动为Postgres应用生成CRUD操作，只需接入本地Postgres URL即可获得完整的CRUD API。",
+          "他深度参与Hasura Discord社区回答他人问题，并向项目提交PR实现他认为缺失的功能，最终被Hasura以双倍于当时薪资的条件聘用。"
+        ],
+        "article_id": "a41e99d31fde317a"
+      },
+      {
+        "object_type": "company",
+        "name": "Techtonic",
+        "canonical_name": "Techtonic",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "加文·雷在狱中看到关于Techtonic为高危青少年提供实习机会的新闻文章，出狱后直接走进该公司办公室求职，获得全栈网页开发实习生职位。",
+          "Techtonic承接了大量绿地SaaS MVP开发项目，加文·雷在那里学习了前端、后端和运维，经历了试火式的成长。"
+        ],
+        "article_id": "a41e99d31fde317a"
+      }
     ],
     "impact_score": {
       "score": 2.0,
@@ -897,7 +2124,37 @@
       "compound": "low",
       "hype": "low"
     },
-    "actionable_insight": "speculative_watch"
+    "actionable_insight": "speculative_watch",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "Hasura",
+        "canonical_name": "Hasura",
+        "url": "https://hasura.io",
+        "positioning": "Hasura是一款自动为Postgres应用生成CRUD操作的开源工具，只需接入数据库URL即可获得完整的实时GraphQL和REST API。",
+        "target_users": [
+          "使用Postgres数据库的全栈开发者",
+          "需要快速构建API的创业团队",
+          "追求低代码后端方案的开发者"
+        ],
+        "product_signal": "Hasura能够自动为Postgres数据库生成完整的CRUD API，用户仅需提供数据库URL即可获得实时API接口，大幅降低后端开发工作量。",
+        "market_signal": "Hasura重视社区贡献者，从活跃社区成员中直接招聘人才，表明其社区驱动增长策略有效且可持续。",
+        "differentiation": "通过数据库驱动自动生成完整API，无需手动编写后端CRUD代码即可获得实时GraphQL和REST API，显著降低开发门槛。",
+        "watch_reason": "Hasura以数据库驱动自动生成API的理念持续降低后端开发门槛，叠加活跃的社区生态和从贡献者中招募人才的模式，使其在低代码API工具赛道中保持差异化竞争力，值得跟踪其生态扩展与商业化进展。",
+        "risk_notes": [
+          "Hasura与Postgres深度绑定，对非Postgres数据库及异构数据源场景支持有限，可能限制其适用范围。",
+          "Supabase、PostgREST等同类工具在功能上存在重叠，市场竞争可能削弱Hasura的差异化定位。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "a41e99d31fde317a"
+        ],
+        "evidence_snippets": [
+          "加文·雷在评估V2重写技术时发现了Hasura，它自动为Postgres应用生成CRUD操作，只需接入本地Postgres URL即可获得完整的CRUD API。",
+          "他深度参与Hasura Discord社区回答他人问题，并向项目提交PR实现他认为缺失的功能，最终被Hasura以双倍于当时薪资的条件聘用。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -916,20 +2173,13 @@
     "pipeline_stage": "fact_extracted",
     "id": "a563187073c57b1d",
     "source_type": "community_discussion",
-    "tldr": "第29届IOCCC公布2025年度22个获奖作品，涵盖GameBoy模拟器、Quine乒乓等创意条目。",
-    "objective_summary": "IOCCC于2025年公布第29届国际C语言代码混淆大赛获奖名单，共22个作品获奖。本届投稿数量和质量均处历史高位，涌现出GameBoy模拟器、Quine乒乓、Subleq计算机等标志性作品。",
+    "tldr": "第29届国际混淆C代码大赛（IOCCC 2025）公布22个获奖作品，参赛数量和品质均接近历史高点。Yusuke Endoh、Nick Craig-Wood和Don Yang三位作者各获三项大奖，台湾作者jingp49首次获奖，下届比赛计划2026年底开放。",
+    "objective_summary": "第29届IOCCC于2025年正式公布获奖结果，参赛作品数量和整体质量均达到接近历史最高水平。Yusuke Endoh、Nick Craig-Wood和Don Yang三位作者各自获得三项大奖实现\"帽子戏法\"，来自台湾的作者jingp49首次为新的参赛地区赢得奖项。大赛官网列出22个获奖作品及对应奖项名称，评委重点推荐了Subleq计算机模拟器、GameBoy模拟器、Quine乒乓游戏等多个突出作品。大赛规则与指南相比往届进行了重大重写，IOCCC 30计划于2026年底开放投稿，2027年第一季度截止。",
     "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
-      "companies": [
-        "IOCCC"
-      ],
-      "technologies": [
-        "C",
-        "Subleq",
-        "Fortran",
-        "Quine"
-      ],
+      "companies": [],
+      "technologies": [],
       "key_people": [
         "Yusuke Endoh",
         "Nick Craig-Wood",
@@ -938,12 +2188,117 @@
       ]
     },
     "key_logic_flow": [
-      "第29届IOCCC（2025年）公布了22个获奖作品，涵盖GameBoy模拟器、Quine乒乓、Subleq计算机等多种创意类型。",
-      "本届投稿数量接近上一届，质量保持历史高位，被认为得益于网站改进和社交媒体曝光增加。",
-      "Yusuke Endoh、Nick Craig-Wood、Don Yang三位作者各自获得三项大奖，均实现帽子戏法。",
-      "来自台湾的参赛者jingp49首次为IOCCC贡献获奖作品。",
-      "IOCCC计划于2026年底开放第30届比赛，预计2027年第一季度末截止。",
-      "获奖作品设有公开挑战（Fun Challenge），鼓励社区通过GitHub Pull Request提交改进方案。"
+      "第29届国际混淆C代码大赛（IOCCC 2025）正式公布了22个获奖作品，参赛作品数量和品质均接近历史最高水平。",
+      "Yusuke Endoh、Nick Craig-Wood和Don Yang三位作者各自获得三项大奖，实现了本届比赛的\"帽子戏法\"。",
+      "来自台湾的作者jingp49首次在IOCCC获奖，代表了一个新的参赛地区首次出现获奖者。",
+      "评委重点推荐了多个引人注目的获奖作品，包括2025/cable的Subleq计算机、2025/ncw1的GameBoy模拟器和2025/uellenberg的Quine乒乓游戏等。",
+      "本届比赛规则和指南相比往届进行了重大重写，得益于多位志愿者的编辑和整理贡献。",
+      "IOCCC 30计划于2026年底开放投稿，截止时间约为2027年第一季度末。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "IOCCC 2025 获奖作品集",
+        "canonical_name": "IOCCC 2025",
+        "url": "https://www.ioccc.org/2025/",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "第29届IOCCC公布了22个获奖作品，参赛作品数量和质量均接近历史最高水平。",
+          "获奖作品涵盖Subleq计算机模拟器、GameBoy模拟器、Quine乒乓游戏等多种类型。",
+          "获奖作者来自多个地区，其中来自台湾的作者jingp49首次为新的参赛地区赢得奖项。"
+        ],
+        "article_id": "a563187073c57b1d"
+      },
+      {
+        "object_type": "project",
+        "name": "mkiocccentry",
+        "canonical_name": "mkiocccentry",
+        "url": "https://github.com/ioccc/mkiocccentry",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "IOCCC评委在IOCCC 28结束后花费大量时间处理mkiocccentry仓库的缺陷修复和改进工作。",
+          "评委计划在IOCCC 29获奖名单发布后的假期结束后再处理该仓库的拉取请求。"
+        ],
+        "article_id": "a563187073c57b1d"
+      },
+      {
+        "object_type": "project",
+        "name": "2025/cable - Subleq computer",
+        "canonical_name": "2025/cable",
+        "url": "https://www.ioccc.org/2025/cable/",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "2025/cable获奖作品实现了一个Subleq计算机模拟器，被评委授予最佳虚拟模拟器奖。"
+        ],
+        "article_id": "a563187073c57b1d"
+      },
+      {
+        "object_type": "project",
+        "name": "2025/ncw1 - GameBoy emulator",
+        "canonical_name": "2025/ncw1",
+        "url": "https://www.ioccc.org/2025/ncw1/",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "2025/ncw1获奖作品是一个GameBoy模拟器，被评委授予最佳真实模拟器奖。",
+          "该作品的作者Nick Craig-Wood在本届比赛中一人获得三项大奖。"
+        ],
+        "article_id": "a563187073c57b1d"
+      },
+      {
+        "object_type": "project",
+        "name": "2025/uellenberg - Quine pong",
+        "canonical_name": "2025/uellenberg",
+        "url": "https://www.ioccc.org/2025/uellenberg/",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "2025/uellenberg获奖作品是一个Quine乒乓游戏，被评委授予乒乓奖。"
+        ],
+        "article_id": "a563187073c57b1d"
+      },
+      {
+        "object_type": "project",
+        "name": "2025/endoh3 - patch/diff quine",
+        "canonical_name": "2025/endoh3",
+        "url": "https://www.ioccc.org/2025/endoh3/",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "2025/endoh3获奖作品实现了一个patch/diff quine，被评委授予最坚韧奖。",
+          "该作品的作者Yusuke Endoh在本届比赛中一人获得三项大奖。"
+        ],
+        "article_id": "a563187073c57b1d"
+      },
+      {
+        "object_type": "project",
+        "name": "2025/tompng - Ocean sound generator",
+        "canonical_name": "2025/tompng",
+        "url": "https://www.ioccc.org/2025/tompng/",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "2025/tompng获奖作品是一个海洋声音生成器，被评委授予最舒缓奖。"
+        ],
+        "article_id": "a563187073c57b1d"
+      },
+      {
+        "object_type": "project",
+        "name": "2025/yang2 - Zoltraak encoding",
+        "canonical_name": "2025/yang2",
+        "url": "https://www.ioccc.org/2025/yang2/",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "2025/yang2获奖作品实现了Zoltraak编码，被评委授予最魔法单词奖。",
+          "该作品的作者Don Yang在本届比赛中一人获得三项大奖。"
+        ],
+        "article_id": "a563187073c57b1d"
+      }
     ],
     "impact_score": {
       "score": 2.3,
@@ -989,7 +2344,157 @@
       "compound": "low",
       "hype": "low"
     },
-    "actionable_insight": "ignore"
+    "actionable_insight": "ignore",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "IOCCC 2025 获奖作品集",
+        "canonical_name": "IOCCC 2025",
+        "url": "https://www.ioccc.org/2025/",
+        "positioning": "第29届国际混淆C代码大赛的获奖作品合集，收录22个通过极致混淆技术实现的创意C语言程序，涵盖模拟器、Quine和音效生成等多种类型。",
+        "technical_signal": "获奖作品涵盖Subleq计算机模拟器、GameBoy模拟器和Quine乒乓游戏，展现了C语言在代码混淆和自修改领域的极限创新能力。",
+        "adoption_signal": "参赛作品数量和质量均接近历史最高水平，多位作者实现帽子戏法，台湾作者首次获奖显示赛事国际影响力持续扩大。",
+        "ecosystem_relevance": "IOCCC作为C语言编程文化的重要赛事，持续推动底层计算技术和编程创意在开发者社区中的传承与创新。",
+        "target_users": [],
+        "watch_reason": "IOCCC 2025汇集全球顶尖混淆编程创意，22个获奖作品代表了C语言在代码混淆和自修改领域的最新成果，三位老将各自包揽三项大奖的'帽子戏法'是赛事史上的罕见现象，下届IOCCC 30计划2026年底开放投稿，值得持续关注赛事动态。",
+        "risk_notes": [
+          "混淆代码以难读难懂为创作目标，其工程可复用性和实际应用价值极低，不宜作为生产环境代码参考。",
+          "赛事本身的趣味性和竞赛性质大于实际技术突破，不宜过度解读其产业技术含量。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "a563187073c57b1d"
+        ],
+        "evidence_snippets": [
+          "第29届IOCCC公布了22个获奖作品，参赛作品数量和整体质量均接近历史最高水平。",
+          "获奖作品涵盖Subleq计算机模拟器、GameBoy模拟器、Quine乒乓游戏等多种类型。",
+          "获奖作者来自多个地区，其中来自台湾的作者jingp49首次为新的参赛地区赢得奖项。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "2025/cable - Subleq computer",
+        "canonical_name": "2025/cable",
+        "url": "https://www.ioccc.org/2025/cable/",
+        "positioning": "一个用混淆C语言实现的Subleq单指令集计算机模拟器，获得IOCCC 2025最佳虚拟模拟器奖，是本届评委重点推荐作品之一。",
+        "technical_signal": "在极少量混淆C代码中完整模拟Subleq计算机体系结构，展示了C语言在底层计算模拟方面的极致表达能力和技巧。",
+        "target_users": [],
+        "watch_reason": "作为IOCCC 2025评委重点推荐的获奖作品，该Subleq计算机模拟器以极少量混淆代码实现了完整的单指令集计算机体系结构，是混淆编程与底层计算原理巧妙结合的典范，对理解计算机体系结构模拟技术有启发意义。",
+        "risk_notes": [
+          "该作品为IOCCC竞赛作品，混淆代码不具备实际工程应用和代码复用条件。"
+        ],
+        "score": 2.0,
+        "article_ids": [
+          "a563187073c57b1d"
+        ],
+        "evidence_snippets": [
+          "2025/cable获奖作品实现了一个Subleq计算机模拟器，被评委授予最佳虚拟模拟器奖。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "2025/ncw1 - GameBoy emulator",
+        "canonical_name": "2025/ncw1",
+        "url": "https://www.ioccc.org/2025/ncw1/",
+        "positioning": "一个用混淆C语言实现的经典GameBoy游戏机模拟器，获得IOCCC 2025最佳真实模拟器奖，是本届评委重点推荐作品之一。",
+        "technical_signal": "在高度混淆的C代码中完整实现经典掌机GameBoy的硬件模拟功能，体现了作者对硬件模拟和C语言极限运用的深刻理解。",
+        "target_users": [],
+        "watch_reason": "GameBoy模拟器是IOCCC 2025评委重点推荐作品之一，作者Nick Craig-Wood一人独得三项大奖，展现了在混淆编程与硬件模拟领域的深厚功力，值得持续关注其模拟技术实现思路。",
+        "risk_notes": [
+          "混淆代码以可读性为代价，难以作为实际游戏模拟器工程的参考实现。"
+        ],
+        "score": 2.0,
+        "article_ids": [
+          "a563187073c57b1d"
+        ],
+        "evidence_snippets": [
+          "2025/ncw1获奖作品是一个GameBoy模拟器，被评委授予最佳真实模拟器奖。",
+          "该作品的作者Nick Craig-Wood在本届比赛中一人获得三项大奖，完成了帽子戏法。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "2025/uellenberg - Quine pong",
+        "canonical_name": "2025/uellenberg",
+        "url": "https://www.ioccc.org/2025/uellenberg/",
+        "positioning": "一个结合Quine自生成代码机制与经典乒乓游戏玩法的创意C语言程序，获得IOCCC 2025乒乓奖，是本届评委重点推荐作品之一。",
+        "technical_signal": "将Quine自生成源代码机制与交互式乒乓游戏逻辑融为一体，展示了C语言在自引用和自修改编程方面的极致创意。",
+        "target_users": [],
+        "watch_reason": "作为评委重点推荐的IOCCC 2025获奖作品，该Quine乒乓游戏将自生成源代码机制与交互游戏玩法创新结合，代表了混淆编程在创意表达方面的前沿探索，对理解自引用编程技术有参考价值。",
+        "risk_notes": [
+          "该作品以新颖创意为主要价值，代码结构和算法不具备通用参考性。"
+        ],
+        "score": 2.0,
+        "article_ids": [
+          "a563187073c57b1d"
+        ],
+        "evidence_snippets": [
+          "2025/uellenberg获奖作品是一个Quine乒乓游戏，被评委授予乒乓奖。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "2025/endoh3 - patch/diff quine",
+        "canonical_name": "2025/endoh3",
+        "url": "https://www.ioccc.org/2025/endoh3/",
+        "positioning": "一个利用patch/diff机制实现自我生成与差异对比的Quine程序，获得IOCCC 2025最坚韧奖，作者Yusuke Endoh本届三项大奖作品之一。",
+        "technical_signal": "通过混淆C代码实现patch/diff Quine，代码能输出自身与变体之间的diff差异，展示了C语言自引用编程方面的精妙技巧。",
+        "target_users": [],
+        "watch_reason": "作者Yusuke Endoh在本届IOCCC中一人独得三项大奖，该patch/diff quine获最坚韧奖，其自引用编程技术思路在编译器测试和代码分析领域具有理论启发性，值得编程语言工具链研究者关注。",
+        "risk_notes": [
+          "Quine类作品以理论趣味性为主，在生产环境中的直接应用场景非常有限。"
+        ],
+        "score": 2.0,
+        "article_ids": [
+          "a563187073c57b1d"
+        ],
+        "evidence_snippets": [
+          "2025/endoh3获奖作品实现了一个patch/diff quine，被评委授予最坚韧奖。",
+          "该作品的作者Yusuke Endoh在本届比赛中一人获得三项大奖，完成了精彩的帽子戏法。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "2025/tompng - Ocean sound generator",
+        "canonical_name": "2025/tompng",
+        "url": "https://www.ioccc.org/2025/tompng/",
+        "positioning": "一个通过混淆C代码生成海洋环境声音的音频程序，获得IOCCC 2025最舒缓奖，是本届评委重点推荐作品之一。",
+        "technical_signal": "在混淆C代码中实现海洋声音的实时合成与音频输出，展示了C语言在音频信号数字合成领域的技术能力。",
+        "target_users": [],
+        "watch_reason": "作为评委重点推荐的获奖作品，该海洋声音生成器将编程混淆技巧与音频合成技术结合，是IOCCC 2025中少有的多媒体交互类作品，对跨领域编程创意有兴趣的研究者值得关注。",
+        "risk_notes": [
+          "音频生成效果受限于混淆代码的表达方式，音质和功能丰富度有限。"
+        ],
+        "score": 2.0,
+        "article_ids": [
+          "a563187073c57b1d"
+        ],
+        "evidence_snippets": [
+          "2025/tompng获奖作品是一个海洋声音生成器，被评委授予本届大赛最舒缓奖。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "2025/yang2 - Zoltraak encoding",
+        "canonical_name": "2025/yang2",
+        "url": "https://www.ioccc.org/2025/yang2/",
+        "positioning": "一个实现Zoltraak编码方案的混淆C程序，获得IOCCC 2025最魔法单词奖，作者Don Yang本届三项大奖作品之一。",
+        "technical_signal": "通过混淆C代码实现Zoltraak自定义编码方案，在编码算法和字符串处理方面展现了独特的混淆编程技巧。",
+        "target_users": [],
+        "watch_reason": "作者Don Yang在本届IOCCC中一人独得三项大奖，该Zoltraak编码方案荣获最魔法单词奖，展示了在编码和算法领域的混淆编程创意，对自定义编码方案和算法混淆有兴趣者具有参考价值。",
+        "risk_notes": [
+          "Zoltraak编码为自定义编码方案，其设计以混淆和趣味性为主，密码学强度未经验证。"
+        ],
+        "score": 2.0,
+        "article_ids": [
+          "a563187073c57b1d"
+        ],
+        "evidence_snippets": [
+          "2025/yang2获奖作品实现了Zoltraak编码，被评委授予最魔法单词奖。",
+          "该作品的作者Don Yang在本届比赛中一人获得三项大奖，同样完成了精彩的帽子戏法。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -1008,30 +2513,60 @@
     "pipeline_stage": "fact_extracted",
     "id": "bc26d27930955a21",
     "source_type": "community_discussion",
-    "tldr": "Podman 6 改进了机器管理功能，允许跨所有提供商统一操作 VM，无需切换默认提供商。",
-    "objective_summary": "Podman 项目在 v6.0 中重构了 machine 子命令的提供商模型：Podman 5 中 CLI 只能感知默认提供商的 VM，非默认提供商创建的机器对 CLI 不可见；Podman 6 移除了这一限制，所有 machine 命令（stop、start、rm、ls）默认跨所有提供商操作，",
+    "tldr": "Podman 6 改进了机器管理功能，允许用户直接通过机器名称执行 stop、start、rm 等操作，不再受限于默认 provider。新增 `--provider` 参数用于创建非默认 provider 的机器，并默认跨所有 provider 显示机器列表。",
+    "objective_summary": "Podman 项目在版本 6 中重构了 machine 子系统的 provider 模型。在 Podman 5 中，每个平台的默认 provider 被硬编码在二进制文件中，通过 Podman Desktop 创建的非默认 provider 机器无法被 CLI 识别和管理。Podman 6 移除了 `--all-providers` 参数，改为默认显示所有 provider 下的机器，并允许用户直接按机器名称执行管理操作。同时新增了 `podman machine init --provider` 参数，支持在非默认 provider 上创建新机器。",
     "event_type": "framework_tools",
-    "epistemic_status": "verified_fact",
+    "epistemic_status": "pr_statement",
     "entities": {
       "companies": [
         "Red Hat"
       ],
       "technologies": [
         "Podman",
-        "QEMU",
         "WSL",
         "HyperV",
+        "QEMU",
         "Libkrun",
         "Applehv"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "Podman 的 machine 功能基于\"提供商\"（provider）概念运行 Linux VM，不同平台支持不同提供商（Windows: WSL/HyperV, Linux: QEMU, macOS: Libkrun/Applehv）。",
-      "Podman 5 中，CLI 默认只感知默认提供商的 VM，非默认提供商创建的机器对 CLI 不可见，导致 podman machine stop 等命令报错。",
-      "Podman 6 移除了 --all-providers 开关，所有机器管理命令（stop、start、rm、ls）默认在所有支持的提供商中查找并操作 VM。",
-      "Podman 6 新增 podman machine init --provider <provider> 参数，允许在非默认提供商下创建机器。",
-      "Podman 6 中 podman machine ls 默认显示所有提供商的全部机器列表，而非仅限于默认提供商。"
+      "Podman 5 中机器 provider 被硬编码在二进制文件中，每个平台有默认 provider（如 macOS 默认 Applehv，Linux 默认 QEMU），可通过 containers.conf 覆盖。",
+      "Podman 5 中通过 Podman Desktop 在非默认 provider 下创建的机器，使用 CLI 时无法被识别和管理，执行 podman machine stop 会报错。",
+      "Podman 6 将 machine 命令中的 provider 概念去中心化，用户只需提供机器名称即可跨 provider 执行 rm、stop、start 等操作。",
+      "Podman 6 移除了 podman machine ls 的 --all-providers 参数，默认行为改为显示所有 provider 下的全部机器。",
+      "Podman 6 新增 podman machine init --provider 参数，允许用户在非默认 provider 上创建新机器，并使用 --now 参数在初始化后立即启动。",
+      "Podman 6 在 macOS 平台支持的 provider 包括 Libkrun（默认）和 Applehv，Windows 支持 WSL 和 HyperV，Linux 支持 QEMU。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "Podman",
+        "canonical_name": "Podman",
+        "url": "https://github.com/containers/podman",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Podman 6 重构了 machine 子系统的 provider 模型，允许用户直接按机器名称执行管理操作，不再受默认 provider 限制。",
+          "Podman 6 新增了 podman machine init --provider 参数，支持在非默认 provider 上创建新机器。",
+          "Podman 6 移除了 --all-providers 参数，podman machine ls 默认显示所有 provider 下的全部机器。"
+        ],
+        "article_id": "bc26d27930955a21"
+      },
+      {
+        "object_type": "product",
+        "name": "Podman Desktop",
+        "canonical_name": "Podman Desktop",
+        "url": "https://podman-desktop.io/",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Podman 5 中通过 Podman Desktop 在非默认 provider 下创建的机器，使用 CLI 时无法被识别和管理。"
+        ],
+        "article_id": "bc26d27930955a21"
+      }
     ],
     "impact_score": {
       "score": 1.8,
@@ -1087,7 +2622,58 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Podman",
+        "canonical_name": "Podman",
+        "url": "https://github.com/containers/podman",
+        "positioning": "Podman 是一个开源容器管理引擎，在版本 6 中重构了 machine 子系统的 provider 模型，实现了跨多个虚拟机提供方的容器统一管理与操作。",
+        "technical_signal": "Podman 6 将 provider 概念去中心化，用户只需提供机器名称即可跨 provider 执行 rm、stop、start 等管理操作，不再受默认 provider 限制。",
+        "ecosystem_relevance": "Podman 6 的 provider 重构改善了 CLI 与 Podman Desktop 之间的互操作性，使整个 Podman 生态在跨平台虚拟机管理上体验更加一致。",
+        "target_users": [],
+        "watch_reason": "Podman 6 重构了核心虚拟机管理模型，解决了跨 provider 机器管理的关键不一致问题，作为容器工具链的重要演进方向，值得关注其在实际部署中的采用情况和社区反馈。",
+        "risk_notes": [
+          "新架构依赖用户对 provider 概念的理解，新增的 --provider 参数可能对新手造成一定的认知负担。",
+          "重构后的 machine 子系统在多个 provider 之间的兼容性和稳定性尚未经过大规模生产环境的验证。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "bc26d27930955a21"
+        ],
+        "evidence_snippets": [
+          "Podman 6 重构了 machine 子系统的 provider 模型，允许用户直接按机器名称执行管理操作，不再受默认 provider 限制。",
+          "Podman 6 新增了 podman machine init --provider 参数，支持在非默认 provider 上创建新机器。",
+          "Podman 6 移除了 --all-providers 参数，podman machine ls 默认显示所有 provider 下的全部机器。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Podman Desktop",
+        "canonical_name": "Podman Desktop",
+        "url": "https://podman-desktop.io/",
+        "positioning": "Podman Desktop 是 Podman 容器引擎的桌面图形化管理工具，支持在多个平台上创建和管理多 provider 容器虚拟机。",
+        "target_users": [
+          "容器开发者",
+          "Podman 用户",
+          "偏好图形化容器管理工具的平台工程师"
+        ],
+        "product_signal": "在 Podman 5 中通过 Podman Desktop 在非默认 provider 下创建的机器无法被 CLI 识别，Podman 6 的架构改进解决了这一互操作问题。",
+        "differentiation": "与 Docker Desktop 相比，Podman Desktop 支持 Libkrun、Applehv、WSL、HyperV 等多种虚拟机提供方，提供更灵活的 provider 选择。",
+        "watch_reason": "Podman Desktop 作为 Podman 生态的关键 GUI 组件，其 provider 兼容性直接影响跨平台容器开发者的使用体验，Podman 6 的架构改进为工具链一致性奠定了基础，后续适配进度值得持续跟踪。",
+        "risk_notes": [
+          "文章仅将 Podman Desktop 作为问题背景提及，其在 Podman 6 下的具体适配状态和功能改进尚未明确。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "bc26d27930955a21"
+        ],
+        "evidence_snippets": [
+          "Podman 5 中通过 Podman Desktop 在非默认 provider 下创建的机器，使用 CLI 时无法被识别和管理。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",

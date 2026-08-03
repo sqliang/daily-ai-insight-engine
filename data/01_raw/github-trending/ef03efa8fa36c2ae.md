@@ -8,6 +8,7 @@ manifest_dates:
 - '2026-07-19'
 - '2026-07-20'
 - '2026-07-21'
+- '2026-07-22'
 description: 'The go-to web for your AI coding agent — local-first search, fetch,
   crawl & research over MCP. No API keys, no cloud, $0/query. Public beta. Local-first
   web intelligence for AI agents — no keys, no cloud, no metered bill. works with&nbsp;&nbsp;Claude

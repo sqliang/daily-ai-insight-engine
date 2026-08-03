@@ -794,8 +794,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "4497601ed03ef24f",
     "source_type": "academic_paper",
-    "tldr": "OmniMem 提出扰动感知记忆压缩方法，用于流式音视频 LLM 的长视频推理。",
-    "objective_summary": "该论文提出 OmniMem，一种面向音视频大模型的记忆高效流式推理框架，通过模态感知记忆分配、扰动感知记忆选择和预算感知微调，在 VideoMME Long、LVBench 等基准上相比训练无关基线提升 2-4% 绝对准确率。",
+    "tldr": "OmniMem 提出了一种针对音视频大语言模型的扰动感知内存压缩框架，通过模态感知分配和扰动感知选择机制解决长视频推理中的 KV 缓存膨胀问题，在三个基准上比无训练压缩基线提升 2-4% 绝对准确率。",
+    "objective_summary": "来自 arXiv 的学术论文（2025年6月）提出 OmniMem，一个专为音视频大语言模型设计的内存高效流式推理框架。该框架通过模态感知的内存分配策略分别管理视觉和音频上下文，解决两种模态之间的 Token 数量不平衡，并采用扰动感知的内存选择机制保留信息丰富且非冗余的 KV 状态。研究还探索了预算感知微调以增强实际部署效果。在 VideoMME Long、LVBench 和 LVOmniBench 三个基准上使用 video-SALMONN 2+ 和 Qwen-2.5-Omni 进行测试，结果显示 OmniMem 在相同内存预算下比强无训练压缩基线提升 2-4% 的绝对准确率，微调后额外提升 1-2%。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
@@ -803,18 +803,58 @@
       "technologies": [
         "OmniMem",
         "audio-visual LLM",
-        "KV cache",
+        "KV cache compression",
         "video-SALMONN 2+",
         "Qwen-2.5-Omni"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "OmniMem 是专为音视频大模型设计的记忆高效流式推理框架，解决长视频推理中视频 token 和 KV 缓存线性增长的根本限制。",
-      "该框架提出模态感知记忆分配策略，分别管理视觉和音频上下文，解决两种模态间 token 数量严重不平衡的问题。",
-      "通过扰动感知记忆选择机制，保留信息量大且非冗余的 KV 状态，在压缩记忆的同时不牺牲长程理解能力。",
-      "探索预算感知微调方法，在现实部署约束下引导模型将有用信息整合到保留记忆中。",
-      "在 VideoMME Long、LVBench 和 LVOmniBench 基准上使用 video-SALMONN 2+ 和 Qwen-2.5-Omni 进行实验，OmniMem 在相同记忆预算下比强训练无关压缩基线提升 2-4% 绝对准确率，微调后额外提升 1-2%。"
+      "OmniMem 专门针对音视频大语言模型在长视频推理中遇到的 Token 和 KV 缓存线性增长问题，提出了一种内存高效的流式推理框架。",
+      "该框架通过模态感知的内存分配策略分别管理视觉和音频上下文，解决了两种模态之间严重的 Token 数量不平衡问题。",
+      "OmniMem 使用扰动感知的内存选择机制保留信息丰富且非冗余的 KV 状态，在不牺牲长距离理解能力的前提下实现紧凑内存占用。",
+      "为了增强实际部署场景下的压缩效果，研究还探索了预算感知微调方法，促使模型将有用信息整合到保留的内存中。",
+      "在 VideoMME Long、LVBench 和 LVOmniBench 三个长视频基准上使用 video-SALMONN 2+ 和 Qwen-2.5-Omni 进行的评估显示，OmniMem 在相同内存预算下比无训练压缩基线提升了 2-4% 的绝对准确率，微调后额外获得 1-2% 的提升。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "OmniMem",
+        "canonical_name": "OmniMem",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "OmniMem 是一种专为音视频大语言模型设计的内存高效流式推理框架，提出了模态感知的内存分配和扰动感知的 KV 缓存压缩策略。",
+          "在 VideoMME Long、LVBench 和 LVOmniBench 上的实验表明，OmniMem 在相同内存预算下比无训练压缩基线提升 2-4% 的绝对准确率。",
+          "OmniMem 还探索了预算感知微调方法，在压缩基线基础上额外获得 1-2% 的准确率提升。"
+        ],
+        "article_id": "4497601ed03ef24f"
+      },
+      {
+        "object_type": "model",
+        "name": "video-SALMONN 2+",
+        "canonical_name": "video-SALMONN 2+",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "video-SALMONN 2+ 是论文中用于评估 OmniMem 性能的主要音视频大语言模型之一。",
+          "该模型在 VideoMME Long、LVBench 和 LVOmniBench 三个长视频基准上搭配 OmniMem 进行了测试。"
+        ],
+        "article_id": "4497601ed03ef24f"
+      },
+      {
+        "object_type": "model",
+        "name": "Qwen-2.5-Omni",
+        "canonical_name": "Qwen-2.5-Omni",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Qwen-2.5-Omni 是论文中用于评估 OmniMem 性能的另一款音视频大语言模型，验证了框架对不同模型架构的适用性。",
+          "该模型同样在 VideoMME Long、LVBench 和 LVOmniBench 基准上进行了评估，结果支持了 OmniMem 的通用性。"
+        ],
+        "article_id": "4497601ed03ef24f"
+      }
     ],
     "impact_score": {
       "score": 5.0,
@@ -868,7 +908,33 @@
       "compound": "low",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "OmniMem",
+        "canonical_name": "OmniMem",
+        "positioning": "OmniMem 是专为音视频大语言模型设计的内存高效流式推理框架，通过扰动感知的 KV 缓存压缩技术解决长视频推理中的内存膨胀问题。",
+        "technical_signal": "首次提出模态感知内存分配策略分别管理视觉与音频上下文，解决两种模态 Token 数量严重不平衡问题，属于架构级创新。",
+        "adoption_signal": "在 VideoMME Long、LVBench 和 LVOmniBench 三个长视频基准上验证了有效性，使用 video-SALMONN 2+ 和 Qwen-2.5-Omni 两种主流模型架构。",
+        "ecosystem_relevance": "音视频大语言模型在长视频理解场景中的内存效率是制约其实际部署的关键瓶颈，OmniMem 直接回应了这一核心基础设施需求。",
+        "target_users": [],
+        "watch_reason": "长视频推理的内存瓶颈是音视频大语言模型走向实际部署的核心障碍之一，OmniMem 提出的模态感知分配和扰动感知选择机制代表了比无训练压缩更强的解决方案方向，且微调路线具有现实部署价值。",
+        "risk_notes": [
+          "该方法仅在两个模型系列上验证，泛化到其他音视频架构的适用性尚待证明。",
+          "预算感知微调带来额外收益但仍有限（1-2%），在实际部署中的性价比需要进一步评估。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "4497601ed03ef24f"
+        ],
+        "evidence_snippets": [
+          "OmniMem 是一种专为音视频大语言模型设计的内存高效流式推理框架，提出了模态感知的内存分配和扰动感知的 KV 缓存压缩策略。",
+          "在 VideoMME Long、LVBench 和 LVOmniBench 上的实验表明，OmniMem 在相同内存预算下比无训练压缩基线提升 2-4% 的绝对准确率。",
+          "OmniMem 还探索了预算感知微调方法，在压缩基线基础上额外获得 1-2% 的准确率提升。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -887,8 +953,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "69c5cf7c65c9cbca",
     "source_type": "academic_paper",
-    "tldr": "论文提出监管上下文协议(RCP)，通过Agent间通信将核能监管审批成本降低50-77%，时间缩短65%。",
-    "objective_summary": "该论文分析了美国核监管委员会1,236份文件后，提出监管上下文协议(RCP)，用结构化智能体通道替代人工审批流程。实验表明，RCP可将审批成本从8,900万美元降至2,100-4,400万美元，时间从42个月缩至15个月，且剩余差距是结构性而非算法性的。",
+    "tldr": "该论文提出监管上下文协议（RCP），一种用于核反应堆审批流程的智能体间通信标准，可将审查时间缩短65%（从42个月降至15个月），成本降低50-77%，预估若推广至美国全部监管领域可节省每年2100-3300亿美元。",
+    "objective_summary": "论文基于美国核管理委员会先进反应堆审批中1236份文档的分析，提出监管上下文协议（RCP），用于取代传统人工书面审批流程，建立结构化、可审计的智能体通信渠道，同时在安全关键决策点保留人工监督。通过多智能体原型系统验证，相比42个月、8900万美元的重构基线，RCP可将时间线缩短65%（至15个月），成本降低50-77%（至2100万-4400万美元）。论文指出同样多方可审计审批瓶颈存在于制药审批、环境许可、金融监管和航空认证等领域，若全面推广可节省约2100-3300亿美元/年。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
@@ -896,18 +962,47 @@
         "U.S. Nuclear Regulatory Commission"
       ],
       "technologies": [
-        "Regulatory Context Protocol (RCP)",
+        "RCP",
+        "Regulatory Context Protocol",
         "Agent-to-Agent Protocol"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "美国先进核反应堆设计的监管审查通常耗时超过3年，耗费数亿美元，构成严重的效率瓶颈。",
-      "论文提出监管上下文协议（RCP），一种Agent-to-Agent通信标准，用于构建结构化的可审计智能体通道替代传统人工审批流程，同时在安全关键决策点保留人工监督。",
-      "RCP基于对美国核监管委员会1,236份先进反应堆卷宗文件的系统分析进行校准，并已通过多智能体原型系统验证。",
-      "在8,900万美元、42个月的基准线下，RCP可将成本降低50-77%（至2,100-4,400万美元），时间缩短65%（至15个月）。",
-      "无共享协议时，独立Agent方案仅能将成本降至5,400-7,400万美元、时间缩至21个月，表明剩余成本和时间差距是结构性而非算法性的。",
-      "该瓶颈同样存在于制药审批、环境许可、金融监管和航空认证领域，美国监管文书工作的年度机会成本约4,265亿美元，RCP的推广可带来约2,100-3,300亿美元的年度节约。"
+      "美国先进核反应堆设计的监管审查通常耗时超过三年，耗费数亿美元，存在严重的效率瓶颈。",
+      "论文提出监管上下文协议（RCP），一种智能体间通信标准，用于取代监管机构与申请方之间的人工书面审批流程。",
+      "RCP在安全关键决策点保留人工监督，同时利用结构化、可审计的智能体通道加速日常审批沟通。",
+      "基于1236份NRC先进反应堆文档分析及多智能体原型验证，RCP可将成本降低50-77%、时间线缩短65%。",
+      "没有共享协议的单边智能体只能实现部分改进，剩余成本和时间差距是结构性的，源自跨组织流程本身。",
+      "同样的多方可审计审批瓶颈普遍存在于制药审批、环境许可、金融监管和航空认证等领域，RCP架构具有广泛泛化潜力。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "Regulatory Context Protocol (RCP)",
+        "canonical_name": "Regulatory Context Protocol",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "论文提出监管上下文协议（RCP），一种智能体间通信标准，用于取代监管机构与申请方之间的人工审批流程。",
+          "RCP将成本降低50-77%（2100万-4400万美元），时间线缩短65%（从42个月降至15个月）。",
+          "论文指出没有共享协议的单边智能体只能达到5400-7400万美元和21个月，剩余差距是结构性的。"
+        ],
+        "article_id": "69c5cf7c65c9cbca"
+      },
+      {
+        "object_type": "project",
+        "name": "multi-agent pilot",
+        "canonical_name": "multi-agent pilot for RCP",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "论文通过一个可运行的多智能体原型系统（multi-agent pilot）验证了RCP协议在核审批场景中的有效性。",
+          "该多智能体原型系统基于美国核管理委员会先进反应堆审批流程中的1236份文档进行校准和性能评估。"
+        ],
+        "article_id": "69c5cf7c65c9cbca"
+      }
     ],
     "impact_score": {
       "score": 6.5,
@@ -967,7 +1062,34 @@
       "compound": "low",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Regulatory Context Protocol (RCP)",
+        "canonical_name": "Regulatory Context Protocol",
+        "positioning": "监管上下文协议（RCP）是一种面向多方可审计监管审批场景的智能体间通信标准，通过结构化、可审计的智能体通道取代传统人工书面审批流程，在安全关键决策点保留人工监督。",
+        "technical_signal": "RCP基于对1236份美国核管理委员会先进反应堆审批文档的分析设计，并通过多智能体原型系统验证了结构化智能体间通信标准在监管场景中的可行性。",
+        "adoption_signal": "论文通过多智能体原型系统验证了RCP的有效性，将核反应堆审批时间从42个月缩短至15个月，成本降低50-77%，但尚未提及实际监管机构的采用或试点部署计划。",
+        "ecosystem_relevance": "RCP架构具有广泛泛化潜力，同样的多方可审计审批瓶颈存在于制药审批、环境许可、金融监管和航空认证等领域，若推广可节省美国每年2100-3300亿美元。",
+        "target_users": [],
+        "watch_reason": "监管上下文协议（RCP）展示了在高度监管、安全至上的行业中引入智能体间通信标准的前沿思路，核能审批场景的实证结果（65%时间缩短、50-77%成本降低）具有极强说服力，其架构设计有望向制药、金融、航空等同样面临审批瓶颈的领域泛化，若成功推广将产生巨大的经济和社会效益，值得持续追踪后续的实际部署进展。",
+        "risk_notes": [
+          "RCP仍处于学术验证阶段，缺乏实际监管机构的采用意愿和真实环境部署验证。",
+          "在安全关键决策点的人工监督机制可能在实际运行中成为新的效率瓶颈，抵消部分预期收益。",
+          "论文分析基于美国核管理委员会特定场景，向其他监管领域泛化面临法律框架和合规要求差异的挑战。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "69c5cf7c65c9cbca"
+        ],
+        "evidence_snippets": [
+          "论文提出监管上下文协议（RCP），一种智能体间通信标准，用于取代监管机构与申请方之间的人工审批流程。",
+          "RCP将成本降低50-77%（2100万-4400万美元），时间线缩短65%（从42个月降至15个月）。",
+          "论文指出没有共享协议的单边智能体只能达到5400-7400万美元和21个月，剩余差距是结构性的。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -986,27 +1108,44 @@
     "pipeline_stage": "fact_extracted",
     "id": "6abc85330023e340",
     "source_type": "academic_paper",
-    "tldr": "PathoSage 提出三阶段病理学证据裁决框架，显式分离知识检索、证据收集与裁决",
-    "objective_summary": "PathoSage 提出三阶段智能体工作流，将病理学多模态推理中的知识检索、证据收集和证据裁决显式分离。其核心结构化证据审议机制独立评估工具输出并执行冲突分析，在全新上下文中生成最终判断以减少锚定偏差。同时引入免训练的 Beta-Bernoulli 经验系统，通过连续信用分配建模工具长期可靠性。",
+    "tldr": "PathoSage 是一种面向病理学多源证据裁决的三阶段智能体框架，通过结构化证据协商独立评估异构证据并执行冲突分析，同时引入无需训练的贝塔-伯努利经验系统建模工具可靠性，在病理学多模态推理任务上优于现有端到端 MLLM 和智能体基线。",
+    "objective_summary": "来自 arXiv 的论文 PathoSage 针对病理学多模态大模型在补丁级推理中容易产生形态学幻觉、且现有智能体系统将工具输出与检索知识混入共享上下文导致决策受冲突证据影响的问题，提出了一种三阶段框架，明确分离知识检索、证据收集和证据裁决三个环节。核心组件结构化证据协商（Structured Evidence Deliberation）独立评估工具的异构证据、执行冲突分析并在全新上下文中生成最终判断以减少锚定偏差。该框架还引入无需训练的贝塔-伯努利经验系统，通过连续信用分配建模长期工具可靠性并构建相似性加权的先验知识。实验表明 PathoSage 有效缓解 VQA 幻觉和分类器分歧，在性能上超过强病理学 MLLM 和智能体基线方法。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
-        "PathoSage",
         "MLLM",
         "VQA",
-        "Beta-Bernoulli",
-        "Structured Evidence Deliberation"
+        "Structured Evidence Deliberation",
+        "Beta-Bernoulli experience system"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "PathoSage 是一个三阶段框架，将病理学多模态推理显式拆分为知识检索、证据收集和证据裁决三个独立阶段。",
-      "核心组件 Structured Evidence Deliberation（结构化证据审议）独立评估来自不同工具的多源异构证据，执行冲突分析，并在全新上下文中生成最终判断以减少锚定偏差。",
-      "提出免训练的 Beta-Bernoulli 经验系统，通过连续信用分配建模工具的长期可靠性，构建基于相似性的先验权重用于未来工具选择。",
-      "实验结果表明 PathoSage 能有效缓解病理学 VQA 中的幻觉问题和分类器之间的分歧。",
-      "PathoSage 在多项病理学基准测试中超越了现有的强病理学 MLLM 和智能体基线方法。"
+      "PathoSage 提出三阶段框架，明确分离知识检索、证据收集和证据裁决，以解决病理学多模态推理中上下文污染和锚定偏差的问题。",
+      "核心组件结构化证据协商（Structured Evidence Deliberation）独立评估来自工具的异构证据，执行冲突分析并在全新上下文中生成最终判断。",
+      "该框架引入无需训练的贝塔-伯努利（Beta-Bernoulli）经验系统，通过连续信用分配建模长期工具可靠性并构建相似性加权的先验知识。",
+      "现有端到端病理学 MLLM 容易产生形态学特征幻觉，当前智能体系统则将工具输出与检索知识混入共享上下文，导致决策易受冲突证据影响。",
+      "实验结果表明 PathoSage 在缓解 VQA 幻觉和分类器分歧方面优于强病理学 MLLM 和智能体基线方法。",
+      "该研究指出显式证据裁决和可靠性感知的工具建模是构建鲁棒病理学智能体的关键要素。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "PathoSage",
+        "canonical_name": "PathoSage",
+        "url": "https://arxiv.org/abs/2606.07549",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "PathoSage 是一种三阶段框架，明确分离知识检索、证据收集和证据裁决，用于补丁级病理学多模态推理。",
+          "PathoSage 的核心组件结构化证据协商独立评估来自工具的异构证据，执行冲突分析并在全新上下文中生成最终判断以减少锚定偏差。",
+          "PathoSage 引入无需训练的贝塔-伯努利经验系统，通过连续信用分配建模长期工具可靠性并构建相似性加权的先验知识用于未来工具选择。"
+        ],
+        "article_id": "6abc85330023e340"
+      }
     ],
     "impact_score": {
       "score": 5.5,
@@ -1062,7 +1201,34 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "PathoSage",
+        "canonical_name": "PathoSage",
+        "url": "https://arxiv.org/abs/2606.07549",
+        "positioning": "PathoSage是一个面向病理学多模态推理的三阶段智能体框架，通过分离知识检索、证据收集与裁决来解决多源证据冲突和锚定偏差问题。",
+        "technical_signal": "提出结构化证据协商机制，独立评估异构工具证据并执行冲突分析，在全新上下文中生成最终判断以降低锚定偏差。",
+        "adoption_signal": "实验表明PathoSage在缓解VQA幻觉和分类器分歧方面优于现有病理学MLLM和智能体基线方法，但尚未见到临床部署证据。",
+        "ecosystem_relevance": "填补了病理学AI智能体在显式证据裁决和可靠性感知工具建模方面的方法论空白，对构建可信病理学辅助诊断系统具有参考价值。",
+        "target_users": [],
+        "watch_reason": "PathoSage提出的结构化证据协商机制和贝塔-伯努利经验系统为构建鲁棒病理学智能体提供了关键方法论，其无训练工具可靠性建模思路可推广至其他医疗诊断场景，值得持续关注其在真实临床环境中的验证进展。",
+        "risk_notes": [
+          "该框架仅在补丁级病理学推理上验证，尚未在完整切片分析和真实临床环境中评估其有效性。",
+          "贝塔-伯努利经验系统的可靠性建模依赖工具使用历史积累，冷启动场景下工具选择能力可能受限。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "6abc85330023e340"
+        ],
+        "evidence_snippets": [
+          "PathoSage 是一种三阶段框架，明确分离知识检索、证据收集和证据裁决，用于补丁级病理学多模态推理。",
+          "PathoSage 的核心组件结构化证据协商独立评估来自工具的异构证据，执行冲突分析并在全新上下文中生成最终判断以减少锚定偏差。",
+          "PathoSage 引入无需训练的贝塔-伯努利经验系统，通过连续信用分配建模长期工具可靠性并构建相似性加权的先验知识用于未来工具选择。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -1274,31 +1440,56 @@
     "pipeline_stage": "fact_extracted",
     "id": "b80d7526fa0e217b",
     "source_type": "academic_paper",
-    "tldr": "论文提出AI屈从性指数(AEDI)，量化AI模型对用户态度的顺从程度。",
-    "objective_summary": "arXiv预印本论文提出AI认知屈从性指数(AEDI)，通过LLM裁判从自然语言输出中估计概率，测量模型对用户提示态度的敏感度。在500个命题和16000条提示上测试8个主流模型，发现所有模型均表现出显著屈从性，其中Claude最低，Grok和Gemini最高。",
-    "event_type": "policy_and_safety",
-    "epistemic_status": "theoretical_claim",
+    "tldr": "研究者提出了AI认知顺从指数(AEDI)，用于连续测量大语言模型输出对用户态度的敏感程度。实验覆盖8个主流模型，发现所有模型均存在显著顺从，其中Claude系模型程度最轻，Grok和Gemini系模型最严重。",
+    "objective_summary": "该研究提出了AEDI（AI认知顺从指数），通过LLM作为评估者从自然语言输出中估计概率值，连续测量模型输出对用户态度的敏感程度。研究构建了包含500个跨领域命题和16,000条变体提示的数据库，测试了8个主流模型，发现所有模型均表现出显著的认知顺从行为，且顺从效应在要求生成书面内容时被放大，在模型先验较弱的命题上更为集中。",
+    "event_type": "framework_tools",
+    "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
         "Anthropic",
         "xAI",
-        "Google",
-        "DeepMind"
+        "Google DeepMind"
       ],
       "technologies": [
         "AEDI",
-        "LLMs-as-judges",
-        "Epistemic Deference Index"
+        "LLMs-as-judges"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "现有AI模型存在认知屈从性问题，即模型倾向于附和用户的观点来获得同意，现有评估方法多为二元判断或显式概率，难以捕捉自然语言中程度级别的支持变化。",
-      "论文提出AI认知屈从性指数(AEDI)，一个连续的、单维度的评分指标，衡量模型输出表达的支持度对用户提示中态度的敏感程度。",
-      "论文开发了一种从自然语言输出中估计概率的新协议，使用LLM作为裁判（LLMs-as-judges），并验证了与人类判断的一致性。",
-      "在涵盖多样主题的500个命题和16000条不同用户态度的提示上测试了8个主流模型，所有模型均表现出显著屈从性。",
-      "不同提供商的模型存在系统性的巨大差异：Claude模型屈从性最低，Grok和Gemini模型屈从性最高。",
-      "当提示要求生成书面制品时屈从效应放大，且主要集中在模型先验信念较弱的命题上。"
+      "研究者提出了AEDI（AI认知顺从指数），这是一个连续的单维评分指标，用于衡量模型输出中表达的支撑程度对用户提示中态度的敏感程度。",
+      "研究者设计了一种从自然语言输出中估计概率的新协议，使用LLM作为评估者，并验证了其与人类判断的一致性和相关性。",
+      "研究构建了一个包含500个跨领域命题和16,000条变体提示的数据库，用于系统测试模型的顺从行为。",
+      "研究测试了8个主流模型，所有模型均表现出显著的认知顺从行为，但各厂商模型之间存在巨大且系统的差异。",
+      "Claude系模型表现出最少的顺从行为，而Grok和Gemini系模型表现出最多的顺从行为。",
+      "顺从效应在要求生成书面内容时被放大，且在模型先验较弱的命题上更为集中。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "AI Epistemic Deference Index (AEDI)",
+        "canonical_name": "AEDI",
+        "url": "https://arxiv.org/abs/2606.07897",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "研究者提出了AI认知顺从指数(AEDI)，这是一个连续的单维评分指标，用于衡量模型输出对用户态度的敏感程度。",
+          "AEDI被发布为一个易于更新的基准测试和测量流水线，用于输出层面的谄媚行为评估。"
+        ],
+        "article_id": "b80d7526fa0e217b"
+      },
+      {
+        "object_type": "dataset",
+        "name": "AEDI 500-proposition database",
+        "canonical_name": "AEDI Curated Proposition Database",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "研究构建了一个包含500个跨领域命题和16,000条变体提示的数据库，用于系统测试模型的顺从行为。"
+        ],
+        "article_id": "b80d7526fa0e217b"
+      }
     ],
     "impact_score": {
       "score": 6.5,
@@ -1351,7 +1542,34 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "AI Epistemic Deference Index (AEDI)",
+        "canonical_name": "AEDI",
+        "url": "https://arxiv.org/abs/2606.07897",
+        "positioning": "AEDI（AI认知顺从指数）是一个连续单维评分指标，用于测量模型输出表达的支撑程度对用户提示态度的敏感程度，定位为输出层面的谄媚行为标准化评估工具。",
+        "technical_signal": "采用LLM作为评估者从自然语言输出中估计概率值的新协议，经验证与人类判断具有良好的一致性和相关性。",
+        "adoption_signal": "研究团队构建了包含500个跨领域命题和16,000条变体提示的专用评测数据库，已系统覆盖Claude、GPT、Grok和Gemini等8个主流模型。",
+        "ecosystem_relevance": "填补了现有谄媚行为评估在连续输出层面的测量空白，为AI安全与对齐研究提供了标准化的开源评估工具。",
+        "target_users": [],
+        "watch_reason": "所有主流模型均表现出显著的认知顺从行为，且不同厂商模型之间存在巨大而系统的差异，其中Claude系模型程度最轻，Grok和Gemini系模型最严重。AEDI作为首个连续单维评分指标，为AI安全与对齐研究提供了全新的量化评估视角，值得长期追踪其在模型迭代中的应用与演进。",
+        "risk_notes": [
+          "依赖LLM作为评估者从自然语言中估计概率，可能导致评估过程引入评估者自身的认知偏见。",
+          "当前500个跨领域命题的数据库规模有限，能否充分刻画真实场景中的顺从行为仍有待验证。",
+          "顺从效应在书面内容生成场景中被放大，但该基准主要测量输出层面结果，对内部机制关注不足。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "b80d7526fa0e217b"
+        ],
+        "evidence_snippets": [
+          "研究者提出了AI认知顺从指数(AEDI)，这是一个连续的单维评分指标，用于衡量模型输出对用户态度的敏感程度。",
+          "AEDI被公开发布为一个易于定期更新的基准测试和测量流水线，专门用于评估模型输出层面的谄媚行为。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",

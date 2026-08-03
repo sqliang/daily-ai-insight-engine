@@ -11,26 +11,50 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 2eb5bcc3ad88b97e
 source_type: tech_blog
-tldr: MosaicLeaks 基准测试发现深度研究代理会通过外部查询泄露私人信息，提出 PA-DR 训练方法将泄漏率从 34.0% 降至 9.9%。
-objective_summary: ServiceNow 在 HuggingFace 博客发布研究，提出 MosaicLeaks 基准任务评估深度研究代理的隐私泄漏风险。测试表明代理频繁通过外部查询泄露私密信息，仅优化任务性能会加剧泄漏。提出的
-  PA-DR 强化学习方法将严格链成功率从 48.7% 提升至 58.
-event_type: policy_and_safety
+tldr: ServiceNow 提出了 MosaicLeaks 任务，用于评估深度研究智能体在混合公私有信息查询时通过外部搜索泄露敏感信息的风险。实验表明仅优化任务性能会加重泄露，他们提出的隐私感知训练方法
+  PA-DR 将完整信息泄露率从 34.0% 降至 9.9%。
+objective_summary: ServiceNow 发布了一篇关于深度研究智能体隐私泄露风险的研究，提出了 MosaicLeaks 评估任务和 PA-DR
+  训练方法。该研究将隐私泄露分为意图泄露、答案泄露和完整信息泄露三个层级，并发现仅优化任务性能会加剧泄露。PA-DR 方法将严格链成功率从 48.7% 提升至 58.7%，同时将完整信息泄露率从
+  34.0% 降至 9.9%。
+event_type: framework_tools
 epistemic_status: verified_fact
 entities:
   companies:
   - ServiceNow
-  - Hugging Face
   technologies:
   - MosaicLeaks
   - PA-DR
+  - RL
   key_people: []
 key_logic_flow:
-- 深度研究代理结合私有文档和外部工具时，外部查询可能泄漏敏感信息，产生马赛克效应（Mosaic Effect）。
-- ServiceNow 提出 MosaicLeaks 基准任务，包含需要交织使用公开和私有信息的多跳问题，用于评估代理的隐私泄漏风险。
-- 攻击者仅观察代理的查询日志（不访问私有文档或推理过程），即可推断私有信息，分为意图泄漏、答案泄漏和全信息泄漏三个等级。
-- 实验发现仅优化任务性能会加剧隐私泄漏，代理回答越好泄漏越多。
-- ServiceNow 提出隐私感知深度研究（PA-DR）训练方法，通过马赛克泄漏感知的强化学习同时提升任务完成度和隐私保护能力。
-- PA-DR 将严格链成功率从 48.7% 提升至 58.7%，同时将答案/全信息泄漏率从 34.0% 降低至 9.9%。
+- 深度研究智能体在混合使用本地私密文档和外部工具时，其外部搜索查询可能被对手累积分析，从而推断出私密信息，这就是马赛克效应隐私风险。
+- ServiceNow 提出了 MosaicLeaks 评估任务，这是一种包含交错公私有信息的多跳问答深度研究任务，以智能体的外部查询日志作为泄露通道来评估隐私泄露程度。
+- 他们将泄露分为三个层级：意图泄露（对手可以推断研究目标）、答案泄露（对手可以回答私人问题）和完整信息泄露（对手可以发现并陈述私密事实）。
+- 实验表明现有智能体频繁泄露私密信息，且仅针对任务性能进行训练会使隐私泄露更加严重。
+- 他们提出了隐私感知深度研究训练方法 PA-DR，将严格链成功率从 48.7% 提升至 58.7%。
+- PA-DR 将完整信息泄露率从 34.0% 降至 9.9%，显著增强了智能体在混合信息查询场景下的隐私保护能力。
+extract_result: success
+object_mentions:
+- object_type: project
+  name: MosaicLeaks
+  canonical_name: ServiceNow MosaicLeaks
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - MosaicLeaks 提出了一种新的深度研究任务，包含交错公私有信息的多跳问题，用于评估智能体在混合查询中的隐私泄露风险。
+  - MosaicLeaks 将智能体的网络查询视为泄露通道，对手仅通过累积的查询日志来推断私密的企业信息。
+  article_id: 2eb5bcc3ad88b97e
+- object_type: project
+  name: Privacy-Aware Deep Research (PA-DR)
+  canonical_name: PA-DR
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - PA-DR 是一种马赛克泄露感知的强化学习训练方法，将严格链成功率从 48.7% 提升至 58.7%。
+  - PA-DR 将答案泄露和完整信息泄露率从 34.0% 降至 9.9%，显著降低了智能体在深度研究任务中的隐私泄露风险。
+  article_id: 2eb5bcc3ad88b97e
 impact_score:
   score: 6.5
   reason: 该研究揭示了深度研究代理的一个系统性安全漏洞——外部查询日志可被第三方利用马赛克效应推断私密信息，这是一个真实且被行业低估的风险点。但 MosaicLeaks
@@ -82,6 +106,53 @@ confidence:
   compound: medium
   hype: medium
 actionable_insight: strategic_invest
+object_insights:
+- object_type: project
+  name: MosaicLeaks
+  canonical_name: ServiceNow MosaicLeaks
+  url: null
+  positioning: 深度研究智能体隐私泄露评估基准，通过交错公私有信息的多跳问答任务，以外部搜索查询日志为泄露通道，系统评估智能体在混合查询场景中的信息泄露风险。
+  technical_signal: 定义了意图泄露、答案泄露和完整信息泄露三个递进层级的评估指标，为量化深度研究智能体的隐私风险提供了可操作的评测框架。
+  adoption_signal: null
+  ecosystem_relevance: 填补了 AI 智能体隐私安全评估的方法论空白，直接回应了企业级深度研究应用部署中日益突出的马赛克效应隐私威胁。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: 随着深度研究智能体在企业场景中的快速渗透，隐私泄露已成为关键安全瓶颈；MosaicLeaks 提供的系统化评估框架是理解和缓解这一风险的基础工具，对
+    AI 安全领域具有持续参考价值。
+  risk_notes:
+  - 评估场景为合成任务，真实世界的隐私攻击手段可能比查询日志分析更复杂和多样化。
+  - 基准本身不提供隐私保护方案，需要与其他防御方法配合使用才能形成完整防护。
+  score: 7.0
+  article_ids:
+  - 2eb5bcc3ad88b97e
+  evidence_snippets:
+  - MosaicLeaks 提出了一种新的深度研究任务，包含交错公私有信息的多跳问题，用于评估智能体在混合查询中的隐私泄露风险。
+  - MosaicLeaks 将智能体的网络查询视为泄露通道，对手仅通过累积的查询日志来推断私密的企业信息。
+- object_type: project
+  name: Privacy-Aware Deep Research (PA-DR)
+  canonical_name: PA-DR
+  url: null
+  positioning: 一种马赛克泄露感知的强化学习训练方法，通过在深度研究任务中引入隐私约束，同步提升任务性能并降低智能体在混合公私有信息查询中的信息泄露风险。
+  technical_signal: 采用马赛克泄露感知的强化学习策略，将严格链成功率从 48.7% 提升至 58.7%，同时将完整信息泄露率从 34.0% 降至
+    9.9%，实现了性能与隐私的双重优化。
+  adoption_signal: null
+  ecosystem_relevance: 为深度研究智能体的隐私保护提供了可复用的训练范式，直接证明了隐私约束与任务性能并非零和博弈，对企业级 AI 系统的安全部署具有重要指导意义。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: 在深度研究智能体快速走向实用化的关键窗口期，PA-DR 展示了隐私保护与任务性能可以兼得的具体路径；其训练范式有望成为 AI 智能体隐私安全的标准组件，值得持续跟踪技术演进和社区采纳情况。
+  risk_notes:
+  - 仅在合成基准上完成验证，真实环境中的隐私攻防对抗可能削弱其防护效果。
+  - 隐私约束的泛化性尚未在更多样化的深度研究任务中检验，可能面临性能权衡。
+  score: 8.0
+  article_ids:
+  - 2eb5bcc3ad88b97e
+  evidence_snippets:
+  - PA-DR 是一种马赛克泄露感知的强化学习训练方法，将严格链成功率从 48.7% 提升至 58.7%。
+  - PA-DR 将答案泄露和完整信息泄露率从 34.0% 降至 9.9%，显著降低了智能体在深度研究任务中的隐私泄露风险。
 ---
 
 Deep research agents increasingly combine private local documents with external tools like web retrieval, creating a privacy risk: an agent's external queries may leak sensitive information. **MosaicLeaks** proposes a new deep-research task with multi-hop questions that interleave public and private information. Across the models we tested, agents frequently leaked private information, and training only for task performance made it worse. We propose a mosaic-leakage-aware RL training method, **Privacy-Aware Deep Research (PA-DR)**, which raises strict chain success (the share of chains where every hop is answered correctly) from 48.7% to 58.7% while reducing answer/full-information leakage from 34.0% to 9.9%.

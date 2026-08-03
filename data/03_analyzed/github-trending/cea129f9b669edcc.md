@@ -94,28 +94,45 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: cea129f9b669edcc
 source_type: community_discussion
-tldr: 一个为 Claude Code 提供规范化 Plan-Work-Review-Ship 开发工作流的开源工具，通过 MCP 插件市场安装。
-objective_summary: 开发者 Chachamaru127 发布了 claude-code-harness 开源项目（MIT 协议），为 Claude
-  Code 等 AI 编程智能体引入结构化的五阶段交付循环：规划、实施、独立评审、同步与发布。用户通过 Claude 插件市场安装后，以 /harness-plan
+tldr: Chachamaru127/claude-code-harness 是一个为 Claude Code 提供结构化交付循环的开源插件，通过 Plan、Work、Review、Sync、Release
+  五个核心命令将原始代理工作转化为可重复的操作路径，并生成 spec.md 和 Plans.md 作为事实来源。
+objective_summary: Chachamaru127 在 GitHub 上发布了 claude-code-harness 项目，这是一个针对 Claude
+  Code 的插件，提供从需求描述到发布证据打包的完整工作流。该插件通过 /harness-setup、/harness-plan、/harness-work、/harness-review、/harness-release
+  五个命令来约束开发流程，要求用户先审批生成的 spec.md 和 Plans.md 合同文件，再执行具体任务，最后封装验证后的证据用于 PR 或发布。
 event_type: framework_tools
-epistemic_status: pr_statement
+epistemic_status: verified_fact
 entities:
   companies: []
   technologies:
   - Claude Code
-  - MCP
-  - Go
   - Codex CLI
   - OpenCode
-  key_people:
-  - Chachamaru127
+  - Cursor
+  - GitHub Copilot CLI
+  key_people: []
 key_logic_flow:
-- Harness 将 Claude Code 的原始智能体工作流升级为 Plan → Work → Review → Ship 的四阶段纪律循环，每个阶段有明确的输出物和门禁条件
-- /harness-plan 命令将用户意图转化为 spec.md 和 Plans.md 两份合约文件，包含范围、验收标准、依赖项、未知因素和停止条件，用户只需批准或纠正即可
-- /harness-work 执行已批准的任务切片，强制要求 TDD 和验证，确保实施不偏离计划边界
-- /harness-review 将评审从实施中分离，重大发现被视作阻塞项而非可忽略建议
-- 工具通过 Claude 插件市场分发（/plugin marketplace add），支持 Claude Code（正式支持）、Codex CLI 和 OpenCode（内部兼容）三条路径
-- 提供 bin/harness doctor --migration-report 迁移检查命令，可盘点旧插件缓存和配置状态而不删除任何数据
+- claude-code-harness 将默认的"让代理直接编码"模式转变为先编写规范和计划、再实现已审批切片、然后验证结果、独立审查、最后打包证据用于 PR
+  或发布的五步流程。
+- 用户通过 /harness-plan 命令将需求转化为 spec.md 和 Plans.md，包含范围、验收标准、依赖关系、未知因素和停止条件，非平凡计划还需通过团队验证模式。
+- /harness-work 执行已批准的单个任务或范围，要求 TDD 测试驱动开发和验证步骤；/harness-review 将审查与实现分离，主要发现将作为阻塞项处理。
+- /harness-release 在实现和审查完成后检查发布就绪状态、CHANGELOG 和标签边界，并封装验证后的证据。
+- 不同 AI 编码工具对 Harness 的支持分为 supported、internal-compatible、candidate 和 future/unsupported
+  四个等级，Claude Code v2.1+ 是官方支持路径。
+- 现有用户在执行清理或重装前应先运行 bin/harness doctor --migration-report 命令，该命令会清查旧的插件缓存和状态而不删除任何数据。
+extract_result: success
+object_mentions:
+- object_type: project
+  name: Chachamaru127/claude-code-harness
+  canonical_name: claude-code-harness
+  url: https://github.com/Chachamaru127/claude-code-harness
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - claude-code-harness 是一个为 Claude Code 提供结构化交付循环的开源项目，通过 plan、work、review、sync、release
+    五个核心命令将原始代理工作转化为可重复的操作路径。
+  - 该项目通过 /plugin marketplace add Chachamaru127/claude-code-harness 等命令安装，安装后默认行为从"让代理编码"变为编写规范、实现切片、验证结果、独立审查、打包证据的流程。
+  - 不同 AI 编码工具对 Harness 的支持等级不同，Claude Code 为官方支持级，Codex CLI 和 OpenCode 为内部兼容级。
+  article_id: cea129f9b669edcc
 impact_score:
   score: 4.5
   reason: 该工具针对 AI 编程智能体「工作漂移」这一真实痛点提出了结构化的 Plan-Work-Review-Ship 四阶段纪律循环方案，通过 MCP
@@ -177,6 +194,35 @@ confidence:
   compound: low
   hype: medium
 actionable_insight: monitor
+object_insights:
+- object_type: project
+  name: Chachamaru127/claude-code-harness
+  canonical_name: claude-code-harness
+  url: https://github.com/Chachamaru127/claude-code-harness
+  positioning: claude-code-harness 是一个为 Claude Code 提供结构化交付循环的开源插件，通过 Plan、Work、Review、Sync、Release
+    五个核心命令将原始代理工作转化为可重复的操作路径。
+  technical_signal: 项目通过五个核心命令将 Claude Code 的原始代理工作转化为可重复的操作路径，并生成 spec.md 和 Plans.md
+    作为契约式事实来源。
+  adoption_signal: Claude Code v2.1+ 是官方支持路径，Codex CLI 和 OpenCode 被列为内部兼容级，需通过独立安装脚本启用。
+  ecosystem_relevance: 该项目填补了 Claude Code 缺乏结构化交付流程的空白，与多款 AI 编码工具生态形成互补关系，Codex CLI
+    和 OpenCode 也提供兼容支持。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: claude-code-harness 解决了 AI 编码代理在真实交付中缺乏规范、审查滞后、证据缺失的核心痛点，其五步契约式工作流为
+    AI 辅助开发提供了可审计、可重复的工程范式，值得跟踪其在更多编码工具生态中的落地进展。
+  risk_notes:
+  - 项目仍处于早期阶段，主流编码工具的兼容性尚不统一，Cursor 和 GitHub Copilot CLI 仅停留在 candidate 等级。
+  - 用户需主动审批 spec.md 和 Plans.md 合同文件，额外的工作流认知负担可能影响开发者采用意愿。
+  score: 7.0
+  article_ids:
+  - cea129f9b669edcc
+  evidence_snippets:
+  - claude-code-harness 是一个为 Claude Code 提供结构化交付循环的开源项目，通过 plan、work、review、sync、release
+    五个核心命令将原始代理工作转化为可重复的操作路径。
+  - 该项目通过 /plugin marketplace add Chachamaru127/claude-code-harness 等命令安装，安装后默认行为从"让代理编码"变为编写规范、实现切片、验证结果、独立审查、打包证据的流程。
+  - 不同 AI 编码工具对 Harness 的支持等级不同，Claude Code 为官方支持级，Codex CLI 和 OpenCode 为内部兼容级。
 ---
 
 **Plan. Work. Review. Ship.**

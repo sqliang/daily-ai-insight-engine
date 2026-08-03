@@ -89,43 +89,82 @@
     "pipeline_stage": "fact_extracted",
     "id": "1055589186c95a99",
     "source_type": "community_discussion",
-    "tldr": "在WiFi智能灯泡中植入固件，使其开放WiFi热点并托管被禁书籍，作为隐蔽的数字死信投放点。",
-    "objective_summary": "Richard Osgood 使用预装 Tasmota 固件的 ESP32C3 WiFi 灯泡，通过 Arduino 编写自定义固件，使其创建开放式 WiFi 热点并运行 Web 服务器，用于托管被禁书籍的电子版。该项目旨在提供一种隐蔽、低成本的数字死信投放方式，供审查环境下的人们访问被禁材料。",
+    "tldr": "Richard Osgood 将一个预装 Tasmota 固件的 WiFi 智能灯泡（ESP32C3）改造为开放热点和 Web 服务器，用于在社区内匿名分发禁书。该项目受 Ben Brown 短篇小说《Library》启发，以低成本、易隐藏的灯泡作为数字死信箱。",
+    "objective_summary": "Richard Osgood 出于对禁书数字存档和社区分发的兴趣，购买了两颗预装 Tasmota 固件的 WiFi 智能灯泡（ESP32C3，4MB 闪存）。他拆解灯泡后发现主板被灌封胶固定，难以焊接 microSD 扩展存储，因此放弃了增加外部存储的方案。他通过串口编程使芯片进入下载模式，用 esptool 备份了原始固件，并改用 Arduino IDE 为 ESP32C3 编写自定义固件，最终实现了开放 WiFi 热点和 Web 服务器的功能。该项目名为 Banned Book Library，旨在让社区成员在有灯泡的地方即可通过 WiFi 访问禁书内容。",
     "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
-        "Tasmota",
-        "Adafruit",
         "Sparkfun",
-        "AliExpress",
-        "DEFCON",
-        "Arduino"
+        "Adafruit",
+        "AliExpress"
       ],
       "technologies": [
+        "ESP32",
         "ESP32C3",
         "Tasmota",
-        "LittleFS",
         "WiFi",
-        "SD card",
+        "Arduino",
         "OTA",
-        "FTDI",
-        "esptool",
+        "LittleFS",
         "GPIO"
       ],
       "key_people": [
         "Richard Osgood",
-        "Ben Brown",
-        "Cory Doctorow"
+        "Ben Brown"
       ]
     },
     "key_logic_flow": [
-      "作者提出在WiFi智能灯泡上修改固件，使其成为托管被禁书籍的隐蔽数字死信投放点。",
-      "作者使用预装Tasmota固件的ESP32C3芯片（4MB闪存）灯泡作为硬件基础。",
-      "作者拆解灯泡后，发现主板被大量橡胶状灌封胶固定，难以重新安全安装，因此放弃拆解改装路线。",
-      "作者将主板作为开发平台，通过FTDI串行编程器和esptool工具成功读取原始固件备份。",
-      "作者使用Arduino IDE编写自定义固件，实现开放式WiFi热点和异步Web服务器功能。",
-      "作者尝试通过microSD卡扩展存储（用于托管更多书籍），最终转向ESP32内置的LittleFS文件系统。"
+      "作者受 Ben Brown 短篇小说《Library》中数字存档概念的启发，计划将 WiFi 智能灯泡改造为禁书分发设备。",
+      "作者购买了预装 Tasmota 开源固件的 WiFi 灯泡（ESP32C3 芯片，4MB 闪存），通过 DEFCON 本地聚会成员推荐了解了 Tasmota 的本地控制能力。",
+      "作者拆解灯泡后发现主板被大量灌封胶固定，难以安全取出并焊接 microSD 读卡器，因此放弃了扩展存储的方案。",
+      "作者通过串口将 ESP32C3 置于下载模式，使用 esptool 成功备份了原始固件，并用 Arduino IDE 编写了自定义固件。",
+      "作者在 Arduino IDE 中实现了基本的 Hello World 串口通信验证，随后完成了开放 WiFi 热点和 Web 服务器的功能开发。",
+      "作者改用 Adafruit ItsyBitsy ESP32 进行原型开发，尝试用 LittleFS 托管文件，但 microSD 卡扩展方案最终未成功。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "Banned Book Library",
+        "canonical_name": "Banned Book Library",
+        "url": "https://www.richardosgood.com/posts/banned-book-library/",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "作者将预装 Tasmota 固件的 WiFi 智能灯泡改造为开放热点和 Web 服务器，用于在社区内匿名分发禁书。",
+          "该项目旨在让社区成员在有灯泡的地方即可通过 WiFi 访问禁书内容，设备本身难以被检测和发现。",
+          "作者受 Ben Brown 短篇小说《Library》中数字存档概念的启发，产生了在灯泡上托管禁书的创意。"
+        ],
+        "article_id": "1055589186c95a99"
+      },
+      {
+        "object_type": "project",
+        "name": "Tasmota",
+        "canonical_name": "Tasmota",
+        "url": "https://tasmota.github.io/docs/",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Tasmota 是一款开源固件，可安装在各种智能设备上，将其集成到 HomeAssistant 等家庭自动化系统中。",
+          "作者购买的 WiFi 灯泡预装了 Tasmota 固件，且支持通过 OTA 方式进行固件更新。",
+          "作者最初计划修改 Tasmota 固件来实现功能，但因固件过于复杂且支持多种架构而放弃。"
+        ],
+        "article_id": "1055589186c95a99"
+      },
+      {
+        "object_type": "product",
+        "name": "Adafruit ItsyBitsy ESP32",
+        "canonical_name": "Adafruit ItsyBitsy ESP32",
+        "url": "https://www.adafruit.com/product/4568",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者改用闲置的 Adafruit ItsyBitsy ESP32 进行原型开发，因为它将所有引脚引出，便于焊接排针。",
+          "作者通过 ItsyBitsy 连接 microSD 读卡器进行原型测试，最终用 LittleFS 托管文件但 microSD 方案未成功。"
+        ],
+        "article_id": "1055589186c95a99"
+      }
     ],
     "impact_score": {
       "score": 2.5,
@@ -181,7 +220,84 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "speculative_watch"
+    "actionable_insight": "speculative_watch",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Banned Book Library",
+        "canonical_name": "Banned Book Library",
+        "url": "https://www.richardosgood.com/posts/banned-book-library/",
+        "positioning": "基于WiFi智能灯泡（ESP32C3）改造的禁书匿名分发项目，通过开放热点和Web服务器实现低检测风险的社区数字死信箱功能。",
+        "technical_signal": "通过串口将ESP32C3置于下载模式并成功刷写自定义Arduino固件，实现了开放WiFi热点和Web服务器，但microSD扩展存储方案未成功。",
+        "ecosystem_relevance": "项目基于Tasmota开源固件生态和ESP32硬件平台，展示了开源IoT固件与消费级硬件在非常规场景下的灵活改造潜力。",
+        "target_users": [],
+        "watch_reason": "将民用IoT设备改造为数字死信箱的创意极具颠覆性，展示了低检测风险、低成本、易扩散的禁书分发方案，对审查环境下的信息自由分发具有参考价值。",
+        "risk_notes": [
+          "4MB闪存和主板灌封胶导致存储扩展受限，microSD卡方案未能成功，可托管书籍数量极少。",
+          "项目仅为作者个人原型验证，未见实际社区部署案例或生产环境应用可行性验证。",
+          "Tasmota固件因过于复杂而放弃直接修改，自定义固件开发仍需较高的嵌入式编程门槛。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "1055589186c95a99"
+        ],
+        "evidence_snippets": [
+          "作者将预装 Tasmota 固件的 WiFi 智能灯泡改造为开放热点和 Web 服务器，用于在社区内匿名分发禁书。",
+          "该项目旨在让社区成员在有灯泡的地方即可通过 WiFi 访问禁书内容，设备本身难以被检测和发现。",
+          "作者受 Ben Brown 短篇小说《Library》中数字存档概念的启发，产生了在灯泡上托管禁书的创意。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Tasmota",
+        "canonical_name": "Tasmota",
+        "url": "https://tasmota.github.io/docs/",
+        "positioning": "开源的智能设备固件平台，支持多芯片架构和OTA更新，让IoT设备脱离云服务实现本地控制，已形成预装硬件的商业生态。",
+        "technical_signal": "支持ESP32C3等多种芯片架构，提供内置OTA固件更新机制和GPIO引脚配置能力，但固件复杂度较高导致第三方修改门槛不低。",
+        "adoption_signal": "被DEFCON社区成员推荐使用，已有商业厂商预装Tasmota固件销售灯泡，社区生态活跃且硬件兼容性广泛。",
+        "ecosystem_relevance": "作为开源IoT固件生态的核心基础设施，Tasmota连接了硬件厂商、改装社区和家庭自动化系统，是智能设备去云化本地控制的关键方案。",
+        "target_users": [],
+        "watch_reason": "Tasmota作为开源智能设备固件生态的基础设施项目，其设备兼容性扩展和社区活跃度直接决定了IoT改造类创新项目的技术可行性和入门门槛。",
+        "risk_notes": [
+          "固件体量和架构复杂度较高，第三方开发者直接修改固件实现自定义功能存在较大的技术门槛。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "1055589186c95a99"
+        ],
+        "evidence_snippets": [
+          "Tasmota 是一款开源固件，可安装在各种智能设备上，将其集成到 HomeAssistant 等家庭自动化系统中。",
+          "作者购买的 WiFi 灯泡预装了 Tasmota 固件，且支持通过 OTA 方式进行固件更新。",
+          "作者最初计划修改 Tasmota 固件来实现功能，但因固件过于复杂且支持多种架构而放弃。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Adafruit ItsyBitsy ESP32",
+        "canonical_name": "Adafruit ItsyBitsy ESP32",
+        "url": "https://www.adafruit.com/product/4568",
+        "positioning": "Adafruit推出的ESP32原型开发板，引出全部引脚便于焊接排针和连接外设，适合IoT原型验证和外围扩展方案测试。",
+        "target_users": [
+          "IoT原型开发者",
+          "硬件黑客与改造爱好者",
+          "嵌入式系统实验者"
+        ],
+        "product_signal": "提供完整的引脚引出设计，方便开发者焊接排针并连接microSD读卡器等外设进行原型验证和快速迭代。",
+        "differentiation": "相比于封装在灯泡内的ESP32模块，ItsyBitsy开发板提供了便捷的硬件调试接口和外围扩展能力，适合快速原型验证而非最终部署。",
+        "watch_reason": "作为ESP32原型开发板，ItsyBitsy展示了开发板与封装模块在硬件改造灵活性上的路径差异，对理解IoT改造项目的技术选型有参考价值。",
+        "risk_notes": [
+          "作为通用开发板，其体积和成本结构无法直接替代封装模块在最终部署场景中的应用。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "1055589186c95a99"
+        ],
+        "evidence_snippets": [
+          "作者改用闲置的 Adafruit ItsyBitsy ESP32 进行原型开发，因为它将所有引脚引出，便于焊接排针。",
+          "作者通过 ItsyBitsy 连接 microSD 读卡器进行原型测试，最终用 LittleFS 托管文件但 microSD 方案未成功。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -200,9 +316,9 @@
     "pipeline_stage": "fact_extracted",
     "id": "1274e97d0c78092f",
     "source_type": "community_discussion",
-    "tldr": "Iroh 发布 1.0 正式版，基于密钥寻址替代 IP 的新一代网络协议栈",
-    "objective_summary": "Iroh 团队于 2026 年 6 月发布 1.0 稳定版，该网络协议栈以密钥替代 IP 地址实现设备寻址。支持 QUIC 多路径、NAT 穿透、本地优先配置和 WASM 编译，提供 Rust、Python、Node.js、Swift、Kotlin 语言绑定。",
-    "event_type": "application_landing",
+    "tldr": "Iroh 1.0 正式发布，这是一个基于密钥寻址而非 IP 地址的 P2P 网络通信库，经过 4 年多开发和 65 个版本迭代后达到稳定。公共中继 30 天内已处理超 2 亿个端点，现支持 Rust、Python、Node.js、Swift 和 Kotlin 五种语言。",
+    "objective_summary": "Iroh 团队于 2026 年 7 月 21 日宣布发布 Iroh 1.0 稳定版，该项目历时 4 年多、经 65 个版本迭代打磨。Iroh 的核心抽象是使用密钥替代 IP 地址进行设备寻址和连接，支持 NAT 穿越、多路径 QUIC、本地优先配置和 WASM 编译。1.0 版本同时保证线协议和语言 API 的向后兼容性，除 Rust 外新增 Python、Node.js、Swift 和 Kotlin 四种官方 FFI 支持。其公共中继在近 30 天内处理了超过 2 亿个端点创建请求。",
+    "event_type": "framework_tools",
     "epistemic_status": "pr_statement",
     "entities": {
       "companies": [
@@ -216,17 +332,35 @@
         "BLE",
         "LoRa",
         "WiFi Aware",
-        "Tor"
+        "Tor",
+        "FFI"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "Iroh 1.0 采用密钥（key）而非 IP 地址作为设备寻址和连接的基础抽象，用户可自行创建和控制密钥，密钥不随网络位置变化，且能穿透防火墙。",
-      "Iroh 实现了自研的 QUIC 多路径协议，可在同一条连接内管理多条路由并根据网络状况热切换路径。",
-      "Iroh 支持 QUIC NAT 穿透建立直连，同时保持连接细节加密；约 95% 的数据传输走直连而非中继。",
-      "Iroh 1.0 提供 Rust、Python、Node.js、Swift、Kotlin 五种语言的官方绑定，支持浏览器 WASM 编译和自定义传输层（BLE、LoRa、Tor 等）。",
-      "过去 30 天内 Iroh 公共中继已创建超过 2 亿端点，被用于视频流、大模型训练、Agent 通信、安全聊天、游戏和文件传输等场景。",
-      "Iroh 1.0 保证线缆协议和语言 API 的稳定性，同一主版本下的端点无论次版本和语言均可互通信；0.35x 版本公网中继支持截止 2026 年 12 月 31 日。"
+      "Iroh 是一个基于密钥寻址而非 IP 地址的网络通信库，核心理念是让设备通过用户自主创建和控制的密钥进行安全寻址与连接。",
+      "经过 4 年多开发和 65 个版本的迭代，Iroh 发布 1.0 稳定版，其公共中继在 30 天内处理了超过 2 亿个端点创建请求。",
+      "1.0 版本采用 IETF 草案等开放标准，实现了 QUIC 多路径传输、NAT 穿越、本地优先配置、WASM 编译支持和自定义传输协议（BLE、LoRa、Tor 等）等关键能力。",
+      "1.0 版本同时保证线协议和各语言 API 的稳定性，任何影响线协议兼容性的变更都将伴随主版本号更新。",
+      "除原生的 Rust crate 外，Iroh 1.0 正式通过 FFI 支持 Python、Node.js、Swift 和 Kotlin 四种语言，可直接嵌入 iOS 和 Android 应用。",
+      "公司发布版本支持计划：1.0 版本的公共中继服务持续到生命周期结束，0.35x 版本支持到 2026 年 12 月 31 日，0.9x 及候选版本支持到 2026 年 9 月 30 日。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "iroh",
+        "canonical_name": "iroh",
+        "url": "https://www.iroh.computer",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Iroh 1.0 是经过 4 年多开发和 65 个版本迭代后发布的首个稳定版本，其核心理念是用密钥替代 IP 地址进行设备寻址和连接。",
+          "Iroh 1.0 保证了线协议和各语言 API 的稳定性，除 Rust 外还正式支持 Python、Node.js、Swift 和 Kotlin 四种语言的 FFI。",
+          "Iroh 的公共中继在 30 天内已处理超过 2 亿个端点创建请求，被用于视频流、大模型训练、Agent 通信、安全聊天和文件传输等场景。"
+        ],
+        "article_id": "1274e97d0c78092f"
+      }
     ],
     "impact_score": {
       "score": 6.5,
@@ -285,7 +419,35 @@
       "compound": "medium",
       "hype": "medium"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "iroh",
+        "canonical_name": "iroh",
+        "url": "https://www.iroh.computer",
+        "positioning": "Iroh 是一个基于密钥寻址替代 IP 地址的开源 P2P 网络通信库，提供 NAT 穿越、多路径 QUIC 传输与端到端加密直连能力。",
+        "technical_signal": "使用 IETF 开放标准构建，自研 QUIC 多路径传输与 NAT 穿越实现，支持 WASM 编译和自定义传输协议（BLE、LoRa、Tor 等）。",
+        "adoption_signal": "公共中继在 30 天内处理超 2 亿个端点创建请求，已被用于视频流、大模型训练、Agent 通信和文件传输等场景。",
+        "ecosystem_relevance": "支持 Rust、Python、Node.js、Swift 和 Kotlin 五种语言 FFI，可直接嵌入 iOS 和 Android 应用，推动去中心化网络生态发展。",
+        "target_users": [],
+        "watch_reason": "Iroh 重新定义了互联网设备寻址方式，1.0 稳定版标志着基于密钥的网络通信进入生产可用阶段，其多语言支持和去中心化理念在 AI Agent 通信和边缘计算场景具有长期跟踪价值。",
+        "risk_notes": [
+          "基于密钥寻址的 P2P 网络对传统中心化架构构成挑战，企业级大规模采用和市场接受度尚需验证。",
+          "公共中继服务依赖持续运营投入，免费服务的速率限制和商业模式的长期可持续性存在不确定性。",
+          "作为底层通信基础设施，其安全性和稳定性需在更大规模的生产环境中经受长期考验。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "1274e97d0c78092f"
+        ],
+        "evidence_snippets": [
+          "Iroh 1.0 是经过 4 年多开发和 65 个版本迭代后发布的首个稳定版本，其核心理念是用密钥替代 IP 地址进行设备寻址和连接。",
+          "Iroh 1.0 保证了线协议和各语言 API 的稳定性，除 Rust 外还正式支持 Python、Node.js、Swift 和 Kotlin 四种语言的 FFI。",
+          "Iroh 的公共中继在 30 天内已处理超过 2 亿个端点创建请求，被用于视频流、大模型训练、Agent 通信、安全聊天和文件传输等场景。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -304,23 +466,58 @@
     "pipeline_stage": "fact_extracted",
     "id": "285efcbfbbf2b106",
     "source_type": "community_discussion",
-    "tldr": "John Carmack 公开称赞 Fabrice Bellard 是比自己更优秀的程序员",
-    "objective_summary": "John Carmack 在推特上发表观点，认为法国工程师 Fabrice Bellard 是一位比他更优秀的程序员。Bellard 三十年来编写了大量支撑互联网运行的底层软件，包括驱动 YouTube、Netflix、TikTok 等视频平台的流媒体代码，但公众知名度极低。",
-    "event_type": "application_landing",
-    "epistemic_status": "pr_statement",
+    "tldr": "id Software 创始人 John Carmack 公开称赞法国工程师 Fabrice Bellard 是比他更优秀的程序员。Bellard 30 年间编写的视频流媒体和虚拟机代码支撑了 YouTube、Netflix、TikTok 等全球互联网服务，但公众知名度极低。",
+    "objective_summary": "John Carmack 在 Twitter 上发表了对法国软件工程师 Fabrice Bellard 的高度评价。Carmack 认为 Bellard 在整体编程能力上优于自己。文章指出 Bellard 在过去 30 年中编写了支撑 YouTube、Netflix、TikTok 等全球主流视频平台的流媒体基础代码，以及被广泛使用的虚拟机软件，但他的名字在大众中几乎不为人知。",
+    "event_type": "framework_tools",
+    "epistemic_status": "verified_fact",
     "entities": {
-      "companies": [],
-      "technologies": [],
+      "companies": [
+        "YouTube",
+        "Netflix",
+        "TikTok",
+        "ByteDance"
+      ],
+      "technologies": [
+        "QEMU",
+        "FFmpeg",
+        "libavcodec"
+      ],
       "key_people": [
         "John Carmack",
         "Fabrice Bellard"
       ]
     },
     "key_logic_flow": [
-      "John Carmack 公开表示他钦佩 Fabrice Bellard，并认为 Bellard 是比自己更优秀的程序员。",
-      "Fabrice Bellard 是一位在巴黎低调生活的法国工程师，三十年来持续编写软件。",
-      "Bellard 编写的代码支撑了 YouTube、Netflix、TikTok 等平台的视频流传输，成为整个互联网基础设施的一部分。",
-      "尽管 Bellard 的软件被广泛使用，但他的名字并不为大众所知。"
+      "John Carmack 公开表示他钦佩 Fabrice Bellard，并认为 Bellard 的整体编程能力几乎肯定超过自己。",
+      "Fabrice Bellard 是一位居住在巴黎的法国软件工程师，已持续编写软件长达 30 年。",
+      "Bellard 编写的核心代码支撑了 YouTube、Netflix、TikTok 等全球主流视频平台的流媒体播放功能。",
+      "Bellard 还编写了被广泛使用的虚拟机软件。",
+      "尽管 Bellard 的软件被全球互联网广泛依赖，但他的名字在大众层面几乎不为人知。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "FFmpeg",
+        "canonical_name": "FFmpeg",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "文章指出 Fabrice Bellard 编写了支撑 YouTube、Netflix、TikTok 每一条视频流的底层代码，即被广泛使用的视频编解码库 FFmpeg/libavcodec。"
+        ],
+        "article_id": "285efcbfbbf2b106"
+      },
+      {
+        "object_type": "project",
+        "name": "QEMU",
+        "canonical_name": "QEMU",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "文章提到 Fabrice Bellard 编写了驱动所有虚拟机的底层代码，即他所创建的开源虚拟化软件 QEMU。"
+        ],
+        "article_id": "285efcbfbbf2b106"
+      }
     ],
     "impact_score": {
       "score": 1.2,
@@ -374,7 +571,51 @@
       "compound": "low",
       "hype": "low"
     },
-    "actionable_insight": "speculative_watch"
+    "actionable_insight": "speculative_watch",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "FFmpeg",
+        "canonical_name": "FFmpeg",
+        "positioning": "由法国软件工程师 Fabrice Bellard 创建的开源音视频编解码库，是全球流媒体产业的基础设施级软件，在视频处理领域占据绝对主导地位。",
+        "technical_signal": "FFmpeg/libavcodec 提供了覆盖几乎所有主流音视频格式的编解码实现，其高效性和兼容性在大规模生产环境中得到充分验证。",
+        "adoption_signal": "被 YouTube、Netflix、TikTok 等全球主流流媒体平台大规模部署采用，是事实上的行业标准音视频编解码方案，影响力覆盖整个互联网视频生态。",
+        "ecosystem_relevance": "作为开源多媒体处理生态的核心基石，几乎所有的视频处理工具、云转码管道和播放器都直接或间接依赖 FFmpeg。",
+        "target_users": [],
+        "watch_reason": "FFmpeg 作为全球数字视频基础设施的支柱，其编解码技术创新和性能优化直接影响流媒体产业的成本效率；在 AI 视频生成与处理快速发展的背景下，其底层能力演进值得持续追踪。",
+        "risk_notes": [
+          "项目由社区治理，创始人已不直接参与核心开发，长期版本演进依赖社区贡献网络，治理效率存在不确定性。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "285efcbfbbf2b106"
+        ],
+        "evidence_snippets": [
+          "文章指出法国工程师 Fabrice Bellard 编写了支撑 YouTube、Netflix、TikTok 每一条视频流的底层代码，即被广泛使用的开源视频编解码库 FFmpeg/libavcodec。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "QEMU",
+        "canonical_name": "QEMU",
+        "positioning": "由 Fabrice Bellard 创建的开源硬件虚拟化软件，提供全系统 CPU 模拟和虚拟机管理能力，是云计算基础设施的核心组件。",
+        "technical_signal": "QEMU 实现了多架构 CPU 完整模拟和 KVM 硬件加速虚拟化，为开发测试和生产环境提供统一高效的虚拟化平台。",
+        "adoption_signal": "被全球云计算平台和开发基础设施广泛部署，与 KVM、libvirt、OpenStack 等工具深度集成，构成现代虚拟化技术栈的基石。",
+        "ecosystem_relevance": "作为 Linux 和云计算虚拟化生态的关键组件，QEMU 使跨平台开发、云资源隔离和边缘计算基础设施成为可能。",
+        "target_users": [],
+        "watch_reason": "QEMU 在云计算和边缘计算基础设施中扮演不可替代的角色，其对新硬件架构的支持和性能优化直接影响虚拟化效率，值得持续跟踪其技术演进。",
+        "risk_notes": [
+          "QEMU 代码库庞大且功能覆盖广泛，安全漏洞面较大，持续的维护和审计需要大量社区贡献和资金支持。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "285efcbfbbf2b106"
+        ],
+        "evidence_snippets": [
+          "文章提到 Fabrice Bellard 编写了驱动所有虚拟机的底层代码，即他所创建并在全球被广泛使用的开源虚拟化软件 QEMU。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -483,14 +724,13 @@
     "pipeline_stage": "fact_extracted",
     "id": "41f1082fd0aba666",
     "source_type": "community_discussion",
-    "tldr": "TimescaleDB 使用 hypercore 混合行列引擎，对时序数据实现高达 98% 的压缩率。",
-    "objective_summary": "TimescaleDB 的 hypercore 引擎将旧数据分块转换为列式压缩格式，采用增量编码、增量之增量、Gorilla XOR 和游程编码等专用算法，针对时序数据跨行模式优化，典型压缩率可达 10-100 倍。",
+    "tldr": "TimescaleDB 通过 hypercore 混合行列引擎对时间序列数据实现最高 98% 的压缩率，采用逐列算法（delta-of-delta、Gorilla XOR、RLE、dictionary compression），segmentby 和 orderby 参数决定分批方式，范围扫描和聚合查询因 I/O 减少 10-20 倍而加速。",
+    "objective_summary": "TimescaleDB 的 hypercore 引擎将新数据按行存储以支持快速写入，自动将旧 chunk 转为列式压缩格式。它对整数和时间戳使用 delta-of-delta 与 simple-8b 组合，对浮点数使用基于 Gorilla 的 XOR 压缩，对重复字符串使用字典压缩加 RLE。segmentby 参数决定按列分批，每个 segment 需至少 100 行才能获得有效压缩率；orderby 通常按时间降序排序以最大化差值编码效果。压缩后典型时序范围扫描与聚合查询因 I/O 减少 10-20 倍而加速，但单行点查和压缩后 update/delete 会变慢。",
     "event_type": "infrastructure_update",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
-        "TimescaleDB",
-        "PostgreSQL",
+        "Timescale",
         "Facebook"
       ],
       "technologies": [
@@ -501,20 +741,50 @@
         "Gorilla XOR",
         "run-length encoding",
         "simple-8b",
-        "columnar storage",
         "dictionary compression",
+        "PostgreSQL",
         "pglz",
-        "LZ4"
+        "lz4"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "TimescaleDB 的压缩与 PostgreSQL 的 TOAST 机制解决不同问题：TOAST 处理单行大字段，hypercore 优化时序数据的跨行模式，两者互补。",
-      "Hypercore 引擎将旧数据分块按每批最多 1000 行分组，每组在压缩表中变成一行，列以数组形式存储，采用列优先格式。",
-      "对时间戳和整数采用增量之增量编码，规律间隔时差值可为 0，用 simple-8b 打包为极少数比特位。",
-      "对重复值（如 machine_id、sensor_type）采用游程编码（RLE），将相同值的多次重复存储为\"值 + 计数\"。",
-      "对浮点数值采用基于 Gorilla 的 XOR 压缩，相邻值异或后仅保留中间的显著位，丢弃前导和尾随零。",
-      "segmentby 和 orderby 是压缩配置的关键参数：segmentby 按列分组使值共享于整个批次，orderby 按时间排序最大化增量编码优势，高基数 segmentby 会导致批次填充不足、压缩失效。"
+      "TimescaleDB 的 hypercore 引擎针对时间序列数据可实现最高 98% 的压缩率，与 PostgreSQL 通用 TOAST 机制解决的是不同层面的问题，两者互补而非竞争。",
+      "hypercore 是混合行列引擎：新数据以行格式存储（快速写入），旧 chunk 自动转为列式压缩格式，每批最多 1000 行合并为压缩表中的一行（列为数组）。",
+      "压缩算法按列类型自动选择：整数和时间戳用 delta-of-delta + simple-8b，浮点数用 Gorilla XOR，重复字符串用字典 + RLE，JSONB 用字典加 TOAST 回退。",
+      "segmentby 和 orderby 是最重要的配置参数，分别决定按什么列分批以及批次内排序方式，每个 segment 在单个 chunk 中至少需要 100 行才能保证有效压缩。",
+      "对于典型的时序范围扫描和聚合查询，列式压缩将 I/O 减少 10-20 倍从而显著加速；但单行点查和对已压缩 chunk 执行 UPDATE/DELETE 会变慢。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "TimescaleDB",
+        "canonical_name": "TimescaleDB",
+        "url": "https://www.timescale.com/",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "TimescaleDB 通过 hypercore 引擎对典型时间序列数据实现最高 98% 的压缩率，远超 PostgreSQL 原生 TOAST 的压缩能力。",
+          "TimescaleDB 的压缩是逐列类型的最佳算法选择——整数用 delta-of-delta，浮点用 Gorilla XOR，重复字符串用字典加 RLE。",
+          "segmentby 和 orderby 是 TimescaleDB 压缩最重要的配置参数，决定了分批方式和排序顺序，直接影响压缩率和查询性能。"
+        ],
+        "article_id": "41f1082fd0aba666"
+      },
+      {
+        "object_type": "project",
+        "name": "Hypercore Engine",
+        "canonical_name": "TimescaleDB hypercore",
+        "url": "https://www.timescale.com/",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "hypercore 是 TimescaleDB 内部的混合行列引擎，新数据以行格式写入，旧 chunk 自动转换为列式压缩格式。",
+          "hypercore 将行分组为每批最多 1000 行的 batch，每个 batch 在压缩表中成为单行，各列以压缩数组形式存储。",
+          "hypercore 引擎支持 delta-of-delta、Gorilla XOR、run-length encoding 和 dictionary compression 等多种专用压缩算法。"
+        ],
+        "article_id": "41f1082fd0aba666"
+      }
     ],
     "impact_score": {
       "score": 2.5,
@@ -573,7 +843,60 @@
       "compound": "medium",
       "hype": "high"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "TimescaleDB",
+        "canonical_name": "TimescaleDB",
+        "url": "https://www.timescale.com/",
+        "positioning": "TimescaleDB 是基于 PostgreSQL 的时间序列数据库，通过 hypercore 混合行列引擎对典型时序数据实现最高 98% 的压缩率。",
+        "target_users": [
+          "使用 PostgreSQL 构建时序监控与 IoT 分析系统的团队",
+          "需要长时间保留海量时间序列数据的开发和运维工程师"
+        ],
+        "product_signal": "hypercore 引擎按列类型自动选择最佳压缩算法，对整数和时间戳使用 delta-of-delta，对浮点数使用 Gorilla XOR，实现远超 TOAST 的压缩比。",
+        "differentiation": "与 PostgreSQL 通用 TOAST 机制解决不同层面问题，TOAST 压缩单行大值，hypercore 优化跨行时序模式，两者互补而非竞争。",
+        "watch_reason": "TimescaleDB 的 hypercore 混合行列引擎在 PostgreSQL 生态中实现了专用的时序数据压缩能力，其逐列算法选择和自动格式转换机制代表关系数据库向时序场景的重要扩展，值得持续关注。",
+        "risk_notes": [
+          "对已压缩 chunk 执行单行点查和 UPDATE/DELETE 操作会显著变慢，不适合需要频繁修改历史数据的场景。",
+          "每个 segment 在单个 chunk 中至少需要 100 行才能保证有效压缩率，小批量数据场景可能压缩效果不佳。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "41f1082fd0aba666"
+        ],
+        "evidence_snippets": [
+          "TimescaleDB 通过 hypercore 引擎对典型时间序列数据实现最高 98% 的压缩率，远超 PostgreSQL 原生 TOAST 的压缩能力。",
+          "TimescaleDB 的压缩是逐列类型的最佳算法选择——整数用 delta-of-delta，浮点用 Gorilla XOR，重复字符串用字典加 RLE。",
+          "segmentby 和 orderby 是 TimescaleDB 压缩最重要的配置参数，决定了分批方式和排序顺序，直接影响压缩率和查询性能。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Hypercore Engine",
+        "canonical_name": "TimescaleDB hypercore",
+        "url": "https://www.timescale.com/",
+        "positioning": "TimescaleDB 内部的混合行列存储引擎，新数据以行格式写入以支持快速写入，旧 chunk 自动转换为列式压缩格式以优化存储和查询性能。",
+        "technical_signal": "hypercore 将行分组为每批最多 1000 行的 batch，每个 batch 在压缩表中成为单行，各列以压缩数组形式存储，支持高效列式扫描。",
+        "ecosystem_relevance": "hypercore 与 PostgreSQL 的 TOAST 机制互补而非竞争，组合使用可为 PostgreSQL 提供原生的时间序列列式压缩能力，填补了 PG 生态在时序场景的空白。",
+        "target_users": [],
+        "watch_reason": "hypercore 采用的混合行列设计和逐列专用压缩算法（delta-of-delta、Gorilla XOR、RLE、字典压缩）组合，是时间序列数据库存储层的先进技术实践，对理解时序数据存储与压缩技术演进趋势有重要参考价值。",
+        "risk_notes": [
+          "segmentby 和 orderby 参数配置不当会严重影响压缩效果和查询性能，需要用户理解数据特征才能优化。",
+          "转换后的列式格式对单行点查和 UPDATE/DELETE 操作不友好，不适用于需要频繁修改历史时序数据的负载。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "41f1082fd0aba666"
+        ],
+        "evidence_snippets": [
+          "hypercore 是 TimescaleDB 内部的混合行列引擎，新数据以行格式写入，旧 chunk 自动转换为列式压缩格式。",
+          "hypercore 将行分组为每批最多 1000 行的 batch，每个 batch 在压缩表中成为单行，各列以压缩数组形式存储。",
+          "hypercore 引擎支持 delta-of-delta、Gorilla XOR、run-length encoding 和 dictionary compression 等多种专用压缩算法。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -592,32 +915,102 @@
     "pipeline_stage": "fact_extracted",
     "id": "582e92cec3b22411",
     "source_type": "community_discussion",
-    "tldr": "作者Zachary Kai分享主动给陌生人发邮件的实践经历与感悟，探讨电子邮件在社交媒体时代的持久价值。",
-    "objective_summary": "Zachary Kai在Good Internet Magazine发表个人散文，回顾自己从犹豫到习惯向陌生人发送邮件的转变过程，过去一年已发出168封邮件。他介绍了电子邮件自1971年由Ray Tomlinson发明以来的54年历史，引用Lindy定律解释其持久性，",
+    "tldr": "作者Zachary Kai分享了他主动通过电子邮件联系陌生人的实践心得，认为这是一种比社交平台更有深度的交流方式，并给出了具体的联系原则和寻找对象的渠道建议。",
+    "objective_summary": "作者Zachary Kai在Good Internet Magazine上发表文章，讲述他主动通过电子邮件联系作家、开发者、博主等陌生人的经历与感悟。他认为电子邮件自1971年诞生以来持续存在，其非即时性允许交流按人的节奏进行，从而形成比社交平台更深的对话。他给出七条联系原则，包括将对方视为潜在朋友、事先了解对方背景、关注对方而非只关注自己、保持简洁、不主动索取、保持耐心以及重视邮件主题行。他推荐Derek Sivers、IndieWeb社区、32-Bit Café、Manu Moreale的People & Blogs访谈系列等作为寻找联系对象的渠道，截至写稿时已发送168封此类邮件。",
     "event_type": "application_landing",
     "epistemic_status": "theoretical_claim",
     "entities": {
-      "companies": [],
-      "technologies": [
-        "Email"
+      "companies": [
+        "Good Internet Magazine"
       ],
+      "technologies": [],
       "key_people": [
         "Zachary Kai",
         "Ray Tomlinson",
-        "Tim Berners-Lee",
         "Derek Sivers",
         "Manu Moreale",
-        "Blaise Pascal",
-        "Ava"
+        "Ava",
+        "Blaise Pascal"
       ]
     },
     "key_logic_flow": [
-      "作者Zachary Kai分享他从怯于向陌生人发邮件到主动实践的转变过程，过去一年间已累计发出168封邮件。",
-      "电子邮件自1971年Ray Tomlinson首次实现计算机间传输以来已有54年历史，作者引用Lindy定律——存在越久的事物预期寿命越长——解释其持久性。",
-      "作者认为电子邮件相比社交媒体具有持久、灵活、可存档的优势，且允许参与者以人的自然节奏进行有深度的交流。",
-      "作者提出了主动联系陌生人的核心原则：真诚关注对方作品、具体而非泛泛、以交朋友而非索取的姿态沟通。",
-      "作者建议通过Indieweb、32-Bit Café、Manu Moreale的People & Blogs访谈系列等渠道寻找愿意被联系的人。",
-      "作者认为主动发出邮件连接的核心意义在于跳出平台算法控制，建立属于自己的真实人际纽带。"
+      "作者介绍自己从恐惧犹豫到坚持给陌生人写邮件的经历，指出核心障碍是对未知反应的担忧和自我怀疑。",
+      "作者阐述电子邮件自1971年Ray Tomlinson发送第一封邮件以来持续存在，符合林迪定律，是一种经得起时间考验的通信方式。",
+      "作者认为电子邮件的非即时性是其最大优势，允许双方按自己的节奏回复，从而产生比即时消息更深度的对话。",
+      "作者给出七条联系陌生人的原则：将对方视为潜在朋友、事先了解对方背景、关注对方而非只关注自己、保持简洁但不失温和、不主动索取报酬、保持耐心与善意、重视邮件主题行。",
+      "作者推荐寻找联系对象的渠道包括Derek Sivers的公开邮箱、IndieWeb和32-Bit Café社区、以及Manu Moreale的People & Blogs访谈系列。",
+      "作者引用Ava的博客观点，指出在个人网站生态中电子邮件被视为受欢迎的交流方式，与社交平台上令人烦恼的私信截然不同。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "company",
+        "name": "Good Internet Magazine",
+        "canonical_name": "Good Internet Magazine",
+        "url": "https://www.goodinternetmagazine.com",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "文章发表于Good Internet Magazine，作者在其中分享通过电子邮件主动联系陌生人的个人心得与实践方法。"
+        ],
+        "article_id": "582e92cec3b22411"
+      },
+      {
+        "object_type": "project",
+        "name": "IndieWeb",
+        "canonical_name": "IndieWeb",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者推荐IndieWeb社区作为寻找可联系对象的来源，该社区汇集了大量喜欢在线创作并乐于被联系的人。"
+        ],
+        "article_id": "582e92cec3b22411"
+      },
+      {
+        "object_type": "project",
+        "name": "32-Bit Café",
+        "canonical_name": "32-Bit Café",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者推荐32-Bit Café作为寻找可联系对象的来源，该社区汇集了大量喜欢在线创作并乐于被联系的人。"
+        ],
+        "article_id": "582e92cec3b22411"
+      },
+      {
+        "object_type": "project",
+        "name": "People & Blogs",
+        "canonical_name": "People & Blogs",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Manu Moreale运营的People & Blogs访谈系列采访在个人网站上写作的人，受访者通常公开自己的电子邮箱地址以供联系。"
+        ],
+        "article_id": "582e92cec3b22411"
+      },
+      {
+        "object_type": "project",
+        "name": "zacharykai.net",
+        "canonical_name": "zacharykai.net",
+        "url": "https://zacharykai.net",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "作者的网站zacharykai.net展示其身份为科幻小说作家、zine创作者和技能收集者，网站是其网络生活的核心载体。"
+        ],
+        "article_id": "582e92cec3b22411"
+      },
+      {
+        "object_type": "project",
+        "name": "Ava's Blog",
+        "canonical_name": "Ava's Blog",
+        "confidence": "low",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Ava在其博客上发表文章《some things to (un)learn》，讨论个人网站生态中电子邮件的交流规范，认为在这里发邮件不是骚扰而是受欢迎的行为。"
+        ],
+        "article_id": "582e92cec3b22411"
+      }
     ],
     "impact_score": {
       "score": 1.2,
@@ -662,7 +1055,67 @@
       "compound": "low",
       "hype": "low"
     },
-    "actionable_insight": "speculative_watch"
+    "actionable_insight": "speculative_watch",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "IndieWeb",
+        "canonical_name": "IndieWeb",
+        "positioning": "倡导个人网站独立拥有与去中心化表达的全球性社区，鼓励创作者脱离社交平台建立自主在线身份。",
+        "ecosystem_relevance": "作为个人网站生态的核心力量，IndieWeb所倡导的独立网站理念与电子邮件文化天然契合，为深度交流提供了去平台化基础设施。",
+        "target_users": [],
+        "watch_reason": "IndieWeb社区成员是作者实践陌生人邮件联系的核心对象来源，该社区对去中心化交流方式的长期推动值得关注其对个人网站文化的影响。",
+        "risk_notes": [
+          "文章仅将IndieWeb作为联系对象渠道提及，未涉及社区发展动态或具体项目进展，跟踪依据有限。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "582e92cec3b22411"
+        ],
+        "evidence_snippets": [
+          "作者推荐IndieWeb社区作为寻找可联系对象的来源，该社区汇集了大量喜欢在线创作并乐于被联系的人。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "32-Bit Café",
+        "canonical_name": "32-Bit Café",
+        "positioning": "汇集独立创作者的在线社区，成员热爱网络创作并欢迎他人主动联系，是发现志同道合者的优质渠道。",
+        "ecosystem_relevance": "作为独立网站生态中的社区节点，32-Bit Café为创作者提供了去中心化的交流空间，与邮件联系文化高度契合。",
+        "target_users": [],
+        "watch_reason": "32-Bit Café代表了一种小规模、高密度的独立创作者聚集模式，其成员乐于被联系的文化为深度人际连接提供了独特土壤。",
+        "risk_notes": [
+          "文章仅将32-Bit Café作为联系对象渠道提及，缺乏关于社区规模、活跃度或影响力的具体信息。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "582e92cec3b22411"
+        ],
+        "evidence_snippets": [
+          "作者推荐32-Bit Café作为寻找可联系对象的来源，该社区汇集了大量喜欢在线创作并乐于被联系的人。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "People & Blogs",
+        "canonical_name": "People & Blogs",
+        "positioning": "Manu Moreale运营的个人网站访谈系列，采访在独立网站上写作的创作者，受访者通常公开邮箱乐于接受联系。",
+        "ecosystem_relevance": "通过系统性地采访个人网站创作者并公开其联系方式，People & Blogs为独立网站生态提供了可发现性和人际连接桥梁。",
+        "target_users": [],
+        "watch_reason": "该访谈系列以策展方式连接个人网站创作者，为陌生人邮件联系提供了精准的可联系对象清单，这种内容模式对独立创作者生态具有独特价值。",
+        "risk_notes": [
+          "该访谈系列由个人运营，可持续性和更新频率存在不确定性。",
+          "文章仅将其作为联系渠道提及，未涉及访谈项目的覆盖范围或影响力数据。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "582e92cec3b22411"
+        ],
+        "evidence_snippets": [
+          "Manu Moreale运营的People & Blogs访谈系列采访在个人网站上写作的人，受访者通常公开自己的电子邮箱地址以供联系。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -771,8 +1224,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "72c805579f21b6e8",
     "source_type": "community_discussion",
-    "tldr": "Anthropic 推出 Claude Corps 全国奖学金项目，投入 1.5 亿美元培训 1000 名青年，配备至全美非营利组织使用 Claude 一年。",
-    "objective_summary": "Anthropic 于 2026 年 6 月宣布启动 Claude Corps 全国奖学金项目。该项目联合 CodePath 和 Social Finance，投入 1.5 亿美元培训 1000 名早期职业青年熟练掌握 Claude，并派遣他们全职入驻全美 400 多家非营利组织工作 12 个月，",
+    "tldr": "Anthropic 宣布启动 Claude Corps 全国奖学金项目，投入 1.5 亿美元，招募 1,000 名早期职业人士，培训其使用 Claude 并在全美 400 多家非营利组织全职服务一年。",
+    "objective_summary": "Anthropic 于 2026 年 7 月宣布推出 Claude Corps 全国奖学金项目，联合 CodePath 和 Social Finance 共同运营。Anthropic 初始出资 1.5 亿美元，招募 1,000 名早期职业人士，提供密集的 Claude 使用培训后匹配至全美至少 400 家非营利组织，开展为期 12 个月的全职服务。奖学金获得者年薪 85,000 美元加福利，每周接受 5 小时持续培训。首批 100 人于 2026 年 10 月启动，申请于 2026 年 7 月 17 日截止，后续两批分别在 2027 年 1 月和 8 月开始。",
     "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
@@ -783,18 +1236,14 @@
         "Braven",
         "Code the Dream",
         "Heartland Forward",
-        "Montgomery County Food Bank",
-        "Team Red, White & Blue",
-        "Reef Environmental Education Foundation",
-        "SoundOff",
-        "StriveTogether",
-        "YMCA of Greater Charlotte",
         "Goodwill Industries International",
         "RAINN",
-        "MyFriendBen",
-        "Year Up United",
+        "YMCA of Greater Charlotte",
+        "Team Red, White & Blue",
         "Code for America",
-        "PCV"
+        "Year Up United",
+        "StriveTogether",
+        "International Rescue Committee"
       ],
       "technologies": [
         "Claude"
@@ -802,12 +1251,40 @@
       "key_people": []
     },
     "key_logic_flow": [
-      "Anthropic 宣布启动 Claude Corps 全国奖学金项目，投入 1.5 亿美元，面向早期职业青年。",
-      "项目目标为培训 1000 名学员掌握 Claude 使用技能，匹配至全美非营利组织全职工作 12 个月。",
-      "学员年薪为 8.5 万美元并提供福利，每周接受 5 小时持续培训，由 Anthropic 和 CodePath 提供技术支持和导师指导。",
-      "项目由 Anthropic 出资并主导战略，CodePath 担任官方雇主，Social Finance 负责评估与规模化金融工具。",
-      "首批 100 个名额于 2026 年 10 月启动，后续批次于 2027 年 1 月和 8 月启动，滚动开放申请至 2026 年 7 月 17 日。",
-      "Anthropic 计划将项目规模扩大至超过 1000 人，并开源核心技术基础设施，以推动其他国家复制类似模式。"
+      "Anthropic 宣布启动 Claude Corps 全国奖学金项目，承诺初始投入 1.5 亿美元。",
+      "项目计划招募 1,000 名早期职业人士，提供密集的 Claude 培训后，匹配到全美至少 400 家非营利组织全职服务一年。",
+      "奖学金获得者将获得年薪 85,000 美元及福利，每周接受 5 小时持续培训，配有可观的 Claude 代币预算和导师支持。",
+      "项目由 Anthropic 出资并主导战略，CodePath 担任奖学金获得者的正式雇主，Social Finance 负责评估与规模化金融方案。",
+      "首批 100 人的申请截止于 2026 年 7 月 17 日，于 2026 年 10 月开始；后续两批分别于 2027 年 1 月和 8 月启动。",
+      "Anthropic 计划开源项目的核心技术基础设施，并将探索在美国以外复制该模式的可行性。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "Claude Corps",
+        "canonical_name": "Claude Corps",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Anthropic 宣布投入 1.5 亿美元启动 Claude Corps 奖学金项目，招募 1,000 名早期职业人士在全美非营利组织服务一年。",
+          "Anthropic 将出资并主导战略，CodePath 担任奖学金获得者的正式雇主，Social Finance 负责评估与规模化金融方案。",
+          "首批 100 名奖学金获得者将于 2026 年 10 月开始服务，后续两批分别在 2027 年 1 月和 8 月启动。"
+        ],
+        "article_id": "72c805579f21b6e8"
+      },
+      {
+        "object_type": "product",
+        "name": "Claude",
+        "canonical_name": "Claude",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "奖学金获得者将接受 Anthropic 和 CodePath 提供的密集培训，学习如何在非营利场景中使用 Claude。",
+          "每位奖学金获得者拥有可观的 Claude 代币预算，并可获得 Anthropic 的技术办公室支持。"
+        ],
+        "article_id": "72c805579f21b6e8"
+      }
     ],
     "impact_score": {
       "score": 5.0,
@@ -863,7 +1340,34 @@
       "compound": "medium",
       "hype": "high"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Claude Corps",
+        "canonical_name": "Claude Corps",
+        "positioning": "Anthropic 发起的全国性奖学金项目，投入 1.5 亿美元培养 1,000 名早期职业人士使用 Claude，在全美非营利组织全职服务一年。",
+        "technical_signal": "项目提供系统性 Claude 使用培训，包括岗前密集训练和每周 5 小时持续培训，配合可观的 Claude 代币预算和 Anthropic 技术支持。",
+        "adoption_signal": "计划招募 1,000 名奖学金获得者，首批 100 人于 2026 年 10 月启动，后续两批分别在 2027 年 1 月和 8 月开始，已公布至少 9 家非营利合作组织。",
+        "ecosystem_relevance": "Anthropic 联合 CodePath 和 Social Finance 建立三方运营模式，为至少 400 家非营利组织引入 AI 人才和能力，拓展 Claude 在社会影响领域的应用生态系统。",
+        "target_users": [],
+        "watch_reason": "Claude Corps 是 AI 公司直接投入社会影响和劳动力转型的标志性项目，1.5 亿美元初始投入在行业内罕见。其规模化模式可能成为 AI 经济下企业社会责任的范本，值得持续跟踪项目执行效果、对非营利 AI 采纳的催化作用以及国际复制进展。",
+        "risk_notes": [
+          "1.5 亿美元初始投入规模巨大，项目效果在 12 个月服务期后的可持续性尚需验证。",
+          "三方协作运营增加管理复杂度，奖学金获得者与 400 多家非营利组织的匹配质量直接影响项目成效。",
+          "当前仅覆盖美国本土，国际复制的可行性和时间表尚不明确。"
+        ],
+        "score": 8.0,
+        "article_ids": [
+          "72c805579f21b6e8"
+        ],
+        "evidence_snippets": [
+          "Anthropic 宣布投入 1.5 亿美元启动 Claude Corps 奖学金项目，招募 1,000 名早期职业人士在全美非营利组织服务一年。",
+          "Anthropic 将出资并主导战略，CodePath 担任奖学金获得者的正式雇主，Social Finance 负责评估与规模化金融方案。",
+          "首批 100 名奖学金获得者将于 2026 年 10 月开始服务，后续两批分别在 2027 年 1 月和 8 月启动。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -882,33 +1386,87 @@
     "pipeline_stage": "fact_extracted",
     "id": "7876a45e594cef3e",
     "source_type": "community_discussion",
-    "tldr": "求职面试发现所有公司都上K8s，原因是组织管理收益而非技术需求",
-    "objective_summary": "作者通过近期求职面试与多家公司CTO交流，发现几乎所有公司（包括10人规模初创企业）都已采用Kubernetes。CTO们选择K8s的主要原因并非技术需求，而是其带来的部署统一性、知识标准化、操作可追溯性等组织管理优势。",
+    "tldr": "作者通过求职面试发现几乎所有公司都已采用 Kubernetes，但 CTO 们选择 K8s 的核心原因是组织收益而非技术需求：部署统一性、知识标准化和 GitOps 可追溯性。作者建议初创公司在团队超过两人后才引入 K8s。",
+    "objective_summary": "作者在近期求职面试中与十余家公司的工程团队交流，发现所有公司都已迁移到 Kubernetes。通过直接询问 CTO，作者了解到他们采用 K8s 的核心驱动力是组织层面的优势：统一所有服务的部署方式、将运维知识以 YAML 形式标准化存储在 Git 仓库中便于人员交接、以及通过 GitOps 工作流实现变更可追溯性以通过合规审计。作者认为 K8s 解决了多人团队中知识留存和权限管理的真实痛点，但建议只有一名工程师的初创公司仍应使用 VPS 加 git pull 的简单方案，将精力集中在产品开发上。",
     "event_type": "infrastructure_update",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
         "Kubernetes",
+        "K8s",
         "Helm",
+        "GitOps",
         "FluxCD",
         "ArgoCD",
+        "systemd",
+        "Docker Compose",
         "EKS",
         "GKE",
-        "AKS",
-        "Docker Compose",
-        "systemd",
-        "GitOps"
+        "AKS"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "作者对比五年前和现在的求职经历，发现几乎所有公司都已迁移到Kubernetes，而五年前还有VM/systemd和Serverless两大阵营与之共存。",
-      "CTO们选择K8s的首要原因是部署统一性：所有服务用同一方式部署，不再有某些服务跑在裸VM上另一些跑在Docker Compose上的混乱局面。",
-      "K8s带来可雇佣的标准化知识：新员工通过Helm charts和Kube配置可在一小时内掌握系统架构，知识沉淀在YAML中而非个人脑中，人员更替时无需长时间交接。",
-      "GitOps（FluxCD/ArgoCD）天然结合K8s实现操作可追溯性：所有变更通过Helm chart提交到git，经MR审批后自动部署，不存在暗箱操作，合规审计自然通过。",
-      "作者认为大多数公司应从无K8s起步，在只有CTO一人时git pull式的应急方案更快捷，团队成员超过两人后才值得引入K8s解决组织和知识共享问题。",
-      "作者推测K8s近年普及的原因包括：托管K8s服务（EKS/GKE/AKS）成熟、人才池翻转（懂K8s的人足够多使得招非K8s人才更难）、Helm降低了使用门槛。"
+      "作者在求职面试中发现五年前还存在 K8s 用户、VM+systemd 和 Serverless 三大阵营，而现在所有接受面试的公司都已迁移到 Kubernetes。",
+      "CTO 们选择 K8s 的首要原因是部署统一性——所有服务用同一种方式部署，不再依赖个别工程师的记忆或遗留脚本。",
+      "第二个原因是知识标准化：K8s 配置以 YAML 形式存放在版本仓库中，新员工通过 Helm charts 能在一小时内理解整体架构，人员离职不会带走关键运维知识。",
+      "第三个原因是可追溯性：通过 GitOps 工作流将 Helm chart 推送至 Git 并经过代码审查，再由 FluxCD 或 ArgoCD 自动部署，所有变更都有审计记录，便于通过 ISO 等合规认证。",
+      "作者建议大多数公司在团队超过两人（CTO 不再是唯一工程师）时才引入 Kubernetes，在此之前使用 VPS 加 git pull 的方式更简单可控。",
+      "作者推测 K8s 近期被广泛采用的原因包括托管 K8s 服务（EKS、GKE、AKS）的成熟以及人才池的翻转——足够多人学习了 K8s，以至于招聘其他技能反而更难。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "Kubernetes",
+        "canonical_name": "Kubernetes",
+        "url": "https://kubernetes.io",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "文章指出所有被采访的公司都已使用 Kubernetes 来部署服务，而五年前 K8s 还只是少数公司的选择。",
+          "CTO 们选择 Kubernetes 的主要原因是组织层面的好处，包括部署统一性、知识标准化和基于 GitOps 的变更可追溯性。"
+        ],
+        "article_id": "7876a45e594cef3e"
+      },
+      {
+        "object_type": "project",
+        "name": "Helm",
+        "canonical_name": "Helm",
+        "url": "https://helm.sh",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者提到入职后通过查看 Helm charts 和 Kubernetes 配置，能在一小时内掌握整个系统架构。",
+          "作者所在公司通过将 Helm chart 推送至 Git 仓库并经过代码审查后，由 CD 工具自动完成部署。"
+        ],
+        "article_id": "7876a45e594cef3e"
+      },
+      {
+        "object_type": "project",
+        "name": "FluxCD",
+        "canonical_name": "FluxCD",
+        "url": "https://fluxcd.io",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者提到在公司中 Helm chart 经过代码审查后，由 FluxCD 或 ArgoCD 处理实际的部署执行。"
+        ],
+        "article_id": "7876a45e594cef3e"
+      },
+      {
+        "object_type": "project",
+        "name": "ArgoCD",
+        "canonical_name": "ArgoCD",
+        "url": "https://argo-cd.readthedocs.io",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者提到在公司中 Helm chart 经过代码审查后，由 FluxCD 或 ArgoCD 处理实际的部署执行。"
+        ],
+        "article_id": "7876a45e594cef3e"
+      }
     ],
     "impact_score": {
       "score": 2.5,
@@ -966,7 +1524,96 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Kubernetes",
+        "canonical_name": "Kubernetes",
+        "url": "https://kubernetes.io",
+        "positioning": "业界标准的容器编排平台，提供跨环境的部署统一性、知识标准化和变更可追溯性等组织级收益，已成为现代云基础设施的事实标准。",
+        "technical_signal": "托管Kubernetes服务（EKS、GKE、AKS）已成熟稳定，使中小团队无需自建集群即可享受K8s带来的组织收益。",
+        "adoption_signal": "作者在求职面试中发现所有受访公司均已迁移到Kubernetes，VM加systemd阵营已基本消失，K8s成为招聘市场的默认技能要求。",
+        "ecosystem_relevance": "K8s生态中的Helm、ArgoCD、FluxCD等工具链与GitOps工作流深度绑定，共同构建了可审计、可追溯的现代化部署体系。",
+        "target_users": [],
+        "watch_reason": "K8s正从技术基础设施演变为组织管理工具，其部署统一性、知识标准化和GitOps可追溯性三大组织收益正在驱动新一轮广泛采用，改变了云原生基础设施选型的决策逻辑。",
+        "risk_notes": [
+          "K8s集群调试复杂度高，初创公司在团队规模较小时引入可能带来过高的运维负担和认知开销，分散产品开发精力。"
+        ],
+        "score": 8.0,
+        "article_ids": [
+          "7876a45e594cef3e"
+        ],
+        "evidence_snippets": [
+          "文章指出所有被采访的公司都已经使用 Kubernetes 来部署服务，而五年前 K8s 还只是少数公司的选择而已。",
+          "CTO 们选择 Kubernetes 的主要原因是组织层面的好处，包括部署统一性、知识标准化和基于 GitOps 的变更可追溯性。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Helm",
+        "canonical_name": "Helm",
+        "url": "https://helm.sh",
+        "positioning": "Kubernetes 的包管理工具，通过 Chart 标准化应用配置的分发与管理流程，有效降低团队使用和运维 K8s 的门槛。",
+        "technical_signal": "Helm Charts将K8s配置以标准化格式存放在版本仓库中，新员工通过查阅Chart能在一小时内了解整体架构，显著缩短上手时间。",
+        "ecosystem_relevance": "Helm与ArgoCD、FluxCD等GitOps工具紧密集成，通过Chart推送触发自动化部署审查流程，构成K8s配置即代码的核心工作流。",
+        "target_users": [],
+        "watch_reason": "Helm作为K8s生态中标准化配置分发的事实标准，其Chart模式使团队无需从零编写配置即可快速部署应用，是推动K8s被广大团队广泛采用的重要助推因素之一。",
+        "risk_notes": [
+          "过度依赖第三方Helm Chart可能导致版本兼容问题和安全隐患，需要团队持续维护与审计。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "7876a45e594cef3e"
+        ],
+        "evidence_snippets": [
+          "作者入职后通过查看 Helm charts 和 Kubernetes 配置文件，能在一小时内完全了解整个系统的架构设计和部署方式。",
+          "作者所在公司通过将 Helm chart 推送至 Git 仓库并经过代码审查审批后，由 FluxCD 或 ArgoCD 工具自动完成实际的部署执行任务。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "FluxCD",
+        "canonical_name": "FluxCD",
+        "url": "https://fluxcd.io",
+        "positioning": "基于 GitOps 理念的 Kubernetes 持续部署工具，通过自动同步 Git 仓库中的配置变更至集群，实现声明式部署管理。",
+        "technical_signal": "FluxCD能够监听Git仓库中Helm Chart的变更，在代码审查通过后自动完成集群部署同步，实现声明式持续交付。",
+        "ecosystem_relevance": "FluxCD与Helm和Git工作流深度集成，是K8s GitOps生态中的重要持续部署工具选项之一。",
+        "target_users": [],
+        "watch_reason": "作为K8s GitOps工作流的核心持续部署组件之一，FluxCD与Helm的紧密集成模式代表了声明式部署的重要发展方向与技术路径，其自动化同步机制值得持续跟踪与评估。",
+        "risk_notes": [
+          "自动同步机制可能在缺乏充分测试的情况下将配置变更直接推入生产环境，需配合完善的CI流水线和审批流程。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "7876a45e594cef3e"
+        ],
+        "evidence_snippets": [
+          "作者在公司中将 Helm chart 推送至 Git 仓库，经过代码审查和团队批准合并后，由 FluxCD 自动完成实际的部署执行。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "ArgoCD",
+        "canonical_name": "ArgoCD",
+        "url": "https://argo-cd.readthedocs.io",
+        "positioning": "基于 GitOps 理念的 Kubernetes 持续部署工具，以应用为中心管理多集群的配置同步与状态一致性。",
+        "technical_signal": "ArgoCD能够监听Git仓库中Helm Chart的变更，在代码审查通过后自动完成集群部署同步，实现声明式持续交付。",
+        "ecosystem_relevance": "ArgoCD与Helm和Git工作流深度集成，是K8s GitOps生态中的重要持续部署工具选项之一。",
+        "target_users": [],
+        "watch_reason": "ArgoCD作为K8s GitOps工作流的主流持续部署工具之一，与FluxCD共同构成GitOps部署的两大核心方案，其以应用为中心的管理模式和多集群原生支持能力值得持续跟踪与评估。",
+        "risk_notes": [
+          "多集群管理场景下配置复杂度较高，小团队在引入前需评估运维成本是否超过实际收益。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "7876a45e594cef3e"
+        ],
+        "evidence_snippets": [
+          "作者在公司中将 Helm chart 推送至 Git 仓库，经过代码审查和团队批准合并后，由 ArgoCD 自动完成实际的部署执行。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -985,15 +1632,14 @@
     "pipeline_stage": "fact_extracted",
     "id": "8efceb5be72f3a1d",
     "source_type": "community_discussion",
-    "tldr": "Salesforce 以 36 亿美元收购 AI 客服公司 Fin（原 Intercom）。",
-    "objective_summary": "2026 年 6 月 15 日，Salesforce 宣布以约 36 亿美元收购客户代理公司 Fin（原 Intercom）。Fin 的 AI Agent 基于自研 Apex 模型，可端到端解决复杂客服查询，服务超过 3 万客户。交易预计在 Salesforce 2027 财年第四季度完成。",
+    "tldr": "Salesforce 以约 36 亿美元收购 Fin（原 Intercom），将其 AI 客服代理平台与自研模型 Apex 纳入 Agentforce 生态，加速企业级自主代理在各规模客户中的部署。Fin 的 AI Agent 平均自主解决 76% 的支持工单，覆盖实时聊天、邮件、WhatsApp、短信、电话和 Slack 等多个渠道。",
+    "objective_summary": "2026 年 6 月 15 日，Salesforce 宣布签署最终协议，以约 36 亿美元收购客户代理公司 Fin（原 Intercom）。Fin 的核心产品是其 AI Agent，基于自研模型 Apex，可在实时聊天、邮件、WhatsApp、短信、电话和 Slack 等多个渠道端到端解决复杂客户查询，已实现平均自主解决 76% 支持工单的成果。收购完成后，Fin 将补充 Salesforce 的 Agentforce 平台，为中小企业提供快速部署选项。该交易预计在 Salesforce 2027 财年第四季度完成，不影响其资本回报计划。",
     "event_type": "capital_movement",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
         "Salesforce",
-        "Fin",
-        "Intercom"
+        "Fin"
       ],
       "technologies": [
         "AI Agent",
@@ -1006,11 +1652,50 @@
       ]
     },
     "key_logic_flow": [
-      "Salesforce 于 2026 年 6 月 15 日宣布签署最终协议，以约 36 亿美元收购 Fin（原 Intercom）。",
-      "Fin 的核心产品是其 AI Agent，使用自研 Apex 模型，可在实时聊天、邮件、WhatsApp、短信、电话和 Slack 等多渠道端到端解决复杂客户查询。",
-      "Fin 的 AI Agent 已实现平均自动解决 76% 的客服工单量，服务于超过 3 万家企业客户。",
-      "此次收购将补充 Salesforce 的 Agentforce 平台（Q1 FY27 ARR 达 12 亿美元，同比增长 205%），为中小企业提供快速部署的 AI 客服方案。",
-      "交易预计在 Salesforce 2027 财年第四季度完成，不会影响其 2027 财年财务指引和资本回报计划。"
+      "Salesforce 宣布以约 36 亿美元收购 Fin（原 Intercom），交易预计在 Salesforce 2027 财年第四季度完成。",
+      "Fin 的核心产品是其 AI Agent，基于自研模型 Apex，可在实时聊天、邮件、WhatsApp、短信、电话和 Slack 等多个渠道端到端解决复杂客户查询。",
+      "Fin 的 AI Agent 已展示出平均自主解决 76% 支持工单的客户成果，其性能优于市面上的前沿商业模型。",
+      "Agentforce 在 2027 财年第一季度达到 12 亿美元年经常性收入（ARR），同比增长 205%。",
+      "Fin 的技术将补充 Agentforce 平台，为服务组织提供快速部署选项，尤其适合需要快速启动的中小企业。",
+      "Fin 拥有超过 30,000 家企业的全球客户基础和经验丰富的 AI 技术团队，加入 Salesforce 后有望加速 AI 代理在各规模企业中的部署。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "Fin AI Agent",
+        "canonical_name": "Fin AI Agent",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Fin 的核心产品是其 AI Agent，可在实时聊天、邮件、WhatsApp、短信、电话和 Slack 等多个渠道端到端解决复杂客户查询。",
+          "该 AI Agent 基于自研模型 Apex，已展示出平均自主解决 76% 支持工单的客户成果，性能优于市面上的前沿商业模型。"
+        ],
+        "article_id": "8efceb5be72f3a1d"
+      },
+      {
+        "object_type": "model",
+        "name": "Apex",
+        "canonical_name": "Apex",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Fin 的 AI Agent 由公司自研的 AI 模型 Apex 驱动，该模型专为客服场景设计，已展示出行业领先的问题解决率。"
+        ],
+        "article_id": "8efceb5be72f3a1d"
+      },
+      {
+        "object_type": "product",
+        "name": "Agentforce",
+        "canonical_name": "Agentforce",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "Agentforce 在 2027 财年第一季度达到 12 亿美元年经常性收入（ARR），同比增长 205%。",
+          "Fin 的打包产品与自研模型将补充 Agentforce 平台，为服务组织提供额外快速部署选项，尤其适合需要快速启动的中小企业。"
+        ],
+        "article_id": "8efceb5be72f3a1d"
+      }
     ],
     "impact_score": {
       "score": 6.8,
@@ -1067,7 +1752,38 @@
       "compound": "medium",
       "hype": "medium"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "Fin AI Agent",
+        "canonical_name": "Fin AI Agent",
+        "positioning": "Salesforce 以 36 亿美元收购的多渠道 AI 客服代理平台，基于自研模型 Apex 端到端解决客户查询，将融入 Agentforce 生态加速企业级自主代理部署。",
+        "target_users": [
+          "中小企业（SMB）",
+          "商业组织",
+          "企业服务团队"
+        ],
+        "product_signal": "AI Agent 已实现平均自主解决 76% 支持工单的成果，覆盖实时聊天、邮件、WhatsApp、短信、电话和 Slack 七个渠道。",
+        "market_signal": "Salesforce 以约 36 亿美元完成收购，Agentforce 同期达 12 亿美元 ARR 同比增长 205%，Fin 拥有超 3 万家企业客户基础。",
+        "differentiation": "基于专为客服场景构建的自研模型 Apex，性能优于前沿商业模型，并提供比 Agentforce 更快速的打包部署选项。",
+        "watch_reason": "作为 Salesforce 以 36 亿美元高价收购的 AI 客服代理，Fin 的 76% 自主解决率代表行业标杆水平，其整合后的产品路线图将深刻影响企业级 AI 客服市场竞争格局，值得持续跟踪。",
+        "risk_notes": [
+          "收购整合存在不确定性，Fin 与 Agentforce 的客服代理功能可能重叠，需关注产品路线图调整方向。",
+          "36 亿美元的高估值能否通过后续增长兑现，取决于 Fin 客户在 Salesforce 生态中的留存率和交叉销售效果。"
+        ],
+        "score": 9.0,
+        "article_ids": [
+          "8efceb5be72f3a1d"
+        ],
+        "evidence_snippets": [
+          "Fin 的核心产品是其 AI Agent，可在实时聊天、邮件、WhatsApp、短信、电话和 Slack 等多个渠道端到端解决复杂客户查询。",
+          "该 AI Agent 基于自研模型 Apex，已展示出平均自主解决 76% 支持工单的客户成果，性能优于市面上的前沿商业模型。",
+          "Agentforce 在 2027 财年第一季度达到 12 亿美元年经常性收入（ARR），同比增长 205%。",
+          "Salesforce 宣布以约 36 亿美元收购 Fin（原 Intercom），交易预计在 Salesforce 2027 财年第四季度完成。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -1086,31 +1802,121 @@
     "pipeline_stage": "fact_extracted",
     "id": "91a724440e894f1b",
     "source_type": "community_discussion",
-    "tldr": "开发者分享用本地 Qwen 3.6 等模型替代 Claude/GPT 进行日常编码的经验、性能对比和设置方案。",
-    "objective_summary": "多位开发者在 Hacker News 讨论中分享了使用本地模型（Qwen 3.6 35B-A3B 为主）替代 Claude/GPT 作为日常编码工具的实践，硬件配置包括 Mac Studio 128GB 和 Strix Halo 128GB 统一内存，涉及 Pi",
-    "event_type": "application_landing",
+    "tldr": "Hacker News 用户分享使用本地模型（如 Qwen 3.6 35B-A3B、Qwen 3.5 122B-A10B）替代 Claude/GPT 进行日常编码的经验，主要使用 Pi 编码工具链配合 llama.cpp 在 Mac Studio 或 Strix Halo 等本地硬件上运行，在完全免费和保障数据隐私的前提下获得约 5 倍于人工的编码加速，但需要用户精确指引，效果相当于需引导的初级开发者。",
+    "objective_summary": "2026 年 7 月 21 日，Hacker News 讨论帖中多名开发者分享了用本地大模型替代云端 Claude/GPT 作为日常编码工具的实际经验。用户使用 Pi 编码工具链（容器化沙箱隔离）配合 llama.cpp 推理引擎，在 Mac Studio（128GB RAM）或 Strix Halo（128GB 统一内存）等本地硬件上运行 Qwen 3.6 35B-A3B（3B 活跃参数，55 tok/s）或 Qwen 3.5 122B-A10B（10B 活跃参数，30 tok/s）等混合专家模型。讨论涉及 KV 缓存管理、推理轨迹保留、编辑工具调用错误循环等技术问题，以及本地模型在代码架构决策和复杂推理方面与前沿闭源模型的差距。",
+    "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
-      "companies": [],
+      "companies": [
+        "Anthropic",
+        "OpenAI",
+        "Google"
+      ],
       "technologies": [
-        "Qwen 3.6 35B-A3B",
-        "Qwen 3.5 122B-A10B",
-        "Gemma 4 31B",
-        "llama.cpp",
+        "KV Cache",
+        "MTP",
         "ROCm",
         "Vulkan",
-        "Pi coding harness",
-        "MTP"
+        "llama.cpp",
+        "Qwen 3.6",
+        "Qwen 3.5",
+        "Gemma 4",
+        "Sliding Window Attention",
+        "Mamba-2"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "多位开发者分享了使用本地大模型替代 Claude/GPT 的经验，主流选择是 Qwen 3.6 35B-A3B，在 Mac Studio 128GB 或 Strix Halo 128GB 统一内存设备上运行。",
-      "本地模型的优势是免费且完全离线保护数据隐私，但需要用户精确描述需求，不会主动思考架构问题，容易陷入循环和编辑工具调用错误。",
-      "对比 Claude Opus，Qwen 3.6 35B 带来的效率提升从 15 倍降至 5 倍，但完全免费；Qwen 3.6 27B 速度虽慢 3 倍但整体开发完成效率更高。",
-      "Qwen 混合模型早期不支持 preserving thinking，导致每轮对话需重新处理完整上下文；Qwen 3.6 已支持该功能，显著改善 KV 缓存复用。",
-      "llama.cpp 中提示缓存失效问题部分源于引擎 bug（如含图片的轮次前不拍摄快照），以及 token 在自回归生成和预填充时解析不一致导致的缓存重计算。",
-      "有观点认为既然代码生产效率提升 10 倍，代码应被频繁重写而非期望持续数十年，接手者可借助 LLM 快速重建理解系统。"
+      "多位开发者已在日常编码中完全使用本地模型替代 Claude/GPT，主要动因是数据隐私和避免付费。",
+      "最受欢迎的本地模型组合是 Qwen 3.6 35B-A3B 配合 llama.cpp 推理引擎，在 128GB 统一内存设备上可达约 55 tok/s 的推理速度。",
+      "本地模型在需要精确指引和架构决策能力方面明显弱于 Claude Opus，前者相当于需引导的初级开发者，后者相当于能协同思考架构的高级开发者。",
+      "本地推理面临的核心技术挑战包括 KV 缓存管理、推理轨迹跨轮次保留以及编辑工具调用错误后陷入循环等问题。",
+      "Qwen 3.6 开始支持 preserve_thinking（保留推理轨迹），可减少长代理流程中每轮对话的上下文重新计算开销。",
+      "Pi 编码工具链是最常用的本地编码 harness，需搭配容器化沙箱隔离并在 model 配置中启用 preserve_thinking 等参数以获得最佳效果。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "Pi coding harness",
+        "canonical_name": "Pi",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "多位用户使用 Pi 编码工具链（容器化沙箱隔离）作为本地模型的编码 harness，并讨论其在编辑工具调用方面的表现。",
+          "Pi 是目前本地编码场景中最常用的 harness，但它缺失计划模式、子代理和 MCP 客户端支持等功能。"
+        ],
+        "article_id": "91a724440e894f1b"
+      },
+      {
+        "object_type": "project",
+        "name": "llama.cpp",
+        "canonical_name": "llama.cpp",
+        "url": "https://github.com/ggerganov/llama.cpp",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "用户将 llama.cpp 部署在独立容器中作为推理引擎，与 Pi 编码 harness 容器配合使用。",
+          "讨论涉及 llama.cpp 在 Vulkan 和 ROCm 后端下的性能对比，以及 KV 缓存和 prompt caching 方面的已知问题与上游修复。"
+        ],
+        "article_id": "91a724440e894f1b"
+      },
+      {
+        "object_type": "model",
+        "name": "Qwen 3.6 35B-A3B",
+        "canonical_name": "Qwen 3.6 35B-A3B",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Qwen 3.6 35B-A3B（3B 活跃参数）是多位用户首选的本地编码模型，在 128GB 统一内存设备上运行速度很快。",
+          "Qwen 3.6 开始支持 preserve_thinking 功能，可在代理流程中保留跨轮次的推理轨迹以减少上下文重新计算。"
+        ],
+        "article_id": "91a724440e894f1b"
+      },
+      {
+        "object_type": "model",
+        "name": "Qwen 3.5 122B-A10B",
+        "canonical_name": "Qwen 3.5 122B-A10B",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Qwen 3.5 122B-A10B（10B 活跃参数）用于处理更复杂的编码任务，推理速度约 30 tok/s，明显慢于 35B 版本但性能更好。"
+        ],
+        "article_id": "91a724440e894f1b"
+      },
+      {
+        "object_type": "model",
+        "name": "Gemma 4",
+        "canonical_name": "Gemma 4",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "一位用户提到在日常聊天翻译任务中使用 Gemma 4 31B，在音频任务中使用 Gemma 4 12B。"
+        ],
+        "article_id": "91a724440e894f1b"
+      },
+      {
+        "object_type": "project",
+        "name": "OpenCode",
+        "canonical_name": "OpenCode",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "帖子中提到 OpenCode 编码 harness 存在每轮对话中修改系统提示的问题，因此无法有效利用 KV 缓存。"
+        ],
+        "article_id": "91a724440e894f1b"
+      },
+      {
+        "object_type": "project",
+        "name": "oh-my-pi (omp-config)",
+        "canonical_name": "oh-my-pi",
+        "confidence": "low",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "一位用户分享了基于 Pi.dev harness 的 omp-config 配置方案，用于在 ROCm 和 llama.cpp 上解决 KV 缓存问题。"
+        ],
+        "article_id": "91a724440e894f1b"
+      }
     ],
     "impact_score": {
       "score": 4.5,
@@ -1167,7 +1973,78 @@
       "compound": "medium",
       "hype": "medium"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Pi coding harness",
+        "canonical_name": "Pi",
+        "positioning": "面向本地编码场景的容器化 Agent 编码工具链（harness），提供沙箱隔离环境以支持完全离线的模型驱动编程工作流。",
+        "technical_signal": "采用容器化沙箱隔离架构，支持与 llama.cpp 独立容器配合运行；但缺失计划模式和子代理等高级 Agent 功能。",
+        "adoption_signal": "多位 HN 用户将其作为本地编码的主要 harness 使用，配合 Qwen 3.6 35B 和 llama.cpp 形成完整离线编码工作流。",
+        "ecosystem_relevance": "与 llama.cpp、Qwen 等本地推理技术栈深度绑定，是本地 Agent 编码工具链中的关键编排层。",
+        "target_users": [],
+        "watch_reason": "Pi 是 HN 社区本地编码最广泛使用的 Agent harness，其缺失的计划模式、子代理等功能代表明确的演进方向；随着本地模型能力提升，harness 层的完善度将直接影响本地编码的实际可用性。",
+        "risk_notes": [
+          "编辑工具调用容易陷入错误循环，且模型无法根据系统提示自动重试，消耗大量推理 token 后仍无法恢复。",
+          "缺乏计划模式和子代理支持，在处理复杂多步骤编码任务时效率受限，无法与 Cline 等更成熟工具链竞争。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "91a724440e894f1b"
+        ],
+        "evidence_snippets": [
+          "多位用户使用 Pi 编码工具链（容器化沙箱隔离）作为本地模型的编码 harness，并讨论其在编辑工具调用方面的表现。",
+          "Pi 是目前本地编码场景中最常用的 harness，但它缺失计划模式、子代理和 MCP 客户端支持等功能。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "llama.cpp",
+        "canonical_name": "llama.cpp",
+        "url": "https://github.com/ggerganov/llama.cpp",
+        "positioning": "高性能开源 LLM 推理引擎，被广泛用作本地 Agent 编码场景的后端推理层，支持 Vulkan 和 ROCm 多后端加速。",
+        "technical_signal": "持续上游修复 KV 缓存和 prompt caching 问题，支持 Vulkan 和 ROCm 多后端，适配 Qwen 混合专家模型的 preserve_thinking 特性。",
+        "adoption_signal": "被 Pi 等编码 harness 广泛用作后端推理引擎，在 Mac Studio 和 Strix Halo 等本地硬件上成为离线编码的标准推理层。",
+        "ecosystem_relevance": "作为开源 LLM 推理的事实标准基础设施，承载整个本地 Agent 编码生态的底层推理能力，上下游依赖广泛。",
+        "target_users": [],
+        "watch_reason": "llama.cpp 的 KV 缓存管理和 prompt caching 效率直接决定本地模型编码的实际推理速度，其上游修复进度和 Vulkan/ROCm 后端性能优化是本地编码体验的关键基础设施瓶颈。",
+        "risk_notes": [
+          "KV 缓存和 prompt caching 在不同模型和硬件后端上表现不一致，部分上游修复仍在进行中。",
+          "Vulkan 和 ROCm 后端间存在性能差异，且缺少针对 Qwen 混合专家模型的深度优化，用户需手动调参。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "91a724440e894f1b"
+        ],
+        "evidence_snippets": [
+          "用户将 llama.cpp 部署在独立容器中作为推理引擎，与 Pi 编码 harness 容器配合使用。",
+          "讨论涉及 llama.cpp 在 Vulkan 和 ROCm 后端下的性能对比，以及 KV 缓存和 prompt caching 方面的已知问题与上游修复。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "OpenCode",
+        "canonical_name": "OpenCode",
+        "positioning": "面向 Agent 编码场景的开源编码 harness，但因每轮对话修改系统提示的设计问题导致无法有效利用 KV 缓存。",
+        "technical_signal": "编码 harness 存在每轮对话修改系统提示的架构问题，导致无法有效利用 KV 缓存，长上下文场景下推理效率低下。",
+        "adoption_signal": "在 HN 讨论中被提及作为对比案例，实际采用率低于 Pi 等主流 harness，社区关注度有限。",
+        "ecosystem_relevance": "作为编码 harness 设计中的反面案例，其架构缺陷为同类工具（如 Pi）提供了重要的设计教训和对比参照。",
+        "target_users": [],
+        "watch_reason": "OpenCode 的 KV 缓存问题反映了编码 harness 架构设计中的常见陷阱，作为被引用的反面案例值得关注其是否修复该架构缺陷。",
+        "risk_notes": [
+          "置信度仅为 medium，仅在 HN 讨论中被作为对比引用，缺乏独立验证和更广泛的使用案例。",
+          "每轮对话修改系统提示的设计缺陷若不修复，该 harness 在长上下文编码场景中的实用性将严重受限。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "91a724440e894f1b"
+        ],
+        "evidence_snippets": [
+          "帖子中提到 OpenCode 编码 harness 存在每轮对话中修改系统提示的问题，因此无法有效利用 KV 缓存。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -1186,29 +2063,56 @@
     "pipeline_stage": "fact_extracted",
     "id": "9e3aa322058f3c0e",
     "source_type": "community_discussion",
-    "tldr": "《游戏引擎白皮书：Commander Keen》技术书籍发布，详解80年代末游戏开发技术。",
-    "objective_summary": "2026年3月28日，一本关于经典游戏 Commander Keen 引擎的214页全彩技术书籍正式发布，提供亚马逊纸质版和免费PDF下载，源代码同步公开在 GitHub。该书耗时三年完成，详细解析了80286、EGA显卡等硬件及游戏引擎实现。",
+    "tldr": "《Game Engine White Papers: Commander Keen》一书于2026年3月发布，详细解析了1990年经典游戏《Commander Keen》的引擎技术。该书共214页全彩，提供亚马逊纸质版和免费PDF电子版，源代码已在GitHub上开源。",
+    "objective_summary": "作者于2026年3月28日发布了《Game Engine White Papers: Commander Keen》一书，距原游戏发行已逾35年。该书耗时三年完成，共214页全彩，深入解析了八十年代末至九十年代初的游戏开发技术，涵盖80286硬件、EGA/CGA显卡、声卡、键盘以及游戏引擎和资源。书籍提供亚马逊纸质版和免费PDF数字版，源代码同步发布于GitHub。",
     "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
-      "companies": [],
+      "companies": [
+        "Amazon"
+      ],
       "technologies": [
-        "C",
-        "Assembly",
-        "MS-DOS",
-        "80286",
         "EGA",
-        "CGA"
+        "CGA",
+        "MS-DOS",
+        "80286"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "《游戏引擎白皮书：Commander Keen》于2026年3月28日正式发布，距原游戏发行已超过35年。",
-      "该书提供亚马逊纸质版和免费高分辨率PDF两种格式，源代码同步公开在GitHub。",
-      "作者耗时三年以上完成本书，通过逆向调试C和汇编代码重现MS-DOS时期的游戏开发过程。",
-      "全书214页全彩印刷，涵盖80286处理器、EGA显卡、声卡、键盘等硬件以及游戏资产和引擎架构。",
-      "书中还包含对游戏CGA版本的创建过程的详细解析。",
-      "作者邀请读者在GitHub上提交勘误，以确保技术内容的准确性。"
+      "《Game Engine White Papers: Commander Keen》一书于2026年3月28日正式发布，距离原游戏发行已超过35年。",
+      "纸质版可通过亚马逊（美国、荷兰等多国站点）购买，高清PDF电子版免费提供。",
+      "该书耗时三年完成，共214页全彩，内容涵盖硬件（80286、EGA显卡、CGA显卡、声卡、键盘等）、游戏资源、引擎本身以及CGA版本的制作过程。",
+      "作者将书籍的源代码发布在GitHub上，并邀请读者通过GitHub提交勘误。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "Game Engine White Papers: Commander Keen",
+        "canonical_name": "Game Engine White Papers: Commander Keen",
+        "url": "https://forgottenbytes.net/commander_keen.html",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "《Game Engine White Papers: Commander Keen》是一本214页全彩图书，详细解释八十年代末到九十年代初的游戏开发过程和挑战。",
+          "该书涵盖硬件（80286、EGA显卡、声卡、键盘等）、游戏资源、引擎本身以及CGA版本制作等主题。",
+          "纸质版可通过亚马逊购买，同时提供免费的高分辨率PDF数字版。"
+        ],
+        "article_id": "9e3aa322058f3c0e"
+      },
+      {
+        "object_type": "project",
+        "name": "Game Engine White Papers: Commander Keen source code",
+        "canonical_name": "Game Engine White Papers: Commander Keen source code",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者将书籍的源代码在GitHub上公开发布，供感兴趣的读者查阅和使用。",
+          "读者如果发现书中任何错误，可以通过GitHub提交issue来报告问题。"
+        ],
+        "article_id": "9e3aa322058f3c0e"
+      }
     ],
     "impact_score": {
       "score": 1.5,
@@ -1254,7 +2158,58 @@
       "compound": "low",
       "hype": "low"
     },
-    "actionable_insight": "speculative_watch"
+    "actionable_insight": "speculative_watch",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "Game Engine White Papers: Commander Keen",
+        "canonical_name": "Game Engine White Papers: Commander Keen",
+        "url": "https://forgottenbytes.net/commander_keen.html",
+        "positioning": "这是一本214页全彩技术图书，系统解析1990年经典游戏《Commander Keen》的引擎架构与DOS时代游戏开发技术。",
+        "target_users": [
+          "复古游戏开发者",
+          "游戏引擎技术爱好者",
+          "计算机历史研究者"
+        ],
+        "product_signal": "纸质版通过亚马逊多国站点销售，同时提供免费高清PDF数字版和GitHub开源代码，降低了获取门槛。",
+        "market_signal": "距原游戏发行逾35年后出版，历时三年完成，面向复古游戏开发与数字遗产保存的细分市场。",
+        "differentiation": "以214页全彩篇幅深入解析单一经典游戏引擎的全部技术细节，并配套开源代码和免费数字版，在复古游戏技术文献中较为罕见。",
+        "watch_reason": "该书以详实篇幅和开源代码系统记录了DOS时代游戏引擎的技术细节，对复古游戏开发、计算机历史研究和数字遗产保存具有独特参考价值。可关注社区反馈及后续是否扩展至其他经典游戏引擎分析。",
+        "risk_notes": [
+          "该书聚焦于1990年单一游戏的引擎逆向解析，受众规模有限，商业影响力不高。",
+          "书籍内容依赖作者个人逆向工程，部分技术细节可能存在不准确之处。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "9e3aa322058f3c0e"
+        ],
+        "evidence_snippets": [
+          "《Game Engine White Papers: Commander Keen》是一本214页全彩图书，详细解释八十年代末到九十年代初的游戏开发过程和挑战。",
+          "该书涵盖硬件（80286、EGA显卡、声卡、键盘等）、游戏资源、引擎本身以及CGA版本制作等主题。",
+          "纸质版通过亚马逊多国站点销售，同时提供免费高清PDF数字版，源代码也在GitHub上公开发布。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Game Engine White Papers: Commander Keen source code",
+        "canonical_name": "Game Engine White Papers: Commander Keen source code",
+        "positioning": "该书配套的开源代码仓库，在GitHub上公开发布，供读者查阅和学习DOS时代游戏引擎的具体实现。",
+        "technical_signal": "源代码与书籍同步发布在GitHub上，展示了DOS时代游戏引擎在80286硬件和EGA/CGA显卡架构上的实现细节。",
+        "target_users": [],
+        "watch_reason": "该开源代码与书籍配套，完整记录了DOS时代游戏引擎的代码实现，对复古游戏开发和计算机技术史研究具有参考价值，可关注社区在GitHub上的反馈和贡献。",
+        "risk_notes": [
+          "该项目为书籍配套代码，完成后缺乏持续更新动力，社区参与度可能较低。",
+          "未提供明确的许可证信息，可能影响代码的使用和分发。"
+        ],
+        "score": 2.0,
+        "article_ids": [
+          "9e3aa322058f3c0e"
+        ],
+        "evidence_snippets": [
+          "作者将书籍的源代码在GitHub上公开发布，供感兴趣的读者查阅和使用；读者如果发现错误，可以通过GitHub提交issue来报告问题。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -1273,22 +2228,38 @@
     "pipeline_stage": "fact_extracted",
     "id": "bd9ea413a4270b52",
     "source_type": "community_discussion",
-    "tldr": "Fox收购Roku",
-    "objective_summary": "华尔街日报报道，Fox公司宣布收购流媒体平台Roku，这是一项重大的媒体行业并购交易。",
+    "tldr": "福克斯公司（Fox）收购流媒体平台 Roku，交易细节未在受限页面中披露。",
+    "objective_summary": "《华尔街日报》报道称福克斯公司（Fox）将收购 Roku。由于页面需要启用 JavaScript 并关闭广告拦截器，文章正文内容无法获取，交易金额、条款和预期完成时间等具体细节未被披露。",
     "event_type": "capital_movement",
     "epistemic_status": "pr_statement",
     "entities": {
       "companies": [
-        "Fox",
-        "Roku"
+        "Fox Corporation",
+        "Roku",
+        "Wall Street Journal"
       ],
       "technologies": [],
       "key_people": []
     },
     "key_logic_flow": [
-      "Fox公司宣布收购Roku，该消息由华尔街日报报道。",
-      "该交易涉及传统媒体巨头Fox与流媒体平台Roku的整合。",
-      "收购的具体金额、交易结构和监管审批情况尚未在可用信息中披露。"
+      "福克斯公司（Fox）计划收购流媒体平台 Roku，该消息由《华尔街日报》报道。",
+      "由于文章页面被付费墙拦截，正文无法访问，交易的具体财务条款未被获取。",
+      "此次收购若完成，将意味着传统媒体巨头进一步整合流媒体硬件与平台资产。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "Roku",
+        "canonical_name": "Roku",
+        "url": "https://www.roku.com",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "《华尔街日报》报道标题明确指出福克斯公司（Fox）将收购流媒体平台 Roku。"
+        ],
+        "article_id": "bd9ea413a4270b52"
+      }
     ],
     "impact_score": {
       "score": 4.5,
@@ -1346,7 +2317,36 @@
       "compound": "medium",
       "hype": "medium"
     },
-    "actionable_insight": "strategic_invest"
+    "actionable_insight": "strategic_invest",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "Roku",
+        "canonical_name": "Roku",
+        "url": "https://www.roku.com",
+        "positioning": "Roku 是全球领先的流媒体硬件与操作系统平台，其 Roku OS 预装于海量智能电视，覆盖北美及全球数千万家庭用户。",
+        "target_users": [
+          "北美智能电视用户",
+          "流媒体内容消费者",
+          "广告主与内容发行方"
+        ],
+        "product_signal": "Roku 作为被收购标获得福克斯（Fox）出价，表明其流媒体平台资产价值获得传统媒体巨头认可，是独立流媒体硬件公司走向整合的标志性事件。",
+        "market_signal": "福克斯收购 Roku 的交易标志着传统媒体巨头加速整合流媒体分发渠道与硬件入口，可能深刻重塑电视广告市场与内容分发的竞争格局。",
+        "differentiation": "Roku 的差异化在于其独立于内容制作方的中立流媒体 OS 定位，与 Apple TV、Amazon Fire TV 等既有内容生态又有硬件竞争的模式截然不同。",
+        "watch_reason": "福克斯收购 Roku 若完成，将深刻改变流媒体硬件与操作系统的竞争版图，并可能引发更多传统媒体对分发渠道的战略收购，值得持续关注交易进展与监管审查动态。",
+        "risk_notes": [
+          "由于 WSJ 付费墙限制，交易金额、条款和完成时间等关键细节未能获取，需等待官方确认。",
+          "传统媒体巨头收购独立流媒体平台可能面临反垄断审查，尤其在内容与分发渠道垂直整合方面。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "bd9ea413a4270b52"
+        ],
+        "evidence_snippets": [
+          "《华尔街日报》报道标题明确指出福克斯公司（Fox）将收购流媒体平台 Roku，但因付费墙限制无法获取正文更多交易细节。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -1365,19 +2365,39 @@
     "pipeline_stage": "fact_extracted",
     "id": "c0f56327d7def908",
     "source_type": "community_discussion",
-    "tldr": "TinyWind 是一款像素风海盗帆船游戏，核心特色是真实风力物理，社区累计航行超 38 万公里。",
-    "objective_summary": "TinyWind 是一款像素风格的海盗航行游戏，实现了真实风力物理模拟。该游戏在 Hacker News 上获得 825 个点赞和 154 条评论，玩家社区累计航行里程超过 38 万公里。",
+    "tldr": "TinyWind 是一款使用真实风力物理模拟的像素风海盗帆船游戏，玩家累计航行里程已超过 38 万公里。该游戏在 Hacker News 上获得了 825 分和 154 条评论的高度关注。",
+    "objective_summary": "TinyWind 是一款发布于 tinywind.io 的像素风格海盗主题帆船游戏，其核心特色是实现了真实的风力物理模拟系统。截至报道时，全球玩家在该游戏中的累计航行里程已超过 38 万公里。该游戏在 Hacker News 社区引发了广泛讨论，获得了 825 个点赞和 154 条评论。",
     "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [],
-      "technologies": [],
+      "technologies": [
+        "real-time wind physics simulation"
+      ],
       "key_people": []
     },
     "key_logic_flow": [
-      "TinyWind 是一款像素海盗航行游戏，核心玩法围绕真实风力物理模拟展开。",
-      "该游戏在 Hacker News 上获得 825 个点赞和 154 条评论，社区反响热烈。",
-      "玩家社区累计航行里程超过 38 万公里，表明游戏具有一定用户基础和活跃度。"
+      "TinyWind 是一款像素风格的海盗帆船游戏，其核心玩法基于真实的风力物理模拟系统。",
+      "玩家在游戏中操控帆船，利用实时风向和风力进行航行，累计全球航行里程已超过 38 万公里。",
+      "该游戏在 Hacker News 上获得了 825 个点赞和 154 条评论，表明社区对其关注度较高。",
+      "游戏的官方网站为 https://tinywind.io，可直接在浏览器中体验。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "TinyWind",
+        "canonical_name": "TinyWind",
+        "url": "https://tinywind.io",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "TinyWind 是一款像素风格的海盗帆船游戏，核心玩法基于真实的风力物理模拟系统。",
+          "全球玩家在 TinyWind 中的累计航行里程已超过 38 万公里。",
+          "该游戏在 Hacker News 上获得了 825 个点赞和 154 条评论讨论。"
+        ],
+        "article_id": "c0f56327d7def908"
+      }
     ],
     "impact_score": {
       "score": 1.5,
@@ -1425,7 +2445,39 @@
       "compound": "low",
       "hype": "low"
     },
-    "actionable_insight": "ignore"
+    "actionable_insight": "ignore",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "TinyWind",
+        "canonical_name": "TinyWind",
+        "url": "https://tinywind.io",
+        "positioning": "TinyWind 是一款基于真实风力物理模拟的像素风格海盗帆船游戏，玩家可在浏览器中直接体验实时风向驱动航行的核心玩法。",
+        "target_users": [
+          "海盗游戏爱好者",
+          "帆船模拟玩家",
+          "网页游戏用户",
+          "Hacker News 社区"
+        ],
+        "product_signal": "游戏实现了实时风力方向与强度模拟系统，风向变化直接影响帆船航速与操控响应，复现了真实的海上航行物理体验。",
+        "market_signal": "全球玩家累计航行里程已超过 38 万公里，在 Hacker News 上获得 825 个点赞和 154 条评论讨论。",
+        "differentiation": "与传统海盗游戏依赖摇杆或触屏操作不同，TinyWind 的核心玩法完全基于实时风力动态变化，创造差异化的物理驱动航行体验。",
+        "watch_reason": "TinyWind 凭借真实风力物理这一差异化玩法在 Hacker News 获得大量关注，展示了轻量级网页游戏通过独特机制实现病毒式传播的潜力，可作为独立游戏产品创新趋势的观察样本。",
+        "risk_notes": [
+          "作为浏览器原生独立游戏，长期用户留存和可持续变现模式尚未得到验证。",
+          "核心乐趣高度依赖风力模拟这一单一机制，对追求快节奏体验的休闲玩家吸引力有限。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "c0f56327d7def908"
+        ],
+        "evidence_snippets": [
+          "TinyWind 是一款像素风格的海盗帆船游戏，核心玩法基于真实的风力物理模拟系统。",
+          "全球玩家在 TinyWind 中的累计航行里程已超过 38 万公里。",
+          "该游戏在 Hacker News 上获得了 825 个点赞和 154 条评论讨论。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -1444,31 +2496,93 @@
     "pipeline_stage": "fact_extracted",
     "id": "d73e14591ae2574c",
     "source_type": "community_discussion",
-    "tldr": "作者用 OpenCode Web UI 搭建家庭 AI 开发平台，AI 写代码后通过 PR 审核再由 GitOps 自动部署。",
-    "objective_summary": "作者在家庭服务器 VM 上部署 OpenCode Web UI，为其配置独立 Git 账号和 SSH 密钥，限定其只能推送到特性分支。AI 编写代码并推送分支后，作者审核并合并 PR，再由 GitOps（Arcane）自动部署到目标环境。该平台支持持久化编码会话和多设备同步，可管理 Docker",
+    "tldr": "作者在个人 homelab 中搭建了基于 OpenCode Web UI 的 AI 开发平台，通过 GitOps 工作流管理 Docker 容器服务，实现跨设备编码、PR 审核和自动部署。",
+    "objective_summary": "作者（rsgm.dev 博主）在其 TrueNAS 主机上的虚拟机中部署了 OpenCode Web UI 作为 AI 开发平台，将其配置为 systemd 服务运行。该平台提供持久化编码会话、终端、文件浏览器和 Git 差异比较功能。作者将约十几个 Docker Compose 服务堆栈从 TrueNAS 迁移到 Arcane GitOps 平台，通过 Git 管理部署。工作流为 OpenCode 创建功能分支、作者审核 PR 后合并、GitOps 自动部署，AI 无法直接访问实际服务。",
     "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
-        "Forgejo"
+        "TrueNAS",
+        "Cloudflare",
+        "GitHub",
+        "Forgejo",
+        "Home Assistant"
       ],
       "technologies": [
-        "OpenCode",
-        "Git",
         "GitOps",
-        "Arcane",
-        "Claude Code",
-        "Home Assistant",
-        "Cloudflare Pages"
+        "Docker",
+        "systemd"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "作者在家庭服务器 VM 上部署 OpenCode Web UI，为其配置独立 Git 账号和 SSH 密钥，限定 AI 只能推送到特性分支而无法直接推送到部署分支。",
-      "工作流程为：AI 在 OpenCode 中规划并编写代码 → 推送到特性分支 → 作者创建并审核 PR → 合并后由 GitOps（Arcane）自动部署到 Docker、Home Assistant 或 Cloudflare Pages 等目标环境。",
-      "AI 可访问互联网和 Git 服务器，但无法直接访问实际运行的服务，从而将潜在影响范围限制在开发环境内，作者因此愿意给予 AI root 权限。",
-      "作者之前使用 Claude Code，因 AI 供应商 token 限制而转向开源、厂商中立的 OpenCode，后者内置 Web 服务器、终端、文件浏览器和 Git 差异对比功能。",
-      "当前缺少 CI 反馈环，因为 Forgejo Actions 未通过公开 API 暴露任务日志，导致 AI 无法自动诊断测试失败、lint 错误和堆栈跟踪。"
+      "作者在 TrueNAS 主机的虚拟机中部署了 OpenCode Web UI 作为 AI 开发平台，将其配置为 systemd 服务运行。",
+      "OpenCode 提供内置 Web 界面、持久化编码会话、终端、文件浏览器和 Git 差异比较功能，并支持跨设备同步。",
+      "作者将约十几个 Docker Compose 服务堆栈从 TrueNAS 迁移到 Arcane GitOps 平台，实现了 Git 驱动的服务管理与部署。",
+      "OpenCode 拥有独立的 Git 用户和 SSH 密钥，可以克隆项目和推送功能分支，但无法直接推送到部署分支。",
+      "AI 辅助的工作流包括容器版本升级说明摘要、健康检查配置添加以及跨容器网络配置更新。",
+      "当前工作流缺失持续集成反馈环节，因为 Forgejo Actions 未通过公开 API 暴露作业日志，作者无法让 AI 读取构建反馈。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "OpenCode Web UI",
+        "canonical_name": "OpenCode",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "作者在 TrueNAS 主机的虚拟机中部署了 OpenCode Web UI 作为 AI 开发平台，并将其配置为 systemd 服务运行。",
+          "OpenCode 内置 Web 用户界面，提供持久化编码会话、终端、文件浏览器和 Git 差异比较功能，并支持跨设备同步。",
+          "OpenCode 拥有独立的 Git 用户和专用 SSH 密钥，可以克隆项目并推送功能分支，但无法直接推送到部署分支。"
+        ],
+        "article_id": "d73e14591ae2574c"
+      },
+      {
+        "object_type": "product",
+        "name": "Arcane",
+        "canonical_name": "Arcane",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "作者将约十几个 Docker Compose 服务堆栈迁移到 Arcane 平台，以便通过 GitOps 方式管理和部署这些服务。",
+          "使用 Arcane 进行 GitOps 管理后，作者可以通过手机跨所有容器进行网络配置更新，大幅简化了管理流程。"
+        ],
+        "article_id": "d73e14591ae2574c"
+      },
+      {
+        "object_type": "product",
+        "name": "Forgejo",
+        "canonical_name": "Forgejo",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者使用 Forgejo 作为自托管 Git 服务器，但 Forgejo Actions 未通过公开 API 暴露作业日志，导致无法实现 AI 读取持续集成反馈的工作流。"
+        ],
+        "article_id": "d73e14591ae2574c"
+      },
+      {
+        "object_type": "product",
+        "name": "Claude Code",
+        "canonical_name": "Claude Code",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者此前主要使用 Claude Code 作为 AI 编码工具，但因 AI 提供商限制 token 用量而转向寻找其他替代方案。"
+        ],
+        "article_id": "d73e14591ae2574c"
+      },
+      {
+        "object_type": "product",
+        "name": "Home Assistant",
+        "canonical_name": "Home Assistant",
+        "confidence": "low",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "作者的 GitOps 部署流程中包括通过 GitOps 插件管理 Home Assistant 的配置变更。"
+        ],
+        "article_id": "d73e14591ae2574c"
+      }
     ],
     "impact_score": {
       "score": 2.2,
@@ -1525,7 +2639,81 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "OpenCode Web UI",
+        "canonical_name": "OpenCode",
+        "positioning": "基于 OpenCode 的自托管 AI 开发平台，提供持久化编码会话、终端和 Git 差异比较，通过 GitOps 工作流实现受控的 AI 辅助开发。",
+        "target_users": [
+          "个人开发者",
+          "Homelab 爱好者",
+          "自托管基础设施运维者"
+        ],
+        "product_signal": "内置 Web 用户界面和持久化编码会话，支持终端、文件浏览器和 Git 差异比较，移动端 Web UI 问答交互体验出色。",
+        "market_signal": "目前仅见于个人 Homelab 部署场景，尚无公开的企业采用或大规模市场应用数据。",
+        "differentiation": "与 Claude Code 等传统编码工具不同，OpenCode 以服务端模式运行，提供跨设备同步的持久化编码会话。",
+        "watch_reason": "OpenCode 以服务端模式提供跨设备同步的 AI 编码环境，结合 GitOps 实现受控的 AI 辅助开发工作流，为个人开发者开辟了一种可审计、低风险的 AI 编程平台路径，其生态演变值得跟踪。",
+        "risk_notes": [
+          "OpenCode 作为相对新兴的 AI 编码工具，其生态体系和社区支持仍在早期发展阶段。",
+          "当前工作流缺少 CI 反馈闭环，AI 无法自动读取构建日志诊断问题。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "d73e14591ae2574c"
+        ],
+        "evidence_snippets": [
+          "作者在 TrueNAS 主机的虚拟机中部署了 OpenCode Web UI 作为 AI 开发平台，并将其配置为 systemd 服务运行。",
+          "OpenCode 内置 Web 用户界面，提供持久化编码会话、终端、文件浏览器和 Git 差异比较功能，并支持跨设备同步。",
+          "OpenCode 拥有独立的 Git 用户和专用 SSH 密钥，可以克隆项目并推送功能分支，但无法直接推送到部署分支。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Forgejo",
+        "canonical_name": "Forgejo",
+        "positioning": "自托管的开源 Git 代码托管与 CI/CD 平台，内置 Forgejo Actions 持续集成能力，适用于注重数据隐私的团队。",
+        "target_users": [
+          "自托管 Git 服务用户",
+          "注重数据隐私和自主可控的开发团队"
+        ],
+        "product_signal": "Forgejo Actions 未通过公开 API 暴露作业日志，限制了 AI 编码工具读取 CI 反馈的能力。",
+        "watch_reason": "Forgejo 作为自托管 Git 平台在开源社区中有一定用户基础，但其 Actions 未公开作业日志 API 的局限，在 AI 辅助编码工作流日益普及的趋势下可能成为关键短板，值得关注。",
+        "risk_notes": [
+          "Forgejo Actions 未通过公开 API 暴露作业日志，导致 AI 编码工具无法直接读取持续集成构建反馈。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "d73e14591ae2574c"
+        ],
+        "evidence_snippets": [
+          "作者使用 Forgejo 作为自托管 Git 服务器，但 Forgejo Actions 未通过公开 API 暴露作业日志，导致无法实现 AI 读取持续集成反馈的工作流。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Claude Code",
+        "canonical_name": "Claude Code",
+        "positioning": "Anthropic 推出的终端 AI 编码工具，提供 AI 驱动的代码生成、编辑和调试能力，是目前主流的 AI 编程助手之一。",
+        "target_users": [
+          "使用 AI 辅助编码的软件开发者",
+          "对编码工具 token 成本敏感的个人开发者"
+        ],
+        "product_signal": "作为主流 AI 编码工具功能强大，但其 token 用量限制促使部分用户寻找替代方案。",
+        "watch_reason": "Claude Code 是 Anthropic 推出的核心 AI 编码产品，但其 token 用量限制策略正促使用户寻找 OpenCode 等替代方案，这一用户流失趋势值得持续跟踪，以观察其定价和产品策略的后续调整。",
+        "risk_notes": [
+          "AI 提供商持续收紧 token 用量限制策略，对依赖高频调用的开发用户可能影响留存和付费意愿。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "d73e14591ae2574c"
+        ],
+        "evidence_snippets": [
+          "作者此前主要使用 Claude Code 作为 AI 编码工具，但因 AI 提供商限制 token 用量而转向寻找其他替代方案。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -1635,10 +2823,10 @@
     "pipeline_stage": "fact_extracted",
     "id": "e099eaeb0874839d",
     "source_type": "community_discussion",
-    "tldr": "Hetzner 自 2026 年 6 月 15 日起上调云服务器与裸金属服务器价格",
-    "objective_summary": "Hetzner 于 2026 年 6 月 15 日实施价格调整，涉及 Cloud、CX、CCX、CPX 及 AX、EX、SX、DX、GEX 系列服务器，所有新订单和实例扩缩容适用新价格，调价前订单仍按旧价格执行。",
+    "tldr": "德国主机托管商 Hetzner 宣布自 2026 年 6 月 15 日起调整所有专用服务器和云服务器的价格，同时推出有限定价层级（LTD），以更低价格供应采购成本降低的特定服务器型号。",
+    "objective_summary": "Hetzner 于 2026 年 6 月 15 日起执行新的定价体系，涵盖 AX、EX、SX、DX、GEX 等专用服务器系列以及 CAX、CCX、CPX、CX 等云服务器系列。此前已下单但尚未交付的订单仍适用旧价格。专用服务器新增 LTD 有限定价层级，月租价格远低于标准版，供应取决于低采购成本硬件的可用性。Hetzner 同时推荐用户关注 Server Auction，以荷兰式拍卖获取旧款服务器。",
     "event_type": "infrastructure_update",
-    "epistemic_status": "verified_fact",
+    "epistemic_status": "pr_statement",
     "entities": {
       "companies": [
         "Hetzner"
@@ -1647,12 +2835,64 @@
       "key_people": []
     },
     "key_logic_flow": [
-      "Hetzner 自 2026 年 6 月 15 日上午 8 点（CEST 时区）起对新订单和云实例扩缩容执行新价格。",
-      "2026 年 6 月 15 日之前下单但在此之后交付的订单仍适用旧价格。",
-      "几乎所有云服务器系列（CAX、CCX、CPX、CX）均出现显著价格上涨，部分型号涨幅超过 100%。",
-      "裸金属服务器系列（AX、EX、SX、DX、GEX）也全面调价，同时推出了 Limited 定价层级，提供折扣价格但供应量受硬件采购成本限制。",
-      "Limited 定价层级的服务器价格显著低于常规价格（如 AX41-1-LTD 月费 57.30 欧元，免安装费），但供应取决于数据中心中低采购成本硬件的可用性。",
-      "所有报价均为不含增值税的净价，同时提供欧元和美元两种计价。"
+      "Hetzner 宣布自 2026 年 6 月 15 日欧洲中部夏令时间 8:00 起，对所有专用服务器和云服务器产品执行价格调整。",
+      "AX、EX、SX、DX、GEX 全系列专用服务器的月租价格和安装费用均有上调，新价格以欧元和美元两种货币公布。",
+      "CAX、CCX、CPX、CX 全系列云服务器的每小时和每月价格均上涨，涨幅因系列和配置而异。",
+      "Hetzner 推出有限定价层级（LTD）专用服务器型号，月租价格较标准版大幅降低，供应取决于低采购成本硬件的可用性。",
+      "Hetzner 推荐用户关注其 Server Auction，以荷兰式拍卖方式获取旧款服务器，价格由供需决定。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "Hetzner Cloud Servers",
+        "canonical_name": "Hetzner Cloud",
+        "url": "https://www.hetzner.com/cloud",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Hetzner 公布了云服务器 CAX、CCX、CPX、CX 各系列的旧价格与新价格对照表，所有规格均涨价。",
+          "CAX11 每小时价格从 0.0072 欧元涨至 0.0096 欧元，月租从 4.49 欧元涨至 5.99 欧元。"
+        ],
+        "article_id": "e099eaeb0874839d"
+      },
+      {
+        "object_type": "product",
+        "name": "Hetzner Dedicated Servers",
+        "canonical_name": "Hetzner Dedicated Server",
+        "url": "https://www.hetzner.com/dedicated-rootserver",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Hetzner 列出了 AX、EX、SX、DX、GEX 系列所有专用服务器的新月租价格和安装费用。",
+          "GEX131-3 月租价格达到 2,297.30 欧元（不含 IPv4），安装费为 1,149.00 欧元。"
+        ],
+        "article_id": "e099eaeb0874839d"
+      },
+      {
+        "object_type": "product",
+        "name": "Limited (LTD) pricing tier",
+        "canonical_name": "Hetzner Limited Server",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "Hetzner 推出了 AX42-1-LTD、EX63-1-LTD 等 LTD 型号，月租价格显著低于同系列标准版。",
+          "AX41-1-LTD 月租仅 57.30 欧元且免安装费，供应取决于低采购成本硬件的可用性。"
+        ],
+        "article_id": "e099eaeb0874839d"
+      },
+      {
+        "object_type": "product",
+        "name": "Hetzner Server Auction",
+        "canonical_name": "Hetzner Server Auction",
+        "url": "https://www.hetzner.com/sb",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Hetzner 推荐用户关注其 Server Auction，以荷兰式拍卖获取旧款服务器，价格由供需决定。"
+        ],
+        "article_id": "e099eaeb0874839d"
+      }
     ],
     "impact_score": {
       "score": 2.5,
@@ -1711,7 +2951,91 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "strategic_invest"
+    "actionable_insight": "strategic_invest",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "Hetzner Cloud Servers",
+        "canonical_name": "Hetzner Cloud",
+        "url": "https://www.hetzner.com/cloud",
+        "positioning": "Hetzner Cloud 是欧洲市场以高性价比著称的云服务器产品线，提供 CAX、CCX、CPX、CX 四个实例系列，覆盖 ARM 和 x86 架构，广泛应用于中小型 AI 推理和通用计算场景。",
+        "target_users": [
+          "中小型企业和个人开发者",
+          "成本敏感的欧洲云计算用户",
+          "AI 推理和通用计算场景用户"
+        ],
+        "product_signal": "2026 年 6 月 15 日起全系列价格上调，CAX11 每小时从 0.0072 欧元涨至 0.0096 欧元，月租从 4.49 欧元涨至 5.99 欧元。",
+        "market_signal": "全系列涨幅显著，CCX 系列部分规格涨幅超过 100%，反映硬件采购成本持续上升对欧洲云服务定价的传导压力。",
+        "differentiation": "以透明定价和简洁产品线著称于欧洲市场，但本次大幅涨价可能削弱其相对于超大规模云厂商的性价比优势。",
+        "watch_reason": "Hetzner 是欧洲中小型 AI 开发者和创业公司广泛使用的云基础设施，本次显著涨价可能推动用户重新评估基础设施成本结构，其 LTD 替代层的市场效果值得持续跟踪。",
+        "risk_notes": [
+          "涨价幅度较大，CCX 系列部分规格涨幅超过 100%，可能引导价格敏感用户向竞品迁移。",
+          "欧洲云计算市场竞争激烈，Hetzner 的核心性价比定位面临涨价后的品牌认知挑战。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "e099eaeb0874839d"
+        ],
+        "evidence_snippets": [
+          "Hetzner 公布了云服务器 CAX、CCX、CPX、CX 各系列的旧价格与新价格对照表，所有规格均涨价。",
+          "CAX11 每小时价格从 0.0072 欧元涨至 0.0096 欧元，月租从 4.49 欧元涨至 5.99 欧元。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Hetzner Dedicated Servers",
+        "canonical_name": "Hetzner Dedicated Server",
+        "url": "https://www.hetzner.com/dedicated-rootserver",
+        "positioning": "Hetzner 旗下高性能专用服务器产品阵容，涵盖 AX、EX、SX、DX、GEX 系列，面向需要裸机性能的企业级工作负载和重度计算场景。",
+        "target_users": [
+          "企业级用户和开发团队",
+          "高性能计算和重度计算场景用户",
+          "需要裸机隔离性能的用户"
+        ],
+        "product_signal": "专用服务器全线月租价和安装费上调，同时引入 LTD 有限定价层级，部分型号月租较标准版大幅降低。",
+        "market_signal": "LTD 层级的推出表明 Hetzner 在涨价同时尝试通过差异化定价留住价格敏感用户，形成标准价与受限低价并行的双轨策略。",
+        "differentiation": "LTD 分级定价模式根据硬件采购成本动态调整售价，在主流托管商中较为罕见，体现了灵活的成本传导和库存管理能力。",
+        "watch_reason": "LTD 定价层级是托管行业少见的创新定价模式，其供应稳定性及用户接受度将影响 Hetzner 在价格敏感市场的中长期竞争力。",
+        "risk_notes": [
+          "LTD 层级供应受低采购成本硬件可用性制约，可能出现长时间缺货，实际价值有限。",
+          "标准型号价格全面上调可能削弱 Hetzner 在性价比市场多年积累的核心竞争力。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "e099eaeb0874839d"
+        ],
+        "evidence_snippets": [
+          "Hetzner 列出了 AX、EX、SX、DX、GEX 系列所有专用服务器的新月租价格和安装费用。",
+          "GEX131-3 月租价格达到 2,297.30 欧元（不含 IPv4），安装费为 1,149.00 欧元。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Hetzner Server Auction",
+        "canonical_name": "Hetzner Server Auction",
+        "url": "https://www.hetzner.com/sb",
+        "positioning": "Hetzner 旗下以荷兰式拍卖定价的旧款服务器交易平台，价格由供需动态决定，为预算敏感用户提供灵活的低价硬件获取渠道。",
+        "target_users": [
+          "寻求极致性价比的个人开发者与中小企业",
+          "对硬件新旧和规格灵活度要求不高的用户"
+        ],
+        "product_signal": "在标准产品全面涨价的背景下，Hetzner 将 Server Auction 作为价格敏感用户的替代推荐渠道。",
+        "market_signal": "Server Auction 在涨价公告中被重点引荐，表明 Hetzner 正试图构建从新品标准价、LTD 低价到拍卖浮动的三层定价体系。",
+        "differentiation": "采用荷兰式拍卖定价，价格由出价和供需动态决定，在主流托管商中独树一帜。",
+        "watch_reason": "Server Auction 作为 Hetzner 多层次定价策略的最低价层，其成交价格和交易量是观察用户价格弹性和需求迁移的重要指标。",
+        "risk_notes": [
+          "供应量和服务器配置不可控，用户无法按需获取指定规格的硬件。",
+          "作为旧款服务器渠道，硬件性能和能效可能无法满足现代工作负载需求。"
+        ],
+        "score": 2.0,
+        "article_ids": [
+          "e099eaeb0874839d"
+        ],
+        "evidence_snippets": [
+          "Hetzner 推荐用户关注其 Server Auction，以荷兰式拍卖获取旧款服务器，价格由供需决定。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -1730,41 +3054,61 @@
     "pipeline_stage": "fact_extracted",
     "id": "e251d5c0aff0f624",
     "source_type": "community_discussion",
-    "tldr": "莫纳什大学研究发现铜输送药物Cu(ATSM)可清除阿尔茨海默病有毒蛋白并恢复记忆。",
-    "objective_summary": "莫纳什大学研究人员在《ACS Chemical Neuroscience》发表研究，发现铜化合物Cu(ATSM)通过修复血脑屏障P-gp清除泵（增加24.1%），在56天内将阿尔茨海默病模型中的毒性淀粉样蛋白减少42%，空间学习能力提升近44%。该化合物已在帕金森病和ALS临床测试中通过安全性评估。",
+    "tldr": "蒙纳士大学研究发现，铜转运药物 Cu(ATSM) 通过修复血脑屏障上的 P-gp 清除泵，在 56 天内将阿尔茨海默病模型中毒性淀粉样蛋白减少 42%，并将空间学习能力提升近 44%。",
+    "objective_summary": "蒙纳士大学药物科学研究所的研究团队在《ACS Chemical Neuroscience》期刊发表研究，证实铜化合物 Cu(ATSM) 能够修复血脑屏障上的 P-糖蛋白（P-gp）废物清除泵，使其丰度增加 24.1%。在阿尔茨海默病模型的 56 天实验中，该治疗将毒性淀粉样蛋白减少 42%，并将空间学习能力提升近 44%。该化合物此前已在帕金森病和渐冻症的临床试验中完成安全性评估，研究者认为其具备快速进入人类临床试验的潜力。",
     "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
         "Monash University",
-        "University of Melbourne",
-        "Monash Institute of Pharmaceutical Sciences"
+        "Monash Institute of Pharmaceutical Sciences (MIPS)",
+        "University of Melbourne"
       ],
-      "technologies": [
-        "Cu(ATSM)",
-        "P-glycoprotein (P-gp)",
-        "amyloid-beta"
-      ],
+      "technologies": [],
       "key_people": [
         "Jae Pyun",
         "Joseph Nicolazzo",
-        "Pranav Runwal",
-        "Oliver Fuller",
-        "Casey Egan",
         "Mark Febbraio",
-        "Jennifer Short",
-        "Asif Noor",
-        "Celeste Mawal",
-        "Paul Donnelly",
-        "Ashley Bush"
+        "Ashley Bush",
+        "Paul Donnelly"
       ]
     },
     "key_logic_flow": [
-      "莫纳什大学研究发现，铜化合物Cu(ATSM)通过修复血脑屏障上的P-gp清除泵（使其数量增加24.1%），恢复了大脑清除毒性蛋白的能力。",
-      "在56天的治疗中，Cu(ATSM)使阿尔茨海默病小鼠模型脑内的毒性淀粉样蛋白减少42%，空间学习能力提升近44%。",
-      "阿尔茨海默病的病理机制是P-gp泵功能减弱导致毒性淀粉样蛋白无法通过血脑屏障排出，在大脑中累积致病。",
-      "Cu(ATSM)此前已在帕金森病和ALS的临床试验中完成安全性评估，具备快速进入阿尔茨海默病人体临床试验的潜力。",
-      "研究人员推测Cu(ATSM)还可能激活脑内小胶质细胞（microglia）来吞噬和降解毒性斑块，具体蛋白清除路径仍在研究中。"
+      "阿尔茨海默病由毒性淀粉样蛋白在大脑中积累引起，正常情况下大脑通过血脑屏障上的 P-糖蛋白（P-gp）泵将废物排入血液，但患病后 P-gp 功能显著减弱。",
+      "蒙纳士大学研究团队在实验室实验中测试铜化合物 Cu(ATSM)，发现该药物能将阿尔茨海默病模型中的 P-gp 清除泵丰度提高 24.1%。",
+      "经过 56 天治疗，毒性淀粉样蛋白减少 42%，空间学习能力提升近 44%，首次建立了血脑屏障修复与认知功能改善之间的关联。",
+      "Cu(ATSM) 此前已在帕金森病和渐冻症的临床试验中完成安全性评估，具备快速进入阿尔茨海默病人体临床试验的基础。",
+      "研究者推测该药物还可能通过激活脑内免疫细胞（小胶质细胞）来吞噬降解毒性斑块，后续研究将追踪蛋白质离开大脑进入血液的具体生物路径。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "Cu(ATSM)",
+        "canonical_name": "Cu(ATSM)",
+        "confidence": "medium",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "蒙纳士大学研究人员发现，铜转运药物 Cu(ATSM) 能修复血脑屏障上的废物清除泵，显著降低阿尔茨海默病模型中的毒性蛋白并改善长期空间记忆。",
+          "Cu(ATSM) 具有抗炎和神经保护特性，已在帕金森病和渐冻症的临床试验中完成安全性评估。",
+          "经过 56 天治疗，Cu(ATSM) 将毒性淀粉样蛋白减少 42%，并将空间学习能力提升近 44%。"
+        ],
+        "article_id": "e251d5c0aff0f624"
+      },
+      {
+        "object_type": "paper",
+        "name": "ACS Chemical Neuroscience 研究论文",
+        "canonical_name": "Cu(ATSM) Alzheimer's Study",
+        "url": "https://doi.org/10.1021",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "该研究于今日发表在《ACS Chemical Neuroscience》期刊上，论文展示了 Cu(ATSM) 在阿尔茨海默病模型中的治疗效果。",
+          "研究由蒙纳士大学药物科学研究所的 Jae Pyun 博士领导，多位来自蒙纳士大学和墨尔本大学的研究人员共同参与。",
+          "这是首次证明 Cu(ATSM) 能在阿尔茨海默病模型中增加 P-gp 清除泵丰度，并将血脑屏障修复与认知功能改善联系起来。"
+        ],
+        "article_id": "e251d5c0aff0f624"
+      }
     ],
     "impact_score": {
       "score": 6.5,
@@ -1819,7 +3163,36 @@
       "compound": "low",
       "hype": "medium"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "Cu(ATSM)",
+        "canonical_name": "Cu(ATSM)",
+        "positioning": "Cu(ATSM) 是一种铜转运化合物，通过修复血脑屏障 P-gp 清除泵来清除阿尔茨海默病相关毒性蛋白的候选药物。",
+        "target_users": [
+          "阿尔茨海默病早期患者",
+          "神经退行性疾病药物研发人员"
+        ],
+        "product_signal": "经过 56 天治疗将毒性淀粉样蛋白减少 42%，并将空间学习能力提升近 44%，首次建立血脑屏障修复与认知改善的关联。",
+        "market_signal": "该化合物已在帕金森病和渐冻症的临床试验中完成安全性评估，具备快速进入阿尔茨海默病人体临床试验的基础。",
+        "differentiation": "区别于传统直接清除淀粉样蛋白的策略，Cu(ATSM) 通过修复血脑屏障 P-gp 清除泵恢复大脑自我清除能力。",
+        "watch_reason": "Cu(ATSM) 已通过其他神经退行性疾病的安全性评估，若在阿尔茨海默病临床试验中复现 42% 的淀粉样蛋白减少效果，有望成为首个靶向血脑屏障修复机制的治疗药物，开辟全新的治疗路径。",
+        "risk_notes": [
+          "该发现仍处于临床前阶段，尚需人体临床试验验证疗效与安全性。",
+          "毒性蛋白离开大脑进入血液的具体生物路径尚未完全明确，作用机制存在未知环节。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "e251d5c0aff0f624"
+        ],
+        "evidence_snippets": [
+          "蒙纳士大学研究人员发现，铜转运药物 Cu(ATSM) 能修复血脑屏障上的废物清除泵，显著降低阿尔茨海默病模型中的毒性蛋白并改善长期空间记忆。",
+          "Cu(ATSM) 具有抗炎和神经保护特性，已在帕金森病和渐冻症的临床试验中完成安全性评估。",
+          "经过 56 天治疗，Cu(ATSM) 将毒性淀粉样蛋白减少 42%，并将空间学习能力提升近 44%。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -1838,28 +3211,71 @@
     "pipeline_stage": "fact_extracted",
     "id": "ed6d0083681a0d99",
     "source_type": "community_discussion",
-    "tldr": "亚马逊在密苏里州投资数十亿美元建设数据中心园区",
-    "objective_summary": "Amazon Web Services 宣布在密苏里州蒙哥马利县投资数十亿美元建设新数据中心园区，预计创造400多个全职岗位和数千个建筑岗位，支持云计算和AI工作负载。公司已与 Ameren Missouri 达成能源协议，并承诺超过700万美元社区投资。",
+    "tldr": "Amazon 旗下 AWS 宣布在密苏里州蒙哥马利县投资数十亿美元建设数据中心园区，预计创造 400 多个全职岗位并支持云计算与 AI 工作负载，园区将采用自由空气冷却和雨水收集等环保措施，同时 Amazon 承诺提供超过 700 万美元社区捐赠。",
+    "objective_summary": "2026 年 7 月 21 日，Amazon Web Services 宣布在密苏里州蒙哥马利县投资数十亿美元建设新数据中心园区，预计创造 400 多个全职数据中心岗位和数千个建筑岗位。该园区将主要用于支持 AWS 云计算和 AI 工作负载。Amazon 已与当地公用事业公司 Ameren Missouri 达成协议确保成本不转嫁给其他用户，并在该州投资了一个 138 兆瓦的无碳能源项目。园区采用自由空气冷却、雨水收集和现场水循环等环保措施，预计用水量仅占当地含水层年补给量的 0.1% 以下。该项目预计为当地带来数亿美元新增税收，Amazon 还承诺提供超过 700 万美元的社区捐赠用于公共安全、社区空间和 STEM 教育。",
     "event_type": "infrastructure_update",
-    "epistemic_status": "verified_fact",
+    "epistemic_status": "pr_statement",
     "entities": {
       "companies": [
-        "Amazon Web Services",
         "Amazon",
+        "AWS",
         "Ameren Missouri"
       ],
-      "technologies": [],
+      "technologies": [
+        "cloud computing",
+        "AI"
+      ],
       "key_people": [
         "Mike Kehoe"
       ]
     },
     "key_logic_flow": [
-      "Amazon Web Services 宣布在密苏里州蒙哥马利县投资数十亿美元建设数据中心园区，支持云计算和 AI 工作负载。",
-      "该项目预计创造超过400个全职数据中心岗位以及数千个建筑岗位，涵盖电工、HVAC技师、网络专家等职位。",
-      "亚马逊与当地公用事业公司 Ameren Missouri 达成协议，确保园区新增成本不会转嫁给其他用户，并投资了一个138兆瓦的无碳能源项目。",
-      "数据中心采用自由气冷（约90%时间）、雨水收集（满足约20%年用水需求）、现场水循环利用（重复使用达6次）等节能节水技术。",
-      "亚马逊承诺超过700万美元社区捐赠，包括300万美元用于应急调度和公共安全基础设施，以及STEM教育项目和社区基金。",
-      "密苏里州州长 Mike Kehoe 对该项目表示欢迎，认为将促进基础设施、税收和经济增长。"
+      "Amazon Web Services 宣布在密苏里州蒙哥马利县投资数十亿美元建设新的数据中心园区。",
+      "该项目预计创造 400 多个全职数据中心岗位以及数千个建筑岗位，涵盖电工、暖通技术员、网络专家和运营经理等职位。",
+      "该数据中心园区将主要用于支持 AWS 云计算和 AI 工作负载。",
+      "Amazon 与当地公用事业公司 Ameren Missouri 达成协议，确保数据中心相关成本不转嫁给其他用户。",
+      "Amazon 在密苏里州投资了一个 138 兆瓦的无碳能源项目，并采用自由空气冷却（约 90% 时间）、雨水收集（满足约 20% 年用水需求）和现场水循环（重复使用六次）等环保措施。",
+      "Amazon 承诺提供超过 700 万美元的社区捐赠，包括 300 万美元用于公共安全基础设施，以及 STEM 教育项目、教师资助和新的社区空间建设。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "AWS Missouri Data Center Campus",
+        "canonical_name": "AWS Missouri Data Center Campus",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Amazon Web Services 宣布在密苏里州蒙哥马利县投资数十亿美元建设新的数据中心园区。",
+          "该项目预计创造 400 多个全职数据中心岗位和数千个建筑岗位，支持 AWS 云计算和 AI 工作负载。",
+          "该园区将采用自由空气冷却（约 90% 时间）、雨水收集（满足约 20% 年用水需求）和现场水循环（重复使用六次）等环保措施。"
+        ],
+        "article_id": "ed6d0083681a0d99"
+      },
+      {
+        "object_type": "project",
+        "name": "Missouri 138 MW Carbon-Free Energy Project",
+        "canonical_name": "Missouri Carbon-Free Energy Project",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Amazon 在密苏里州投资了一个 138 兆瓦的无碳能源项目，足以为超过 28,000 户家庭供电。",
+          "该无碳能源项目是 Amazon 为支持其在该州的数据中心运营所做的配套清洁能源投资。"
+        ],
+        "article_id": "ed6d0083681a0d99"
+      },
+      {
+        "object_type": "project",
+        "name": "Amazon Montgomery County Community Fund",
+        "canonical_name": "Amazon Montgomery County Community Fund",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Amazon 承诺提供超过 700 万美元的直接社区捐款，包括新设立的 Amazon 蒙哥马利县社区基金用于支持当地项目。",
+          "社区捐款还包括 300 万美元用于应急调度服务和公共安全基础设施。"
+        ],
+        "article_id": "ed6d0083681a0d99"
+      }
     ],
     "impact_score": {
       "score": 3.5,
@@ -1912,6 +3328,77 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "AWS Missouri Data Center Campus",
+        "canonical_name": "AWS Missouri Data Center Campus",
+        "positioning": "AWS在密苏里州蒙哥马利县投资数十亿美元建设的数据中心园区，专为支持云计算和AI工作负载而设计。",
+        "technical_signal": "采用自由空气冷却（约90%时间）、雨水收集（满足约20%年用水需求）和现场水循环（重复使用六次）等环保技术，预计用水量仅占当地含水层年补给量的0.1%以下。",
+        "adoption_signal": "预计创造400多个全职数据中心岗位和数千个建筑岗位，已与当地公用事业公司Ameren Missouri达成协议确保成本不转嫁给其他用户。",
+        "ecosystem_relevance": "与Amazon在密苏里州已有的1万多名员工和138兆瓦无碳能源项目形成协同，强化了其在云计算和AI基础设施领域的全栈布局。",
+        "target_users": [],
+        "market_signal": "预计为当地带来数亿美元新增税收，并承诺超过700万美元社区捐赠，标志着中西部正成为新兴数据中心枢纽。",
+        "differentiation": "自由空气冷却、雨水收集和现场水循环六次等环保措施，以及不将成本转嫁给其他用户的公用事业协议，在同类数据中心项目中具有差异化优势。",
+        "watch_reason": "该项目是AWS在AI和云计算基础设施领域的重大投资，其环保技术方案和社区合作模式对判断大型科技公司数据中心战略风向具有重要参考价值。",
+        "risk_notes": [
+          "数据中心建设和运营可能面临当地社区对环境影响和资源消耗的担忧。",
+          "项目实际创造就业岗位数量能否达到预期存在不确定性。",
+          "大规模数据中心对当地电网和基础设施的压力可能需要持续投入。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "ed6d0083681a0d99"
+        ],
+        "evidence_snippets": [
+          "Amazon Web Services 宣布在密苏里州蒙哥马利县投资数十亿美元建设新的数据中心园区。",
+          "该项目预计创造 400 多个全职数据中心岗位和数千个建筑岗位，支持 AWS 云计算和 AI 工作负载。",
+          "该园区将采用自由空气冷却（约 90% 时间）、雨水收集（满足约 20% 年用水需求）和现场水循环（重复使用六次）等环保措施。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Missouri 138 MW Carbon-Free Energy Project",
+        "canonical_name": "Missouri Carbon-Free Energy Project",
+        "positioning": "Amazon在密苏里州投资的138兆瓦无碳能源项目，为数据中心运营提供配套清洁电力。",
+        "technical_signal": "138兆瓦无碳能源项目足以为超过28,000户家庭供电，是Amazon为数据中心配套建设的清洁能源基础设施。",
+        "ecosystem_relevance": "作为AWS数据中心园区的配套清洁能源投资，该模式反映了大型科技公司自建清洁能源以支持AI计算负载增长的行业趋势。",
+        "target_users": [],
+        "watch_reason": "作为AWS数据中心园区的配套清洁能源投资，该项目的规模和模式反映了大型科技公司数据中心能源策略从外购电力向自建清洁能源转型的新趋势。",
+        "risk_notes": [
+          "文章未提供该项目的具体时间表、技术类型和部署细节。",
+          "138兆瓦的无碳能源规模相对于大型数据中心的持续电力需求可能较为有限。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "ed6d0083681a0d99"
+        ],
+        "evidence_snippets": [
+          "Amazon 在密苏里州投资了一个 138 兆瓦的无碳能源项目，足以为超过 28,000 户家庭供电。",
+          "该无碳能源项目是 Amazon 为支持其在该州的数据中心运营所做的配套清洁能源投资。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Amazon Montgomery County Community Fund",
+        "canonical_name": "Amazon Montgomery County Community Fund",
+        "positioning": "Amazon设立的蒙哥马利县社区基金，通过超过700万美元捐赠支持当地公共安全、社区空间和STEM教育项目。",
+        "target_users": [],
+        "watch_reason": "作为大型科技公司数据中心社区投资配套的典型案例，该基金的构建模式和资金分配方式对评估科技企业区域合作策略具有参考价值。",
+        "risk_notes": [
+          "社区基金的实际分配效果和长期可持续性尚待进一步观察。",
+          "此类社区捐赠能否有效缓解数据中心对当地资源消耗引发的争议仍不确定。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "ed6d0083681a0d99"
+        ],
+        "evidence_snippets": [
+          "Amazon 承诺提供超过 700 万美元的直接社区捐款，包括新设立的 Amazon 蒙哥马利县社区基金用于支持当地项目。",
+          "社区捐款还包括 300 万美元用于应急调度服务和公共安全基础设施。"
+        ]
+      }
+    ]
   }
 ]

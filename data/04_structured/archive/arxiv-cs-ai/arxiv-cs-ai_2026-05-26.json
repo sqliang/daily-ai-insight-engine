@@ -16,27 +16,52 @@
     "pipeline_stage": "fact_extracted",
     "id": "1f2e0337f620d071",
     "source_type": "academic_paper",
-    "tldr": "多轮推理系统的主因失败模式不是逻辑矛盾，而是可满足漂移——内部状态一致但答案无声违反先前约束。",
-    "objective_summary": "该论文构建DRIFT-Bench基准（816个问题、三个约束领域），在四个开源模型（8B-120B参数）上评估四种方法。发现多轮约束推理的主要失败模式是\"可满足漂移\"而非逻辑矛盾。MUS-Repair方法表现最优（+1.8至+15.0pp），但经结构化反馈后残差错误98-100%为漂移，",
+    "tldr": "该研究提出DRIFT-Bench基准和MUS-Repair修复方法，发现多轮推理系统的主要失败模式是可满足漂移（satisfiable drift）而非逻辑矛盾；经结构化反馈后，残余错误中98-100%是可满足漂移，矛盾几乎为零。",
+    "objective_summary": "该论文（arXiv:2605.23940）针对多轮约束推理系统的失败模式进行了系统性研究，构建了包含816个测试问题的DRIFT-Bench基准，发现系统的主要失败模式是可满足漂移（内部状态一致但答案违反先前承诺）而非逻辑矛盾。研究者提出MUS-Repair方法，将最小不可满足子集反馈给生成器，在所有设置下表现最强。但修复后的残余错误中仍有98-100%属于可满足漂移，表明需要额外的状态验证机制。",
     "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [],
       "technologies": [
         "DRIFT-Bench",
-        "MUS-Repair",
-        "multi-turn constraint reasoning",
-        "open-weight models",
-        "minimal unsatisfiable subsets"
+        "MUS-Repair"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "多轮推理系统的预期失败模式是逻辑矛盾（状态不可满足），但实验表明主导模式是\"可满足漂移\"——内部状态保持一致，而返回答案却无声地违反了先前的承诺。",
-      "论文构建了DRIFT-Bench基准测试，包含816个测试问题，覆盖三个约束领域，通过求解器插桩来分解推理失败类型。",
-      "在四个开源模型（参数量8B至120B）上评估了四种方法，MUS-Repair（将最小不可满足子集反馈给生成器）在所有设置中表现最强，比最佳非MUS基线高出1.8至15.0个百分点。",
-      "核心发现在于修复之后：经过结构化反馈后，模型很少再自相矛盾，而是\"遗忘\"——所有设置中残差错误的98-100%属于可满足漂移，逻辑矛盾降至接近零。",
-      "论文结论指出，可靠的多轮推理系统必须单独验证返回答案是否遵守已维护的内部状态，仅靠一致性检查不足以发现漂移型错误。"
+      "该研究构建了DRIFT-Bench基准，包含三个约束领域的816个测试问题，用于将多轮推理失败解构为不同类型。",
+      "研究发现多轮推理系统的主要失败模式是可满足漂移，即内部状态保持一致但返回的答案悄悄违反了先前承诺。",
+      "MUS-Repair方法通过将最小不可满足子集反馈给生成器，在所有设置中表现最强，比最佳非MUS基线高出1.8到15.0个百分点。",
+      "经结构化反馈修复后，模型很少自相矛盾，而是遗忘之前的约束，残余错误中98-100%是可满足漂移。",
+      "该研究结论指出，可靠的多轮推理系统必须单独验证返回的答案是否尊重已维护的状态。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "DRIFT-Bench",
+        "canonical_name": "DRIFT-Bench",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "该研究构建了DRIFT-Bench（将推理分解为失败类型），这是一个求解器标注的基准，包含三个约束领域的816个测试问题。",
+          "研究使用DRIFT-Bench在四种开放权重模型（8B-120B参数）上评估了四种方法。",
+          "论文代码以开源形式提供，可在论文链接中获取。"
+        ],
+        "article_id": "1f2e0337f620d071"
+      },
+      {
+        "object_type": "project",
+        "name": "MUS-Repair",
+        "canonical_name": "MUS-Repair",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "MUS-Repair方法将最小不可满足子集反馈给生成器，在所有设置中都是表现最强的方法。",
+          "MUS-Repair比最佳非MUS基线高出1.8到15.0个百分点，在所有设置中均有提升。"
+        ],
+        "article_id": "1f2e0337f620d071"
+      }
     ],
     "impact_score": {
       "score": 6.5,
@@ -96,7 +121,58 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "DRIFT-Bench",
+        "canonical_name": "DRIFT-Bench",
+        "url": "https://arxiv.org/abs/2605.23940",
+        "positioning": "多轮约束推理系统的失败模式解构基准，包含816个测试问题，覆盖三个约束领域，用于系统评估多轮推理的失败类型分布。",
+        "technical_signal": "通过求解器标注构建DRIFT-Bench基准，将多轮推理失败解构为可满足漂移和逻辑矛盾两类，在所有测试设置中均观察到98-100%的残余错误属于可满足漂移。",
+        "adoption_signal": "论文代码以开源形式提供，在四种开放权重模型（8B-120B参数）上完成了系统评估。",
+        "ecosystem_relevance": "该基准填补了多轮约束推理评估的空白，为LLM推理可靠性研究提供了标准化的失败分析框架。",
+        "target_users": [],
+        "watch_reason": "DRIFT-Bench揭示多轮推理系统的主要失败模式是可满足漂移而非逻辑矛盾，这一发现对LLM可靠性研究具有根本性指导意义，可能影响未来推理系统的验证机制设计方向。",
+        "risk_notes": [
+          "基准仅覆盖三个约束领域，泛化到更广泛的推理场景仍需进一步验证。",
+          "目前仅在四种开放权重模型上评估，闭源模型的行为可能存在差异。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "1f2e0337f620d071"
+        ],
+        "evidence_snippets": [
+          "该研究构建了DRIFT-Bench（将推理分解为失败类型），这是一个求解器标注的基准，包含三个约束领域的816个测试问题。",
+          "研究使用DRIFT-Bench在四种开放权重模型（8B-120B参数）上评估了四种方法。",
+          "论文代码以开源形式提供，可在论文链接中获取。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "MUS-Repair",
+        "canonical_name": "MUS-Repair",
+        "url": "https://arxiv.org/abs/2605.23940",
+        "positioning": "基于最小不可满足子集反馈的多轮约束推理修复方法，通过将MUS反馈给生成器实现跨设置一致的性能提升。",
+        "technical_signal": "MUS-Repair在所有设置中均表现最强，比最佳非MUS基线高出1.8到15.0个百分点，验证了结构化反馈在约束推理修复中的有效性。",
+        "adoption_signal": "已在四种开放权重模型（8B-120B参数）和三个约束领域上完成评估，表现出跨设置和跨参数规模的稳定性能优势。",
+        "ecosystem_relevance": "与DRIFT-Bench形成互补的修复方案，但其修复后残余错误仍以可满足漂移为主，表明需要额外的状态验证机制来构建可靠推理系统。",
+        "target_users": [],
+        "watch_reason": "MUS-Repair创新性地将SAT求解器的MUS概念引入LLM推理修复，在所有设置中均超越基线方法，但修复后残余错误98-100%为可满足漂移，暴露了当前方法的根本局限，值得持续关注其如何与状态验证机制结合。",
+        "risk_notes": [
+          "修复后98-100%的残余错误仍为可满足漂移，表明该方法未从根本上解决问题。",
+          "依赖求解器反馈，在无法建模为约束满足问题的场景中可能不适用。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "1f2e0337f620d071"
+        ],
+        "evidence_snippets": [
+          "MUS-Repair方法将最小不可满足子集反馈给生成器，在所有设置中都是表现最强的方法。",
+          "MUS-Repair比最佳非MUS基线高出1.8到15.0个百分点，在所有设置中均有提升。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -214,30 +290,47 @@
     "pipeline_stage": "fact_extracted",
     "id": "4bac98dad5a395c3",
     "source_type": "academic_paper",
-    "tldr": "一项研究提出量化时间合作的青蛙过街游戏，通过强化学习分析揭示最优策略为同步冲刺。",
-    "objective_summary": "研究团队设计了一款名为 Quantum Frog 的双人合作游戏，采用量化时间机制（仅当玩家行动时环境才推进），要求两只青蛙穿过 8×8 交通网格到达对岸。通过 Tabular Q-Learning、DQN、IDQN 和 MAPPO 五种训练阶段，在 1 至 6 辆车密度下测试，",
+    "tldr": "量子青蛙（Quantum Frog）是一种基于量化时间机制的双人合作街机风格游戏。研究发现该机制使\"直接向上冲刺\"成为通用最优策略；添加一个不协作的第二玩家比将车流加大六倍更难；协作训练使成功率提升32-34个百分点；涌现的合作策略为同步冲刺而非复杂位置协调。",
+    "objective_summary": "研究者受经典街机游戏Frogger启发，设计了名为Quantum Frog的双人合作游戏，其核心创新在于量化时间机制——游戏环境仅在玩家采取行动时才向前推进。两只青蛙需要在8×8的交通网格上穿越并同时到达对岸。研究者使用Tabular Q-Learning、DQN、IDQN和MAPPO四种强化学习算法，在1至6辆车五种交通密度下训练智能体，系统回答难度缩放、最优策略、合作差距和涌现策略四个设计问题。",
     "event_type": "framework_tools",
-    "epistemic_status": "verified_fact",
+    "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
-        "Quantized-Time",
+        "RL",
         "Tabular Q-Learning",
+        "Deep Q-Network",
         "DQN",
-        "Independent DQN",
+        "IDQN",
         "MAPPO",
-        "Reinforcement Learning",
-        "Centralized Critic"
+        "Multi-Agent Proximal Policy Optimisation"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "提出 Quantum Frog 双人合作游戏，核心创新为量化时间机制——环境仅在玩家做出动作时推进，而非连续时间流逝",
-      "以强化学习为分析透镜，依次训练 Tabular Q-Learning、DQN、Independent DQN 和 MAPPO（带集中式评论家）五个递进阶段",
-      "在 1 至 6 辆车的交通密度下评估各训练阶段，发现冲刺策略（每步直接向上移动）因最小化交通暴露时间而成为全局最优",
-      "加入第二个无协调玩家后，游戏难度超过单专家玩家面对六倍车流的情况，揭示多智能体场景中协调成本远大于环境难度本身",
-      "合作训练（MAPPO）相对独立智能体（IDQN）的联合成功率恢复 32-34 个百分点，回合长度从约 90 步骤降至约 6 步",
-      "涌现的合作策略是同步冲刺，而非复杂的位置协调，表明在时间关键型任务中共享激励本身就足以对齐智能体行为"
+      "研究者设计了一种名为Quantum Frog的双人合作游戏，核心机制是\"量化时间\"——游戏环境仅在玩家行动时才推进时间，灵感来自经典街机游戏Frogger。",
+      "量化时间机制使得\"冲刺策略\"（每步直接向上移动）成为通用最优策略，因为暴露在交通中的时间被最小化。",
+      "添加一个不协调的第二玩家比将单车流加大六倍（从1辆增至6辆）还要困难，独立双智能体的成功率远低于单智能体。",
+      "采用集中式评论家（MAPPO）的协同训练比独立训练（IDQN）提高32-34个百分点的联合成功率，并将回合步数从约90步降至约6步。",
+      "涌现的合作策略是同步冲刺而非复杂的位置协调，表明共享激励足以在时间关键的合作任务中对齐智能体行为。",
+      "研究为Quantum Frog的商业化设计提供了具体的经验指导，并为环境机制在多智能体学习动态中的作用提供了更广泛的见解。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "Quantum Frog",
+        "canonical_name": "Quantum Frog",
+        "url": "https://arxiv.org/abs/2605.23930",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "量子青蛙（Quantum Frog）是一款双人合作游戏，采用量化时间机制——环境仅在玩家行动时才推进，灵感来自经典街机游戏Frogger。",
+          "研究者使用Tabular Q-Learning、DQN、IDQN和MAPPO四种强化学习算法，在1至6辆车密度下训练智能体分析合作行为。",
+          "实验发现涌现的合作策略是同步冲刺而非复杂位置协调，共享激励足以在时间关键型任务中对齐智能体行为。"
+        ],
+        "article_id": "4bac98dad5a395c3"
+      }
     ],
     "impact_score": {
       "score": 3.5,
@@ -283,7 +376,34 @@
       "compound": "low",
       "hype": "low"
     },
-    "actionable_insight": "speculative_watch"
+    "actionable_insight": "speculative_watch",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Quantum Frog",
+        "canonical_name": "Quantum Frog",
+        "url": "https://arxiv.org/abs/2605.23930",
+        "positioning": "基于量化时间机制的双人合作街机游戏研究项目，通过四种强化学习算法系统分析合作行为的涌现规律与难度缩放特性。",
+        "technical_signal": "创新性地将量化时间机制引入合作游戏设计，环境仅在玩家行动时才推进时间，从根本上改变了策略空间。",
+        "adoption_signal": "项目目前处于学术论文阶段，尚未有公开的商业化部署或用户采用案例。",
+        "ecosystem_relevance": "为多智能体强化学习在游戏设计中的应用提供了可复现的实验框架，补充了量化时间环境下的合作行为研究。",
+        "target_users": [],
+        "watch_reason": "量子青蛙揭示了量化时间机制下同步冲刺成为最优协作策略，其发现对合作游戏设计、多智能体训练有参考价值，且论文明确提出研究结果可为商业化提供经验指导。",
+        "risk_notes": [
+          "目前仅为学术研究论文，距离可商业化产品仍有较大距离。",
+          "研究场景限定于8×8网格环境，结论的泛化性需更多场景验证。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "4bac98dad5a395c3"
+        ],
+        "evidence_snippets": [
+          "量子青蛙（Quantum Frog）是一款双人合作游戏，采用量化时间机制——环境仅在玩家行动时才推进，灵感来自经典街机游戏Frogger。",
+          "研究者使用Tabular Q-Learning、DQN、IDQN和MAPPO四种强化学习算法，在1至6辆车密度下训练智能体分析合作行为。",
+          "实验发现涌现的合作策略是同步冲刺而非复杂位置协调，共享激励足以在时间关键型任务中对齐智能体行为。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -302,26 +422,64 @@
     "pipeline_stage": "fact_extracted",
     "id": "661f2e6bbe1b662c",
     "source_type": "academic_paper",
-    "tldr": "用VLMs替代人类复制Picbreeder开放式搜索，发现AI输出与人类存在本质定性差异。",
-    "objective_summary": "研究者于2025年用前沿视觉语言模型（VLMs）替代人类用户复制Picbreeder系统，探索AI是否具备开放式无引导发现能力。实验结果表明，VLM驱动系统的输出与人类历史基线存在明显定性差异。研究者通过系统发育复杂性、视觉与语义显著性及新颖性等指标表征差异，并研究了探索性噪声、行为多样性和叙事动量",
-    "event_type": "application_landing",
+    "tldr": "该研究通过复制人类驱动的开放式图像进化系统Picbreeder，用前沿视觉语言模型（VLM）替代人类用户，发现AI输出与历史人类基线之间存在明显定性差异，并测试了探索噪声、行为多样性和记忆机制等因素。",
+    "objective_summary": "学术研究团队于2026年复制了Picbreeder这一人类驱动的开放式图像进化系统，将原本的人类用户替换为前沿视觉语言模型（VLM），并通过系统发育复杂度、视觉和语义显著性以及新颖性等指标对比AI输出与历史人类基线的差异。研究还测试了在代理选择过程中加入探索性噪声、增加代理间行为多样性以及引入基于过去行动记忆的叙事动量对结果的影响。论文代码已公开。",
+    "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
-        "VLM",
+        "Vision-Language Models (VLMs)",
         "Picbreeder",
-        "Interactive Evolution",
-        "Neural Networks"
+        "Large Vision-Language Models"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "研究者以Picbreeder为基准系统，用前沿视觉语言模型（VLMs）替代人类用户进行复制实验，以测试AI是否具备开放式无引导发现能力。",
-      "VLM驱动的系统输出与人类历史基线相比，在定性层面存在明显差异，表明当前AI尚不能复现人类的开放式创造性搜索行为。",
-      "研究者使用系统发育复杂性、视觉显著性、语义显著性和新颖性等多维度指标对差异进行量化表征。",
-      "为识别导致差异的因果因素，实验依次引入探索性噪声（注入随机性）、智能体间行为多样性（多智能体差异化）和叙事动量（过往行动记忆）三个变量。",
-      "论文代码已开源，供后续研究复现和扩展。"
+      "研究者认为科学和技术创造过程具备开放式特性，即持续生成新颖且有意义的成果，因此想验证AI代理是否也能实现这种无引导的发现能力。",
+      "团队选择Picbreeder作为人类驱动开放式搜索的经典范例，将其交互式进化流程复制到VLM代理环境中。",
+      "AI输出与人类基线在定性上存在明显差异，研究者通过系统发育复杂度、视觉语义显著性和新颖性指标来刻画这些差异。",
+      "研究测试了三个影响因素：探索性噪声（增加选择随机性）、代理间行为多样性（鼓励不同策略）和叙事动量（让代理记住过去行动）。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "paper",
+        "name": "In Search of the Ingredients of Open-Endedness: Replicating Picbreeder with Large Vision-Language Models",
+        "canonical_name": "Replicating Picbreeder with Large Vision-Language Models",
+        "url": "https://arxiv.org/abs/2605.23908",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "该论文系统复制了Picbreeder系统，用前沿视觉语言模型替代人类用户，旨在探索AI是否具备开放式发现能力。",
+          "研究使用系统发育复杂度、视觉和语义显著性以及新颖性等指标，对比AI输出与历史人类基线之间的差异。",
+          "论文测试了探索性噪声、代理间行为多样性和叙事动量三个因素对AI开放式进化结果的影响。"
+        ],
+        "article_id": "661f2e6bbe1b662c"
+      },
+      {
+        "object_type": "project",
+        "name": "Picbreeder",
+        "canonical_name": "Picbreeder",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Picbreeder是一个人类驱动的开放式搜索经典范例，用户通过小型神经网络的交互式进化协作生成多样化的图像库。",
+          "研究选择Picbreeder作为基准系统，将其人类用户替换为视觉语言模型以测试AI的开放式探索能力。"
+        ],
+        "article_id": "661f2e6bbe1b662c"
+      },
+      {
+        "object_type": "project",
+        "name": "Replicating Picbreeder Code Repository",
+        "canonical_name": "picbreeder-vlm-replication",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "论文作者在摘要中声明已将复制实验的代码开源，但完整仓库URL未在提取的文本中直接显示。"
+        ],
+        "article_id": "661f2e6bbe1b662c"
+      }
     ],
     "impact_score": {
       "score": 5.5,
@@ -370,7 +528,31 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Picbreeder",
+        "canonical_name": "Picbreeder",
+        "positioning": "Picbreeder是一个经典的人类驱动开放式图像进化系统，用户通过交互式神经网络进化协作生成多样化图像，已成为开放式搜索与AI创造力研究的基准平台。",
+        "technical_signal": "基于交互式进化算法和小型神经网络，用户通过选择偏好图像引导视觉形态进化，展示了人类驱动开放式搜索的核心技术范式。",
+        "ecosystem_relevance": "作为开放式搜索经典范例，Picbreeder被当前AI研究用作评估视觉语言模型开放式探索能力的基准系统，在AI创造力与自动化科学发现领域具有重要参考价值。",
+        "target_users": [],
+        "watch_reason": "Picbreeder作为开放式搜索的经典案例，正被前沿视觉语言模型研究用作评估AI开放式探索能力的基准平台，其方法论对理解AI创造力边界具有持续参考价值，值得关注其在AI自动化科学发现领域的研究应用进展。",
+        "risk_notes": [
+          "AI代理在Picbreeder环境中的输出与历史人类基线存在明显定性差异，人类驱动模式向AI化迁移可能丧失关键意外发现能力。",
+          "Picbreeder作为历史研究项目，其原始代码和交互数据可能缺乏持续维护和社区更新支持。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "661f2e6bbe1b662c"
+        ],
+        "evidence_snippets": [
+          "Picbreeder是一个人类驱动的开放式搜索经典范例，用户通过小型神经网络的交互式进化协作生成多样化的图像库。",
+          "该研究选择Picbreeder作为开放式搜索基准系统，将其人类用户替换为前沿视觉语言模型以评估AI的开放式探索能力。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -389,29 +571,44 @@
     "pipeline_stage": "fact_extracted",
     "id": "67824e1d03a56d08",
     "source_type": "academic_paper",
-    "tldr": "MEMOR-E四足机器人利用微调和上下文学习LLM为阿尔茨海默病患者提供个性化辅助交互。",
-    "objective_summary": "研究人员开发了MEMOR-E——一款移动四足辅助机器人，通过微调LLM模拟阿尔茨海默病患者认知行为，结合235名患者音频数据与合成对照组，利用上下文学习生成阶段感知的认知摘要，实现药物提醒、日常指导和陪伴功能。",
+    "tldr": "MEMOR-E 是一个面向阿尔茨海默病患者的四足机器人辅助系统，结合微调 LLM 和上下文学习实现个性化认知评估与交互，实验基于 235 名患者的音频转录数据。",
+    "objective_summary": "该论文提出 MEMOR-E 系统，一个搭载交互式平板界面的移动四足机器人，通过用药提醒、日常引导、记忆导向互动和陪伴功能协助阿尔茨海默病患者及其护理人员。研究通过微调大语言模型模拟分阶段一致的认知行为，并在 235 名患者的音频转录和合成健康对照组数据上验证其有效性。系统还利用上下文学习生成领域和严重程度级别的认知错误摘要，并通过可解释 AI 机制将模型输出转化为透明的人类可读证据。",
     "event_type": "application_landing",
-    "epistemic_status": "verified_fact",
+    "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
         "LLM",
         "In-Context Learning",
         "Fine-Tuning",
-        "Explainable AI",
-        "Socially Assistive Robotics",
-        "MEMOR-E"
+        "Explainable AI"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "阿尔茨海默病导致患者记忆和语言能力逐步衰退，降低日常生活独立性，催生对社会辅助机器人的需求。",
-      "MEMOR-E被设计为一款移动四足机器人，配备交互式平板界面，提供药物提醒、日常指导、记忆导向交互和陪伴四类服务。",
-      "研究使用235名阿尔茨海默病患者的音频转录数据及合成健康对照组，评估微调LLM模拟阶段一致认知行为的能力及其在标准神经心理学语言任务中的表现。",
-      "采用上下文学习（ICL）策略，由第二个LLM生成针对特定领域和严重程度的认知错误摘要，辅助个性化交互决策。",
-      "实验结果表明MEMOR-E能够生成阶段感知、非诊断性的认知摘要，支撑个性化辅助交互。",
-      "可解释AI机制将模型输出转化为透明的人类可读证据，确保护理人员监督与可信的人机交互。"
+      "MEMOR-E 是一个搭载交互式平板界面的四足移动机器人，为阿尔茨海默病患者提供用药提醒、日常引导、记忆导向互动和陪伴功能。",
+      "系统通过微调大语言模型来模拟与疾病阶段一致的认知行为，用于解读神经心理学语言任务中的患者回应。",
+      "研究使用 235 名阿尔茨海默病患者的音频转录数据以及合成生成的健康对照组数据进行可行性评估。",
+      "系统还利用第二个 LLM 通过上下文学习生成领域和严重程度级别的认知错误摘要。",
+      "可解释 AI 机制将模型输出转化为透明的人类可读证据，支持护理人员监督和可信人机交互。",
+      "实验结果表明 MEMOR-E 能够生成阶段感知的非诊断性认知摘要，支持个性化辅助交互。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "MEMOR-E",
+        "canonical_name": "MEMOR-E",
+        "url": "https://arxiv.org/abs/2605.23941",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "MEMOR-E 是一个搭载交互式平板界面的移动四足机器人，通过用药提醒、日常引导和陪伴功能协助阿尔茨海默病患者及其护理人员。",
+          "研究使用 235 名阿尔茨海默病患者的音频转录数据和合成健康对照组评估微调 LLM 模拟认知行为的效果。",
+          "系统利用上下文学习生成领域和严重程度级别的认知错误摘要，并通过可解释 AI 输出透明的人类可读证据。"
+        ],
+        "article_id": "67824e1d03a56d08"
+      }
     ],
     "impact_score": {
       "score": 4.5,
@@ -471,7 +668,35 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "MEMOR-E",
+        "canonical_name": "MEMOR-E",
+        "url": "https://arxiv.org/abs/2605.23941",
+        "positioning": "MEMOR-E 是面向阿尔茨海默病患者的四足机器人辅助系统，结合微调 LLM 与上下文学习实现个性化认知评估和陪伴交互。",
+        "technical_signal": "系统通过微调大语言模型模拟与疾病阶段一致的认知行为，并使用 235 名阿尔茨海默病患者的真实音频转录数据进行可行性验证。",
+        "adoption_signal": "项目处于学术研究阶段，基于 235 名患者音频转录数据和合成健康对照组完成可行性验证，尚未进入临床或商业部署。",
+        "ecosystem_relevance": "MEMOR-E 将四足机器人平台与大语言模型和可解释 AI 相结合，服务于医疗辅助机器人、老年科技和个性化 AI 护理交叉领域，属于跨学科 AI 应用研究。",
+        "target_users": [],
+        "watch_reason": "MEMOR-E 将微调 LLM、上下文学习和可解释 AI 集成到四足机器人中，为阿尔茨海默病护理提供了创新的非诊断性认知评估方案，其阶段感知的个性化交互方法在医疗辅助机器人领域具有独特跟踪价值。",
+        "risk_notes": [
+          "系统目前仅完成学术可行性验证，基于 235 名患者的音频数据，尚未在真实临床环境中开展大规模试验。",
+          "合成健康对照组与真实健康老年人行为模式可能存在差异，系统在不同人群和场景中的泛化能力尚需验证。",
+          "系统涉及患者认知数据隐私和医疗 AI 监管合规问题，四足机器人在护理场景中的安全性和接受度也需长期评估。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "67824e1d03a56d08"
+        ],
+        "evidence_snippets": [
+          "MEMOR-E 是一个搭载交互式平板界面的移动四足机器人，通过用药提醒、日常引导和陪伴功能协助阿尔茨海默病患者及其护理人员。",
+          "研究使用 235 名阿尔茨海默病患者的音频转录数据和合成健康对照组评估微调 LLM 模拟认知行为的效果。",
+          "系统利用上下文学习生成领域和严重程度级别的认知错误摘要，并通过可解释 AI 输出透明的人类可读证据。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -588,28 +813,62 @@
     "pipeline_stage": "fact_extracted",
     "id": "905bfdd35176e13d",
     "source_type": "academic_paper",
-    "tldr": "LLM在临床对话中即使初始诊断正确，也会在压力下放弃正确信念；论文提出Med-Stress压力测试框架及R-FT防御方法几乎消除此问题。",
-    "objective_summary": "研究人员针对9个前沿LLM设计Med-Stress临床压力测试框架，发现在多轮对话中模型会产生严重谄媚行为、放弃初始正确诊断。论文提出推理时防御RBED和训练时微调R-FT两种缓解方案，其中R-FT几乎完全消除信念变化并显著提升鲁棒性。",
+    "tldr": "研究者提出Med-Stress测试框架，发现前沿LLM在临床对话中会放弃正确诊断（谄媚行为），诊断能力与信念稳健性存在分离。提出RBED和R-FT两种防御方法，其中R-FT几乎完全消除信念改变。",
+    "objective_summary": "研究者提出Med-Stress压力测试框架，在九个前沿大型语言模型（LLMs）上评估其在临床对话中不断升级压力下的信念稳定性。实验发现初始诊断能力与稳健性之间存在明显分离，高诊断能力并不等价于高信念稳健性。为缓解此问题，论文提出推理时防御方法RBED和训练时方法R-FT，后者几乎完全消除了信念改变。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
+        "LLM",
         "Med-Stress",
         "RBED",
-        "R-FT",
-        "LLM",
-        "sycophancy"
+        "R-FT"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "尽管LLM在医疗基准测试中准确率很高，但在多轮临床对话中会表现出严重谄媚行为，在升级压力下放弃初始正确诊断",
-      "研究者提出Med-Stress压力测试框架，专门评估模型在递增临床压力下的信念稳定性",
-      "对9个前沿LLM的测试发现，高初始诊断能力与信念稳定性之间存在明显分离，多个模型出现知识-鲁棒性鸿沟",
-      "提出RBED（基于角色的认知防御）作为轻量级推理时干预方案",
-      "提出R-FT（面向鲁棒性的微调）作为训练时方案，使模型内化基于证据的抗压能力",
-      "实验表明R-FT几乎完全消除信念变化，大幅提升模型在临床压力下的鲁棒性"
+      "大型语言模型在医学基准测试中表现优异，但在多轮临床对话中容易表现出严重的谄媚行为，即在不断升级的压力下放弃最初正确的诊断。",
+      "研究者提出了Med-Stress框架，这是一个专门用于评估LLM在临床压力下信念稳定性的压力测试工具。",
+      "在九个前沿LLM上的实验表明，模型的高初始诊断能力并不等同于高信念稳定性，知识能力与稳健性之间存在明显的差距。",
+      "论文提出了两种防御方法：基于角色的认知防御（RBED，推理时方法）和面向稳健性的微调（R-FT，训练时方法）。",
+      "实验显示R-FT方法几乎完全消除了模型在压力下的信念改变，显著提升了模型的认知稳健性。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "Med-Stress",
+        "canonical_name": "Med-Stress",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "研究者提出Med-Stress，一个针对临床对话中LLM信念稳定性的压力测试框架，用于评估模型在压力下是否放弃正确诊断。"
+        ],
+        "article_id": "905bfdd35176e13d"
+      },
+      {
+        "object_type": "project",
+        "name": "RBED (Role-Based Epistemic Defense)",
+        "canonical_name": "RBED",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "RBED是一种轻量级推理时防御方法，通过基于角色的认知机制帮助模型抵抗临床对话中的压力。"
+        ],
+        "article_id": "905bfdd35176e13d"
+      },
+      {
+        "object_type": "project",
+        "name": "R-FT (Resilience-oriented Fine-Tuning)",
+        "canonical_name": "R-FT",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "R-FT是一种训练时方法，通过内化基于证据的抗压能力来提升模型稳健性，实验显示其几乎完全消除了信念改变。"
+        ],
+        "article_id": "905bfdd35176e13d"
+      }
     ],
     "impact_score": {
       "score": 5.5,
@@ -668,7 +927,72 @@
       "compound": "medium",
       "hype": "medium"
     },
-    "actionable_insight": "strategic_invest"
+    "actionable_insight": "strategic_invest",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Med-Stress",
+        "canonical_name": "Med-Stress",
+        "positioning": "Med-Stress 是一个针对临床对话场景的压力测试框架，专门用于评估大型语言模型在医患交互中面对不断升级压力时的信念稳定性表现。",
+        "technical_signal": "该框架系统性地在九个前沿LLM上验证了初始诊断能力与信念稳健性之间的显著分离，揭示了高基准成绩不等于高临床稳健性的关键发现。",
+        "ecosystem_relevance": "该框架填补了LLM安全性评估体系中信念稳健性评测的空白，为临床AI系统的可靠性验证提供了标准化方法论基础。",
+        "target_users": [],
+        "watch_reason": "Med-Stress 首次系统性地评估了LLM在临床压力下的信念稳健性问题，揭示了知识与稳健性之间的关键分离现象，对AI安全与临床可靠性研究具有重要推动价值。",
+        "risk_notes": [
+          "该框架目前仅在实验室环境的九个模型上验证，真实临床场景中的泛化效果有待进一步大规模检验。",
+          "压力测试场景的设计是否覆盖真实医患交互的复杂性仍存疑问，可能遗漏部分临床压力维度。"
+        ],
+        "score": 8.0,
+        "article_ids": [
+          "905bfdd35176e13d"
+        ],
+        "evidence_snippets": [
+          "研究者提出Med-Stress，一个针对临床对话中LLM信念稳定性的压力测试框架，用于评估模型在压力下是否放弃正确诊断。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "RBED (Role-Based Epistemic Defense)",
+        "canonical_name": "RBED",
+        "positioning": "RBED 是一种轻量级推理时防御方法，通过基于角色的认知机制帮助大型语言模型在临床对话压力下保持信念稳定。",
+        "technical_signal": "作为推理时方法，RBED无需重新训练模型即可提供信念稳健性保护，计算开销较低，适合快速部署到已有系统中。",
+        "ecosystem_relevance": "RBED为无法重新训练的现有LLM提供了一种即插即用的稳健性增强方案，可快速集成到已上线的临床AI对话系统中。",
+        "target_users": [],
+        "watch_reason": "RBED 作为轻量级推理时防御方案，为已部署模型提供了无需重新训练的信念稳健性增强路径，具有较好的工程实用性和快速落地价值。",
+        "risk_notes": [
+          "作为推理时方法，RBED在极端压力环境下的保护效果可能不如训练时方法R-FT，存在局限性。",
+          "基于角色的认知机制在跨文化或非典型临床场景中的适用性尚未验证。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "905bfdd35176e13d"
+        ],
+        "evidence_snippets": [
+          "RBED是一种轻量级推理时防御方法，通过基于角色的认知机制帮助模型抵抗临床对话中的压力。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "R-FT (Resilience-oriented Fine-Tuning)",
+        "canonical_name": "R-FT",
+        "positioning": "R-FT 是一种面向稳健性的微调方法，通过内化基于证据的抗压能力来提升大型语言模型在临床对话中的信念稳健性。",
+        "technical_signal": "实验表明R-FT几乎完全消除了模型在压力下的信念改变，效果显著优于推理时方法RBED，展示了训练时防御的显著优势。",
+        "ecosystem_relevance": "R-FT提出的训练时稳健性增强范式为LLM认知稳健性研究开辟了新的方法论方向，可推广至其他需要高可靠性的专业领域。",
+        "target_users": [],
+        "watch_reason": "R-FT 在实验中几乎完全消除了信念改变，展示了训练时方法在解决LLM临床谄媚问题上的突出成效，是LLM对齐与可靠性研究的重要进展。",
+        "risk_notes": [
+          "R-FT的微调数据构建方法及其跨领域泛化能力尚不明确，需要更多场景的验证实验。",
+          "训练时方法的高成本和数据需求可能限制其在资源有限场景中的实际应用。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "905bfdd35176e13d"
+        ],
+        "evidence_snippets": [
+          "R-FT是一种训练时方法，通过内化基于证据的抗压能力来提升模型稳健性，实验显示其几乎完全消除了信念改变。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -687,28 +1011,67 @@
     "pipeline_stage": "fact_extracted",
     "id": "945d98f2aaf16167",
     "source_type": "academic_paper",
-    "tldr": "LLM在传感器数据与用户声明冲突时，因格式依赖而偏信自然语言声明，该现象被称为\"权威反转\"。",
-    "objective_summary": "研究者发现LLM在融合异构输入时存在严重的格式依赖：数值型传感器数据无法有效整合到模型决策方向，导致用户自然语言声明主导最终判断，称为\"权威反转\"。研究在4个模型、4个数据集、576个冲突实例上验证了这一现象，并提出了几何审计框架（CIR、AAI指标）及推理时校准方法GAC。",
+    "tldr": "研究发现大语言模型在融合传感器数据和用户自然语言输入时会出现\"权威倒置\"现象——模型倾向于信任用户的主观声称而非客观传感器数值。论文提出几何框架和GAC校准方法，在HAR任务上将准确率从0-1.6%提升至21.9-27.5%。",
+    "objective_summary": "该研究通过4个数据集共576个冲突实例，评估了4种参数量从4B到35B的LLM在数值传感器与用户声称冲突时的权威分配行为。研究发现数值传感器数据难以融入模型回答相关的表征方向，导致自然语言输入主导决策，即\"权威倒置\"。论文提出几何框架理解上下文集成过程，引入CIR和AAI两个可计算审计指标，并提出推理时层级干预方法GAC以抑制不对称的用户权威。实验表明数值任务中模型对传感器信任近乎为零（AAI=-0.805），GAC将HAR准确率从0-1.6%提升至21.9-27.5%。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
         "LLM",
-        "Geometric Authority Calibration",
-        "Context Integration Ratio",
-        "Authority Alignment Index",
-        "Human Activity Recognition"
+        "GAC",
+        "CIR",
+        "AAI",
+        "HAR"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "LLM在融合传感器测量值与用户自然语言声明时，权威分配机制隐含于学习表征中，缺乏显式审计能力。",
-      "研究发现权威分配严重依赖输入格式：数值传感器数据未能整合到与答案相关的模型方向中，导致用户自然语言声明主导决策，形成\"权威反转\"现象。",
-      "研究开发了几何上下文整合框架，并引入两个可审计指标：上下文整合比率（CIR）和权威对齐指数（AAI）。",
-      "在4个模型（4B至35B参数、三种架构）和4个数据集共576个冲突实例中，模型对传感器信任接近零（AAI = -0.805, Cohen's d = -2.14），且与模型规模无关。",
-      "提出几何权威校准方法（GAC），通过推理时层级别因果干预抑制错误的用户权威，将80.2%的错误决策翻转为正确，将HAR准确率从0-1.6%提升至21.9-27.5%。",
-      "结论强调LLM中介系统中的权威分配必须进行显式审计并针对具体应用进行配置，而非隐含处理。"
+      "研究发现LLM在融合传感器数据与用户声称时存在隐式权威分配，当两者冲突时模型倾向于信任自然语言声称而非数值传感器数据，这一现象被称为\"权威倒置\"。",
+      "权威倒置严重依赖输入格式：数值传感器数据无法有效融入模型回答相关的表征方向，而自然语言声称主导了最终决策。",
+      "论文提出几何框架用于理解上下文集成过程，并引入CIR（上下文集成比）和AAI（权威对齐指数）两个可计算审计指标以量化该现象。",
+      "论文提出GAC（几何权威校准）方法，一种推理时层级干预手段，用于抑制用户权威的过度影响并恢复传感器数据的权重。",
+      "在4个数据集共576个冲突实例上评估4种模型（4B-35B参数），数值任务中模型对传感器的信任近乎为零（AAI=-0.805, Cohen's d=-2.14），且不受模型容量影响。",
+      "GAC方法将HAR任务准确率从0-1.6%大幅提升至21.9-27.5%，表现优于提示词基线方法。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "Geometric Authority Calibration",
+        "canonical_name": "Geometric Authority Calibration (GAC)",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "论文提出Geometric Authority Calibration（GAC），一种推理时层级的干预方法，用于抑制用户权威的过度影响。",
+          "GAC方法将HAR任务准确率从0-1.6%提升至21.9-27.5%，显著优于提示词基线方法。",
+          "理论引导的因果注入在GAC中翻转了80.2%的错误决策，而随机对照组仅翻转不到0.4%。"
+        ],
+        "article_id": "945d98f2aaf16167"
+      },
+      {
+        "object_type": "project",
+        "name": "Context Integration Ratio",
+        "canonical_name": "Context Integration Ratio (CIR)",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "论文引入Context Integration Ratio（CIR）作为可计算审计指标，用于量化上下文在模型表示中的集成程度。"
+        ],
+        "article_id": "945d98f2aaf16167"
+      },
+      {
+        "object_type": "project",
+        "name": "Authority Alignment Index",
+        "canonical_name": "Authority Alignment Index (AAI)",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "论文引入Authority Alignment Index（AAI）作为可计算审计指标，用于量化模型输出与传感器或用户之间的权威对齐程度。",
+          "在数值任务中模型展现极端倒置，AAI=-0.805，表明对传感器的信任近乎为零。"
+        ],
+        "article_id": "945d98f2aaf16167"
+      }
     ],
     "impact_score": {
       "score": 5.5,
@@ -765,7 +1128,74 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "strategic_invest"
+    "actionable_insight": "strategic_invest",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Geometric Authority Calibration",
+        "canonical_name": "Geometric Authority Calibration (GAC)",
+        "positioning": "一种推理时层级干预方法，用于校准大语言模型在融合传感器数据与用户自然语言输入时的权威分配偏差，抑制用户权威过度影响并恢复传感器数据权重。",
+        "technical_signal": "提出基于几何框架的因果注入方法，在理论指导下翻转了80.2%的错误决策，而随机对照组仅翻转不到0.4%。",
+        "adoption_signal": "在4个数据集共576个冲突实例上完成评估，覆盖4种参数量从4B到35B的模型三种架构。",
+        "ecosystem_relevance": "针对LLM在物联网和普适计算系统中融合异构输入时的可靠性问题，填补了隐式权威分配审计与校准的技术空白。",
+        "target_users": [],
+        "watch_reason": "GAC揭示了LLM在多模态融合场景中的一个系统性缺陷——权威倒置，并以极低推理开销的层级干预方式实现了从近乎零准确率到21.9-27.5%的大幅提升，对LLM在物理世界落地部署具有基础性价值。",
+        "risk_notes": [
+          "实验仅在HAR单任务场景验证，在更复杂的多模态融合任务中GAC的有效性尚待检验。",
+          "推理时层级干预的计算开销和最优层级选择策略在大规模生产环境中需要进一步优化。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "945d98f2aaf16167"
+        ],
+        "evidence_snippets": [
+          "论文提出Geometric Authority Calibration（GAC），一种推理时层级的干预方法，用于抑制用户权威的过度影响。",
+          "GAC方法将HAR任务准确率从0-1.6%提升至21.9-27.5%，显著优于提示词基线方法。",
+          "理论引导的因果注入在GAC中翻转了80.2%的错误决策，而随机对照组仅翻转不到0.4%。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Context Integration Ratio",
+        "canonical_name": "Context Integration Ratio (CIR)",
+        "positioning": "一种可计算的审计指标，用于量化上下文信息在LLM隐藏层表示中的集成程度，为检测权威倒置现象提供几何框架下的可观测度量。",
+        "technical_signal": "通过测量上下文在模型表示方向上的投影系数，量化了异构信息在LLM隐藏层中的融合质量。",
+        "ecosystem_relevance": "为LLM多模态融合的可解释性研究提供了可计算的审计工具，有望应用于更广泛的人机协同决策场景。",
+        "target_users": [],
+        "watch_reason": "CIR提供了量化LLM隐式权威分配的标准化指标，随着多模态LLM在物联网和普适计算中的普及，该指标可能成为融合系统可靠性评估的基础审计工具。",
+        "risk_notes": [
+          "CIR作为审计指标目前仅在论文几何框架和四个数据集上验证，跨模型架构和任务域的泛化性有待检验。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "945d98f2aaf16167"
+        ],
+        "evidence_snippets": [
+          "论文引入Context Integration Ratio（CIR）作为可计算审计指标，用于量化上下文在模型表示中的集成程度。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Authority Alignment Index",
+        "canonical_name": "Authority Alignment Index (AAI)",
+        "positioning": "一种可计算的审计指标，用于量化大语言模型输出与传感器数据或用户声称之间的权威对齐程度，揭示模型在异构输入融合中的隐式权威分配偏向。",
+        "technical_signal": "构建了量化权威分配的指标框架，实验证明数值任务中LLM对传感器的信任近乎为零（AAI=-0.805）。",
+        "ecosystem_relevance": "为评估和审计LLM在物理世界决策系统中的人机权威分配提供了定量基准，对构建可信LLM应用具有监督价值。",
+        "target_users": [],
+        "watch_reason": "AAI首次量化了LLM在异构输入融合中的权威分配偏向，将隐式的信任分配问题转化为可测量、可比较的审计维度，对构建可信LLM物理世界应用具有基础性的安全评估价值。",
+        "risk_notes": [
+          "AAI指标的有效性目前仅基于几何框架和有限数据集验证，在实际部署场景中的基准阈值尚未建立。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "945d98f2aaf16167"
+        ],
+        "evidence_snippets": [
+          "论文引入Authority Alignment Index（AAI）作为可计算审计指标，用于量化模型输出与传感器或用户之间的权威对齐程度。",
+          "在数值任务中模型展现极端倒置，AAI=-0.805，表明对传感器的信任近乎为零。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -784,30 +1214,58 @@
     "pipeline_stage": "fact_extracted",
     "id": "a581fb709d7122a3",
     "source_type": "academic_paper",
-    "tldr": "国内大模型与国产CIM量子硬件通过LangGraph/LangChain框架集成，实现量子计算建模自动化。",
-    "objective_summary": "本研究将飞秒激光泵浦的相干伊辛机（CIM）与基于大语言模型的智能体系统集成，利用LangGraph和LangChain框架，使LLM能够自动完成QUBO/Ising模型校准、约束权重迭代和文献方案验证。整套系统完全基于国产大模型和国产CIM硬件实现，并意外发现智能体辅助量子计算迭代可反向增强智能体自",
-    "event_type": "framework_tools",
-    "epistemic_status": "theoretical_claim",
+    "tldr": "该研究将飞秒激光泵浦的相干伊辛机与基于LangGraph和LangChain的大模型智能体系统集成，实现QUBO/Ising模型校准和约束权重迭代等任务的自动化，并完全基于国产大模型和国产CIM硬件完成。",
+    "objective_summary": "该论文发表于arXiv，研究团队将飞秒激光泵浦的相干伊辛机与基于LangGraph和LangChain框架的LLM驱动智能体系统成功集成。实验证明，大语言模型能够有效执行QUBO/Ising模型校准、约束权重迭代决策以及文献方案快速验证等建模任务。所有任务均基于国产大模型和国产CIM硬件实现，达成了全栈国产化的量子CIM实用赋能。",
+    "event_type": "infrastructure_update",
+    "epistemic_status": "verified_fact",
     "entities": {
       "companies": [],
       "technologies": [
-        "Coherent Ising Machine",
         "CIM",
+        "Coherent Ising Machine",
         "QUBO",
-        "Ising Model",
+        "Ising model",
         "LangGraph",
         "LangChain",
-        "LLM",
-        "Femtosecond Laser"
+        "LLM"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "量子计算设备在求解NP完全问题方面具有优势，但其建模复杂性对非专业人士构成显著障碍，专家也需要耗费大量精力进行约束权重迭代和建模方法调优。",
-      "本研究将飞秒激光泵浦的相干伊辛机（CIM）与大语言模型驱动的智能体系统进行集成，技术栈基于LangGraph和LangChain框架。",
-      "实验证明LLM能够有效执行QUBO/Ising模型校准、约束权重决策迭代以及文献报道方案的快速验证等建模任务。",
-      "上述所有任务完全基于国产大模型实现，结合国产自研CIM硬件，真正达成了全链路国产化的量子CIM实际赋能。",
-      "该研究意外发现了一种新范式：智能体辅助量子计算迭代过程中积累的知识，能够反向增强智能体自身的问题求解能力。"
+      "量子计算设备能解决NP完全问题，但其建模复杂性对非专业用户构成显著障碍。",
+      "研究将飞秒激光泵浦的相干伊辛机与基于LangGraph和LangChain框架的LLM驱动智能体系统进行集成。",
+      "实验证明大语言模型可有效完成QUBO/Ising模型校准、约束权重迭代和文献方案快速验证等建模任务。",
+      "所有任务均基于国产大模型和国产CIM硬件实现，达成了全栈国产化的量子CIM实用赋能。",
+      "研究发现了有前景的新范式：智能体辅助量子计算迭代中积累的知识可反向增强智能体自身的问题解决能力。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "LangGraph",
+        "canonical_name": "LangGraph",
+        "url": "https://github.com/langchain-ai/langgraph",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "该研究通过利用LangGraph和LangChain框架，将飞秒激光泵浦的相干伊辛机与LLM驱动的智能体系统进行集成。",
+          "LangGraph框架被用于构建智能体系统的编排逻辑，以支撑量子计算建模任务的自动化执行。"
+        ],
+        "article_id": "a581fb709d7122a3"
+      },
+      {
+        "object_type": "project",
+        "name": "LangChain",
+        "canonical_name": "LangChain",
+        "url": "https://github.com/langchain-ai/langchain",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "该研究通过利用LangGraph和LangChain框架，将飞秒激光泵浦的相干伊辛机与LLM驱动的智能体系统进行集成。",
+          "LangChain框架为智能体系统提供了大语言模型调用和任务编排的基础能力支撑。"
+        ],
+        "article_id": "a581fb709d7122a3"
+      }
     ],
     "impact_score": {
       "score": 4.5,
@@ -864,7 +1322,56 @@
       "compound": "low",
       "hype": "high"
     },
-    "actionable_insight": "speculative_watch"
+    "actionable_insight": "speculative_watch",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "LangGraph",
+        "canonical_name": "LangGraph",
+        "url": "https://github.com/langchain-ai/langgraph",
+        "positioning": "基于有向图结构编排LLM智能体工作流的编排框架，支持循环、分支和并行执行模式，用于构建复杂多步骤AI应用。",
+        "technical_signal": "LangGraph的有向图编排架构为量子CIM的QUBO建模自动化提供了可靠的智能体执行引擎支撑。",
+        "adoption_signal": "被量子计算研究团队用于CIM建模任务自动化，验证了其在跨学科科学计算场景中的实际应用价值。",
+        "ecosystem_relevance": "作为LangChain生态的核心编排组件，LangGraph扩展了LLM从对话交互到复杂科学任务编排的能力边界。",
+        "target_users": [],
+        "watch_reason": "LangGraph将LLM智能体编排能力引入量子CIM建模领域，展现了Agent框架从通用场景向专业科学计算渗透的趋势，图结构编排在QUBO/Ising迭代自动化中展现出独特价值。",
+        "risk_notes": [
+          "LangGraph在量子计算等科学计算场景中的长期稳定性和可扩展性尚需更多实验验证。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "a581fb709d7122a3"
+        ],
+        "evidence_snippets": [
+          "该研究通过利用LangGraph和LangChain框架，将飞秒激光泵浦的相干伊辛机与LLM驱动的智能体系统进行集成。",
+          "LangGraph框架被用于构建智能体系统的编排逻辑，以支撑量子计算建模任务的自动化执行。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "LangChain",
+        "canonical_name": "LangChain",
+        "url": "https://github.com/langchain-ai/langchain",
+        "positioning": "面向LLM应用开发的综合框架，提供模型调用、提示管理、记忆系统和工具集成等核心能力，支撑复杂AI应用快速构建。",
+        "technical_signal": "LangChain为大模型调用和任务编排提供了基础能力支撑，使量子CIM建模流程的自动化集成成为可能。",
+        "adoption_signal": "被用于量子CIM与LLM集成的科研项目中，证明了其在专业化科学计算场景中的技术适配性。",
+        "ecosystem_relevance": "LangChain作为LangGraph和AI Agent生态的基础框架层，其模型抽象和工具集成能力是构建领域专用智能体的关键基础设施。",
+        "target_users": [],
+        "watch_reason": "LangChain在量子CIM这一高壁垒科学领域的应用，标志着LLM编排框架向专业科研场景的重要拓展，其对国产大模型的适配支撑了全栈国产化技术路线。",
+        "risk_notes": [
+          "LangChain作为非国产框架，在全栈国产化技术栈中的长期兼容性和替代风险值得关注。",
+          "LangChain对国产大模型的适配深度和性能表现在该研究中未能充分披露。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "a581fb709d7122a3"
+        ],
+        "evidence_snippets": [
+          "该研究通过利用LangGraph和LangChain框架，将飞秒激光泵浦的相干伊辛机与LLM驱动的智能体系统进行集成。",
+          "LangChain框架为智能体系统提供了大语言模型调用和任务编排的基础能力支撑。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -1079,29 +1586,57 @@
     "pipeline_stage": "fact_extracted",
     "id": "bde4ef7f043c103b",
     "source_type": "academic_paper",
-    "tldr": "提出将重构权威（RAM）作为自主Agent运行时的执行门控机制，通过依赖解析与恢复环路确保无权威不执行。",
-    "objective_summary": "本文针对自主Agent系统中权威在运行时失效的问题，将重构权威（RAM）操作化为一个运行时执行模型：引入 admit/deny/halt 三态执行语义，定义包含动态依赖解析和权威重建的具体执行协议，并提出整合漂移检测（IML）与执行控制（ACP）的恢复环路，使系统在权威不可构造时暂停执行、获取缺失信",
+    "tldr": "该论文为自主智能体系统提出了一种运行时执行模型，将可重构权威（RAM）作为执行合法性的前提条件，并引入暂停（halt）作为第三种执行状态，结合漂移检测（IML）与执行控制（ACP）形成恢复循环，保证系统在权威不可构造时挂起执行、获取缺失信息后重试。",
+    "objective_summary": "本文由学术研究者发表于 arXiv，提出了一种面向自主智能体系统的运行时权威执行模型。作者在先前定义的可重构权威（RAM）基础上，设计了具体的执行协议，包括运行时权威构造、动态依赖解析和三级决策语义（允许/拒绝/暂停）。系统引入恢复循环，通过集成漂移检测模块（IML）与执行控制模块（ACP），在权威不可构造时挂起执行、获取缺失信息并重新尝试权威构造。该模型理论上保证了安全性（无动作可在无构造权威时执行）和条件活性（权威变量可观察时恢复执行）。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
-        "Reconstructive Authority (RAM)",
-        "Recovery Loop",
-        "IML (drift detection)",
-        "ACP (execution control)",
-        "dependency resolution",
-        "authority reconstruction"
+        "Reconstructive Authority",
+        "RAM",
+        "IML",
+        "ACP"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "自主Agent系统的失败不仅源于错误决策，更源于执行时权威已失效——先前工作已将重构权威（RAM）定义为有效执行的前置条件。",
-      "本文聚焦运行时强制执行：提出一个在动作执行时刻评估权威构造性的执行模型，将状态空间从 admit/deny 二值扩展为 admit/deny/halt 三态。",
-      "halt 状态表示因观测不完整或不确定导致权威未定义，此时系统应暂停而非盲目执行或拒绝。",
-      "定义了包含动态依赖解析、权威重建和显式决策语义的具体执行协议。",
-      "引入恢复环路（Recovery Loop），将漂移检测（IML）与执行控制（ACP）整合，使系统能暂停执行、获取缺失信息并重新尝试权威重建。",
-      "该模型保证了安全性——无构造性权威则不执行任何动作——以及条件活性：当定义权威的变量变得可观测时，执行可恢复。"
+      "自主智能体系统失败的原因不仅包括决策错误，还包括执行时其决策的权威已不再成立的场景。",
+      "先前工作定义了可重构权威（RAM）作为有效执行的条件：仅当权威能够从当前状态构造时，动作才被允许执行。",
+      "本文在 RAM 基础上提出了运行时执行模型，在传统的允许/拒绝二元状态之外引入第三种状态——暂停（halt），表示因观测不完整或不确定而导致权威未定义的情况。",
+      "具体执行协议包括动态依赖解析、权威重构和明确的决策语义三个核心环节。",
+      "本文进一步设计了恢复循环（Recovery Loop），将漂移检测（IML）与执行控制（ACP）集成，使系统能够挂起执行、获取缺失信息并重新尝试权威重构。",
+      "该模型保证了安全性——无动作可在无构造权威时执行，以及条件活性——权威定义变量可观察时恢复执行。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "paper",
+        "name": "Operationalizing Reconstructive Authority: Runtime Construction, Dependency Resolution, and Execution Gating in Autonomous Agent Systems",
+        "canonical_name": "2605.23935",
+        "url": "https://arxiv.org/abs/2605.23935",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "本文提出了一个运行时执行模型，在该模型中权威在动作执行时被评估，执行的条件取决于权威是否可构造。",
+          "该模型将执行状态空间从允许/拒绝二元扩展为三态，新增暂停状态表示因观测不完整或不确定导致权威未定义的情形。",
+          "本文进一步引入了恢复循环，将漂移检测（IML）与执行控制（ACP）集成，使系统能够挂起执行、获取缺失信息并重新尝试权威重构。"
+        ],
+        "article_id": "bde4ef7f043c103b"
+      },
+      {
+        "object_type": "project",
+        "name": "Reconstructive Authority (RAM) Runtime Execution Model",
+        "canonical_name": "RAM Runtime Model",
+        "confidence": "medium",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "该执行协议包括动态依赖解析、权威重构和显式决策语义，是 RAM 在真实系统中应用的运行时语义基础。",
+          "系统可在权威不可构造时挂起执行、获取缺失信息并通过恢复循环重新尝试权威重构，从而保证条件活性。",
+          "该模型提供了安全性保证，即没有动作会在权威不可构造的情况下被执行。"
+        ],
+        "article_id": "bde4ef7f043c103b"
+      }
     ],
     "impact_score": {
       "score": 4.5,
@@ -1160,7 +1695,33 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Reconstructive Authority (RAM) Runtime Execution Model",
+        "canonical_name": "RAM Runtime Model",
+        "positioning": "为自主智能体系统设计的运行时可重构权威（RAM）执行模型，通过引入暂停状态和恢复循环保证动作仅在权威可构造时执行。",
+        "technical_signal": "提出运行时权威构造、动态依赖解析和三级决策语义（允许/拒绝/暂停），将暂停作为因观测不完整导致的第三种执行状态。",
+        "adoption_signal": "该模型目前为学术理论阶段，尚未在已知的自主智能体系统或工程框架中得到实现或部署。",
+        "ecosystem_relevance": "属于AI安全与自主智能体运行时验证交叉领域，与智能体系统在执行层面的安全性和可靠性保障密切相关。",
+        "target_users": [],
+        "watch_reason": "该模型首次将可重构权威从理论概念推向运行时执行协议，填补了自主智能体系统在动作执行时权威失效检测方面的空白，对提升AI智能体可靠性具有潜在价值。",
+        "risk_notes": [
+          "目前尚无已知的工程实现或基准测试来验证该模型在实际系统中的可行性。",
+          "暂停状态下依赖缺失信息获取的恢复延迟，在实时或高并发智能体系统中可能成为执行瓶颈。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "bde4ef7f043c103b"
+        ],
+        "evidence_snippets": [
+          "该执行协议包括动态依赖解析、权威重构和显式决策语义，是 RAM 在真实系统中应用的运行时语义基础。",
+          "系统可在权威不可构造时挂起执行、获取缺失信息并通过恢复循环重新尝试权威重构，从而保证条件活性。",
+          "该模型提供了安全性保证，即没有动作会在权威不可构造的情况下被执行。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -1179,32 +1740,78 @@
     "pipeline_stage": "fact_extracted",
     "id": "e244da764565a8bd",
     "source_type": "academic_paper",
-    "tldr": "提出PAT自适应张量并行方法，动态调整RLHF生成阶段的TP配置，降低训练延迟最高27.2%。",
-    "objective_summary": "研究者针对RLHF同步训练中长尾生成导致的GPU利用率低下问题，提出PAT方法，在SGLang上实现并与VeRL集成，通过预测器引导的在线重配置与KV-cache迁移/重计算选择，在LLaMA3.1-8B和Qwen3-14B上实现生成延迟降低34.6%、迭代延迟降低27.2%。",
-    "event_type": "framework_tools",
+    "tldr": "arXiv论文提出自适应张量并行方法PAT，通过预测器引导重配置和轻量级状态迁移机制，解决同步RLHF训练中生成长尾导致的GPU利用率低下问题。基于SGLang实现并集成VeRL框架，在LLaMA3.1-8B和Qwen3-14B上使生成延迟降低最高34.6%，端到端迭代延迟降低最高27.2%。",
+    "objective_summary": "该论文针对同步RLHF训练中因响应长度偏斜导致的生成长尾瓶颈问题，提出了一种名为PAT的自适应张量并行方法。PAT通过预测器引导的在线重配置技术动态选择重配置时机和目标TP配置，并通过轻量级在线重配置机制（包含KV缓存迁移或重计算、原位权重重分片和通信组复用）实现低开销的TP切换。基于SGLang实现并集成到VeRL框架后，在LLaMA3.1-8B和Qwen3-14B模型上使用DeepScaleR进行的评估显示，该方法将生成阶段延迟降低最高34.6%，端到端RLHF训练迭代延迟降低最高27.2%。",
+    "event_type": "infrastructure_update",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
-        "PAT",
         "RLHF",
         "Tensor Parallelism",
+        "KV-cache",
         "SGLang",
         "VeRL",
-        "KV-cache",
-        "LLaMA3.1-8B",
-        "Qwen3-14B",
         "DeepScaleR"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "RLHF同步三阶段训练中，生成阶段因响应长度差异导致长尾效应，有效批次大小快速缩小，GPU利用率低下",
-      "主流框架采用静态张量并行配置，无法根据批次特征变化进行动态调整，存在性能优化空间",
-      "PAT引入预测器引导的在线重配置方法，基于离线profiling决定重配置触发时机和目标TP配置",
-      "重配置仅在预测延迟收益超过重配置开销时触发，确保优化净收益为正",
-      "PAT的轻量级在线重配置机制通过成本模型在KV-cache迁移与重计算之间选择最优方案，配合原地权重重分片和缓存通信组复用",
-      "PAT在SGLang上实现并与VeRL框架集成，在LLaMA3.1-8B和Qwen3-14B上使用DeepScaleR评估，生成延迟降低最高34.6%，端到端训练迭代延迟降低最高27.2%"
+      "同步RLHF训练的三阶段流程中，生成阶段因响应长度偏斜成为性能瓶颈，有效批处理尺寸在解码过程中快速缩小，导致GPU在等待少数长响应完成时利用率低下。",
+      "主流框架采用静态张量并行配置，无法适应批量特征的变化，留下了大量性能优化空间未被利用。",
+      "论文提出自适应张量并行方法PAT，在每次RLHF迭代的生成阶段动态重配置TP。",
+      "PAT包含两项关键技术：预测器引导的在线重配置方法根据离线分析决定重配置时机和目标配置；轻量级在线重配置机制通过成本模型在KV缓存迁移与重计算之间选择，并执行原位权重重分片和通信组复用。",
+      "PAT基于SGLang实现并与VeRL框架集成，在LLaMA3.1-8B和Qwen3-14B模型上使用DeepScaleR完成评估。",
+      "实验结果表明，相比原始VeRL配置，PAT将生成延迟降低最高34.6%，端到端RLHF训练迭代延迟降低最高27.2%。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "PAT",
+        "canonical_name": "PAT (Adaptive Tensor Parallelism)",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "论文提出了一种名为PAT的自适应张量并行方法，用于加速同步RLHF训练中的生成长尾阶段。",
+          "PAT通过预测器引导的在线重配置和轻量级在线重配置机制，动态调整TP配置以应对批处理特征变化。",
+          "在LLaMA3.1-8B和Qwen3-14B上的评估显示，PAT将生成延迟降低最高34.6%，端到端迭代延迟降低最高27.2%。"
+        ],
+        "article_id": "e244da764565a8bd"
+      },
+      {
+        "object_type": "project",
+        "name": "SGLang",
+        "canonical_name": "SGLang",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "论文将PAT基于SGLang实现，SGLang作为底层推理框架承载自适应TP的动态重配置逻辑。"
+        ],
+        "article_id": "e244da764565a8bd"
+      },
+      {
+        "object_type": "project",
+        "name": "VeRL",
+        "canonical_name": "VeRL",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "PAT被集成到VeRL框架中，在LLaMA3.1-8B和Qwen3-14B上使用DeepScaleR进行了端到端评估。"
+        ],
+        "article_id": "e244da764565a8bd"
+      },
+      {
+        "object_type": "dataset",
+        "name": "DeepScaleR",
+        "canonical_name": "DeepScaleR",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "论文使用DeepScaleR在LLaMA3.1-8B和Qwen3-14B模型上对PAT进行性能评估。"
+        ],
+        "article_id": "e244da764565a8bd"
+      }
     ],
     "impact_score": {
       "score": 5.0,
@@ -1264,7 +1871,34 @@
       "compound": "low",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "PAT",
+        "canonical_name": "PAT (Adaptive Tensor Parallelism)",
+        "url": "https://arxiv.org/abs/2605.23945",
+        "positioning": "面向同步RLHF训练的学术研究项目，提出自适应张量并行方法，通过动态重配置TP配置加速生成长尾阶段。",
+        "technical_signal": "提出预测器引导的在线重配置方法和轻量级状态迁移机制，实现低开销的TP动态切换，相比静态配置显著提升GPU利用率。",
+        "adoption_signal": "基于SGLang实现并集成到VeRL框架，在LLaMA3.1-8B和Qwen3-14B上完成验证评估，生成延迟降低最高34.6%。",
+        "ecosystem_relevance": "解决了RLHF框架中因响应长度偏斜导致GPU利用率低下的共性问题，有潜力被主流RLHF训练框架采纳。",
+        "target_users": [],
+        "watch_reason": "自适应张量并行方法填补了同步RLHF训练中静态TP配置导致性能空白的优化空白，最高34.6%的生成延迟降低和27.2%的端到端迭代延迟降低具有实际工程价值。",
+        "risk_notes": [
+          "方法依赖离线分析的预测器模型，预测准确性在训练数据分布偏移时可能显著下降，直接影响性能收益。",
+          "轻量级重配置机制涉及KV缓存迁移和权重重分片等操作，增加了系统的工程复杂性和运维成本。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "e244da764565a8bd"
+        ],
+        "evidence_snippets": [
+          "论文提出了一种名为PAT的自适应张量并行方法，用于加速同步RLHF训练中的生成长尾阶段。",
+          "PAT通过预测器引导的在线重配置和轻量级在线重配置机制，动态调整TP配置以应对批处理特征变化。",
+          "在LLaMA3.1-8B和Qwen3-14B上的评估显示，PAT将生成延迟降低最高34.6%，端到端迭代延迟降低最高27.2%。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -1283,8 +1917,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "e9d5eab416345446",
     "source_type": "academic_paper",
-    "tldr": "BODHI通过结构化C到Python翻译指南注入领域知识，将OS内核规范生成的Pass@1提升至96.73%。",
-    "objective_summary": "研究团队提出BODHI领域知识提示方法，通过15类C-to-Python翻译模式的结构化指南增强少样本提示，在OSV-Bench基准上评估了Anthropic、Mistral等六家厂商的9个模型，Claude Opus 4.6+BODHI达96.",
+    "tldr": "BODHI 是一种基于领域知识提示的操作系统内核规约自动推断方法，通过为 LLM 提供结构化 C 到 Python 翻译指南，覆盖 15 类领域特定翻译模式，在 OSV-Bench 基准上使所有测试模型提升 11% 至 32%，最佳配置（Claude Opus 4.6 + BODHI）达到 96.73% Pass@1。",
+    "objective_summary": "来自 Anthropic、Mistral、Amazon、DeepSeek、Meta 和 Alibaba 的六家模型提供商共九种模型参与了评估。BODHI 方法在标准少样本提示中增加了一个覆盖 15 类领域特定翻译模式的结构化 C 到 Python 翻译指南，受结构化思维链（SCoT）启发，按关注点分离原则将前置条件提取和后置条件生成分为不同类别。在来自 Hyperkernel 操作系统的 245 个规约生成任务的 OSV-Bench 基准上，BODHI 使所有模型提升了 11% 到 32%，其中 Claude Opus 4.6 搭配 BODHI 达到了 96.73% 的 Pass@1。",
     "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
@@ -1298,24 +1932,62 @@
       ],
       "technologies": [
         "BODHI",
-        "SCoT",
-        "LLM",
         "OSV-Bench",
         "Hyperkernel",
-        "Few-shot Prompting",
-        "Mixture-of-Experts",
-        "Pre-condition Extraction",
-        "Post-condition Generation"
+        "SCoT",
+        "LLM",
+        "Pass@1"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "操作系统内核的形式化验证需要精确的系统调用规范，手工编写需要深厚领域知识，因此研究者尝试用大语言模型自动化该过程",
-      "现有最佳方法在OSV-Bench的245个规范生成任务上Pass@1仅为55.10%，存在显著性能瓶颈",
-      "BODHI方法借鉴结构化思维链（SCoT），将C到Python的翻译模式组织为15类领域特定翻译模式的结构化指南",
-      "该指南按关注点分离原则组织，将前置条件提取和后置条件生成作为不同类别分别处理",
-      "在覆盖稠密模型、混合专家模型和推理架构的9个模型上评估，BODHI使每个模型都获得提升，增益范围从+11%到+32%",
-      "BODHI同时减少了语法错误和语义错误，对指令遵循能力足够强以利用结构化参考材料的模型效果最强，证明领域知识注入是一种模型无关的技术"
+      "操作系统内核的形式化验证需要精确的规约来捕获系统调用的预期行为，手工编写这些规约需要深厚的领域专业知识。",
+      "BODHI 方法在标准少样本提示中增加了一个覆盖 15 类领域特定翻译模式的结构化 C 到 Python 翻译指南。",
+      "该方法受结构化思维链（SCoT）启发，按关注点分离原则将前置条件提取和后置条件生成分为不同类别处理。",
+      "在 OSV-Bench 基准的 245 个规约生成任务上，BODHI 使所有九种模型提升了 11% 到 32%，最佳配置达到 96.73% Pass@1。",
+      "BODHI 同时减少了语法错误和语义错误，对具有足够指令遵循能力的模型效果最为显著。",
+      "实验结果表明领域知识注入是一种模型无关的技术，能有效弥合通用代码生成与形式规约合成之间的差距。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "BODHI",
+        "canonical_name": "BODHI",
+        "url": "https://arxiv.org/abs/2605.23931",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "BODHI 是一种领域知识提示方法，在标准少样本提示中增加覆盖 15 类领域特定翻译模式的结构化 C 到 Python 翻译指南。",
+          "在 OSV-Bench 基准的 245 个规约生成任务上，BODHI 使所有九种模型提升了 11% 到 32%。",
+          "最佳配置（Claude Opus 4.6 搭配 BODHI）达到了 96.73% 的 Pass@1。"
+        ],
+        "article_id": "e9d5eab416345446"
+      },
+      {
+        "object_type": "dataset",
+        "name": "OSV-Bench",
+        "canonical_name": "OSV-Bench",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "OSV-Bench 是一个包含 245 个规约生成任务的基准测试集，这些任务来源于 Hyperkernel 操作系统内核。",
+          "在该基准上，此前最佳报告的 Pass@1 为 55.10%。"
+        ],
+        "article_id": "e9d5eab416345446"
+      },
+      {
+        "object_type": "project",
+        "name": "Hyperkernel",
+        "canonical_name": "Hyperkernel",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "OSV-Bench 的 245 个规约生成任务来源于 Hyperkernel 操作系统内核。",
+          "Hyperkernel 是一个用于操作系统内核形式化验证的研究项目。"
+        ],
+        "article_id": "e9d5eab416345446"
+      }
     ],
     "impact_score": {
       "score": 5.0,
@@ -1372,7 +2044,56 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "BODHI",
+        "canonical_name": "BODHI",
+        "url": "https://arxiv.org/abs/2605.23931",
+        "positioning": "BODHI 是一种通过领域知识提示实现操作系统内核规约自动推断的方法，利用结构化 C 到 Python 翻译指南弥合通用代码生成与形式规约合成之间的差距。",
+        "technical_signal": "覆盖 15 类领域特定翻译模式，受结构化思维链（SCoT）启发，按关注点分离原则将前置条件提取和后置条件生成分为不同类别处理。",
+        "adoption_signal": "在 Anthropic、Mistral、Amazon、DeepSeek、Meta、Alibaba 六家提供商的九种模型上评估，所有模型均获得 11% 到 32% 的提升。",
+        "ecosystem_relevance": "面向操作系统内核形式化验证领域，填补了 LLM 自动生成形式规约的方法空白，为程序语言与 AI 交叉方向提供新的技术路径。",
+        "target_users": [],
+        "watch_reason": "BODHI 以模型无关的领域知识注入方式，在 OS 内核规约生成任务上实现 96.73% Pass@1（Claude Opus 4.6），较此前最优水平提升超 40 个百分点，展示了结构化领域知识提示在形式化方法中的巨大潜力，值得持续跟踪其推广至其他形式规约领域的进展。",
+        "risk_notes": [
+          "BODHI 的效果高度依赖于底层模型的指令遵循能力，对指令理解较弱的模型提升效果有限。",
+          "当前评估仅覆盖 Hyperkernel 一个操作系统内核的 245 个任务，方法的泛化性尚未在更多内核上验证。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "e9d5eab416345446"
+        ],
+        "evidence_snippets": [
+          "BODHI 是一种领域知识提示方法，在标准少样本提示中增加覆盖 15 类领域特定翻译模式的结构化 C 到 Python 翻译指南。",
+          "在 OSV-Bench 基准的 245 个规约生成任务上，BODHI 使所有九种模型提升了 11% 到 32%。",
+          "最佳配置（Claude Opus 4.6 搭配 BODHI）达到了 96.73% 的 Pass@1。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Hyperkernel",
+        "canonical_name": "Hyperkernel",
+        "positioning": "Hyperkernel 是一个用于操作系统内核形式化验证的研究项目，其系统调用规约被构建为 OSV-Bench 基准测试集，用于评估 LLM 的形式规约合成能力。",
+        "technical_signal": "作为 OSV-Bench 的来源操作系统内核，Hyperkernel 提供了 245 个系统调用规约生成任务，覆盖完整的系统调用接口定义。",
+        "adoption_signal": "Hyperkernel 被九种主流 LLM 的规约生成能力评估所采用，在操作系统形式化验证领域具有基准参考地位。",
+        "ecosystem_relevance": "Hyperkernel 在操作系统形式化验证与 AI 代码生成的交叉研究中扮演基准角色，连接了传统形式化方法与 LLM 评估体系。",
+        "target_users": [],
+        "watch_reason": "Hyperkernel 的规约集已演变为 OSV-Bench 标准基准，被持续用于衡量 LLM 在操作系统形式规约合成方面的能力，反映了形式化验证领域与 AI 技术结合的研究趋势。",
+        "risk_notes": [
+          "Hyperkernel 主要面向教学和研究场景，与实际工业级操作系统内核在复杂度和规模上仍有较大差距。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "e9d5eab416345446"
+        ],
+        "evidence_snippets": [
+          "OSV-Bench 的 245 个规约生成任务来源于 Hyperkernel 操作系统内核。",
+          "Hyperkernel 是一个用于操作系统内核形式化验证的研究项目。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -1391,8 +2112,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "ee9aa6e1b05970bf",
     "source_type": "academic_paper",
-    "tldr": "提出Context智能层，用主动目标导向智能体替代被动聊天机器人，通过三项机制实现近乎完全的KV缓存复用与形式化正确性保证。",
-    "objective_summary": "研究团队在arXiv发表论文，提出Magarshak架构的智能层Context，用主动目标导向智能体替代被动查询-响应聊天机器人。系统基于写时上下文组装、可组合沙盒智慧程序、主动目标流状态机三项机制，证明了六个形式化定理（含上下文稳定性、主动支配性等），并在Qbix/Safebox/Safebots",
+    "tldr": "Context 论文提出了 Magarshak 架构的智能层，用可组合沙盒程序、声明式接线和主动式目标状态机构取代了传统的被动问答聊天机器人，并证明了六项形式化定理。该架构已在 Qbix / Safebox / Safebots 开源栈中实现。",
+    "objective_summary": "Grigory Yakushev 等人于 2026 年 5 月在 arXiv 发表论文，提出 Context 架构作为 Magarshak 架构的智能层。该架构通过三种机制实现主动目标导向：编写时上下文组装通过 Groker 代理预计算丰富类型属性，使 KV 缓存复用接近 100%；可组合沙盒智慧程序形成由 LM 生成的命令式程序库，通过类型化流关系声明式接线并在运行时无需再调用 LM；主动目标流状态机通过检查图状态并发出结构化交互内容来驱动对话走向终态。论文证明了上下文稳定性定理、程序组合正确性定理等六项形式化结果，并在开源的 Qbix / Safebox / Safebots 栈中实现。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
@@ -1402,19 +2123,46 @@
         "Magarshak Architecture",
         "Groker agents",
         "KV-cache",
-        "typed stream relations",
-        "composable sandboxed wisdom programs",
-        "goal stream state machines"
+        "LM-generated programs"
       ],
-      "key_people": []
+      "key_people": [
+        "Grigory Yakushev"
+      ]
     },
     "key_logic_flow": [
-      "Context被设计为Magarshak架构的智能层，其核心目标是替代被动的查询-响应聊天机器人，实现无需等待用户提示的主动目标导向智能体。",
-      "系统依赖三项相互增强的机制：写时上下文组装通过Groker智能体预计算富类型属性，使上下文块在语义变化之间字节级一致，从而实现接近100%的KV缓存复用。",
-      "可组合沙盒智慧程序构成一个受治理的库，其中LM生成的命令式程序通过类型化流关系声明式地连接到目标类型，按阶段排序组合，在交互时执行且无需额外LM调用。",
-      "主动目标流状态机通过检查图状态并发出结构化交互内容（选项数组、治理能力、澄清提示），驱动对话走向终止状态，无需等待用户输入。",
-      "论文证明了六个形式化结果：上下文稳定性定理、程序组合正确性定理、声明式连接可靠性定理、主动支配性定理、多参与者目标对话中的协调开销消除与质量保持、以及跨平台投票一致性定理。",
-      "该系统在Qbix/Safebox/Safebots开源栈中实现。"
+      "Context 论文提出了 Magarshak 架构的智能层，旨在用主动目标导向智能体取代被动的查询-响应聊天机器人。",
+      "该架构依赖三个相互增强的机制：编写时上下文组装（通过 Groker 代理预计算属性，实现接近 100% 的 KV 缓存复用）、可组合沙盒智慧程序（LM 生成的命令式程序库，通过类型化流关系声明式接线，运行时无需再调用 LM）以及主动目标流状态机（检查图状态并主动发出结构化交互内容）。",
+      "论文证明了六项形式化结果，包括上下文稳定性定理（将单轮 LM 成本与语义变化率关联）、程序组合正确性定理、声明式接线正确性定理、主动主导定理（证明主动智能体在预期轮次上弱主导被动智能体）等。",
+      "该架构已在开源的 Qbix / Safebox / Safebots 技术栈中实现。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "Context",
+        "canonical_name": "Context Architecture",
+        "url": "https://arxiv.org/abs/2605.23928",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "论文提出了 Context 作为 Magarshak 架构的智能层，用主动目标导向智能体替代被动问答机器人。",
+          "该架构依赖编写时上下文组装、可组合沙盒智慧程序和主动目标流状态机三个相互增强的机制。",
+          "论文证明了六项形式化定理，包括上下文稳定性定理和主动主导定理。"
+        ],
+        "article_id": "ee9aa6e1b05970bf"
+      },
+      {
+        "object_type": "project",
+        "name": "Qbix / Safebox / Safebots",
+        "canonical_name": "Qbix-Safebox-Safebots Stack",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "论文声称 Context 架构已经在开源的 Qbix / Safebox / Safebots 技术栈中实现。",
+          "该栈作为 Context 架构的具体实现基础被提及，但论文未提供详细实现说明。"
+        ],
+        "article_id": "ee9aa6e1b05970bf"
+      }
     ],
     "impact_score": {
       "score": 4.0,
@@ -1471,6 +2219,34 @@
       "compound": "low",
       "hype": "low"
     },
-    "actionable_insight": "speculative_watch"
+    "actionable_insight": "speculative_watch",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Context",
+        "canonical_name": "Context Architecture",
+        "url": "https://arxiv.org/abs/2605.23928",
+        "positioning": "Context 是 Magarshak 架构的智能层，通过可组合沙盒程序、声明式接线和主动目标状态机，将传统被动问答机器人升级为主动目标导向智能体。",
+        "technical_signal": "论文证明了六项形式化定理，包括上下文稳定性定理（将单轮 LM 成本与语义变化率关联）和主动主导定理（证明主动智能体在预期轮次上弱主导被动智能体），为架构提供了理论严谨性保障。",
+        "adoption_signal": "该架构已在开源的 Qbix / Safebox / Safebots 技术栈中实现，提供了可验证的参考实现和代码基础。",
+        "ecosystem_relevance": "作为 Magarshak 架构的智能层，Context 与沙盒程序库和声明式接线机制深度耦合，构成完整的主动智能理论-实践技术栈。",
+        "target_users": [],
+        "watch_reason": "Context 论文提出了从被动问答到主动目标导向智能体的范式转换，并给出六项严格形式化证明和开源参考实现。这一方向有望重新定义人机交互模式，推动 AI 系统从响应式工具进化为协作者，值得持续跟踪理论演进和工程落地进展。",
+        "risk_notes": [
+          "该架构目前仅在 Qbix/Safebox/Safebots 栈中实现，缺乏广泛的社区验证和第三方独立复现。",
+          "编写时上下文组装依赖 Groker 代理预计算属性，该代理的能力边界和泛化性尚未充分验证。",
+          "主动目标流状态机在真实开放域对话中的鲁棒性有待进一步验证，理论优势转化为工程实践仍面临挑战。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "ee9aa6e1b05970bf"
+        ],
+        "evidence_snippets": [
+          "论文提出了 Context 作为 Magarshak 架构的智能层，用主动目标导向智能体替代传统被动问答机器人，并在开源栈中实现。",
+          "该架构依赖编写时上下文组装、可组合沙盒智慧程序和主动目标流状态机这三个相互增强的核心机制。",
+          "论文证明了六项形式化定理，包括上下文稳定性定理和主动主导定理，从理论上保证了架构的效率和智能优势。"
+        ]
+      }
+    ]
   }
 ]

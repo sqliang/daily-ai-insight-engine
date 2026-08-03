@@ -31,29 +31,43 @@ tags:
 extraction_status: success
 id: 6dd8aa396fd1fab6
 source_type: academic_paper
-tldr: DecisionBench发布：用于评估长周期Agent工作流中涌现式委托行为的基准测试平台，覆盖11模型×3任务套件×23375实例。
-objective_summary: 学术团队在arXiv发布DecisionBench基准测试平台，整合GAIA、tau-bench、BFCL三个任务套件与11个模型的委托评估框架。在23375个任务实例上进行五条件参考扫描，发现质量指标无法区分委托策略优劣，路由保真度仅7.5%-29.5%，完美委托上限比实测高15-31个百分点。
+tldr: DecisionBench 是一个用于评估长周期 AI 智能体工作流中紧急委派能力的基准测试平台，基于 GAIA、tau-bench、BFCL 三个任务套件和
+  11 个模型的参考评估发现：各意识条件下的终端任务质量无统计显著差异，但路由保真度差异巨大（7.5% 至 29.5%），且完美委派上限与实际表现之间存在 15
+  到 31 个百分点的差距。
+objective_summary: 研究者提出了 DecisionBench，这是一个用于评估长周期 AI 智能体工作流中紧急委派能力的标准化基准测试平台。该平台固定了任务套件（GAIA、tau-bench、BFCL
+  multi-turn）、同行模型池（来自 7 个供应商家族的 11 个模型）、委派接口（call_model 加可选的 read_profile 通道）、确定性技能标注层和多维度评估指标套件。通过对全部模型池进行五条件参考扫描（n=23,375
+  个任务实例），研究发现仅评估质量会遗漏编排信号，路由保真度在各条件下差异显著（7.5% 至 29.5%），且反事实分析显示完美委派上限与实际表现之间存在 15
+  到 31 个百分点的提升空间。
 event_type: framework_tools
 epistemic_status: verified_fact
 entities:
   companies: []
   technologies:
-  - DecisionBench
   - GAIA
   - tau-bench
   - BFCL
-  - emergent delegation
-  - agentic workflow
-  - model routing
   key_people: []
 key_logic_flow:
-- DecisionBench是一个用于评估长周期Agent工作流中涌现式委托行为的基准测试平台，固定了任务套件、模型池、委托接口和指标体系四个核心要素
-- 平台使用3个任务套件（GAIA、tau-bench、BFCL多轮）和11个模型（来自7个供应商家族），通过call_model接口和可选的read_profile通道实现委托
-- 评估指标涵盖质量、成本、延迟、委托率、路由保真度@k、供应商自偏好以及反事实委托上限共七个维度
-- 在23375个任务实例上的五条件参考扫描发现：四种awareness条件下端任务质量在统计上无显著差异（|beta|≤0.010, p≥0.21），仅靠质量评估会遗漏编排信号
-- 路由保真度@1在不同条件下仅为7.5%-29.5%，交付通道（按需工具vs预加载描述）的影响远大于描述内容本身
-- 反事实上限分析表明，完美委托比当前实测性能高出15-31个百分点，揭示了未来编排方法的巨大提升空间
+- DecisionBench 是一个用于评估长周期 AI 智能体工作流中紧急委派能力的基准测试平台，固定了任务套件、模型池、委派接口、技能标注层和多维度评估指标。
+- 任务套件包括 GAIA、tau-bench 和 BFCL multi-turn 三个基准，模型池涵盖来自 7 个供应商家族的 11 个模型。
+- 研究通过五条件参考扫描对全部模型池进行表征分析，总任务实例数为 23,375 个。
+- 终端任务质量在各意识条件下无统计显著差异，仅评估质量会遗漏编排信号。
+- 路由保真度在不同条件下差异巨大（7.5% 至 29.5%），且交付渠道（按需工具 vs 预加载描述）的影响超过描述内容。
+- 反事实完美委派上限在所有任务套件上均高于实测表现 15 至 31 个百分点，表明编排方法仍有巨大提升空间。
 pipeline_stage: fact_extracted
+extract_result: success
+object_mentions:
+- object_type: project
+  name: DecisionBench
+  canonical_name: DecisionBench
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - DecisionBench 是一个由研究者提出的、用于评估长周期 AI 智能体工作流中紧急委派能力的标准化基准测试平台。
+  - 该平台固定了 GAIA、tau-bench、BFCL multi-turn 三个任务套件和来自 7 个供应商家族的 11 个模型的同行模型池。
+  - 研究通过 23,375 个任务实例的五条件参考扫描发现完美委派上限与实际表现之间存在 15 到 31 个百分点的差距。
+  article_id: 6dd8aa396fd1fab6
 impact_score:
   score: 5.5
   reason: DecisionBench 是首个系统化评估长周期 Agent 工作流中涌现式委托行为的基准测试平台，覆盖 11 模型 × 3 任务套件 × 23375
@@ -112,6 +126,31 @@ confidence:
   compound: medium
   hype: low
 actionable_insight: deep_dive
+object_insights:
+- object_type: project
+  name: DecisionBench
+  canonical_name: DecisionBench
+  url: https://arxiv.org/abs/2605.19099
+  positioning: DecisionBench 是一个用于评估长周期 AI 智能体工作流中紧急委派能力的标准化基准测试平台，固定了 GAIA、tau-bench、BFCL
+    任务套件和 11 个模型的评估框架。
+  technical_signal: 提出标准化委派接口 call_model 和 read_profile 通道，构建确定性技能标注层和覆盖质量、成本、延迟、路由保真度的多维度指标套件。
+  adoption_signal: 论文已开源基准平台、标注层、参考干预套件和分析管道，并发布了 220 个条件运行存档供社区使用。
+  ecosystem_relevance: 填补了 AI 智能体领域缺乏标准化紧急委派评估基准的空白，可与 GAIA、tau-bench、BFCL 等现有任务套件直接配合使用。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: 路由保真度在各条件下差异巨大（7.5%-29.5%），且完美委派上限与实际表现存在 15-31 个百分点的差距，表明智能体编排方法仍有巨大提升空间，值得持续跟踪后续路由策略和编排方法的发展。
+  risk_notes:
+  - 终端任务质量在各意识条件下无统计显著差异，仅评估质量可能完全遗漏编排信号。
+  - 11 个模型的池规模相对有限，基准结果对更大模型池的泛化性尚未验证。
+  score: 7.0
+  article_ids:
+  - 6dd8aa396fd1fab6
+  evidence_snippets:
+  - DecisionBench 是一个由研究者提出的、用于评估长周期 AI 智能体工作流中紧急委派能力的标准化基准测试平台。
+  - 该平台固定了 GAIA、tau-bench、BFCL multi-turn 三个任务套件和来自 7 个供应商家族的 11 个模型的同行模型池。
+  - 研究通过 23,375 个任务实例的五条件参考扫描发现完美委派上限与实际表现之间存在 15 到 31 个百分点的差距。
 ---
 
 # Computer Science > Artificial Intelligence

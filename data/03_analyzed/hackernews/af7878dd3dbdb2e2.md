@@ -13,30 +13,37 @@ tags:
 extraction_status: partial
 id: af7878dd3dbdb2e2
 source_type: community_discussion
-tldr: USNI《海军历史》刊文回顾钱学森从美国导弹先驱到中国航天之父的传奇经历，称其为美国失去、中国获得的导弹天才。
-objective_summary: 2025年12月，美国海军学会（USNI）旗下《海军历史》杂志发表专题文章，梳理钱学森的生平轨迹：早年作为加州理工学院喷气推进实验室（JPL）联合创始人参与美国早期火箭研究，后在红色恐慌中被剥夺安全许可并遭驱逐，1955年返回中国后领导导弹与航天事业，成为中国火箭技术奠基人。
-event_type: application_landing
+tldr: 《海军历史》杂志2025年12月刊发表长文《钱学森：美国失去、中国获得的导弹天才》，回顾这位火箭科学家从JPL创始人之一到成为"中国导弹之父"的传奇人生。
+objective_summary: 美国海军学会《海军历史》杂志2025年12月刊发表专题文章，讲述钱学森（Tsien Hsue-shen）的生平。钱学森是喷气推进实验室（JPL）的联合创始人之一，在二战和冷战早期为美国火箭技术做出重大贡献。麦卡锡时代他被指控为共产主义者并遭软禁，1955年返回中国后主导了中国的导弹与太空计划，被誉为"中国导弹之父"。文章在Hacker
+  News上引发讨论，获得130个点赞和69条评论。
+event_type: policy_and_safety
 epistemic_status: verified_fact
 entities:
   companies:
   - US Naval Institute
-  - Jet Propulsion Laboratory
-  - Caltech
-  - MIT
-  technologies:
-  - ballistic missile
-  - rocketry
-  - hypersonics
+  - Jet Propulsion Laboratory (JPL)
+  technologies: []
   key_people:
-  - Qian Xuesen
-  - Theodore von Kármán
+  - Qian Xuesen (Tsien Hsue-shen)
 key_logic_flow:
-- 美国海军学会（USNI）在2025年12月《海军历史》杂志上刊发钱学森专题文章，标题直指其为'美国失去、中国获得的导弹天才'
-- 文章追溯钱学森早年在美国的学术与工程成就，包括在加州理工学院与冯·卡门共同创立喷气推进实验室（JPL），深度参与美国早期火箭与导弹研究
-- 冷战时期的红色恐慌导致钱学森被怀疑为共产主义同情者，其安全许可被吊销，随后被软禁并最终于1955年通过换俘协议遣返中国
-- 钱学森返回中国后主导建立导弹与航天工业体系，领导东风导弹系列和长征运载火箭的研制，被尊为中国航天之父
-- 文章将钱学森案定性为美国在人才战略上的重大失误——驱逐一位顶级科学家最终加速了中国战略武器能力的崛起
+- 美国海军学会《海军历史》杂志2025年12月刊发表以钱学森为主题的专题文章。
+- 钱学森曾是喷气推进实验室（JPL）联合创始人，为美国火箭技术做出关键贡献。
+- 麦卡锡时代钱学森被指控为共产主义同情者并遭美国软禁。
+- 1955年钱学森获释并返回中国，随后领导中国的导弹与太空计划。
+- 文章标题以"美国失去、中国获得"概括钱学森的地缘战略影响。
+- 该文章在Hacker News上引起广泛关注，获得130个点赞和69条评论。
 pipeline_stage: fact_extracted
+extract_result: success
+object_mentions:
+- object_type: project
+  name: Jet Propulsion Laboratory (JPL)
+  canonical_name: Jet Propulsion Laboratory
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - 钱学森是喷气推进实验室（JPL）的联合创始人之一，在二战和冷战早期为美国火箭技术做出重大贡献。
+  article_id: af7878dd3dbdb2e2
 impact_score:
   score: 2.5
   reason: 该文章为美国海军学会旗下《海军历史》杂志发表的冷战科技史回顾性文章，主题是钱学森从美国导弹先驱到中国航天之父的生平。文章本身不涉及 AI 技术、产品或产业动态。其在
@@ -84,6 +91,27 @@ confidence:
   compound: medium
   hype: low
 actionable_insight: monitor
+object_insights:
+- object_type: project
+  name: Jet Propulsion Laboratory (JPL)
+  canonical_name: Jet Propulsion Laboratory
+  url: null
+  positioning: JPL是NASA下属的联邦资助研究与开发中心，由钱学森等科学家联合创立，专注机器人太空探测和行星科学。
+  technical_signal: JPL在火箭推进和导弹技术领域拥有深厚的技术积累，二战及冷战期间为美国火箭技术做出重大贡献。
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: 作为钱学森曾参与创立的顶级航天实验室，JPL的历史渊源揭示了人才跨国流动对科技实力的深远影响，值得持续关注其太空探索技术前沿。
+  risk_notes:
+  - JPL作为美国国防和航天核心机构，其国际化人才策略长期面临国家安全审查压力。
+  score: 3.0
+  article_ids:
+  - af7878dd3dbdb2e2
+  evidence_snippets:
+  - 钱学森是喷气推进实验室（JPL）的联合创始人之一，在二战和冷战早期为美国火箭技术做出重大贡献。
 ---
 
 > **⚠️ 正文提取不完整**：HTML 获取成功但无法从中提取正文，以下为文章摘要

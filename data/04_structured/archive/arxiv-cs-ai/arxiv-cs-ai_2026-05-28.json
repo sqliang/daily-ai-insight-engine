@@ -111,27 +111,44 @@
     "pipeline_stage": "fact_extracted",
     "id": "27fbaeab8c07a7da",
     "source_type": "academic_paper",
-    "tldr": "提出 AgingBench 基准，揭示部署后的 AI Agent 即使模型权重冻结也会随时间退化，需用生命周期工程而非一次性评测来保障可靠性。",
-    "objective_summary": "研究者于 2026 年发布论文，提出 AgingBench 纵向可靠性基准，将 Agent 老化归为压缩老化、干扰老化、修订老化和维护老化四种机制，通过时序依赖图和反事实探针对 7 个场景、14 个模型进行约 400 次运行，发现行为测试可能保持清洁而事实精度已衰退，同一错误答案需不同修复策略。",
+    "tldr": "该论文提出 AgingBench，一个用于评估已部署 AI 代理长期可靠性的纵向基准，识别了压缩老化、干扰老化、修订老化和维护老化四种机制，并通过约 400 次实验发现代理老化是多维的，需要全生命周期评估而非仅依赖初始模型性能。",
+    "objective_summary": "研究者在一篇 arXiv 论文中提出了 AgingBench，这是一个用于衡量已部署 AI 代理长期可靠性的纵向基准，而非仅评估初始化时的模型性能。该基准将代理老化分为压缩老化、干扰老化、修订老化和维护老化四种机制，并使用时间依赖图和配对反事实探针诊断记忆管道的写入、检索和利用阶段故障。在 7 个场景、14 个模型、多种记忆策略下进行的约 400 次实验表明，行为测试可能保持正常而事实精度已下降，不同老化模式需要不同的针对性修复。",
     "event_type": "framework_tools",
-    "epistemic_status": "theoretical_claim",
+    "epistemic_status": "verified_fact",
     "entities": {
       "companies": [],
       "technologies": [
         "AgingBench",
-        "temporal dependency graphs",
-        "counterfactual probes",
-        "memory pipeline"
+        "Agent Lifespan Engineering",
+        "Temporal Dependency Graphs",
+        "Counterfactual Probes"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "当前 Agent 评测体系依赖初始化时的快照测试，忽略部署后随时间持续运行的可靠性问题，即使模型权重冻结，Agent 的有效状态仍会因交互历史压缩、记忆库增长、事实修订和日常维护而变化。",
-      "提出 AgingBench 纵向可靠性基准，将 Agent 老化归纳为四种机制：压缩老化（compression aging）、干扰老化（interference aging）、修订老化（revision aging）和维护老化（maintenance aging）。",
-      "为诊断老化故障，AgingBench 使用时序依赖图和配对反事实探针，生成针对记忆管道写入、检索和利用三个阶段的诊断画像。",
-      "实验覆盖 7 个场景、14 个模型、多种记忆策略以及受控和自主两类 Agent，约 400 次运行跨越 8 至 200 个会话，结果表明 Agent 老化不是单维度的。",
-      "核心发现：行为测试可能保持清洁而事实精度已衰退，派生状态跟踪可在单一模型内急剧崩溃，且同一错误答案根据诊断画像指向的不同需要不同的修复策略。",
-      "结论：可靠的 Agent 部署需要生命周期评测、机制级诊断和阶段定向修复，而非仅依赖更强的初始模型。"
+      "该论文指出长期部署的 AI 代理在模型权重冻结后，其有效状态仍会因交互历史压缩、记忆库增长、事实修订和日常维护而持续变化。",
+      "论文提出了 AgingBench 纵向可靠性基准，将代理老化机制分为压缩老化、干扰老化、修订老化和维护老化四类。",
+      "AgingBench 使用时间依赖图和配对反事实探针来诊断记忆管道的写入、检索和利用阶段的具体故障并生成诊断画像。",
+      "在 7 个场景、14 个模型、多种记忆策略下进行的约 400 次实验覆盖了 8 到 200 个会话周期，横跨 runner 控制和自主代理两种类型。",
+      "实验表明代理老化并非一维：行为测试可能仍然正常而事实精度已经下降，衍生状态追踪可能在单个模型内急剧崩溃。",
+      "可靠的代理部署需要全生命周期评估、机制级别的诊断和分阶段针对性修复，而非仅依赖于更强的初始模型。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "AgingBench",
+        "canonical_name": "AgingBench",
+        "url": "https://arxiv.org/abs/2605.26302",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "论文介绍了 AgingBench，一个用于代理生命周期工程的纵向可靠性基准，不仅衡量退化程度还诊断退化形式。",
+          "AgingBench 将代理老化组织为四种机制：压缩老化、干扰老化、修订老化和维护老化。",
+          "在 7 个场景、14 个模型和多种记忆策略下的约 400 次实验说明代理老化是多维的，需要机制级别诊断和针对性修复。"
+        ],
+        "article_id": "27fbaeab8c07a7da"
+      }
     ],
     "impact_score": {
       "score": 6.5,
@@ -191,7 +208,35 @@
       "compound": "high",
       "hype": "low"
     },
-    "actionable_insight": "strategic_invest"
+    "actionable_insight": "strategic_invest",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "AgingBench",
+        "canonical_name": "AgingBench",
+        "url": "https://arxiv.org/abs/2605.26302",
+        "positioning": "AgingBench 是针对已部署AI代理的纵向可靠性基准，通过四种老化机制分类和记忆管道诊断，衡量退化形式并指导针对性修复。",
+        "technical_signal": "提出了压缩老化、干扰老化、修订老化和维护老化四种机制分类，并使用时间依赖图和配对反事实探针诊断记忆管道故障。",
+        "adoption_signal": "在7个场景、14个模型、多种记忆策略下完成约400次实验，覆盖runner控制和自主代理两种类型，横跨8到200个会话周期。",
+        "ecosystem_relevance": "填补了AI代理从原型到生产部署过程中长期可靠性评估的工具空白，与记忆系统、代理框架和运维监控形成互补生态。",
+        "target_users": [],
+        "watch_reason": "长期部署的AI代理面临运行时可靠性退化问题，但业界缺乏系统化评测工具；AgingBench提出的四种老化机制和诊断方法为代理运维提供了可操作的分析框架，随着代理从演示走向生产部署，其价值将持续增长。",
+        "risk_notes": [
+          "该基准目前仅以论文形式存在，尚未提供开源实现或公开数据集，可复现性待验证。",
+          "约400次实验的覆盖范围在统计泛化能力上仍有局限，需要更大规模的跨任务验证。",
+          "代理老化的根本原因是否仅限于论文分类的四种机制，在实践中可能存在更多未识别老化模式。"
+        ],
+        "score": 8.0,
+        "article_ids": [
+          "27fbaeab8c07a7da"
+        ],
+        "evidence_snippets": [
+          "论文介绍了 AgingBench，一个用于代理生命周期工程的纵向可靠性基准，不仅衡量退化程度还诊断退化形式。",
+          "AgingBench 将代理老化组织为四种机制：压缩老化、干扰老化、修订老化和维护老化。",
+          "在 7 个场景、14 个模型和多种记忆策略下的约 400 次实验说明代理老化是多维的，需要机制级别诊断和针对性修复。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -210,8 +255,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "53451b4dc233b01e",
     "source_type": "academic_paper",
-    "tldr": "arXiv论文提出MPMMine基准套件，旨在解决约束获取（CA）领域缺乏标准化评估基准的问题。",
-    "objective_summary": "研究人员指出约束获取（CA）和数学规划（MP）模型验证领域缺乏合适的基准，现有基准面向求解器而非CA算法，组织松散且遗漏领域知识工件。为此提出MPMMine基准套件，采用MiniZinc、CommonMark和JSON等开放格式，提供多模型、多实例及数千组解与非解数据，",
+    "tldr": "该论文指出约束获取（Constraint Acquisition）领域缺乏合适的基准测试，并提出了MPMMine基准套件，用于评估从领域知识工件中发现、验证和增强数学规划模型的算法。",
+    "objective_summary": "来自arXiv的论文指出，约束获取（Constraint Acquisition）及数学规划模型验证与增强的研究受限于不充分的基准测试。现有基准是为求解器评估而非约束获取算法设计的，存在组织松散、问题定义不一致、缺少领域知识工件等问题。该论文提出了MPMMine基准套件，采用统一结构并基于MiniZinc、CommonMark和JSON开放格式，提供每个问题多个模型、每个模型数十个实例、数千个整数和连续域的解与非解，以及支持文本到模型方法的自然语言描述。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
@@ -219,20 +264,35 @@
       "technologies": [
         "Constraint Acquisition",
         "Mathematical Programming",
-        "MiniZinc",
-        "CommonMark",
-        "JSON",
-        "text-to-model"
+        "MPMMine",
+        "MiniZinc"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "约束获取（CA）与数学规划（MP）模型验证领域当前缺乏合适的评估基准，阻碍了可复现性和跨研究可比较性。",
-      "现有基准是为求解器评估设计的，而非为CA算法评估设计，组织松散且遗漏CA方法所需的领域知识工件。",
-      "论文提出MPMMine基准套件，遵循一致性、标准化、完整性、可扩展性、开放性和版本控制六大原则。",
-      "MPMMine采用统一结构，依赖MiniZinc、CommonMark和JSON三种开放格式。",
-      "该基准为每个问题提供多个模型、每个模型提供数十个实例，以及整数域和连续域中数千组解与非解数据。",
-      "MPMMine还包含自然语言描述，以支持文本到模型（text-to-model）方法的研究。"
+      "约束获取（CA）及数学规划模型验证与增强研究目前受限于不充分的基准测试，这阻碍了可重复性和跨研究可比性。",
+      "现有基准是为求解器评估设计的而非用于评估CA算法，存在组织松散、问题定义不一致且缺少领域知识工件等问题。",
+      "该论文提出MPMMine基准套件，旨在评估发现、验证和增强数学规划模型的算法。",
+      "MPMMine遵循一致性、标准化、完整性、可扩展性、开放性和版本控制等设计原则。",
+      "MPMMine采用统一结构，使用MiniZinc、CommonMark和JSON开放格式，提供多模型、多实例以及大量整数和连续域的解与非解数据。",
+      "该基准还包含自然语言描述以支持文本到模型方法的评估。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "MPMMine",
+        "canonical_name": "MPMMine",
+        "url": "https://arxiv.org/abs/2605.26279",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "该论文提出MPMMine基准套件，旨在评估发现、验证和增强数学规划模型的算法，并解决现有基准不适用的问题。",
+          "MPMMine采用统一结构，使用MiniZinc、CommonMark和JSON开放格式，提供多模型、多实例和数千个解与非解数据。",
+          "该基准还提供自然语言描述以支持文本到模型方法的评估，并遵循一致性、标准化、完整性等设计原则。"
+        ],
+        "article_id": "53451b4dc233b01e"
+      }
     ],
     "impact_score": {
       "score": 3.0,
@@ -281,7 +341,33 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "MPMMine",
+        "canonical_name": "MPMMine",
+        "url": "https://arxiv.org/abs/2605.26279",
+        "positioning": "MPMMine是一个专为约束获取与数学规划模型验证增强研究设计的统一基准测试套件，填补了该领域缺乏专用基准的空白。",
+        "technical_signal": "采用MiniZinc、CommonMark和JSON开放格式构建统一结构，提供多模型多实例及数千个整数与连续域的解与非解数据，并包含自然语言描述以支持文本到模型方法。",
+        "ecosystem_relevance": "直接面向约束获取研究社区的基准需求，通过一致性、标准化、完整性等设计原则推动领域研究的可重复性和跨研究可比性。",
+        "target_users": [],
+        "watch_reason": "MPMMine是首个专门面向约束获取算法评估的统一基准套件，直接解决了该领域长期存在的基准不充分、组织松散和问题定义不一致等问题，其标准化设计和开放格式有望推动整个约束获取领域的研究规范化。",
+        "risk_notes": [
+          "作为新提出的基准，是否被学界广泛采纳并成为领域标准尚需时间验证。",
+          "基准的长期维护、社区协作和数据集扩展需要持续投入，存在可持续性风险。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "53451b4dc233b01e"
+        ],
+        "evidence_snippets": [
+          "该论文提出MPMMine基准套件，旨在评估发现、验证和增强数学规划模型的算法，并解决现有基准不适用的问题。",
+          "MPMMine采用统一结构，使用MiniZinc、CommonMark和JSON开放格式，提供多模型、多实例和数千个解与非解数据。",
+          "该基准还提供自然语言描述以支持文本到模型方法的评估，并遵循一致性、标准化、完整性等设计原则。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -300,28 +386,45 @@
     "pipeline_stage": "fact_extracted",
     "id": "66daf771fa67e3a0",
     "source_type": "academic_paper",
-    "tldr": "提出POLAR框架，通过多模态记忆图实现具身MLLM智能体的长期个性化交互",
-    "objective_summary": "研究者提出POLAR多模态记忆增强框架，将用户与具身智能体的长期交互组织为多模态知识图谱（含语义记忆和情景记忆），通过检索相关记忆来解读当前请求并指导任务执行。在多种MLLM骨干模型和评估场景上验证，证明该记忆机制能一致提升跨交互推理、多跳推断和用户上下文追踪的性能。",
+    "tldr": "提出 POLAR 框架，通过多模态知识图谱组织语义记忆和情景记忆，使具身多模态大语言模型代理能在长期用户交互中利用累积的记忆来个性化地理解隐式指令并执行任务。实验表明，该记忆机制在跨交互推理、多跳推断和用户上下文追踪等场景下持续提升性能。",
+    "objective_summary": "该研究提出了 POLAR（多模态记忆增强框架），旨在解决具身多模态大语言模型代理在长期用户交互中的个性化问题。POLAR 将用户先前的交互组织为多模态知识图谱，包括用于保存个性化上下文和视觉概念的语义记忆，以及用于存储代理轨迹等具身经验的情景记忆。在执行任务时，POLAR 检索相关记忆来解释当前请求并引导任务执行。研究者在多种 MLLM 基座模型和不同评测场景下评估了 POLAR，结果显示该记忆机制能通过更有效地利用累积信息持续提升性能，尤其在需要跨多轮交互推理、多跳推断或持续追踪用户特定上下文更新的场景中增益最为显著。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
-        "MLLM",
         "POLAR",
+        "MLLM",
         "Multimodal Knowledge Graph",
         "Semantic Memory",
-        "Episodic Memory",
-        "Embodied Agent"
+        "Episodic Memory"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "现有MLLM具身智能体缺乏个性化能力，无法利用长期交互中积累的隐式用户上下文来识别真实意图目标",
-      "POLAR框架将先前的多模态交互组织为知识图谱，其中语义记忆存储个性化上下文和视觉概念，情景记忆存储智能体轨迹等具身体验",
-      "执行具身任务时，POLAR检索相关记忆来解读当前用户请求并指导任务执行",
-      "在多个MLLM骨干模型和多样化评估场景上进行实验验证",
-      "实验结果表明该记忆机制一致提升性能，尤其在需要跨多次交互推理、多跳推断或追踪用户上下文更新时增益最为显著"
+      "POLAR 是一个多模态记忆增强框架，旨在让具身多模态大语言模型代理在长期用户交互中实现个性化辅助。",
+      "该框架将用户先前的交互组织为多模态知识图谱，包含语义记忆（个性化上下文和视觉概念）和情景记忆（代理轨迹等具身经验）两类记忆。",
+      "在执行具身任务时，POLAR 检索相关记忆来理解当前用户的隐式指令并引导任务执行过程。",
+      "研究者在多种 MLLM 基座模型和多样化评测场景下评估了 POLAR 的性能，以研究记忆在长期个性化中的作用。",
+      "实验结果表明，POLAR 的记忆机制通过更有效地利用历史交互中积累的信息，持续提升了代理的任务执行性能。",
+      "性能提升在需要跨多轮交互推理、执行多跳推断或持续追踪用户特定上下文更新时最为显著。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "POLAR",
+        "canonical_name": "POLAR",
+        "url": "https://arxiv.org/abs/2605.26256",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "该论文提出了 POLAR，一个多模态记忆增强框架，用于在长期用户交互中实现个性化的具身多模态大语言模型代理。",
+          "POLAR 将先前的交互组织为多模态知识图谱，同时捕获语义记忆（个性化上下文和视觉概念）和情景记忆（代理轨迹等具身经验）。",
+          "实验结果表明，POLAR 的记忆机制通过更有效地利用跨交互累积的信息持续提升了任务性能，尤其在多跳推断和用户上下文追踪场景中增益显著。"
+        ],
+        "article_id": "66daf771fa67e3a0"
+      }
     ],
     "impact_score": {
       "score": 5.0,
@@ -380,7 +483,35 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "POLAR",
+        "canonical_name": "POLAR",
+        "url": "https://arxiv.org/abs/2605.26256",
+        "positioning": "POLAR 是一个多模态记忆增强框架，通过将长期用户交互组织为多模态知识图谱并检索相关记忆，使具身代理能理解隐式指令并个性化地执行任务。",
+        "technical_signal": "POLAR 将用户交互组织为多模态知识图谱，同时捕获语义记忆（个性化上下文和视觉概念）和情景记忆（代理轨迹等具身经验）。",
+        "adoption_signal": "目前仅处于论文阶段，无公开代码或部署信息，尚未观察到社区采用信号。",
+        "ecosystem_relevance": "POLAR 属于具身多模态大语言模型代理与个性化记忆增强的交叉方向，可扩展至多种 MLLM 基座模型，与具身智能研究生态高度相关。",
+        "target_users": [],
+        "watch_reason": "POLAR 通过多模态知识图谱统一了语义记忆和情景记忆，在跨交互推理、多跳推断和用户上下文追踪等场景下显著提升任务性能，为解决具身代理长期个性化这一关键瓶颈提供了可行路径，值得持续跟踪。",
+        "risk_notes": [
+          "目前仅处于学术论文阶段，代码和模型均未开源，实际部署效果和工程实用性尚待验证。",
+          "多模态知识图谱的构建和维护在高频长期交互场景下可能面临存储和检索效率瓶颈。",
+          "实验评测基于特定仿真环境，在真实复杂物理环境中的泛化能力和鲁棒性有待进一步检验。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "66daf771fa67e3a0"
+        ],
+        "evidence_snippets": [
+          "该论文提出了 POLAR，一个多模态记忆增强框架，用于在长期用户交互中实现个性化的具身多模态大语言模型代理。",
+          "POLAR 将先前的交互组织为多模态知识图谱，同时捕获语义记忆（个性化上下文和视觉概念）和情景记忆（代理轨迹等具身经验）。",
+          "实验结果表明，POLAR 的记忆机制通过更有效地利用跨交互累积的信息持续提升了任务性能，尤其在多跳推断和用户上下文追踪场景中增益显著。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -399,32 +530,68 @@
     "pipeline_stage": "fact_extracted",
     "id": "684a32feb0bd0238",
     "source_type": "academic_paper",
-    "tldr": "提出两种基于混合架构的科学Agent框架，分别用于时间序列数据自动策展和物理讲座结构化报告生成。",
-    "objective_summary": "该论文于2025年提出两个自主科学AI框架：DeepTS/DeepCollector 用于大规模时间序列数据集的策展、提取与去重；DeepScribe 用于将复杂物理讲座自动转化为结构化科学报告。两者均采用Google Colab上的本地-远程混合架构，通过Python编排器调用云端LLM，",
+    "tldr": "该论文提出两个自主AI科学智能体框架：DeepTS/DeepCollector用于自动化时间序列数据集的大规模整理与去重，DeepScribe用于将物理学讲座自动转换为结构化科学报告。两个系统均采用Google Colab混合本地主体与远程大脑架构，通过Python编排器调用LLM云后端。",
+    "objective_summary": "该论文发表于2026年5月，详细介绍了两套用于科学工作流中自主AI的新型框架。两个系统均采用基于Google Colab的混合本地主体与远程大脑架构，利用Python本地编排器调用大语言模型云后端。第一个智能体DeepTS/DeepCollector实现了时间序列数据集的大规模自动化整理、提取与去重；第二个智能体DeepScribe是一款自主演示分析器，能够将视觉密集、数学复杂的物理学讲座转化为结构化科学报告。论文还提出了将DeepTS推广以支持深度知识图谱的构想，并讨论了该方法在高能物理领域（DeepQCD）的应用前景。",
     "event_type": "framework_tools",
-    "epistemic_status": "theoretical_claim",
+    "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
         "Google"
       ],
       "technologies": [
-        "Cellular RAG",
-        "LLM",
         "DeepTS",
         "DeepCollector",
         "DeepScribe",
+        "Cellular RAG",
+        "LLM",
         "DeepQCD",
-        "knowledge graph",
-        "agentic AI"
+        "Google Colab"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "提出一种Local Body, Remote Brain混合架构，通过Google Colab在本地运行Python编排器、远程调用云端LLM后端",
-      "DeepTS/DeepCollector框架实现时间序列数据的大规模自动策展、属性提取与去重，采用细粒度属性抽取技术Cellular RAG",
-      "DeepScribe框架将视觉密集且数学复杂的物理讲座自动转换为结构化科学报告",
-      "通过远程数据检查和分布式并发控制等系统工程手段，克服当前LLM在科学工作流中的上下文与推理限制",
-      "论文进一步将DeepTS概念泛化至深度知识图谱构建，并探讨其在DeepQCD高能物理领域的应用"
+      "论文提出两套用于科学工作流的自主AI智能体框架，均采用混合本地主体与远程大脑架构，基于Google Colab平台运行。",
+      "第一个智能体DeepTS/DeepCollector专门用于自动化时间序列数据集的大规模整理、提取与去重工作。",
+      "第二个智能体DeepScribe是一款自主演示分析器，能够将视觉密集且数学复杂的物理学讲座转化为结构化的科学报告。",
+      "系统通过实际系统工程方法，如细粒度属性提取（Cellular RAG）、远程数据检查和分布式并发控制，克服了当前最先进系统在上下文和推理方面的限制。",
+      "论文提出了将DeepTS推广为支持深度知识图谱的通用框架的构想，并讨论了该方法在高能物理领域（DeepQCD）的应用前景。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "DeepTS/DeepCollector",
+        "canonical_name": "DeepTS/DeepCollector",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "第一个智能体DeepTS/DeepCollector用于自动化时间序列数据集的大规模整理、提取与去重工作。",
+          "该论文提出了将DeepTS推广为支持深度知识图谱的通用框架的构想。"
+        ],
+        "article_id": "684a32feb0bd0238"
+      },
+      {
+        "object_type": "project",
+        "name": "DeepScribe",
+        "canonical_name": "DeepScribe",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "第二个智能体DeepScribe是一款自主演示分析器，能够将视觉密集且数学复杂的物理学讲座转化为结构化科学报告。"
+        ],
+        "article_id": "684a32feb0bd0238"
+      },
+      {
+        "object_type": "project",
+        "name": "DeepQCD",
+        "canonical_name": "DeepQCD",
+        "confidence": "low",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "论文讨论了将DeepTS概念方法应用到高能物理领域（DeepQCD）的前景。"
+        ],
+        "article_id": "684a32feb0bd0238"
+      }
     ],
     "impact_score": {
       "score": 4.5,
@@ -478,7 +645,54 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "DeepTS/DeepCollector",
+        "canonical_name": "DeepTS/DeepCollector",
+        "positioning": "DeepTS/DeepCollector是一个用于自动化时间序列数据集大规模整理、提取与去重的AI科学智能体框架，采用混合本地主体与远程大脑架构。",
+        "technical_signal": "采用混合本地主体与远程大脑架构，通过Python编排器调用LLM云后端，利用Cellular RAG和分布式并发控制等系统工程方法克服上下文与推理限制。",
+        "adoption_signal": "该框架于2026年5月以arXiv论文形式发布，目前处于学术概念验证阶段，尚无公开代码库、演示或可测量的社区采用数据。",
+        "ecosystem_relevance": "论文明确规划将DeepTS推广为支持深度知识图谱的通用框架，并讨论了在高能物理领域（DeepQCD）的应用前景，与科学AI基础设施生态存在潜在衔接点。",
+        "target_users": [],
+        "watch_reason": "该框架代表了自主AI智能体在科学数据工作流中的系统化工程尝试，其Cellular RAG和分布式并发控制等设计模式可能为科学AI基础设施提供可复用的参考方案，且路线图已明确向知识图谱和高能物理领域扩展。",
+        "risk_notes": [
+          "当前仅为学术论文提出的概念验证框架，尚无公开可用的代码库或工具实现来验证其工程可行性。",
+          "混合本地与远程架构对网络连接依赖性强，在大规模生产环境中的可扩展性和可靠性尚未经过检验。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "684a32feb0bd0238"
+        ],
+        "evidence_snippets": [
+          "第一个智能体DeepTS/DeepCollector用于自动化时间序列数据集的大规模整理、提取与去重工作。",
+          "该论文提出了将DeepTS推广为支持深度知识图谱的通用框架的构想。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "DeepScribe",
+        "canonical_name": "DeepScribe",
+        "positioning": "DeepScribe是一款能够将视觉密集且数学复杂的物理学讲座自动转化为结构化科学报告的自主演示分析智能体。",
+        "technical_signal": "采用与DeepTS相同的混合本地主体与远程大脑架构，利用Python编排器调用LLM云后端，处理视觉内容与数学公式交织的多模态科学讲座理解与结构化转换。",
+        "adoption_signal": "该智能体于2026年5月以arXiv论文形式发布，目前处于学术原型阶段，尚无公开演示、代码仓库或实际用户采用证据。",
+        "ecosystem_relevance": "聚焦于物理学讲座到结构化报告的自动化转化场景，对AI辅助科学教育与知识管理具有潜在价值，但当前独立于主流教育技术生态，尚未与现有平台形成集成。",
+        "target_users": [],
+        "watch_reason": "DeepScribe尝试解决多模态科学内容（视觉图表与数学公式混合）的结构化理解与报告生成难题，这一方向对AI辅助科学教育和跨模态知识管理有广泛借鉴意义，值得持续关注其技术路线的演进与验证。",
+        "risk_notes": [
+          "当前仅为学术论文中的原型系统，缺乏真实大规模讲座场景的端到端验证。",
+          "对复杂数学公式和科学图表的准确理解与转换能力尚无独立基准评估，实际输出质量存疑。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "684a32feb0bd0238"
+        ],
+        "evidence_snippets": [
+          "第二个智能体DeepScribe是一款自主演示分析器，能够将视觉密集且数学复杂的物理学讲座转化为结构化科学报告。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -573,8 +787,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "99aeccda5d1c1880",
     "source_type": "academic_paper",
-    "tldr": "JobBench 基准测试评估 AI 智能体在 35 个职业 130 项任务上的表现，最强模型 Claude Opus 4.7 仅达 45.",
-    "objective_summary": "研究团队提出 JobBench 基准，覆盖 35 个职业的 130 项智能体任务，任务以异构参考文件工作区形式呈现，要求智能体在混乱信息流中推理。评估采用事实锚定的评分链，每任务平均 35.6 个二元标准。测试 36 个模型后，Claude Opus 4.",
+    "tldr": "JobBench 是一个覆盖 35 个职业、130 项智能体任务的 AI 基准，旨在评估 AI 智能体在人类真正希望委派的工作流上的表现，而非仅衡量其经济替代价值。最强模型 Claude Opus 4.7（搭配 Claude Code）仅达到 45.9% 的得分。",
+    "objective_summary": "arXiv 于 2025 年发表的论文提出了 JobBench 基准，用于评估 AI 智能体在 35 个职业的 130 项代理任务上的表现。每个任务包含异构引用文件构成的工作区，要求智能体在真实职业的杂乱信息流中进行推理。输出通过事实锚定的评分链进行评分，平均每项任务包含 35.6 个二元判断标准。在 36 个被测模型中，表现最强的 Claude Opus 4.7 搭配 Claude Code 仅达到 45.9%。该基准旨在引导社区将劳动力市场效应从替代转向增强。",
     "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
@@ -582,19 +796,46 @@
         "Anthropic"
       ],
       "technologies": [
-        "JobBench",
-        "Claude Opus 4.7",
-        "Claude Code"
+        "JobBench"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "现有职业 AI 智能体基准以经济价值（GDP）为核心，讲述的是替代人类的故事，忽略了人类自身的委托需求。",
-      "JobBench 转而从专家认定的高优先级可委托工作流出发，覆盖 35 个职业的 130 项智能体任务，目标是从替代转向增强。",
-      "每个任务被封装为一个包含异构参考文件的工作区，智能体需在真实专业工作中杂乱的信息流里进行推理。",
-      "输出评分采用事实锚定的评分链（chain of rubrics），每项任务平均包含 35.6 个二元评判标准。",
-      "在 36 个被评估模型中，Claude Opus 4.7 搭配 Claude Code 表现最强，但整体完成率仅为 45.9%，表明当前智能体能力仍有巨大差距。",
-      "研究者希望 JobBench 推动社区将劳动力市场目标从替代转向增强，即构建人类真正愿意委托的智能体，而非仅追求经济价值最大化。"
+      "JobBench 是评估 AI 智能体在职业工作流上表现的基准，覆盖 35 个职业共 130 项代理任务。",
+      "每个任务打包为包含异构引用文件的工作区，要求智能体在真实职业的杂乱信息流中进行推理。",
+      "输出通过事实锚定的评分链进行评估，平均每项任务包含 35.6 个二元判断标准。",
+      "研究团队对 36 个模型进行了评估，表现最强的 Claude Opus 4.7（搭配 Claude Code）仅达到 45.9% 的得分。",
+      "JobBench 的设计目标是引导社区将关注点从经济替代转向人类增强，即构建人类真正希望委派的智能体。",
+      "现有职业 AI 基准主要由经济价值驱动，讲述的是替代叙事，而 JobBench 基于专家识别的高优先级委派工作流进行评估。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "JobBench",
+        "canonical_name": "JobBench",
+        "url": "https://arxiv.org/abs/2605.26329",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "JobBench 覆盖 35 个职业共 130 项代理任务，每项任务包含异构引用文件构成的工作区。",
+          "输出通过事实锚定的评分链进行评分，平均每项任务包含 35.6 个二元判断标准。",
+          "在 36 个被测模型中，表现最强的 Claude Opus 4.7 搭配 Claude Code 仅达到 45.9%。"
+        ],
+        "article_id": "99aeccda5d1c1880"
+      },
+      {
+        "object_type": "product",
+        "name": "Claude Code",
+        "canonical_name": "Claude Code",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "表现最强的模型是 Claude Opus 4.7 搭配 Claude Code，在 JobBench 上仅达到 45.9%。",
+          "Claude Code 作为 Claude Opus 4.7 的执行环境参与了 JobBench 的评估。"
+        ],
+        "article_id": "99aeccda5d1c1880"
+      }
     ],
     "impact_score": {
       "score": 5.5,
@@ -647,7 +888,59 @@
       "compound": "high",
       "hype": "medium"
     },
-    "actionable_insight": "strategic_invest"
+    "actionable_insight": "strategic_invest",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "JobBench",
+        "canonical_name": "JobBench",
+        "url": "https://arxiv.org/abs/2605.26329",
+        "positioning": "JobBench 是一个覆盖 35 个职业、130 项智能体任务的 AI 基准，旨在评估 AI 智能体在人类真正希望委派的工作流上的表现，而非仅衡量其经济替代价值。",
+        "technical_signal": "采用事实锚定的评分链进行自动评估，每项任务平均包含 35.6 个二元判断标准，评估粒度细且具有高可复现性。",
+        "adoption_signal": "研究团队已完成对 36 个模型的系统性评估，为后续社区采用奠定了基线基准，但作为新提出的基准，外部采用尚处于早期阶段。",
+        "ecosystem_relevance": "填补了现有职业 AI 基准由经济价值驱动、讲述替代叙事的空白，引导社区将劳动力市场效应从替代转向增强。",
+        "target_users": [],
+        "watch_reason": "JobBench 以人类真实委派意愿而非经济替代价值为评估导向，在 36 个模型中最强仅达 45.9%，表明 AI 在真实职业工作流上仍有巨大提升空间，值得持续跟踪其社区采纳和后续迭代。",
+        "risk_notes": [
+          "35 个职业的覆盖规模有限，难以全面代表所有知识工作领域的 AI 智能体表现。",
+          "评估任务基于专家识别的高优先级委托工作流，可能存在主观选择偏差。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "99aeccda5d1c1880"
+        ],
+        "evidence_snippets": [
+          "JobBench 覆盖 35 个职业共 130 项代理任务，每项任务包含异构引用文件构成的工作区。",
+          "输出通过事实锚定的评分链进行评分，平均每项任务包含 35.6 个二元判断标准。",
+          "在 36 个被测模型中，表现最强的 Claude Opus 4.7 搭配 Claude Code 仅达到 45.9%。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Claude Code",
+        "canonical_name": "Claude Code",
+        "positioning": "Claude Code 是 Anthropic 推出的 AI 编程助手，作为 Claude 模型的执行环境，在 JobBench 评估中支撑 Claude Opus 4.7 完成复杂的职业工作流任务。",
+        "target_users": [
+          "AI 开发者和工程师",
+          "使用 Claude 模型进行代码生成的团队"
+        ],
+        "product_signal": "在 JobBench 评估中，Claude Opus 4.7 搭配 Claude Code 以 45.9% 的得分位居 36 个模型之首，展示了其在复杂职业工作流上的执行能力。",
+        "market_signal": "在 JobBench 基准上，Claude Code 支撑 Claude Opus 4.7 取得所有 36 个模型中的最佳成绩，反映了其在智能体任务执行环境中的竞争力。",
+        "differentiation": "Claude Code 作为 Claude 模型的深度集成执行环境，能够支撑模型完成包含异构引用文件的复杂职业工作流任务，而不仅限于代码生成。",
+        "watch_reason": "Claude Code 在 JobBench 上支撑 Claude Opus 4.7 取得 45.9% 的最佳成绩，表明其在 AI 编程工具赛道具有差异化优势，值得持续跟踪其在更多职业场景中的应用效果和功能演进，以验证其超越代码生成场景的通用性。",
+        "risk_notes": [
+          "文章仅在 JobBench 评估的上下文中提及 Claude Code，缺乏对其独立能力和用户体验的详细描述。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "99aeccda5d1c1880"
+        ],
+        "evidence_snippets": [
+          "表现最强的模型是 Claude Opus 4.7 搭配 Claude Code，在 JobBench 上仅达到 45.9%。",
+          "Claude Code 作为 Claude Opus 4.7 的执行环境参与了 JobBench 的评估。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -666,8 +959,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "9a432dfa99dc189d",
     "source_type": "academic_paper",
-    "tldr": "论文提出将AI智能体长期记忆视为状态轨迹管理问题而非记录级存储，并形式化为Governed Evolving Memory（GEM）框架。",
-    "objective_summary": "该论文指出当前智能体记忆系统因将记忆视为静态存储而导致四种失效模式：无节制增长、缺乏语义修正、容量驱动遗忘和只读检索。作者将长期智能体记忆重新定义为一种新型数据管理工作负载，提出GEM框架，用摄入、修正、遗忘和检索四个状态级操作替代记录级数据库操作，并以六条正确性条件约束状态演化，",
+    "tldr": "这篇arXiv论文提出长期AI智能体记忆应被重新定义为一种新的数据管理工作负载，并提出了GEM（受控演化记忆）框架，用状态级操作取代记录级数据库操作，通过MemState原型在属性图上验证了可行性。",
+    "objective_summary": "arXiv论文《Is Agent Memory a Database?》指出当前智能体记忆系统将记忆视为存储，导致无节制增长、缺乏语义修订、容量驱动的遗忘和只读检索四种重复失败模式。论文提出GEM（Governed Evolving Memory）框架，将记忆正确性定义为状态轨迹属性而非记录属性，用摄取、修订、遗忘和检索四个状态级算子取代传统记录级操作，并证明了任何记录级系统都无法同时满足其六条正确性条件。论文通过MemState原型在属性图后端上验证了该抽象概念的可行性，并提出了三个未来研究方向。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
@@ -675,18 +968,58 @@
       "technologies": [
         "GEM",
         "MemState",
-        "property-graph",
-        "Agent Memory"
+        "Governed Evolving Memory",
+        "property-graph"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "当前智能体记忆系统和数据库范式都将记忆视为存储，正确性局限在单条记录、嵌入向量或边级别，每种方式只能提供长期记忆所需的部分能力",
-      "由此导致四种反复出现的失效模式：记忆无节制增长、缺失语义层面的修正能力、基于容量而非重要性的遗忘、以及只读式检索无法支持记忆的主动演化",
-      "论文提出长期智能体记忆应被视为一种全新的数据管理工作负载，其正确性是状态轨迹的属性而非单条记录的属性",
-      "GEM框架形式化定义了四个状态级操作（摄入、修正、遗忘、检索）和六条正确性条件来约束状态演化过程",
-      "论文在属性图后端上实现了MemState原型以验证该抽象的可行性，并揭示了原型与原生引擎之间的差距",
-      "论文最终勾勒出三个研究方向，将\"以记忆为中心的数据管理\"定义为一类独立的工作负载"
+      "当前智能体记忆系统存在四种重复失败模式：无节制增长、缺乏语义修订、容量驱动的遗忘和只读检索。",
+      "论文提出长期AI智能体记忆本质上是新的数据管理工作负载，其正确性取决于状态轨迹而非单条记录的准确性。",
+      "GEM（受控演化记忆）框架用四个状态级算子（摄取、修订、遗忘、检索）取代传统记录级数据库操作。",
+      "六条正确性条件约束GEM状态演化过程，论文证明任何记录级系统都无法同时满足这些条件。",
+      "MemState是GEM框架在属性图后端上的原型实现，验证了可行性并揭示了与原生引擎之间的差距。",
+      "论文提出了三个研究方向以定义以记忆为中心的数据管理作为独立的工作负载类型。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "GEM (Governed Evolving Memory)",
+        "canonical_name": "Governed Evolving Memory",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "GEM（Governed Evolving Memory）用四个状态级运算符（摄取、修订、遗忘和检索）取代了记录级数据库操作，并定义了六条正确性条件来约束整个记忆状态的演化过程。",
+          "论文从三个结构性观察出发，证明任何记录级系统都无法同时满足GEM的六条正确性条件，无论其采用何种存储模型。"
+        ],
+        "article_id": "9a432dfa99dc189d"
+      },
+      {
+        "object_type": "project",
+        "name": "MemState",
+        "canonical_name": "MemState",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "MemState是GEM抽象概念在属性图后端上的原型实现，用于验证该框架的可行性并揭示与原生引擎之间的差距。",
+          "通过MemState原型，论文展示了GEM框架在实际系统中的可操作性，并指出了以记忆为中心的数据管理作为未来研究方向。"
+        ],
+        "article_id": "9a432dfa99dc189d"
+      },
+      {
+        "object_type": "paper",
+        "name": "Is Agent Memory a Database? Rethinking Data Foundations for Long-Term AI Agent Memory",
+        "canonical_name": "Is Agent Memory a Database?",
+        "url": "https://arxiv.org/abs/2605.26252",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "该论文来自arXiv预印本平台，系统分析了当前AI智能体记忆系统的四种重复失败模式并提出了GEM框架作为解决方案。",
+          "论文提出长期AI智能体记忆是一种新的数据管理工作负载，其正确性是状态轨迹的属性而非单条记录的属性。"
+        ],
+        "article_id": "9a432dfa99dc189d"
+      }
     ],
     "impact_score": {
       "score": 5.5,
@@ -745,7 +1078,51 @@
       "compound": "low",
       "hype": "medium"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "GEM (Governed Evolving Memory)",
+        "canonical_name": "Governed Evolving Memory",
+        "positioning": "长期AI智能体记忆框架，用状态级操作取代传统记录级数据库操作，将记忆正确性定义为状态轨迹属性。",
+        "technical_signal": "提出四个状态级算子（摄取、修订、遗忘、检索）和六条正确性条件，从理论上证明记录级系统无法同时满足这些条件。",
+        "ecosystem_relevance": "为AI智能体长期记忆提供全新的数据管理范式，有望影响Agent框架和记忆系统的设计方向。",
+        "target_users": [],
+        "watch_reason": "GEM框架从根本上重新定义了AI智能体记忆的数据管理基础，解决了当前记忆系统四种重复失败模式（无节制增长、缺乏语义修订、容量驱动的遗忘和只读检索），具有理论创新性和实践指导价值。",
+        "risk_notes": [
+          "目前仅停留在理论框架和原型验证阶段，距离生产级原生引擎仍有较大差距。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "9a432dfa99dc189d"
+        ],
+        "evidence_snippets": [
+          "GEM（Governed Evolving Memory）用四个状态级运算符（摄取、修订、遗忘和检索）取代了记录级数据库操作，并定义了六条正确性条件来约束整个记忆状态的演化过程。",
+          "论文从三个结构性观察出发，证明任何记录级系统都无法同时满足GEM的六条正确性条件，无论其采用何种存储模型。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "MemState",
+        "canonical_name": "MemState",
+        "positioning": "GEM框架在属性图后端上的原型实现，验证受控演化记忆抽象概念的可行性与原生引擎差距。",
+        "technical_signal": "在属性图后端上实现了GEM的状态级算子，验证了框架的可操作性并揭示了与原生引擎之间的性能差距。",
+        "ecosystem_relevance": "作为GEM框架的可行性验证，为后续以记忆为中心的数据管理引擎开发提供了参考实现和基准。",
+        "target_users": [],
+        "watch_reason": "MemState作为GEM理论框架的关键验证环节，通过属性图后端原型揭示了理论抽象与原生引擎之间的实质性差距，为以记忆为中心的数据管理定义了明确的研究方向。",
+        "risk_notes": [
+          "作为原型实现，与原生引擎之间存在显著的性能差距，实用性尚需进一步验证和完善。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "9a432dfa99dc189d"
+        ],
+        "evidence_snippets": [
+          "MemState是GEM抽象概念在属性图后端上的原型实现，用于验证该框架的可行性并揭示与原生引擎之间的差距。",
+          "通过MemState原型，论文展示了GEM框架在实际系统中的可操作性，并指出了以记忆为中心的数据管理作为未来研究方向。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -764,29 +1141,64 @@
     "pipeline_stage": "fact_extracted",
     "id": "a042b3a2b0523818",
     "source_type": "academic_paper",
-    "tldr": "提出CARL算法，利用局部动力学规律性在离线分层强化学习中学习可复用技能",
-    "objective_summary": "该论文针对分层强化学习中技能复用难题，提出CARL（对比动作表示的可复用局部控制）算法。核心思想是利用局部动力学直觉——不同全局上下文中的局部状态转移需要相似的动作序列——通过对齐上下文与动作序列来学习技能复用。该算法在复杂人形环境中实现了有意义的技能聚类，并与HIQL集成后在OGBench基准上取",
+    "tldr": "该论文提出 CARL 算法，通过对比学习对齐局部上下文与所需动作序列，让离线分层强化学习学到真正可复用的技能，并在 OGBench 上验证了效果。",
+    "objective_summary": "arXiv 在 2025 年发表了一篇关于离线分层强化学习的研究论文。论文提出 CARL（Contrastive Action-based Representations for Reusable Local Control）算法，利用局部动力学正则性来学习可复用的时间扩展技能。CARL 通过对比学习将不同全局上下文中的局部转换与所需的动作序列对齐，从而判断哪些技能在何处复用。实验表明，CARL 能在复杂人形环境中产生有意义的技能聚类，并与 HIQL 集成后在 OGBench 基准上提升了下游任务性能。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
         "HRL",
+        "RL",
         "CARL",
         "HIQL",
-        "OGBench",
-        "Offline RL",
-        "Contrastive Learning"
+        "OGBench"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "分层强化学习（HRL）的核心承诺是通过发现和复用时间扩展技能来高效解决长时域任务，但获得真正可复用的技能仍是一个开放挑战",
-      "论文聚焦于利用局部动力学直觉：不同全局上下文中的局部状态转移需要相似类型的动作序列",
-      "通过对齐这些上下文与其所需的动作序列，可以学习哪些技能可复用以及在哪里复用",
-      "该信息原则上能使高层策略更有效地推理其所使用的低层技能，从而惠及多种HRL算法",
-      "由此提出CARL算法（Contrastive Action-based Representations for Reusable Local Control），采用对比动作表示学习",
-      "实验表明CARL在复杂人形环境中实现了有意义的技能定性聚类，并与HIQL集成后在OGBench基准上提升了下游任务性能"
+      "分层强化学习（HRL）通过发现和复用时域扩展技能来解决长期任务，但如何获得真正可复用的技能仍是一个开放挑战。",
+      "论文基于局部动力学直觉——不同全局上下文中的局部转换需要相似的动作序列——通过对齐上下文与动作序列来学习技能复用位置。",
+      "提出的 CARL 算法采用对比学习方式，为高层策略在推理底层技能时提供所需信息。",
+      "实验结果显示 CARL 在复杂人形环境中能产生有意义的技能聚类，并与 HIQL 集成后在 OGBench 基准上提升了下游性能。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "CARL",
+        "canonical_name": "CARL",
+        "url": "https://arxiv.org/abs/2605.26371",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "论文提出的核心算法 CARL（Contrastive Action-based Representations for Reusable Local Control）利用对比学习对齐局部上下文与所需动作序列。",
+          "CARL 在复杂人形环境中展示了有意义的技能聚类，并与 HIQL 集成后在 OGBench 基准上提升了下游任务性能。"
+        ],
+        "article_id": "a042b3a2b0523818"
+      },
+      {
+        "object_type": "project",
+        "name": "HIQL",
+        "canonical_name": "HIQL",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "CARL 与 HIQL 集成后在 OGBench 基准上验证了改进的下游性能。"
+        ],
+        "article_id": "a042b3a2b0523818"
+      },
+      {
+        "object_type": "dataset",
+        "name": "OGBench",
+        "canonical_name": "OGBench",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "OGBench 被用作下游任务性能评估的基准，CARL 与 HIQL 集成后在该基准上取得了改进效果。"
+        ],
+        "article_id": "a042b3a2b0523818"
+      }
     ],
     "impact_score": {
       "score": 3.5,
@@ -841,7 +1253,53 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "CARL",
+        "canonical_name": "CARL",
+        "url": "https://arxiv.org/abs/2605.26371",
+        "positioning": "CARL 是一种基于对比学习的离线分层强化学习算法，通过利用局部动力学正则性来发现和复用时间扩展技能。",
+        "technical_signal": "CARL 采用对比学习将不同全局上下文中的局部转换与所需动作序列对齐，从而判断技能在何处复用，为离线 HRL 技能发现提供了新范式。",
+        "adoption_signal": "CARL 在复杂人形环境中产生了有意义的技能聚类结果，并与 HIQL 集成后在 OGBench 基准上提升了下游任务性能表现。",
+        "ecosystem_relevance": "CARL 聚焦离线分层强化学习技能复用这一核心瓶颈，其设计思路可集成到多种 HRL 算法中，具有较高的通用性和兼容性。",
+        "target_users": [],
+        "watch_reason": "CARL 从局部动力学正则性切入解决离线分层 RL 技能复用难题，提出了一种可集成到多种 HRL 算法的通用技能发现模块，在复杂人形环境和 OGBench 基准上均有验证，值得持续跟踪其后续扩展与实际应用。",
+        "risk_notes": [
+          "对比学习的表征质量高度依赖离线数据集的覆盖度和信噪比，在低质量或分布外数据上可能退化。",
+          "当前验证仅在仿真环境中完成，向真实机器人系统迁移需解决 sim-to-real 适配和样本效率问题。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "a042b3a2b0523818"
+        ],
+        "evidence_snippets": [
+          "论文提出的核心算法 CARL 通过对比学习将不同全局上下文中的局部转换与所需动作序列对齐，从而学习技能复用位置。",
+          "CARL 在复杂人形环境中展示了有意义的技能聚类结果，并与 HIQL 集成后在 OGBench 基准上提升了下游任务性能表现。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "HIQL",
+        "canonical_name": "HIQL",
+        "positioning": "HIQL 是一种现有的离线分层强化学习方法，作为高层决策器与 CARL 技能表示集成以解决长期任务。",
+        "adoption_signal": "CARL 与 HIQL 的集成实验表明，高层策略可利用习得的技能表示进行推理选择，在 OGBench 基准上取得改进的下游性能结果。",
+        "ecosystem_relevance": "HIQL 作为 CARL 技能发现能力的集成验证平台，展示了新方法可与现有 HRL 框架兼容互通的生态价值。",
+        "target_users": [],
+        "watch_reason": "HIQL 作为离线分层 RL 的现有方法，是 CARL 技能复用能力的验证底座；其与 CARL 的集成效果为未来 HRL 架构中通用技能模块的设计思路提供了参考方向。",
+        "risk_notes": [
+          "本文仅提及 HIQL 作为集成对象，未深入分析 HIQL 自身的创新点或局限性，信息量有限。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "a042b3a2b0523818"
+        ],
+        "evidence_snippets": [
+          "CARL 与 HIQL 的集成实验表明，高层策略可利用 CARL 习得的技能表示进行推理选择，在 OGBench 基准上取得改进的下游性能结果。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -956,28 +1414,52 @@
     "pipeline_stage": "fact_extracted",
     "id": "a886ffcda4263965",
     "source_type": "academic_paper",
-    "tldr": "Anchor通过约束优化程序联合生成基准任务的全部组件，消除artifact drift，并以此构建了ERP-Bench企业级Agent评测集。",
-    "objective_summary": "论文提出Anchor任务生成管道，将领域专家的业务工作流规范形式化为约束优化程序，从单一参数化规范同步生成自然语言指令、环境配置、求解器认证的最优解和状态验证器。基于Anchor构建了ERP-Bench，包含300个长周期采购与制造任务。实验表明，前沿模型仅26.1%的试验满足显式约束，17.",
+    "tldr": "该论文提出 Anchor，一个通过约束优化程序将领域专家的工作流规范转化为任务生成管道的框架，以解决智能体基准生成中的\"工件漂移\"问题，并基于此构建了包含 300 个长周期任务的 ERP-Bench 基准测试集。",
+    "objective_summary": "arXiv 于 2026 年 5 月发布了关于智能体基准生成的研究论文。论文定义了\"工件漂移\"问题——即指令、环境、预言机和验证器由松散耦合的流程创建时，会对任务要求产生分歧，导致环境不可解、可奖励作弊或不一致。作者提出了 Anchor 管道，能从单一参数化规范中联合生成自然语言指令、环境配置、求解器认证的真实解和基于状态的验证器。基于 Anchor 构建的 ERP-Bench 包含 300 个涵盖采购和制造工作流的长周期任务。实验表明，前沿模型在 26.1% 的试验中满足显式任务约束，但仅 17.4% 达到完全最优解。",
     "event_type": "framework_tools",
-    "epistemic_status": "theoretical_claim",
+    "epistemic_status": "verified_fact",
     "entities": {
       "companies": [],
       "technologies": [
         "Anchor",
-        "ERP-Bench",
-        "constraint optimization",
-        "oracle",
-        "verifier"
+        "ERP-Bench"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "识别artifact drift问题：当指令、环境、验证器和oracle由松耦合流程分别创建时，它们之间经常对任务需求产生分歧，导致环境不可解、可被奖励欺骗或内部不一致。",
-      "设计Anchor管道：将领域专家的业务工作流规范形式化为约束优化程序，从单一参数化规范联合生成任务的所有组件。",
-      "Anchor输出的四个组件：自然语言指令、环境配置、求解器认证的最优解（ground-truth）、以及基于状态的验证器，且生成的环境与评测框架无关，奖励仅取决于最终状态的业务正确性。",
-      "通过调整参数控制任务难度并生成已知最优解的新任务，使基准构建过程可审计。",
-      "应用Anchor生成ERP-Bench：在一个生产级ERP系统中构建了300个涵盖采购和制造工作流的长周期任务。",
-      "实验验证：生成参数可预测实际难度；前沿模型在26.1%的试验中满足显式任务约束，但仅17.4%达到完全最优解，说明当前模型在企业级长周期任务上仍有显著差距。"
+      "论文识别了智能体基准生成中的一个核心失败模式——\"工件漂移\"，即指令、环境、预言机和验证器之间对任务要求的不一致性。",
+      "Anchor 管道通过约束优化程序将领域专家的业务工作流规范形式化，从单一参数规范中联合生成指令、环境、求解器认证解和状态验证器。",
+      "Anchor 可通过调整参数生成具有可控难度和已知最优解的新任务，产生与执行环境无关、奖励仅取决于最终状态正确性的测试环境。",
+      "基于 Anchor 构建的 ERP-Bench 包含 300 个长周期任务，覆盖生产级 ERP 系统中的采购和制造工作流。",
+      "实验发现生成参数能够预测实际任务难度，前沿模型在 26.1% 的试验中满足显式任务约束，但仅 17.4% 达到完全最优解。",
+      "Anchor 和 ERP-Bench 为构建经济价值高的智能体工作的可审计评估环境提供了具体方法。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "Anchor",
+        "canonical_name": "Anchor",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Anchor 是一个任务生成管道，通过约束优化程序将领域专家的业务工作流规范形式化，从单一参数规范中联合生成自然语言指令、环境配置、求解器认证的真实解和基于状态的验证器。",
+          "Anchor 通过调整参数即可生成具有可控难度和已知最优解的新任务，产生与执行环境无关、奖励仅取决于最终状态正确性的测试环境。"
+        ],
+        "article_id": "a886ffcda4263965"
+      },
+      {
+        "object_type": "dataset",
+        "name": "ERP-Bench",
+        "canonical_name": "ERP-Bench",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "基于 Anchor 管道构建的 ERP-Bench 是一个包含 300 个长周期任务的基准测试集，涵盖生产级 ERP 系统中的采购和制造工作流。",
+          "实验表明前沿模型在 ERP-Bench 上满足显式任务约束的比例为 26.1%，但达到完全最优解的比例仅为 17.4%。"
+        ],
+        "article_id": "a886ffcda4263965"
+      }
     ],
     "impact_score": {
       "score": 6.0,
@@ -1035,7 +1517,34 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Anchor",
+        "canonical_name": "Anchor",
+        "url": "https://arxiv.org/abs/2605.26321",
+        "positioning": "Anchor 是一个通过约束优化程序将领域专家业务工作流规范转化为任务生成管道的框架，旨在解决智能体基准生成中的工件漂移问题。",
+        "technical_signal": "Anchor 能从单一参数化规范中联合生成自然语言指令、环境配置、求解器认证的真实解和基于状态的验证器，确保各组件对任务要求的一致性。",
+        "adoption_signal": "基于 Anchor 构建的 ERP-Bench 包含 300 个涵盖采购和制造工作流的长周期任务，前沿模型仅 17.4% 达到完全最优解，表明该基准具有充分挑战性。",
+        "ecosystem_relevance": "Anchor 针对的工件漂移问题是智能体基准构建中的关键痛点，为评估经济价值高的企业级智能体工作提供了可审计的评估方法论。",
+        "target_users": [],
+        "watch_reason": "Anchor 从根源上解决智能体基准生成中指令、环境与验证器不一致的工件漂移问题，其约束优化范式为构建可扩展、可审计的企业智能体评估体系提供了新路径，值得持续关注其跨领域泛化和社区采纳进展。",
+        "risk_notes": [
+          "Anchor 目前仅在 ERP 领域验证，其在金融、医疗等其他业务领域的泛化能力尚未得到检验。",
+          "该方法依赖领域专家提供精确的业务工作流规范，这本身可能成为大规模应用的前置瓶颈。",
+          "前沿模型在 Anchor 生成任务上的低完成率可能反映任务难度设置过高，而非模型能力不足的固有局限。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "a886ffcda4263965"
+        ],
+        "evidence_snippets": [
+          "Anchor 是一个任务生成管道，通过约束优化程序将领域专家的业务工作流规范形式化，从单一参数规范中联合生成自然语言指令、环境配置、求解器认证的真实解和基于状态的验证器。",
+          "Anchor 通过调整参数即可生成具有可控难度和已知最优解的新任务，产生与执行环境无关、奖励仅取决于最终状态正确性的测试环境。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -1247,27 +1756,69 @@
     "pipeline_stage": "fact_extracted",
     "id": "d21a835a75d044bb",
     "source_type": "academic_paper",
-    "tldr": "ScientistOne通过证据链框架实现零幻觉引用的自主科研智能体，在75篇论文对比中全面超越基线系统。",
-    "objective_summary": "一篇arXiv论文提出ScientistOne端到端自主研究系统，通过Chain-of-Evidence可验证性框架确保每项声明可追溯至证据源。在覆盖5个系统、5项前沿任务的75篇论文实验中，基线系统的引用幻觉率高达21%、分数验证通过率仅42%；ScientistOne实现零幻觉引用(0/337)",
+    "tldr": "该论文提出Chain-of-Evidence（CoE）可验证性框架与ScientistOne自主研究系统，在75篇论文评估中所有基线均存在系统性失败，而ScientistOne实现零幻觉引用（0/337）、完美分数验证（12/12），在五项前沿任务上达到或超越人类专家水平。",
+    "objective_summary": "该论文发表于arXiv，提出了Chain-of-Evidence（CoE）可验证性框架，要求每个科学主张都必须追溯到其证据来源，解决了自主研究产出中表面评估无法检测的可验证性失败问题。基于CoE框架构建的ScientistOne端到端自主研究系统，在文献综述、方案发现和论文撰写全流程中自动维护证据链。论文设计了CoE Audit事后审计机制，通过分数验证、规范违反、引用验证和方法-代码对齐四项检查统一评估所有系统。在跨越五个系统和五项前沿任务的75篇论文实验中，所有基线均表现出至少一种系统性失败模式，而ScientistOne实现了零幻觉引用（0/337）和完美分数验证（12/12），并在医学影像、3D感知等六个额外任务上取得最先进结果。",
     "event_type": "framework_tools",
-    "epistemic_status": "theoretical_claim",
+    "epistemic_status": "verified_fact",
     "entities": {
       "companies": [],
       "technologies": [
-        "ScientistOne",
         "Chain-of-Evidence",
+        "CoE",
         "CoE Audit",
-        "Autonomous Research Agent"
+        "MLE-Bench"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "现有自主研究智能体存在系统性可验证性缺陷，包括伪造引用、分数不可复现、方法描述与实现不一致等问题，这些缺陷无法通过表层评估检测。",
-      "提出Chain-of-Evidence（CoE）可验证性框架，要求论文中每一项声明都必须可追溯到具体的证据来源。",
-      "基于CoE框架构建ScientistOne端到端自主研究系统，在文献综述、方案发现和论文撰写全流程中内建证据链维护机制。",
-      "设计CoE Audit事后审计方案，包含四项完整性检查：分数验证、规范违规检测、引用验证和方法-代码对齐检查，可统一适用于任何系统。",
-      "在涵盖5个系统和5项前沿研究任务的75篇论文实验中，所有基线系统均至少存在一种系统性失败模式，引用幻觉率最高达21%，分数验证通过率最低仅42%。",
-      "ScientistOne在所有可验证性指标上取得最优结果：零幻觉引用、完美分数验证、最高方法-代码对齐率，同时在全部5项任务上匹敌或超越人类专家表现，并泛化至医学影像、细粒度识别、3D感知、语言建模等6个额外领域。"
+      "该论文发表于arXiv，提出了Chain-of-Evidence（CoE）可验证性框架，要求每个科学主张都必须追溯到其证据来源，解决自主研究产出中表面评估无法检测的可验证性失败问题。",
+      "基于CoE框架构建的ScientistOne是一个端到端自主研究系统，在文献综述、方案发现和论文撰写全流程中由构造自动维护证据链。",
+      "论文还设计了CoE Audit事后审计机制，包含分数验证、规范违反、引用验证和方法-代码对齐四项完整性检查，可统一应用于所有系统。",
+      "在跨越五个系统和五项前沿研究任务的75篇论文评估中，每个基线系统都表现出至少一种系统性失败模式，幻觉引用率最高达21%，分数验证通过率最低仅为42%。",
+      "ScientistOne实现了零幻觉引用率（0/337）、完美分数验证通过率（12/12）和最高方法-代码对齐率（14/15），在五项任务上达到或超越人类专家表现。",
+      "ScientistOne进一步泛化至医学影像、细粒度识别、3D感知和语言建模六个额外任务，在Parameter Golf上取得最先进结果，并在MLE-Bench任务上获得金牌。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "ScientistOne",
+        "canonical_name": "ScientistOne",
+        "url": "https://arxiv.org/abs/2605.26340",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "ScientistOne是一个端到端自主研究系统，在文献综述、方案发现和论文撰写全流程中由构造自动维护证据链。",
+          "ScientistOne实现了零幻觉引用（0/337）、完美分数验证（12/12）以及最高的方法-代码对齐率（14/15），在所有基线中表现最优。",
+          "在五项前沿任务上达到或超越人类专家表现，并在医学影像、3D感知等六个额外任务上取得最先进结果。"
+        ],
+        "article_id": "d21a835a75d044bb"
+      },
+      {
+        "object_type": "project",
+        "name": "Chain-of-Evidence",
+        "canonical_name": "Chain-of-Evidence",
+        "url": "https://arxiv.org/abs/2605.26340",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Chain-of-Evidence（CoE）是一个可验证性框架，要求每个科学主张都必须追溯到其证据来源，解决自主研究产出中表面评估无法检测的可验证性失败问题。",
+          "ScientistOne基于CoE框架构建，在文献综述、方案发现和论文撰写全流程中由构造自动维护证据链。"
+        ],
+        "article_id": "d21a835a75d044bb"
+      },
+      {
+        "object_type": "project",
+        "name": "CoE Audit",
+        "canonical_name": "CoE Audit",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "CoE Audit是一套事后审计机制，包含分数验证、规范违反、引用验证和方法-代码对齐四项完整性检查，可统一应用于所有系统。",
+          "在75篇论文评估中，CoE Audit的分数验证检查显示基线系统最低通过率仅为42%，而ScientistOne实现完美通过。"
+        ],
+        "article_id": "d21a835a75d044bb"
+      }
     ],
     "impact_score": {
       "score": 7.2,
@@ -1325,7 +1876,81 @@
       "compound": "medium",
       "hype": "high"
     },
-    "actionable_insight": "strategic_invest"
+    "actionable_insight": "strategic_invest",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "ScientistOne",
+        "canonical_name": "ScientistOne",
+        "url": "https://arxiv.org/abs/2605.26340",
+        "positioning": "ScientistOne 是基于 Chain-of-Evidence 框架构建的端到端自主研究系统，在文献综述、方案发现和论文撰写全流程中自动维护可验证证据链。",
+        "technical_signal": "ScientistOne 在覆盖五个系统和五项任务的 75 篇论文评估中实现零幻觉引用（0/337）和完美分数验证（12/12），所有基线均存在系统性失败。",
+        "adoption_signal": "该论文发表于 arXiv，尚未提供开源代码或公开接口，当前仍处于学术研究验证阶段，需要更高的可复现性和可用性。",
+        "ecosystem_relevance": "ScientistOne 与 CoE 框架和 CoE Audit 共同构成完整的自主研究可验证性生态，为 AI 驱动的科学研究自动化树立了新的标杆。",
+        "target_users": [],
+        "watch_reason": "ScientistOne 首次在五项前沿研究任务上达到或超越人类专家水平，同时实现零幻觉引用和完美分数验证，标志着自主研究系统从'表面像样'到'真正可验证'的关键跨越，代表了 AI 驱动科学研究自动化的重要方向。",
+        "risk_notes": [
+          "当前仅经过 75 篇论文评估，在更广泛学科和研究场景中的泛化能力和鲁棒性尚待充分验证。",
+          "论文未提及系统的计算成本和资源需求，大规模部署可能面临显著的经济和基础设施障碍。"
+        ],
+        "score": 9.0,
+        "article_ids": [
+          "d21a835a75d044bb"
+        ],
+        "evidence_snippets": [
+          "ScientistOne是一个端到端自主研究系统，在文献综述、方案发现和论文撰写全流程中由构造自动维护证据链。",
+          "ScientistOne实现了零幻觉引用（0/337）、完美分数验证（12/12）以及最高的方法-代码对齐率（14/15），在所有基线中表现最优。",
+          "在五项前沿任务上达到或超越人类专家表现，并在医学影像、3D感知等六个额外任务上取得最先进结果。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Chain-of-Evidence",
+        "canonical_name": "Chain-of-Evidence",
+        "url": "https://arxiv.org/abs/2605.26340",
+        "positioning": "Chain-of-Evidence（CoE）是一个可验证性框架，要求每个科学主张都必须追溯到其证据来源，解决自主研究产出中表面评估无法检测的可验证性失败问题。",
+        "technical_signal": "CoE 框架通过构造性证据链设计，从根本上杜绝了自主研究系统中的引用幻觉和方法-代码不匹配等系统性的可验证性失败。",
+        "adoption_signal": "CoE 已作为 ScientistOne 的核心构建原则得到验证，但作为独立框架在其他自主研究系统中的通用适用性仍有待探索。",
+        "ecosystem_relevance": "CoE 为自主研究系统评估领域提供了首个可操作的可验证性标准框架，填补了表面评估无法检测深层失败的关键空白。",
+        "target_users": [],
+        "watch_reason": "Chain-of-Evidence 提出了自主研究领域首个系统性的可验证性框架，直接解决了 AI 生成研究内容中的引用幻觉和方法-代码不匹配等核心信任问题，有望成为未来自主科学研究的标准化评估协议与基础方法论。",
+        "risk_notes": [
+          "CoE 的验证目前仅限于与 ScientistOne 的集成场景，其跨系统框架通用性和适配能力尚未充分验证。",
+          "严格的证据链追溯要求可能显著增加自主研究系统的计算开销和系统设计复杂度。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "d21a835a75d044bb"
+        ],
+        "evidence_snippets": [
+          "Chain-of-Evidence（CoE）是一个可验证性框架，要求每个科学主张都必须追溯到其证据来源，解决自主研究产出中表面评估无法检测的可验证性失败问题。",
+          "ScientistOne基于CoE框架构建，在文献综述、方案发现和论文撰写全流程中由构造自动维护证据链。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "CoE Audit",
+        "canonical_name": "CoE Audit",
+        "positioning": "CoE Audit 是一套事后审计机制，包含分数验证、规范违反、引用验证和方法-代码对齐四项完整性检查，可统一应用于所有自主研究系统。",
+        "technical_signal": "CoE Audit 的四项检查在 75 篇论文评估中暴露了所有基线系统的系统性失败模式，基线通过率最低仅 42%，最高幻觉引用率达 21%。",
+        "adoption_signal": "CoE Audit 已被证明可统一应用于五个不同自主研究系统的产出评估，具备跨系统通用的评估潜力和实际可行性。",
+        "ecosystem_relevance": "CoE Audit 建立了自主研究领域的统一可验证性评估标准，填补了现有表面评估方法无法检测深层可验证性失败的空白。",
+        "target_users": [],
+        "watch_reason": "CoE Audit 是首个能够系统性地检测自主研究产出中可验证性失败的审计机制，四项完整性检查设计简洁有效且可统一应用于不同系统，有望成为评估 AI 科学研究产出质量的标准化工具和行业基准。",
+        "risk_notes": [
+          "CoE Audit 的四项检查覆盖范围有限，可能无法检测不涉及引用、分数或代码的可验证性失败类型。",
+          "审计机制目前由系统构建方设计执行，缺乏独立第三方审计的公正性和公信力保障。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "d21a835a75d044bb"
+        ],
+        "evidence_snippets": [
+          "CoE Audit是一套事后审计机制，包含分数验证、规范违反、引用验证和方法-代码对齐四项完整性检查，可统一应用于所有系统。",
+          "在75篇论文评估中，CoE Audit的分数验证检查显示基线系统最低通过率仅为42%，而ScientistOne实现完美通过。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -1344,8 +1969,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "e539c94c7d8e987e",
     "source_type": "academic_paper",
-    "tldr": "提出 BrickAnything 框架，通过结构感知树形分词从 3D 点云自回归生成可物理搭建的积木结构。",
-    "objective_summary": "该研究提出了 BrickAnything 框架，利用点云作为统一几何接口，通过结构感知树形分词对积木附着关系建模，自回归生成满足装配约束的可搭建积木序列。引入偏好对齐后训练、有效性约束解码和自适应回退机制提升稳定性与几何保真度，实验证明生成的积木结构几何忠实且物理可实现。",
+    "tldr": "BrickAnything 是一个基于几何条件的自回归框架，能从三维点云生成可物理搭建的砖块结构。它引入结构感知树分词来建模砖块间的局部依附关系，并结合偏好对齐、有效性约束解码和自适应回滚策略来保证结构的稳定性和几何保真度。",
+    "objective_summary": "该论文提出 BrickAnything，一种几何条件自回归框架，以点云为统一几何接口，预测砖块序列以在装配约束下重建目标三维形状。框架采用结构感知树分词来表示砖块间的局部依附关系，使序列生成更符合物理搭建过程。实验表明该方法能生成几何保真且可物理实现的砖块结构，所提分词方法相比传统排序策略有效减少了回滚和重新生成。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
@@ -1354,18 +1979,32 @@
         "Point Cloud",
         "Autoregressive Generation",
         "Structure-Aware Tree Tokenization",
-        "Preference-based Alignment",
-        "Validity-Constrained Decoding",
-        "Adaptive Rollback"
+        "Preference-based Alignment"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "BrickAnything 是一个以几何条件引导的自回归框架，旨在从多样化 3D 表示生成可物理搭建的积木结构，而非仅做几何重建",
-      "框架使用点云作为统一几何接口，将任意 3D 形状转换为积木序列预测问题，并施加装配约束确保可搭建性",
-      "核心创新是结构感知树形分词，通过局部附着关系表示积木结构，使序列生成过程与物理搭建过程一致，从而减少无效中间状态",
-      "在后处理层面引入基于偏好的对齐训练、有效性约束解码和自适应回退三种机制，共同提升稳定性与几何保真度",
-      "实验表明树形分词相比传统排序策略显著减少了回退和重新生成，且最终生成的积木结构在几何忠实度和物理可实现性上均表现优异"
+      "现有砖块生成方法依赖启发式优化，在目标三维形状无法满足预设约束时容易失败，或者生成砖块序列时不显式建模底层三维几何和装配关系。",
+      "BrickAnything 采用点云作为统一几何接口，通过自回归方式预测砖块序列，在装配约束下重建目标形状。",
+      "论文提出结构感知树分词方法，通过局部依附关系来表示砖块结构，使序列生成更符合物理搭建过程并减少无效中间状态。",
+      "框架引入偏好对齐后训练、有效性约束解码和自适应回滚三种技术手段，用于改善稳定性和几何保真度等可搭建性目标。",
+      "实验证明 BrickAnything 能生成几何保真且物理可实现的砖块结构，所提分词方法相比传统排序策略显著减少了回滚和重新生成。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "BrickAnything",
+        "canonical_name": "BrickAnything",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "BrickAnything 是一个几何条件自回归框架，用于从多种三维表示生成可物理搭建的砖块结构。",
+          "该框架使用点云作为统一几何接口，预测砖块序列以在装配约束下重建目标形状。",
+          "BrickAnything 引入结构感知树分词表示砖块间的局部依附关系，使序列生成更符合物理搭建过程。"
+        ],
+        "article_id": "e539c94c7d8e987e"
+      }
     ],
     "impact_score": {
       "score": 4.0,
@@ -1423,6 +2062,31 @@
       "compound": "low",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "BrickAnything",
+        "canonical_name": "BrickAnything",
+        "positioning": "基于几何条件的自回归框架，以点云为统一几何接口，从三维表示生成满足装配约束的可物理搭建砖块结构。",
+        "technical_signal": "采用点云作为统一几何接口，通过结构感知树分词建模砖块间的局部依附关系，结合偏好对齐后训练和有效性约束解码提升可搭建性。",
+        "ecosystem_relevance": "弥合三维几何生成与物理装配约束之间的鸿沟，为自动化搭建、机器人装配和交互式设计等场景提供技术基础。",
+        "target_users": [],
+        "watch_reason": "BrickAnything 以点云为统一接口、结合结构感知树分词的自回归方法，解决了现有砖块生成方法在复杂几何形状下约束失效的问题。其在偏好对齐和有效性解码方面的创新有望推动三维生成与物理装配的深度融合，值得持续跟踪后续在更复杂场景和实际制造中的验证进展。",
+        "risk_notes": [
+          "目前仍在学术研究阶段，距离工业级实际部署还有较大距离，实用化前景尚不明朗。",
+          "在高度复杂或非规则几何体上的可扩展性和生成效率尚未得到充分验证。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "e539c94c7d8e987e"
+        ],
+        "evidence_snippets": [
+          "BrickAnything 是一个几何条件自回归框架，用于从多种三维表示生成可物理搭建的砖块结构。",
+          "该框架使用点云作为统一几何接口，预测砖块序列以在装配约束下重建目标形状。",
+          "BrickAnything 引入结构感知树分词表示砖块间的局部依附关系，使序列生成更符合物理搭建过程。"
+        ]
+      }
+    ]
   }
 ]

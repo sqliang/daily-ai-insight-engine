@@ -13,9 +13,12 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 8d93eba0d14eacbf
 source_type: community_discussion
-tldr: Linux 中 epoll 与 io_uring 两种异步 I/O 机制的对比，io_uring 通过减少系统调用显著提升性能。
-objective_summary: 作者在构建反向代理 TinyGate 的过程中，从 worker 模型切换到 epoll，最终重写为 io_uring。文章从架构原理、系统调用开销、代码示例等维度对比了
-  epoll 的 readiness 模型与 io_uring 的 completion 模型，指出 io_uring 将每次
+tldr: 本文对比了 Linux 的两种异步 I/O 机制 epoll 和 io_uring，介绍了作者基于两者三次重写 TinyGate 反向代理服务器的经历。epoll
+  采用就绪通知模型，每次 I/O 需两次系统调用；io_uring 采用完成通知模型，通过共享环形缓冲区实现批量 I/O，大幅减少系统调用次数。
+objective_summary: 一位教师作者与学生们构建了反向代理服务器 TinyGate，因架构受限先后基于 epoll 和 io_uring 两次完全重写。文章从架构层面对比了
+  epoll（2002 年加入内核，就绪通知模型，每次 I/O 事件需要 epoll_wait 加 read/write 两次系统调用）和 io_uring（2019
+  年内核 5.1+ 引入，完成通知模型，通过内核与用户态共享的环形缓冲区实现批量提交与收割）。作者提供了两种机制的 C 语言代码示例，并指出在支持 io_uring
+  的现代 Linux 系统上，新项目应优先选择 io_uring 而非 epoll。
 event_type: infrastructure_update
 epistemic_status: verified_fact
 entities:
@@ -23,21 +26,40 @@ entities:
   technologies:
   - epoll
   - io_uring
-  - liburing
+  - Linux
   - SQPOLL
-  - IORING_SETUP_SQPOLL
+  - liburing
   - IORING_OP_SEND_ZC
   key_people: []
 key_logic_flow:
-- epoll 采用 readiness 模型，只通知用户态 I/O 就绪，用户态仍需调用 read()/write() 完成操作，每次 I/O 事件至少需要两次系统调用（epoll_wait
-  + read/write），每次系统调用都导致用户态/内核态上下文切换。
-- io_uring 采用 completion 模型，通过用户态与内核态共享内存的环形缓冲区（ring buffer）传递提交和完成事件，不再需要每笔 I/O 单独调用系统调用。
-- io_uring 的默认模式仍需要 io_uring_enter() 通知内核检查提交队列，但一次调用可以提交一批操作并收割一批完成事件；启用 IORING_SETUP_SQPOLL
-  后可由内核线程持续轮询提交队列，稳态下接近零系统调用。
-- io_uring 支持零拷贝 I/O：通过 io_uring_register_buffers() 预注册缓冲区避免内存重映射，IORING_OP_SEND_ZC（内核
-  6.0+）可跳过数据拷贝到内核缓冲区的步骤。
-- SQPOLL 模式的代价是在提交队列为空时内核线程仍会空转消耗 CPU，可通过 sq_thread_idle 设置空闲超时使其休眠。
-- io_uring 自 Linux 内核 5.1（2019 年）起可用，对于在新系统上从零开始的项目，io_uring 是异步 I/O 的首选方案。
+- 作者与学生们构建了名为 TinyGate 的反向代理服务器，因架构限制性能远不及 nginx 和 haproxy，随后基于 epoll 重写了第二版。
+- 第二版 TinyGate 性能大幅提升但基准测试仍不及 nginx 和 haproxy，团队最终切换到 io_uring 并从头完全重写了项目。
+- epoll 采用就绪通知模型，每次 I/O 事件需要两次系统调用（epoll_wait 通知就绪 + read/write 执行读写），高并发下上下文切换开销巨大。
+- io_uring 于 2019 年在 Linux 内核 5.1 版本中引入，采用完成通知模型，通过共享环形缓冲区实现单次系统调用批量提交和收割多笔 I/O 操作。
+- io_uring 的 SQPOLL 模式启动专用内核线程轮询提交队列，稳态下可接近零系统调用，但空闲时仍会额外消耗 CPU 资源。
+- io_uring 还支持预注册缓冲区实现零拷贝 I/O（需内核 6.0+ 的 IORING_OP_SEND_ZC）和异步错误处理，作者认为现代 Linux 新项目应优先选用。
+extract_result: success
+object_mentions:
+- object_type: project
+  name: TinyGate
+  canonical_name: TinyGate
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 作者与学生们构建了一款名为 TinyGate 的反向代理服务器，它是一个教育项目但达到了生产就绪水平。
+  - 第一版 TinyGate 因架构限制无法超越 nginx 和 haproxy，团队基于 epoll 重写了第二版获得大幅性能提升。
+  - 团队最终切换到 io_uring 并从头完全重写了整个 TinyGate 项目，作者认为这是现代 Linux 上构建新项目的正确选择。
+  article_id: 8d93eba0d14eacbf
+- object_type: project
+  name: liburing
+  canonical_name: liburing
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - io_uring 的代码示例使用了 liburing 用户空间辅助库，可通过 liburing-dev 或 liburing-devel 软件包安装，也可选择直接使用原始系统调用。
+  article_id: 8d93eba0d14eacbf
 impact_score:
   score: 3.5
   reason: 该文章是一篇高质量的社区技术深度对比，详细阐述了 epoll 与 io_uring 的架构差异、系统调用开销和代码实践。但 io_uring 自
@@ -95,6 +117,54 @@ confidence:
   compound: high
   hype: low
 actionable_insight: deep_dive
+object_insights:
+- object_type: project
+  name: TinyGate
+  canonical_name: TinyGate
+  url: null
+  positioning: TinyGate 是一款基于 io_uring 实现的反向代理服务器，从教育项目起步历经三次架构迭代，旨在探索现代 Linux 异步
+    I/O 在高性能代理场景中的应用。
+  technical_signal: 项目从 worker 模型演进到 epoll 再切换到 io_uring，验证了完成通知模型相比就绪通知模型在减少系统调用方面的架构优势。
+  adoption_signal: 基于 io_uring 的第三版在 benchmark 中仍不及 nginx/haproxy，但相比前两版有质的性能飞跃，证明了
+    io_uring 在生产场景的潜力。
+  ecosystem_relevance: 作为 io_uring 在反向代理领域的实践案例，为开发者从 epoll 迁移到 io_uring 提供了 C 语言代码参考和架构设计参考。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: TinyGate 完整记录了从传统 epoll 到 io_uring 的迁移路径和架构决策，是理解现代 Linux 异步 I/O 选型的宝贵实践案例，值得持续跟踪其性能优化进展。
+  risk_notes:
+  - TinyGate 在基准测试中仍不及 nginx 和 haproxy 等成熟方案，性能差距的根因尚不明确。
+  - 项目定位为教育项目，缺乏长期维护承诺和社区生态支持，可持续性存疑。
+  score: 5.0
+  article_ids:
+  - 8d93eba0d14eacbf
+  evidence_snippets:
+  - 作者与学生们构建了一款名为 TinyGate 的反向代理服务器，它是一个教育项目但达到了生产就绪水平。
+  - 第一版 TinyGate 因架构限制无法超越 nginx 和 haproxy，团队基于 epoll 重写了第二版获得大幅性能提升。
+  - 团队最终切换到 io_uring 并从头完全重写了整个 TinyGate 项目，作者认为这是现代 Linux 上构建新项目的正确选择。
+- object_type: project
+  name: liburing
+  canonical_name: liburing
+  url: null
+  positioning: liburing 是 io_uring 的用户空间辅助库，封装了内核原始系统调用，为开发者提供更简洁的异步 I/O 编程接口。
+  technical_signal: 通过 liburing 可避免直接使用 io_uring_setup/io_uring_enter 等原始系统调用，大幅降低
+    io_uring 的使用门槛。
+  adoption_signal: liburing 作为官方推荐的 io_uring 用户态库，可通过 liburing-dev/liburing-devel
+    软件包安装，广泛用于高性能 I/O Linux 应用。
+  ecosystem_relevance: liburing 是 io_uring 生态中重要的基础组件，简化了异步 I/O 编程模型，是连接内核能力与应用开发的关键桥梁。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: liburing 作为 io_uring 生态的标准用户空间库，其演进方向直接影响 Linux 高性能 I/O 应用的开发体验和生态繁荣程度。
+  risk_notes:
+  - liburing 依赖内核 io_uring 支持（v5.1+），在老旧 Linux 系统上不可用，限制了适用范围。
+  score: 5.0
+  article_ids:
+  - 8d93eba0d14eacbf
+  evidence_snippets:
+  - io_uring 的代码示例使用了 liburing 用户空间辅助库，可通过 liburing-dev 或 liburing-devel 软件包安装，也可选择直接使用原始系统调用。
 ---
 
 # epoll vs io_uring in Linux

@@ -13,27 +13,42 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: d92d61ae4b4c3ebf
 source_type: community_discussion
-tldr: UHF X11 将 Apple Vision Pro 变为原生 X11 显示服务器，X11 窗口以 visionOS 空间窗口形式呈现。
-objective_summary: UHF X11 是一款专为 visionOS 和 Apple Vision Pro 构建的 X11 显示服务器。它将每个 X11
-  顶级窗口渲染为独立的 visionOS 空间窗口，支持用户自由放置。该应用通过标准 X11 TCP 接受来自可信机器的连接，使用 X authority cookie
+tldr: UHF X11 是一款专为 visionOS 和 Apple Vision Pro 打造的现代 X11 显示服务器，支持根窗口空间化窗口、原生 X11
+  TCP 连接、CRT 扫描线特效以及 GLX 渲染。
+objective_summary: UHF X11 将 Apple Vision Pro 转变为完整的 X11 显示服务器。每个 X11 顶级窗口作为独立的 visionOS
+  空间窗口打开，用户可将其放置在空间任意位置。应用支持来自可信机器的原生 X11 TCP 连接、X authority cookie 认证、CRT 扫描线和辉光等经典显示预设，以及
+  OpenGL 客户端的 GLX 渲染。
 event_type: application_landing
-epistemic_status: verified_fact
+epistemic_status: pr_statement
 entities:
   companies:
   - Apple
   technologies:
   - X11
-  - visionOS
   - GLX
   - OpenGL
+  - visionOS
   key_people: []
 key_logic_flow:
-- UHF X11 是一款专为 visionOS 和 Apple Vision Pro 构建的现代 X11 显示服务器。
-- 每个 X11 顶级窗口会作为独立的 visionOS 空间窗口打开，用户可将其放置在空间中的任意位置。
-- 应用支持通过标准 X11 TCP 协议接受来自可信机器的远程连接，并使用 X authority cookie 进行设备端生成的身份认证。
-- X 帧缓冲区内容以原生分辨率呈现，小尺寸表面采用最近邻缩放算法。
-- 内置 CRT 扫描线、荧光粉遮罩、辉光和暗角等复古显示器外观预设。
-- 支持 GLX 渲染，允许 OpenGL 客户端通过 X11 进行 3D 渲染，但兼容性因具体环境而异。
+- UHF X11 是一款为 visionOS 和 Apple Vision Pro 打造的 X11 显示服务器。
+- 每个 X11 顶级窗口会作为独立的 visionOS 空间窗口打开，用户可随意放置在空间中。
+- 应用支持从可信机器通过原生 X11 TCP 协议发送 X11 调用到 visionOS 空间窗口中。
+- X 帧缓冲区内容以原生分辨率呈现，小表面使用最近邻缩放，并支持 CRT 扫描线等经典显示预设。
+- X authority cookie 在设备上生成并复制到客户端机器以完成认证连接。
+- OpenGL 客户端可通过 GLX 在 X11 上进行 3D 渲染，兼容性因环境而异。
+extract_result: success
+object_mentions:
+- object_type: product
+  name: UHF X11
+  canonical_name: UHF X11
+  url: https://www.lispm.net/apps/uhf-x11/
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - UHF X11 是一款专为 visionOS 和 Apple Vision Pro 打造的现代 X11 显示服务器。
+  - UHF X11 将 Apple Vision Pro 转变为一个完整的 X11 显示服务器，每个 X11 顶级窗口作为独立的 visionOS 空间窗口打开。
+  - 应用支持原生 X11 TCP 连接、X authority cookie 认证以及 CRT 扫描线等经典显示预设。
+  article_id: d92d61ae4b4c3ebf
 impact_score:
   score: 3.5
   reason: 该事件是面向极少数复古 Unix 爱好者和 X11 开发者的垂直产品发布。将 X11 显示协议移植到 visionOS 空间窗口虽然技术上颇为巧妙，但
@@ -83,6 +98,34 @@ confidence:
   compound: low
   hype: low
 actionable_insight: speculative_watch
+object_insights:
+- object_type: product
+  name: UHF X11
+  canonical_name: UHF X11
+  url: https://www.lispm.net/apps/uhf-x11/
+  positioning: UHF X11 是一款专为 visionOS 和 Apple Vision Pro 打造的现代 X11 显示服务器，将传统 X11 客户端映射为独立的空间窗口。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users:
+  - Apple Vision Pro 用户
+  - 复古计算爱好者
+  - X11 开发者
+  - Unix 系统爱好者
+  product_signal: 实现了 X11 顶级窗口到独立 visionOS 空间窗口的完整映射，支持原生分辨率呈现、CRT 扫描线特效和 GLX 3D 渲染。
+  market_signal: 填补了 Apple Vision Pro 上运行传统 X11 桌面环境的空白，面向复古计算和开发者场景的差异化工具应用。
+  differentiation: 目前 visionOS 上唯一将 X11 显示服务器完整映射到空间窗口的应用，实现了复古计算与空间计算的融合。
+  watch_reason: UHF X11 探索了空间计算平台承载传统桌面环境的实现路径，其空间窗口化 X11 的设计范式可能为 visionOS 上的远程开发和复古计算场景提供参考价值。
+  risk_notes:
+  - 应用场景较为小众，面向 Apple Vision Pro 上的复古计算和 Unix 终端用户，市场规模有限。
+  - GLX 3D 渲染的兼容性因环境而异，可能存在与传统 X11 客户端的兼容性挑战。
+  score: 4.0
+  article_ids:
+  - d92d61ae4b4c3ebf
+  evidence_snippets:
+  - UHF X11 是一款专为 visionOS 和 Apple Vision Pro 打造的现代 X11 显示服务器。
+  - UHF X11 将 Apple Vision Pro 转变为一个完整的 X11 显示服务器，每个 X11 顶级窗口作为独立的 visionOS 空间窗口打开。
+  - 应用支持原生 X11 TCP 连接、X authority cookie 认证以及 CRT 扫描线等经典显示预设。
 ---
 
 ### Rootless Spatial Windows

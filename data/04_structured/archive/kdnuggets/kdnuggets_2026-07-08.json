@@ -109,9 +109,9 @@
       "2026-07-08"
     ],
     "source_type": "news_media",
-    "tldr": "实证对比 SQL、Pandas 和 Claude 智能体在三个难度级别的数据分析任务上的表现",
-    "objective_summary": "作者使用 StrataScratch 的三道面试题（简单/中等/困难），在同一数据集上分别用 SQLite、Pandas 和 Claude Sonnet 4-6 智能体执行并对比，每个工具运行 500 次取中位数耗时，从速度、准确率、可解释性等八个维度评估三种方案的差异。",
-    "event_type": "application_landing",
+    "tldr": "KDnuggets 发布了一篇对比评测，使用 StrataScratch 的三道面试题，在八个维度上比较 SQL（SQLite）、Pandas（Python 3.12）和 claude-sonnet-4-6 Agent 处理相同分析任务的表现。第一道简单检索题中三者均返回正确结果，耗时分别为 0.002ms、0.40ms 和 2s。",
+    "objective_summary": "KDnuggets 在 2026 年发布了一篇对比分析报告，以 StrataScratch 面试题库中的三道分析题（Easy、Medium、Hard）为测试基准，在速度、准确率、可解释性、调试难度、可扩展性、灵活性、幻觉风险和生产就绪性八个维度上比较 SQL、Pandas 和 Claude Agent 三种分析工具。SQL 在 SQLite 内存数据库中执行，Pandas 在 Python 3.12 中运行，Agent 使用 claude-sonnet-4-6 并通过 Anthropic API 调用，所有计时结果取 500 次运行的中位数。第一道简单题（从 facebook_web_log 表中找出执行过 scroll_up 事件的用户）中，三者均返回正确结果，SQL 耗时 0.002ms，Pandas 耗时 0.40ms，Agent 耗时 2s。",
+    "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
@@ -122,20 +122,65 @@
       "technologies": [
         "SQL",
         "Pandas",
-        "AI Agents",
         "SQLite",
         "Claude"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "作者选取 StrataScratch 三道面试题（简单/中等/困难），使用 SQL、Pandas 和 Claude Sonnet 4-6 智能体分别在 SQLite 和 Python 3.12 上执行，每轮 500 次取中位数计时。",
-      "对比维度包括速度、准确率、可解释性、调试难度、可扩展性、灵活性、幻觉风险和生产就绪性共八项。",
-      "简单题（找出所有执行过 scroll_up 事件的用户）中，三种方案返回完全一致的结果，智能体生成的 SQL 与手写 SQL 无异。",
-      "中等题涉及多步骤聚合（计算产品功能完成百分比），需要跨两张表关联查询，智能体对 schema 的依赖尤为关键。",
-      "智能体的响应时间从请求发送到首 token 返回计算，全文尚未公布中等题和难题的完整对比结果。"
+      "文章使用 StrataScratch 的三道面试题（Easy、Medium、Hard）作为测试基准，在八个维度上比较 SQL、Pandas 和 Claude Agent 处理相同分析任务的表现。",
+      "SQL 在 SQLite 内存数据库中运行，Pandas 在 Python 3.12 中运行，Agent 使用 claude-sonnet-4-6 通过 Anthropic API 调用，所有计时取 500 次运行的中位数。",
+      "第一道简单检索题要求从 facebook_web_log 表中找出执行过 scroll_up 事件的用户，三者的 SQL 方案高度一致，均返回用户 1 和 2。",
+      "SQL 耗时 0.002ms，Pandas 耗时 0.40ms，Agent 耗时 2s，在简单单过滤条件下三者均能正确完成任务。",
+      "文章指出，简单场景下 Agent 的主要风险在于列名匹配问题，若未提供 schema 则可能因列名错误而导致静默失败。"
     ],
     "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "company",
+        "name": "StrataScratch",
+        "canonical_name": "StrataScratch",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "文章的三道分析面试题均来自 StrataScratch 面试题库，覆盖 Easy、Medium 和 Hard 三个难度等级。"
+        ],
+        "article_id": "d0f79c4607cff3c8"
+      },
+      {
+        "object_type": "model",
+        "name": "claude-sonnet-4-6",
+        "canonical_name": "claude-sonnet-4-6",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Agent 使用 claude-sonnet-4-6，通过 Anthropic API 调用，每个问题都使用包含表名、列名和示例行的 schema-grounded prompt。"
+        ],
+        "article_id": "d0f79c4607cff3c8"
+      },
+      {
+        "object_type": "project",
+        "name": "Pandas",
+        "canonical_name": "pandas",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Pandas 在 Python 3.12 中运行相同数据集，与 SQL 和 Claude Agent 在八个维度上进行比较，计时取 500 次运行的中位数。"
+        ],
+        "article_id": "d0f79c4607cff3c8"
+      },
+      {
+        "object_type": "product",
+        "name": "SQLite",
+        "canonical_name": "SQLite",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "SQL 在 SQLite 内存数据库中执行，用于与 Pandas 和 Claude Agent 进行性能对比。"
+        ],
+        "article_id": "d0f79c4607cff3c8"
+      }
+    ],
     "impact_score": {
       "score": 3.5,
       "reason": "这是一篇实证对比评测文章，通过500次运行的中位数耗时，从八个维度比较SQL、Pandas和Claude智能体在数据分析任务上的表现。评测方法扎实（500次取中位数、同一数据集、明确的系统提示），但仅覆盖三道面试题（简单/中等/困难），样本量有限。对于数据分析工具选型有参考价值，尤其是量化了智能体在简单任务上2秒响应时间对比SQL的0.002毫秒这一现实差距，但不足以改变行业格局或竞争态势。文章尚未公布中等题和难题的完整对比结果，信息不完整。评分3.5：属于有价值的工程实践参考，但影响力局限于数据科学社区内的工具讨论。"
@@ -192,6 +237,30 @@
       "compound": "medium",
       "hype": "high"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Pandas",
+        "canonical_name": "pandas",
+        "positioning": "Pandas 是 Python 生态中成熟的数据分析库，在分析工具光谱中处于 SQL 的极致速度和 AI Agent 的灵活智能之间的平衡位置。",
+        "technical_signal": "Pandas 在简单过滤任务中耗时 0.40ms（500 次中位值），准确率与 SQL 和 Agent 一致，体现了其作为成熟内存级分析工具的稳定性能。",
+        "ecosystem_relevance": "本对比评测将 Pandas 与 SQL 和 AI Agent 并列为核心分析工具，反映了其在 Python 数据分析生态中不可替代的基准地位。",
+        "target_users": [],
+        "watch_reason": "Pandas 作为数据科学生态的核心组件，在面对 AI Agent 等新型分析范式的竞争时，其在速度、可解释性和调试难度等维度上的表现值得持续跟踪。",
+        "risk_notes": [
+          "在 AI Agent 快速发展下，Pandas 在简单任务上的速度（0.40ms）远不及 SQL（0.002ms），而灵活性又不如 Agent，面临中间位置被挤压的风险。",
+          "本评测仅限于 StrataScratch 面试题场景，未覆盖大规模数据集或流式处理等实际生产环境，结论普适性有限。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "d0f79c4607cff3c8"
+        ],
+        "evidence_snippets": [
+          "Pandas 在 Python 3.12 中运行相同数据集，与 SQL 和 Claude Agent 在八个维度上进行比较，计时取 500 次运行的中位数。",
+          "在简单检索测试中，Pandas 耗时 0.40ms，与 SQL 的 0.002ms 和 AI Agent 的 2s 形成梯度对比。"
+        ]
+      }
+    ]
   }
 ]

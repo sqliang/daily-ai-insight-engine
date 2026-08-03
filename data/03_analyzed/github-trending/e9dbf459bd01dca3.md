@@ -188,14 +188,20 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: e9dbf459bd01dca3
 source_type: community_discussion
-tldr: Firecrawl 开源网页搜索与抓取 API，专为 AI Agent 设计
-objective_summary: Firecrawl 发布开源网页数据平台，提供搜索、抓取、爬取、交互等 API 及 MCP 集成，输出 Markdown/JSON
-  供 AI 使用，声称覆盖 96% 网页，P95 延迟 3.4 秒。
+tldr: Firecrawl 是一个开源的网页抓取与交互 API，支持将任意网页转换为 AI 可消费的 Markdown、结构化 JSON 或截图，覆盖 96%
+  的网页且 P95 延迟为 3.4 秒。
+objective_summary: Firecrawl 是一个开源 Web 数据抓取与交互 API 项目，由 Eric Ciarla、Nicolas Camara
+  和 Caleb Peffer 联合创立。它提供 Search、Scrape、Interact、Agent、Crawl 和 Map 等核心功能，可将网页内容转为
+  LLM 就绪的 Markdown、JSON 或截图，并内置代理轮换、速率限制等复杂处理。项目在 GitHub 上开源，同时提供托管云服务，支持 MCP 协议集成，覆盖
+  96% 的网页且 P95 延迟为 3.4 秒。
 event_type: framework_tools
 epistemic_status: pr_statement
 entities:
   companies:
   - Firecrawl
+  - Notion
+  - Apify
+  - ScrapingBee
   technologies:
   - MCP
   key_people:
@@ -203,13 +209,50 @@ entities:
   - Nicolas Camara
   - Caleb Peffer
 key_logic_flow:
-- Firecrawl 是一个开源网页数据抓取平台，提供搜索、抓取、爬取、地图发现、批量抓取等核心 API 端点。
-- 平台声称覆盖 96% 的网页（含 JavaScript 动态页面），P95 延迟为 3.4 秒，输出格式支持 Markdown、JSON 和截图。
-- 提供 Agent 功能，用户只需自然语言描述需求即可自动完成数据收集，并支持结构化 Schema 输出。
-- 支持 MCP 协议集成，可通过一条命令将 Firecrawl 接入 Claude Code 等 AI Agent 客户端。
-- 支持页面交互操作（点击、滚动、输入、按键）后再提取内容。
-- 提供 Python、Node.js、Java 等多语言 SDK 以及 cURL 和 CLI 接口。
+- Firecrawl 是开源项目，提供 Search、Scrape、Interact、Agent、Crawl、Map 和 Batch Scrape 七项核心 API
+  端点，覆盖网页数据全链路。
+- Scrape 端点可将任意 URL 转为 Markdown、HTML、结构化 JSON 或截图，且内置代理轮换和反爬处理，无需用户额外配置。
+- Interact 端点允许在抓取页面上执行点击、滚动、输入等操作，适用于 Amazon 等复杂动态页面的数据采集。
+- Agent 功能支持用户通过自然语言描述需求，AI 自主搜索、导航和提取数据，无需提前指定目标 URL。
+- 项目支持 MCP 协议，通过一条 npx 命令即可将 Firecrawl 集成到 Claude Code、Antigravity、OpenCode 等 AI 代理中。
+- 提供 Python、Node.js、Java 多语言 SDK 及 CLI 工具，SDK 自动处理异步任务的轮询等待。
 extract_result: success
+object_mentions:
+- object_type: project
+  name: firecrawl/firecrawl
+  canonical_name: firecrawl/firecrawl
+  url: https://github.com/firecrawl/firecrawl
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Firecrawl 是一个开源 Web 抓取 API，支持 Search、Scrape、Crawl、Map 等核心功能，覆盖 96% 的网页且 P95 延迟为
+    3.4 秒。
+  - 项目提供 Python、Node.js、Java 多语言 SDK 及 CLI 工具，并作为托管服务在 firecrawl.dev 上运营。
+  - Firecrawl 由 Eric Ciarla、Nicolas Camara 和 Caleb Peffer 联合创立，核心创始人均在官网公开列出。
+  article_id: e9dbf459bd01dca3
+- object_type: project
+  name: firecrawl-mcp
+  canonical_name: firecrawl-mcp
+  url: https://github.com/firecrawl/firecrawl-mcp-server
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - Firecrawl 可通过 MCP 配置将 firecrawl-mcp 作为 mcpServers 接入，兼容 Claude Code、Antigravity、OpenCode
+    等 AI 代理。
+  - 配置示例为在 mcpServers 中添加 firecrawl-mcp 条目，设置命令为 npx -y firecrawl-mcp，并传入 FIRECRAWL_API_KEY
+    环境变量。
+  article_id: e9dbf459bd01dca3
+- object_type: product
+  name: Firecrawl Agent
+  canonical_name: Firecrawl Agent
+  url: https://firecrawl.dev
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Agent 功能支持用户通过自然语言描述需求，AI 自主搜索、导航和获取数据，无需提前知道目标 URL。
+  - Agent 提供 spark-1-mini 和 spark-1-pro 两种模型，前者比后者便宜 60%，后者适用于复杂研究任务。
+  - Agent 支持 Pydantic schema 定义输出结构，也支持通过 urls 参数限定搜索范围后进行对比分析。
+  article_id: e9dbf459bd01dca3
 impact_score:
   score: 6.5
   reason: Firecrawl 定位为 AI Agent 的网页数据基础设施层，其开源策略 + MCP 原生集成是一个关键差异化点，直接降低了 AI agent
@@ -272,6 +315,62 @@ confidence:
   compound: medium
   hype: medium
 actionable_insight: deep_dive
+object_insights:
+- object_type: project
+  name: firecrawl/firecrawl
+  canonical_name: firecrawl/firecrawl
+  url: https://github.com/firecrawl/firecrawl
+  positioning: Firecrawl 是一个开源网页抓取与交互 API，支持将任意网页转换为 AI 可消费的 Markdown、结构化 JSON 或截图，覆盖
+    96% 的网页且 P95 延迟为 3.4 秒。
+  technical_signal: 项目提供 Search、Scrape、Interact、Agent、Crawl、Map 和 Batch Scrape 七项核心
+    API，内置代理轮换与反爬处理，P95 延迟仅 3.4 秒。
+  adoption_signal: 项目在 GitHub 上开源，提供 Python、Node.js、Java 多语言 SDK 及 CLI 工具，并作为托管服务在
+    firecrawl.dev 上运营。
+  ecosystem_relevance: 支持 MCP 协议集成，通过一条 npx 命令即可将 Firecrawl 接入 Claude Code、Antigravity、OpenCode
+    等主流 AI 代理生态。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: Firecrawl 以开源模式提供企业级的网页数据采集能力，覆盖 96% 的网页且延迟优秀，在 AI 代理需要实时网页数据的场景中价值显著，MCP
+    协议集成进一步降低了生态接入门槛，值得持续跟踪其在 AI 基础设施领域的渗透进展。
+  risk_notes:
+  - 开源项目面临来自 Jina AI、Trafilatura 等竞品的持续竞争压力。
+  - 托管服务的 API 定价模式依赖客户增长，收入可持续性需长期验证。
+  score: 8.0
+  article_ids:
+  - e9dbf459bd01dca3
+  evidence_snippets:
+  - Firecrawl 是一个开源 Web 抓取 API，支持 Search、Scrape、Crawl、Map 等核心功能，覆盖 96% 的网页且 P95 延迟为
+    3.4 秒。
+  - 项目提供 Python、Node.js、Java 多语言 SDK 及 CLI 工具，并作为托管服务在 firecrawl.dev 上运营。
+  - Firecrawl 由 Eric Ciarla、Nicolas Camara 和 Caleb Peffer 联合创立，核心创始人均在官网公开列出。
+- object_type: product
+  name: Firecrawl Agent
+  canonical_name: Firecrawl Agent
+  url: https://firecrawl.dev
+  positioning: Firecrawl Agent 是 Firecrawl 平台中的 AI 自主数据采集功能，用户只需用自然语言描述需求即可自动搜索、导航和提取网页数据。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users:
+  - 需要网页数据采集但无编程经验的非技术用户
+  - 希望用自然语言驱动数据管道的 AI 应用开发者
+  product_signal: Agent 支持用户通过自然语言描述需求，AI 自主完成搜索、导航和数据采集，无需提前指定目标 URL。
+  market_signal: 提供 spark-1-mini 和 spark-1-pro 两种模型选项，前者比后者便宜 60%，覆盖从轻量查询到复杂研究任务的不同预算需求。
+  differentiation: Agent 是 Firecrawl 原有 /extract 端点的进化版本，速度更快且可靠性更高，同时支持 Pydantic
+    schema 定义输出结构。
+  watch_reason: Firecrawl Agent 将 AI 代理能力与网页数据采集深度结合，降低了获取结构化网页数据的门槛，其定价分层策略表明产品化程度较成熟，值得关注其在网页数据
+    SaaS 市场的成长路径。
+  risk_notes:
+  - Agent 功能依赖底层 AI 模型质量，输出结果的准确性和可控性存在不确定性。
+  score: 7.0
+  article_ids:
+  - e9dbf459bd01dca3
+  evidence_snippets:
+  - Agent 功能支持用户通过自然语言描述需求，AI 自主搜索、导航和获取数据，无需提前知道目标 URL。
+  - Agent 提供 spark-1-mini 和 spark-1-pro 两种模型，前者比后者便宜 60%，后者适用于复杂研究任务。
+  - Agent 支持 Pydantic schema 定义输出结构，也支持通过 urls 参数限定搜索范围后进行对比分析。
 ---
 
 **The API to search, scrape, and interact with the web at scale. 🔥** The web context API to find sources, extract content, and turn it into clean Markdown or structured data your agents can ship with. Open source and available as a hosted service.

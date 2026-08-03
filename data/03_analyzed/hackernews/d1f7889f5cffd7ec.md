@@ -13,9 +13,15 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: d1f7889f5cffd7ec
 source_type: community_discussion
-tldr: Let's Encrypt 宣布采用 Merkle Tree Certificates（MTC）实现后量子 Web PKI，2026 年底上线测试环境。
-objective_summary: Let's Encrypt 于 2026 年 6 月 3 日发布公告，计划采用 Merkle Tree Certificates（MTC）作为后量子
-  Web PKI 的技术路线。MTC 通过批量签发证书并用单个签名覆盖整个批次，将 TLS 握手中的认证路径压缩为单个签名+公钥+包含证明，比当前
+tldr: Let's Encrypt 宣布将采用 Merkle Tree Certificates（MTCs）作为后量子 Web PKI 的技术路线，目标 2026
+  年底推出 MTC 签发测试环境、2027 年投入生产。MTCs 通过批量签发证书将单次 TLS 握手认证路径压缩为一条签名+一条公钥+一条包含证明，解决了 ML-DSA
+  后量子签名体积过大导致连接失败和延迟的问题。
+objective_summary: Let's Encrypt 于 2026 年 6 月 3 日发布公告，计划采用 Merkle Tree Certificates（MTCs）实现后量子安全的
+  Web PKI。MTCs 将证书批量签发，用一个签名覆盖整批证书，浏览器的批量签名（landmarks）在 TLS 握手之外更新。常见情况下 MTC 握手只携带一条签名、一条公钥和一条包含证明，比当前
+  Web PKI 握手的体积更小。该项目基于 Let's Encrypt 自 2019 年起运营的 Certificate Transparency 日志（同样使用
+  Merkle 树数据结构）。Cloudflare 和 Chrome 已在互联网真实流量中开展 MTC 可行性实验，IETF PLANTS 工作组正在推进标准化。Let's
+  Encrypt 计划 2026 年底上线 MTC 签发测试环境、2027 年进入生产环境，同时强调现有证书不受影响，后量子证书将以免费和自动化的方式提供给所有
+  ACME 客户端用户。
 event_type: infrastructure_update
 epistemic_status: verified_fact
 entities:
@@ -24,32 +30,95 @@ entities:
   - Cloudflare
   - Google
   - Chrome
-  - IETF
-  - NSA
-  - NIST
+  - Internet Engineering Task Force
+  - National Institute of Standards and Technology
+  - National Security Agency
+  - European Union
   technologies:
   - Merkle Tree Certificates (MTCs)
   - ML-DSA
   - ML-DSA-44
-  - RSA-2048
-  - ECDSA-P256
-  - X.509
   - TLS
   - ACME
   - Certificate Transparency
-  - Web PKI
-  - X25519MLKEM768
+  - X.509
+  - RSA-2048
+  - ECDSA-P256
   - CNSA 2.0
   - PLANTS
+  - X25519MLKEM768
   key_people: []
 key_logic_flow:
-- Let's Encrypt 宣布将采用 Merkle Tree Certificates（MTC）作为后量子 Web PKI 的技术路线，目标在 2026 年底上线测试环境、2027
-  年投入生产。
-- 后量子签名（如 ML-DSA-44）体积远大于当前 RSA-2048 和 ECDSA-P256 签名，导致 TLS 握手包超过 10KB，现实网络中会导致连接失败和性能下降。
-- MTC 的核心创新是批量签发证书：CA 一批次签发多个证书，用一个签名覆盖整批，浏览器通过独立于 TLS 握手的方式获取批次签名（landmark）。
-- 在常见场景下，MTC 握手的认证路径仅包含一个签名、一个公钥和一个包含证明，比当前 PKI 握手更小，同时使用后量子算法。
-- MTC 将证书透明度（Certificate Transparency）内建于签发过程本身，证书无法脱离 Merkle 树存在，无需额外的透明度日志签名。
-- Google 宣布 2029 年前完成迁移，Cloudflare 同步承诺，Go 1.27 已将 ML-DSA 加入标准库，多方推动后量子认证时间表大幅提前。
+- 后量子密码学此前聚焦于加密而非认证，但 NSA 的 CNSA 2.0 要求在 2030-2035 年间迁移、NIST 计划 2030 年后弃用 RSA-2048
+  和 P-256、Google 宣布 2029 年完成迁移、Cloudflare 跟进承诺，这些时间表将认证紧迫性大幅提前。
+- ML-DSA-44 签名约 2420 字节、公钥 1312 字节，替代 Web PKI 现有算法（RSA-2048 签名 256 字节、ECDSA-P256 签名
+  64 字节）后单次 TLS 握手将超过 10KB，Cloudflare 的研究显示大量连接会失败、其余变慢。
+- Merkle Tree Certificates（MTCs）采用批量签发模式：CA 用一个签名覆盖整批证书，浏览器在 TLS 握手之外更新批量签名（landmarks），常见情况下握手仅包含一条签名、一条公钥和一条包含证明。
+- MTCs 将 Certificate Transparency 内建于证书签发本身——证书无法脱离 Merkle 树存在，而 Let's Encrypt 自 2019
+  年起已有生产级 Merkle 树日志（CT 日志）的运营经验。
+- Let's Encrypt 计划 2026 年底上线 MTC 测试环境、2027 年投入生产，需要改造签发基础设施、ACME 协议、撤销和运营工具以及透明度日志系统。
+- 当前证书不受影响，后量子到来时将以免费、自动化、ACME 客户端可用的方式交付，同时建议服务器运维人员立即启用混合后量子密钥交换（X25519MLKEM768）以防范现有流量被记录后解密的风险。
+extract_result: success
+object_mentions:
+- object_type: project
+  name: Merkle Tree Certificates (MTCs)
+  canonical_name: Merkle Tree Certificates
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Let's Encrypt 计划采用 Merkle Tree Certificates（MTCs）作为后量子 Web PKI 的技术路线，MTCs 将证书批量签发，用一个签名覆盖整批证书。
+  - 常见情况下 MTC 握手只携带一条签名、一条公钥和一条包含证明，体积比当前 Web PKI 握手更小。
+  - Cloudflare 和 Chrome 已在真实互联网流量中开展 MTC 可行性实验，IETF PLANTS 工作组正在推进标准化。
+  article_id: d1f7889f5cffd7ec
+- object_type: project
+  name: IETF PLANTS working group
+  canonical_name: IETF PLANTS
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - The IETF's PLANTS working group is working on standardizing the design of Merkle
+    Tree Certificates.
+  - Let's Encrypt 已在 IETF PLANTS 和 ACME 工作组中参与标准制定。
+  article_id: d1f7889f5cffd7ec
+- object_type: project
+  name: Let's Encrypt Certificate Transparency logs
+  canonical_name: Let's Encrypt Certificate Transparency
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - Let's Encrypt 自 2019 年起运营 Certificate Transparency 日志，这些日志是追加型 Merkle 树，MTCs 所使用的核心数据结构与之一致。
+  article_id: d1f7889f5cffd7ec
+- object_type: paper
+  name: RFC 9881
+  canonical_name: RFC 9881
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Let's Encrypt 跟踪 ML-DSA 签名在 X.509 中的标准（RFC 9881）以及在 TLS 中的草案（draft-ietf-tls-mldsa）。
+  article_id: d1f7889f5cffd7ec
+- object_type: project
+  name: Go ML-DSA standard library
+  canonical_name: Go ML-DSA
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - Go 1.27 在标准库中新增 ML-DSA（NIST 标准化后量子签名方案），表明后量子签名正在成为实际可用的基础设施。
+  - Web PKI 向后量子安全的过渡需要 ML-DSA 在浏览器、库和 ACME 客户端中落地。
+  article_id: d1f7889f5cffd7ec
+- object_type: project
+  name: X25519MLKEM768
+  canonical_name: X25519MLKEM768
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Let's Encrypt 建议服务器运维人员立即启用混合后量子密钥交换 X25519MLKEM768，因为任何没有后量子密钥交换的 TLS 连接都可能在将来被解密。
+  article_id: d1f7889f5cffd7ec
 impact_score:
   score: 7.5
   reason: Let's Encrypt 作为全球最大的证书颁发机构（服务超过 5 亿网站），其对 MTC 路线的公开承诺具有极强的行业牵引力。MTC 解决了一个真实的工程危机——后量子签名（ML-DSA-44
@@ -128,6 +197,51 @@ confidence:
   compound: medium
   hype: medium
 actionable_insight: deep_dive
+object_insights:
+- object_type: project
+  name: Merkle Tree Certificates (MTCs)
+  canonical_name: Merkle Tree Certificates
+  url: null
+  positioning: Let's Encrypt 选定的后量子 Web PKI 技术路线，基于 Merkle 树批量签发机制将 TLS 握手压缩至比当前方案更小的体积。
+  technical_signal: MTCs 将证书批量签发，用一个签名覆盖整批证书，常见情况下握手仅携带一条签名、一条公钥和一条包含证明。
+  adoption_signal: Cloudflare 和 Chrome 已在真实互联网流量中开展 MTC 可行性实验，IETF PLANTS 工作组正在推进标准化。
+  ecosystem_relevance: Let's Encrypt 自 2019 年起已运营生产级的 Merkle 树 CT 日志，可直接复用于 MTC 基础设施。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: Let's Encrypt 计划 2026 年底上线 MTC 测试环境、2027 年投入生产，Chrome 已将其列为后量子证书首选路径，一旦落地将彻底变革
+    Web PKI 认证体系。
+  risk_notes:
+  - MTC 需要改造 Let's Encrypt 签发基础设施、ACME 协议和运营工具，工程复杂度极高。
+  - MTC 作为全新证书体系，浏览器和服务器等客户端广泛采用需要数年时间才能完成生态迁移。
+  score: 8.0
+  article_ids:
+  - d1f7889f5cffd7ec
+  evidence_snippets:
+  - Let's Encrypt 计划采用 Merkle Tree Certificates（MTCs）作为后量子 Web PKI 的技术路线，MTCs 将证书批量签发，用一个签名覆盖整批证书。
+  - 常见情况下 MTC 握手只携带一条签名、一条公钥和一条包含证明，体积比当前 Web PKI 握手更小。
+  - Cloudflare 和 Chrome 已在真实互联网流量中开展 MTC 可行性实验，IETF PLANTS 工作组正在推进标准化。
+- object_type: project
+  name: X25519MLKEM768
+  canonical_name: X25519MLKEM768
+  url: null
+  positioning: 混合后量子密钥交换协议，结合 X25519 椭圆曲线与 ML-KEM 后量子密钥封装机制，保护 TLS 连接免受未来量子计算机解密威胁。
+  technical_signal: X25519MLKEM768 将经典椭圆曲线密钥交换与 ML-KEM 后量子密钥封装结合，是目前 Web 生态广泛推荐的混合后量子密钥交换方案。
+  adoption_signal: Let's Encrypt 建议服务器运维人员立即启用 X25519MLKEM768，防范现有 TLS 流量被记录后将来解密的存储即解密风险。
+  ecosystem_relevance: 混合密钥交换是后量子迁移的第一步，X25519MLKEM768 已被主流浏览器和 TLS 库支持，是目前最成熟的过渡方案。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: X25519MLKEM768 是防范存储即解密攻击的关键措施，Let's Encrypt 的明确推荐将加速 Web 服务器大规模采用混合后量子密钥交换。
+  risk_notes:
+  - X25519MLKEM768 仅是密钥交换层面的后量子化，TLS 认证层面仍需等待 MTC 等方案落地才能完成全面后量子迁移。
+  score: 5.0
+  article_ids:
+  - d1f7889f5cffd7ec
+  evidence_snippets:
+  - Let's Encrypt 建议服务器运维人员立即启用混合后量子密钥交换 X25519MLKEM768，因为任何没有后量子密钥交换的 TLS 连接都可能在将来被解密。
 ---
 
 Let’s Encrypt is committed to a post-quantum-safe Web PKI. The path we’re planning to take is Merkle Tree Certificates (“MTCs”), a new approach that adds post-quantum authentication to the web without sacrificing the speed and reliability that have made TLS universal.

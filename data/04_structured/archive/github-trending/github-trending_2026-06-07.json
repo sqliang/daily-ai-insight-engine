@@ -14,8 +14,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "0b10079a9e5fd6fd",
     "source_type": "community_discussion",
-    "tldr": "微软开源 MXC，一个跨平台沙盒代码执行系统，支持多重隔离后端。",
-    "objective_summary": "微软在 GitHub 上发布 MXC（Microsoft Execution Containers）早期预览版，一个跨平台沙盒代码执行系统，通过统一 JSON 配置和 TypeScript SDK 管理进程、虚拟机等多重隔离后端，用于安全运行模型输出、插件等不可信代码。",
+    "tldr": "微软发布 MXC（Microsoft Execution Containers）开源项目，这是一个跨平台沙盒化代码执行系统，支持 Windows、Linux 和 macOS，提供多种隔离后端并统一通过 JSON 配置和 TypeScript SDK 管理。当前为早期预览版，不应用于生产环境。",
+    "objective_summary": "微软于 2026 年 7 月在 GitHub 上开源了 MXC（Microsoft Execution Containers）项目，提供一套用于运行不受信任代码（如模型输出、插件、工具）的沙盒执行系统。该系统通过统一的 JSON 配置模式和 TypeScript SDK 支持多种隔离后端，包括 ProcessContainer、Bubblewrap、LXC、Windows Sandbox、Seatbelt、MicroVM 等。当前版本为 0.6.0-alpha 稳定版，属于早期预览阶段，项目明确警告不应将当前策略视为安全边界。",
     "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
@@ -24,19 +24,56 @@
       ],
       "technologies": [
         "MXC",
-        "TypeScript SDK"
+        "ProcessContainer",
+        "Windows Sandbox",
+        "Bubblewrap",
+        "LXC",
+        "Seatbelt",
+        "NanVix",
+        "Hyperlight",
+        "IsolationSession",
+        "WSLC",
+        "TypeScript"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "MXC 是一个跨平台（Windows、Linux、macOS）的沙盒代码执行系统，专门用于安全运行不可信代码（模型输出、插件、工具等）。",
-      "该系统提供多种隔离后端，包括 ProcessContainer、Windows Sandbox、LXC、Bubblewrap、Seatbelt、MicroVM（NanVix）、Hyperlight、IsolationSession 和 WSLC，覆盖操作系统级沙盒到完整虚拟机。",
-      "MXC 通过版本化 JSON Schema 统一定义执行参数和安全策略，支持文件系统策略（只读/读写路径）、网络策略（代理、出站过滤）和 UI 策略（剪贴板、显示、GUI 访问控制）。",
-      "MXC 提供 TypeScript SDK（@microsoft/mxc-sdk），支持一次性执行和有状态生命周期管理两种 API。",
-      "该项目当前为早期预览阶段，安全策略存在过度宽松的情况，官方明确表示当前版本不应被视为安全边界。",
-      "构建依赖 Rust 1.93 工具链和 Node.js ≥ 18，支持 Windows、Linux 和 macOS 原生构建。"
+      "MXC 是微软开源的跨平台沙盒化代码执行系统，支持 Windows、Linux 和 macOS 三大操作系统。",
+      "系统提供多种隔离后端，包括 ProcessContainer、Bubblewrap、LXC、Windows Sandbox、Seatbelt、MicroVM、Hyperlight 等，通过统一 JSON 配置进行管理。",
+      "MXC 采用策略驱动的沙箱模式，涵盖文件系统策略、网络策略和 UI 策略三个维度。",
+      "项目提供 TypeScript SDK（@microsoft/mxc-sdk），包含一次性执行 API 和状态感知生命周期 API 两套接口。",
+      "当前稳定版本为 schema 0.6.0-alpha，项目处于早期预览阶段，官方明确声明当前策略不应被视为安全边界。",
+      "构建体系由 Rust 原生二进制和 TypeScript SDK 两部分组成，各平台有独立的构建脚本。"
     ],
     "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "microsoft/mxc",
+        "canonical_name": "microsoft/mxc",
+        "url": "https://github.com/microsoft/mxc",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "MXC 是微软开源的跨平台沙盒化代码执行系统，用于运行不受信任代码，支持 Windows、Linux 和 macOS 三大平台。",
+          "项目提供多个隔离后端，包括 ProcessContainer、Windows Sandbox、LXC、Bubblewrap、Seatbelt、MicroVM、Hyperlight 等。",
+          "MXC 通过统一的 JSON 配置模式和 TypeScript SDK 管理沙盒生命周期，当前为早期预览阶段。"
+        ],
+        "article_id": "0b10079a9e5fd6fd"
+      },
+      {
+        "object_type": "project",
+        "name": "@microsoft/mxc-sdk",
+        "canonical_name": "@microsoft/mxc-sdk",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "MXC 发布 TypeScript SDK 包 @microsoft/mxc-sdk，可通过 npm install 安装并使用。",
+          "SDK 提供 spawnSandboxFromConfig 等一次性执行 API，以及 provisionSandbox、startSandbox 等状态感知生命周期 API。"
+        ],
+        "article_id": "0b10079a9e5fd6fd"
+      }
+    ],
     "impact_score": {
       "score": 6.5,
       "reason": "MXC 解决了 AI agent 工具调用和插件执行中安全沙盒这一关键基础设施缺失问题，微软的品牌背书和跨平台多后端设计具有重要的行业信号价值。但项目处于 early preview 阶段，官方明确声明当前版本不应被视为安全边界，安全策略存在过度宽松情况，短期内无法直接用于生产环境。该发布更多是技术方向确认和生态布局，而非即战力冲击，因此评分中等偏上。"
@@ -168,7 +205,59 @@
         "未投入微软生态的组织（Windows 集成优势无法发挥）"
       ],
       "time_to_production": "needs_6_plus_months"
-    }
+    },
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "microsoft/mxc",
+        "canonical_name": "microsoft/mxc",
+        "url": "https://github.com/microsoft/mxc",
+        "positioning": "微软开源的跨平台沙盒化代码执行系统，通过统一 JSON 配置和 TypeScript SDK 管理多种隔离后端，支持 Windows、Linux 和 macOS 三大平台。",
+        "technical_signal": "采用策略驱动的沙箱模式，涵盖文件系统、网络和 UI 三个维度的安全策略，通过版本化 JSON schema 统一管理配置。",
+        "adoption_signal": "当前稳定版本为 schema 0.6.0-alpha，属于早期预览阶段，官方明确声明不应将当前策略视为安全边界。",
+        "ecosystem_relevance": "为 AI 模型输出、插件和工具提供跨平台沙盒执行能力，填补了微软在安全代码执行开源领域的重要空白。",
+        "target_users": [],
+        "differentiation": "从 OS 原生进程沙箱到 MicroVM 完整虚拟机，提供多级隔离后端选择并通过统一接口管理，覆盖三大桌面平台。",
+        "watch_reason": "微软官方出品的跨平台沙盒执行系统，以统一接口管理从进程隔离到虚拟机等多级安全后端，对 AI 代理安全执行和插件沙盒化具有重要参考价值。项目处于早期预览阶段，策略和安全边界仍在快速迭代中。",
+        "risk_notes": [
+          "项目官方明确声明当前策略不应视为安全边界，存在已知权限过于宽松的情况，生产环境使用风险较高。",
+          "项目处于早期预览阶段，API 和沙箱后端仍在快速迭代，可能引入不兼容变更。",
+          "部分后端依赖特定操作系统版本，如 Windows 24H2+ 和 Insider Preview，跨平台一致性部署门槛较高。"
+        ],
+        "score": 8.0,
+        "article_ids": [
+          "0b10079a9e5fd6fd"
+        ],
+        "evidence_snippets": [
+          "MXC 是微软开源的跨平台沙盒化代码执行系统，用于运行不受信任代码，支持 Windows、Linux 和 macOS 三大平台。",
+          "项目提供多个隔离后端，包括 ProcessContainer、Windows Sandbox、LXC、Bubblewrap、Seatbelt、MicroVM、Hyperlight 等。",
+          "MXC 通过统一的 JSON 配置模式和 TypeScript SDK 管理沙盒生命周期，当前为早期预览阶段。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "@microsoft/mxc-sdk",
+        "canonical_name": "@microsoft/mxc-sdk",
+        "positioning": "MXC 项目的官方 TypeScript 开发工具包，提供一次性执行和状态感知生命周期两套沙箱管理 API，通过 npm 分发。",
+        "technical_signal": "提供 spawnSandboxFromConfig 等一次性执行 API，以及 provisionSandbox、startSandbox 等状态感知生命周期管理接口。",
+        "adoption_signal": "可通过 npm install 直接安装使用，但随项目处于 alpha 阶段，SDK 接口可能发生变更。",
+        "ecosystem_relevance": "为 Node.js/TypeScript 开发者提供标准化的沙盒执行编程接口，降低 AI 应用集成安全代码执行的入门门槛。",
+        "target_users": [],
+        "watch_reason": "作为 MXC 项目面向开发者的主要接口，SDK 提供统一的一次性和状态感知两套沙箱生命周期管理 API，其成熟度直接影响该沙盒系统在 AI 代理安全和插件执行场景中的实际采用。当前处于 alpha 阶段，API 仍在迭代中。",
+        "risk_notes": [
+          "SDK 随 MXC 项目处于 alpha 阶段，API 接口和功能可能在正式发布前发生不兼容变更。",
+          "SDK 依赖平台原生二进制文件，不同操作系统上的后端可用性和行为可能存在差异。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "0b10079a9e5fd6fd"
+        ],
+        "evidence_snippets": [
+          "MXC 发布 TypeScript SDK 包 @microsoft/mxc-sdk，可通过 npm install 安装并使用。",
+          "SDK 提供 spawnSandboxFromConfig 等一次性执行 API，以及 provisionSandbox、startSandbox 等状态感知生命周期 API。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "github-trending",
@@ -185,45 +274,100 @@
     "pipeline_stage": "fact_extracted",
     "id": "137ebc899af74dce",
     "source_type": "community_discussion",
-    "tldr": "百度 PaddleOCR 发布 3.5.0 版本，OCR-VL 模型在文档解析基准上达 96.3% 准确率。",
-    "objective_summary": "百度 PaddlePaddle 团队维护的开源 OCR 工具 PaddleOCR 持续更新，最新 3.5.0 版（2026.04.21）增加了 HuggingFace Transformers 推理后端、Office 文档转 Markdown 及浏览器端推理 SDK。",
+    "tldr": "PaddleOCR 是 PaddlePaddle 团队开发的开源 OCR 工具（70k+ GitHub Stars），于 2026 年 4 月发布 3.5.0 版本，其旗舰视觉语言模型 PaddleOCR-VL-1.6 在 OmniDocBench 上达到 96.3% 准确率，PP-OCRv5 支持超 100 种语言，被 Dify、RAGFlow 等主流项目集成。",
+    "objective_summary": "PaddlePaddle 团队于 2026 年 4 月 21 日发布 PaddleOCR 3.5.0 版本，这是一个开源的 OCR 与文档解析工具。该版本新增了灵活推理后端切换、Office 文档转 Markdown、DOCX 导出和浏览器端推理 SDK PaddleOCR.js 等功能。其旗舰视觉语言模型 PaddleOCR-VL-1.6（0.9B 参数）在 OmniDocBench v1.6 上达到 96.3% 准确率，在文本、公式和表格识别领域领先。PP-OCRv5 多语言识别模型支持超过 100 种语言，精度相比上一代提升 13%，且模型仅 2M 参数。PP-StructureV3 提供结构感知的文档转换能力，可将复杂 PDF 和图片转换为 Markdown 或 JSON 格式。",
     "event_type": "framework_tools",
     "epistemic_status": "pr_statement",
     "entities": {
       "companies": [
         "PaddlePaddle",
-        "Baidu",
-        "HuggingFace",
-        "Dify",
-        "RAGFlow",
-        "Cherry Studio",
-        "Pathway"
+        "HuggingFace"
       ],
       "technologies": [
-        "PaddleOCR",
+        "OCR",
+        "VLM",
         "PP-OCRv5",
-        "PaddleOCR-VL",
         "PP-StructureV3",
-        "OmniDocBench",
+        "PaddleOCR-VL",
         "PP-DocLayoutV3",
-        "PP-DocTranslation",
-        "PP-Chart2Table",
-        "ERNIE-4.5",
-        "Transformers",
         "ONNX",
-        "PaddleOCR.js"
+        "RAG"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "PaddleOCR 是百度 PaddlePaddle 团队开发的开源 OCR 工具，GitHub 星标超 70,000，可将 PDF 和图片转换为 JSON/Markdown 的结构化数据。",
-      "PaddleOCR-VL-1.6 版本（0.9B 参数）在 OmniDocBench v1.6 上达到 96.3% 准确率，在文字、公式、表格识别上领先，并增强了对古籍、生僻字、印章和图表的识别能力。",
-      "PP-OCRv5 模型以单模型方案支持 100 种以上语言的混合文本识别，比上一版本准确率提升 13%，同时保持了极小的资源占用。",
-      "PP-StructureV3 支持将复杂 PDF 和图片转换为 Markdown 或 JSON，提供表格单元格坐标等细粒度位置信息。",
-      "PaddleOCR 3.5.0 版本（2026.04.21）新增 HuggingFace Transformers 推理后端、Office 文档（Word/Excel/PowerPoint）转 Markdown、DOCX 格式导出，以及浏览器端推理 SDK PaddleOCR.js。",
-      "PaddleOCR 已被 Dify、RAGFlow、Cherry Studio 等主流 AI Agent 生态项目集成，支持 NVIDIA GPU、Intel CPU、昆仑芯 XPU 等多种硬件后端。"
+      "PaddleOCR 是 PaddlePaddle 团队开发的开源 OCR 和文档解析工具，拥有超过 70k GitHub Stars，被 Dify、RAGFlow 和 Cherry Studio 等主流 AI 项目集成。",
+      "2026 年 4 月 21 日发布的 PaddleOCR 3.5.0 版本新增了灵活推理后端切换（Paddle 静态图、动态图或 Transformers）、Office 文档转 Markdown、DOCX 导出和浏览器端推理 SDK PaddleOCR.js。",
+      "PaddleOCR-VL-1.6 是其旗舰轻量级视觉语言模型（0.9B 参数），在 OmniDocBench v1.6 上达到 96.3% 准确率，在古籍、生僻字、印章和图表识别方面有显著增强。",
+      "PP-OCRv5 多语言识别模型支持超过 100 种语言，采用单模型方案处理多语言混合文档，精度相比上一代提升 13%，模型仅 2M 参数。",
+      "PP-StructureV3 提供结构感知的文档转换能力，可将复杂 PDF 和图片转换为 Markdown 或 JSON，并输出表格单元格坐标等细粒度位置信息。",
+      "PaddleOCR 支持多种硬件后端（NVIDIA GPU、Intel CPU、昆仑芯 XPU 等），并提供一键部署和模型导出为 ONNX 格式的能力。"
     ],
     "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "PaddlePaddle/PaddleOCR",
+        "canonical_name": "PaddlePaddle/PaddleOCR",
+        "url": "https://github.com/PaddlePaddle/PaddleOCR",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "PaddleOCR 将 PDF 文档和图片转换为结构化的 JSON 或 Markdown 数据，拥有超过 7 万 GitHub Stars，被 Dify、RAGFlow 和 Cherry Studio 等主流项目集成。",
+          "PaddleOCR 3.5.0 版本于 2026 年 4 月 21 日发布，新增了灵活推理后端切换、Office 文档转 Markdown 以及浏览器端推理 SDK 等功能。"
+        ],
+        "article_id": "137ebc899af74dce"
+      },
+      {
+        "object_type": "model",
+        "name": "PaddleOCR-VL-1.6",
+        "canonical_name": "PaddleOCR-VL-1.6",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "PaddleOCR-VL-1.6 是轻量级视觉语言模型（0.9B 参数），在 OmniDocBench v1.6 上达到 96.3% 准确率，在文本、公式和表格识别领域处于行业领先水平。",
+          "该模型在古籍、生僻字、印章和图表识别方面有显著增强，支持以 Markdown 和 JSON 格式输出结构化结果。",
+          "PaddleOCR-VL-1.6 的模型架构与 1.5 版本完全一致，可实现零成本迁移，用户可直接替换使用。"
+        ],
+        "article_id": "137ebc899af74dce"
+      },
+      {
+        "object_type": "model",
+        "name": "PP-OCRv5",
+        "canonical_name": "PP-OCRv5",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "PP-OCRv5 多语言识别模型支持超过 100 种语言，采用单模型方案处理中英文、日文等多语言混合文档，精度相比上一代提升 13%。",
+          "PP-OCRv5 单模型仅 2M 参数，在拉丁语系、西里尔字母、阿拉伯语、天城文等多种文字系统上均实现了显著精度提升。"
+        ],
+        "article_id": "137ebc899af74dce"
+      },
+      {
+        "object_type": "project",
+        "name": "PP-StructureV3",
+        "canonical_name": "PP-StructureV3",
+        "confidence": "medium",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "PP-StructureV3 可将复杂 PDF 和图片无缝转换为 Markdown 或 JSON 格式，提供表格单元格坐标、文本坐标等细粒度坐标信息。",
+          "与 PaddleOCR-VL 系列模型不同，PP-StructureV3 提供更精细的坐标信息，包括表格单元格坐标和文本坐标等结构化输出。"
+        ],
+        "article_id": "137ebc899af74dce"
+      },
+      {
+        "object_type": "product",
+        "name": "PaddleOCR.js",
+        "canonical_name": "PaddleOCR.js",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "PaddleOCR.js 是官方发布的浏览器端推理 SDK，支持直接在浏览器中运行 PP-OCRv5 模型进行文字识别。",
+          "PaddleOCR 3.5.0 版本正式发布了 PaddleOCR.js 作为官方浏览器推理 SDK，无需后端支持即可在浏览器端完成 OCR 推理。"
+        ],
+        "article_id": "137ebc899af74dce"
+      }
+    ],
     "impact_score": {
       "score": 6.3,
       "reason": "该版本是PaddleOCR的常规大版本迭代而非范式突破，但影响面不小。核心增量价值在于三点：1) Office文档(Word/Excel/PPT)直转Markdown和浏览器端推理SDK(PaddleOCR.js)显著降低了RAG/Agent应用的文档解析集成门槛，这是实质性工程进步；2) PaddleOCR-VL-1.6以0.9B参数在OmniDocBench上达到96.3%准确率，在同参数量级中表现突出，但OmniDocBench以中文文档为主，泛化能力待第三方验证；3) 新增HuggingFace Transformers推理后端扩大了生态兼容性，有助于吸引非PaddlePaddle用户。OCR赛道已非常成熟，竞品众多（Azure OCR、Google Cloud Vision、Tesseract、MinerU等），且文章源自官方README存在自评偏差。综合评估属于重要的局部竞争格局变化，不足以构成行业范式转移，评分6.3。"
@@ -282,7 +426,83 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "PaddlePaddle/PaddleOCR",
+        "canonical_name": "PaddlePaddle/PaddleOCR",
+        "url": "https://github.com/PaddlePaddle/PaddleOCR",
+        "positioning": "PaddleOCR 是百度飞桨团队开发的 OCR 与文档解析开源工具，以旗舰轻量级 VLM 实现业界领先精度，为 RAG 与 Agent 应用提供结构化数据基础。",
+        "technical_signal": "旗舰模型 PaddleOCR-VL-1.6（0.9B 参数）在 OmniDocBench v1.6 上达到 96.3% 准确率，在文本、公式和表格识别领域全面领先。",
+        "adoption_signal": "PaddleOCR 拥有超过 70k GitHub Stars，被 Dify、RAGFlow 和 Cherry Studio 等主流 AI 项目深度集成。",
+        "ecosystem_relevance": "PaddleOCR 支持 NVIDIA GPU、Intel CPU、昆仑芯 XPU 等多种硬件后端，并深度融入 Hugging Face 生态与 Transformers 推理后端。",
+        "target_users": [],
+        "watch_reason": "PaddleOCR 3.5.0 在识别精度、多语言支持和部署灵活性上均有显著提升，且被 RAG 与 Agent 生态广泛采用，是文档理解基础设施的关键项目，值得持续跟踪其模型演进与生态扩展。",
+        "risk_notes": [
+          "百度飞桨框架生态相对封闭，与 PyTorch 生态的互操作性在模型迁移和社区参与方面存在隐形成本。",
+          "PaddleOCR-VL 模型仅 0.9B 参数，在极端复杂文档场景下可能仍有精度瓶颈。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "137ebc899af74dce"
+        ],
+        "evidence_snippets": [
+          "PaddleOCR 将 PDF 文档和图片转换为结构化的 JSON 或 Markdown 数据，拥有超过 7 万 GitHub Stars，被 Dify、RAGFlow 和 Cherry Studio 等主流项目集成。",
+          "PaddleOCR 3.5.0 版本于 2026 年 4 月 21 日发布，新增了灵活推理后端切换、Office 文档转 Markdown 以及浏览器端推理 SDK 等功能。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "PP-StructureV3",
+        "canonical_name": "PP-StructureV3",
+        "positioning": "PP-StructureV3 是 PaddleOCR 生态内的结构感知文档转换组件，可将复杂 PDF 与图片转换为 Markdown 或 JSON，并输出表格单元格坐标等细粒度位置信息。",
+        "technical_signal": "PP-StructureV3 提供表格单元格坐标、文本坐标等细粒度位置信息，结构化输出精度优于 PaddleOCR-VL 系列模型。",
+        "adoption_signal": "作为 PaddleOCR 3.5.0 的核心组件之一，PP-StructureV3 受益于 PaddleOCR 在 Dify、RAGFlow 等主流项目中的广泛集成。",
+        "ecosystem_relevance": "PP-StructureV3 与 PaddleOCR 深度绑定，并支持 DOCX 格式导出，可衔接文档编辑与 RAG 数据处理工作流。",
+        "target_users": [],
+        "watch_reason": "PP-StructureV3 提供了不同于通用文档 VLM 的细粒度坐标信息输出，在需要精确版面还原的 RAG 和 Agent 应用中具有差异化价值，值得持续跟踪其技术演进与生态渗透。",
+        "risk_notes": [
+          "PP-StructureV3 强依赖 PaddleOCR 整体框架，独立使用场景受限且与 Paddle 框架深度绑定。",
+          "与 PaddleOCR-VL 系列存在功能重叠，长期定位和资源投入方向尚不清晰。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "137ebc899af74dce"
+        ],
+        "evidence_snippets": [
+          "PP-StructureV3 可将复杂 PDF 和图片无缝转换为 Markdown 或 JSON 格式，提供表格单元格坐标、文本坐标等细粒度坐标信息。",
+          "与 PaddleOCR-VL 系列模型不同，PP-StructureV3 提供更精细的坐标信息，包括表格单元格坐标和文本坐标等结构化输出。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "PaddleOCR.js",
+        "canonical_name": "PaddleOCR.js",
+        "positioning": "PaddleOCR.js 是 PaddleOCR 官方发布的浏览器端推理 SDK，支持在浏览器中直接运行 PP-OCRv5 模型进行文字识别。",
+        "target_users": [
+          "前端开发者",
+          "需要浏览器端 OCR 能力的 Web 应用团队",
+          "注重用户数据隐私的边缘部署场景"
+        ],
+        "product_signal": "作为官方浏览器端推理 SDK，PaddleOCR.js 无需后端支持即可完成 OCR 推理，显著降低了浏览器端文字识别的部署门槛。",
+        "market_signal": "浏览器端 AI 推理 SDK 在隐私合规和低延迟场景需求持续增长，PaddleOCR.js 填补了 OCR 领域在浏览器端原生推理的市场空白。",
+        "differentiation": "与主流 OCR 服务需要后端 API 调用不同，PaddleOCR.js 实现了完全在浏览器端运行的离线 OCR 推理，减少了服务器依赖和隐私风险。",
+        "watch_reason": "PaddleOCR.js 将 OCR 能力直接带入浏览器端，契合边缘部署与隐私计算趋势，但其性能和浏览器兼容性仍需通过实际使用验证，值得持续跟踪其成熟度。",
+        "risk_notes": [
+          "浏览器端模型执行性能和内存占用是核心挑战，大文档场景下的可用性需持续验证。",
+          "PaddleOCR.js 目前仅支持 PP-OCRv5，尚未集成 PaddleOCR-VL 等更强模型。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "137ebc899af74dce"
+        ],
+        "evidence_snippets": [
+          "PaddleOCR.js 是官方发布的浏览器端推理 SDK，支持直接在浏览器中运行 PP-OCRv5 模型进行文字识别。",
+          "PaddleOCR 3.5.0 版本正式发布了 PaddleOCR.js 作为官方浏览器推理 SDK，无需后端支持即可在浏览器端完成 OCR 推理。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "github-trending",
@@ -299,9 +519,9 @@
     "pipeline_stage": "fact_extracted",
     "id": "24d2ebb24ff35b75",
     "source_type": "community_discussion",
-    "tldr": "OpenAI 开源通用语音识别模型 Whisper，支持多语言识别、翻译和语言检测。",
-    "objective_summary": "OpenAI 发布了 Whisper 通用语音识别模型，基于 Transformer 序列到序列架构，在多语言语音识别、翻译和语言检测等任务上训练。提供 6 种模型尺寸（tiny 到 turbo），支持 pip 安装和 Python API 调用。",
-    "event_type": "framework_tools",
+    "tldr": "OpenAI 发布 Whisper 通用语音识别模型，基于 Transformer 序列到序列架构，支持多语言语音识别、翻译和语言识别，提供六种模型尺寸（tiny 到 turbo），可通过 pip 安装并使用命令行或 Python API 调用。",
+    "objective_summary": "OpenAI 于其 GitHub 仓库发布了 Whisper 通用语音识别模型。该模型基于 Transformer 序列到序列架构，在多语言语音识别、语音翻译、语言识别等任务上联合训练，能够用一个模型替代传统语音处理管道的多个阶段。模型提供六种尺寸（tiny、base、small、medium、large、turbo），其中四种有纯英文版本，turbo 是 large-v3 的优化版，在精度损失极小的前提下大幅提升转录速度。用户可通过 pip 安装并依赖 ffmpeg 处理音频，支持命令行和 Python API 两种使用方式。",
+    "event_type": "infrastructure_update",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
@@ -316,12 +536,29 @@
       "key_people": []
     },
     "key_logic_flow": [
-      "Whisper 是一个通用语音识别模型，支持多语言语音识别、语音翻译和语言检测。",
-      "模型基于 Transformer 序列到序列架构，将多任务统一表示为解码器预测的 token 序列。",
-      "提供 6 种模型尺寸：tiny、base、small、medium、large 和 turbo，参数规模从 39M 到 1550M 不等。",
-      "turbo 模型是 large-v3 的优化版本，速度提升约 8 倍且精度损失极小，但不支持翻译任务。",
-      "支持通过 pip 安装（ffmpeg 为系统依赖），提供命令行和 Python API 两种使用方式。",
-      "模型权重和代码均以 MIT 许可证开源发布。"
+      "Whisper 是由 OpenAI 训练的通用语音识别模型，支持多语言语音识别、语音翻译和语言识别。",
+      "模型采用 Transformer 序列到序列架构，将多语言识别、翻译、语言识别和语音活动检测统一表示为解码器预测的 token 序列。",
+      "Whisper 提供六种模型尺寸（tiny、base、small、medium、large、turbo），速度和精度依次递增，其中 turbo 为 large-v3 的优化版本。",
+      "用户可通过 pip install openai-whisper 安装，并需在系统上安装 ffmpeg 来处理音频文件。",
+      "模型支持命令行直接转录音频文件，也支持通过 Python API 进行 transcribe、detect_language 和 decode 等操作。",
+      "turbo 模型未针对翻译任务训练，如需将非英语语音翻译为英语应使用 medium 或 large 模型。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "openai/whisper",
+        "canonical_name": "openai/whisper",
+        "url": "https://github.com/openai/whisper",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Whisper 是一个通用语音识别模型，基于大规模多样化音频数据集训练，支持多语言语音识别、语音翻译和语言识别。",
+          "模型采用 Transformer 序列到序列架构，将多语言语音识别、翻译、语言识别和语音活动检测等任务统一表示为 token 序列进行预测。",
+          "用户可通过 pip install openai-whisper 或从 GitHub 仓库直接安装，并支持命令行和 Python API 两种使用方式。"
+        ],
+        "article_id": "24d2ebb24ff35b75"
+      }
     ],
     "impact_score": {
       "score": 8.5,
@@ -377,7 +614,34 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "openai/whisper",
+        "canonical_name": "openai/whisper",
+        "url": "https://github.com/openai/whisper",
+        "positioning": "OpenAI 开源的通用语音识别模型，基于 Transformer 序列到序列架构，支持多语言语音识别、翻译和语言识别。",
+        "technical_signal": "采用 Transformer seq2seq 架构，将多语言语音识别、翻译、语言识别和语音活动检测统一表示为解码器预测的 token 序列，取代传统多阶段语音处理管道。",
+        "adoption_signal": "可通过 pip install openai-whisper 快速安装，依赖 ffmpeg 处理音频，提供命令行和 Python API 两种使用方式，集成门槛低。",
+        "ecosystem_relevance": "提供 tiny、base、small、medium、large、turbo 六种模型尺寸覆盖从边缘设备到服务器的部署场景，turbo 在精度损失极小前提下实现约 8 倍加速。",
+        "target_users": [],
+        "watch_reason": "Whisper 作为 OpenAI 开源的通用语音识别基座模型，凭借多语言泛化能力、完善的模型尺寸梯度和灵活的部署方式，已成为语音识别领域的事实标准开源项目，其后续版本迭代和社区生态演化值得持续跟踪。",
+        "risk_notes": [
+          "turbo 模型未针对翻译任务训练，翻译非英语语音时应切换为 medium 或 large 模型。",
+          "模型转录性能因语言差异波动较大，部分低资源语言准确率仍不理想。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "24d2ebb24ff35b75"
+        ],
+        "evidence_snippets": [
+          "Whisper 是一个通用语音识别模型，基于大规模多样化音频数据集训练，支持多语言语音识别、语音翻译和语言识别。",
+          "模型采用 Transformer 序列到序列架构，将多语言语音识别、翻译、语言识别和语音活动检测等任务统一表示为 token 序列进行预测。",
+          "用户可通过 pip install openai-whisper 或从 GitHub 仓库直接安装，并支持命令行和 Python API 两种使用方式。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "github-trending",
@@ -394,23 +658,41 @@
     "pipeline_stage": "fact_extracted",
     "id": "43d3ef9bd32addf2",
     "source_type": "community_discussion",
-    "tldr": "Svelte 是一个编译器驱动的 Web 框架，将声明式组件编译为高效 JavaScript 以精确更新 DOM。",
-    "objective_summary": "Svelte 是一个 MIT 许可的开源 Web 应用框架，采用编译器方式将声明式组件转换为高效 JavaScript，实现针对性的 DOM 更新。其开发由志愿者贡献，通过 Open Collective 接受捐赠以支持托管费用和开发。",
+    "tldr": "Svelte 是一个将声明式组件编译为高效 JavaScript 的开源前端框架，采用 MIT 许可证，由志愿者社区驱动开发。",
+    "objective_summary": "Svelte 是一个编译器型前端框架，通过将声明式组件转换为高效的 JavaScript 代码实现对 DOM 的精确更新。该项目采用 MIT 开源许可证，完全由志愿者推动持续开发，并通过 Open Collective 平台接受捐款以覆盖托管费用等开发支出。",
     "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
-      "companies": [],
+      "companies": [
+        "Svelte"
+      ],
       "technologies": [
         "Svelte"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "Svelte 是一个 Web 应用编译器，将声明式组件转换为高效的 JavaScript 代码。",
-      "Svelte 通过精确的 DOM 更新操作，而非虚拟 DOM diff 方式，来提升运行时性能。",
-      "Svelte 采用 MIT 开源许可，其开发完全由社区志愿者推动。",
-      "项目通过 Open Collective 接受捐赠，资金用于托管费用和直接支持项目开发。",
-      "项目提供官方网站、Discord 聊天室、贡献指南和路线图等社区资源。"
+      "Svelte 是一个编译器，将声明式组件转换为高效的 JavaScript 代码，实现对 DOM 的精确更新。",
+      "Svelte 采用 MIT 许可证，是一个完全由志愿者推动的开源项目。",
+      "Svelte 通过 Open Collective 接受社区捐款，用于支付托管费用等开发相关支出。",
+      "该项目拥有官方网站、Discord 聊天室、贡献指南和公开路线图。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "sveltejs/svelte",
+        "canonical_name": "svelte",
+        "url": "https://github.com/sveltejs/svelte",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Svelte 是一个编译器，它将声明式组件转化为高效的 JavaScript 代码，实现对 DOM 的精确更新。",
+          "Svelte 采用 MIT 许可证，是一个完全由志愿者推动开发的开源项目。",
+          "Svelte 通过 Open Collective 接受捐款，用于支付托管费用等开发相关支出。"
+        ],
+        "article_id": "43d3ef9bd32addf2"
+      }
     ],
     "impact_score": {
       "score": 1.5,
@@ -465,7 +747,34 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "speculative_watch"
+    "actionable_insight": "speculative_watch",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "sveltejs/svelte",
+        "canonical_name": "svelte",
+        "url": "https://github.com/sveltejs/svelte",
+        "positioning": "Svelte 是一个编译器型前端框架，通过将声明式组件转换为高效 JavaScript 代码实现对 DOM 的精确更新，采用 MIT 开源许可证。",
+        "technical_signal": "Svelte 采用编译器替代传统虚拟 DOM 运行时框架，将声明式组件编译为精准操作 DOM 的原生 JavaScript 代码。",
+        "adoption_signal": "Svelte 完全由志愿者社区推动开发，通过 Open Collective 接受社区捐款以覆盖托管等开发支出。",
+        "ecosystem_relevance": "Svelte 已建立包含官方网站、Discord 社区、贡献指南和公开路线图的完整开发者生态。",
+        "target_users": [],
+        "watch_reason": "Svelte 的编译器架构在前端框架中具有差异化优势，其完全开源和社区驱动的模式使它的技术演进和生态发展值得持续跟踪。",
+        "risk_notes": [
+          "Svelte 完全依赖志愿者贡献，长期发展速度和资源投入方向存在不确定性。",
+          "Svelte 相比 React 和 Vue 等主流框架，生态成熟度和市场占有率仍较为有限。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "43d3ef9bd32addf2"
+        ],
+        "evidence_snippets": [
+          "Svelte 是一个编译器，它将声明式组件转化为高效的 JavaScript 代码，实现对 DOM 的精确更新。",
+          "Svelte 采用 MIT 许可证，是一个完全由志愿者推动开发的开源项目。",
+          "Svelte 通过 Open Collective 接受捐款，用于支付托管费用等开发相关支出。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "github-trending",
@@ -482,49 +791,117 @@
     "pipeline_stage": "fact_extracted",
     "id": "4a4e1b20d1ed2ee1",
     "source_type": "community_discussion",
-    "tldr": "Open Notebook 是一款开源的、隐私优先的 Google Notebook LM 替代品，支持 18+ AI 模型提供商",
-    "objective_summary": "lfnovo 团队发布了 Open Notebook，一个开源、可自托管的 Notebook LM 替代品。支持 18+ AI 提供商（OpenAI、Anthropic、Ollama 等），可处理 PDF、视频、音频等多模态内容，具备多说话人播客生成、全文与向量搜索、上下文聊天等功能，采用 MIT",
+    "tldr": "Open Notebook 是一个开源、可自托管的 Google Notebook LM 替代品，支持 18+ AI 提供商、多模态内容管理、多 speaker 播客生成和 REST API，采用 MIT 许可协议。",
+    "objective_summary": "该项目由 lfnovo 团队开发，于 GitHub 上发布 Open Notebook 项目，定位为 Google Notebook LM 的隐私优先替代方案。核心功能包括：支持 18 个以上 AI 提供商（OpenAI、Anthropic、Ollama 等）、多模态内容管理（PDF、视频、音频、网页）、1-4 人多 speaker 播客生成、全文和向量搜索、上下文感知 AI 聊天、多语言 UI。技术栈为 Python、FastAPI、Next.js、React 和 SurrealDB，可通过 Docker 一键部署。",
     "event_type": "application_landing",
-    "epistemic_status": "pr_statement",
+    "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
+        "lfnovo",
         "Google",
         "OpenAI",
         "Anthropic",
         "Ollama",
         "LM Studio",
         "Groq",
-        "Vertex AI",
         "Perplexity",
         "ElevenLabs",
         "Deepgram",
         "Azure OpenAI",
         "Mistral",
         "DeepSeek",
+        "Voyage",
         "xAI",
         "OpenRouter",
         "DashScope (Qwen)",
         "MiniMax",
-        "SurrealDB"
+        "Esperanto"
       ],
       "technologies": [
         "REST API",
-        "MCP",
         "Docker",
-        "vector search",
         "FastAPI",
         "Next.js",
-        "React"
+        "React",
+        "SurrealDB",
+        "Vector Search",
+        "Full-text Search",
+        "MCP",
+        "Ollama"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "Open Notebook 是一个开源项目，旨在提供隐私优先的 Google Notebook LM 替代品，用户可完全控制自己的数据。",
-      "该项目支持 18 个以上 AI 模型提供商，包括 OpenAI、Anthropic、Ollama 等，用户可自由选择底层模型。",
-      "功能覆盖多模态内容管理（PDF、视频、音频、网页）、多说话人播客生成、全文与向量搜索、上下文聊天等。",
-      "相比 Google Notebook LM，Open Notebook 在隐私控制、AI 提供商选择、播客说话人数、内容转换能力、API 访问和部署方式等方面具备优势。",
-      "部署方式支持 Docker、云服务器或本地运行，并提供完整 REST API 供程序化集成。",
-      "项目使用 MIT 开源许可证，技术栈为 Python/FastAPI 后端 + Next.js/React 前端 + SurrealDB 数据库。"
+      "Open Notebook 是一个 MIT 许可的开源项目，提供 Google Notebook LM 的隐私优先替代方案，用户可完全掌控自己的数据。",
+      "项目支持 18 个以上 AI 提供商，包括 OpenAI、Anthropic、Groq、Ollama、LM Studio 等，覆盖 LLM、嵌入、语音转文本和文本转语音能力。",
+      "核心功能包括多 notebook 管理、多模态内容导入（PDF、视频、音频、网页）、1-4 人专业多 speaker 播客生成、全文与向量搜索、上下文感知 AI 聊天和内容转换。",
+      "技术架构基于 Python、FastAPI、Next.js、React 前端和 SurrealDB 数据库，可通过 Docker 一键部署至本地、云端或自托管环境。",
+      "项目提供完整的 REST API 接口和 MCP 集成能力，支持与 Claude Desktop、VS Code 等 MCP 客户端连接。",
+      "与 Google Notebook LM 相比，Open Notebook 在数据主权、AI 提供商选择、播客 speaker 数量和可定制性方面具有优势。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "lfnovo/open-notebook",
+        "canonical_name": "lfnovo/open-notebook",
+        "url": "https://github.com/lfnovo/open-notebook",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Open Notebook 是一个开源、隐私优先的 Google Notebook LM 替代方案，用户可自托管并完全掌控自己的数据。",
+          "项目支持 18 个以上 AI 提供商，包括 OpenAI、Anthropic、Ollama、LM Studio 等，用户可灵活选择模型并优化成本。",
+          "Open Notebook 提供高级多 speaker 播客生成功能，支持 1-4 个 speaker 和自定义语音配置文件。"
+        ],
+        "article_id": "4a4e1b20d1ed2ee1"
+      },
+      {
+        "object_type": "product",
+        "name": "Open Notebook AI",
+        "canonical_name": "open-notebook.ai",
+        "url": "https://www.open-notebook.ai",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "项目官网为 https://www.open-notebook.ai，提供产品介绍、用户指南和部署文档。",
+          "该产品定位为 Google Notebook LM 的完全开源替代品，强调数据隐私、成本控制和可定制性。"
+        ],
+        "article_id": "4a4e1b20d1ed2ee1"
+      },
+      {
+        "object_type": "product",
+        "name": "Google Notebook LM",
+        "canonical_name": "Google Notebook LM",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "文章将 Open Notebook 定性为 Google Notebook LM 的隐私优先替代品，并在多个维度进行对比。",
+          "对比显示 Google Notebook LM 仅支持 Google 自有模型和 2 个 speaker 播客，而 Open Notebook 在灵活性和数据主权上具有优势。"
+        ],
+        "article_id": "4a4e1b20d1ed2ee1"
+      },
+      {
+        "object_type": "project",
+        "name": "Esperanto",
+        "canonical_name": "Esperanto",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "Open Notebook 借助 Esperanto 库实现了对 18 个以上 AI 提供商的开箱即用支持。"
+        ],
+        "article_id": "4a4e1b20d1ed2ee1"
+      },
+      {
+        "object_type": "project",
+        "name": "SurrealDB",
+        "canonical_name": "SurrealDB",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "Open Notebook 使用 SurrealDB 作为后端数据库，在 Docker Compose 配置中通过 surrealdb/surrealdb:v2 镜像启动。"
+        ],
+        "article_id": "4a4e1b20d1ed2ee1"
+      }
     ],
     "impact_score": {
       "score": 6.0,
@@ -581,7 +958,60 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "lfnovo/open-notebook",
+        "canonical_name": "lfnovo/open-notebook",
+        "url": "https://github.com/lfnovo/open-notebook",
+        "positioning": "开源、隐私优先的 Google Notebook LM 替代方案，用户可自托管并完全掌控数据主权与隐私。",
+        "technical_signal": "技术架构基于 Python、FastAPI、Next.js、React 和 SurrealDB 构建，支持超过 18 个 AI 提供商，提供完整 REST API 与 MCP 协议集成。",
+        "adoption_signal": "提供 Docker 一键部署至本地或云端的方案，用户可自由选择本地 Ollama 或云端 AI 提供商，社区通过 Discord 协作交流。",
+        "ecosystem_relevance": "属于开源 AI 工具与应用生态，与 OpenAI、Anthropic、Ollama 等超过 18 个主流 AI 提供商深度集成，同时兼容 MCP 协议与桌面客户端。",
+        "target_users": [],
+        "watch_reason": "该项目代表了用户对数据主权和 AI 提供商选择自由的明确市场需求，作为 Google Notebook LM 的开源替代方案，在功能完整性和可定制性上具备竞争力，且社区活跃、迭代快速，值得持续跟踪。",
+        "risk_notes": [
+          "与 Google Notebook LM 相比，该项目的引用和来源管理功能尚不完善，可能影响研究类用户对信息可信度的判断体验。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "4a4e1b20d1ed2ee1"
+        ],
+        "evidence_snippets": [
+          "Open Notebook 是一个开源、隐私优先的 Google Notebook LM 替代方案，用户可自托管并完全掌控自己的数据。",
+          "项目支持 18 个以上 AI 提供商，包括 OpenAI、Anthropic、Ollama、LM Studio 等，用户可灵活选择模型并优化成本。",
+          "Open Notebook 提供高级多 speaker 播客生成功能，支持 1-4 个 speaker 和自定义语音配置文件。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Open Notebook AI",
+        "canonical_name": "open-notebook.ai",
+        "url": "https://www.open-notebook.ai",
+        "positioning": "一款以数据隐私为核心的 Google Notebook LM 开源替代产品，主打自托管部署、成本可控和 AI 提供商自由选择。",
+        "target_users": [
+          "重视数据隐私的研究者与知识工作者",
+          "需要 AI 提供商灵活性的小团队和独立开发者",
+          "希望自托管知识管理工具的技术用户"
+        ],
+        "product_signal": "提供多模态内容管理、1 至 4 人多 speaker 播客生成、全文与向量搜索和上下文感知 AI 聊天等核心功能。",
+        "market_signal": "定位为 Google Notebook LM 的隐私优先替代品，通过自托管和提供商自由选择差异化竞争，目标客群为隐私敏感型用户。",
+        "differentiation": "与 Google Notebook LM 相比，在数据主权、AI 提供商选择自由度、播客 speaker 数量和系统可定制性方面具备显著优势。",
+        "watch_reason": "在 AI 笔记和知识管理领域，该产品开辟了功能完善的开源替代路线，通过自托管部署和多 AI 提供商支持，满足了隐私敏感用户对数据主权和成本控制的核心需求，差异化定位清晰，值得持续跟踪。",
+        "risk_notes": [
+          "作为小型开源项目的商业化产品，在品牌知名度和用户基数上与 Google Notebook LM 差距巨大，面临较高的市场教育成本。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "4a4e1b20d1ed2ee1"
+        ],
+        "evidence_snippets": [
+          "项目官网为 https://www.open-notebook.ai，提供产品介绍、用户指南和部署文档。",
+          "该产品定位为 Google Notebook LM 的完全开源替代品，强调数据隐私、成本控制和可定制性。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "github-trending",
@@ -598,34 +1028,87 @@
     "pipeline_stage": "fact_extracted",
     "id": "6a1e74497465541d",
     "source_type": "community_discussion",
-    "tldr": "微软开源 VibeVoice 语音模型家族，含 90 分钟 TTS 和 60 分钟单次 ASR 模型",
-    "objective_summary": "微软于 2025-2026 年陆续开源 VibeVoice 系列语音 AI 模型，包括 VibeVoice-TTS（长文本多说话人语音合成，支持 90 分钟、4 个说话人）、VibeVoice-ASR（统一语音转文本，支持 60 分钟单次处理、说话人识别与时间戳）和",
-    "event_type": "framework_tools",
+    "tldr": "微软开源了VibeVoice系列语音AI模型，包含ASR（语音识别）、TTS（文本转语音）和Realtime三类模型。VibeVoice-ASR支持60分钟长音频单次处理与结构化转录，VibeVoice-TTS支持90分钟多说话人合成后因滥用被移除，VibeVoice-Realtime-0.5B实现约300毫秒延迟的实时流式语音合成。",
+    "objective_summary": "微软在GitHub上开源了VibeVoice系列语音AI模型，以7.5Hz超低帧率连续语音分词器和下一个标记扩散框架为核心创新。该系列包含三款模型：VibeVoice-ASR-7B（2026年1月开源，支持60分钟长音频单次处理，生成包含说话人、时间戳和内容的结构化转录，并支持自定义热词）、VibeVoice-TTS-1.5B（2025年8月开源后被移除，支持90分钟多说话人语音合成）和VibeVoice-Realtime-0.5B（2025年12月开源，支持流式输入实时TTS，约300毫秒延迟）。VibeVoice-ASR已集成到Hugging Face Transformers库并支持vLLM推理加速。",
+    "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
-        "Microsoft",
-        "Hugging Face"
+        "Microsoft"
       ],
       "technologies": [
-        "VibeVoice",
-        "ASR",
-        "TTS",
+        "VibeVoice-ASR",
+        "VibeVoice-TTS",
+        "VibeVoice-Realtime",
         "LLM",
         "Transformers",
         "vLLM",
-        "Qwen2.5",
-        "diffusion"
+        "ASR",
+        "TTS",
+        "Qwen2.5"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "微软开源了 VibeVoice 系列语音 AI 模型，包括 TTS、ASR 和 Realtime 三个子模型，均可在 Hugging Face 获取权重。",
-      "VibeVoice 的核心创新是使用 7.5Hz 超低帧率的连续语音分词器（声学+语义），采用 next-token diffusion 框架结合 LLM 理解上下文和 diffusion head 生成高保真声学细节。",
-      "VibeVoice-TTS 支持最长 90 分钟的单次语音合成、最多 4 个不同说话人、支持中英文等多语言及跨语言和自发歌唱生成，已被 ICLR 2026 接收为 Oral 论文。",
-      "VibeVoice-ASR 支持 60 分钟连续音频单次处理（64K token 长度内）、说话人识别与时间戳联合输出、以及用户自定义热词增强领域准确率。",
-      "VibeVoice-Realtime-0.5B 是一个轻量级实时 TTS 模型，支持流式文本输入、约 300 毫秒首音延迟和约 10 分钟的长文本生成。",
-      "2025 年 9 月微软曾因发现工具被滥用而移除 VibeVoice-TTS 代码，后恢复发布；模型基于 Qwen2.5 1.5B 基座，存在偏见和深度伪造风险，目前仅限研究用途。"
+      "微软开源了VibeVoice系列语音AI模型，包括语音识别（ASR-7B）、文本转语音（TTS-1.5B）和实时语音合成（Realtime-0.5B）三款模型。",
+      "VibeVoice系列的核心创新在于使用7.5Hz超低帧率的连续语音分词器，结合下一个标记扩散框架，利用LLM理解文本上下文、扩散头生成高保真声学细节。",
+      "VibeVoice-ASR支持60分钟长音频单次处理，能生成包含说话人、时间戳和内容的结构化转录，并支持用户自定义热词以提升领域特定内容的识别准确率。",
+      "VibeVoice-TTS可合成最长90分钟、最多4个不同说话人的语音，曾被ICLR 2026接收为Oral论文，但因被发现在使用方式上与预期意图不一致而于2025年9月从仓库中移除。",
+      "VibeVoice-Realtime-0.5B是一个轻量级实时TTS模型，参数量仅0.5B，支持流式文本输入，首次可听延迟约300毫秒，已添加9种语言的实验性说话人和11种英语风格声音。",
+      "VibeVoice-ASR已集成到Hugging Face Transformers库，用户可通过Transformers直接调用，并已支持vLLM推理加速。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "microsoft/VibeVoice",
+        "canonical_name": "microsoft/VibeVoice",
+        "url": "https://github.com/microsoft/VibeVoice",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "VibeVoice是微软在GitHub上开源的前沿语音AI模型系列，同时包含文本转语音（TTS）和自动语音识别（ASR）两类模型。"
+        ],
+        "article_id": "6a1e74497465541d"
+      },
+      {
+        "object_type": "model",
+        "name": "VibeVoice-ASR",
+        "canonical_name": "VibeVoice-ASR-7B",
+        "url": "https://huggingface.co/microsoft/VibeVoice-ASR-7B",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "VibeVoice-ASR是一个统一的语音转文本模型，支持60分钟长音频单次处理，可生成包含说话人、时间戳和内容的结构化转录。",
+          "该模型已集成到Hugging Face Transformers库中，并支持vLLM推理加速和用户自定义热词功能。"
+        ],
+        "article_id": "6a1e74497465541d"
+      },
+      {
+        "object_type": "model",
+        "name": "VibeVoice-TTS",
+        "canonical_name": "VibeVoice-TTS-1.5B",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "VibeVoice-TTS是一个长格式多说话人文本转语音模型，可合成最长90分钟、最多4个不同说话人的语音，曾被ICLR 2026接收为Oral论文。",
+          "由于发现该工具在使用方式上与预期意图不一致，微软已于2025年9月将VibeVoice-TTS代码从仓库中移除。"
+        ],
+        "article_id": "6a1e74497465541d"
+      },
+      {
+        "object_type": "model",
+        "name": "VibeVoice-Realtime-0.5B",
+        "canonical_name": "VibeVoice-Realtime-0.5B",
+        "url": "https://huggingface.co/microsoft/VibeVoice-Realtime-0.5B",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "VibeVoice-Realtime-0.5B是一个支持流式文本输入的实时文本转语音模型，参数量仅0.5B，首次可听延迟约300毫秒。",
+          "该模型已添加包括德语、法语、日语等9种语言的实验性说话人和11种不同的英语风格声音。"
+        ],
+        "article_id": "6a1e74497465541d"
+      }
     ],
     "impact_score": {
       "score": 7.5,
@@ -683,7 +1166,33 @@
       "compound": "medium",
       "hype": "medium"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "microsoft/VibeVoice",
+        "canonical_name": "microsoft/VibeVoice",
+        "url": "https://github.com/microsoft/VibeVoice",
+        "positioning": "微软开源的VibeVoice系列语音AI模型，以7.5Hz超低帧率连续语音分词器和下一个标记扩散框架为核心，涵盖ASR、TTS和实时语音合成三类任务。",
+        "technical_signal": "系列采用7.5Hz超低帧率连续语音分词器，结合LLM文本理解与扩散头生成高保真声学细节，显著提升长序列处理效率与语音质量。",
+        "adoption_signal": "VibeVoice-ASR已集成到Hugging Face Transformers库并支持vLLM推理加速，社区开发者可通过标准API直接调用模型，验证了实用价值与社区吸引力。",
+        "ecosystem_relevance": "作为微软开源项目，VibeVoice与Hugging Face Transformers和vLLM推理引擎深度集成，降低了语音AI模型在开源生态中的使用门槛，丰富了微软AI开源矩阵。",
+        "target_users": [],
+        "watch_reason": "VibeVoice系列以7.5Hz超低帧率分词器和下一个标记扩散架构为核心创新，同时覆盖ASR、TTS和实时合成三类任务，ASR已获Hugging Face社区集成验证，微软持续投入使其值得长期跟踪，但TTS因滥用风险被移除也需密切关注。",
+        "risk_notes": [
+          "VibeVoice-TTS因被发现在使用方式上与预期意图不一致，已于2025年9月从仓库中移除，语音合成技术的深度伪造与滥用风险不容忽视。",
+          "模型输出可能包含偏见或不准确内容，VibeVoice继承自基座模型Qwen2.5的固有局限，在高风险应用场景中需谨慎评估输出质量与可靠性。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "6a1e74497465541d"
+        ],
+        "evidence_snippets": [
+          "VibeVoice是微软在GitHub上开源的前沿语音AI模型系列，同时包含文本转语音（TTS）和自动语音识别（ASR）两类模型。",
+          "VibeVoice-ASR支持60分钟长音频单次处理，能生成包含说话人、时间戳和内容的结构化转录，并支持自定义热词以提升特定领域识别准确率。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "github-trending",
@@ -700,41 +1209,76 @@
     "pipeline_stage": "fact_extracted",
     "id": "b68d90c0788819fd",
     "source_type": "community_discussion",
-    "tldr": "开源 AI 求职助手，用 Claude Code 等 CLI 批量评估职位、生成简历、扫描招聘门户。",
-    "objective_summary": "Santiago（santifer）于 GitHub 开源 Career-Ops 项目，这是一个基于 AI 编码 CLI（Claude Code/Gemini CLI）的求职工具，能够批量评估职位、生成 ATS 优化简历、扫描 Greenhouse 等 45+ 公司招聘门户，作者自称用其评估",
+    "tldr": "Santiago 开发了开源项目 Career-Ops，将 AI 编程 CLI 转变为求职指挥中心，支持职位批量评估、ATS 简历生成、招聘门户扫描和全流程跟踪。该项目已在实战中评估 740 多个职位并帮助作者成功获得 Head of Applied AI 职位。",
+    "objective_summary": "Santiago 在经历数月低效求职后，开发了 Career-Ops 这一开源 AI 求职工具。该系统支持 Claude Code、Gemini CLI 和 OpenCode 三种 AI CLI，提供职位评分、个性化简历生成、45 家以上公司门户自动扫描和终端仪表盘等功能。作者使用该工具评估了 740 多个职位、生成了 100 多份简历，并最终获得 Head of Applied AI 职位。工具遵循人在回路中的设计原则，AI 仅负责评估和推荐，用户始终保留最终决定权。",
     "event_type": "framework_tools",
-    "epistemic_status": "pr_statement",
+    "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
         "Anthropic",
         "OpenAI",
-        "Mistral",
-        "Cohere",
-        "LangChain",
-        "Pinecone",
         "ElevenLabs",
-        "Retool",
         "Vercel",
         "Salesforce"
       ],
       "technologies": [
         "Playwright",
-        "ATS",
-        "PDF Generation",
+        "Puppeteer",
         "Bubble Tea",
-        "Gemini CLI"
+        "Greenhouse API",
+        "ATS"
       ],
       "key_people": [
-        "Santiago (santifer)"
+        "Santiago"
       ]
     },
     "key_logic_flow": [
-      "Career-Ops 是一个开源的 AI 求职命令行工具，可将任何 AI 编码 CLI（Claude Code、Gemini CLI、OpenCode）转变为求职指挥中心。",
-      "系统提供 14 种技能模式，包括职位评估（A-F 评分系统，10 个加权维度）、ATS 优化 PDF 简历生成、招聘门户扫描（Greenhouse/Ashby/Lever 等 45+ 预配置公司）。",
-      "工具强调\"人机协作\"设计：AI 负责评估和建议，但永远不代提交申请，最终决策由用户掌控。",
-      "作者 Santiago 自称使用该工具评估了 740+ 个职位、生成 100+ 份定制简历，并成功入职 Head of Applied AI 职位。",
-      "系统使用 Playwright 进行浏览器自动化、HTML 模板生成 PDF、Go 构建终端仪表盘，所有数据存储在本地 Markdown/YAML/TSV 文件中。",
-      "该项目支持 Gemini CLI 原生集成（15 条斜杠命令），也提供独立的 Node.js API 脚本供非 CLI 环境使用。"
+      "Santiago 在手动求职数月后，决定开发 Career-Ops 替代传统电子表格追踪方式，将 AI 编程 CLI 转变为全功能求职指挥中心。",
+      "Career-Ops 采用 A-F 评分系统对职位进行 10 个维度的结构化评估，并针对每个职位自动生成 ATS 优化的个性化简历 PDF。",
+      "系统内置 45 家以上预配置公司扫描器和 19 条搜索查询，覆盖 Ashby、Greenhouse、Lever 等主流招聘平台的职位信息自动抓取。",
+      "Career-Ops 遵循人在回路中的设计原则，AI 仅负责评估和推荐，用户始终保留提交申请和做出最终决定的权力。",
+      "该项目已在真实场景中验证：Santiago 使用 Career-Ops 评估了 740 多个职位并成功获得 Head of Applied AI 职位。",
+      "Career-Ops 完全开源且数据本地化运行，用户的简历和个人信息不会离开本地机器，系统也不提供任何托管服务。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "santifer/career-ops",
+        "canonical_name": "career-ops",
+        "url": "https://github.com/santifer/career-ops",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Career-Ops 能将任何 AI 编程 CLI 转变为求职指挥中心，提供职位评估、简历生成、门户扫描和全流程跟踪功能。",
+          "该项目已在实战中评估了 740 多个职位、生成了 100 多份个性化简历，并帮助创建者 Santiago 获得 Head of Applied AI 职位。",
+          "Career-Ops 支持 Claude Code、Gemini CLI 和 OpenCode 三种 AI CLI，提供 15 个斜杠命令和 14 种技能模式。"
+        ],
+        "article_id": "b68d90c0788819fd"
+      },
+      {
+        "object_type": "project",
+        "name": "cv-santiago",
+        "canonical_name": "cv-santiago",
+        "url": "https://santifer.io",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "cv-santiago 是 Santiago 的个人作品集网站，包含 AI 聊天机器人和 LLMOps 仪表盘，可供求职者 fork 并用作展示平台。"
+        ],
+        "article_id": "b68d90c0788819fd"
+      },
+      {
+        "object_type": "project",
+        "name": "career-dashboard",
+        "canonical_name": "career-dashboard",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "Career-Ops 附带基于 Go 语言和 Bubble Tea 框架构建的终端仪表盘，支持 6 种筛选标签和 4 种排序模式。"
+        ],
+        "article_id": "b68d90c0788819fd"
+      }
     ],
     "impact_score": {
       "score": 6.5,
@@ -788,7 +1332,56 @@
       "compound": "low",
       "hype": "high"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "santifer/career-ops",
+        "canonical_name": "career-ops",
+        "url": "https://github.com/santifer/career-ops",
+        "positioning": "Career-Ops 是一个开源 AI 求职工具，将 AI 编程 CLI 转变为求职指挥中心，支持批量职位评估、ATS 简历自动生成和多平台招聘门户扫描。",
+        "technical_signal": "系统支持 Claude Code、Gemini CLI 和 OpenCode 三种 AI CLI，提供 15 个斜杠命令和 14 种技能模式，采用 10 维 A-F 评分体系与人在回路设计。",
+        "adoption_signal": "作者使用 Career-Ops 评估了 740 多个职位、生成了 100 多份个性化简历，并成功获得 Head of Applied AI 职位，验证了工具的真实有效性。",
+        "ecosystem_relevance": "Career-Ops 将 AI 编程 CLI 扩展至求职场景，展示了 AI Agent 在招聘流程自动化中的实用价值，推动了 AI CLI 生态向非编程领域延伸。",
+        "target_users": [],
+        "watch_reason": "Career-Ops 代表了 AI 编程 CLI 向非编程应用场景扩展的创新方向，其真实的求职成功案例证明了 AI Agent 在招聘领域的实用价值；作为开源项目，其功能演进和社区采纳情况值得持续跟踪。",
+        "risk_notes": [
+          "工具高度依赖 AI CLI 的可用性和 API 成本，Claude Code 等服务定价变化可能影响用户持续使用。",
+          "作为个人开发者维护的开源项目，长期更新和社区贡献的持续性尚无明确保障。",
+          "职位匹配质量受限于 AI 模型对简历与职位描述的理解能力，存在评分偏差的风险。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "b68d90c0788819fd"
+        ],
+        "evidence_snippets": [
+          "Career-Ops 能将任何 AI 编程 CLI 转变为求职指挥中心，提供职位评估、简历生成、门户扫描和全流程跟踪功能。",
+          "该项目已在实战中评估了 740 多个职位、生成了 100 多份个性化简历，并帮助创建者 Santiago 获得 Head of Applied AI 职位。",
+          "Career-Ops 支持 Claude Code、Gemini CLI 和 OpenCode 三种 AI CLI，提供 15 个斜杠命令和 14 种技能模式。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "cv-santiago",
+        "canonical_name": "cv-santiago",
+        "url": "https://santifer.io",
+        "positioning": "cv-santiago 是 Santiago 的个人作品集与求职展示网站，集成了 AI 聊天机器人和 LLMOps 仪表盘，可供求职者 fork 并用作 AI 开发者展示模板。",
+        "technical_signal": "项目集成了 AI 聊天机器人和 LLMOps 仪表盘功能，展示了求职者的技术能力和项目实践经验，可作为 AI 工程师的作品集参考。",
+        "ecosystem_relevance": "作为 Career-Ops 求职工具链中的个人展示环节，cv-santiago 展示了 AI 开发者如何利用自身开源项目作品来增强求职竞争力。",
+        "target_users": [],
+        "watch_reason": "cv-santiago 作为 AI 工程师的作品集模板，体现了开源项目与个人求职展示相结合的趋势；但其独立价值和可复用性有限，更多是 Career-Ops 生态中的配套项目，跟踪优先级较低。",
+        "risk_notes": [
+          "该项目本质上是个人网站，缺乏通用模板的标准化程度和社区维护支持。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "b68d90c0788819fd"
+        ],
+        "evidence_snippets": [
+          "cv-santiago 是 Santiago 的个人作品集网站，包含 AI 聊天机器人和 LLMOps 仪表盘，可供求职者 fork 并用作展示平台。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "github-trending",
@@ -805,37 +1398,170 @@
     "pipeline_stage": "fact_extracted",
     "id": "b6bb9341088f0954",
     "source_type": "community_discussion",
-    "tldr": "Agent Reach 是一款为 AI Agent 一键安装互联网能力的开源脚手架工具",
-    "objective_summary": "Panniantong 于 GitHub 发布 Agent Reach 开源项目，这是一个为 AI Agent 提供互联网能力的安装与配置脚手架工具，整合了多个上游开源工具，支持 Agent 直接读取网页、YouTube 字幕、Twitter、Reddit 等内容源。",
+    "tldr": "Agent Reach 是一个开源的 AI Agent 互联网能力脚手架工具，通过一条安装命令即可让 Claude Code、Cursor、OpenClaw 等 Agent 获得访问网页、YouTube、Twitter、Reddit、B站、小红书等十余个平台的能力，所有功能免费开源。",
+    "objective_summary": "Panniantong 于 2026 年发布了开源项目 Agent Reach，旨在解决 AI Agent 在访问互联网平台时面临的付费 API、IP 封锁、登录认证等门槛问题。该项目通过 pip 安装并聚合 twitter-cli、yt-dlp、Jina Reader、Exa 等多个上游开源工具，以脚手架而非框架的方式为 Agent 提供一键配置能力。安装后 Agent 可直接调用各上游工具实现网页阅读、视频字幕提取、社交平台搜索等功能，无需额外付费，Cookie 等凭据仅存储在用户本地。",
     "event_type": "framework_tools",
-    "epistemic_status": "pr_statement",
+    "epistemic_status": "verified_fact",
     "entities": {
-      "companies": [],
+      "companies": [
+        "Panniantong"
+      ],
       "technologies": [
         "MCP",
-        "yt-dlp",
-        "Jina Reader",
         "RSS",
-        "Exa",
-        "gh CLI",
         "Whisper",
-        "pipx",
-        "feedparser",
-        "mcporter"
+        "Exa",
+        "Jina Reader"
       ],
       "key_people": [
         "Panniantong"
       ]
     },
     "key_logic_flow": [
-      "Agent Reach 是一个开源脚手架工具，旨在解决 AI Agent 无法自由访问各互联网平台（如 Twitter、Reddit、YouTube、小红书等）内容的问题。",
-      "它通过整合多个上游开源工具（twitter-cli、yt-dlp、Jina Reader、rdt-cli、gh CLI、Exa 等），为 Agent 提供跨平台的互联网内容读取能力，而非自建包装层。",
-      "用户只需让 Agent 执行一条安装命令，Agent Reach 会自动完成工具安装、系统依赖配置、搜索引擎接入和环境检测。",
-      "Agent Reach 采用可插拔架构，每个平台对应一个独立渠道文件，用户可自由替换不满意的上游工具实现。",
-      "支持 Claude Code、Cursor、OpenClaw、Windsurf 等多种 AI Agent 平台，Cookie 等凭据仅本地存储，代码完全开源可审查。",
-      "项目完全免费，所有依赖工具均为开源项目，唯一可选成本是服务器代理（约 1 美元/月），用于海外访问国内平台。"
+      "Agent Reach 是一个脚手架工具，通过一条安装命令即可让 AI Agent 获得访问十余个互联网平台的能力。",
+      "底层依赖多个上游开源工具如 twitter-cli、yt-dlp、Jina Reader、Exa 等，Agent 安装后直接调用这些工具而非经过中间层包装。",
+      "每个平台对应一个独立的 channel 文件，用户可以自由更换不满意的上游工具实现。",
+      "Cookie 和 Token 等凭据仅存储在用户本地机器且文件权限设为 600，不上传至任何外部服务。",
+      "项目完全免费开源，唯一可选的付费项是海外服务器访问 B 站所需的代理费用（约 1 美元/月）。",
+      "兼容 Claude Code、Cursor、OpenClaw、Windsurf 等任何能运行 shell 命令的 AI Agent，OpenClaw 用户需先开启 exec 权限。"
     ],
     "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "Panniantong/Agent-Reach",
+        "canonical_name": "Agent Reach",
+        "url": "https://github.com/Panniantong/Agent-Reach",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Agent Reach 是一个脚手架工具，通过一条安装命令即可让 AI Agent 获得访问网页、YouTube、Twitter、Reddit、B站、小红书等十余个平台的能力。",
+          "项目完全免费开源，所有依赖的上游工具也是开源项目，Cookie 等凭据仅存储在用户本地。",
+          "每个平台对应一个独立的 channel 文件，用户可置换不满意的上游工具，聚合了 twitter-cli、yt-dlp、Jina Reader、Exa 等工具。"
+        ],
+        "article_id": "b6bb9341088f0954"
+      },
+      {
+        "object_type": "project",
+        "name": "twitter-cli",
+        "canonical_name": "twitter-cli",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Agent Reach 使用 twitter-cli 通过 Cookie 认证访问 Twitter，安装后 Agent 可以用 twitter search 搜索推文、用 twitter tweet 读单条推文。",
+          "twitter-cli 是一个 2.1K Star 的开源工具，支持 Cookie 登录、搜索、读推文、查看时间线和长文。"
+        ],
+        "article_id": "b6bb9341088f0954"
+      },
+      {
+        "object_type": "project",
+        "name": "rdt-cli",
+        "canonical_name": "rdt-cli",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Agent Reach 使用 rdt-cli 访问 Reddit，安装后需运行 rdt login 登录，之后 Agent 可以用 rdt search 搜索帖子、用 rdt read 读帖子全文和评论。",
+          "rdt-cli 是一个 304 Star 的开源工具，通过 Cookie 认证实现 Reddit 搜索、全文阅读和评论获取。"
+        ],
+        "article_id": "b6bb9341088f0954"
+      },
+      {
+        "object_type": "project",
+        "name": "xhs-cli",
+        "canonical_name": "xiaohongshu-cli",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Agent Reach 通过 xhs-cli（xiaohongshu-cli）让 Agent 搜索、阅读、评论和发帖小红书，安装 pipx install xiaohongshu-cli 后运行 xhs login 登录。",
+          "xhs-cli 是一个 1.5K Star 的开源工具，通过 pipx 一行安装，支持搜索、阅读、评论和发帖功能。"
+        ],
+        "article_id": "b6bb9341088f0954"
+      },
+      {
+        "object_type": "project",
+        "name": "yt-dlp",
+        "canonical_name": "yt-dlp",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Agent Reach 使用 yt-dlp 提取 YouTube 和 B 站的视频字幕及元数据，支持多语言字幕，无需 API Key。",
+          "yt-dlp 是一个 154K Star 的开源工具，支持 YouTube、B 站等 1800 多个网站的视频信息提取。"
+        ],
+        "article_id": "b6bb9341088f0954"
+      },
+      {
+        "object_type": "project",
+        "name": "Jina Reader",
+        "canonical_name": "Jina Reader",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Agent Reach 使用 Jina Reader 实现任意网页的阅读，通过 curl https://r.jina.ai/URL 即可读取网页内容。",
+          "Jina Reader 是一个 9.8K Star 的免费开源工具，不需要 API Key 即可使用。"
+        ],
+        "article_id": "b6bb9341088f0954"
+      },
+      {
+        "object_type": "project",
+        "name": "douyin-mcp-server",
+        "canonical_name": "douyin-mcp-server",
+        "url": "https://github.com/yzfly/douyin-mcp-server",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Agent Reach 通过 douyin-mcp-server 让 Agent 解析抖音视频信息并获取无水印下载链接，无需登录即可使用。",
+          "douyin-mcp-server 是一个 MCP 服务，Agent 可通过 mcporter 调用 parse_douyin_video_info 等工具解析抖音视频。"
+        ],
+        "article_id": "b6bb9341088f0954"
+      },
+      {
+        "object_type": "project",
+        "name": "mcporter",
+        "canonical_name": "mcporter",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Agent Reach 通过 mcporter 的 MCP 接入方式集成 Exa 搜索引擎、抖音解析、小红书、LinkedIn 等平台能力。",
+          "Agent 可以通过 mcporter call 命令调用各平台的 MCP 工具，如调用抖音视频解析和社交平台脚本提取工具。"
+        ],
+        "article_id": "b6bb9341088f0954"
+      },
+      {
+        "object_type": "project",
+        "name": "linkedin-scraper-mcp",
+        "canonical_name": "linkedin-scraper-mcp",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Agent Reach 通过 linkedin-scraper-mcp 让 Agent 获取 LinkedIn Profile 详情、公司页面和职位搜索能力。",
+          "linkedin-scraper-mcp 是一个 1.2K Star 的 MCP 服务，基于浏览器自动化实现 LinkedIn 数据抓取。"
+        ],
+        "article_id": "b6bb9341088f0954"
+      },
+      {
+        "object_type": "product",
+        "name": "FluxNode",
+        "canonical_name": "FluxNode",
+        "confidence": "low",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "FluxNode 被描述为低价 AI API 中转站，官方一折，可按量或按套餐付费，可用于 OpenClaw、Claude Code 等 Agent。"
+        ],
+        "article_id": "b6bb9341088f0954"
+      },
+      {
+        "object_type": "product",
+        "name": "OpenClaw",
+        "canonical_name": "OpenClaw",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "Agent Reach 兼容 OpenClaw，但 OpenClaw 用户需先开启 exec 权限才能安装 Agent Reach。",
+          "文章提及了 OpenClaw for Enterprise 企业级多用户部署方案和腾讯云 OpenClaw Lighthouse 部署方案。"
+        ],
+        "article_id": "b6bb9341088f0954"
+      }
+    ],
     "impact_score": {
       "score": 6.0,
       "reason": "Agent Reach 是一个实用的开源脚手架工具，解决了 AI Agent 领域一个广泛存在的痛点——Agent 无法便捷访问互联网各平台内容。评分 6.0 的理由：一方面，它并非底层技术突破或范式转移（非 8-10 分区间）；另一方面，它通过巧妙的集成设计（可插拔渠道架构、一键安装、SKILL.md 注册机制）显著降低了开发者为 Agent 配置互联网能力的成本，能有效提升 Claude Code、Cursor 等 Agent 平台的使用体验，对 AI Agent 工具链生态有实质性推动作用，超出了普通日常更新的范畴（高于 1-3 分）。它可能改变局部竞争格局——让中小团队和个人开发者更容易构建全功能 Agent。但受限于其脚手架性质（非原创技术）和项目的新生状态，影响力尚不足以达到改变行业格局的级别（7+）。"
@@ -956,7 +1682,214 @@
         "需要合规审批的金融/医疗等领域——使用的上游工具（如 mcporter、第三方 CLI）的合规状态未验证"
       ],
       "time_to_production": "needs_1_3_months"
-    }
+    },
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Panniantong/Agent-Reach",
+        "canonical_name": "Agent Reach",
+        "url": "https://github.com/Panniantong/Agent-Reach",
+        "positioning": "开源的 AI Agent 互联网能力脚手架工具，通过一条安装命令让 Agent 获得访问十余个主流互联网平台的能力，完全免费开源。",
+        "technical_signal": "采用脚手架架构而非中间层封装模式，每个平台对应独立 channel 文件，用户可自由置换不满意的上游工具实现，设计灵活可扩展。",
+        "adoption_signal": "通过 GitHub 发布且安装只需一条 pip 命令，兼容 Claude Code、Cursor、OpenClaw 等主流 Agent 框架，显著降低了 Agent 互联网能力的获取门槛。",
+        "ecosystem_relevance": "填补了 AI Agent 获取多平台数据能力的工具链空白，聚合十余个入口的 scaffolding 模式对 Agent 基础设施生态有重要补充价值。",
+        "target_users": [],
+        "watch_reason": "Agent Reach 以脚手架模式一站式解决 Agent 访问互联网平台的付费 API、IP 封锁、登录认证等碎片化问题，各 channel 可替换的设计兼顾灵活性与可维护性，随着 Agent 框架普及其工具链价值有望持续增长。",
+        "risk_notes": [
+          "项目依赖的上游工具可能因平台反爬政策变化而失效，需持续追踪和维护各 channel 的兼容性。",
+          "Cookie 和 Token 凭据存储在本地虽不上传服务器，但涉及多个社交平台账号，用户隐私信任需要时间建立。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "b6bb9341088f0954"
+        ],
+        "evidence_snippets": [
+          "Agent Reach 是一个脚手架工具，通过一条安装命令即可让 AI Agent 获得访问网页、YouTube、Twitter、Reddit、B站、小红书等十余个平台的能力。",
+          "项目完全免费开源，所有依赖的上游工具也是开源项目，Cookie 等凭据仅存储在用户本地。",
+          "每个平台对应一个独立的 channel 文件，用户可置换不满意的上游工具，聚合了 twitter-cli、yt-dlp、Jina Reader、Exa 等工具。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "twitter-cli",
+        "canonical_name": "twitter-cli",
+        "positioning": "开源的 Twitter/X 命令行客户端，通过 Cookie 认证替代付费 API，实现搜索推文、阅读推文、时间线查看和发帖等核心功能。",
+        "technical_signal": "采用 Cookie 登录方式绕过官方付费 API 限制，支持搜索推文、阅读单条推文、查看时间线和发推等完整交互能力。",
+        "adoption_signal": "拥有 2.1K GitHub Star，已被 Agent Reach 选为 Twitter 渠道的默认上游工具，在 AI Agent 社区中有实际使用基础。",
+        "ecosystem_relevance": "为 AI Agent 生态提供零成本的 Twitter 数据访问通道，解决了付费 API 门槛对 Agent 获取社交数据的限制。",
+        "target_users": [],
+        "watch_reason": "twitter-cli 通过 Cookie 认证实现零成本 Twitter 访问的方案在 Agent 工具链中具有独特价值，其稳定性和演化直接影响 Agent Reach 等上层工具的 Twitter 能力。",
+        "risk_notes": [
+          "依赖 Cookie 登录的方式存在凭证失效风险，Twitter 平台政策变化可能导致工具不可用。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "b6bb9341088f0954"
+        ],
+        "evidence_snippets": [
+          "Agent Reach 使用 twitter-cli 通过 Cookie 认证访问 Twitter，安装后 Agent 可以用 twitter search 搜索推文、用 twitter tweet 读单条推文。",
+          "twitter-cli 是一个 2.1K Star 的开源工具，支持 Cookie 登录、搜索、读推文、查看时间线和长文。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "rdt-cli",
+        "canonical_name": "rdt-cli",
+        "positioning": "开源的 Reddit 命令行客户端，通过 Cookie 认证实现 Reddit 搜索、帖子全文阅读和评论获取等功能，服务于 AI Agent 的数据需求。",
+        "technical_signal": "支持通过 Cookie 认证登录，提供搜索帖子、阅读帖子全文和评论等核心接口，适合 Agent 自动化调用和内容分析。",
+        "adoption_signal": "拥有 304 GitHub Star，被 Agent Reach 选为 Reddit 渠道的默认上游工具，在 Agent 访问论坛社区内容的场景中具有实用价值。",
+        "ecosystem_relevance": "为 AI Agent 提供了访问 Reddit 社区内容的命令行通道，弥补了 Agent 获取全球论坛讨论数据的能力缺口。",
+        "target_users": [],
+        "watch_reason": "rdt-cli 解决了 Agent 访问 Reddit 时的 IP 封锁和登录认证问题，作为 Agent Reach 的 Reddit 渠道依赖，其 Cookie 认证机制的可靠性值得持续关注。",
+        "risk_notes": [
+          "Star 数量较少，社区活跃度和长期维护能力有待观察。",
+          "依赖 Cookie 认证面临平台政策变化风险，Reddit 可能调整反爬策略影响工具可用性。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "b6bb9341088f0954"
+        ],
+        "evidence_snippets": [
+          "Agent Reach 使用 rdt-cli 访问 Reddit，安装后需运行 rdt login 登录，之后 Agent 可以用 rdt search 搜索帖子、用 rdt read 读帖子全文和评论。",
+          "rdt-cli 是一个 304 Star 的开源工具，通过 Cookie 认证实现 Reddit 搜索、全文阅读和评论获取。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "xhs-cli",
+        "canonical_name": "xiaohongshu-cli",
+        "positioning": "开源的命令行版小红书客户端，通过 pipx 一行安装即可使用，支持小红书搜索、阅读、评论和发帖等完整功能。",
+        "technical_signal": "通过 pipx 安装的 CLI 工具，支持搜索笔记、阅读正文、评论互动和发布新帖等完整操作，Agent Reach 通过 mcporter MCP 方式集成。",
+        "adoption_signal": "拥有 1.5K GitHub Star，被 Agent Reach 集成为小红书渠道的上游工具，在中文 AI Agent 社区中有一定关注度和使用基础。",
+        "ecosystem_relevance": "为 AI Agent 访问中文社交平台小红书提供了命令行接口，扩展了 Agent 在中文互联网内容生态中的数据获取能力。",
+        "target_users": [],
+        "watch_reason": "xhs-cli 作为小红书这一重要中文内容平台的 CLI 工具，其被 Agent Reach 集成体现了 Agent 工具链向中文社区拓展的趋势，对中文 AI Agent 生态有独特价值。",
+        "risk_notes": [
+          "小红书平台对自动化访问限制较严，CLI 工具的长期可用性面临反爬政策变化风险。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "b6bb9341088f0954"
+        ],
+        "evidence_snippets": [
+          "Agent Reach 通过 xhs-cli（xiaohongshu-cli）让 Agent 搜索、阅读、评论和发帖小红书，安装 pipx install xiaohongshu-cli 后运行 xhs login 登录。",
+          "xhs-cli 是一个 1.5K Star 的开源工具，通过 pipx 一行安装，支持搜索、阅读、评论和发帖功能。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "yt-dlp",
+        "canonical_name": "yt-dlp",
+        "positioning": "开源的视频信息提取工具，支持 YouTube、B 站等 1800 多个网站的视频字幕和元数据提取，无需任何 API Key。",
+        "technical_signal": "支持多语言字幕提取和视频元数据解析，通过命令行直接调用即可获取视频信息，无需任何 API Key 或账号认证。",
+        "adoption_signal": "拥有 154K GitHub Star，是视频信息提取领域最广泛使用的开源工具之一，被 Agent Reach 用作 YouTube 和 B 站的视频字幕获取方案。",
+        "ecosystem_relevance": "作为视频内容提取的基础设施级工具，为 Agent 提供跨平台视频信息获取能力，是 Agent 处理多媒体内容的标准化渠道。",
+        "target_users": [],
+        "watch_reason": "yt-dlp 作为 154K Star 的成熟开源项目，是 Agent Reach 视频能力的基础依赖，其覆盖 1800+ 网站的能力为 Agent 提供了极为广泛的多媒体数据入口。",
+        "risk_notes": [
+          "部分视频平台对 yt-dlp 有反制措施，可能需要持续更新以应对平台接口变化。",
+          "视频字幕提取质量取决于源平台的字幕提供情况，非所有视频均有可用字幕。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "b6bb9341088f0954"
+        ],
+        "evidence_snippets": [
+          "Agent Reach 使用 yt-dlp 提取 YouTube 和 B 站的视频字幕及元数据，支持多语言字幕，无需 API Key。",
+          "yt-dlp 是一个 154K Star 的开源工具，支持 YouTube、B 站等 1800 多个网站的视频信息提取。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Jina Reader",
+        "canonical_name": "Jina Reader",
+        "positioning": "免费开源的网页内容读取工具，通过一条 curl 命令即可将任意 URL 的网页内容转换为可读文本格式，无需 API Key。",
+        "technical_signal": "通过 curl https://r.jina.ai/URL 即可获取清洗后的网页内容，无需复杂配置或认证，接口极简适合 Agent 直接调用。",
+        "adoption_signal": "拥有 9.8K GitHub Star，被 Agent Reach 选为网页阅读渠道的默认上游工具，作为免费且无需 Key 的网页阅读方案广受欢迎。",
+        "ecosystem_relevance": "为 AI Agent 提供零成本的网页内容读取能力，是 Agent 获取互联网文本信息的基础设施级工具，降低了 Agent 浏览网页的门槛。",
+        "target_users": [],
+        "watch_reason": "Jina Reader 以免费无需 Key 的方式提供网页内容读取服务，极大降低了 Agent 获取网页信息的门槛，作为 Agent Reach 网页阅读的默认选择值得持续跟踪其服务稳定性。",
+        "risk_notes": [
+          "免费服务可能存在请求频率限制或未来转为收费模式的风险。",
+          "依赖远程 API 的读取方式在网络不稳定时可能影响可用性。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "b6bb9341088f0954"
+        ],
+        "evidence_snippets": [
+          "Agent Reach 使用 Jina Reader 实现任意网页的阅读，通过 curl https://r.jina.ai/URL 即可读取网页内容。",
+          "Jina Reader 是一个 9.8K Star 的免费开源工具，不需要 API Key 即可使用。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "douyin-mcp-server",
+        "canonical_name": "douyin-mcp-server",
+        "url": "https://github.com/yzfly/douyin-mcp-server",
+        "positioning": "基于 MCP 协议的抖音视频解析服务，提供视频信息解析和无水印下载链接获取功能，无需用户登录即可使用。",
+        "technical_signal": "以 MCP 服务形式提供抖音视频解析能力，Agent 可通过 mcporter 调用 parse_douyin_video_info 等工具获取视频元数据，无需用户登录认证。",
+        "adoption_signal": "被 Agent Reach 选为抖音渠道的上游 MCP 工具，在 AI Agent 工具链中作为短视频内容解析的标准化接口。",
+        "ecosystem_relevance": "将抖音这一主流中文短视频平台接入 MCP 生态，拓展了 AI Agent 在中文短视频内容领域的解析和处理能力。",
+        "target_users": [],
+        "watch_reason": "douyin-mcp-server 以 MCP 协议标准接入抖音平台，体现了 Agent 工具向中文内容生态延伸的趋势，对 Agent 获取短视频内容有独特价值。",
+        "risk_notes": [
+          "抖音平台对第三方数据抓取行为管控严格，工具的长期可用性存在不确定性。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "b6bb9341088f0954"
+        ],
+        "evidence_snippets": [
+          "Agent Reach 通过 douyin-mcp-server 让 Agent 解析抖音视频信息并获取无水印下载链接，无需登录即可使用。",
+          "douyin-mcp-server 是一个 MCP 服务，Agent 可通过 mcporter 调用 parse_douyin_video_info 等工具解析抖音视频。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "mcporter",
+        "canonical_name": "mcporter",
+        "positioning": "MCP 协议的命令行调用工具，让 Agent 通过命令行直接调用 MCP 服务，桥接 MCP 生态与 CLI Agent 之间的能力。",
+        "technical_signal": "通过 mcporter call 命令将 MCP 服务的能力以 CLI 方式暴露给 Agent，实现了 MCP 协议与命令行 Agent 之间的互操作。",
+        "adoption_signal": "被 Agent Reach 用作 MCP 集成层，通过它接入 Exa 搜索、抖音、小红书、LinkedIn 等多个 MCP 服务，承载了 Agent Reach 中多个渠道的能力交付。",
+        "ecosystem_relevance": "作为 MCP 协议的命令行桥梁，mcporter 在扩展 Agent 能力边界方面具有基础设施价值，连接了 MCP 服务生态与 CLI-based Agent。",
+        "target_users": [],
+        "watch_reason": "mcporter 作为 MCP 协议与 CLI Agent 之间的桥接工具，被 Agent Reach 用于集成多个 MCP 服务，其发展对 Agent 工具链的 MCP 生态融合有重要风向标意义。",
+        "risk_notes": [
+          "MCP 协议仍在快速发展中，工具接口可能随协议升级而变化，需要持续适配。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "b6bb9341088f0954"
+        ],
+        "evidence_snippets": [
+          "Agent Reach 通过 mcporter 的 MCP 接入方式集成 Exa 搜索引擎、抖音解析、小红书、LinkedIn 等平台能力。",
+          "Agent 可以通过 mcporter call 命令调用各平台的 MCP 工具，如调用抖音视频解析和社交平台脚本提取工具。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "linkedin-scraper-mcp",
+        "canonical_name": "linkedin-scraper-mcp",
+        "positioning": "基于 MCP 协议的 LinkedIn 数据抓取服务，通过浏览器自动化实现 Profile 详情、公司页面浏览和职位搜索等功能。",
+        "technical_signal": "基于浏览器自动化的 MCP 服务，支持 LinkedIn Profile 详情获取、公司页面浏览和职位搜索，Agent 通过 mcporter 命令行调用。",
+        "adoption_signal": "拥有 1.2K GitHub Star，被 Agent Reach 选为 LinkedIn 渠道的上游 MCP 工具，在职业社交数据获取场景中有一定认可度。",
+        "ecosystem_relevance": "为 AI Agent 提供了访问 LinkedIn 职业社交数据的 MCP 接口，扩展了 Agent 在职场社交平台的数据获取范围和应用场景。",
+        "target_users": [],
+        "watch_reason": "linkedin-scraper-mcp 将 LinkedIn 数据接入 Agent 工具链，对需要职场信息的 AI 应用场景具有独特实用价值，其浏览器自动化方案的稳定性值得密切关注。",
+        "risk_notes": [
+          "基于浏览器自动化的实现方案容易受到 LinkedIn 反爬检测影响，运营风险和失效概率较高。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "b6bb9341088f0954"
+        ],
+        "evidence_snippets": [
+          "Agent Reach 通过 linkedin-scraper-mcp 让 Agent 获取 LinkedIn Profile 详情、公司页面和职位搜索能力。",
+          "linkedin-scraper-mcp 是一个 1.2K Star 的 MCP 服务，基于浏览器自动化实现 LinkedIn 数据抓取。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "github-trending",
@@ -973,38 +1906,56 @@
     "pipeline_stage": "fact_extracted",
     "id": "b88590c43555a909",
     "source_type": "community_discussion",
-    "tldr": "/last30days 是跨多平台的 AI 搜索工具，按社交参与度（点赞、投票、资金）排序全球信息。",
-    "objective_summary": "mvanhorn 开发了 /last30days 这一 AI 搜索工具，可并行搜索 Reddit、X、YouTube、TikTok、Polymarket、GitHub 等 14+ 平台，利用各平台公开 API 获取数据，按社交参与度指标排序结果，并通过 AI 代理合成摘要。",
+    "tldr": "mvanhorn/last30days-skill 是一个跨平台 AI 代理搜索技能，可同时搜索 Reddit、X、YouTube 等十余个封闭平台的内容，根据真实用户互动数据而非编辑推荐进行排序，支持在 50 多种 AI 代理平台上零配置运行。",
+    "objective_summary": "开发者 mvanhorn 发布了一个名为 last30days-skill 的 AI 代理搜索技能包，通过跨平台并行搜索和 AI 合成引擎，将 Reddit、X、YouTube、TikTok、GitHub 等十余个封闭平台的内容聚合为一份简报。该技能按照真实用户互动数据（点赞、投票、播放量等）而非 SEO 或编辑推荐进行排序，v3 引擎新增了实体预解析、幽默评分、话题聚类和竞品分析等功能。用户可通过 /last30days [主题] 指令在 Claude Code、Cursor、Copilot 等 50 多种 AI 代理平台上直接调用。",
     "event_type": "framework_tools",
-    "epistemic_status": "pr_statement",
+    "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
-        "OpenAI",
-        "Anthropic",
-        "Google",
         "Polymarket",
         "GitHub",
+        "Reddit",
+        "YouTube",
+        "TikTok",
+        "Instagram",
         "Digg",
+        "Threads",
+        "Pinterest",
+        "Bluesky",
         "Perplexity"
       ],
       "technologies": [
-        "MCP",
-        "AT Protocol",
-        "Sonar Pro"
+        "Agent Skills"
       ],
       "key_people": [
-        "mvanhorn",
         "Peter Steinberger",
-        "j-sperling"
+        "j-sperling",
+        "IMJustinBrooke"
       ]
     },
     "key_logic_flow": [
-      "/last30days 是一个 AI 代理驱动的搜索引擎，并行搜索 Reddit、X、YouTube、TikTok、Hacker News、Polymarket、GitHub 等 14+ 个平台，而非依赖单一搜索引擎。",
-      "搜索结果按社交参与度指标排序——Reddit 点赞数、X 互动量、Polymarket 资金押注等真实人群的注意力投票，而非传统 SEO 或编辑推荐。",
-      "v3 引擎在搜索前先进行预研究，解析话题关联的人物、社区和标签（如搜索 'OpenClaw' 自动解析到 @steipete、r/openclaw 等），再进行针对性并行搜索。",
-      "支持多种输出格式：聊天内摘要、自包含 HTML 简报、竞争对比模式（--competitors 自动发现竞品并并行分析）、ELI5 简明改写。",
-      "可通过 Claude Code 插件市场（/plugin marketplace add mvanhorn/last30days-skill）或 npx（npx skills add mvanhorn/last30days-skill -g）安装，支持 50+ 智能体宿主平台。",
-      "v3 新增幽默评分裁判、实体级故事聚类（同一主题跨平台合并）、以及按作者域搜索（针对人物话题切换到 GitHub PR/Release 搜索模式）。"
+      "mvanhorn/last30days-skill 是一个跨平台 AI 代理搜索技能，可同时搜索 Reddit、X、YouTube、TikTok、GitHub 等十余个封闭平台的内容。",
+      "该技能根据真实用户互动数据（点赞、投票、播放量等）而非编辑推荐或 SEO 进行搜索排序。",
+      "用户可通过 /last30days [主题] 指令在 Claude Code、Cursor、Copilot 等 50 多种 AI 代理平台上直接调用，无需额外配置。",
+      "v3 引擎引入了实体预解析功能，在搜索前先理解主题并自动解析出相关的社区和账号进行搜索。",
+      "该技能支持输出可分享的 HTML 格式简报，并保存到本地文件系统。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "mvanhorn/last30days-skill",
+        "canonical_name": "mvanhorn/last30days-skill",
+        "url": "https://github.com/mvanhorn/last30days-skill",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "该技能是一个跨平台 AI 代理搜索引擎，可同时搜索 Reddit、X、YouTube、TikTok、GitHub 等十余个封闭平台的内容。",
+          "安装后通过 /last30days [主题] 指令即可使用，支持在 Claude Code、Cursor、Copilot 等 50 多种 AI 代理平台上运行。",
+          "v3 引擎引入实体预解析功能，在搜索前先理解主题，然后自动解析出相关的社区和账号进行搜索。"
+        ],
+        "article_id": "b88590c43555a909"
+      }
     ],
     "impact_score": {
       "score": 4.8,
@@ -1058,7 +2009,34 @@
       "compound": "medium",
       "hype": "medium"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "mvanhorn/last30days-skill",
+        "canonical_name": "mvanhorn/last30days-skill",
+        "url": "https://github.com/mvanhorn/last30days-skill",
+        "positioning": "跨平台 AI 代理搜索技能，通过并行搜索 Reddit、X、YouTube 等十余个封闭平台，基于真实用户互动数据而非编辑推荐进行排序并生成合成简报。",
+        "technical_signal": "v3 引擎引入实体预解析功能，在搜索前先理解主题并自动解析出相关社区和账号进行搜索，结果经 AI 代理统一排序和合成。",
+        "adoption_signal": "支持在 Claude Code、Cursor、Copilot 等 50 多种 AI 代理平台上零配置运行，通过 /last30days [主题] 指令直接使用。",
+        "ecosystem_relevance": "采用 npx skills 和 /plugin marketplace 标准安装机制，与主流 AI 代理生态深度兼容，社区持续贡献新的数据源，生态扩展性强。",
+        "target_users": [],
+        "watch_reason": "该技能以真实用户互动数据（点赞、投票、播放量等）而非 SEO 或编辑推荐进行排序，填补了传统搜索引擎无法检索封闭平台内容的空白，在 AI 快速迭代场景中具有独特实用价值，且生态覆盖持续扩展。",
+        "risk_notes": [
+          "依赖各平台 API 密钥和浏览器会话，数据源的可用性和稳定性受第三方平台政策变化影响。",
+          "搜索质量高度依赖各平台用户生成内容质量，可能存在信息噪音和偏差，需持续关注排序算法的可靠性。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "b88590c43555a909"
+        ],
+        "evidence_snippets": [
+          "该技能是一个跨平台 AI 代理搜索引擎，可同时搜索 Reddit、X、YouTube、TikTok、GitHub 等十余个封闭平台的内容。",
+          "安装后通过 /last30days [主题] 指令即可使用，支持在 Claude Code、Cursor、Copilot 等 50 多种 AI 代理平台上运行。",
+          "v3 引擎引入实体预解析功能，在搜索前先理解主题，然后自动解析出相关的社区和账号进行搜索。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "github-trending",
@@ -1075,34 +2053,81 @@
     "pipeline_stage": "fact_extracted",
     "id": "bc1be22764a168b9",
     "source_type": "community_discussion",
-    "tldr": "PAI v5.0.0 是基于 Claude Code 构建的个人生命操作系统，通过 DA 和算法帮助用户从当前状态迈向理想状态。",
-    "objective_summary": "Daniel Miessler 发布 PAI v5.0.0（Life Operating System），一个基于 Claude Code 钩子系统构建的开源个人 AI 基础设施。系统包含 Pulse 仪表盘、DA 数字助理身份层和 Algorithm v6.3.",
+    "tldr": "danielmiessler/Personal_AI_Infrastructure（PAI）发布 v5.0.0 版本，定位从 AI 脚手架升级为\"生活操作系统\"。核心架构包括 Pulse 生活仪表盘、DA（数字助理）身份层和 Algorithm v6.3.0 算法，通过 ISA（理想状态工件）原语驱动当前状态向理想状态过渡。PAI 原生基于 Claude Code 构建，提供 45 项技能、171 个工作流和 37 个钩子。",
+    "objective_summary": "danielmiessler 于 2026 年 7 月 21 日发布 Personal_AI_Infrastructure（PAI）v5.0.0。该项目是一个开源的个人 AI 基础设施平台，定位为\"生活操作系统\"，通过三层架构（PAI 系统本身、Pulse 生活仪表盘、DA 数字助理）运作。PAI 使用 Algorithm v6.3.0 的七阶段循环驱动当前状态向理想状态过渡，以 ISA（理想状态工件）为核心原语。系统原生构建在 Claude Code 之上，提供 45 项技能、171 个工作流和 37 个钩子，可通过 curl 一键安装。项目还提供了无需安装完整 PAI 即可使用的独立 Packs 能力包。",
     "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [],
       "technologies": [
-        "PAI",
-        "Pulse",
-        "DA",
-        "ISA",
-        "ISC",
-        "Algorithm v6.3.0",
-        "TELOS",
         "RAG",
-        "Claude Code"
+        "Claude Code",
+        "MCP",
+        "ElevenLabs"
       ],
       "key_people": [
-        "Daniel Miessler"
+        "danielmiessler"
       ]
     },
     "key_logic_flow": [
-      "PAI v5.0.0 是一个基于 Claude Code 构建的生命操作系统，由 PAI（操作系统层）、Pulse（本地 31337 端口生命仪表盘）和 DA（数字助理身份层）三层架构组成。",
-      "系统核心算法 Algorithm v6.3.0 通过七阶段循环（当前状态→理想状态），使用分类器驱动模式和层级机制，以 ISA（Ideal State Artifact）作为通用理想状态表达原语。",
-      "PAI 自 2025 年 6 月起弃用 RAG，改用纯文本 Markdown 文件加 ripgrep 搜索替代向量检索，强调文件系统即索引的透明可解析架构。",
-      "系统内置 45 个技能、171 个工作流、37 个钩子和三层记忆系统（WORK、KNOWLEDGE、LEARNING），技能偏向确定性代码执行，层级为：代码→CLI→工作流→SKILL.md。",
-      "安装方式为一键脚本 curl -sSL https://ourpai.ai/install.sh | bash，安装后通过 /interview 引导用户完成 TELOS、IDEAL_STATE、偏好和身份四阶段配置。",
-      "PAI 与 Fabric 互补而非竞争：Fabric 提供 AI 提示词集合，PAI 提供 DA 操作基础设施（记忆、路由、上下文、自我改进）。"
+      "PAI v5.0.0 从 AI 脚手架升级为\"生活操作系统\"，核心三层架构包括 PAI 系统本身、Pulse 生活仪表盘和 DA 数字助理。",
+      "系统通过 Algorithm v6.3.0 的七阶段循环驱动当前状态向理想状态过渡，以 ISA（理想状态工件）作为核心表达原语。",
+      "PAI 自 2025 年 6 月起已弃用 RAG，改用富文本交叉引用加 ripgrep 搜索替代向量检索方案。",
+      "系统通过 curl 一键安装脚本完成部署，支持 Bun、Git 和 Claude Code 的自动验证，以及 ElevenLabs 密钥配置和 DA 身份设置。",
+      "安装后通过 /interview 流程引导用户完成 TELOS（使命、信念等）配置，这是 DA 优化的核心依据。",
+      "PAI 原生构建在 Claude Code 之上，将其视为引擎而 PAI 是完整的个人 AI 平台层，同时提供无需安装完整系统的独立 Packs 功能包。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "danielmiessler/Personal_AI_Infrastructure",
+        "canonical_name": "danielmiessler/Personal_AI_Infrastructure",
+        "url": "https://github.com/danielmiessler/Personal_AI_Infrastructure",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "PAI 是一个生活操作系统，通过三层架构（PAI 系统、Pulse 仪表盘和 DA 数字助理）捕获用户身份、关注事项和目标。",
+          "PAI v5.0.0 是最大版本更新，包含 45 项技能、171 个工作流、37 个钩子和 ISA 原语，支持通过 curl 一键安装。"
+        ],
+        "article_id": "bc1be22764a168b9"
+      },
+      {
+        "object_type": "product",
+        "name": "Pulse",
+        "canonical_name": "Pulse",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Pulse 是 PAI 的统一后台守护进程，提供运行在 localhost:31337 的 Life Dashboard 即生活仪表盘。",
+          "Pulse 作为 launchd 服务（com.pai.pulse）注册，用户可通过 open http://localhost:31337 访问仪表盘页面。"
+        ],
+        "article_id": "bc1be22764a168b9"
+      },
+      {
+        "object_type": "product",
+        "name": "PAI DA",
+        "canonical_name": "PAI DA",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "DA（Digital Assistant）是 PAI 的数字助理身份层，提供用户与之对话的声音和个性。",
+          "安装过程中会启动 DA 身份向导，引导用户设置名称、声音和个性参数。"
+        ],
+        "article_id": "bc1be22764a168b9"
+      },
+      {
+        "object_type": "product",
+        "name": "PAI Packs",
+        "canonical_name": "PAI Packs",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "Packs 是独立的、可通过 AI 安装的能力包，可以在不安装完整 PAI 的情况下添加到任何 AI 编码工具中。",
+          "每个 Pack 是一个自包含的提示，用户的 DA 读取后可通过简单的\"install this\"指令完成安装。"
+        ],
+        "article_id": "bc1be22764a168b9"
+      }
     ],
     "impact_score": {
       "score": 6.5,
@@ -1159,7 +2184,83 @@
       "compound": "high",
       "hype": "low"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "danielmiessler/Personal_AI_Infrastructure",
+        "canonical_name": "danielmiessler/Personal_AI_Infrastructure",
+        "url": "https://github.com/danielmiessler/Personal_AI_Infrastructure",
+        "positioning": "PAI 是一个开源的个人 AI 基础设施平台，v5.0.0 版本从 AI 脚手架升级为\"生活操作系统\"，通过三层架构捕获用户身份、关注事项和目标，驱动当前状态向理想状态过渡。",
+        "technical_signal": "PAI 原生构建在 Claude Code 之上，自 2025 年 6 月起已弃用 RAG，改用富文本交叉引用加 ripgrep 搜索替代向量检索方案。",
+        "adoption_signal": "项目提供 curl 一键安装脚本，安装过程自动验证 Bun、Git 和 Claude Code，并通过 /interview 流程引导用户完成 TELOS 配置。",
+        "ecosystem_relevance": "PAI 的 ISA 原语和 Algorithm v6.3.0 七阶段循环为个人 AI 系统设计提供了完整参考范式，对开源 AI 基础设施生态有重要影响。",
+        "target_users": [],
+        "watch_reason": "PAI v5.0.0 代表个人 AI 基础设施从工具集向\"生活操作系统\"的范式跃迁，其 ISA 原语、Algorithm 算法和三层架构为个人 AI 系统提供了完整的设计参考，且项目处于活跃迭代状态，值得持续跟踪其架构演进和社区采用情况。",
+        "risk_notes": [
+          "PAI 深度绑定 Claude Code 作为底层引擎，存在对单一 AI 平台的强依赖风险，未来模型生态的扩展能力受限。",
+          "个人\"生活操作系统\"涉及大量敏感隐私数据，当前数据安全与治理方案在真实场景下的充分性尚需验证。"
+        ],
+        "score": 8.0,
+        "article_ids": [
+          "bc1be22764a168b9"
+        ],
+        "evidence_snippets": [
+          "PAI 是一个生活操作系统，通过三层架构（PAI 系统、Pulse 仪表盘和 DA 数字助理）捕获用户身份、关注事项和目标。",
+          "PAI v5.0.0 是最大版本更新，包含 45 项技能、171 个工作流、37 个钩子和 ISA 原语，支持通过 curl 一键安装。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Pulse",
+        "canonical_name": "Pulse",
+        "positioning": "Pulse 是 PAI 的统一后台守护进程，提供运行在 localhost:31337 的 Life Dashboard（生活仪表盘），让用户可视化查看自身状态、目标和工作进度。",
+        "target_users": [
+          "PAI 系统使用者",
+          "追求系统化个人管理的技术用户"
+        ],
+        "product_signal": "Pulse 作为 launchd 服务（com.pai.pulse）注册，用户可通过 open http://localhost:31337 在浏览器中访问仪表盘页面，实现系统状态实时可视化。",
+        "differentiation": "Pulse 区别于通用仪表盘产品，它深度整合了 PAI 的 ISA 原语和 TELOS 体系，为用户提供围绕个人理想状态的目标追踪视图而非通用任务管理。",
+        "watch_reason": "Pulse 作为 PAI 三层架构的可视化层，其 Life Dashboard 设计理念反映了个人 AI 系统从纯命令行向可视化交互的演进方向，值得关注其功能扩展和用户体验迭代。",
+        "risk_notes": [
+          "Pulse 作为 PAI 内部组件深度绑定生态系统，缺乏独立使用价值，难以脱离 PAI 体系单独评估。",
+          "本地运行模式（localhost:31337）限制了远程访问能力，在多设备协同场景下用户体验受限。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "bc1be22764a168b9"
+        ],
+        "evidence_snippets": [
+          "Pulse 是 PAI 的统一后台守护进程，提供运行在 localhost:31337 的 Life Dashboard 即生活仪表盘。",
+          "Pulse 作为 launchd 服务（com.pai.pulse）注册，用户可通过 open http://localhost:31337 访问仪表盘页面。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "PAI DA",
+        "canonical_name": "PAI DA",
+        "positioning": "PAI DA（Digital Assistant）是 PAI 的数字助理身份层，为用户提供可定制的对话声音和个性，是用户与 PAI 系统进行自然交互的核心界面。",
+        "target_users": [
+          "追求个性化 AI 交互体验的用户",
+          "PAI 生态使用者"
+        ],
+        "product_signal": "安装过程中通过 DA 身份向导引导用户设置名称、声音和个性参数，并通过 /interview 流程完成 TELOS 配置以优化 DA 的个性化响应能力。",
+        "differentiation": "PAI DA 区别于通用 AI 助手，它深度绑定个人 TELOS（使命、信念、价值观等）体系，是\"每人一个 DA\"理念的核心实现，交互围绕理想状态而非通用问答。",
+        "watch_reason": "DA 代表\"每人一个数字助理\"的未来愿景，其基于 TELOS 的身份架构和个性化交互设计为个人 AI 助手的演进提供了独特参考路径，值得跟踪其能力边界和用户体验深度的演进。",
+        "risk_notes": [
+          "DA 的数字人格依赖用户主动完成 TELOS 配置，配置门槛较高可能导致多数用户无法充分利用其个性化能力。",
+          "单一 DA 架构在多角色、多场景切换时缺乏灵活适应机制，实际使用中可能面临身份与角色冲突问题。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "bc1be22764a168b9"
+        ],
+        "evidence_snippets": [
+          "DA（Digital Assistant）是 PAI 的数字助理身份层，提供用户与之对话的声音和个性。",
+          "安装过程中会启动 DA 身份向导，引导用户设置名称、声音和个性参数。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "github-trending",
@@ -1176,10 +2277,10 @@
     "pipeline_stage": "fact_extracted",
     "id": "da5e5724c2e93828",
     "source_type": "community_discussion",
-    "tldr": "CopilotKit 是一个跨平台 Agentic SDK，支持多框架生成式 UI 和人机协作工作流。",
-    "objective_summary": "CopilotKit 发布多平台 Agentic 框架 SDK，支持 React、Angular、Vue、React Native 等前端框架，实现生成式 UI、共享状态、人机协作（Human-in-the-Loop）及基于用户反馈的持续学习（CLHF），并已集成 Slack 和",
+    "tldr": "CopilotKit 是一个多平台智能体 SDK，支持 React、Angular、Vue、React Native 等框架构建全栈智能体应用，具备生成式 UI、共享状态和人在回路等功能。该公司还推出了被 Google、LangChain、AWS、Microsoft 等采用的 AG-UI 协议。",
+    "objective_summary": "CopilotKit 发布了其多平台智能体框架 SDK，支持在 React、Next.js、Angular、Vue、React Native 以及 Slack 和 Microsoft Teams 等平台上构建全栈智能体应用。核心功能包括生成式 UI、后端工具渲染、共享状态、人在回路（HITL）以及基于人类反馈的持续学习（CLHF）。该公司同时推出了 AG-UI 协议，已被 Google、LangChain、AWS、Microsoft、Mastra、PydanticAI 等采用，作为智能体与 UI 层之间的通信标准。开发者可通过 npx copilotkit@latest 命令行工具快速初始化和配置项目。",
     "event_type": "framework_tools",
-    "epistemic_status": "pr_statement",
+    "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
         "CopilotKit",
@@ -1195,17 +2296,73 @@
         "AG-UI Protocol",
         "Generative UI",
         "CLHF",
-        "Human-in-the-Loop"
+        "Chat UI",
+        "Shared State",
+        "Human-in-the-Loop",
+        "Backend Tool Rendering"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "CopilotKit 是一个多平台 Agentic 应用 SDK，支持 React、Angular、Vue、React Native 以及 Slack 和 Microsoft Teams 等平台。",
-      "核心功能包括生成式 UI（后端工具返回 UI 组件前端动态渲染）、共享状态层（代理和 UI 组件实时读写）、Human-in-the-Loop（代理暂停等待用户确认或编辑）和基于 CLHF 的持续自我学习。",
-      "CopilotKit 是 AG-UI 协议背后的公司，该协议已被 Google、LangChain、AWS、Microsoft、Mastra、PydanticAI 等采用。",
-      "提供 CLI 工具 npx copilotkit@latest create/init 快速搭建项目，并开放 useAgent hook 实现编程式代理控制。",
-      "与 LangChain、CrewAI、Mastra、PydanticAI 等主流 Agent 框架深度集成，支持统一的代理后端覆盖 Web、移动和聊天平台。",
-      "CopilotKit 开源仓库同时作为 Claude Code 插件提供 9 个技能（3 个核心包技能 + 6 个生命周期旅程技能）。"
+      "CopilotKit 是一个多平台智能体框架 SDK，最初为 React 库，现已扩展支持 Angular、Vue、React Native 以及 Slack 和 Microsoft Teams 等平台。",
+      "核心功能包括生成式 UI、后端工具渲染、共享状态、人在回路以及基于人类反馈的持续学习（CLHF）。",
+      "CopilotKit 是 AG-UI 协议背后的公司，该协议已被 Google、LangChain、AWS、Microsoft、Mastra、PydanticAI 等业界厂商采用。",
+      "开发者可通过 npx copilotkit@latest create 和 init 命令快速创建和配置智能体应用。",
+      "CLHF 功能允许智能体通过用户交互自动改进，无需模型微调，支持提示词自动增强和个性化用户适应。",
+      "CopilotKit 同时提供云端服务和自托管部署选项，以及面向企业的智能体平台。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "CopilotKit",
+        "canonical_name": "CopilotKit",
+        "url": "https://github.com/CopilotKit/CopilotKit",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "CopilotKit 是一个用于构建全栈智能体应用、生成式 UI 和聊天应用的最佳 SDK。",
+          "CopilotKit 支持 React、Next.js、Angular、Vue、React Native 等多种前端框架。",
+          "CopilotKit 现在允许将同一个智能体部署到 Slack 和 Microsoft Teams 平台。"
+        ],
+        "article_id": "da5e5724c2e93828"
+      },
+      {
+        "object_type": "project",
+        "name": "AG-UI Protocol",
+        "canonical_name": "AG-UI Protocol",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "AG-UI 协议已被 Google、LangChain、AWS、Microsoft、Mastra、PydanticAI 等公司采用。",
+          "AG-UI 是智能体与 UI 层之间的通信协议，CopilotKit 负责处理各框架的 UI 层。"
+        ],
+        "article_id": "da5e5724c2e93828"
+      },
+      {
+        "object_type": "product",
+        "name": "CopilotKit Cloud",
+        "canonical_name": "CopilotKit Cloud",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "CLHF 功能可通过 CopilotKit Cloud 或自托管方式使用，目前处于早期访问阶段。",
+          "CopilotKit 提供企业级智能体平台，可通过官网申请试用。"
+        ],
+        "article_id": "da5e5724c2e93828"
+      },
+      {
+        "object_type": "product",
+        "name": "CopilotKit Intelligence Platform",
+        "canonical_name": "CopilotKit Intelligence Platform",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "CopilotKit Intelligence Platform 的 CLHF 功能让智能体通过用户交互自动改进，无需模型微调。",
+          "CLHF 支持自动提示词增强、个性化用户适应以及跨会话的完整交互历史持久化。"
+        ],
+        "article_id": "da5e5724c2e93828"
+      }
     ],
     "impact_score": {
       "score": 6.5,
@@ -1265,7 +2422,58 @@
       "compound": "medium",
       "hype": "medium"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "CopilotKit",
+        "canonical_name": "CopilotKit",
+        "url": "https://github.com/CopilotKit/CopilotKit",
+        "positioning": "CopilotKit 是一个多平台智能体框架 SDK，支持 React、Angular、Vue 和 React Native 等框架构建全栈智能体应用，并可将同一智能体部署到 Slack 和 Microsoft Teams。",
+        "technical_signal": "实现了生成式 UI、后端工具渲染、共享状态、人在回路（HITL）及基于人类反馈的持续学习（CLHF）等核心技术能力。",
+        "adoption_signal": "其主导的 AG-UI 协议已被 Google、LangChain、AWS、Microsoft 等业界主要厂商采用，生态采用范围持续扩展。",
+        "ecosystem_relevance": "与 LangChain、CrewAI、Mastra、PydanticAI 等主流智能体框架深度集成，处于智能体 UI 层生态的关键枢纽位置。",
+        "target_users": [],
+        "watch_reason": "CopilotKit 从一个 React 库发展为多平台智能体框架，其 AG-UI 协议被 Google、AWS、Microsoft 等巨头采用，并持续扩展到移动端和企业通讯平台，展现出成为智能体 UI 层基础设施标准的潜力，值得跟踪其生态扩张和商业化进展。",
+        "risk_notes": [
+          "作为开源项目面临来自大型科技公司自有智能体框架的激烈竞争，差异化优势有待时间验证。",
+          "多平台兼容性维护成本较高，随着前端框架和智能体框架版本迭代可能出现兼容性断裂。",
+          "CLHF 和 AG-UI 协议均处于早期阶段，标准化进程和实际生产环境成熟度仍需持续观察。"
+        ],
+        "score": 8.0,
+        "article_ids": [
+          "da5e5724c2e93828"
+        ],
+        "evidence_snippets": [
+          "CopilotKit 是一个用于构建全栈智能体应用、生成式 UI 和聊天应用的最佳 SDK。",
+          "CopilotKit 支持 React、Next.js、Angular、Vue、React Native 等多种前端框架。",
+          "CopilotKit 现在允许将同一个智能体部署到 Slack 和 Microsoft Teams 平台。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "AG-UI Protocol",
+        "canonical_name": "AG-UI Protocol",
+        "positioning": "AG-UI 是智能体与 UI 层之间的开放式通信协议，由 CopilotKit 提出并已被多家业界主要厂商广泛采用。",
+        "technical_signal": "定义了智能体与前端 UI 层之间的标准通信协议，CopilotKit 负责处理各框架的 UI 层实现，支持跨框架的智能体 UI 渲染。",
+        "adoption_signal": "已被 Google、LangChain、AWS、Microsoft、Mastra、PydanticAI 等公司采用，展现出成为行业通用标准的潜力。",
+        "ecosystem_relevance": "作为智能体 UI 通信标准被多个主流智能体框架和云平台采纳，填补了智能体与前端之间的协议空白。",
+        "target_users": [],
+        "watch_reason": "AG-UI 协议作为智能体与 UI 层之间的通信标准，获得了 Google、AWS、Microsoft、LangChain 等关键厂商的采用，有潜力成为智能体生态的基础设施级协议，值得跟踪其标准化进程和在更广泛智能体框架中的渗透情况。",
+        "risk_notes": [
+          "作为单一公司（CopilotKit）主导的协议，存在被厂商锁定或单一实体控制标准化进程的风险。",
+          "面临来自其他智能体通信标准和协议生态的竞争，大规模普及仍面临不确定性。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "da5e5724c2e93828"
+        ],
+        "evidence_snippets": [
+          "AG-UI 协议已被 Google、LangChain、AWS、Microsoft、Mastra、PydanticAI 等公司采用。",
+          "AG-UI 是智能体与 UI 层之间的通信协议，CopilotKit 负责处理各框架的 UI 层。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "github-trending",
@@ -1282,28 +2490,85 @@
     "pipeline_stage": "fact_extracted",
     "id": "dc1245866190dc02",
     "source_type": "community_discussion",
-    "tldr": "MemPalace 发布本地优先 AI 记忆工具，可插拔后端，无需 API 即达 96.6% R@5。",
-    "objective_summary": "MemPalace 正式发布其本地优先的 AI 记忆系统，支持逐字存储对话历史、可插拔检索后端（默认 ChromaDB，可选 Qdrant/pgvector）和 29 个 MCP 工具。在 LongMemEval 基准上纯语义搜索达到 96.6% R@5，无需任何 API 调用或 LLM。",
+    "tldr": "MemPalace 是一个本地优先的 AI 记忆开源项目，以原文形式存储对话历史并通过语义搜索检索，在 LongMemEval 基准测试中纯语义搜索达到 96.6% R@5 召回率，无需任何 API 调用或 LLM 参与。",
+    "objective_summary": "MemPalace 是一个本地优先的开源 AI 记忆项目，以原文形式存储对话历史并通过语义搜索实现检索，不进行摘要、提取或改写操作。其默认向量存储后端为 ChromaDB，同时支持 Qdrant 和 pgvector 等可插拔后端方案。在 LongMemEval 500 道题的检索召回测试中，纯语义搜索模式达到 96.6% R@5 召回率，混合 v4 模式达到 98.4%，均无需 API 密钥或外部 LLM 参与。项目提供 29 个 MCP 工具和一个基于本地 SQLite 的时序知识图谱，数据默认不离开用户机器。",
     "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
-      "companies": [],
+      "companies": [
+        "MemPalace"
+      ],
       "technologies": [
         "ChromaDB",
         "Qdrant",
         "pgvector",
         "MCP",
-        "LongMemEval"
+        "SQLite",
+        "LongMemEval",
+        "LoCoMo",
+        "ConvoMem",
+        "MemBench",
+        "Semantic Search"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "MemPalace 是一个本地优先的 AI 记忆工具，以逐字原文形式存储对话历史，不做摘要、提取或重新表述。",
-      "检索层采用可插拔后端架构，默认使用 ChromaDB，可选 Qdrant（REST）和 pgvector（Postgres）作为外部后端，SQLite 精确匹配用于本地校验。",
-      "在 LongMemEval 基准测试（500 道题）中，纯语义搜索达到 96.6% R@5，混合模式 v4 达到 98.4% R@5，均无需任何 API 密钥或 LLM。",
-      "项目提供 29 个 MCP 工具，涵盖 palace 读写、知识图谱操作、跨翼导航、抽屉管理和代理日记，可与 Claude Code、Gemini CLI 等 MCP 客户端集成。",
-      "内置知识图谱组件（temporal entity-relationship graph with validity windows），基于本地 SQLite，支持添加、查询、失效和时间线操作。",
-      "支持 CLI、Docker 和 Python API 三种使用方式，通过 uv/pipx/pip 安装，提供 Claude Code hooks 实现定期保存和上下文压缩前的自动备份。"
+      "MemPalace 以全文形式存储对话历史并通过语义搜索检索，不做摘要、提取或改写，确保信息完整无损。",
+      "检索层采用可插拔架构，默认使用 ChromaDB 后端，也可切换为 Qdrant、pgvector 或 SQLite exact 后端。",
+      "在 LongMemEval 500 道题的测试中，纯语义搜索模式达到 96.6% R@5 召回率，混合 v4 模式达到 98.4%，均无需 LLM 或 API 密钥。",
+      "项目提供 29 个 MCP 工具，覆盖宫殿读写、知识图谱操作、跨 wing 导航和代理日记管理等功能。",
+      "内置基于本地 SQLite 的时序实体关系图谱，支持实体添加、关系查询、失效标记和 timeline 回溯。",
+      "该项目强调本地优先设计，数据默认不离开用户机器，使用 Qdrant 或 pgvector 等外部后端需用户明确选择启用。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "MemPalace/mempalace",
+        "canonical_name": "MemPalace/mempalace",
+        "url": "https://github.com/MemPalace/mempalace",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "MemPalace 以全文形式存储对话历史并通过语义搜索检索，不进行摘要、提取或改写，确保信息完整无损。",
+          "在 LongMemEval 500 道题的检索召回测试中，纯语义搜索模式达到 96.6% R@5 召回率，无需任何 API 密钥或 LLM 参与。",
+          "该项目采用可插拔检索层架构，默认使用 ChromaDB 后端，同时支持 Qdrant 和 pgvector 等外部存储方案。"
+        ],
+        "article_id": "dc1245866190dc02"
+      },
+      {
+        "object_type": "project",
+        "name": "ChromaDB",
+        "canonical_name": "ChromaDB",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "MemPalace 默认使用 ChromaDB 作为向量存储后端，其接口在 mempalace/backends/base.py 中定义，可被替换为其他后端实现。"
+        ],
+        "article_id": "dc1245866190dc02"
+      },
+      {
+        "object_type": "project",
+        "name": "Qdrant",
+        "canonical_name": "Qdrant",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "MemPalace 支持通过 MEMPALACE_QDRANT_URL 环境变量配置 Qdrant REST 后端，并可设置 API 密钥和命名空间进行租户隔离。"
+        ],
+        "article_id": "dc1245866190dc02"
+      },
+      {
+        "object_type": "project",
+        "name": "pgvector",
+        "canonical_name": "pgvector",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "MemPalace 支持 pgvector 作为 Postgres 后端，需安装 mempalace[pgvector] 可选驱动且服务器提供 vector 扩展。"
+        ],
+        "article_id": "dc1245866190dc02"
+      }
     ],
     "impact_score": {
       "score": 5.5,
@@ -1362,7 +2627,98 @@
       "compound": "medium",
       "hype": "medium"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "MemPalace/mempalace",
+        "canonical_name": "MemPalace/mempalace",
+        "url": "https://github.com/MemPalace/mempalace",
+        "positioning": "本地优先的 AI 记忆开源项目，以原文形式完整存储对话历史并通过语义搜索检索，不进行摘要、提取或改写操作。",
+        "technical_signal": "在 LongMemEval 500 道题测试中纯语义搜索达到 96.6% R@5 召回率，混合 v4 模式达 98.4%，无需 LLM 或 API 密钥参与。",
+        "adoption_signal": "项目提供 29 个 MCP 工具和本地时序知识图谱，支持 uv/pipx/Docker 安装，可集成到 Claude Code 等 MCP 客户端使用。",
+        "ecosystem_relevance": "采用可插拔检索层架构，默认 ChromaDB 后端，支持切换为 Qdrant、pgvector 或 SQLite exact 后端，适应不同部署场景。",
+        "target_users": [],
+        "watch_reason": "MemPalace 以\"不摘要、不改写\"的全文存储策略在 AI 记忆赛道走出差异化路线，纯语义搜索即可达 96.6% 召回率且无需外部 LLM，结合 MCP 协议融入现有 AI 工具生态，是本地优先 AI 记忆基础设施的有力竞争者。",
+        "risk_notes": [
+          "全文存储策略在对话量极大时可能面临存储膨胀问题，长周期运行后的存储开销与检索性能尚需验证。",
+          "项目仍处于早期阶段，社区规模和生态系统成熟度有限，长期维护可持续性有待观察。"
+        ],
+        "score": 8.0,
+        "article_ids": [
+          "dc1245866190dc02"
+        ],
+        "evidence_snippets": [
+          "MemPalace 以全文形式存储对话历史并通过语义搜索检索，不进行摘要、提取或改写，确保信息完整无损。",
+          "在 LongMemEval 500 道题的检索召回测试中，纯语义搜索模式达到 96.6% R@5 召回率，无需任何 API 密钥或 LLM 参与。",
+          "该项目采用可插拔检索层架构，默认使用 ChromaDB 后端，同时支持 Qdrant 和 pgvector 等外部存储方案。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "ChromaDB",
+        "canonical_name": "ChromaDB",
+        "positioning": "开源嵌入式向量数据库，为 MemPalace 提供默认的本地向量存储检索能力，无需额外配置即可运行。",
+        "technical_signal": "在 MemPalace 中作为默认向量存储后端，其接口被定义为可替换的后端抽象，支持交换为其他向量数据库。",
+        "adoption_signal": "作为 MemPalace 默认后端用户无需额外配置即可获得本地向量检索能力，降低了 AI 记忆系统的部署门槛。",
+        "ecosystem_relevance": "通过 MemPalace 的可插拔后端架构与之深度集成，成为本地优先 AI 记忆方案的核心存储组件之一。",
+        "target_users": [],
+        "watch_reason": "作为 MemPalace 默认向量后端，随该项目在 AI 记忆场景的成长可能获得更多采用，但其角色为可替换组件而非唯一选型。",
+        "risk_notes": [
+          "作为项目依赖项，其在 MemPalace 生态中的角色是可替换的，不一定能持续绑定在默认后端位置。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "dc1245866190dc02"
+        ],
+        "evidence_snippets": [
+          "MemPalace 默认使用 ChromaDB 作为向量存储后端，其接口在 mempalace/backends/base.py 中定义，可被替换为其他后端实现。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Qdrant",
+        "canonical_name": "Qdrant",
+        "positioning": "开源向量数据库，通过 REST API 为 MemPalace 提供可选的云原生向量存储后端，支持租户隔离与命名空间管理。",
+        "technical_signal": "MemPalace 支持通过 MEMPALACE_QDRANT_URL 等环境变量配置 Qdrant REST 后端，具备 API 密钥和命名空间租户隔离能力。",
+        "adoption_signal": "作为 MemPalace 可选的外部存储后端，用户需明确选择启用，数据将发送到配置的 Qdrant 服务器而非本地默认存储。",
+        "ecosystem_relevance": "与 MemPalace 的可插拔后端架构兼容，为需要云原生分布式向量存储的用户提供从本地到远端的弹性部署选项。",
+        "target_users": [],
+        "watch_reason": "作为 MemPalace 支持的外部向量存储后端之一，为需要分布式存储或云部署场景的用户提供弹性扩展方案，验证了 REST 后端在 AI 记忆系统中的可行性。",
+        "risk_notes": [
+          "使用外部 Qdrant 后端时数据将离开用户本地机器，需用户明确 opt-in，存在数据隐私与传输安全考量。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "dc1245866190dc02"
+        ],
+        "evidence_snippets": [
+          "MemPalace 支持通过 MEMPALACE_QDRANT_URL 环境变量配置 Qdrant REST 后端，并可设置 API 密钥和命名空间进行租户隔离。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "pgvector",
+        "canonical_name": "pgvector",
+        "positioning": "PostgreSQL 的向量检索扩展，为 MemPalace 提供基于 SQL/JSONB 的向量存储后端，面向已有 Postgres 基础设施的团队。",
+        "technical_signal": "MemPalace 支持 pgvector 作为 Postgres 后端，需安装 mempalace[pgvector] 可选驱动且服务器提供 vector 扩展。",
+        "adoption_signal": "作为 MemPalace 可选后端之一，面向已有 Postgres 基础设施的用户群体，通过命名空间实现多租户隔离。",
+        "ecosystem_relevance": "通过 MemPalace 可插拔架构集成，为 Postgres 生态用户提供 AI 记忆存储方案，降低引入新存储系统的迁移成本。",
+        "target_users": [],
+        "watch_reason": "成为 MemPalace 三种可选后端之一，验证了 pgvector 作为通用向量存储方案在 AI 记忆场景的适用性，为 Postgres 用户提供无缝整合路径。",
+        "risk_notes": [
+          "依赖 Postgres 服务器提供 vector 扩展，部署复杂度相对高于本地嵌入式方案如 ChromaDB。",
+          "pgvector 在向量检索性能与精度方面与专用向量数据库存在差距，大规模场景下需评估。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "dc1245866190dc02"
+        ],
+        "evidence_snippets": [
+          "MemPalace 支持 pgvector 作为 Postgres 后端，需安装 mempalace[pgvector] 可选驱动且服务器提供 vector 扩展。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "github-trending",
@@ -1379,8 +2735,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "f36df30631aaa417",
     "source_type": "community_discussion",
-    "tldr": "OpenAI 发布 Codex 插件示例仓库，包含 Figma、Notion 等多款开发工具插件。",
-    "objective_summary": "OpenAI 在 GitHub 上发布了一个 curated 的 Codex 插件示例仓库，每个插件位于 plugins/<name>/ 目录下，包含必需的 plugin.json 清单文件和可选的 skills、agents、commands 等配套文件。",
+    "tldr": "OpenAI 在 GitHub 上发布了 openai/plugins 仓库，提供精选的 Codex 插件示例集合，每个插件包含必需的 .codex-plugin/plugin.json 清单文件和可选的技能、MCP 配置等辅助组件。",
+    "objective_summary": "OpenAI 在 GitHub 上维护了 openai/plugins 仓库，这是一个精选的 Codex 插件示例集合。每个插件以 plugins/<名称>/ 目录组织，必须包含 .codex-plugin/plugin.json 清单文件，并可选择集成 skills/、.app.json、.mcp.json、agents/、commands/、hooks.json、assets/ 等辅助组件。仓库高亮展示了 Figma、Notion、iOS 应用构建、macOS 应用构建、Web 应用构建、Expo、Netlify、Remotion 和 Google Slides 等丰富插件示例，为开发者提供 Codex 插件开发的参考实现。",
     "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
@@ -1388,16 +2744,147 @@
         "OpenAI"
       ],
       "technologies": [
-        "Codex"
+        "Codex",
+        "MCP",
+        "SwiftUI",
+        "AppKit",
+        "React Native",
+        "Expo",
+        "EAS"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "OpenAI 在 GitHub 上发布了 openai/plugins 仓库，包含经过筛选的 Codex 插件示例集合。",
-      "每个插件位于 plugins/<name>/ 目录下，必须包含 .codex-plugin/plugin.json 清单文件。",
-      "插件可选的配套表面包括 skills/、.app.json、.mcp.json、agents/、commands/、hooks.json、assets/ 等。",
-      "仓库重点示例包括：Figma 插件（设计系统规则、Code to Canvas）、Notion 插件（规划与研究）、iOS/macOS/Web 应用构建插件、Expo 和 Netlify 插件等。",
-      "这些插件支持 MCP（Model Context Protocol）和技能（skills）等扩展机制。"
+      "OpenAI 在 GitHub 上发布了 openai/plugins 仓库，提供精选的 Codex 插件示例集合。",
+      "每个插件以 plugins/<名称>/ 目录组织，必须包含核心的 .codex-plugin/plugin.json 清单文件。",
+      "插件可选择集成 skills/、.app.json、.mcp.json、agents/、commands/、hooks.json、assets/ 等辅助组件。",
+      "高亮示例包括 Figma 插件（设计工具集成、Code to Canvas 和设计系统规则）和 Notion 插件（计划、研究、会议和知识捕获）。",
+      "开发类插件涵盖 iOS（SwiftUI 实现与调试）、macOS（SwiftUI/AppKit 工作流）和 Web 应用（部署、UI、支付和数据库）。",
+      "其他高亮插件包含 Expo（React Native 与 EAS 工作流）、Netlify、Remotion 和 Google Slides 等集成示例。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "openai/plugins",
+        "canonical_name": "openai/plugins",
+        "url": "https://github.com/openai/plugins",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "OpenAI 在 GitHub 上维护的 openai/plugins 仓库提供精选的 Codex 插件示例集合，每个插件以 plugins/<名称>/ 目录组织。",
+          "每个插件必须包含必需的 .codex-plugin/plugin.json 清单文件，并可选择集成 skills/、.app.json、.mcp.json 等辅助组件。"
+        ],
+        "article_id": "f36df30631aaa417"
+      },
+      {
+        "object_type": "project",
+        "name": "plugins/figma",
+        "canonical_name": "openai/plugins/figma",
+        "url": "https://github.com/openai/plugins/tree/main/plugins/figma",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "该插件示例用于 Figma 设计工具集成，包含 use_figma 技能、Code to Canvas、Code Connect 以及设计系统规则等功能。"
+        ],
+        "article_id": "f36df30631aaa417"
+      },
+      {
+        "object_type": "project",
+        "name": "plugins/notion",
+        "canonical_name": "openai/plugins/notion",
+        "url": "https://github.com/openai/plugins/tree/main/plugins/notion",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "该插件示例用于 Notion 协作平台的集成，涵盖计划制定、研究、会议记录和知识捕获等工作流。"
+        ],
+        "article_id": "f36df30631aaa417"
+      },
+      {
+        "object_type": "project",
+        "name": "plugins/build-ios-apps",
+        "canonical_name": "openai/plugins/build-ios-apps",
+        "url": "https://github.com/openai/plugins/tree/main/plugins/build-ios-apps",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "该插件示例为 iOS 应用开发提供指导，包含 SwiftUI 实现、代码重构、性能优化和调试等主题。"
+        ],
+        "article_id": "f36df30631aaa417"
+      },
+      {
+        "object_type": "project",
+        "name": "plugins/build-macos-apps",
+        "canonical_name": "openai/plugins/build-macos-apps",
+        "url": "https://github.com/openai/plugins/tree/main/plugins/build-macos-apps",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "该插件示例覆盖 macOS 平台 SwiftUI/AppKit 开发工作流，包括构建、运行、调试循环和打包指导。"
+        ],
+        "article_id": "f36df30631aaa417"
+      },
+      {
+        "object_type": "project",
+        "name": "plugins/build-web-apps",
+        "canonical_name": "openai/plugins/build-web-apps",
+        "url": "https://github.com/openai/plugins/tree/main/plugins/build-web-apps",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "该插件示例为 Web 应用开发提供工作流指导，涉及部署、UI 设计、支付集成和数据库操作等主题。"
+        ],
+        "article_id": "f36df30631aaa417"
+      },
+      {
+        "object_type": "project",
+        "name": "plugins/expo",
+        "canonical_name": "openai/plugins/expo",
+        "url": "https://github.com/openai/plugins/tree/main/plugins/expo",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "该插件示例用于 Expo 和 React Native 应用开发，涵盖 SDK 升级、EAS 工作流和 Codex Run 操作。"
+        ],
+        "article_id": "f36df30631aaa417"
+      },
+      {
+        "object_type": "project",
+        "name": "plugins/netlify",
+        "canonical_name": "openai/plugins/netlify",
+        "url": "https://github.com/openai/plugins/tree/main/plugins/netlify",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "该插件示例提供 Netlify 平台集成相关的公共技能和 MCP 支持的插件功能。"
+        ],
+        "article_id": "f36df30631aaa417"
+      },
+      {
+        "object_type": "project",
+        "name": "plugins/remotion",
+        "canonical_name": "openai/plugins/remotion",
+        "url": "https://github.com/openai/plugins/tree/main/plugins/remotion",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "该插件示例用于 Remotion 视频编程框架集成，提供公共技能和 MCP 支持的插件功能。"
+        ],
+        "article_id": "f36df30631aaa417"
+      },
+      {
+        "object_type": "project",
+        "name": "plugins/google-slides",
+        "canonical_name": "openai/plugins/google-slides",
+        "url": "https://github.com/openai/plugins/tree/main/plugins/google-slides",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "该插件示例实现 Google Slides 集成，提供公共技能和 MCP 支持的插件功能。"
+        ],
+        "article_id": "f36df30631aaa417"
+      }
     ],
     "impact_score": {
       "score": 6.0,
@@ -1456,6 +2943,217 @@
       "compound": "medium",
       "hype": "medium"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "openai/plugins",
+        "canonical_name": "openai/plugins",
+        "url": "https://github.com/openai/plugins",
+        "positioning": "OpenAI 在 GitHub 上维护的 Codex 插件官方示例集合，定义了从 Figma 设计工具到 iOS、macOS 和 Web 应用等多场景的插件开发标准和组件架构。",
+        "technical_signal": "定义了 .codex-plugin/plugin.json 清单文件作为插件核心标准，并支持 skills、MCP 配置、agents、commands、hooks 等可扩展组件架构，具备良好的模块化设计。",
+        "adoption_signal": "由 OpenAI 官方团队维护，作为 Codex 插件生态的权威参考实现仓库，已收录 10 个以上覆盖设计、协作、开发等领域的插件示例。",
+        "ecosystem_relevance": "直接服务于 Codex 插件开发生态，覆盖设计工具、协作平台、移动开发、Web 开发和部署平台等多个技术领域，有助于降低第三方插件开发门槛。",
+        "target_users": [],
+        "watch_reason": "OpenAI 官方推出的 Codex 插件标准和最佳实践集合，定义了 Codex 生态的插件开发规范，其组件架构和清单文件标准将深刻影响第三方插件开发方向，值得持续跟踪其版本迭代和生态建设进展。",
+        "risk_notes": [
+          "仓库当前定位为示例集合而非正式 SDK，API 和清单格式可能随 Codex 版本迭代发生不兼容变更。",
+          "部分插件示例功能较为基础，实际生产集成可能需要对开源代码进行额外定制开发。"
+        ],
+        "score": 8.0,
+        "article_ids": [
+          "f36df30631aaa417"
+        ],
+        "evidence_snippets": [
+          "OpenAI 在 GitHub 上维护的 openai/plugins 仓库提供精选的 Codex 插件示例集合，每个插件以 plugins/<名称>/ 目录组织。",
+          "每个插件必须包含必需的 .codex-plugin/plugin.json 清单文件，并可选择集成 skills/、.app.json、.mcp.json 等辅助组件。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "plugins/figma",
+        "canonical_name": "openai/plugins/figma",
+        "url": "https://github.com/openai/plugins/tree/main/plugins/figma",
+        "positioning": "openai/plugins 仓库中的 Figma 设计工具集成插件示例，通过 use_figma 技能实现 Codex 与设计工作流的双向交互。",
+        "technical_signal": "该插件示例展示了通过 use_figma 技能实现 Codex 与 Figma 的双向交互，涵盖 Code to Canvas、Code Connect 以及设计系统规则等技术能力。",
+        "ecosystem_relevance": "作为 Codex 与主流设计工具 Figma 的官方集成示例，对设计系统自动化和开发者体验工作流具有示范价值。",
+        "target_users": [],
+        "watch_reason": "作为 OpenAI 官方提供的 Figma 集成参考实现，展示了 Codex 在设计工具领域的插件能力边界，对 AI 辅助设计工作流和设计系统自动化具有重要示范价值。",
+        "risk_notes": [
+          "该插件仍为参考示例，实际生产环境中的深度 Figma 集成可能需要更多定制开发和权限管理。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "f36df30631aaa417"
+        ],
+        "evidence_snippets": [
+          "该插件示例用于 Figma 设计工具集成，包含 use_figma 技能、Code to Canvas、Code Connect 以及设计系统规则等功能。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "plugins/notion",
+        "canonical_name": "openai/plugins/notion",
+        "url": "https://github.com/openai/plugins/tree/main/plugins/notion",
+        "positioning": "openai/plugins 仓库中的 Notion 协作平台集成插件示例，将 Codex 能力延伸至计划制定、研究和知识捕获等工作流。",
+        "ecosystem_relevance": "作为 Codex 与 Notion 协作平台的官方集成示例，拓展了 AI 编程助手在知识管理和团队协作场景中的应用边界。",
+        "target_users": [],
+        "watch_reason": "作为 OpenAI 官方提供的 Notion 协作集成参考，展示了 Codex 在知识管理和团队协作工作流中的插件扩展方向，值得关注其工作流覆盖深度和与 Notion API 的整合方式。",
+        "risk_notes": [
+          "该插件仍为参考示例，实际企业级 Notion 集成可能涉及更复杂的权限管理和工作流定制需求。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "f36df30631aaa417"
+        ],
+        "evidence_snippets": [
+          "该插件示例用于 Notion 协作平台的集成，涵盖计划制定、研究、会议记录和知识捕获等工作流。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "plugins/build-ios-apps",
+        "canonical_name": "openai/plugins/build-ios-apps",
+        "url": "https://github.com/openai/plugins/tree/main/plugins/build-ios-apps",
+        "positioning": "openai/plugins 仓库中的 iOS 应用开发插件示例，为 Codex 在 SwiftUI 开发场景中的代码生成和调试能力提供参考实现。",
+        "technical_signal": "该插件示例覆盖 SwiftUI 实现、代码重构、性能优化和调试等 iOS 开发技术栈，展示 Codex 在移动端原生开发中的辅助能力。",
+        "ecosystem_relevance": "作为 Codex 在 iOS 原生开发场景的官方示例，有助于推动 AI 编程助手在 Apple 生态中的应用落地。",
+        "target_users": [],
+        "watch_reason": "作为 OpenAI 官方提供的 iOS 开发插件参考，展示了 Codex 在 SwiftUI 实现和调试等原生移动开发场景中的能力边界，对评估 AI 编程助手的平台覆盖度具有参考价值。",
+        "risk_notes": [
+          "该插件示例侧重工作流指导而非完整工具链，实际工程中的复杂 iOS 项目可能还需要更多项目上下文感知。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "f36df30631aaa417"
+        ],
+        "evidence_snippets": [
+          "该插件示例为 iOS 应用开发提供指导，包含 SwiftUI 实现、代码重构、性能优化和调试等主题。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "plugins/build-macos-apps",
+        "canonical_name": "openai/plugins/build-macos-apps",
+        "url": "https://github.com/openai/plugins/tree/main/plugins/build-macos-apps",
+        "positioning": "openai/plugins 仓库中的 macOS 应用开发插件示例，将 Codex 能力覆盖至 SwiftUI/AppKit 开发工作流和打包流程。",
+        "technical_signal": "该插件示例覆盖 macOS 平台 SwiftUI/AppKit 开发工作流，包含构建、运行、调试循环和打包指导等完整技术流程。",
+        "ecosystem_relevance": "作为 Codex 在 macOS 桌面开发场景的官方示例，有助于评估 AI 编程助手在桌面端原生开发中的技术覆盖度。",
+        "target_users": [],
+        "watch_reason": "作为 OpenAI 官方提供的 macOS 开发插件参考，展示了 Codex 在桌面端 SwiftUI/AppKit 开发工作流中的集成能力，对评估 AI 编程助手在 Apple 全平台生态中的覆盖度具有参考价值。",
+        "risk_notes": [
+          "macOS 桌面开发涉及系统级 API 和沙箱限制，插件示例的实用性依赖于 Codex 对平台特性的持续适配。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "f36df30631aaa417"
+        ],
+        "evidence_snippets": [
+          "该插件示例覆盖 macOS 平台 SwiftUI/AppKit 开发工作流，包括构建、运行、调试循环和打包指导。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "plugins/build-web-apps",
+        "canonical_name": "openai/plugins/build-web-apps",
+        "url": "https://github.com/openai/plugins/tree/main/plugins/build-web-apps",
+        "positioning": "openai/plugins 仓库中的 Web 应用开发插件示例，涵盖从部署到数据库操作的全栈开发工作流。",
+        "technical_signal": "该插件示例涵盖部署、UI 设计、支付集成和数据库操作等 Web 开发技术栈，展示 Codex 在前后端全栈开发场景中的综合能力。",
+        "ecosystem_relevance": "作为 Codex 在 Web 全栈开发场景的官方示例，涉及部署平台、支付服务和数据库等关键生态组件集成。",
+        "target_users": [],
+        "watch_reason": "作为 OpenAI 官方提供的 Web 全栈开发插件参考，展示了 Codex 在部署、UI、支付和数据库等关键 Web 开发环节中的集成能力，对评估 AI 编程助手的全栈覆盖度具有参考价值。",
+        "risk_notes": [
+          "Web 技术栈碎片化严重，插件示例可能无法覆盖所有主流框架和部署方案的组合。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "f36df30631aaa417"
+        ],
+        "evidence_snippets": [
+          "该插件示例为 Web 应用开发提供工作流指导，涉及部署、UI 设计、支付集成和数据库操作等主题。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "plugins/expo",
+        "canonical_name": "openai/plugins/expo",
+        "url": "https://github.com/openai/plugins/tree/main/plugins/expo",
+        "positioning": "openai/plugins 仓库中的 Expo 与 React Native 开发插件示例，聚焦移动跨平台开发工作流和 SDK 管理。",
+        "technical_signal": "该插件示例涉及 Expo SDK 升级、EAS 工作流和 Codex Run 操作，展示 Codex 在 React Native 跨平台移动开发生态中的技术集成。",
+        "ecosystem_relevance": "作为 Codex 在 Expo/React Native 跨平台移动开发生态的官方示例，有助于推动 AI 编程助手在混合移动开发领域的应用。",
+        "target_users": [],
+        "watch_reason": "作为 OpenAI 官方提供的 Expo 集成示例，展示了 Codex 在跨平台移动开发工作流中的能力，对评估 AI 编程助手在 React Native 生态中的适配深度具有参考意义。",
+        "risk_notes": [
+          "Expo 生态和 EAS 工作流迭代较快，插件示例可能需要持续更新以保持与最新 SDK 版本的兼容性。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "f36df30631aaa417"
+        ],
+        "evidence_snippets": [
+          "该插件示例用于 Expo 和 React Native 应用开发，涵盖 SDK 升级、EAS 工作流和 Codex Run 操作。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "plugins/netlify",
+        "canonical_name": "openai/plugins/netlify",
+        "url": "https://github.com/openai/plugins/tree/main/plugins/netlify",
+        "positioning": "openai/plugins 仓库中的 Netlify 平台集成插件示例，将 Codex 能力延伸至现代 Web 部署和托管平台。",
+        "ecosystem_relevance": "作为 Codex 与 Netlify 部署平台的集成示例，拓展了 AI 编程助手在 CI/CD 和前端托管生态中的应用场景。",
+        "target_users": [],
+        "watch_reason": "作为 OpenAI 示例仓库中的 Netlify 集成参考，展示了 Codex 在前端部署和托管平台领域的扩展方向，值得关注其与部署工作流的整合深度。",
+        "risk_notes": [
+          "该插件为中等置信度示例，具体实现细节和可用性有待进一步验证。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "f36df30631aaa417"
+        ],
+        "evidence_snippets": [
+          "该插件示例提供 Netlify 平台集成相关的公共技能和 MCP 支持的插件功能。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "plugins/remotion",
+        "canonical_name": "openai/plugins/remotion",
+        "url": "https://github.com/openai/plugins/tree/main/plugins/remotion",
+        "positioning": "openai/plugins 仓库中的 Remotion 视频编程框架集成插件示例，探索 Codex 在程序化视频生成领域的应用。",
+        "ecosystem_relevance": "作为 Codex 与 Remotion 视频编程框架的集成示例，探索了 AI 编程助手在创意编程和视频生成领域的可能性。",
+        "target_users": [],
+        "watch_reason": "作为 OpenAI 示例仓库中的 Remotion 集成参考，展示了 Codex 向视频编程和创意编码领域扩展的潜力，对评估 AI 编程助手的跨领域适用性具有参考意义。",
+        "risk_notes": [
+          "该插件为中等置信度示例，Remotion 场景相对小众，实际采用率可能有限。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "f36df30631aaa417"
+        ],
+        "evidence_snippets": [
+          "该插件示例用于 Remotion 视频编程框架集成，提供公共技能和 MCP 支持的插件功能。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "plugins/google-slides",
+        "canonical_name": "openai/plugins/google-slides",
+        "url": "https://github.com/openai/plugins/tree/main/plugins/google-slides",
+        "positioning": "openai/plugins 仓库中的 Google Slides 集成插件示例，将 Codex 能力延伸至在线演示文档制作场景。",
+        "ecosystem_relevance": "作为 Codex 与 Google Slides 在线办公套件的集成示例，拓展了 AI 编程助手在文档自动化生成领域的应用场景。",
+        "target_users": [],
+        "watch_reason": "作为 OpenAI 示例仓库中的 Google Slides 集成参考，展示了 Codex 向在线办公和演示文档自动化领域扩展的方向，值得关注其与 Google Workspace 生态的整合方式。",
+        "risk_notes": [
+          "该插件为中等置信度示例，Google Slides API 存在调用频率和权限限制，实际大规模使用可能受限。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "f36df30631aaa417"
+        ],
+        "evidence_snippets": [
+          "该插件示例实现 Google Slides 集成，提供公共技能和 MCP 支持的插件功能。"
+        ]
+      }
+    ]
   }
 ]

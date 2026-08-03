@@ -153,15 +153,14 @@
     "pipeline_stage": "fact_extracted",
     "id": "195d89ae5bcccbcb",
     "source_type": "academic_paper",
-    "tldr": "SEAGym 是一个用于评估自进化 LLM 代理框架（agent harness）的多维度测试环境。",
-    "objective_summary": "研究团队提出 SEAGym，一个用于评估自进化 LLM 代理框架更新的测试环境，覆盖训练、验证、测试、回放和成本记录。在 Terminal-Bench 2.0 和 HLE 上对比 ACE、TF-GRPO、AHE 三种方法，发现频繁更新不一定提升保留集性能，中间快照可能后续失效。",
+    "tldr": "SEAGym 是一个用于评估自进化 LLM Agent 框架更新的评测环境，在 Terminal-Bench 2.0 和 HLE 上对比了 ACE、TF-GRPO 和 AHE 三种方法，发现频繁更新可能无法提升留出性能且中间快照可能在后继更新中崩溃。",
+    "objective_summary": "研究者提出了 SEAGym，一个专为自进化 LLM Agent 设计的评测环境，用于衡量 agent harness（包括提示词、记忆、工具、中间件、运行时状态及模型-工具交互循环）的更新效果。SEAGym 提供训练、验证、测试、回放和成本记录五个维度的评估视图，将 Harbor 兼容基准测试转化为动态自进化任务源。研究者在 Terminal-Bench 2.0 和 HLE 上实例化 SEAGym，对比了 ACE、TF-GRPO 和 AHE 三种方法，结果表明频繁更新可能无法提升留出测试集性能，有用中间快照可能在后继更新中崩溃，且源多样性与模型后端影响框架可靠性。",
     "event_type": "framework_tools",
-    "epistemic_status": "theoretical_claim",
+    "epistemic_status": "verified_fact",
     "entities": {
       "companies": [],
       "technologies": [
         "SEAGym",
-        "LLM",
         "ACE",
         "TF-GRPO",
         "AHE",
@@ -172,11 +171,93 @@
       "key_people": []
     },
     "key_logic_flow": [
-      "SEAGym 是一个专为自进化 LLM 代理框架（agent harness）设计的评估环境，覆盖训练、验证、测试、回放和成本记录五个维度。",
-      "现有评估方法将代理进化简化为孤立任务分数或单条序列曲线，无法判断更新是否产生可复用改进、过拟合、增加成本或损害旧行为。",
-      "SEAGym 将 Harbor 兼容的基准测试转化为动态自进化任务源，提供训练批次、冻结更新验证、ID/OOD 迁移视图、回放诊断及快照记录。",
-      "研究者在 Terminal-Bench 2.0 和 HLE 上对 ACE、TF-GRPO 和 AHE 三种方法进行了对比实验。",
-      "实验发现：频繁更新未必提升保留集性能，有用的中间快照可能在后续训练中失效，来源多样性和模型后端影响代理框架的可靠性。"
+      "SEAGym 是一个专门用于评估自进化 LLM Agent 的评测环境，核心关注 agent harness 层面的更新，包括提示词、记忆、工具、中间件和运行时状态。",
+      "现有评估方法通常将自进化过程简化为孤立任务分数或单一序列曲线，无法判断更新是否产生可复用改进、是否过拟合近期任务或是否损害旧行为。",
+      "SEAGym 提供训练、验证、测试、回放和成本记录五个评估维度，并将 Harbor 兼容基准测试转化为动态自进化任务源。",
+      "研究者在 Terminal-Bench 2.0 和 HLE 两个基准上实例化 SEAGym，对比了 ACE、TF-GRPO 和 AHE 三种自进化方法在统一 epoch/batch 协议下的表现。",
+      "实验结果表明频繁更新可能无法提升留出测试集性能，有用的中间快照可能在后续更新中性能衰退，且源多样性与模型后端选择会影响 agent 框架的整体可靠性。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "SEAGym",
+        "canonical_name": "SEAGym",
+        "url": "https://arxiv.org/abs/2606.17546",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "SEAGym 是一个用于测量 agent harness 更新效果的评测环境，覆盖训练、验证、测试、回放和成本记录五个维度。",
+          "SEAGym 将 Harbor 兼容基准测试转化为动态自进化任务源，支持训练批次、冻结更新验证、留出 ID 和 OOD 迁移视图以及回放诊断。"
+        ],
+        "article_id": "195d89ae5bcccbcb"
+      },
+      {
+        "object_type": "dataset",
+        "name": "Terminal-Bench 2.0",
+        "canonical_name": "Terminal-Bench 2.0",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "研究者将 SEAGym 实例化在 Terminal-Bench 2.0 和 HLE 两个基准上，用于对比不同自进化方法的效果。"
+        ],
+        "article_id": "195d89ae5bcccbcb"
+      },
+      {
+        "object_type": "dataset",
+        "name": "HLE",
+        "canonical_name": "HLE",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "研究者将 SEAGym 实例化在 Terminal-Bench 2.0 和 HLE 两个基准上，用于对比不同自进化方法的效果。"
+        ],
+        "article_id": "195d89ae5bcccbcb"
+      },
+      {
+        "object_type": "project",
+        "name": "ACE",
+        "canonical_name": "ACE",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "研究者在统一 epoch/batch 协议下，使用 SEAGym 对比了 ACE、TF-GRPO 和 AHE 三种自进化方法的评估结果。"
+        ],
+        "article_id": "195d89ae5bcccbcb"
+      },
+      {
+        "object_type": "project",
+        "name": "TF-GRPO",
+        "canonical_name": "TF-GRPO",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "研究者在统一 epoch/batch 协议下，使用 SEAGym 对比了 ACE、TF-GRPO 和 AHE 三种自进化方法的评估结果。"
+        ],
+        "article_id": "195d89ae5bcccbcb"
+      },
+      {
+        "object_type": "project",
+        "name": "AHE",
+        "canonical_name": "AHE",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "研究者在统一 epoch/batch 协议下，使用 SEAGym 对比了 ACE、TF-GRPO 和 AHE 三种自进化方法的评估结果。"
+        ],
+        "article_id": "195d89ae5bcccbcb"
+      },
+      {
+        "object_type": "project",
+        "name": "Harbor",
+        "canonical_name": "Harbor",
+        "confidence": "low",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "SEAGym 将 Harbor 兼容的基准测试转化为动态自进化任务源，以支持训练批次和冻结更新验证等功能。"
+        ],
+        "article_id": "195d89ae5bcccbcb"
+      }
     ],
     "impact_score": {
       "score": 6.0,
@@ -233,7 +314,87 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "SEAGym",
+        "canonical_name": "SEAGym",
+        "url": "https://arxiv.org/abs/2606.17546",
+        "positioning": "SEAGym 是一个专为自进化 LLM Agent 设计的评测环境，专注于衡量 agent harness（提示词、记忆、工具、中间件、运行时状态）层面的更新效果。",
+        "technical_signal": "SEAGym 提供训练、验证、测试、回放和成本记录五个评估维度，将 Harbor 兼容基准测试转化为动态自进化任务源。",
+        "adoption_signal": "研究者在 Terminal-Bench 2.0 和 HLE 上实例化 SEAGym，使用统一 epoch/batch 协议对比了 ACE、TF-GRPO 和 AHE 三种方法的评估效果。",
+        "ecosystem_relevance": "SEAGym 填补了自进化 Agent 评测空白，解决了现有评估无法判断更新是否产生可复用改进或损害旧行为的问题。",
+        "target_users": [],
+        "watch_reason": "SEAGym 提出的多维度评估框架为自进化 LLM Agent 研究提供了标准化评测手段。实验发现频繁更新未必提升留出性能、有用中间快照可能衰退等结论，对 Agent 自进化方向具有重要指导意义。",
+        "risk_notes": [
+          "SEAGym 仅基于 Terminal-Bench 2.0 和 HLE 两个基准验证，在更广泛场景下的适用性尚待检验。",
+          "SEAGym 作为评测工具本身不提供自进化方法及基线，其长期价值依赖于社区采用和贡献程度。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "195d89ae5bcccbcb"
+        ],
+        "evidence_snippets": [
+          "SEAGym 是一个用于测量 agent harness 更新效果的评测环境，覆盖训练、验证、测试、回放和成本记录五个维度。",
+          "SEAGym 将 Harbor 兼容基准测试转化为动态自进化任务源，支持训练批次、冻结更新验证、留出 ID 和 OOD 迁移视图以及回放诊断。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "ACE",
+        "canonical_name": "ACE",
+        "positioning": "ACE 是一种在 SEAGym 统一框架下接受评估并与 TF-GRPO、AHE 对比的自进化 LLM Agent 方法。",
+        "target_users": [],
+        "watch_reason": "ACE 作为 SEAGym 评测框架下的对比方法之一，其在统一 epoch/batch 协议下的表现结果为自进化 Agent 方法研究提供了参考基准。",
+        "risk_notes": [
+          "当前仅知 ACE 被纳入 SEAGym 的对比评估，缺乏对其方法细节和独立性能的公开信息。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "195d89ae5bcccbcb"
+        ],
+        "evidence_snippets": [
+          "研究者在统一 epoch/batch 协议下，使用 SEAGym 对比了 ACE、TF-GRPO 和 AHE 三种自进化方法的评估结果。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "TF-GRPO",
+        "canonical_name": "TF-GRPO",
+        "positioning": "TF-GRPO 是一种在 SEAGym 统一框架下接受评估并与 ACE、AHE 对比的自进化 LLM Agent 方法。",
+        "target_users": [],
+        "watch_reason": "TF-GRPO 作为 SEAGym 评测框架下的对比方法之一，其在统一 epoch/batch 协议下的表现结果为自进化 Agent 方法研究提供了参考基准。",
+        "risk_notes": [
+          "当前仅知 TF-GRPO 被纳入 SEAGym 的对比评估，缺乏对其方法细节和独立性能的公开信息。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "195d89ae5bcccbcb"
+        ],
+        "evidence_snippets": [
+          "研究者在统一 epoch/batch 协议下，使用 SEAGym 对比了 ACE、TF-GRPO 和 AHE 三种自进化方法的评估结果。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "AHE",
+        "canonical_name": "AHE",
+        "positioning": "AHE 是一种在 SEAGym 统一框架下接受评估并与 ACE、TF-GRPO 对比的自进化 LLM Agent 方法。",
+        "target_users": [],
+        "watch_reason": "AHE 作为 SEAGym 评测框架下的对比方法之一，其在统一 epoch/batch 协议下的表现结果为自进化 Agent 方法研究提供了参考基准。",
+        "risk_notes": [
+          "当前仅知 AHE 被纳入 SEAGym 的对比评估，缺乏对其方法细节和独立性能的公开信息。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "195d89ae5bcccbcb"
+        ],
+        "evidence_snippets": [
+          "研究者在统一 epoch/batch 协议下，使用 SEAGym 对比了 ACE、TF-GRPO 和 AHE 三种自进化方法的评估结果。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -345,8 +506,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "29b8d20cd8bd31d6",
     "source_type": "academic_paper",
-    "tldr": "DivInit 通过多样化首轮查询初始化，在无需训练的情况下显著提升智能体搜索的广度扩展效果。",
-    "objective_summary": "该论文发现标准并行采样在智能体搜索中存在首轮查询冗余的问题，提出 DivInit——一种无需训练的干预方法：从单次调用生成 n 个候选种子，选取 k 个多样化种子并行执行。在五个开源模型和八个基准测试中，DivInit 在多跳问答任务上平均提升 5-7 个百分点。",
+    "tldr": "arXiv 论文提出 DivInit 方法，通过在首轮查询中采样多样化种子而非独立采样，解决 Agentic Search 中标准并行采样因查询冗余导致的收益递减问题，在多跳问答任务上平均提升 5-7 个百分点。",
+    "objective_summary": "该论文分析了 Agentic Search 中测试时扩展的广度维度，发现标准并行采样因首轮查询冗余导致检索证据重叠、收益递减。作者提出 DivInit——一种无训练干预方法：首轮从单次调用中抽取 n 个候选，选择 k 个多样化种子作为并行轨迹运行。在 5 个开源模型和 8 个基准上的实验表明，DivInit 在同等算力下持续优于标准并行采样，多跳问答任务平均提升 5-7 个百分点。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
@@ -354,14 +515,34 @@
       "technologies": [
         "DivInit",
         "agentic search",
-        "parallel sampling"
+        "parallel sampling",
+        "multi-hop QA"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "论文聚焦于智能体搜索中的广度扩展，指出标准并行采样在首轮存在查询冗余问题：模型发出的初始查询高度相似，导致检索到重叠证据，后续步骤基于共享检索结果，收益递减。",
-      "作者提出 DivInit，一种无需训练的首轮干预方法，从单次调用中生成 n 个候选种子，选取其中 k 个多样化的种子作为并行轨迹的起点。",
-      "实验覆盖五个开源模型和八个基准测试，DivInit 在多跳问答任务上以同等算力实现平均 5-7 个百分点的提升，持续优于标准并行采样。"
+      "论文聚焦于 Agentic Search 中测试时扩展的广度维度（并行 rollout 数量），发现标准并行采样存在首轮查询冗余问题。",
+      "当模型在不同 rollout 中发出相似的初始查询时，各线程检索到的证据高度重叠，后续轮次也基于该共享检索结果，导致收益递减。",
+      "作者提出 DivInit 方法，在首轮从单次模型调用中抽取 n 个候选查询，挑选 k 个多样化种子并作为并行轨迹独立运行。",
+      "DivInit 不需要额外训练，仅通过首轮查询多样化干预即可提升并行采样的整体效果。",
+      "在 5 个开源模型和 8 个基准上的实验显示，DivInit 在同等算力下一致优于标准并行采样，多跳问答任务平均提升 5-7 个百分点。",
+      "论文代码已公开发布，但摘要中未提供完整仓库地址。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "DivInit",
+        "canonical_name": "DivInit",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "论文提出 DivInit 方法，是一种在 Agentic Search 首轮查询时进行多样化初始化的无训练干预技术。",
+          "DivInit 从单次调用中抽取 n 个候选查询，选择 k 个多样化种子作为并行轨迹运行，以解决标准并行采样的查询冗余问题。",
+          "在 5 个开源模型和 8 个基准上的实验表明，DivInit 在同等算力下平均提升多跳问答任务 5-7 个百分点。"
+        ],
+        "article_id": "29b8d20cd8bd31d6"
+      }
     ],
     "impact_score": {
       "score": 5.0,
@@ -416,7 +597,34 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "DivInit",
+        "canonical_name": "DivInit",
+        "positioning": "DivInit 是一种针对 Agentic Search 首轮查询冗余问题的无训练干预方法，通过从单次调用中采样多样化种子查询来替代标准并行采样，提升测试时扩展的广度效率。",
+        "technical_signal": "DivInit 从单次模型调用中抽取 n 个候选查询，选择 k 个多样化种子作为并行轨迹独立运行，无需额外训练即可提升首轮检索多样性并减少证据重叠。",
+        "adoption_signal": "该方法在 5 个开源模型和 8 个基准上验证，多跳问答任务平均提升 5-7 个百分点，效果一致优于标准并行采样且算力成本持平。",
+        "ecosystem_relevance": "DivInit 针对测试时扩展的广度维度进行优化，直接解决并行 rollout 中查询冗余导致的收益递减问题，为 Agentic Search 的效率提升提供了轻量级实用方案。",
+        "target_users": [],
+        "watch_reason": "DivInit 提出了一种轻量级但有效的并行采样改进方案，在不增加推理成本的前提下显著提升 Agentic Search 的多跳问答性能，代表了测试时扩展从单纯堆深度走向广度优化的重要实用方向。",
+        "risk_notes": [
+          "从 n 个候选中选择 k 个多样化种子的计算开销与多样性度量方式未在摘要中明确，可能存在因选择算法不当带来的额外延迟风险。",
+          "实验仅覆盖开源模型，在闭源商用模型上的效果和泛化性尚未得到验证。",
+          "论文未提及其他任务类型（如单跳 QA 或开放域检索）上的表现，适用范围边界尚不清晰。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "29b8d20cd8bd31d6"
+        ],
+        "evidence_snippets": [
+          "论文提出 DivInit 方法，是一种在 Agentic Search 首轮查询时进行多样化初始化的无训练干预技术。",
+          "DivInit 从单次调用中抽取 n 个候选查询，选择 k 个多样化种子作为并行轨迹运行，以解决标准并行采样的查询冗余问题。",
+          "在 5 个开源模型和 8 个基准上的实验表明，DivInit 在同等算力下平均提升多跳问答任务 5-7 个百分点。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -533,22 +741,40 @@
     "pipeline_stage": "fact_extracted",
     "id": "352b029f2b99987b",
     "source_type": "academic_paper",
-    "tldr": "SkillChain-Gym 是一个将员工技能再培训纳入生产库存控制的基准测试环境。",
-    "objective_summary": "arXiv 发表的一项名为 SkillChain-Gym 的基准测试，用于研究中断场景下考虑技能再培训的生产库存控制问题。该基准包含员工技能动态模型、认证遗忘机制和训练约束，实验表明没有单一策略能应对所有情景。",
+    "tldr": "SkillChain-Gym 是一个用于技能再培训感知的生产-库存控制基准测试平台，将劳动力技能状态纳入生产规划决策变量，支持扰动场景、可行性诊断和多种策略评估。研究发现在不同扰动条件下，不同策略各有优劣，不存在占主导地位的通用策略。",
+    "objective_summary": "研究人员提出了 SkillChain-Gym，一个面向技能再培训感知的生产-库存控制基准测试规范。该平台包含单站点环境、工人技能状态动态、硬阈值认证、技能遗忘机制以及消耗产能的培训动作。基准提供了种子控制的扰动场景、三种可行性模式及投影诊断、确定性回放和涵盖运营、韧性、能力增长和培训访问分布的指标。在60班次的时间跨度上，研究评估了纯生产、反应式自适应、注水式自适应和静态保险四种策略，结果表明没有一种策略在所有场景中占优，训练能力策略优于纯生产基线。",
     "event_type": "framework_tools",
-    "epistemic_status": "theoretical_claim",
+    "epistemic_status": "verified_fact",
     "entities": {
       "companies": [],
-      "technologies": [],
+      "technologies": [
+        "SkillChain-Gym"
+      ],
       "key_people": []
     },
     "key_logic_flow": [
-      "SkillChain-Gym 是一个面向\"再培训感知\"的生产库存控制基准测试，将员工技能状态作为决策变量纳入生产规划。",
-      "该环境包含员工技能动态模型、硬阈值认证机制、技能遗忘约束，以及与生产共享同一工时预算的培训动作。",
-      "基准提供了种子控制的中断场景、三种可行性模式及投影诊断、确定性回放机制，以及覆盖运营效率、韧性、能力增长和培训分配公平性的多维评估指标。",
-      "实验评估了纯生产基线、反应式自适应、水填充自适应和静态保险四类策略在 60 班次范围内配对统计检验下的表现。",
-      "结果呈现情景依赖性而非固定排名：具备培训能力的策略优于纯生产基线，在遗忘机制下即使没有中断也需要维护性培训。",
-      "自适应培训在瓶颈可预见时有效，而精简的静态交叉培训计划在突发冲击和缺勤下表现更优；没有单一策略能在所有情景中占优。"
+      "SkillChain-Gym 将劳动力技能状态作为生产规划的内生决策变量，解决认证失效、新产品技能需求与再培训占用生产工时之间的矛盾。",
+      "该基准包含硬阈值认证、技能遗忘、产能消耗型培训动作等核心机制，以及种子控制的扰动场景和三种可行性模式。",
+      "研究对比了纯生产、反应式自适应、注水式自适应和静态保险四类策略在60班次跨度上的表现，并进行了配对统计检验。",
+      "训练能力策略在所有场景中均优于纯生产基线，在技能遗忘机制下维护性培训是必不可少的。",
+      "自适应培训在瓶颈可预见时效果更好，而静态交叉培训计划在意外冲击和缺勤下起到保险作用，产能余裕和遗忘率决定了这两类策略的适用边界。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "SkillChain-Gym",
+        "canonical_name": "SkillChain-Gym",
+        "url": "https://arxiv.org/abs/2606.17266",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "SkillChain-Gym 是一个面向技能再培训感知的生产-库存控制基准测试规范，包含工人技能状态动态、硬阈值认证和产能消耗型培训动作。",
+          "该基准提供了种子控制的扰动场景、三种可行性模式及投影诊断、确定性回放以及涵盖运营、韧性、能力增长和培训访问分布的指标。",
+          "研究利用该基准在60班次时间跨度上评估了四类策略，发现没有一种策略在所有扰动条件下占主导地位。"
+        ],
+        "article_id": "352b029f2b99987b"
+      }
     ],
     "impact_score": {
       "score": 1.5,
@@ -601,7 +827,35 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "speculative_watch"
+    "actionable_insight": "speculative_watch",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "SkillChain-Gym",
+        "canonical_name": "SkillChain-Gym",
+        "url": "https://arxiv.org/abs/2606.17266",
+        "positioning": "SkillChain-Gym 是一个将劳动力技能状态作为内生决策变量的生产-库存控制基准测试平台，整合了技能认证、遗忘与培训产能消耗等核心机制，用于评估扰动条件下的韧性策略。",
+        "technical_signal": "该基准实现了硬阈值认证、技能遗忘、产能消耗型培训动作以及种子控制的扰动场景和三种可行性模式，支持确定性回放与多维度指标评估。",
+        "adoption_signal": "作为新发布的基准规范，目前尚未看到外部研究团队的公开采用案例，但填补了运营管理领域缺少可复用技能动态测试床的长期空白。",
+        "ecosystem_relevance": "该基准连接了运筹学、劳动力规划与强化学习三个领域，为AI研究人员提供了面向制造业韧性管理的标准化评估环境。",
+        "target_users": [],
+        "watch_reason": "该基准首次将技能再培训动态系统地纳入生产-库存控制决策框架，揭示了无占优策略的重要实验发现，推动预测驱动型控制器的研发方向，对制造业韧性管理和AI运筹优化交叉领域具有长期参考价值。",
+        "risk_notes": [
+          "该基准为规范化设计而非实际生产线数据驱动，其结论向真实工厂环境迁移的有效性有待验证。",
+          "基准仅覆盖单站点环境，未考虑供应链多级协作和跨工厂技能调配等更复杂场景。",
+          "技能动态模型参数（遗忘率、认证硬阈值）的选择对策略排序有显著影响，敏感性分析空间仍需进一步探索。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "352b029f2b99987b"
+        ],
+        "evidence_snippets": [
+          "SkillChain-Gym 是一个面向技能再培训感知的生产-库存控制基准测试规范，包含工人技能状态动态、硬阈值认证和产能消耗型培训动作。",
+          "该基准提供了种子控制的扰动场景、三种可行性模式及投影诊断、确定性回放以及涵盖运营、韧性、能力增长和培训访问分布的指标。",
+          "研究利用该基准在60班次时间跨度上评估了四类策略，发现没有一种策略在所有扰动条件下占主导地位。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -620,10 +874,10 @@
     "pipeline_stage": "fact_extracted",
     "id": "4b69be78fb8f3724",
     "source_type": "academic_paper",
-    "tldr": "基于课程的LLM评分管道，实现与人工相当的自动阅卷",
-    "objective_summary": "该论文提出基于课程标准的LLM-as-Judge评分管道，通过课程大纲和评分准则等权威材料支撑LLM判断，实现与人工评分相当的自动阅卷效果，已集成到在线学习平台。",
+    "tldr": "本文提出一个基于课程标准的 LLM-as-Judge 自动评分管道，与工业合作伙伴共同开发用于大学入学备考。该管道通过识别题目知识点、组装课程标准上下文，采用分阶段工作流生成评分量规并评估作答，初步评估显示评分效果与人类教师相当。",
+    "objective_summary": "该论文与工业合作伙伴共同开发了一个基于课程标准的可配置 LLM-as-Judge 自动评分管道，用于支持大学入学备考。管道首先识别题目的相关主题、子主题和认知要求，然后组装可验证的课程标准上下文来支撑 LLM 判断。通过分阶段 LLM 工作流，先生成题目专属评分量规，再推导并评估评分标准以分配分数。初步评估表明该管道的评分效果与人类教师相当，且评分依据更可追溯至官方课程标准和评分指南。该管道已集成至一个在线学习平台，早期部署数据提供了操作使用和手动覆盖的初步洞察。",
     "event_type": "framework_tools",
-    "epistemic_status": "theoretical_claim",
+    "epistemic_status": "verified_fact",
     "entities": {
       "companies": [],
       "technologies": [
@@ -633,11 +887,41 @@
       "key_people": []
     },
     "key_logic_flow": [
-      "论文提出一种基于课程标准的可配置LLM-as-Judge评分管道，用于支持大学入学考试准备的自动阅卷。",
-      "管道通过识别试题涉及的主题、子主题和认知需求，从课程大纲和评分指南中组装可验证的权威上下文来支撑LLM判断。",
-      "管道采用分阶段LLM工作流：首先生成试题专属评分量规，再推导并评估评分标准，最后据此对学生作答进行评分。",
-      "初步评估表明，该管道的评分结果与人工评分相当，且评分依据更可追溯至官方课程标准和评分标准。",
-      "该管道已集成到在线学习平台中，早期部署数据提供了运营使用和人工干预的初步洞察。"
+      "该论文提出一个基于课程标准的 LLM-as-Judge 评分管道，与工业合作伙伴共同开发，用于大学入学考试的题目级别自动评分。",
+      "管道通过识别题目的主题、子主题和认知要求，并组装可验证的课程标准上下文来支撑 LLM 的判断过程。",
+      "采用分阶段 LLM 工作流设计：首先生成题目专属的评分量规，然后推导并评估评分标准以分配分数。",
+      "初步评估显示该管道的评分效果与人类教师相当，且评分理由更可追溯至官方课程标准与评分指南。",
+      "该管道已集成至一个在线学习平台，早期部署数据提供了关于操作使用情况和手动覆盖行为的初步洞察。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "Curriculum-Grounded LLM-as-Judge Marking Pipeline",
+        "canonical_name": "Curriculum-Grounded LLM-as-Judge Marking Pipeline",
+        "url": "https://arxiv.org/abs/2606.17507",
+        "confidence": "medium",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "本文提出一个基于课程标准的可配置 LLM-as-Judge 自动评分管道，与工业合作伙伴共同开发，用于题目级别的评分以支持大学入学备考。",
+          "管道通过识别题目的主题、子主题和认知要求，并组装可验证的课程标准上下文来支撑 LLM 判断。",
+          "分阶段 LLM 工作流首先生成题目专属评分量规，再推导并评估评分标准以分配分数，初步评估显示效果与人类教师相当。"
+        ],
+        "article_id": "4b69be78fb8f3724"
+      },
+      {
+        "object_type": "paper",
+        "name": "LLM-as-Judge in Education: A Curriculum-Grounded Marking Pipeline",
+        "canonical_name": "2606.17507",
+        "url": "https://arxiv.org/abs/2606.17507",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "该论文发表于 arXiv，提出一个基于课程标准的 LLM-as-Judge 自动评分管道，用于支持大学入学考试备考场景。",
+          "初步评估表明该管道的评分效果与人类教师相当，且评分依据更可追溯至官方课程标准和评分指南。"
+        ],
+        "article_id": "4b69be78fb8f3724"
+      }
     ],
     "impact_score": {
       "score": 4.0,
@@ -694,7 +978,35 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "基于课程标准的 LLM-as-Judge 自动评分管道",
+        "canonical_name": "Curriculum-Grounded LLM-as-Judge Marking Pipeline",
+        "url": "https://arxiv.org/abs/2606.17507",
+        "positioning": "与工业合作伙伴联合开发的基于课程标准的 LLM-as-Judge 自动评分管道，专门用于大学入学备考场景的题目级别自动评分。",
+        "technical_signal": "采用分阶段 LLM 工作流设计，先由模型生成题目专属评分量规，再推导评分标准并分配分数，使评审过程可追溯至官方课程标准文件。",
+        "adoption_signal": "已集成至在线学习平台并获取早期部署数据，初步评估显示评分效果与人类教师相当且评分依据更可追溯。",
+        "ecosystem_relevance": "聚焦高利害考试场景的 AI 评分可解释性问题，将课程标准显式接入 LLM 推理链，为教育 AI 可信评估提供了可复用的技术范式。",
+        "target_users": [],
+        "watch_reason": "该管道将课程标准文档显式融入 LLM 评分推理链，显著提升评分依据的可追溯性，在 AI 辅助教育评估领域具有示范意义。与工业合作伙伴的联合开发和真实平台部署也提供了宝贵的实操验证。",
+        "risk_notes": [
+          "初步评估规模有限，在更广泛学科和题型上的泛化能力尚未充分验证。",
+          "LLM 在学科知识密集场景下的评分偏差和幻觉风险仍需审慎评估。",
+          "工业合作伙伴的商业模式可能影响管道的开源透明度和第三方独立复现。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "4b69be78fb8f3724"
+        ],
+        "evidence_snippets": [
+          "本文提出一个基于课程标准的可配置 LLM-as-Judge 自动评分管道，与工业合作伙伴共同开发，用于题目级别的评分以支持大学入学备考。",
+          "管道通过识别题目的主题、子主题和认知要求，并组装可验证的课程标准上下文来支撑 LLM 判断。",
+          "分阶段 LLM 工作流首先生成题目专属评分量规，再推导并评估评分标准以分配分数，初步评估显示效果与人类教师相当。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -804,23 +1116,53 @@
     "pipeline_stage": "fact_extracted",
     "id": "88272dbbef054cc3",
     "source_type": "academic_paper",
-    "tldr": "MapSatisfyBench 是一个评估地图代理在隐式决策因素上满足用户满意度能力的基准。",
-    "objective_summary": "该论文提出 MapSatisfyBench，通过 restore-identify-filter 框架从大规模真实匿名用户数据构建，用于评估大语言模型地图代理在隐式决策因素上的满意度感知能力。实验表明当前代理在显式任务完成上表现良好，但在满足隐式决策因素方面仍有限。",
+    "tldr": "MapSatisfyBench 是一个面向地图智能体的满意度感知基准测试，通过行为链证据重构用户隐含决策因素来评估智能体在非明确查询下的满意度表现。实验表明当前大语言模型智能体在显式任务完成上表现良好，但在满足隐含决策因素方面仍有明显不足。",
+    "objective_summary": "该论文提出了 MapSatisfyBench，一个用于评估地图智能体满意度感知能力的基准测试。研究者设计了一个\"恢复-识别-过滤\"框架，从用户行为链证据中重构完整需求，识别隐含决策因素，并仅保留那些在查询前就有证据支撑的因素。该基准基于大规模真实匿名用户数据构建，从五个维度标注了真实答案，实现了对满意度感知地图智能体的全链路评估。实验结果显示，当前智能体在显式任务完成上表现良好，但在满足隐含决策因素和主动获取满意度所需证据方面仍存在局限性。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
-        "MapSatisfyBench",
-        "LLM"
+        "LLM",
+        "MapSatisfyBench"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "大语言模型代理被集成到地图服务中，但用户查询通常信息不完整，包含未明说的隐式决策因素，这些因素对用户满意度至关重要。",
-      "作者提出 restore-identify-filter 框架，从行为链证据中重建完整用户需求，识别隐式决策因素，并仅保留有预查询证据支持的因素。",
-      "基于该框架，作者从大规模真实匿名用户数据构建了 MapSatisfyBench 基准，从五个维度标注参考标准。",
-      "实验表明当前代理在显式任务完成上表现良好，但在满足隐式决策因素和主动获取满意度所需证据方面仍存在显著局限。"
+      "大语言模型智能体越来越多地集成到地图服务中，但用户通常以非正式方式表达需求，导致查询中存在大量未言明的隐含决策因素。",
+      "研究者提出了一个\"恢复-识别-过滤\"框架，该方法从行为链证据中重构用户的完整需求，从中识别出隐含决策因素，并只保留有查询前证据支撑的因素。",
+      "基于该框架，研究者利用大规模真实匿名用户数据构建了 MapSatisfyBench 基准，从五个维度标注真实答案以支持全链路评估。",
+      "实验表明当前智能体在显式任务完成维度表现良好，但在隐含决策因素满足和主动获取满意度证据方面存在明显局限性。",
+      "MapSatisfyBench 的定位是将地图智能体的评估从单纯的任务完成导向转向满意度感知的空间决策导向。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "MapSatisfyBench",
+        "canonical_name": "MapSatisfyBench",
+        "url": "https://arxiv.org/abs/2606.17453",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "MapSatisfyBench 是一个面向地图智能体的满意度感知基准测试，基于大规模真实匿名用户数据构建并标注了五个维度的真实答案。",
+          "实验表明当前智能体在显式任务完成上表现良好，但在隐含决策因素满足和主动获取满意度证据方面仍存在明显局限性。",
+          "该基准旨在将地图智能体的评估从任务完成导向转向满意度感知的空间决策导向。"
+        ],
+        "article_id": "88272dbbef054cc3"
+      },
+      {
+        "object_type": "project",
+        "name": "restore-identify-filter framework",
+        "canonical_name": "Restore-Identify-Filter Framework",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "该框架从行为链证据中重构用户完整需求，识别隐含决策因素，并仅保留有查询前证据支撑的因素。",
+          "该方法是 MapSatisfyBench 构建方法论的核心理念，用于从大规模用户数据中筛选可评估的隐含决策因素。"
+        ],
+        "article_id": "88272dbbef054cc3"
+      }
     ],
     "impact_score": {
       "score": 4.5,
@@ -874,7 +1216,57 @@
       "compound": "low",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "MapSatisfyBench",
+        "canonical_name": "MapSatisfyBench",
+        "url": "https://arxiv.org/abs/2606.17453",
+        "positioning": "MapSatisfyBench 是一个面向地图智能体的满意度感知基准测试，通过行为链证据识别隐含决策因素，推动评估从任务完成导向转向满意度感知的空间决策导向。",
+        "technical_signal": "提出\"恢复-识别-过滤\"框架，从行为链证据中重构用户的完整需求并识别隐含决策因素，仅保留有查询前证据支撑的因素，实现了可评估的满意度感知建模方法。",
+        "adoption_signal": "基于大规模真实匿名用户数据构建，从五个维度标注了真实答案，为满意度感知地图智能体提供了具备实际数据基础的全链路评估方案。",
+        "ecosystem_relevance": "填补了地图智能体满意度感知评测的空白，为大语言模型在地图服务中的集成提供了从任务完成到满意度感知的评价标准转型工具。",
+        "target_users": [],
+        "watch_reason": "实验表明当前LLM智能体在显式任务完成上表现良好，但在满足隐含决策因素和主动获取满意度证据方面存在明显局限性。该基准为评估和提升地图智能体的满意度感知能力提供了首个系统性评测工具，直接服务于大语言模型在地图服务中的实际落地质量改进。",
+        "risk_notes": [
+          "基准构建依赖大规模用户行为链数据，在数据获取和隐私保护方面存在实际应用限制，可能影响其广泛推广。",
+          "隐含决策因素的识别和标注过程存在一定主观性，可能影响评估结果的一致性和跨场景泛化能力。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "88272dbbef054cc3"
+        ],
+        "evidence_snippets": [
+          "MapSatisfyBench 是一个面向地图智能体的满意度感知基准测试，基于大规模真实匿名用户数据构建并标注了五个维度的真实答案。",
+          "实验表明当前智能体在显式任务完成上表现良好，但在隐含决策因素满足和主动获取满意度证据方面仍存在明显局限性。",
+          "该基准旨在将地图智能体的评估从任务完成导向转向满意度感知的空间决策导向。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "restore-identify-filter framework",
+        "canonical_name": "Restore-Identify-Filter Framework",
+        "positioning": "一个从用户行为链证据中重构完整需求、识别隐含决策因素并过滤无证据支撑因素的框架方法，为满意度感知评估提供方法论基础。",
+        "technical_signal": "该框架从行为链证据中重构用户完整需求，识别隐含决策因素并仅保留有查询前证据支撑的因素，解决了满意度评估中确定哪些隐含因素适合评测的核心难题。",
+        "adoption_signal": "作为 MapSatisfyBench 构建方法论的核心理念，该框架从大规模用户数据中筛选可评估的隐含决策因素，为系统性基准构建提供了可操作的技术路径。",
+        "ecosystem_relevance": "为用户满意度导向的智能体评测提供了可复用的方法论范式，可推广至客服、推荐等同样面临隐含需求评估挑战的AI服务场景。",
+        "target_users": [],
+        "watch_reason": "该框架解决了满意度感知评测中的核心方法论难题——如何从用户行为数据中识别并筛选适合评估的隐含决策因素。它为同类满意度导向的AI系统评测提供了可复用的方法论基础，在智能体评估范式转型中具有技术支撑价值。",
+        "risk_notes": [
+          "框架的恢复和识别效果受限于用户行为链数据的完整性和质量，在行为数据稀疏场景下可能产生偏差。",
+          "该方法目前仅在 MapSatisfyBench 中验证，尚需更多独立场景的复现和泛化测试来证明其通用性。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "88272dbbef054cc3"
+        ],
+        "evidence_snippets": [
+          "该框架从行为链证据中重构用户完整需求，识别隐含决策因素，并仅保留有查询前证据支撑的因素。",
+          "该方法是 MapSatisfyBench 构建方法论的核心理念，用于从大规模用户数据中筛选可评估的隐含决策因素。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -893,24 +1285,43 @@
     "pipeline_stage": "fact_extracted",
     "id": "8a65566820c4fee9",
     "source_type": "academic_paper",
-    "tldr": "MemTrace 基准测试发现，LLM 长期记忆的瓶颈在于证据使用而非检索，可检索但未使用的证据比缺失证据多 10 倍。",
-    "objective_summary": "MemTrace 是一个以\"知识点\"（而非单个问题）为评估单位的 LLM 长期记忆基准，沿记忆年龄、问题类型和证据条件三个维度探测知识点的行为。在 4 种范式的 13 种记忆系统配置上评估发现，汇总准确率掩盖了不同的失败模式，且证据使用是主导瓶颈。",
+    "tldr": "MemTrace是一个以知识点为测量单位的新型基准测试，用于探测LLM智能体长期记忆的真实表现。研究发现聚合准确率掩盖了不同的失败模式，主要瓶颈在于证据利用而非检索能力。",
+    "objective_summary": "MemTrace论文提出了一种名为MemTrace的基准测试方法，以知识点为测量单元替代传统的问题行聚合评估，用于分析LLM智能体长期记忆的真实表现。该基准沿记忆年龄、问题类型和证据条件三个受控维度对每个用户事实进行探测。研究者在覆盖四种范式的13种记忆系统配置上进行了系统评估，发现类似的聚合准确率可能掩盖根本不同的失败模式，例如恢复事实的当前和先前状态并不等于能追踪其变化轨迹。研究结论指出，改进长期记忆的关键瓶颈在于更好地利用可触及的证据，而非单纯增加存储或检索能力。",
     "event_type": "framework_tools",
-    "epistemic_status": "theoretical_claim",
+    "epistemic_status": "verified_fact",
     "entities": {
       "companies": [],
       "technologies": [
         "MemTrace",
-        "LLM"
+        "LLM agents",
+        "long-term memory"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "MemTrace 以\"知识点\"（单个用户事实）而非单个问题作为评估单位，沿记忆年龄、问题类型和证据条件三个受控维度探测每个知识点的行为。",
-      "评估覆盖了 4 种范式下的 13 种记忆系统配置。",
-      "汇总准确率相似的不同系统在细分维度上表现出不同的失败模式：能恢复事实的当前和早期状态并不代表能追踪其变化过程。",
-      "安全弃权并不等同于纠正错误前提——系统在两种场景下的表现存在显著差异。",
-      "长期记忆的主要瓶颈是证据使用能力而非检索能力：当系统失败时，可检索到的证据比真正缺失的证据多 10 倍。"
+      "现有评估方法按问题行或回合独立聚合准确率，无法揭示同一知识在不同条件下的行为变化。",
+      "MemTrace以知识点为基本测量单元，沿记忆年龄、问题类型和证据条件三个受控维度探测每个用户事实。",
+      "记忆年龄维度定义事实出现在历史中距今的会话数，问题类型涵盖当前状态、先前状态和变化轨迹三种。",
+      "证据条件维度包含证据存在、证据缺失和虚假前提反驳三种设置，以测试不同场景下的记忆表现。",
+      "在13种记忆系统配置上的评估表明，类似的聚合准确率可能掩盖不同的失败模式，例如恢复当前和先前状态不等于能追踪变化过程。",
+      "研究发现主要瓶颈是证据利用而非检索：系统失败时，证据可检索到的频率比证据缺失的频率高出10倍以上。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "MemTrace",
+        "canonical_name": "MemTrace",
+        "url": "https://arxiv.org/abs/2606.17328",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "MemTrace是一个以知识点为测量单位的基准测试，评估单个用户事实在LLM智能体长期记忆中的表现。",
+          "MemTrace沿记忆年龄、问题类型和证据条件三个维度控制探测每个事实，覆盖四种范式的13种记忆系统配置。",
+          "研究发现聚合准确率下隐藏着不同的失败模式，且主要瓶颈是证据利用而非检索。"
+        ],
+        "article_id": "8a65566820c4fee9"
+      }
     ],
     "impact_score": {
       "score": 5.5,
@@ -966,7 +1377,34 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "MemTrace",
+        "canonical_name": "MemTrace",
+        "url": "https://arxiv.org/abs/2606.17328",
+        "positioning": "MemTrace 是一个以知识点为基本测量单位的 LLM 智能体长期记忆基准测试，沿记忆年龄、问题类型和证据条件三个受控维度探测每个用户事实的真实记忆表现。",
+        "technical_signal": "MemTrace 在覆盖四种范式的十三种记忆系统配置上进行系统评估，发现相似的聚合准确率掩盖了根本不同的失败模式。",
+        "adoption_signal": "作为 2026 年 6 月发布的 arXiv 论文，MemTrace 的评估方法论和核心发现正等待社区验证和后续采用。",
+        "ecosystem_relevance": "MemTrace 填补了 LLM 智能体长期记忆细粒度评估的空白，其发现直接服务于快速发展的 AI Agent 生态系统中的记忆系统设计。",
+        "target_users": [],
+        "watch_reason": "MemTrace 揭示的关键瓶颈是证据利用而非检索能力，系统失败时证据可检索的频率比证据缺失高出十倍以上，这一发现可能重新定义长期记忆系统的优化方向。",
+        "risk_notes": [
+          "MemTrace 的评估结论基于受控实验设置，证据利用瓶颈在真实部署场景中的泛化性尚待验证。",
+          "当前基准仅覆盖文本形式的用户事实记忆，未涉及多模态或动态知识场景下的评估。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "8a65566820c4fee9"
+        ],
+        "evidence_snippets": [
+          "MemTrace是一个以知识点为测量单位的基准测试，评估单个用户事实在LLM智能体长期记忆中的表现。",
+          "MemTrace沿记忆年龄、问题类型和证据条件三个维度控制探测每个事实，覆盖四种范式的13种记忆系统配置。",
+          "研究发现聚合准确率下隐藏着不同的失败模式，且主要瓶颈在于证据利用而非单纯的检索能力。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -985,26 +1423,43 @@
     "pipeline_stage": "fact_extracted",
     "id": "ab6ceeb201510596",
     "source_type": "academic_paper",
-    "tldr": "SpeechDx 是一个覆盖 12 数据集、27 任务的临床语音 AI 多任务基准",
-    "objective_summary": "研究者提出 SpeechDx 基准，整合 12 个数据集和 27 个任务，按语音产生的概念化、制定、发音三阶段组织，系统评估 12 种音频编码器，发现大规模语音模型整体表现最佳，但尚无表征能可靠跨临床语音领域泛化。",
+    "tldr": "SpeechDx 是一个大规模临床语音 AI 基准测试，覆盖 12 个数据集和 27 项任务，按语音生产阶段（概念化、表达、发音）组织。结果显示大型语音模型是最强基线，但尚无表示方法能在临床语音领域可靠泛化。",
+    "objective_summary": "研究人员发布了 SpeechDx，这是一个面向临床语音 AI 的大规模多任务基准测试，涵盖 12 个数据集和 27 项任务，覆盖多种健康状况。基准按语音生产受干扰的阶段（概念化、表达、发音）组织任务，通过有限标注数据和跨数据集同条件评估来测试泛化能力。研究系统评估了 12 种最先进的音频编码器，发现大型语音模型是最强的整体基线，领域专用模型仅在高度匹配的任务上提升性能，尚无现有表示方法能在临床语音领域可靠泛化。",
     "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [],
       "technologies": [
-        "SpeechDx",
         "Clinical Speech AI",
-        "Audio Encoder"
+        "Audio Encoders",
+        "Zero-shot Cross-condition Transfer"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "SpeechDx 是一个覆盖 12 个数据集和 27 个任务的临床语音 AI 多任务基准测试。",
-      "该基准按语音产生的三个受损阶段（概念化、制定、发音）组织任务，以共享临床机制为评估基础。",
-      "基准通过低标注数据任务和跨数据集评估同一健康状况来测试泛化能力，区分临床模式与数据集伪影。",
-      "研究者在所有任务上系统评估了 12 种最先进的音频编码器，并进行零样本跨条件迁移测试。",
-      "实验结果表明大规模语音模型整体表现最强，领域专用模型仅在紧密匹配的任务上提升性能。",
-      "没有任何一种现有表征能在整个临床语音领域实现可靠泛化。"
+      "SpeechDx 是一个覆盖 12 个数据集和 27 项任务的大规模临床语音 AI 基准测试。",
+      "基准按语音生产受干扰的阶段（概念化、表达、发音）对任务进行结构化组织。",
+      "SpeechDx 通过有限标注数据和跨数据集同条件评估来测试模型泛化能力。",
+      "研究系统评估了 12 种最先进的音频编码器在所有任务上的表现以及零样本跨条件迁移能力。",
+      "结果表明大型语音模型是最强的整体基线，领域专用模型仅在高度匹配的任务上有效。",
+      "研究结论是尚无现有表示方法能在临床语音领域可靠泛化。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "SpeechDx",
+        "canonical_name": "SpeechDx",
+        "url": "https://arxiv.org/abs/2606.17339",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "SpeechDx 是一个大规模临床语音 AI 基准测试，涵盖 12 个数据集和 27 项任务。",
+          "SpeechDx 按语音生产受干扰的阶段（概念化、表达、发音）对任务进行结构化组织。",
+          "研究系统评估了 12 种最先进音频编码器，发现尚无表示方法能在临床语音领域可靠泛化。"
+        ],
+        "article_id": "ab6ceeb201510596"
+      }
     ],
     "impact_score": {
       "score": 4.5,
@@ -1059,7 +1514,33 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "SpeechDx",
+        "canonical_name": "SpeechDx",
+        "url": "https://arxiv.org/abs/2606.17339",
+        "positioning": "SpeechDx 是一个大规模临床语音 AI 多任务基准测试，覆盖12个数据集和27项任务，按语音生产阶段结构化组织，旨在推动通用临床语音表示研究。",
+        "technical_signal": "按语音生产受干扰的阶段（概念化、表达、发音）组织27项任务，通过有限标注数据和跨数据集同条件评估来测试模型泛化能力。",
+        "ecosystem_relevance": "临床语音 AI 领域长期缺乏统一评估标准，SpeechDx 填补了这一空白，为神经、运动和呼吸系统相关的语音分析研究提供了可对比的量化评估框架。",
+        "target_users": [],
+        "watch_reason": "SpeechDx 是首个系统覆盖12个数据集和27项任务的大规模临床语音 AI 基准，其按语音生产阶段组织任务的设计具有创新性。研究发现当前所有表示方法均无法可靠泛化，为领域指明了关键瓶颈，该评估框架对推动通用临床语音表示研究具有重要参考价值。",
+        "risk_notes": [
+          "SpeechDx 覆盖的健康状况和数据集规模相对有限，可能无法完全代表临床语音异常的全部谱系。",
+          "当前尚无任何语音表示方法能在临床语音领域实现可靠泛化，表明该领域整体处于早期发展阶段。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "ab6ceeb201510596"
+        ],
+        "evidence_snippets": [
+          "SpeechDx 是一个大规模临床语音 AI 基准测试，覆盖12个数据集和27项任务，涵盖神经、运动和呼吸系统相关健康状况。",
+          "SpeechDx 按语音生产受干扰的阶段（概念化、表达、发音）对任务进行结构化组织，以评估共享临床机制对不同阶段语音的影响。",
+          "研究系统评估了12种最先进音频编码器，发现尚无现有表示方法能在临床语音领域实现可靠泛化。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -1173,28 +1654,64 @@
     "pipeline_stage": "fact_extracted",
     "id": "bd814891e96f9668",
     "source_type": "academic_paper",
-    "tldr": "论文提出意图-执行间隙概念，通过138k条轨迹分析揭示模型在智能体任务中的行为差异",
-    "objective_summary": "该论文形式化了智能体系统中的意图-执行间隙问题，开发了Simple Strands Agent（SSA）框架，在SWE-Pro、SWE-Verified和Terminal-Bench-2基准上复现或超越了各模型供应商报告的pass@1性能，并基于138k条SSA生成的轨迹，",
-    "event_type": "infrastructure_update",
-    "epistemic_status": "theoretical_claim",
+    "tldr": "该论文提出'意图-执行差距'概念，指模型意图与智能体框架执行之间的不匹配。作者开发了Simple Strands Agent（SSA）框架，在SWE-Pro、SWE-Verified和Terminal-Bench-2基准上复现或超越了各模型官方报告的pass@1性能，并通过对138k条轨迹的分析揭示了不同前沿模型在问题解决行为上的差异。",
+    "objective_summary": "arXiv于2026年6月发表了一篇论文，研究者提出将AI智能体性能视为系统问题而非纯建模问题，并形式化定义了'intent-execution' gap（意图-执行差距）。作者开发了一个名为Simple Strands Agent（SSA）的可定制智能体框架，旨在最小化该差距。实验在Claude、Gemini、GPT、Grok、Qwen等多个模型家族上验证，SSA成功复现或超越了这些模型在SWE-Pro、SWE-Verified和Terminal-Bench-2基准上的pass@1成绩。通过对SSA生成的138k条轨迹进行代码状态空间分析，研究者观察到不同模型在编辑频率、测试活动和阶段转换等细粒度指标上存在显著的行为差异。",
+    "event_type": "framework_tools",
+    "epistemic_status": "verified_fact",
     "entities": {
-      "companies": [],
+      "companies": [
+        "Anthropic",
+        "Google DeepMind",
+        "OpenAI",
+        "xAI",
+        "Alibaba Cloud"
+      ],
       "technologies": [
         "SSA",
         "Simple Strands Agent",
-        "SWE-Pro",
-        "SWE-Verified",
-        "Terminal-Bench-2"
+        "pass@1",
+        "intent-execution gap",
+        "agent trajectories",
+        "code state-spaces"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "论文提出智能体性能不仅是一个模型问题，从根本上来说也是一个系统工程问题，模型能力通过智能体框架（harness）来实现。",
-      "论文形式化了意图-执行间隙（intent-execution gap）：模型意图与框架执行之间的不匹配会阻碍模型能力转化为智能体性能。",
-      "论文开发了Simple Strands Agent（SSA）框架，能够适配不同模型家族（Claude、Gemini、GPT、Grok、Qwen）的通用模式及少量模型特定偏好。",
-      "SSA在SWE-Pro、SWE-Verified和Terminal-Bench-2三个主流智能体基准上复现或超越了各模型供应商报告的pass@1性能。",
-      "论文分析了SSA生成的138k条轨迹数据，通过代码状态空间表示方法，观察了不同模型在问题求解行为上的差异。",
-      "细粒度指标（如编辑频率、测试活动、阶段转换）揭示了各模型在自主问题求解过程中不同阶段如何分配精力。"
+      "作者将AI智能体性能重新定义为系统问题，指出模型能力通过智能体框架才能转化为实际性能。",
+      "论文形式化了'intent-execution gap'概念，即模型意图与框架实际执行之间的不匹配。",
+      "作者开发了Simple Strands Agent（SSA）可定制框架，旨在最小化框架与模型的对齐差距。",
+      "SSA在SWE-Pro、SWE-Verified和Terminal-Bench-2三个主流智能体基准上复现或超越了各模型官方报告的pass@1成绩。",
+      "通过对SSA生成的138k条轨迹进行代码状态空间建模，研究者发现了不同模型在问题解决行为上的差异。",
+      "细粒度指标如编辑频率、测试活动和阶段转换揭示了各模型在自主问题求解不同阶段中注意力的分配差异。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "Simple Strands Agent (SSA)",
+        "canonical_name": "Simple Strands Agent",
+        "url": "https://arxiv.org/abs/2606.17454",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "作者开发了一个简单且可定制的智能体框架，名为'Simple Strands Agent'（SSA），旨在寻找跨不同模型家族通用的行为模式。",
+          "SSA在SWE-Pro、SWE-Verified和Terminal-Bench-2基准上复现或超越了Claude、Gemini、GPT、Grok、Qwen等模型官方报告的pass@1性能。",
+          "作者通过SSA生成了138k条轨迹，并在代码状态空间中表示这些轨迹以观察模型间问题解决行为的差异。"
+        ],
+        "article_id": "bd814891e96f9668"
+      },
+      {
+        "object_type": "dataset",
+        "name": "138k SSA Trajectories",
+        "canonical_name": "SSA 138k Trajectories",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "论文分析了由SSA生成的138k条智能体轨迹，用于研究不同模型在自主问题求解中的行为差异。",
+          "通过在代码状态空间中表示智能体轨迹，研究者观察到了编辑频率、测试活动和阶段转换等细粒度指标上的模型级差异。"
+        ],
+        "article_id": "bd814891e96f9668"
+      }
     ],
     "impact_score": {
       "score": 6.5,
@@ -1249,7 +1766,34 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Simple Strands Agent (SSA)",
+        "canonical_name": "Simple Strands Agent",
+        "url": "https://arxiv.org/abs/2606.17454",
+        "positioning": "Simple Strands Agent（SSA）是一个专注于消除意图-执行差距的可定制智能体框架，将AI智能体性能重新定义为系统级问题而非纯建模问题。",
+        "technical_signal": "SSA成功在三个主流智能体基准上复现或超越了Claude、Gemini、GPT、Grok、Qwen等模型官方报告的pass@1最高性能。",
+        "adoption_signal": "通过SSA框架在多个前沿模型家族上生成了138k条智能体轨迹数据，为跨模型行为差异分析提供了大规模实证基础。",
+        "ecosystem_relevance": "SSA将智能体性能问题重新框架化为系统问题，其代码状态空间分析方法为AI社区提供了跨模型行为比较的新范式，影响智能体框架的设计方向。",
+        "target_users": [],
+        "watch_reason": "该论文形式化了'意图-执行差距'概念，并通过SSA框架证明缩小此差距对智能体性能至关重要。其代码状态空间分析方法让跨模型行为比较超越了简单的pass@1指标，为AI智能体系统的评估与优化开辟了新方向。",
+        "risk_notes": [
+          "SSA的泛化能力可能受限于当前测试的编程类基准，在更广泛任务上的表现有待进一步验证。",
+          "框架可能需要为不同模型家族进行少量特化调整，其零成本迁移的边界和成本需要更清晰的界定。"
+        ],
+        "score": 8.0,
+        "article_ids": [
+          "bd814891e96f9668"
+        ],
+        "evidence_snippets": [
+          "作者开发了一个简单且可定制的智能体框架，名为'Simple Strands Agent'（SSA），旨在寻找跨不同模型家族通用的行为模式。",
+          "SSA在SWE-Pro、SWE-Verified和Terminal-Bench-2基准上复现或超越了Claude、Gemini、GPT、Grok、Qwen等模型官方报告的pass@1性能。",
+          "作者通过SSA生成了138k条轨迹，并在代码状态空间中表示这些轨迹以观察模型间问题解决行为的差异。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "arxiv-cs-ai",
@@ -1363,26 +1907,42 @@
     "pipeline_stage": "fact_extracted",
     "id": "ccceb9b00a5406ce",
     "source_type": "academic_paper",
-    "tldr": "提出CEO-Bench基准，评估LLM在多角色CEO战略资源再分配决策中的能力。",
-    "objective_summary": "研究者提出了CEO-Bench，一个多智能体基准，让LLM接收CFO/CTO/COO/CMO四类高管的冲突建议，在约束丰富的多轮环境中测试CEO级战略资源再分配决策。实验覆盖5个前沿模型的13个场景，发现所有模型结构有效性高但战略校准差异显著，存在单顾问捕获、保守默认和历史遗忘等系统性失效。",
+    "tldr": "该论文提出 CEO-Bench，一个多智能体基准测试，评估大语言模型在模拟企业环境中进行跨部门战略资源重新分配的能力。实验发现前沿模型在结构有效性上表现良好，但在战略校准层面出现严重分化，并揭示了单一顾问依赖、模糊情境下保守决策和历史遗忘等系统性失败模式。",
+    "objective_summary": "arXiv 在 2026 年 6 月发表的论文中提出了 CEO-Bench，这是一个多智能体基准测试框架，用于评估大语言模型在模拟 CEO 角色下进行多轮战略资源重新分配的能力。LLM 代理需要综合来自 CFO、CTO、COO、CMO 四位角色化 C 级顾问的冲突建议，并在信息不对称和组织约束下制定资本分配方案，评估维度包括角色整合、条件性果断、历史敏感判断和计划有效性。在 5 个前沿模型和 13 个场景上的实验显示，所有模型在结构有效性维度得分较高，但在战略校准等更高能力层出现显著分化。",
     "event_type": "framework_tools",
     "epistemic_status": "theoretical_claim",
     "entities": {
       "companies": [],
       "technologies": [
         "LLM",
-        "CEO-Bench",
-        "Multi-Agent System"
+        "CEO-Bench"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "现有LLM基准仅关注孤立认知任务，缺少对CEO级战略决策（在信息不对称、组织约束和时间依赖下整合冲突建议）的评估。",
-      "提出CEO-Bench基准，让LLM代理接收CFO、CTO、COO、CMO四位角色化高管的冲突建议，制定资本再分配方案。",
-      "评估四个维度：角色整合、条件性大胆、历史敏感判断和计划有效性。",
-      "在5个前沿模型的13个场景上实验发现，所有模型结构有效性高但在战略校准上差异显著。",
-      "识别出系统性失效模式：单一顾问捕获、模糊情境下的保守默认和历史遗忘。",
-      "发现结构整合-大胆性权衡：越深入参与冲突观点整合的模型，其决策果断性越低。"
+      "论文指出现有 LLM 评估基准局限于孤立的认知任务，如推理、知识检索和风格化经济理性，缺乏对真实高管决策环境的模拟。",
+      "作者提出了 CEO-Bench，一个多智能体基准测试，要求 LLM 代理扮演 CEO 角色，在信息不对称和约束条件下整合四位 C 级顾问的冲突建议并制定资本分配方案。",
+      "评估体系包含四个维度：角色整合、条件性果断、历史敏感判断和计划有效性，覆盖从低到高三个能力层。",
+      "在 5 个前沿模型和 13 个场景上的实验显示，所有模型在结构有效性上表现良好，但在战略校准这一最高能力层出现显著分化。",
+      "论文识别出三种系统性失败模式：单一顾问捕获、模糊情境下保守默认决策和历史遗忘。",
+      "研究还发现了一个结构性的整合-果断权衡：模型越深入参与冲突观点的综合，其行动决策往往越不果断。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "CEO-Bench",
+        "canonical_name": "CEO-Bench",
+        "url": "https://arxiv.org/abs/2606.17459",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "论文提出 CEO-Bench，一个多智能体基准测试，用于评估 LLM 在 CEO 级别的战略资源重新分配能力。",
+          "CEO-Bench 要求 LLM 代理整合四位角色化 C 级顾问（CFO、CTO、COO、CMO）的冲突建议，制定跨业务单元的资本分配计划。",
+          "实验在 5 个前沿模型和 13 个场景上运行，发现模型在战略校准层面存在系统性失败模式。"
+        ],
+        "article_id": "ccceb9b00a5406ce"
+      }
     ],
     "impact_score": {
       "score": 4.5,
@@ -1439,6 +1999,33 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "CEO-Bench",
+        "canonical_name": "CEO-Bench",
+        "url": "https://arxiv.org/abs/2606.17459",
+        "positioning": "CEO-Bench 是一个多智能体基准测试框架，用于评估大语言模型在模拟企业环境中的跨部门战略资源重新分配能力。",
+        "technical_signal": "该基准通过四位角色化 C 级顾问（CFO、CTO、COO、CMO）模拟信息不对称和组织约束，从角色整合、条件性果断、历史敏感判断和计划有效性四维度评估 LLM 能力。",
+        "adoption_signal": "作为新提出的学术基准，目前仅在 5 个前沿模型和 13 个场景上完成实验验证，尚未在更广泛研究社区中得到复现和应用。",
+        "ecosystem_relevance": "该基准填补了 LLM 评估从孤立认知任务到真实高管决策环境的空白，对多智能体系统和 AI 辅助决策研究具有重要参考价值。",
+        "target_users": [],
+        "watch_reason": "CEO-Bench 揭示了前沿 LLM 在战略校准层面的能力边界和系统性失败模式，包括单一顾问捕获、历史遗忘和整合-果断权衡困境，这些发现直接关系到 LLM 在企业高管决策场景中的实际可用性和安全部署边界。",
+        "risk_notes": [
+          "实验仅覆盖 5 个前沿模型和 13 个场景，评估规模和场景多样性仍有局限。",
+          "模拟环境与真实企业决策存在显著差距，基准表现未必能直接迁移到实际 CEO 决策场景。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "ccceb9b00a5406ce"
+        ],
+        "evidence_snippets": [
+          "论文提出 CEO-Bench，一个多智能体基准测试，用于评估 LLM 在 CEO 级别的战略资源重新分配能力。",
+          "CEO-Bench 要求 LLM 代理整合四位角色化 C 级顾问（CFO、CTO、COO、CMO）的冲突建议，制定跨业务单元的资本分配计划。",
+          "实验在 5 个前沿模型和 13 个场景上运行，发现模型在战略校准层面存在系统性失败模式。"
+        ]
+      }
+    ]
   }
 ]

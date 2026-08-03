@@ -14,8 +14,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "04aa3744e1ae44ce",
     "source_type": "community_discussion",
-    "tldr": "Roboflow 开源计算机视觉工具包 supervision，提供标注、数据集管理和模型集成功能。",
-    "objective_summary": "Roboflow 发布的 supervision 是一个模型无关的计算机视觉工具包，支持分类、检测和分割模型。它提供可自定义的标注器、数据集加载/分割/合并/保存/格式转换工具，以及实时区域计数等功能。该库通过 pip 安装，支持 Python 3.",
+    "tldr": "Roboflow 开源了 supervision 库（v0.16.0），这是一个模型无关的计算机视觉工具包，提供数据加载、标注、可视化、目标追踪和区域计数等功能，支持 Ultralytics、Transformers、MMDetection 等主流模型库的即插即用集成。",
+    "objective_summary": "Roboflow 团队维护的开源 Python 库 supervision（当前版本 v0.16.0）为计算机视觉开发者提供了一套模型无关的工具链，涵盖数据加载与格式转换、边界框/掩码/关键点标注可视化、实时目标追踪与区域计数等功能。该库要求 Python>=3.9，可通过 pip 安装，并内置了对 Ultralytics、Transformers、MMDetection、Inference 等主流模型库的连接器。",
     "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
@@ -23,27 +23,59 @@
         "Roboflow"
       ],
       "technologies": [
-        "computer vision",
-        "object detection",
-        "segmentation",
+        "Computer Vision",
         "YOLO",
-        "ByteTrack",
-        "COCO",
-        "Pascal VOC",
-        "Ultralytics",
-        "Transformers",
-        "MMDetection"
+        "ByteTrack"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "Supervision 是 Roboflow 开发的计算机视觉工具包，通过 pip 安装，支持 Python 3.9 及以上环境。",
-      "该工具包是模型无关的，支持分类、检测和分割模型，并内置了 Ultralytics、Transformers、MMDetection 和 Inference 等主流框架的连接器。",
-      "Supervision 提供多种可自定义的标注器（如 BoxAnnotator），用于构建可视化应用。",
-      "其数据集工具支持加载、分割、合并、保存以及在不同格式（COCO、YOLO、Pascal VOC）之间的转换。",
-      "工具包包含实时区域计数、停留时间分析和车速估计等实用功能及其教程。"
+      "Supervision 是一个模型无关的计算机视觉工具包，只需接入任何分类、检测或分割模型即可使用。",
+      "该库提供了高度可定制的标注器（如 BoxAnnotator），支持构建各类可视化组合。",
+      "Supervision 内置了数据集工具，支持 COCO、YOLO、Pascal VOC 等格式的加载、分割、合并与转换。",
+      "该库提供目标追踪与实时区域计数等实用功能，并有 dwell time 分析和速度估计等教程。",
+      "Supervision 为 Ultralytics、Transformers、MMDetection、Inference 等主流库提供了开箱即用的模型连接器。"
     ],
     "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "roboflow/supervision",
+        "canonical_name": "roboflow/supervision",
+        "url": "https://github.com/roboflow/supervision",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Roboflow 团队维护的 supervision 是一个模型无关的计算机视觉工具包，提供数据加载到实时区域计数的完整构建块。",
+          "Supervision 支持 pip 安装，要求 Python>=3.9，并提供 Ultralytics、Transformers、MMDetection 等模型连接器。",
+          "该库包含 BoxAnnotator 等高度可定制的标注器，以及 COCO、YOLO、Pascal VOC 格式的数据集加载与转换功能。"
+        ],
+        "article_id": "04aa3744e1ae44ce"
+      },
+      {
+        "object_type": "project",
+        "name": "Inference",
+        "canonical_name": "roboflow/inference",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "Supervision 集成 Roboflow Inference 作为模型连接器之一，使用 Inference 需要 Roboflow API KEY。",
+          "用户可通过 Inference 加载模型并调用 infer 方法，再将结果转换为 sv.Detections 格式进行后续处理。"
+        ],
+        "article_id": "04aa3744e1ae44ce"
+      },
+      {
+        "object_type": "project",
+        "name": "rfdetr",
+        "canonical_name": "rfdetr",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "rfdetr 是 Supervision 的模型连接器之一，可直接返回 sv.Detections 格式的对象供后续处理。"
+        ],
+        "article_id": "04aa3744e1ae44ce"
+      }
+    ],
     "impact_score": {
       "score": 5.5,
       "reason": "Supervision 是 Roboflow 维护的成熟开源 CV 工具包，非新发布产品。其价值在于为计算机视觉开发者提供了模型无关的统一 API，覆盖标注、数据集管理、目标跟踪、区域计数等高频需求，具备一定的开发者社区影响力。但它并非范式级变革——类似功能的拼装方案（如 cv2 + Ultralytics + ByteTrack 手动组合）早已存在，Supervision 的价值在于降低集成成本和提供标准化的 API 抽象，属于局部生态优化而非行业颠覆。因此评分落在'重要产品/生态组件'的腰部区间。"
@@ -164,7 +196,54 @@
         "已经深度绑定 FiftyOne 或 Label Studio 工作流的团队（迁移成本需评估）"
       ],
       "time_to_production": "ready_now"
-    }
+    },
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "roboflow/supervision",
+        "canonical_name": "roboflow/supervision",
+        "url": "https://github.com/roboflow/supervision",
+        "positioning": "Roboflow 团队维护的开源计算机视觉工具包，提供数据加载、标注、可视化到实时区域计数等模型无关的构建模块。",
+        "technical_signal": "该库内置了 Ultralytics、Transformers、MMDetection 等主流模型库的即插即用连接器，支持分类、检测和分割模型的快速接入。",
+        "adoption_signal": "文章以官方 README 形式呈现，说明 Roboflow 将其作为核心开源产品推广，拥有完善的文档、教程和社区贡献机制。",
+        "ecosystem_relevance": "作为模型无关的工具链，Supervision 填补了模型训练与生产应用之间的中间层空白，可与多个主流 CV 模型生态无缝协作。",
+        "target_users": [],
+        "watch_reason": "Supervision 作为计算机视觉领域的通用工具层，其模型无关设计大幅降低了 CV 应用开发门槛，且持续迭代新功能，值得跟踪其生态整合进展与开发者采用趋势。",
+        "risk_notes": [
+          "作为 Roboflow 商业生态的一部分，其发展路线可能受公司商业优先级牵引，开源社区独立性有待观察。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "04aa3744e1ae44ce"
+        ],
+        "evidence_snippets": [
+          "Roboflow 团队维护的 supervision 是一个模型无关的计算机视觉工具包，提供数据加载到实时区域计数的完整构建块。",
+          "Supervision 支持 pip 安装，要求 Python>=3.9，并提供 Ultralytics、Transformers、MMDetection 等模型连接器。",
+          "该库包含 BoxAnnotator 等高度可定制的标注器，以及 COCO、YOLO、Pascal VOC 格式的数据集加载与转换功能。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "rfdetr",
+        "canonical_name": "rfdetr",
+        "positioning": "基于 RF-DETR 架构的计算机视觉模型库，作为 Supervision 生态的模型连接器实现即时检测结果输出。",
+        "technical_signal": "rfdetr 模型预测结果可直接转换为 Supervision 标准格式，无需额外适配步骤，实现了与 Supervision 的原生集成。",
+        "adoption_signal": "作为 Supervision 官方推荐的模型连接器之一，rfdetr 受益于 Supervision 生态的开发者流量与文档曝光。",
+        "ecosystem_relevance": "rfdetr 通过 Supervision 连接器融入主流计算机视觉工具生态，降低了用户集成 RF-DETR 模型的工程成本。",
+        "target_users": [],
+        "watch_reason": "rfdetr 作为 Supervision 生态中的轻量级检测模型连接器，若持续迭代将受益于 Supervision 的开发者基础，值得关注其在实时检测场景中的定位演进。",
+        "risk_notes": [
+          "从现有信息来看，rfdetr 主要依赖 Supervision 生态，独立的技术路线和社区活跃度尚不明确。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "04aa3744e1ae44ce"
+        ],
+        "evidence_snippets": [
+          "rfdetr 是 Supervision 的模型连接器之一，可直接返回 sv.Detections 格式的对象供后续处理。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "github-trending",
@@ -181,22 +260,22 @@
     "pipeline_stage": "fact_extracted",
     "id": "98a99d0df7599b35",
     "source_type": "community_discussion",
-    "tldr": "Claude Code 功能速成指南，从基础到高级的模块化学习路径",
-    "objective_summary": "luongnv89 在 GitHub 上发布了一个名为 claude-howto 的 Claude Code 学习指南，包含 10 个教程模块、可复制模板和可视化图表，覆盖从斜杠命令到插件的高级用法，总计 11-13 小时学习路径。",
+    "tldr": "luongnv89/claude-howto 是一个结构化、可视化、示例驱动的 Claude Code 学习指南，提供 10 个教程模块、可复制粘贴的配置文件模板和渐进式学习路径，帮助用户从入门到精通掌握 Claude Code 的全部功能。",
+    "objective_summary": "luongnv89 在 GitHub 上发布了 claude-howto 开源指南，旨在解决官方文档仅描述功能特征但不展示如何组合使用的问题。该指南包含 10 个模块（从斜杠命令到插件），使用 Mermaid 图表解释内部原理，提供生产就绪模板和内置自评测验。指南采用 MIT 许可证，随 Claude Code 版本同步更新，当前适配 v2.1.160（2026 年 6 月）。",
     "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
-        "Anthropic",
-        "GitHub"
+        "Anthropic"
       ],
       "technologies": [
         "Claude Code",
         "MCP",
+        "CLAUDE.md",
         "Slash Commands",
         "Hooks",
-        "Skills",
         "Subagents",
+        "Skills",
         "Plugins",
         "Checkpoints"
       ],
@@ -205,12 +284,62 @@
       ]
     },
     "key_logic_flow": [
-      "luongnv89 在 GitHub 上创建了 claude-howto 开源项目，旨在填补官方文档与实践之间的空白，提供结构化、可视化、示例驱动的 Claude Code 学习资源。",
-      "该指南包含 10 个教程模块，从斜杠命令（入门）、记忆、检查点、CLI、技能、钩子、MCP、子代理，到高级功能和插件（高级），总计需要 11-13 小时完成全部学习路径。",
-      "每个模块提供可直接复制到项目中的生产级模板（如 CLAUDE.md 配置、斜杠命令、钩子脚本、MCP 配置和子代理定义），并附带 Mermaid 图表解释底层工作原理。",
-      "用户可以在 15 分钟内通过复制一个斜杠命令模板获得即时价值，1 小时内完成基础设置（斜杠命令 + 项目记忆 + 技能安装）。",
-      "内置自我评估功能（/self-assessment 和 /lesson-quiz 命令）帮助用户识别知识盲区并生成个性化学习路径。",
-      "该项目采用 MIT 许可证，免费且永久可用，积极维护并与 Claude Code v2.1.160（2026年6月）保持同步。"
+      "该指南的创建动机是官方文档仅描述功能特征，但不展示如何组合使用，导致用户无法充分利用 Claude Code 的全部能力。",
+      "指南提供 10 个教程模块，按难度分为初级（斜杠命令、记忆）、中级（技能、钩子、MCP、子代理）和高级（高级功能、插件），完整学习路径约需 11-13 小时。",
+      "每个模块均附带可复制粘贴的配置文件模板，包括斜杠命令、CLAUDE.md、钩子脚本、MCP 配置、子代理定义和插件包。",
+      "指南内置自评测验功能，用户可在 Claude Code 中通过 /self-assessment 或 /lesson-quiz 命令识别知识盲区并获得个性化学习路径。",
+      "该指南采用 MIT 许可证，免费开源，随 Claude Code 版本同步更新，当前适配 v2.1.160（2026 年 6 月发布）。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "luongnv89/claude-howto",
+        "canonical_name": "luongnv89/claude-howto",
+        "url": "https://github.com/luongnv89/claude-howto",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "该指南提供从斜杠命令到自定义子代理团队的 10 个教程模块，覆盖 Claude Code 的全部功能。",
+          "用户可通过 git clone 克隆仓库，复制斜杠命令模板到项目 .claude/commands/ 目录即可在 15 分钟内获得即时价值。",
+          "该仓库采用 MIT 许可证，免费开源，随 Claude Code 版本同步更新（当前适配 v2.1.160）。"
+        ],
+        "article_id": "98a99d0df7599b35"
+      },
+      {
+        "object_type": "project",
+        "name": "code-review-specialist",
+        "canonical_name": "luongnv89/claude-howto/code-review-specialist",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "该技能是指南提供的可复用能力示例，包含完整的代码审查指令和脚本，可通过 cp -r 命令安装到个人或项目技能目录。",
+          "指南列出 code-review-specialist 作为 Skills 模块的示例，与 brand-voice 和 doc-generator 并列展示。"
+        ],
+        "article_id": "98a99d0df7599b35"
+      },
+      {
+        "object_type": "project",
+        "name": "brand-voice",
+        "canonical_name": "luongnv89/claude-howto/brand-voice",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "该技能是品牌语态一致性检查工具，作为指南 Skills 模块的示例之一，与 code-review-specialist 和 doc-generator 并列。"
+        ],
+        "article_id": "98a99d0df7599b35"
+      },
+      {
+        "object_type": "project",
+        "name": "doc-generator",
+        "canonical_name": "luongnv89/claude-howto/doc-generator",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "该技能是 API 文档生成器，作为指南 Skills 模块的示例之一，用户可将其复制到技能目录后自动调用。"
+        ],
+        "article_id": "98a99d0df7599b35"
+      }
     ],
     "impact_score": {
       "score": 2.5,
@@ -264,7 +393,98 @@
       "compound": "medium",
       "hype": "medium"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "luongnv89/claude-howto",
+        "canonical_name": "luongnv89/claude-howto",
+        "url": "https://github.com/luongnv89/claude-howto",
+        "positioning": "结构化、可视化、示例驱动的 Claude Code 实战学习指南，提供 10 个渐进式教程模块、可复制粘贴的生产就绪配置模板和内置自评测验，填补官方文档仅描述功能但不展示组合使用的空白。",
+        "technical_signal": "采用 Mermaid 图表可视化解释 Claude Code 内部原理，提供涵盖斜杠命令、记忆、技能、钩子、MCP、子代理和插件的完整配置模板，实现零门槛功能组合与自动化流水线搭建。",
+        "adoption_signal": "采用 MIT 开源许可，社区贡献驱动开发模式，随 Claude Code 版本同步更新（当前适配 v2.1.160），用户通过 git clone 后 15 分钟内即可获得即时价值。",
+        "ecosystem_relevance": "作为 Claude Code 生态中稀缺的第三方结构化实战资源，精准解决开发者只知功能但不会组合使用的核心痛点，显著降低平台高阶功能的学习与采用门槛。",
+        "target_users": [],
+        "watch_reason": "作为 Claude Code 生态中少有的系统性实战指南，精准定位官方文档与用户实际需求之间的鸿沟，其 GitHub Stars 增长和社区 fork 数量将直接反映 Claude Code 开发者对高质量教程的真实渴求程度，值得持续跟踪其内容演进与社区采用趋势。",
+        "risk_notes": [
+          "依赖第三方个人维护，更新节奏可能滞后于 Claude Code 官方版本的迭代速度。",
+          "指南受众局限于 Claude Code 用户群体，且面临官方文档持续改进后对第三方教程需求的替代风险。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "98a99d0df7599b35"
+        ],
+        "evidence_snippets": [
+          "该指南提供从斜杠命令到自定义子代理团队的 10 个教程模块，覆盖 Claude Code 的全部功能。",
+          "用户可通过 git clone 克隆仓库，复制斜杠命令模板到项目 .claude/commands/ 目录即可在 15 分钟内获得即时价值。",
+          "该仓库采用 MIT 许可证，免费开源，随 Claude Code 版本同步更新（当前适配 v2.1.160）。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "code-review-specialist",
+        "canonical_name": "luongnv89/claude-howto/code-review-specialist",
+        "positioning": "claude-howto 指南中 Skills 模块提供的代码审查自动化技能模板，包含完整的审查指令与可安装脚本，展示 Claude Code 技能系统的实际应用模式。",
+        "technical_signal": "包含完整的代码审查指令和脚本，可通过 cp -r 命令直接安装到个人或项目技能目录，实现代码审查流程的自动化复用。",
+        "ecosystem_relevance": "作为 claude-howto 指南的可复用技能示例，展示了将专业开发工作流封装为 Claude Code 技能模块的标准化实践模式。",
+        "target_users": [],
+        "watch_reason": "作为 Claude Code 技能系统的典型使用案例，展示了将代码审查这一核心开发流程封装为可复用技能模块的有效模式，对理解 Claude Code 技能生态的扩展方式具有参考价值。",
+        "risk_notes": [
+          "仅作为 claude-howto 指南中的示例提供，缺乏独立的版本维护和更新机制。",
+          "技能功能高度依赖 Claude Code 运行环境，脱离平台后无法独立使用。"
+        ],
+        "score": 2.0,
+        "article_ids": [
+          "98a99d0df7599b35"
+        ],
+        "evidence_snippets": [
+          "该技能是指南提供的可复用能力示例，包含完整的代码审查指令和脚本，可通过 cp -r 命令安装到个人或项目技能目录。",
+          "指南列出 code-review-specialist 作为 Skills 模块的示例，与 brand-voice 和 doc-generator 并列展示。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "brand-voice",
+        "canonical_name": "luongnv89/claude-howto/brand-voice",
+        "positioning": "claude-howto 指南中提供的品牌语态一致性检查技能模板，用于确保 AI 生成内容的语言风格符合品牌调性要求。",
+        "technical_signal": "作为品牌语态一致性检查工具，与 code-review-specialist 和 doc-generator 并列作为 Skills 模块的示例技能，用户可直接复制使用。",
+        "ecosystem_relevance": "展示了如何将品牌管理这一非技术需求转化为 Claude Code 可执行的技能模块，拓展了 Claude Code 在企业内容治理与品牌管理场景的应用边界。",
+        "target_users": [],
+        "watch_reason": "作为 Claude Code 在企业品牌管理场景的实践案例，展示了技能系统在内容治理与品牌一致性保障中的应用潜力，对企业团队有参考价值。",
+        "risk_notes": [
+          "仅作为 claude-howto 指南中的示例提供，缺乏独立的版本维护和更新机制。",
+          "品牌语态判断的准确性高度依赖底层模型能力，实际效果可能存在偏差。"
+        ],
+        "score": 1.0,
+        "article_ids": [
+          "98a99d0df7599b35"
+        ],
+        "evidence_snippets": [
+          "该技能是品牌语态一致性检查工具，作为指南 Skills 模块的示例之一，与 code-review-specialist 和 doc-generator 并列。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "doc-generator",
+        "canonical_name": "luongnv89/claude-howto/doc-generator",
+        "positioning": "claude-howto 指南提供的 API 文档自动生成技能模板，用户复制到技能目录后即可利用 Claude Code 自动生成项目文档。",
+        "technical_signal": "作为 API 文档生成器，用户可将其复制到技能目录后自动调用，展示了 Claude Code Skills 功能在自动化文档生成场景的实际用法。",
+        "ecosystem_relevance": "展示了如何利用 Claude Code 技能系统将文档生成流程自动化，帮助开发者降低维护 API 文档的重复劳动成本，提升开发效率。",
+        "target_users": [],
+        "watch_reason": "作为 Claude Code 在文档自动化场景的实践案例，展示了技能系统在开发者工具生态中减少重复性工作的应用潜力。",
+        "risk_notes": [
+          "仅作为 claude-howto 指南中的示例提供，缺乏独立的版本维护和更新机制。",
+          "文档生成质量直接受底层模型能力影响，复杂 API 场景下的准确性和完整性有待验证。"
+        ],
+        "score": 1.0,
+        "article_ids": [
+          "98a99d0df7599b35"
+        ],
+        "evidence_snippets": [
+          "该技能是 API 文档生成器，作为指南 Skills 模块的示例之一，用户可将其复制到技能目录后自动调用。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "github-trending",
@@ -281,37 +501,43 @@
     "pipeline_stage": "fact_extracted",
     "id": "ad904a51b1769854",
     "source_type": "community_discussion",
-    "tldr": "Google 开源了 google/skills 仓库，包含 Google 产品与 Google Cloud 的 Agent Skills 技能包。",
-    "objective_summary": "Google 在 GitHub 上发布了 google/skills 仓库，提供针对 Google 产品和 Google Cloud 技术的 Agent Skills 集合，用户可通过 npx skills add 命令安装，采用 Apache 2.0 开源许可证，处于活跃开发阶段。",
+    "tldr": "Google 在 GitHub 上发布了 google/skills 开源仓库，以 Agent Skill 格式封装 Gemini API、BigQuery、Cloud Run 等 Google Cloud 服务的操作指南，用户可通过 npx skills add google/skills 命令安装。",
+    "objective_summary": "Google 于 2026 年 7 月在 GitHub 上开源了 google/skills 仓库，该仓库将 Google 产品和技术的操作指南封装为标准化的 Agent Skill 格式。仓库目前处于活跃开发阶段，涵盖 Gemini API、AlloyDB、BigQuery、Cloud Run、Cloud SQL、Firebase、GKE 等多项服务的 Skill，以及 Google Cloud 新手引导、身份认证和网络可观测性等实操配方。用户通过 npx skills add google/skills 命令即可选择安装，所有内容采用 Apache 2.0 许可证发布。",
     "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
-        "Google",
-        "Google Cloud"
+        "Google"
       ],
       "technologies": [
-        "Agent Skills",
-        "Gemini API",
-        "Gemini Interactions API",
-        "Managed Agents API",
-        "Skill Registry API",
-        "AlloyDB",
-        "BigQuery",
-        "Cloud Run",
-        "Cloud SQL",
-        "Firebase",
-        "Kubernetes Engine (GKE)"
+        "Agent Skills"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "Google 在 GitHub 上创建了 google/skills 仓库，用于托管 Google 产品和 Google Cloud 的 Agent Skills。",
-      "该仓库处于活跃开发阶段，用户可通过 npx skills add google/skills 命令安装所需技能。",
-      "仓库涵盖的技能包括：Gemini API、Gemini Interactions API、Managed Agents API、Skill Registry API、AlloyDB、BigQuery、Cloud Run、Cloud SQL、Firebase、Kubernetes Engine (GKE) 等。",
-      "还包含了多个实操指南类 Recipe 技能：Google Cloud 入门、Google Cloud 身份认证、Google Cloud 网络可观测性。",
-      "所有技能以 Apache 2.0 许可证发布，允许自由复制、修改和分发。",
-      "项目欢迎社区贡献，包括报告 bug、提交新技能需求等。"
+      "Google 在 GitHub 上创建了 google/skills 开源仓库，专门存放 Google 产品和技术的标准化 Agent Skill。",
+      "该仓库目前处于活跃开发阶段，包含 Gemini API、AlloyDB、BigQuery、Cloud Run、Cloud SQL、Firebase、GKE 等多项 Google Cloud 服务的 Skill 以及多个实操 Recipe。",
+      "用户可通过 npx skills add google/skills 命令交互式选择并安装所需的特定 Agent Skill。",
+      "仓库提供了 Google Cloud 新手引导、身份认证和网络可观测性等端到端实操配方，帮助用户快速上手。",
+      "项目接受社区贡献，包括报告 Bug、改进现有 Skill 内容以及提交新 Skill 的 feature request。",
+      "所有 Skill 内容以 Apache 2.0 许可证发布，允许自由复制、修改和分发。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "google/skills",
+        "canonical_name": "google/skills",
+        "url": "https://github.com/google/skills",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Google 在 GitHub 上创建了 google/skills 开源仓库，用于存放 Google 产品和技术的 Agent Skill。",
+          "用户可通过 npx skills add google/skills 命令，从该仓库中选择并安装特定的 Agent Skill。",
+          "仓库目前处于活跃开发阶段，包含 Gemini API、AlloyDB、BigQuery、Cloud Run 等多项 Google Cloud 服务的标准化 Skill。"
+        ],
+        "article_id": "ad904a51b1769854"
+      }
     ],
     "impact_score": {
       "score": 5.5,
@@ -370,7 +596,34 @@
       "compound": "medium",
       "hype": "medium"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "google/skills",
+        "canonical_name": "google/skills",
+        "url": "https://github.com/google/skills",
+        "positioning": "Google 官方在 GitHub 上开源的标准化工具体系，将 Gemini API、BigQuery、Cloud Run 等核心 Google Cloud 服务能力封装为标准化 Agent Skill 格式，供开发者通过 npx 命令一键安装使用。",
+        "technical_signal": "项目将 Gemini API、BigQuery、Cloud Run 等多项 Google Cloud 核心服务封装为标准化的 Agent Skill 格式，为 AI Agent 调用云服务能力定义了统一的接口规范。",
+        "adoption_signal": "项目于 2026 年 7 月在 GitHub 上正式发布，采用 Apache 2.0 开源协议，提供 npx skills add 一键安装体验，并通过 GitHub Issues 和 feature request 机制面向社区征集贡献。",
+        "ecosystem_relevance": "与 Google Cloud 生态深度绑定，覆盖 AI API、数据库、容器编排、网络可观测性等关键领域，是 Google 推动 Agent 生态标准化的重要战略举措。",
+        "target_users": [],
+        "watch_reason": "Google 以开源方式将其云服务封装为标准化 Agent Skill 格式，是推动 AI Agent 工具链标准化的重要战略布局。该仓库若被社区广泛采纳，可能重塑云服务与 AI Agent 的交互范式，成为行业事实标准。其生态扩展速度、社区贡献活跃度以及格式标准化进程，都值得持续跟踪和关注。",
+        "risk_notes": [
+          "仓库目前处于早期开发阶段，Skill 覆盖范围有限，仅涵盖 Google Cloud 部分核心服务，其内容质量和实用价值有待社区验证。",
+          "Agent Skill 格式（npx skills）本身尚处于生态培育期，其标准化进程和开发者采用情况存在较大不确定性。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "ad904a51b1769854"
+        ],
+        "evidence_snippets": [
+          "Google 在 GitHub 上创建了 google/skills 开源仓库，用于存放 Google 产品和技术的 Agent Skill。",
+          "用户可通过 npx skills add google/skills 命令，从该仓库中选择并安装特定的 Agent Skill。",
+          "仓库目前处于活跃开发阶段，包含 Gemini API、AlloyDB、BigQuery、Cloud Run 等多项 Google Cloud 服务的标准化 Skill。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "github-trending",
@@ -387,19 +640,20 @@
     "pipeline_stage": "fact_extracted",
     "id": "b92602274d6abd3d",
     "source_type": "community_discussion",
-    "tldr": "GitHub 发布 PM Skills Marketplace，含 68 个 PM 技能和 42 个工作流，支持 Claude Code 等多款 AI",
-    "objective_summary": "phuryn 在 GitHub 上发布 pm-skills 仓库，提供 68 个产品管理技能和 42 个链式工作流，分布在 9 个插件中。该项目支持 Claude Code、Cowork、Codex 等 AI 编程助手，覆盖从产品发现、战略、执行到发布增长的全流程。",
+    "tldr": "phuryn/pm-skills 是一个面向 AI 编码助手的 PM 技能市场，提供 68 个产品管理技能和 42 条链式工作流，覆盖从产品发现到战略、执行、发布和增长的全流程，兼容 Claude Code、Cowork 和 Codex 等多款 AI 工具。",
+    "objective_summary": "phuryn 在 GitHub 上发布了 pm-skills 仓库，这是一个为 AI 编码助手设计的 PM 技能市场。该仓库包含 68 个技能和 42 条链式工作流，通过 9 个插件组织，覆盖产品发现、策略、执行、市场研究、数据分析、营销增长、上市策略和 AI 交付等 PM 领域。每个技能编码了经过验证的 PM 框架，命令通过 /command-name 触发链式流程。项目原生支持 Claude Code 和 Cowork 的插件市场，也可通过复制 SKILL.md 文件兼容 Gemini CLI、OpenCode、Cursor 和 Kiro 等工具。",
     "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
-      "companies": [
-        "phuryn",
-        "GitHub"
-      ],
+      "companies": [],
       "technologies": [
         "Claude Code",
-        "Cowork",
-        "Codex"
+        "Codex",
+        "Gemini CLI",
+        "OpenCode",
+        "Cursor",
+        "Kiro",
+        "Cowork"
       ],
       "key_people": [
         "Teresa Torres",
@@ -408,12 +662,97 @@
       ]
     },
     "key_logic_flow": [
-      "phuryn/pm-skills 仓库包含 68 个 PM 技能和 42 个链式工作流，分布在 9 个插件中。",
-      "该项目为 AI 编程助手（Claude Code、Cowork、Codex 等）提供结构化的产品管理框架，涵盖发现、战略、执行、发布、增长和 AI 代码交付。",
-      "9 个插件包括：pm-product-discovery、pm-product-strategy、pm-execution、pm-market-research、pm-data-analytics、pm-marketing-growth、pm-go-to-market、pm-ai-shipping 和 pm-toolkit。",
-      "技能和命令通过 /discover、/strategy、/write-prd、/plan-launch、/north-star 等斜杠命令触发，支持端到端工作流。",
-      "技能编码了 Teresa Torres、Marty Cagan 和 Alberto Savoia 等知名 PM 方法论作为日常工作流。",
-      "该项目还支持通过复制 SKILL.md 文件适配 Gemini CLI、OpenCode、Cursor、Kiro 等其他 AI 编程工具。"
+      "phuryn/pm-skills 包含 68 个 PM 技能和 42 条链式工作流，覆盖从产品发现到策略、执行、发布、增长和 AI 编码交付的全流程。",
+      "该仓库通过 9 个插件组织内容，包括 pm-product-discovery、pm-product-strategy、pm-execution 等覆盖不同 PM 领域的可安装包。",
+      "技能（Skills）是基础构建块，为 AI 助手提供领域知识和分析框架；命令（Commands）是用户通过 /command-name 触发的链式端到端工作流。",
+      "项目原生支持 Claude Code 和 Cowork 的 plugin marketplace 安装机制，同时可通过复制 SKILL.md 文件兼容 Gemini CLI、OpenCode、Cursor 和 Kiro 等 AI 工具。",
+      "每个技能编码了经过验证的 PM 框架，参考了 Teresa Torres 的机会解决树、Marty Cagan 的产品策略和 Alberto Savoia 的预型实验等方法论。",
+      "在 Codex 上，/slash 命令虽然不能原生运行，但用户可通过描述步骤或要求 Codex 将命令文件转换为 Codex 技能来使用相同的工作流。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "phuryn/pm-skills",
+        "canonical_name": "phuryn/pm-skills",
+        "url": "https://github.com/phuryn/pm-skills",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "该仓库提供 68 个 PM 技能和 42 条链式工作流，覆盖从产品发现到策略、执行、发布、增长和 AI 编码交付的全流程。",
+          "技能为 AI 助手提供领域知识和分析框架，命令通过 /command-name 触发链式流程，涵盖 9 个 PM 领域的插件包。",
+          "项目原生支持 Claude Code 和 Cowork 的插件市场安装，也兼容 Gemini CLI、OpenCode、Cursor 和 Kiro 等 AI 工具。"
+        ],
+        "article_id": "b92602274d6abd3d"
+      },
+      {
+        "object_type": "product",
+        "name": "Claude Code",
+        "canonical_name": "Claude Code",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "phuryn/pm-skills 专为 Claude Code 和 Cowork 设计，可通过 plugin marketplace add 命令直接安装所有 9 个插件。",
+          "Claude Code 原生支持 /command-name 格式的命令调用，如 /discover、/strategy、/write-prd 等完整 PM 工作流。"
+        ],
+        "article_id": "b92602274d6abd3d"
+      },
+      {
+        "object_type": "product",
+        "name": "Cowork",
+        "canonical_name": "Cowork",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "phuryn/pm-skills 被明确标注为专为 Claude Code 和 Cowork 设计，技能和命令均可在这两个平台上原生使用。"
+        ],
+        "article_id": "b92602274d6abd3d"
+      },
+      {
+        "object_type": "product",
+        "name": "Codex",
+        "canonical_name": "Codex",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "Codex 可直接读取 phuryn/pm-skills 的插件市场文件，通过 codex plugin add 命令原生安装所有 9 个 PM 插件。",
+          "Codex 不支持 /slash 命令，但用户可通过描述步骤或让 Codex 将命令文件转换为 Codex 技能来使用工作流。"
+        ],
+        "article_id": "b92602274d6abd3d"
+      },
+      {
+        "object_type": "project",
+        "name": "pm-product-discovery",
+        "canonical_name": "pm-product-discovery",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "pm-product-discovery 是 9 个插件之一，包含 13 个技能和 5 个命令，覆盖构思、实验、假设测试和机会解决树等领域。"
+        ],
+        "article_id": "b92602274d6abd3d"
+      },
+      {
+        "object_type": "project",
+        "name": "pm-product-strategy",
+        "canonical_name": "pm-product-strategy",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "pm-product-strategy 是 9 个插件之一，包含 12 个技能和 5 个命令，覆盖愿景、商业模式、定价和竞争分析等领域。"
+        ],
+        "article_id": "b92602274d6abd3d"
+      },
+      {
+        "object_type": "project",
+        "name": "pm-execution",
+        "canonical_name": "pm-execution",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "pm-execution 是 9 个插件之一，包含 16 个技能和 11 个命令，覆盖 PRD、OKR、路线图、Sprint 和利益相关者管理等日常 PM 工作。"
+        ],
+        "article_id": "b92602274d6abd3d"
+      }
     ],
     "impact_score": {
       "score": 4.5,
@@ -469,7 +808,98 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "phuryn/pm-skills",
+        "canonical_name": "phuryn/pm-skills",
+        "url": "https://github.com/phuryn/pm-skills",
+        "positioning": "AI 编码助手的产品管理技能市场，提供 68 个 PM 技能和 42 条链式工作流，覆盖从产品发现到增长的全流程框架。",
+        "technical_signal": "项目采用 Skill/Command/Plugin 三层架构，每个技能编码经过验证的 PM 框架，命令通过链式调用多个技能实现端到端工作流。",
+        "adoption_signal": "原生支持 Claude Code 和 Cowork 的插件市场安装机制，同时兼容 Gemini CLI、OpenCode、Cursor 和 Kiro 等多款 AI 工具。",
+        "ecosystem_relevance": "填补了 AI 编码助手在 PM 领域知识方面的系统化空缺，将产品管理方法论以可复用技能形式融入 AI 协作工具生态。",
+        "target_users": [],
+        "watch_reason": "作为首个系统性的 PM 技能市场，该项目将经行业验证的产品管理框架编码为 AI 可消费的技能模块，有望改变 PM 与 AI 协作的方式，值得持续关注其社区增长、生态扩展和在实际工作流中的落地效果。",
+        "risk_notes": [
+          "技能质量和时效性依赖 PM 框架的持续维护更新，长期维护成本较高且可能滞后于业界最佳实践。",
+          "命令功能在非 Claude Code 工具上不可用，跨工具兼容性仅限技能层面的 SKILL.md 格式支持。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "b92602274d6abd3d"
+        ],
+        "evidence_snippets": [
+          "该仓库提供 68 个 PM 技能和 42 条链式工作流，覆盖从产品发现到策略、执行、发布、增长和 AI 编码交付的全流程。",
+          "技能为 AI 助手提供领域知识和分析框架，命令通过 /command-name 触发链式流程，涵盖 9 个 PM 领域的插件包。",
+          "项目原生支持 Claude Code 和 Cowork 的插件市场安装，也兼容 Gemini CLI、OpenCode、Cursor 和 Kiro 等 AI 工具。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "pm-product-discovery",
+        "canonical_name": "pm-product-discovery",
+        "positioning": "pm-skills 市场中的产品发现插件，13 个技能和 5 个命令覆盖构思、实验、假设测试和机会解决树等发现环节。",
+        "technical_signal": "采用技能与命令分离的架构，技能内置机会解决树等经过验证的 PM 发现方法论，命令链式调用完成端到端发现流程。",
+        "adoption_signal": "可通过 Claude Code 和 Cowork 插件市场安装，作为 9 个插件之一随 pm-skills 主项目自动集成。",
+        "ecosystem_relevance": "将产品发现阶段的系统化方法编码为 AI 原生技能，降低团队应用 Teresa Torres 等成熟方法论的门槛。",
+        "target_users": [],
+        "watch_reason": "作为 pm-skills 中规模较大的核心插件，其 13 个技能覆盖产品发现完整链条，值得关注其在真实 PM 工作流中被调用的频率和效果。",
+        "risk_notes": [
+          "作为主项目子模块，生态发展高度依赖 pm-skills 整体采用率和社区维护节奏。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "b92602274d6abd3d"
+        ],
+        "evidence_snippets": [
+          "pm-product-discovery 是 9 个插件之一，包含 13 个技能和 5 个命令，覆盖构思、实验、假设测试和机会解决树等领域。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "pm-product-strategy",
+        "canonical_name": "pm-product-strategy",
+        "positioning": "pm-skills 市场中的产品策略插件，12 个技能和 5 个命令覆盖愿景定义、商业模式设计、定价策略和竞争分析等战略领域。",
+        "technical_signal": "技能内置 Marty Cagan 产品策略等经典方法论，命令链式调用完成从愿景到竞争分析的战略推演流程。",
+        "adoption_signal": "随 pm-skills 主项目自动安装到 Claude Code 和 Cowork，也可通过复制 SKILL.md 文件独立迁移至其他 AI 工具。",
+        "ecosystem_relevance": "将产品战略经典方法论编码为 AI 可消费技能，帮助团队在编码助手中直接进行战略推演和结构化决策分析。",
+        "target_users": [],
+        "watch_reason": "产品策略是 PM 最高杠杆率的工作环节，该插件将战略框架系统化嵌入 AI 工作流，值得关注其在复杂商业决策场景中的实际应用效果。",
+        "risk_notes": [
+          "战略决策高度依赖上下文和人类判断，AI 驱动的策略框架在复杂商业环境中可能产出表面合理但缺乏深度的建议。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "b92602274d6abd3d"
+        ],
+        "evidence_snippets": [
+          "pm-product-strategy 是 9 个插件之一，包含 12 个技能和 5 个命令，覆盖愿景、商业模式、定价和竞争分析等领域。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "pm-execution",
+        "canonical_name": "pm-execution",
+        "positioning": "pm-skills 市场中规模最大的执行插件，16 个技能和 11 个命令覆盖 PRD、OKR、路线图、Sprint 和利益相关者管理等日常 PM 工作。",
+        "technical_signal": "包含最多技能和命令的插件，命令链覆盖从 PRD 编写到 Sprint 执行的完整链路，部分技能可被多个命令跨插件复用。",
+        "adoption_signal": "作为 pm-skills 使用频率最高的插件之一，11 个命令覆盖 PM 日常高频场景，随主项目自动安装即用。",
+        "ecosystem_relevance": "将 PRD 编写、OKR 管理和路线图规划等 PM 核心执行工作流 AI 原生化的标杆实现，有望成为 AI 辅助 PM 执行的标准参考。",
+        "target_users": [],
+        "watch_reason": "PM 执行是最高频的日常工作，该插件 16 个技能覆盖从 PRD 到 Sprint 的全链路，值得关注其在提升 PM 日常工作效率方面的量化效果。",
+        "risk_notes": [
+          "AI 生成的 PRD 和路线图质量可能不稳定，关键交付物仍需资深 PM 人工审核与调整。",
+          "11 个命令工作流在非 Claude Code 工具上不可用，跨平台使用时仅技能层面有效。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "b92602274d6abd3d"
+        ],
+        "evidence_snippets": [
+          "pm-execution 是 9 个插件之一，包含 16 个技能和 11 个命令，覆盖 PRD、OKR、路线图、Sprint 和利益相关者管理等日常 PM 工作。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "github-trending",
@@ -486,8 +916,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "dda0d6d4ba781ee6",
     "source_type": "community_discussion",
-    "tldr": "自动检测本地硬件并推荐最适配本地运行的大语言模型的 CLI 工具",
-    "objective_summary": "Andyyyy64 发布了开源 CLI 工具 whichllm，可自动检测用户 GPU/CPU/RAM，从 HuggingFace 实时获取模型数据，基于 LiveBench、Aider、Arena ELO 等多源基准测试与硬件适配度进行加权评分（0-100），推荐最适合本地运行的大语言模型，支持",
+    "tldr": "whichllm 是一款开源 CLI 工具，能自动检测本地硬件配置，基于实时基准评分从 HuggingFace 推荐最适配的开源大语言模型，无需繁琐配置即可一键运行。",
+    "objective_summary": "开发者 Andyyyy64 在 GitHub 上发布了 whichllm 项目，这是一款基于 Python 的命令行工具。它通过自动检测用户设备的 GPU、CPU 和内存信息，结合 LiveBench、Chatbot Arena ELO 等多项真实基准评分，以证据置信度加权排序，推荐最适合本地硬件运行的 HuggingFace 大语言模型。工具支持 GPU 购买模拟、一键对话启动、Python 代码片段生成和 JSON 管道输出，安装方式包括 uvx、pip 和 Homebrew。",
     "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
@@ -496,30 +926,45 @@
       ],
       "technologies": [
         "GGUF",
+        "MoE",
         "AWQ",
         "GPTQ",
-        "MoE",
         "GQA",
-        "KV Cache",
         "llama-cpp-python",
-        "transformers",
+        "Transformers",
         "LiveBench",
-        "Artificial Analysis",
         "Aider",
         "Chatbot Arena ELO",
-        "Open LLM Leaderboard"
+        "Open LLM Leaderboard",
+        "ROCm",
+        "Metal"
       ],
-      "key_people": [
-        "Andyyyy64"
-      ]
+      "key_people": []
     },
     "key_logic_flow": [
-      "whichllm 是一个开源 CLI 工具，通过检测用户硬件（NVIDIA/AMD/Apple Silicon/CPU）的 VRAM、RAM 和算力，自动筛选出能在本地运行的 LLM 模型。",
-      "工具从 HuggingFace API 实时拉取模型数据，并融合 LiveBench、Artificial Analysis、Aider、Arena ELO 等多个基准测试进行加权评分，而非单纯按模型大小推荐。",
-      "评分机制包含基准质量、模型大小、量化精度、证据置信度、运行适配度、速度、来源可信度和流行度等多个因子，最终输出 0-100 的综合得分。",
-      "基准证据分为 direct/variant/base/interpolated/self-reported 五个置信等级，虚构的上传者声明和跨家族继承分数会被主动拒绝。",
-      "除核心推荐功能外，还提供 GPU 模拟（--gpu）、硬件规划（plan）、一键聊天（run）、Python 代码片段生成（snippet）和 JSON 输出等子命令。",
-      "支持通过 uvx、Homebrew、pip 等多种方式安装，单次运行无需项目配置，执行 uvx whichllm@latest 即可获得推荐结果。"
+      "whichllm 项目提供自动硬件检测功能，支持 NVIDIA、AMD、Apple Silicon 及纯 CPU 环境。",
+      "该工具从 HuggingFace API 实时拉取模型数据，并整合多项基准排行榜评分进行排序。",
+      "评分系统采用五级证据置信度机制（direct/variant/base/interpolated/self-reported），对上传者自报分数进行折扣处理。",
+      "支持 --gpu 参数模拟指定硬件配置，帮助用户在采购前评估不同 GPU 的性能表现。",
+      "工具提供 run 子命令实现一键下载并启动模型对话，snippet 子命令生成可复制的 Python 代码。",
+      "输出支持 --json 格式，便于集成到脚本管道中进一步处理。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "Andyyyy64/whichllm",
+        "canonical_name": "whichllm",
+        "url": "https://github.com/Andyyyy64/whichllm",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "whichllm 是一款开源 CLI 工具，可自动检测用户 GPU/CPU/RAM 硬件并推荐最适配的 HuggingFace 大语言模型。",
+          "该工具采用证据加权排序算法，整合 LiveBench、Chatbot Arena ELO 等多项真实基准评分，而非仅依据模型参数量推荐。",
+          "支持 GPU 模拟、一键对话启动、Python 代码片段生成和 JSON 管道输出，安装方式包括 uvx、pip 和 Homebrew。"
+        ],
+        "article_id": "dda0d6d4ba781ee6"
+      }
     ],
     "impact_score": {
       "score": 5.5,
@@ -575,6 +1020,33 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Andyyyy64/whichllm",
+        "canonical_name": "whichllm",
+        "url": "https://github.com/Andyyyy64/whichllm",
+        "positioning": "基于自动硬件检测与多项实时基准评分的开源 CLI 工具，为开发者推荐最适合本地设备运行的 HuggingFace 大语言模型。",
+        "technical_signal": "采用五级证据置信度机制对基准评分进行折扣加权排序，整合 LiveBench、Chatbot Arena ELO 等多项真实排行榜数据，而非仅按参数量推荐。",
+        "adoption_signal": "支持 uvx 一键运行、pip 和 Homebrew 多通道安装方式，无需繁琐项目配置即可自动检测硬件并推荐最适配模型，有效降低了本地 LLM 选型的入门门槛。",
+        "ecosystem_relevance": "紧密围绕 HuggingFace 模型生态实时拉取最新开源模型数据，支持 GGUF、AWQ、GPTQ、FP16/BF16 等多种主流格式的本地推理部署。",
+        "target_users": [],
+        "watch_reason": "以「证据加权排序而非仅看参数大小」的差异化定位切入本地 LLM 选型痛点，并提供 GPU 采购模拟、一键对话和硬件规划功能，在本地 AI 推理需求持续增长趋势下具有跟踪价值。",
+        "risk_notes": [
+          "作为个人开发者维护的开源项目，长期可持续性和更新频率存在不确定性，需关注社区活跃度变化。",
+          "评分系统依赖 HuggingFace API 和外部基准数据源，数据变更或不可用将直接影响核心推荐功能。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "dda0d6d4ba781ee6"
+        ],
+        "evidence_snippets": [
+          "whichllm 是一款开源 CLI 工具，可自动检测用户 GPU/CPU/RAM 硬件并推荐最适配的 HuggingFace 大语言模型。",
+          "该工具采用证据加权排序算法，整合 LiveBench、Chatbot Arena ELO 等多项真实基准评分，而非仅依据模型参数量推荐。",
+          "支持 GPU 模拟、一键对话启动、Python 代码片段生成和 JSON 管道输出，安装方式包括 uvx、pip 和 Homebrew。"
+        ]
+      }
+    ]
   }
 ]

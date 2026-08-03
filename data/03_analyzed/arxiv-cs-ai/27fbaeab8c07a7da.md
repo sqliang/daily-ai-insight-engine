@@ -34,27 +34,40 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: 27fbaeab8c07a7da
 source_type: academic_paper
-tldr: 提出 AgingBench 基准，揭示部署后的 AI Agent 即使模型权重冻结也会随时间退化，需用生命周期工程而非一次性评测来保障可靠性。
-objective_summary: 研究者于 2026 年发布论文，提出 AgingBench 纵向可靠性基准，将 Agent 老化归为压缩老化、干扰老化、修订老化和维护老化四种机制，通过时序依赖图和反事实探针对
-  7 个场景、14 个模型进行约 400 次运行，发现行为测试可能保持清洁而事实精度已衰退，同一错误答案需不同修复策略。
+tldr: 该论文提出 AgingBench，一个用于评估已部署 AI 代理长期可靠性的纵向基准，识别了压缩老化、干扰老化、修订老化和维护老化四种机制，并通过约 400
+  次实验发现代理老化是多维的，需要全生命周期评估而非仅依赖初始模型性能。
+objective_summary: 研究者在一篇 arXiv 论文中提出了 AgingBench，这是一个用于衡量已部署 AI 代理长期可靠性的纵向基准，而非仅评估初始化时的模型性能。该基准将代理老化分为压缩老化、干扰老化、修订老化和维护老化四种机制，并使用时间依赖图和配对反事实探针诊断记忆管道的写入、检索和利用阶段故障。在
+  7 个场景、14 个模型、多种记忆策略下进行的约 400 次实验表明，行为测试可能保持正常而事实精度已下降，不同老化模式需要不同的针对性修复。
 event_type: framework_tools
-epistemic_status: theoretical_claim
+epistemic_status: verified_fact
 entities:
   companies: []
   technologies:
   - AgingBench
-  - temporal dependency graphs
-  - counterfactual probes
-  - memory pipeline
+  - Agent Lifespan Engineering
+  - Temporal Dependency Graphs
+  - Counterfactual Probes
   key_people: []
 key_logic_flow:
-- 当前 Agent 评测体系依赖初始化时的快照测试，忽略部署后随时间持续运行的可靠性问题，即使模型权重冻结，Agent 的有效状态仍会因交互历史压缩、记忆库增长、事实修订和日常维护而变化。
-- 提出 AgingBench 纵向可靠性基准，将 Agent 老化归纳为四种机制：压缩老化（compression aging）、干扰老化（interference
-  aging）、修订老化（revision aging）和维护老化（maintenance aging）。
-- 为诊断老化故障，AgingBench 使用时序依赖图和配对反事实探针，生成针对记忆管道写入、检索和利用三个阶段的诊断画像。
-- 实验覆盖 7 个场景、14 个模型、多种记忆策略以及受控和自主两类 Agent，约 400 次运行跨越 8 至 200 个会话，结果表明 Agent 老化不是单维度的。
-- 核心发现：行为测试可能保持清洁而事实精度已衰退，派生状态跟踪可在单一模型内急剧崩溃，且同一错误答案根据诊断画像指向的不同需要不同的修复策略。
-- 结论：可靠的 Agent 部署需要生命周期评测、机制级诊断和阶段定向修复，而非仅依赖更强的初始模型。
+- 该论文指出长期部署的 AI 代理在模型权重冻结后，其有效状态仍会因交互历史压缩、记忆库增长、事实修订和日常维护而持续变化。
+- 论文提出了 AgingBench 纵向可靠性基准，将代理老化机制分为压缩老化、干扰老化、修订老化和维护老化四类。
+- AgingBench 使用时间依赖图和配对反事实探针来诊断记忆管道的写入、检索和利用阶段的具体故障并生成诊断画像。
+- 在 7 个场景、14 个模型、多种记忆策略下进行的约 400 次实验覆盖了 8 到 200 个会话周期，横跨 runner 控制和自主代理两种类型。
+- 实验表明代理老化并非一维：行为测试可能仍然正常而事实精度已经下降，衍生状态追踪可能在单个模型内急剧崩溃。
+- 可靠的代理部署需要全生命周期评估、机制级别的诊断和分阶段针对性修复，而非仅依赖于更强的初始模型。
+extract_result: success
+object_mentions:
+- object_type: project
+  name: AgingBench
+  canonical_name: AgingBench
+  url: https://arxiv.org/abs/2605.26302
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 论文介绍了 AgingBench，一个用于代理生命周期工程的纵向可靠性基准，不仅衡量退化程度还诊断退化形式。
+  - AgingBench 将代理老化组织为四种机制：压缩老化、干扰老化、修订老化和维护老化。
+  - 在 7 个场景、14 个模型和多种记忆策略下的约 400 次实验说明代理老化是多维的，需要机制级别诊断和针对性修复。
+  article_id: 27fbaeab8c07a7da
 impact_score:
   score: 6.5
   reason: 该论文提出了一个被行业系统性忽视的关键问题——AI Agent 部署后的持续退化现象，并贡献了 AgingBench 基准和四种老化机制的分类框架。从技术架构视角看，它将
@@ -115,6 +128,31 @@ confidence:
   compound: high
   hype: low
 actionable_insight: strategic_invest
+object_insights:
+- object_type: project
+  name: AgingBench
+  canonical_name: AgingBench
+  url: https://arxiv.org/abs/2605.26302
+  positioning: AgingBench 是针对已部署AI代理的纵向可靠性基准，通过四种老化机制分类和记忆管道诊断，衡量退化形式并指导针对性修复。
+  technical_signal: 提出了压缩老化、干扰老化、修订老化和维护老化四种机制分类，并使用时间依赖图和配对反事实探针诊断记忆管道故障。
+  adoption_signal: 在7个场景、14个模型、多种记忆策略下完成约400次实验，覆盖runner控制和自主代理两种类型，横跨8到200个会话周期。
+  ecosystem_relevance: 填补了AI代理从原型到生产部署过程中长期可靠性评估的工具空白，与记忆系统、代理框架和运维监控形成互补生态。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: 长期部署的AI代理面临运行时可靠性退化问题，但业界缺乏系统化评测工具；AgingBench提出的四种老化机制和诊断方法为代理运维提供了可操作的分析框架，随着代理从演示走向生产部署，其价值将持续增长。
+  risk_notes:
+  - 该基准目前仅以论文形式存在，尚未提供开源实现或公开数据集，可复现性待验证。
+  - 约400次实验的覆盖范围在统计泛化能力上仍有局限，需要更大规模的跨任务验证。
+  - 代理老化的根本原因是否仅限于论文分类的四种机制，在实践中可能存在更多未识别老化模式。
+  score: 8.0
+  article_ids:
+  - 27fbaeab8c07a7da
+  evidence_snippets:
+  - 论文介绍了 AgingBench，一个用于代理生命周期工程的纵向可靠性基准，不仅衡量退化程度还诊断退化形式。
+  - AgingBench 将代理老化组织为四种机制：压缩老化、干扰老化、修订老化和维护老化。
+  - 在 7 个场景、14 个模型和多种记忆策略下的约 400 次实验说明代理老化是多维的，需要机制级别诊断和针对性修复。
 ---
 
 # Computer Science > Artificial Intelligence

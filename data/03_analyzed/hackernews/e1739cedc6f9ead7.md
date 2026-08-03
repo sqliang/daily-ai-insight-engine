@@ -38,9 +38,12 @@ tags:
 - clippings
 id: e1739cedc6f9ead7
 source_type: community_discussion
-tldr: Cactus Compute将Gemini 3.1的tool calling蒸馏为26M参数的Needle模型，完全开源
-objective_summary: Cactus Compute团队将Gemini 3.1蒸馏为26M参数的Simple Attention Network模型Needle，专门用于单次函数调用。模型在16块TPU
-  v6e上预训练200B tokens（27小时），后训练2B tokens（45分钟）。
+tldr: Cactus Compute 将 Gemini 3.1 蒸馏为 26M 参数的简易注意力网络 Needle，权重、数据集和微调工具全部开源，支持本地 Mac/PC
+  微调。
+objective_summary: Cactus Compute 团队于 2026 年将 Gemini 3.1 蒸馏为一个仅 26M 参数的简易注意力网络（Simple
+  Attention Network），命名为 Needle。该模型在 16 块 TPU v6e 上预训练 200B token（27 小时），后训练 2B token
+  的函数调用数据（45 分钟），生产环境可达 6000 toks/sec 预填充和 1200 toks/sec 解码速度。权重与数据集已在 GitHub 开源，并提供命令行和
+  Web UI 界面支持本地微调。
 event_type: framework_tools
 epistemic_status: verified_fact
 entities:
@@ -48,7 +51,6 @@ entities:
   - Cactus Compute
   technologies:
   - Simple Attention Network
-  - Gemini 3.1
   - GQA
   - RoPE
   - BPE
@@ -62,12 +64,46 @@ entities:
   - Noah Cylich
   - Justin H. Lee
 key_logic_flow:
-- Cactus Compute团队将Gemini 3.1的tool calling能力蒸馏为名为Needle的26M参数模型。
-- Needle采用Simple Attention Network架构，包含8层Decoder和12层Encoder，使用GQA+RoPE注意力机制。
-- 模型在16块TPU v6e上预训练200B tokens（27小时），后训练2B tokens的单次函数调用数据集（45分钟）。
-- 在生产环境中，Needle在Cactus平台上达到6000 toks/s的prefill速度和1200 toks/s的解码速度。
-- 模型权重和数据集完全开源，用户可通过命令行或Web UI在本地Mac/PC上进行测试和微调。
-- 在单次函数调用任务上，Needle性能优于FunctionGemma-270m、Qwen-0.6B、Graninte-350m等更大参数模型。
+- Cactus Compute 将 Gemini 3.1 蒸馏为仅 26M 参数的简易注意力网络 Needle，专为单次函数调用场景优化。
+- Needle 在 16 块 TPU v6e 上预训练 200B token 耗时 27 小时，后训练 2B token 的函数调用数据耗时 45 分钟。
+- 生产环境下 Needle 达到 6000 toks/sec 预填充和 1200 toks/sec 解码速度，可在本地 Mac/PC 微调。
+- 在单次函数调用任务上，Needle 超越了 FunctionGemma-270M、Qwen-0.6B、Graninte-350M 和 LFM2.5-350M。
+- Needle 提供 CLI 工具（needle finetune、needle run）和 Web UI 界面（http://127.0.0.1:7860）供用户测试与微调。
+- 模型权重、数据集生成代码及全部训练脚本均已在 GitHub 上以 cactus-compute/needle 开源。
+extract_result: success
+object_mentions:
+- object_type: project
+  name: cactus-compute/needle
+  canonical_name: cactus-compute/needle
+  url: https://github.com/cactus-compute/needle
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Cactus Compute 将 Gemini 3.1 蒸馏为 26M 参数的简易注意力网络 Needle，权重和数据集已完全开源。
+  - Needle 提供 needle finetune、needle run 等 CLI 命令，以及 playground Web UI 供用户测试和微调。
+  - 在生产环境中 Needle 运行于 Cactus 平台，达到 6000 toks/sec 预填充和 1200 toks/sec 解码速度。
+  article_id: e1739cedc6f9ead7
+- object_type: model
+  name: Gemini 3.1
+  canonical_name: Gemini 3.1
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Needle 是从 Gemini 3.1 蒸馏而来，后训练阶段使用 Gemini 生成单次函数调用数据集。
+  - 在 Needle 的训练流程中，Gemini 3.1 被用作教师模型来合成训练数据。
+  article_id: e1739cedc6f9ead7
+- object_type: project
+  name: Simple Attention Network
+  canonical_name: Simple Attention Network
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - Needle 基于 Simple Attention Network 架构构建，该架构专为消费级设备（手机、手表、眼镜）重新定义小型 AI。
+  - 模型配置为 d=512, 8 头注意力/4 KV 头, BPE 词表大小 8192，编码器 12 层、解码器 8 层，无 FFN。
+  article_id: e1739cedc6f9ead7
+pipeline_stage: fact_extracted
 impact_score:
   score: 5.5
   reason: 该工作将 Gemini 3.1 的工具调用能力蒸馏为仅 26M 参数的微型模型，且在单次函数调用任务上超越 FunctionGemma-270m、Qwen-0.6B
@@ -128,6 +164,34 @@ confidence:
   compound: medium
   hype: high
 actionable_insight: strategic_invest
+object_insights:
+- object_type: project
+  name: cactus-compute/needle
+  canonical_name: cactus-compute/needle
+  url: https://github.com/cactus-compute/needle
+  positioning: Needle 是一个从 Gemini 3.1 蒸馏至仅 26M 参数的简易注意力网络，专注于消费级设备上的单次函数调用场景，模型与数据完全开源。
+  technical_signal: 基于 12 层编码器和 8 层解码器的简易注意力架构（无 FFN），在 16 块 TPU v6e 上预训练 200B token
+    共 27 小时，后训练 2B token 函数调用数据仅需 45 分钟。
+  adoption_signal: 模型在 GitHub 完全开源，提供 CLI 和 Web UI 两种交互方式，用户可在本地 Mac 或 PC 上使用自有数据一键微调，降低使用门槛。
+  ecosystem_relevance: 面向手机、手表和眼镜等消费级设备的个人 AI 助手场景，填补了超小参数模型在函数调用领域的空白，为边缘 AI 代理提供了新的技术路径。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: Needle 以仅 26M 参数在单次函数调用上超越 270M-350M 量级的更大模型，证明蒸馏极小型模型在特定工具调用场景的可行性，其完全开源和极高推理速度使其成为边缘设备
+    AI 代理值得持续关注的方案。
+  risk_notes:
+  - Needle 目前处于实验阶段，生产环境稳定性有待更广泛场景部署验证，且小模型在推理中可能存在输出不稳定的问题。
+  - Needle 专为单次函数调用优化，在多轮对话和通用语言理解场景的能力远不及同规模的通用小语言模型。
+  score: 7.0
+  article_ids:
+  - e1739cedc6f9ead7
+  evidence_snippets:
+  - Cactus Compute 团队从 Gemini 3.1 蒸馏出仅 26M 参数的简易注意力网络 Needle，完全开源了模型权重、数据集生成代码和全部训练脚本，支持用户在本地
+    Mac 或 PC 上微调。
+  - Needle 提供 needle finetune 和 needle run 等 CLI 命令行工具以及基于 Web 的 playground 图形界面，用户可在浏览器中一键测试模型或使用自有工具数据进行本地微调。
+  - Needle 在生产环境运行于 Cactus 平台，达到 6000 toks/sec 预填充速度和 1200 toks/sec 解码速度，在单次函数调用任务上超越
+    FunctionGemma-270M 和 Qwen-0.6B 等参数更大的模型。
 ---
 
 We distilled Gemini 3.1 into a 26m parameter "Simple Attention Network" that you can even finetune locally on your Mac/PC. In production, Needle runs on Cactus at 6000 toks/sec prefill and 1200 decode speed. Weights are fully open on Cactus-Compute/needle, as well as the dataset generation.

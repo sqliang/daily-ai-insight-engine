@@ -15,29 +15,56 @@ id: cb51fdc1bab74ebe
 manifest_dates:
 - '2026-07-02'
 source_type: community_discussion
-tldr: Cloudflare 发布 Monetization Gateway，让客户能为网页、API、MCP 等资源设置按用量收费，支持稳定币微支付。
-objective_summary: Cloudflare 于 2026 年 7 月 15 日宣布推出 Monetization Gateway，这是一个基于 x402
-  开放协议的支付引擎，允许客户为受 Cloudflare 保护的网页、API、数据集和 MCP 工具设置按使用量付费规则。
-event_type: application_landing
-epistemic_status: pr_statement
+tldr: Cloudflare 发布了 Monetization Gateway（货币化网关），允许客户对 Cloudflare 保护下的任何资产（网页、数据集、API
+  或 MCP 工具）通过 x402 协议收取稳定币小额支付。该网关在边缘处理支付验证，无需买家注册账户或卖家搭建计费系统，目标是将 HTTP 请求本身变为一笔交易。
+objective_summary: Cloudflare 于 2026 年 7 月 21 日宣布推出 Monetization Gateway，这是一套基于 x402
+  开放协议的支付引擎，使 Cloudflare 客户能够对网页、数据集、API 和 MCP 工具等受 Cloudflare 保护的资产收取使用费。该网关提供统一的支付策略控制面，在边缘处理支付验证与执行，无需买家提前注册或卖家自建计费系统。支付通过
+  OpenUSD 和 USDC 等稳定币结算，支持低至美分以下的小额交易，结算时间在秒级以内。Cloudflare 正与超过 25 家行业领导企业通过 x402
+  Foundation 共同建设该开放协议。
+event_type: infrastructure_update
+epistemic_status: verified_fact
 entities:
   companies:
   - Cloudflare
   - x402 Foundation
   technologies:
-  - Monetization Gateway
   - x402
+  - Monetization Gateway
   - Web Bot Auth
-  - USDC
-  - Open USD
+  - stablecoins
   key_people: []
 key_logic_flow:
-- Cloudflare 宣布推出 Monetization Gateway，允许客户为网页、API、数据集和 MCP 工具设置按用量付费规则，支付验证在边缘网络完成。
-- 该网关基于 x402 开放协议构建，使用 HTTP 402 Payment Required 状态码实现请求级别的支付流程，支持稳定币微支付且秒级结算。
-- 随着 AI 代理成为互联网的主要用户，传统的广告和订阅模式不再适用，按请求/按 Token 的用量计费成为新的商业模式。
-- Monetization Gateway 旨在消除客户自建计费系统的负担，买家无需注册账户，支付本身即作为访问凭证。
-- Cloudflare 计划未来将支付与 Web Bot Auth 代理身份验证结合，让单一请求同时完成身份核实与支付验证。
+- Cloudflare 宣布推出 Monetization Gateway，允许客户对受 Cloudflare 保护的任何资产（网页、数据集、API、MCP 工具）收取使用费。
+- 该网关基于 x402 开放协议，通过 HTTP 402 Payment Required 状态码实现请求级支付，买家无需提前注册或持有 API 密钥。
+- 支付通过 OpenUSD 和 USDC 等稳定币结算，支持低至美分以下的小额交易，结算时间在秒级以内且无拒付风险。
+- Cloudflare 表示正与超过 25 家行业领导企业通过 x402 Foundation 共同建设 x402 开放协议。
+- 网关提供灵活支付规则 API，支持按 REST 动词定价、按任务复杂度可变定价、仅对未认证调用者收费等策略。
+- Cloudflare 认为随着 AI Agent 成为互联网主要使用者，基于使用量的按需定价将取代传统的广告和订阅模式。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: Cloudflare Monetization Gateway
+  canonical_name: Cloudflare Monetization Gateway
+  url: https://blog.cloudflare.com/monetization-gateway/
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - Cloudflare 宣布推出 Monetization Gateway，该引擎允许客户对受 Cloudflare 保护的任何资产（网页、数据集、API 或
+    MCP 工具）收取费用。
+  - 该网关提供统一的支付策略控制面，在边缘处理支付验证与执行，无需买家注册或卖家自建计费系统。
+  - 网关会提供一个灵活支付规则 API，允许客户精确表达何时要求调用者付费访问其数字资源。
+  article_id: cb51fdc1bab74ebe
+- object_type: project
+  name: x402
+  canonical_name: x402
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - x402 是一个开放协议，使得通过 HTTP 进行支付成为可能，协议名称源自 HTTP 402 Payment Required 状态码。
+  - Cloudflare 正与超过 25 家行业领导企业通过 x402 Foundation 共同建设 x402 开放协议。
+  - x402 支付流程中买家支付后附上支付证明重复请求，验证方验证后服务器返回资源，无需重定向到结账页面。
+  article_id: cb51fdc1bab74ebe
 impact_score:
   score: 7.5
   reason: Cloudflare 凭借其在全球 330+ 数据中心的边缘网络优势，将支付验证直接嵌入代理层，大幅降低了内容/API 按用量收费的实施门槛。这是
@@ -99,6 +126,59 @@ confidence:
   compound: medium
   hype: high
 actionable_insight: strategic_invest
+object_insights:
+- object_type: product
+  name: Cloudflare Monetization Gateway
+  canonical_name: Cloudflare Monetization Gateway
+  url: https://blog.cloudflare.com/monetization-gateway/
+  positioning: 基于 x402 开放协议的边缘支付引擎，让 Cloudflare 客户对受保护的网页、API、数据集和 MCP 工具收取稳定币小额使用费。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users:
+  - 内容创作者和网站所有者
+  - API 提供方
+  - 数据集拥有者
+  - MCP 工具开发者
+  product_signal: 在边缘处理支付验证与执行，买家和卖家均无需自建计费系统或提前注册账户。
+  market_signal: 针对 AI Agent 成为互联网主要使用者的趋势，用基于使用量的按需定价取代传统广告和订阅模式。
+  differentiation: 利用 Cloudflare 全球网络的代理层位置，在 HTTP 请求层面直接完成支付验证与资源交付。
+  watch_reason: Cloudflare 将全球 CDN 网络转化为支付基础设施，可能重塑 AI 时代内容与数据的经济模型，值得持续跟踪其开发者采用率和实际支付场景落地。
+  risk_notes:
+  - 稳定币监管政策在全球范围内存在不确定性，可能影响网关的合规运营。
+  - 买家和开发者对 HTTP 402 支付模式的接受度尚未得到大规模验证。
+  score: 7.0
+  article_ids:
+  - cb51fdc1bab74ebe
+  evidence_snippets:
+  - Cloudflare 宣布推出 Monetization Gateway，该引擎允许客户对受 Cloudflare 保护的任何资产（网页、数据集、API 或
+    MCP 工具）收取费用。
+  - 该网关提供统一的支付策略控制面，在边缘处理支付验证与执行，无需买家注册或卖家自建计费系统。
+  - 网关会提供一个灵活支付规则 API，允许客户精确表达何时要求调用者付费访问其数字资源。
+- object_type: project
+  name: x402
+  canonical_name: x402
+  url: null
+  positioning: 基于 HTTP 402 Payment Required 状态码的开放协议，使任意 HTTP 请求可直接附带支付并完成点对点资源交付。
+  technical_signal: 在 HTTP 层面设计请求-支付-验证-交付的闭环流程，无需重定向到外部结账页面或调用独立支付 API。
+  adoption_signal: 超过 25 家行业领导企业正通过 x402 Foundation 共同建设该协议，Cloudflare 已基于此协议落地 Monetization
+    Gateway。
+  ecosystem_relevance: 为 AI Agent 经济提供原生支付基础设施，填补互联网从注意力经济向使用量经济转型中的支付协议空白。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: x402 有潜力成为 AI Agent 时代互联网支付的标准化协议，其开放的联盟治理模式和多行业参与度为广泛采用奠定了基础。
+  risk_notes:
+  - HTTP 402 作为新兴支付协议，缺乏经过大规模验证的生产环境案例。
+  - 协议成功依赖于联盟成员的实际落地意愿和互操作性实现质量。
+  score: 7.0
+  article_ids:
+  - cb51fdc1bab74ebe
+  evidence_snippets:
+  - x402 是一个开放协议，使得通过 HTTP 进行支付成为可能，协议名称源自 HTTP 402 Payment Required 状态码。
+  - Cloudflare 正与超过 25 家行业领导企业通过 x402 Foundation 共同建设 x402 开放协议。
+  - x402 支付流程中买家支付后附上支付证明重复请求，验证方验证后服务器返回资源，无需重定向到结账页面。
 ---
 
 Today, we are announcing the Cloudflare Monetization Gateway, an engine that will give Cloudflare customers the ability to charge for any asset protected by Cloudflare: web pages, datasets, APIs, or MCP tools.

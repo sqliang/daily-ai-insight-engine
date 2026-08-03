@@ -13,45 +13,111 @@ extraction_status: success
 pipeline_stage: fact_extracted
 id: f9dacd28a2b408bd
 source_type: community_discussion
-tldr: 乐鑫科技发布ESP32-S31芯片，集成Wi-Fi 6、蓝牙5.4、Thread/Zigbee和千兆以太网，搭载双核RISC-V处理器
-objective_summary: 乐鑫科技推出ESP32-S31系统级芯片，集成2.4GHz Wi-Fi 6(802.11ax)、IEEE 802.15.4(Thread/Zigbee)、蓝牙5.4
-  LE和1000Mbps以太网MAC，搭载双核32位RISC-V处理器(320MHz/6.
+tldr: 乐鑫科技（Espressif Systems）发布 ESP32-S31 双核 RISC-V SoC，集成 Wi-Fi 6、蓝牙 5.4 LE Audio、Thread/Zigbee
+  和千兆以太网，支持高级 HMI、摄像头与 LCD 显示，配备 TEE 与 PUF 安全能力，适用于 AI 语音与智能交互设备。
+objective_summary: 乐鑫科技发布了 ESP32-S31 系统级芯片，该芯片采用双核 32 位 RISC-V 架构，主频 320 MHz，集成 2.4
+  GHz Wi-Fi 6、蓝牙 5.4 LE Audio、IEEE 802.15.4（Thread/Zigbee）以及千兆以太网 MAC。芯片配备 512 KB
+  SRAM、支持 8 位 DDR PSRAM，提供 DVP 摄像头接口和最高 24 位并行 RGB LCD 支持，内置 JPEG 编解码器和 2D-DMA 等硬件加速器。安全方面集成
+  TRNG、PUF、TEE 和 APM 能力。该 SoC 将通过 ESP-IDF、ESP-Matter、ESP-BLE-AUDIO 和 ESP-GMF 等开源框架获得软件支持，并可与
+  LLM 配合构建 AI 语音与智能交互设备。
 event_type: infrastructure_update
-epistemic_status: verified_fact
+epistemic_status: pr_statement
 entities:
   companies:
-  - Espressif
+  - Espressif Systems
   technologies:
+  - RISC-V
   - Wi-Fi 6
   - 802.11ax
   - IEEE 802.15.4
   - Thread
   - Zigbee
-  - Bluetooth 5.4
+  - Bluetooth 5.4 LE
   - LE Audio
   - Bluetooth Mesh 1.1
-  - RISC-V
   - SIMD
-  - DDR PSRAM
-  - TEE
-  - TRNG
-  - PUF
-  - ESP-IDF
-  - ESP-Matter
-  - Matter
-  - LC3
   - JPEG
   - PPA
   - 2D-DMA
+  - LC3
+  - TRNG
+  - PUF
+  - TEE
+  - APM
+  - AES-128/256
+  - RSA
+  - ECDSA
+  - ECC
+  - ESP-IDF
+  - ESP-Matter
+  - ESP-BLE-AUDIO
+  - ESP-GMF
   key_people: []
 key_logic_flow:
-- ESP32-S31同时集成2.4GHz Wi-Fi 6(802.11ax)、IEEE 802.15.4(Thread/Zigbee)、蓝牙5.4 LE(含LE
-  Audio和Bluetooth Mesh 1.1)以及1000Mbps以太网MAC，兼顾无线与有线连接。
-- 搭载双核32位RISC-V处理器，主频320MHz，其中一个核心具有128位SIMD数据通路，提供6.86 CoreMark/MHz性能，配备512KB SRAM并支持250MHz
-  8位DDR PSRAM。
-- 提供DVP摄像头接口(8-16位)和多种LCD显示接口(8-24位并行RGB/I8080/MOTO6800)，内置JPEG编解码器、PPA和2D-DMA硬件加速器，支持多达14路电容触摸传感。
-- 集成TRNG和基于RAM的PUF硬件安全能力，支持安全启动、闪存和PSRAM加密、AES/RSA/ECDSA密码加速器，并通过TEE和APM实现软件隔离。
-- 软件方面支持ESP-IDF、ESP-Matter、ESP-BLE-AUDIO和ESP-GMF等开源框架，可配合ESP Private Agents平台或直接对接常用LLM构建支持语音交互的AI终端设备。
+- ESP32-S31 是一款双核 32 位 RISC-V SoC，主频 320 MHz，具备 60 个 GPIO 和 128 位 SIMD 数据通路。
+- 该芯片同时支持 2.4 GHz Wi-Fi 6、蓝牙 5.4 LE Audio、Thread/Zigbee 和千兆以太网 MAC，覆盖无线与有线连接。
+- 芯片提供 DVP 摄像头接口和最高 24 位并行 RGB LCD 支持，内置 JPEG 编解码器、PPA 和 2D-DMA 硬件加速器。
+- 安全方面集成了 TRNG、RAM 基 PUF、安全启动、闪存与 PSRAM 加密、TEE 和 APM 隔离机制。
+- ESP32-S31 将通过 ESP-IDF、ESP-Matter、ESP-BLE-AUDIO 和 ESP-GMF 等开源框架获得软件生态支持。
+- 该 SoC 可配合 ESP Private Agents 平台或直接与 LLM 交互，用于构建 AI 语音和智能交互设备。
+extract_result: success
+object_mentions:
+- object_type: product
+  name: ESP32-S31
+  canonical_name: ESP32-S31
+  url: https://www.espressif.com/en/products/socs/esp32-s31
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - ESP32-S31 是乐鑫科技发布的双核 RISC-V SoC，集成 Wi-Fi 6、蓝牙 5.4 LE Audio 和千兆以太网 MAC。
+  - 该芯片提供 60 个 GPIO、DVP 摄像头接口和最高 24 位并行 RGB LCD 支持。
+  - ESP32-S31 可配合 LLM 构建 AI 语音与智能交互设备。
+  article_id: f9dacd28a2b408bd
+- object_type: project
+  name: ESP-IDF
+  canonical_name: ESP-IDF
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - ESP32-S31 将通过乐鑫的开源 IoT 开发框架 ESP-IDF 获得软件支持。
+  article_id: f9dacd28a2b408bd
+- object_type: project
+  name: ESP-Matter
+  canonical_name: ESP-Matter
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - ESP32-S31 将通过 ESP-Matter 框架支持 Matter 协议设备开发。
+  article_id: f9dacd28a2b408bd
+- object_type: project
+  name: ESP-BLE-AUDIO
+  canonical_name: ESP-BLE-AUDIO
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - ESP32-S31 将通过 ESP-BLE-AUDIO 框架获得蓝牙音频应用支持。
+  article_id: f9dacd28a2b408bd
+- object_type: project
+  name: ESP-GMF
+  canonical_name: ESP-GMF
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - ESP32-S31 将通过 ESP-GMF 框架获得多媒体应用支持。
+  article_id: f9dacd28a2b408bd
+- object_type: product
+  name: ESP Private Agents
+  canonical_name: ESP Private Agents
+  url: null
+  confidence: low
+  article_role: ecosystem_context
+  evidence_snippets:
+  - ESP32-S31 可与 ESP Private Agents 平台配合使用构建 AI 客户端设备。
+  article_id: f9dacd28a2b408bd
 impact_score:
   score: 6.5
   reason: ESP32-S31 是乐鑫在 IoT MCU 领域的重要产品升级，首次在 S 系列中集成 Wi-Fi 6、Thread/Zigbee、蓝牙 5.4
@@ -109,6 +175,36 @@ confidence:
   compound: medium
   hype: medium
 actionable_insight: strategic_invest
+object_insights:
+- object_type: product
+  name: ESP32-S31
+  canonical_name: ESP32-S31
+  url: https://www.espressif.com/en/products/socs/esp32-s31
+  positioning: ESP32-S31是乐鑫科技推出的双核RISC-V SoC，集成Wi-Fi 6、蓝牙5.4 LE Audio和千兆以太网，面向AI语音与智能交互设备市场。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users:
+  - 智能显示与多媒体终端厂商
+  - AI语音交互设备开发者
+  - 智能家居及物联网设备制造商
+  product_signal: 集成Wi-Fi 6、蓝牙5.4 LE Audio、Thread/Zigbee和千兆以太网MAC，支持DVP摄像头与24位并行RGB
+    LCD接口，配备JPEG编解码器、PPA和2D-DMA等硬件加速器。
+  market_signal: 面向AI语音与智能交互设备市场，可配合LLM构建端侧AI应用，拓展了MCU在生成式AI时代的应用边界。
+  differentiation: 在单一SoC上同时提供Wi-Fi 6、蓝牙5.4 LE Audio和千兆以太网三种连接方案，并配备TEE与PUF硬件安全能力，连接全面性在同类MCU中领先。
+  watch_reason: ESP32-S31是乐鑫在AI端侧部署的关键产品，通过集成Wi-Fi 6和千兆以太网满足AI语音设备对高带宽低延迟连接的需求，配合ESP
+    Private Agents平台可直接对接LLM，为智能家居和交互设备带来端侧AI推理能力，有望开辟MCU在智能语音终端领域的新市场空间。
+  risk_notes:
+  - 芯片量产时间和定价策略尚未公布，市场投放节奏存在不确定性。
+  - 端侧AI SoC市场竞争激烈，面临高通、联发科等成熟方案在生态和算力上的竞争压力。
+  score: 7.0
+  article_ids:
+  - f9dacd28a2b408bd
+  evidence_snippets:
+  - ESP32-S31 是乐鑫科技发布的双核 RISC-V SoC，集成 Wi-Fi 6、蓝牙 5.4 LE Audio 和千兆以太网 MAC。
+  - 该芯片提供 60 个 GPIO、DVP 摄像头接口和最高 24 位并行 RGB LCD 支持。
+  - ESP32-S31 可配合 LLM 构建 AI 语音与智能交互设备。
+  - 该 SoC 可配合 ESP Private Agents 平台或直接与 LLM 交互，用于构建 AI 语音和智能交互设备。
 ---
 
 ### Comprehensive Connectivity

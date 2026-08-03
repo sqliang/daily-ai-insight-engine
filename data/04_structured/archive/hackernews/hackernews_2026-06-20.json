@@ -106,8 +106,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "2533c9cdd04a8ea9",
     "source_type": "community_discussion",
-    "tldr": "Oracle确认JEP 401值类将进入JDK 28，Valhalla项目十年终交付预览版",
-    "objective_summary": "2026年6月15日，Oracle工程师Lois Foltan确认JEP 401值类与值对象将集成至OpenJDK主仓库，目标JDK 28。该PR新增约19.7万行代码，涉及1,816个文件，默认禁用且为预览阶段。Brian Goetz指出这仅是整个Valhalla计划的第一部分。",
+    "tldr": "Oracle 工程师 Lois Foltan 确认 JEP 401（Value Classes and Objects）将合入 OpenJDK 主线并目标 JDK 28。该提案是 Project Valhalla 的首阶段成果，仍为预览功能且默认关闭，新增超 19.7 万行代码，解决 Java 引用类型导致的内存布局膨胀和缓存局部性差的问题。",
+    "objective_summary": "2026 年 6 月 15 日，Oracle 工程师 Lois Foltan 确认 JEP 401（Value Classes and Objects）将被集成到 OpenJDK 主线仓库，目标发布版本为 JDK 28。该 Pull Request 在 1,816 个文件中添加了超过 19.7 万行代码。JEP 401 是 Project Valhalla 的第一阶段成果，目前为默认关闭的预览功能。该提案引入了使用 value 修饰符声明的值类，其实例为无身份的值对象，仍属于引用类型但可享受扁平化内存布局。Project Valhalla 自 2014 年启动，经历了五个原型和多次命名变更，核心理念是让代码像类一样编写、像基本类型一样高效运作。",
     "event_type": "infrastructure_update",
     "epistemic_status": "verified_fact",
     "entities": {
@@ -116,27 +116,72 @@
         "OpenJDK"
       ],
       "technologies": [
-        "Project Valhalla",
         "JDK 28",
         "JEP 401",
         "JVM",
-        "OpenJDK",
-        "Project Lilliput"
+        "Project Valhalla",
+        "Project Lilliput",
+        "Value Classes",
+        "Value Objects"
       ],
       "key_people": [
         "Lois Foltan",
         "Brian Goetz",
-        "James Gosling",
-        "Dan Smith"
+        "Dan Smith",
+        "James Gosling"
       ]
     },
     "key_logic_flow": [
-      "Project Valhalla于2014年正式启动，目标是将引用类型的内存密度提升至原生类型级别，解决指针间接引用、对象头开销和缓存不命中导致的性能问题。",
-      "早期Q World原型将值类型视为与对象完全不同的独立体系，导致JVM类型系统复杂度剧增；2019年左右的L World原型实现突破，让值类型与引用类型共享L描述符。",
-      "团队发现语言模型与JVM模型无需完全重叠，L World作为翻译目标层，上层可提供更便捷的语法，这一分离成为后续项目的关键设计决策。",
-      "命名经历了value types→inline classes→primitive classes（双投影模型Point.val/Point.ref）→value classes四个阶段，最终JEP 401简化模型：值类仍是引用类型但无标识，非空性被拆分为独立JEP。",
-      "2026年6月15日Oracle工程师Lois Foltan确认JEP 401将集成至OpenJDK主仓库并目标JDK 28，PR新增超过19.7万行代码涉及1,816个文件，默认禁用。",
-      "Brian Goetz强调该版本仅为Valhalla的第一部分预览版，专门化的泛型（specialized generics）等后续阶段仍需在未来版本中解决。"
+      "Oracle 工程师 Lois Foltan 于 2026 年 6 月 15 日确认 JEP 401（Value Classes and Objects）将合入 OpenJDK 主线并目标 JDK 28。",
+      "JEP 401 的 Pull Request 在 1,816 个文件中新增超过 19.7 万行代码，目前为默认关闭的预览功能，且仅代表 Project Valhalla 的第一阶段。",
+      "Project Valhalla 自 2014 年启动，旨在解决 Java 引用类型带来的指针间接寻址、对象头开销和缓存局部性缺失等性能问题。",
+      "Valhalla 经历了五个原型（包括 Q World 和 L World），最终在 L World 中确立了值类型与引用类型共享同一个 L 描述符的 JVM 模型。",
+      "当前 JEP 401 使用 value 修饰符声明值类，其实例为无身份的值对象，仍作为引用类型，但可享受扁平化的连续内存布局。",
+      "非空值类型（Null-Restricted Value Class Types）已被拆分到另一个独立的可选 JEP 中，使身份属性和可空性属性正交化。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "Project Valhalla",
+        "canonical_name": "Project Valhalla",
+        "url": "https://openjdk.org/projects/valhalla/",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Project Valhalla 自 2014 年启动，James Gosling 曾形容其为拴在一起的六个博士学位，目标是让程序员声明的类型在内存中像基本类型一样扁平紧凑。",
+          "JEP 401 是 Project Valhalla 的第一阶段成果，目前为默认关闭的预览功能，Brian Goetz 提醒这只是 Valhalla 的第一部分。",
+          "Valhalla 的核心理念 Codes Like a Class Works Like an Int 贯穿了从 Q World 到 L World 共五个原型的迭代过程。"
+        ],
+        "article_id": "2533c9cdd04a8ea9"
+      },
+      {
+        "object_type": "project",
+        "name": "JEP 401",
+        "canonical_name": "JEP 401: Value Classes and Objects",
+        "url": "https://openjdk.org/jeps/401",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "JEP 401 由 Dan Smith 编写（评审人为 Brian Goetz），引入使用 value 修饰符声明的值类，其实例为无身份的值对象。",
+          "JEP 401 的 PR 在 1,816 个文件中新增超过 19.7 万行代码，集成期间其它提交者被要求暂缓大的提交。",
+          "JEP 401 中的值类仍然是引用类型，非空性已被拆分到另一个独立的可选 JEP（Null-Restricted Value Class Types）中。"
+        ],
+        "article_id": "2533c9cdd04a8ea9"
+      },
+      {
+        "object_type": "project",
+        "name": "Project Lilliput",
+        "canonical_name": "Project Lilliput",
+        "url": "https://openjdk.org/projects/lilliput/",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Project Lilliput 是 OpenJDK 的另一个项目，专门致力于缩小 JVM 对象头的大小以缓解内存开销问题。",
+          "文章指出每个堆上的对象都有十多个字节的头信息元数据，这正是 Project Lilliput 近年来致力于解决的难题。"
+        ],
+        "article_id": "2533c9cdd04a8ea9"
+      }
     ],
     "impact_score": {
       "score": 6.5,
@@ -192,7 +237,84 @@
       "compound": "high",
       "hype": "low"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "Project Valhalla",
+        "canonical_name": "Project Valhalla",
+        "url": "https://openjdk.org/projects/valhalla/",
+        "positioning": "OpenJDK 旗下自 2014 年启动的长期研究项目，核心理念是「编码像类、运行如基本类型」，旨在解决 Java 引用类型导致的内存布局膨胀和缓存局部性缺失问题，首阶段成果 JEP 401 已目标合入 JDK 28。",
+        "technical_signal": "JEP 401 在 1,816 个文件中新增超过 19.7 万行代码，引入使用 value 修饰符声明的值类，实例为无身份值对象但仍属引用类型，可享受扁平化连续内存布局。",
+        "adoption_signal": "目前为默认关闭的预览功能，仅代表 Valhalla 第一阶段，Brian Goetz 提醒社区这只是第一部分，完整功能尚未交付。",
+        "ecosystem_relevance": "直接解决 Java 引用类型指针间接寻址、对象头开销和缓存局部性缺失等核心性能痛点，对数据库、分析引擎等数据密集型 Java 应用生态影响深远。",
+        "target_users": [],
+        "watch_reason": "Project Valhalla 历经十余年研发，经历五个原型和多次命名变更后终于抵达 JDK 主线里程碑，其值类型方案将深刻改变 Java 内存模型和性能特征，但首阶段仅为预览且非空值类型等核心能力已被拆分，后续演进路径和社区接受度值得持续追踪。",
+        "risk_notes": [
+          "当前仅交付 Valhalla 第一阶段，非空值类型等核心功能被拆分到独立 JEP，完整价值兑现仍需多年等待。",
+          "超 19.7 万行代码的集成体量可能引入实现缺陷和兼容性风险，预览阶段功能行为仍可能发生变化。",
+          "社区长期存在「Valhalla 永远发不出」的负面调侃，JDK 28 正式发布前的接受度存在不确定性。"
+        ],
+        "score": 8.0,
+        "article_ids": [
+          "2533c9cdd04a8ea9"
+        ],
+        "evidence_snippets": [
+          "Project Valhalla 自 2014 年启动，James Gosling 曾形容其为拴在一起的六个博士学位，目标是让程序员声明的类型在内存中像基本类型一样扁平紧凑。",
+          "JEP 401 是 Project Valhalla 的第一阶段成果，目前为默认关闭的预览功能，Brian Goetz 提醒这只是 Valhalla 的第一部分。",
+          "Valhalla 的核心理念 Codes Like a Class Works Like an Int 贯穿了从 Q World 到 L World 共五个原型的迭代过程。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "JEP 401",
+        "canonical_name": "JEP 401: Value Classes and Objects",
+        "url": "https://openjdk.org/jeps/401",
+        "positioning": "Project Valhalla 第一阶段的具体 Java 增强提案，引入使用 value 修饰符声明的值类，实例为无身份的值对象，目标以默认关闭的预览功能合入 JDK 28。",
+        "technical_signal": "由 Dan Smith 编写、Brian Goetz 评审，在 1,816 个文件中新增超 19.7 万行代码，值类实例仍为引用类型但享受扁平化布局，非空性已拆分到独立可选 JEP。",
+        "adoption_signal": "作为默认关闭的预览功能合入 OpenJDK 主线，集成期间其他提交者被要求暂缓大型提交，显示变更范围极大。",
+        "ecosystem_relevance": "为 Java 语言填补长期缺失的值类型抽象能力，直接影响所有 JVM 语言生态以及依赖数据密集型的 Java 框架和库。",
+        "target_users": [],
+        "watch_reason": "JEP 401 是 Java 语言二十多年来最重要的类型系统变革之一，其合入节奏、预览反馈和后续 JEP 的推进速度将决定 Project Valhalla 整体落地的最终时间线，对 JVM 生态性能演进具有标杆意义。",
+        "risk_notes": [
+          "预览功能默认关闭，开发者需显式启用才能使用，早期采用的技术成本和风险较高。",
+          "非空值类型被拆分为独立 JEP，核心能力割裂可能影响开发者的采用意愿和整体体验。",
+          "19.7 万行代码的变更体量意味着潜在实现缺陷在 JDK 28 正式发布前仍需大量打磨验证。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "2533c9cdd04a8ea9"
+        ],
+        "evidence_snippets": [
+          "JEP 401 由 Dan Smith 编写（评审人为 Brian Goetz），引入使用 value 修饰符声明的值类，其实例为无身份的值对象。",
+          "JEP 401 的 PR 在 1,816 个文件中新增超过 19.7 万行代码，集成期间其它提交者被要求暂缓大的提交。",
+          "JEP 401 中的值类仍然是引用类型，非空性已被拆分到另一个独立的可选 JEP（Null-Restricted Value Class Types）中。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Project Lilliput",
+        "canonical_name": "Project Lilliput",
+        "url": "https://openjdk.org/projects/lilliput/",
+        "positioning": "OpenJDK 旗下专注于缩小 JVM 对象头大小的附属项目，通过减少每个堆对象十多个字节的元数据开销，与 Project Valhalla 协同缓解 Java 对象内存膨胀问题。",
+        "technical_signal": "致力于解决每个堆对象头占用十多个字节元数据的问题，通过减少对象头开销改善 Java 对象的内存效率和缓存局部性。",
+        "ecosystem_relevance": "与 Project Valhalla 的扁平化内存布局形成互补关系，对象头缩减成果直接影响值类型的内存密度收益和整体 JVM 性能优化效果。",
+        "target_users": [],
+        "watch_reason": "Project Lilliput 作为 Valhalla 的配套项目，其对象头缩减进展直接影响值类型的内存密度增益上限，但本文仅作为背景提及未提供实质进展，后续需关注其在 JDK 28 周期的独立交付节奏。",
+        "risk_notes": [
+          "本文仅作为背景提及 Project Lilliput，缺乏关于当前进展状态和里程碑的具体信息。",
+          "对象头缩减与值类型系统的交互机制尚不明确，两者协同效果有待实际验证。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "2533c9cdd04a8ea9"
+        ],
+        "evidence_snippets": [
+          "Project Lilliput 是 OpenJDK 的另一个项目，专门致力于缩小 JVM 对象头的大小以缓解内存开销问题。",
+          "文章指出每个堆上的对象都有十多个字节的头信息元数据，这正是 Project Lilliput 近年来致力于解决的难题。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -211,8 +333,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "63cb91c7f339d3fe",
     "source_type": "community_discussion",
-    "tldr": "一人耗时两年多制造巨型香蕉车，已完成美国、加拿大、墨西哥行驶，计划环游世界。",
-    "objective_summary": "一位匿名建造者于2008年至2011年建造了一辆名为Big Banana Car的巨型机动香蕉车，已在美国、加拿大部分地区和墨西哥一日游中行驶，计划驾驶该车环游世界，通过销售T恤和马克杯筹集资金。",
+    "tldr": "一位创作者在2008至2011年间建造了一辆巨大的机动香蕉车，已在美国、加拿大和墨西哥行驶，现计划环球驾驶，通过售卖T恤和马克杯筹集旅费，并寻找纪录片拍摄伙伴。",
+    "objective_summary": "该文章描述了Big Banana Car项目的两阶段计划：第一阶段已在2008至2011年间完成巨型机动香蕉车的建造，第二阶段计划驾驶该车环游世界。目前已在美国、加拿大和墨西哥部分区域行驶过。作者通过与Printify合作销售T恤和马克杯来筹集燃料、维修和食物费用，并寻找一位擅长拍摄和剪辑的同行伙伴，收益五五分成。作者还在完成另一辆名为Starfield Dragonwing Intergalactic Speedster的柴油朋克风格车辆，约完成85%。",
     "event_type": "application_landing",
     "epistemic_status": "verified_fact",
     "entities": {
@@ -223,12 +345,41 @@
       "key_people": []
     },
     "key_logic_flow": [
-      "建造者用两年多时间（2008-2011年）制造了一辆名为Big Banana Car的巨型机动香蕉车。",
-      "已驾驶该车穿越美国全境、加拿大部分地区并在墨西哥行驶了一天。",
-      "下一阶段计划是驾驶香蕉车环游世界，需要解决资金、跨国保险和当前另一辆车的完工问题。",
-      "通过与Printify合作销售Big Banana Car主题T恤和咖啡杯来筹集旅费。",
-      "当前正在完成另一辆名为Starfield Dragonwing Intergalactic Speedster的柴油朋克风格车辆（约85%完工）。",
-      "正在寻找一位有护照且擅长视频拍摄、剪辑和上传的人同行，YouTube收入五五分成。"
+      "作者在2008年至2011年期间与一群朋友共同建造了Big Banana Car巨型机动香蕉车。",
+      "作者已驾驶该香蕉车走遍美国大部分地区、加拿大部分地区和墨西哥部分地区。",
+      "当前面临资金、保险和完成第二辆车的三大挑战，资金通过销售周边商品解决。",
+      "作者希望找到一家能提供多国覆盖的保险公司建立合作。",
+      "作者正在完成一辆名为Starfield Dragonwing Intergalactic Speedster的柴油朋克风格车辆，目前进度约85%。",
+      "作者寻找一位擅长拍摄、剪辑和上传视频且有护照的同行伙伴，YouTube等平台收入五五分成。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "Big Banana Car",
+        "canonical_name": "Big Banana Car",
+        "url": "https://bigbananacar.com/",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "作者在2008年至2011年期间建造了一辆巨大的机动香蕉车，并已驾驶它走遍美国、加拿大和墨西哥部分地区。",
+          "作者计划驾驶Big Banana Car环游世界，与各地的人见面、提供乘车体验并寻找有趣的人。",
+          "作者通过网站bigbananacar.com销售T恤和咖啡马克杯来筹集出行所需的燃料、维修和食物费用。"
+        ],
+        "article_id": "63cb91c7f339d3fe"
+      },
+      {
+        "object_type": "project",
+        "name": "Starfield Dragonwing Intergalactic Speedster",
+        "canonical_name": "Starfield Dragonwing Intergalactic Speedster",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者正在完成一辆名为Starfield Dragonwing Intergalactic Speedster的柴油朋克风格车辆。",
+          "该车辆已完成约85%，作者希望在完成并上路之前不离开当前项目。"
+        ],
+        "article_id": "63cb91c7f339d3fe"
+      }
     ],
     "impact_score": {
       "score": 1.0,
@@ -279,7 +430,59 @@
       "compound": "low",
       "hype": "low"
     },
-    "actionable_insight": "ignore"
+    "actionable_insight": "ignore",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "Big Banana Car",
+        "canonical_name": "Big Banana Car",
+        "url": "https://bigbananacar.com/",
+        "positioning": "一辆由创作者在2008至2011年间手工建造的巨型机动香蕉车，已行驶于美加墨三国，现计划环球驾驶之旅。",
+        "target_users": [
+          "对巨型改装车和公路旅行感兴趣的爱好者",
+          "寻求新奇街头体验的路人和粉丝"
+        ],
+        "product_signal": "已成功建造并实际在美国、加拿大和墨西哥上路行驶，车辆机械可行性和耐久性已得到验证。",
+        "market_signal": "通过与Printify合作销售T恤和马克杯为环球旅行筹集燃料、维修和食物费用，采用轻量级电商模式支撑旅行运营。",
+        "differentiation": "以巨型香蕉车作为移动地标和社交磁石，通过免费乘车体验和纪念品分发创造独特的粉丝互动与社交传播效应。",
+        "watch_reason": "Big Banana Car是一个融合手工造车、公路旅行和社交媒体的个人创意项目，其环球旅行计划具备独特的传播潜力，周边商品销售模式也为个人创作者提供了可参考的轻量变现路径。",
+        "risk_notes": [
+          "项目旅行资金主要依赖T恤和马克杯周边商品销售，收入渠道单一且不稳定，缺乏长期财务保障。",
+          "多国保险合作尚未建立，跨国行驶存在合规与安全风险，可能成为环球旅行的主要障碍。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "63cb91c7f339d3fe"
+        ],
+        "evidence_snippets": [
+          "作者在2008年至2011年期间建造了一辆巨大的机动香蕉车，并已驾驶它走遍美国、加拿大和墨西哥部分地区。",
+          "作者计划驾驶Big Banana Car环游世界，与各地的人见面、提供乘车体验并寻找有趣的人。",
+          "作者通过网站bigbananacar.com销售T恤和咖啡马克杯来筹集出行所需的燃料、维修和食物费用。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Starfield Dragonwing Intergalactic Speedster",
+        "canonical_name": "Starfield Dragonwing Intergalactic Speedster",
+        "positioning": "一辆由同一创作者手工打造的柴油朋克风格车辆，目前已完成约85%，属于Big Banana Car之后的第二个大型车辆项目。",
+        "technical_signal": "属于柴油朋克风格的手工改装车辆，作者已具备从零建造大型机动车辆的技术能力和项目经验。",
+        "ecosystem_relevance": "与Big Banana Car同属创作者个人车辆系列，完成后可共同构成独特的移动艺术品牌。",
+        "target_users": [],
+        "watch_reason": "作为同一创作者继Big Banana Car之后的第二个大型车辆项目，Starfield Dragonwing展示了作者持续的创作能力和技艺进化，完成后的上路表现可能与香蕉车形成协同品牌效应，但其进度的不确定性也影响了环球旅行计划的时间线。",
+        "risk_notes": [
+          "项目完成进度约85%但作者计划先行开始环球旅行，最终完成时间存在较大不确定性。",
+          "缺乏关于车辆具体技术规格、动力系统和性能参数的公开信息，难以评估项目真实进展。"
+        ],
+        "score": 2.0,
+        "article_ids": [
+          "63cb91c7f339d3fe"
+        ],
+        "evidence_snippets": [
+          "作者正在完成一辆名为Starfield Dragonwing Intergalactic Speedster的柴油朋克风格车辆。",
+          "该车辆已完成约85%的进度，作者希望在完成并上路之前不离开当前项目，这意味着环球旅行计划可能因此延迟。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -298,27 +501,23 @@
     "pipeline_stage": "fact_extracted",
     "id": "65ef1642e740e5ae",
     "source_type": "community_discussion",
-    "tldr": "现代汽车以3.25亿美元买断软银持有的波士顿动力剩余9.65%股份，实现完全控股",
-    "objective_summary": "现代汽车集团将于6月22日批准以3.25亿美元收购软银持有的波士顿动力剩余9.65%股份，使后者成为全资子公司。电动Atlas人形机器人已在2026年CES公开演示，计划2028年前在现代汽车佐治亚州电动车工厂投入真实工作。",
+    "tldr": "现代汽车集团以3.25亿美元收购软银持有的波士顿动力剩余9.65%股份，实现对波士顿动力的完全控股，并计划于2028年前在佐治亚州工厂部署Atlas仿人机器人投入实际生产。",
+    "objective_summary": "现代汽车集团预计于2026年6月22日批准以3.25亿美元收购软银持有的波士顿动力剩余9.65%股份，使波士顿动力成为现代全资子公司。现代在2021年曾以约8.8亿美元收购80%股份。2026年1月CES上，现代与波士顿动力展示了电动Atlas仿人机器人，计划2028年前在佐治亚州电动汽车工厂部署生产版Atlas从事零件排序。软银退出后转而组建Roze AI，聚焦AI基础设施与数据中心建设，目标估值1000亿美元。",
     "event_type": "capital_movement",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
         "Hyundai Motor Group",
-        "SoftBank",
         "Boston Dynamics",
+        "SoftBank",
         "Alphabet",
-        "Google",
         "Tesla",
         "Figure AI",
         "Unitree",
         "Hyundai Mobis",
-        "Roze AI",
-        "Metaplant"
+        "Roze AI"
       ],
       "technologies": [
-        "Atlas",
-        "Spot",
         "humanoid robotics"
       ],
       "key_people": [
@@ -327,12 +526,96 @@
       ]
     },
     "key_logic_flow": [
-      "现代汽车集团将以3.25亿美元收购软银持有的波士顿动力剩余9.65%股份，交易预计于6月22日获批，此后波士顿动力成为现代全资子公司",
-      "波士顿动力经历了复杂的所有权变迁：2013年被谷歌收购，2017年转手软银，2021年现代以约8.8亿美元购入80%股份（估值约11亿美元）",
-      "电动Atlas人形机器人在2026年1月CES展上公开亮相，计划2028年前在现代汽车佐治亚州电动车工厂（Metaplant）从事零部件排序等实际工作",
-      "波士顿动力CEO Robert Playter表示，Atlas需要在一到两天内学会新的工厂任务，且可靠性达到99.9%才能在车间真正有用",
-      "现代汽车的优势在于自身就是第一个客户——可在自有工厂内控制部署环境，先执行已知任务，再用生产运转数据验证机器人的商业价值",
-      "软银出售波士顿动力后转向更大的AI基础设施布局，正组建Roze AI新公司，目标估值1000亿美元并计划年内上市"
+      "现代汽车集团以3.25亿美元收购软银持有的波士顿动力剩余9.65%股份，使波士顿动力成为现代的全资子公司。",
+      "2026年1月CES上，现代与波士顿动力展示了电动Atlas仿人机器人，生产版计划2028年前在佐治亚州现代电动汽车工厂开始实际工作。",
+      "波士顿动力CEO Robert Playter表示，Atlas需要在一到两天内学会新工厂任务，并达到99.9%的可靠性才能在生产线上真正有用。",
+      "现代凭借自有工厂作为首批部署场景，Atlas将从零件排序开始，逐步向更复杂操作扩展至2030年。",
+      "现代旗下零部件子公司Hyundai Mobis已参与Atlas驱动器生产，将关键硬件系统保留在现代工业体系内。",
+      "软银创始人Masayoshi Son正通过Roze AI布局AI基础设施与数据中心建设，目标估值1000亿美元，波士顿动力的退出是这一更大战略的一部分。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "company",
+        "name": "Boston Dynamics",
+        "canonical_name": "Boston Dynamics",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "现代汽车集团预计将于2026年6月22日批准以3.25亿美元收购软银持有的波士顿动力剩余9.65%股份，使波士顿动力成为现代的全资子公司。",
+          "波士顿动力CEO Robert Playter表示，Atlas需要在一到两天内学会新工厂任务，并达到99.9%的可靠性才能在产线上真正有用。"
+        ],
+        "article_id": "65ef1642e740e5ae"
+      },
+      {
+        "object_type": "product",
+        "name": "Atlas",
+        "canonical_name": "Boston Dynamics Atlas",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "2026年1月CES上，现代与波士顿动力公开展示了电动Atlas仿人机器人，其生产版本预计2028年前在佐治亚州现代电动汽车工厂开始实际工作。",
+          "现代计划让Atlas从佐治亚州Metaplant的零件排序工作开始，到2030年逐步承担更重型和更复杂的操作任务。",
+          "波士顿动力CEO Robert Playter表示，Atlas需要在一到两天内学会新工厂任务，并达到99.9%的可靠性才能真正在工厂产线上有用。"
+        ],
+        "article_id": "65ef1642e740e5ae"
+      },
+      {
+        "object_type": "product",
+        "name": "Spot",
+        "canonical_name": "Boston Dynamics Spot",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Spot四足机器人是波士顿动力首个获得显著商业成功的产品，为公司建立了机器人商业化的基础。"
+        ],
+        "article_id": "65ef1642e740e5ae"
+      },
+      {
+        "object_type": "product",
+        "name": "Optimus",
+        "canonical_name": "Tesla Optimus",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "特斯拉在结束Model S和Model X生产后，已将其弗里蒙特工厂的部分重心转向Optimus仿人机器人项目。"
+        ],
+        "article_id": "65ef1642e740e5ae"
+      },
+      {
+        "object_type": "company",
+        "name": "Figure AI",
+        "canonical_name": "Figure AI",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Figure AI已将其仿人机器人推进至宝马工厂的试验阶段，是波士顿动力在工业机器人领域的主要竞争对手之一。"
+        ],
+        "article_id": "65ef1642e740e5ae"
+      },
+      {
+        "object_type": "company",
+        "name": "Unitree",
+        "canonical_name": "Unitree",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Unitree凭借其低成本仿人机器人产品在市场上获得了不可忽视的地位，对波士顿动力形成了竞争压力。"
+        ],
+        "article_id": "65ef1642e740e5ae"
+      },
+      {
+        "object_type": "company",
+        "name": "Roze AI",
+        "canonical_name": "Roze AI",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "软银正在组建Roze AI，这是一家利用人工智能和机器人技术建设物理基础设施（包括数据中心）的新企业。",
+          "软银创始人Masayoshi Son的目标是为Roze AI争取1000亿美元估值，并可能在今年内实现公开上市。"
+        ],
+        "article_id": "65ef1642e740e5ae"
+      }
     ],
     "impact_score": {
       "score": 4.5,
@@ -386,7 +669,87 @@
       "compound": "medium",
       "hype": "high"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "Atlas",
+        "canonical_name": "Boston Dynamics Atlas",
+        "positioning": "现代汽车集团全资控股的电动仿人机器人，计划2028年前在电动汽车工厂从事零件排序等实际生产工作。",
+        "target_users": [
+          "现代汽车集团佐治亚州电动汽车制造工厂",
+          "工业自动化产线运营方"
+        ],
+        "product_signal": "电动Atlas在2026年CES上公开展示，能站立行走并完成远程操控演示，生产版本预计2028年在现代工厂执行零件排序任务。",
+        "market_signal": "现代以3.25亿美元收购软银剩余9.65%股份实现完全控股，Hyundai Mobis参与Atlas驱动器生产，将关键硬件保留在现代工业体系内。",
+        "differentiation": "与Tesla Optimus和Figure AI相比，Atlas拥有最悠久的运动控制技术积累，且背靠现代自有工厂提供可控的首批部署场景。",
+        "watch_reason": "现代全资控股使Atlas获得稳定的工厂部署场景和零部件供应链保障，结合波士顿动力在仿人机器人运动控制领域的长期积累，Atlas是最有希望率先实现工厂实用化的仿人机器人之一，2028年佐治亚工厂部署将成为行业关键验证节点。",
+        "risk_notes": [
+          "CEO Playter要求Atlas在一到两天内学会新任务并达到99.9%可靠性，技术门槛极高。",
+          "Unitree等厂商推出低成本仿人机器人，价格竞争压力正在形成。",
+          "仿人机器人需在传统自动化已有成熟方案之处证明价值，替代逻辑尚待验证。"
+        ],
+        "score": 9.0,
+        "article_ids": [
+          "65ef1642e740e5ae"
+        ],
+        "evidence_snippets": [
+          "2026年1月CES上，现代与波士顿动力公开展示了电动Atlas仿人机器人，其生产版本预计2028年前在佐治亚州现代电动汽车工厂开始实际工作。",
+          "现代计划让Atlas从佐治亚州Metaplant的零件排序工作开始，到2030年逐步承担更重型和更复杂的操作任务。",
+          "波士顿动力CEO Robert Playter表示，Atlas需要在一到两天内学会新工厂任务，并达到99.9%的可靠性才能真正在工厂产线上有用。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Spot",
+        "canonical_name": "Boston Dynamics Spot",
+        "positioning": "波士顿动力首个实现商业成功的四足机器人产品，为仿人机器人研发提供了商业化经验基础。",
+        "target_users": [
+          "工业巡检与安防领域运营方",
+          "建筑工地测绘与监控团队"
+        ],
+        "product_signal": "Spot四足机器人是波士顿动力首个获得显著商业成功的产品，为公司建立了机器人商业化的基本运营模式。",
+        "market_signal": "作为波士顿动力的成熟商业化产品，Spot已确立在四足机器人市场的领先地位，为公司后续仿人机器人研发提供了营收基础和商业经验。",
+        "differentiation": "与Unitree等四足机器人竞品相比，Spot拥有更成熟的商业应用生态和更高的品牌认知度，但面临日益增长的低成本竞争压力。",
+        "watch_reason": "Spot的商业化路径为波士顿动力的仿人机器人战略提供了重要参考，其市场表现可反映四足机器人在工业场景中的渗透速度与品类成熟度。",
+        "risk_notes": [
+          "Unitree等中国厂商以更低价格切入四足机器人市场，Spot面临明显的性价比竞争压力。",
+          "本文仅提及Spot过往的商业成功信息，缺乏其最新市场动态和产品迭代数据。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "65ef1642e740e5ae"
+        ],
+        "evidence_snippets": [
+          "Spot四足机器人是波士顿动力首个获得显著商业成功的产品，为公司建立了机器人商业化的基础。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Optimus",
+        "canonical_name": "Tesla Optimus",
+        "positioning": "特斯拉在弗里蒙特工厂重点推进的仿人机器人项目，与Atlas在工业应用场景形成直接竞争。",
+        "target_users": [
+          "特斯拉自有制造工厂",
+          "工业自动化与仓储物流领域"
+        ],
+        "product_signal": "特斯拉在结束Model S和Model X生产后，已将弗里蒙特工厂的部分重心转向Optimus仿人机器人项目。",
+        "market_signal": "与Figure AI（BMW工厂试验）和Unitree（低成本方案）共同构成仿人机器人竞争格局，但Optimus享有特斯拉大规模制造和供应链管理能力。",
+        "differentiation": "特斯拉在规模化制造和供应链垂直整合方面的经验是Optimus的差异化优势，但仿人机器人运动控制的公开技术积累不如波士顿动力深厚。",
+        "watch_reason": "特斯拉拥有大规模制造经验和强大的垂直整合能力，若Optimus复用汽车制造体系的供应链与工程能力，可能成为仿人机器人市场的重要变量，值得与Atlas进展对比跟踪。",
+        "risk_notes": [
+          "本文仅作为竞争背景提及Optimus，缺乏其具体技术进展和性能指标数据。",
+          "特斯拉在仿人机器人运动控制和行走稳定性方面的公开技术积累不如波士顿动力深厚。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "65ef1642e740e5ae"
+        ],
+        "evidence_snippets": [
+          "特斯拉在结束Model S和Model X生产后，已将其弗里蒙特工厂的部分重心转向Optimus仿人机器人项目。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -405,17 +768,18 @@
     "pipeline_stage": "fact_extracted",
     "id": "6a758af901b4e6b6",
     "source_type": "community_discussion",
-    "tldr": "一个基于分层抽样的100题英语词汇量测试，由Gemini 3 Flash AI驱动。",
-    "objective_summary": "该页面介绍了一个名为\"The Scientific Word Count\"的英语词汇量测试，采用分层抽样方法从171,476个单词中抽取100道题，由Gemini 3 Flash AI驱动生成，受《The Rest Is Science》播客及其主持人Hannah Fry和Michael",
+    "tldr": "VocaBowl 发布了一项基于分层抽样方法的英语词汇量测试，包含100道题目，由Gemini 3 Flash AI驱动，旨在估算用户掌握的英语单词数量。",
+    "objective_summary": "VocaBowl 推出了一个名为\"The Scientific Word Count\"的英语词汇量测试工具。该测试从171,476个英语单词中通过分层抽样选取100道题目，利用Gemini 3 Flash AI技术驱动，帮助用户评估自己的词汇量。该项目受到播客\"The Rest Is Science\"的启发。",
     "event_type": "application_landing",
     "epistemic_status": "pr_statement",
     "entities": {
       "companies": [
+        "VocaBowl",
         "Google"
       ],
       "technologies": [
-        "Gemini 3 Flash",
-        "Stratified Sampling"
+        "Stratified Sampling",
+        "Gemini 3 Flash AI"
       ],
       "key_people": [
         "Hannah Fry",
@@ -423,10 +787,27 @@
       ]
     },
     "key_logic_flow": [
-      "该页面提供了一个名为\"The Scientific Word Count\"的英语词汇量测试服务。",
-      "测试采用分层抽样方法，从总共171,476个英语单词中科学选取样本。",
-      "测试内容为100道选择题，由Gemini 3 Flash AI驱动生成。",
-      "该测试受播客节目《The Rest Is Science》及其主持人Hannah Fry和Michael Stevens的启发。"
+      "VocaBowl 推出了一个名为\"The Scientific Word Count\"的在线英语词汇量测试工具。",
+      "该测试从171,476个英语单词中通过分层抽样方法选取了100道题目以统计代表性。",
+      "测试结果由Gemini 3 Flash AI模型进行计算和评估。",
+      "该项目受播客\"The Rest Is Science\"及其主持人Hannah Fry教授和Michael Stevens的启发。",
+      "用户可以通过访问在线应用直接参与测试并了解自己的词汇量水平。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "VocaBowl",
+        "canonical_name": "VocaBowl - The Scientific Word Count",
+        "url": "https://vocabowl-870366514258.us-west1.run.app",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "VocaBowl 推出了一项名为\"The Scientific Word Count\"的英语词汇量测试，通过分层抽样从171,476个单词中选取100道题目进行评估。",
+          "该测试由Gemini 3 Flash AI驱动，并受到播客\"The Rest Is Science\"中Hannah Fry教授和Michael Stevens的启发。"
+        ],
+        "article_id": "6a758af901b4e6b6"
+      }
     ],
     "impact_score": {
       "score": 1.2,
@@ -475,7 +856,38 @@
       "compound": "low",
       "hype": "low"
     },
-    "actionable_insight": "speculative_watch"
+    "actionable_insight": "speculative_watch",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "VocaBowl",
+        "canonical_name": "VocaBowl - The Scientific Word Count",
+        "url": "https://vocabowl-870366514258.us-west1.run.app",
+        "positioning": "VocaBowl 推出的\"The Scientific Word Count\"是一款基于分层抽样和AI技术的英语词汇量科学评估工具，帮助用户从171,476个单词中估算自己的词汇水平。",
+        "target_users": [
+          "英语学习者",
+          "语言教育爱好者",
+          "英语词汇量自测用户"
+        ],
+        "product_signal": "该产品采用分层抽样方法从17万余单词中精选100道题目，并由Gemini 3 Flash AI驱动评分，实现了词汇量的科学化、趣味化评估。",
+        "market_signal": "英语学习者群体庞大，词汇量测试存在广泛需求，但该产品目前影响力有限，尚需验证用户获取和留存能力。",
+        "differentiation": "与传统词汇量测试不同，该产品以171,476个完整英语单词库为母体进行分层抽样，结合Gemini AI评估，在统计严谨性和技术体验上形成差异化。",
+        "watch_reason": "VocaBowl 将AI能力与语言学统计方法结合，打造了面向大众的词汇量科学测试工具，其分层抽样设计在教育类AI应用中有参考价值，值得关注其用户数据表现和后续产品演进。",
+        "risk_notes": [
+          "产品形态较为单一，仅为一次性词汇测试工具，缺乏持续用户粘性和后续学习功能。",
+          "Gemini 3 Flash AI作为评分引擎的准确性和一致性尚需独立验证。",
+          "分层抽样的代表性依赖于单词库完整性和题目设计的科学性，可能存在样本偏差。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "6a758af901b4e6b6"
+        ],
+        "evidence_snippets": [
+          "VocaBowl 推出了一项名为\"The Scientific Word Count\"的英语词汇量测试，通过分层抽样从171,476个单词中选取100道题目进行评估。",
+          "该测试由Gemini 3 Flash AI驱动，并受到播客\"The Rest Is Science\"中Hannah Fry教授和Michael Stevens的启发。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -575,30 +987,62 @@
     "pipeline_stage": "fact_extracted",
     "id": "87ea8c4539b0eb6c",
     "source_type": "community_discussion",
-    "tldr": "EFF联合多组织支持《2026年开放法院法案》，要求废除PACER收费并现代化联邦法院电子档案系统。",
-    "objective_summary": "EFF联合Fix the Court、Free Law Project等组织支持《2026年开放法院法案》，该法案要求用现代化统一平台取代老旧的PACER和CM/ECF系统，消除每年超1.5亿美元的公众使用费，以改善公众访问权、加强网络安全并降低长期成本。",
+    "tldr": "美国《2026年开放法院法案》旨在用现代化统一平台替代老旧的PACER和CM/ECF系统，消除公众获取联邦法院文件的高额收费。EFF联合Fix the Court、Free Law Project等组织支持该立法，认为每年收取超过1.5亿美元费用的PACER系统严重阻碍了公众对司法记录的访问。",
+    "objective_summary": "EFF于2026年6月联合Fix the Court、Free Law Project、公民社会团体、政府透明度监督机构和媒体组织，共同支持《2026年开放法院法案》。该法案计划用现代化统一平台替代老旧的PACER和CM/ECF系统，消除公众获取联邦法院文件的高额费用，同时改善网络安全并降低长期成本。PACER目前每年从公众收取超过1.5亿美元费用，而法院记录本应属于公共财产并免费开放。该法案此前已在参议院司法委员会获得两党支持，但未能在上一届国会会期结束前正式成为法律。",
     "event_type": "policy_and_safety",
-    "epistemic_status": "verified_fact",
+    "epistemic_status": "pr_statement",
     "entities": {
       "companies": [
         "EFF",
         "Fix the Court",
         "Free Law Project"
       ],
-      "technologies": [
-        "PACER",
-        "CM/ECF",
-        "RECAP"
-      ],
+      "technologies": [],
       "key_people": []
     },
     "key_logic_flow": [
-      "PACER系统要求公众支付高额费用才能查阅联邦法院档案，费用已成为低收入群体获取公共司法信息的障碍。",
-      "EFF联合多个公民社会团体、开放政府监督组织和媒体集团，共同支持《2026年开放法院法案》。",
-      "该法案计划用现代化统一平台替换老旧的PACER和CM/ECF系统，以改善公众访问、加强网络安全并降低长期成本。",
-      "PACER目前每年向公众收取超过1.5亿美元的费用，但法院记录本质上是公共文件。",
-      "该法案建立在先前获得参议院司法委员会两党支持但未能在国会会期结束前通过的类似提案基础上。",
-      "Free Law Project维护的RECAP软件已创建了一个大型法律意见书和法院记录档案库，为开放获取提供了技术基础。"
+      "PACER系统要求公众支付高额费用才能搜索和查看联邦法院文件，每年从公众收取超过1.5亿美元，已成为获取公共记录的重大障碍。",
+      "EFF联合Fix the Court、Free Law Project、公民社会团体、政府透明度监督机构和媒体组织，共同支持《2026年开放法院法案》。",
+      "该法案计划用现代化统一平台替代老旧的PACER和CM/ECF系统，旨在改善公众访问、加强网络安全并降低长期成本。",
+      "该法案建立在之前一项获得参议院司法委员会两党支持但未能在国会会期结束前通过的类似提案基础上。",
+      "EFF十多年前就已批评PACER的付费墙机制，认为公众不应付费阅读法律和塑造社会的司法判决。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "PACER",
+        "canonical_name": "PACER",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "PACER是一个名为Public Access to Court Electronic Records的政府软件系统，要求用户支付高额费用才能搜索和查看联邦法院文件。",
+          "PACER目前每年从公众收取超过1.5亿美元费用，尽管法院记录本应是公共文件并应免费开放。"
+        ],
+        "article_id": "87ea8c4539b0eb6c"
+      },
+      {
+        "object_type": "project",
+        "name": "RECAP",
+        "canonical_name": "RECAP",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Free Law Project维护的RECAP软件已创建了包含大量法律意见书和其他法院记录的大型存档。"
+        ],
+        "article_id": "87ea8c4539b0eb6c"
+      },
+      {
+        "object_type": "product",
+        "name": "CM/ECF",
+        "canonical_name": "CM/ECF",
+        "confidence": "low",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "该法案计划用现代化统一平台替代老旧的PACER和CM/ECF系统，以改善公众访问、加强网络安全并降低长期成本。"
+        ],
+        "article_id": "87ea8c4539b0eb6c"
+      }
     ],
     "impact_score": {
       "score": 3.5,
@@ -657,7 +1101,58 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "monitor"
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "PACER",
+        "canonical_name": "PACER",
+        "positioning": "美国政府运营的联邦法院电子档案系统，长期向公众收取高额费用以搜索和查看司法文件。",
+        "target_users": [
+          "公众",
+          "法律从业者",
+          "研究人员"
+        ],
+        "product_signal": "PACER目前每年从公众收取超过1.5亿美元费用，尽管法院记录本应是公共文件并应免费开放。",
+        "market_signal": "《2026年开放法院法案》获两党支持，计划用现代化统一平台替代PACER并取消其收费机制。",
+        "differentiation": "作为政府垄断的司法文档访问系统，PACER的付费墙模式与公众知情权及司法透明化趋势存在根本冲突。",
+        "watch_reason": "PACER是美国联邦法院文件唯一电子访问渠道，每年1.5亿美元收费规模使其成为司法透明改革的最关键障碍。该法案若通过将根本改变美国司法记录的访问模式，值得持续跟踪立法进程。",
+        "risk_notes": [
+          "《开放法院法案》此前在参议院获两党支持但未能在国会会期结束前通过，存在立法进程不确定性风险。",
+          "PACER系统替换涉及联邦法院基础设施全面升级，技术迁移复杂度和预算执行情况可能影响改革落地速度。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "87ea8c4539b0eb6c"
+        ],
+        "evidence_snippets": [
+          "PACER是一个名为Public Access to Court Electronic Records的政府软件系统，要求用户支付高额费用才能搜索和查看联邦法院文件。",
+          "PACER目前每年从公众收取超过1.5亿美元费用，尽管法院记录本应是公共文件并应免费开放。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "RECAP",
+        "canonical_name": "RECAP",
+        "positioning": "Free Law Project维护的开源项目，通过用户贡献构建大型法律意见书和法院记录存档。",
+        "technical_signal": "RECAP通过用户贡献方式创建了包含大量法律意见书和其他法院记录的大型可搜索存档。",
+        "adoption_signal": "RECAP获得EFF、Fix the Court及政府透明度监督机构等公民社会组织广泛支持与背书。",
+        "ecosystem_relevance": "RECAP作为PACER付费墙的替代性开源方案，与《2026年开放法院法案》推动的司法透明化目标高度一致。",
+        "target_users": [],
+        "watch_reason": "RECAP是司法记录免费公开运动的关键基础设施，已积累大量法院记录存档。作为对抗PACER付费墙的核心开源替代方案，其数据积累规模、社区活跃度和在立法推动中的角色都值得持续跟踪。",
+        "risk_notes": [
+          "RECAP的数据完整性和更新时效性依赖用户主动贡献，无法保证与官方PACER系统同步的全面性。",
+          "若《开放法院法案》通过并建立统一免费平台，RECAP的项目定位和使用场景可能发生重大变化。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "87ea8c4539b0eb6c"
+        ],
+        "evidence_snippets": [
+          "Free Law Project维护的RECAP软件已创建了包含大量法律意见书和其他法院记录的大型存档。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -676,34 +1171,61 @@
     "pipeline_stage": "fact_extracted",
     "id": "9f76a187f7f031d8",
     "source_type": "community_discussion",
-    "tldr": "将 HTML 网页存储在 favicon 的像素 RGB 通道中，用 Canvas API 解码还原",
-    "objective_summary": "开发者 Tim Wehrle 将 208 字节的 HTML 内容编码为 RGB 像素值，存储在 9×9 像素的 favicon 中，并通过页面内置的 JavaScript 引导脚本利用 Canvas API 读取像素数据、还原 HTML，实现了从 favicon 中提取并渲染网页的演示。",
-    "event_type": "application_landing",
+    "tldr": "开发者 Tim Wehrle 将一个包含 208 字节 HTML 内容的网页完整编码存储到网站的 favicon（9×9 像素 PNG 图像）中，并通过 JavaScript 读取像素数据反向解码并渲染页面，证明了 favicon 作为隐藏数据载体的可行性。",
+    "objective_summary": "Tim Wehrle 通过将 HTML 文本转换为 UTF-8 字节数组，并将每个字节写入 PNG 图像的 RGB 像素通道中，成功将一个 208 字节的网页内容存储在 9×9 像素的 favicon 内。网页加载后，JavaScript 通过 Canvas API 读取 favicon 像素数据，解码出原始 HTML 并替换页面内容。该实验使用了 4 字节的前置长度头来标记有效负载边界，最终图像仅占其 87% 的存储容量。",
+    "event_type": "framework_tools",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [],
       "technologies": [
-        "favicon",
+        "steganography",
         "PNG",
-        "HTML",
-        "JavaScript",
         "Canvas API",
-        "RGB pixel encoding",
+        "favicon",
         "UTF-8",
-        "TextEncoder",
-        "steganography"
+        "RGB"
       ],
       "key_people": [
         "Tim Wehrle"
       ]
     },
     "key_logic_flow": [
-      "开发者 Tim Wehrle 将一段 208 字节的 HTML 代码通过 RGB 通道编码到 9×9 像素的 favicon 图片中。",
-      "编码过程为：先将 HTML 转为 UTF-8 字节数组，再在前缀添加 4 字节的长度头，最后逐字节写入像素的 RGB 通道。",
-      "浏览器加载 favicon 后，通过 Canvas API 读取每个像素的 RGB 值，反向重建出原始 HTML 内容。",
-      "该方案需要页面内置一段 JavaScript 引导脚本来完成解码过程，favicon 本身只存储内容数据而非完整网页。",
-      "该方法实际可存储数据量极小（239 字节容量），且依赖 JavaScript 引导，不具备实用价值，但展示了 favicon 作为数据存储介质的可能性。",
-      "作者还讨论了替代方案：使用 SVG favicon 直接存储标记、利用 PNG 注释块（tEXt/zTXt/iTXt）以及 ico 文件格式的多图标特性。"
+      "Tim Wehrle 受到此前在鼠标 DPI 寄存器中隐藏数据的实验启发，开始探索将数据存储在网站 favicon 中的可能性。",
+      "作者将 HTML 文本通过 TextEncoder 转为 UTF-8 字节数组，并在前面附加 4 字节的有效负载长度头，然后将每个字节依次写入 PNG 图像的 R、G、B 三个颜色通道中。",
+      "该 208 字节的 HTML 有效负载最终被编码到一张 9×9 像素（共 81 像素，容量 243 字节）的 PNG favicon 图像中，占用约 87% 的存储空间。",
+      "浏览器端通过 JavaScript 将 favicon 绘制到 Canvas 上，逐像素读取 RGB 值重建字节数组，再根据前 4 字节的长度头截取有效负载并解码为 HTML 字符串。",
+      "页面提供「Render Website」按钮触发解码流程，读取的 HTML 将替换当前页面内容，实现从 favicon 中还原出一个完整网页的效果。",
+      "作者指出该方案实用性有限，但展示了 PNG 图像格式作为通用数据容器的边界可能性，并提及了 SVG favicon 直接存储及 PNG 注释块等替代方案。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "timwehrle/favicon",
+        "canonical_name": "timwehrle/favicon",
+        "url": "https://github.com/timwehrle/favicon",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "GitHub 仓库 timwehrle/favicon 包含将网页内容编码存储到 favicon 并反向解码的完整实现代码。",
+          "文章末提供了该仓库链接：https://github.com/timwehrle/favicon，作为读者了解实现方式的入口。",
+          "该项目的核心思路是将 HTML 文本转换为字节后写入 PNG 像素的 RGB 通道，再通过 Canvas API 读取还原。"
+        ],
+        "article_id": "9f76a187f7f031d8"
+      },
+      {
+        "object_type": "product",
+        "name": "favicon-site",
+        "canonical_name": "timwehrle.de/labs/favicon-site",
+        "url": "https://www.timwehrle.de/labs/favicon-site/",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "演示站点 https://www.timwehrle.de/labs/favicon-site/ 展示了从 favicon 中解码并渲染 HTML 的实际效果。",
+          "该页面包含一个「Render Website」按钮，点击后读取 favicon 像素数据，解码出 HTML 并替换页面内容。"
+        ],
+        "article_id": "9f76a187f7f031d8"
+      }
     ],
     "impact_score": {
       "score": 1.2,
@@ -748,7 +1270,60 @@
       "compound": "low",
       "hype": "low"
     },
-    "actionable_insight": "speculative_watch"
+    "actionable_insight": "speculative_watch",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "timwehrle/favicon",
+        "canonical_name": "timwehrle/favicon",
+        "url": "https://github.com/timwehrle/favicon",
+        "positioning": "一个将网页内容编码为像素数据并存储于 PNG favicon 中，再通过 Canvas API 反向解码还原的技术实验项目。",
+        "technical_signal": "通过 4 字节长度头标记有效负载边界，将 HTML 文本逐字节映射到 RGB 通道，实现 208 字节内容在 9×9 像素图像中的完整存储。",
+        "ecosystem_relevance": "验证了 PNG 图像格式作为通用数据容器的边界可能性，探索了 favicon 加载机制与 Canvas API 底层交互能力的非传统用法。",
+        "target_users": [],
+        "watch_reason": "该实验突破了 favicon 作为网站标识的常规用途，展示了 PNG 像素通道作为数据载体的边界能力，对前端开发和数据编码社区具有技术启发价值。",
+        "risk_notes": [
+          "该方案存储容量仅 208 字节，实际应用场景极为有限，且依赖 JavaScript 引导程序解码，无法作为独立数据载体使用。",
+          "PNG 有损压缩或缩放处理可能导致像素数据失真，该方案缺乏纠错机制，在跨平台场景下解码可靠性不足。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "9f76a187f7f031d8"
+        ],
+        "evidence_snippets": [
+          "GitHub 仓库 timwehrle/favicon 包含将网页内容编码存储到 favicon 并反向解码的完整实现代码。",
+          "文章末提供了该仓库链接：https://github.com/timwehrle/favicon，作为读者了解实现方式的入口。",
+          "该项目的核心思路是将 HTML 文本转换为字节后写入 PNG 像素的 RGB 通道，再通过 Canvas API 读取还原。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "favicon-site",
+        "canonical_name": "timwehrle.de/labs/favicon-site",
+        "url": "https://www.timwehrle.de/labs/favicon-site/",
+        "positioning": "一个展示从网站 favicon 中解码并渲染 HTML 内容的交互式在线演示站点，直观验证了像素数据存储方案的可行性。",
+        "target_users": [
+          "前端技术爱好者",
+          "数据编码实验研究者",
+          "浏览器 API 探索者"
+        ],
+        "product_signal": "页面通过「Render Website」按钮触发解码流程，利用 Canvas API 逐像素读取 favicon 的 RGB 值并还原为 HTML 字符串。",
+        "differentiation": "直接利用 PNG 像素的 RGB 通道作为原始字节存储介质，无需隐写编码层，区别于传统的图片隐写和信息隐藏技术方案。",
+        "watch_reason": "作为 favicon 数据存储概念的交互验证载体，该站点直观还原了技术实现流程，为开发者提供了可复现的参考范本，探索了浏览器底层 API 的非传统组合用法。",
+        "risk_notes": [
+          "该演示依赖 Canvas API 的同源策略限制，在跨域或启用严格安全策略的浏览器环境中可能无法正常工作。",
+          "演示页面本身仍需要一个包含 JavaScript 解码逻辑的页面作为引导程序，并未实现完全自包含的独立数据载体方案。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "9f76a187f7f031d8"
+        ],
+        "evidence_snippets": [
+          "演示站点 https://www.timwehrle.de/labs/favicon-site/ 展示了从 favicon 中解码并渲染 HTML 的实际效果。",
+          "该页面包含一个「Render Website」按钮，点击后读取 favicon 像素数据，解码出 HTML 并替换页面内容。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -767,32 +1342,104 @@
     "pipeline_stage": "fact_extracted",
     "id": "a16a8248af1715a8",
     "source_type": "community_discussion",
-    "tldr": "ATProto 没有\"实例\"概念，它将托管与应用分离，类似 RSS 与阅读器的关系。",
-    "objective_summary": "Dan Abramov 于 2026 年 6 月 19 日发表文章，解释 ATProto 协议架构中不存在 Mastodon/ActivityPub 意义上的\"实例\"概念。ATProto 在网络层将托管（hosting）和聚合（app）分离，用户可以自由更换托管服务商或创建新应用，",
+    "tldr": "Dan Abramov 发表博文解释 atproto 与 Mastodon 架构差异：atproto 将托管与聚合在协议层级分离，用户身份不绑定特定实例，可自由切换托管服务或开发新应用，架构类似 RSS 与 Google Reader 的关系。",
+    "objective_summary": "Dan Abramov 于 2026 年 6 月 19 日在个人博客发表文章，阐释 ATProto 协议的去中心化设计理念。文章指出 atproto 的核心架构将托管与聚合在协议层面分离，类似 RSS 与 Google Reader 的关系，用户数据托管在自有或第三方服务上，应用作为投影从各处聚合展示内容。这与 Mastodon/ActivityPub 的实例联邦模型截然不同，后者将身份、数据托管与应用捆绑为不可分割的单元。作者本人已完成从 Bluesky 默认托管到 Eurosky 的迁移，并证实切换过程基本自动化。",
     "event_type": "framework_tools",
-    "epistemic_status": "theoretical_claim",
+    "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
         "Bluesky",
-        "Hacker News",
-        "Google Reader",
-        "Feedly",
+        "Eurosky",
         "Cloudflare"
       ],
       "technologies": [
         "ATProto",
-        "RSS",
-        "ActivityPub"
+        "ActivityPub",
+        "RSS"
       ],
-      "key_people": []
+      "key_people": [
+        "Dan Abramov"
+      ]
     },
     "key_logic_flow": [
-      "文章指出 ATProto 中没有\"实例\"概念，\"实例\"是 Mastodon/ActivityPub 模式的产物，将 ATProto 与其他去中心化协议混为一谈属于范畴错误。",
-      "ATProto 的核心设计是将托管（hosting）与聚合应用（app）在网络层面彻底分离，类似于个人博客（托管）与 RSS 阅读器（聚合）的关系。",
-      "在 Mastodon/ActivityPub 的\"实例\"模式中，用户身份绑定于特定实例（如 @user@instance），且实例间通过 O(n²) 的联邦通信协议交换数据。",
-      "ATProto 允许用户自由切换托管服务商（如作者本人已迁移至 Eurosky），也允许任何人创建和尝试新应用（如 Tangled、Semble），无需受限于单一\"盒子\"。",
-      "ATProto 的去中心化衡量标准不是实例数量，而是用户能否迁移托管、能否开发和使用新应用。",
-      "将托管与应用耦合是去中心化社交网络的原始设计缺陷，ATProto 通过将二者分离来修复这一激励机制问题。"
+      "atproto 将托管与聚合在协议层面分离，用户数据托管在自有服务上，应用作为投影从各处聚合展示内容，架构类似 RSS 与 Google Reader 的关系。",
+      "Mastodon/ActivityPub 采用实例联邦模型，每个实例是托管与应用捆绑的独立单元，用户身份格式为 username@instance，身份与特定实例永久绑定且不可迁移。",
+      "在 Mastodon 模型中，实例管理员可决定是否与其他实例断联，实例关闭将导致用户身份完全消失，跟随者无法再找到该用户。",
+      "atproto 的去中心化措施包括用户可自由切换托管服务商，以及任何人都可以尝试或开发新应用如 Tangled 和 Semble。",
+      "衡量 atproto 生态去中心化的关键指标是用户是否实际迁移到不同托管服务，以及是否有新的独立应用被创建和使用，而非运行的服务器副本数量。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "ATProto",
+        "canonical_name": "AT Protocol",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "atproto 在协议层面将托管与聚合分离开来，用户数据托管在自有服务或第三方托管上，应用作为投影从各处聚合展示内容。",
+          "atproto 的去中心化在结构上比一个应用的多个副本更丰富，用户可自由切换托管服务，也可尝试或开发新应用。",
+          "atproto 中每个应用都是整个 Atmosphere 的投影，如同 Feedly 和 Google Reader 是整个博客圈的投影，应用本身不持有用户数据。"
+        ],
+        "article_id": "a16a8248af1715a8"
+      },
+      {
+        "object_type": "product",
+        "name": "Bluesky",
+        "canonical_name": "Bluesky",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "Bluesky 是基于 atproto 协议构建的社交应用，但 atproto 生态中还有 Tangled、Semble 等与 Bluesky 毫无关系的独立应用。",
+          "运行 Bluesky 数据库服务器的多个完整副本是可行的（例如 Blacksky），但它们是为了满足不同审核策略等特定需求而出现的。"
+        ],
+        "article_id": "a16a8248af1715a8"
+      },
+      {
+        "object_type": "project",
+        "name": "Tangled",
+        "canonical_name": "Tangled",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Tangled 和 Semble 与 Bluesky 毫无关系，它们是 atproto 生态中的独立第三方应用，证明了在 atproto 上开发新应用的可能性。"
+        ],
+        "article_id": "a16a8248af1715a8"
+      },
+      {
+        "object_type": "project",
+        "name": "Semble",
+        "canonical_name": "Semble",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Tangled 和 Semble 与 Bluesky 毫无关系，它们是 atproto 生态中的独立第三方应用，展示了协议层面分离托管与聚合带来的应用多样性。"
+        ],
+        "article_id": "a16a8248af1715a8"
+      },
+      {
+        "object_type": "product",
+        "name": "Eurosky",
+        "canonical_name": "Eurosky",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者本人已完成从 Bluesky 默认托管到 Eurosky 的迁移，除三四个用户体验小问题外，整个切换过程全是自动完成的。",
+          "作者的 atproto 数据现在存储在 Eurosky 上，如果他想更冒险一些，还可以在 Cloudflare 上免费自行托管所有数据。"
+        ],
+        "article_id": "a16a8248af1715a8"
+      },
+      {
+        "object_type": "project",
+        "name": "Blacksky",
+        "canonical_name": "Blacksky",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Blacksky 是一个社区驱动的 Bluesky 数据库副本，它的出现是为了满足特定的审核策略需求，而非简单复制已有功能。"
+        ],
+        "article_id": "a16a8248af1715a8"
+      }
     ],
     "impact_score": {
       "score": 4.0,
@@ -850,7 +1497,118 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "ATProto",
+        "canonical_name": "AT Protocol",
+        "positioning": "ATProto 是一个去中心化社交协议，在协议层面将托管与聚合分离，用户身份不绑定特定实例，架构类似 RSS 与 Google Reader 的关系。",
+        "technical_signal": "atproto 在协议层面将托管与聚合分离开来，用户数据托管在自有服务或第三方托管上，应用作为投影从各处聚合展示内容。",
+        "adoption_signal": "作者完成从 Bluesky 到 Eurosky 的迁移并证实过程自动化，用户还可在 Cloudflare 上免费自行托管所有数据，验证了协议设计的可行性。",
+        "ecosystem_relevance": "生态中已有 Tangled、Semble 和 Blacksky 等独立第三方应用和服务，验证了协议的开放性和可扩展性。",
+        "target_users": [],
+        "watch_reason": "ATProto 代表了去中心化社交网络的另一种技术路线，其架构设计有望解决 ActivityPub/Mastodon 模型中身份与实例绑定的根本性问题，使用户真正拥有数据自主权并推动应用生态的多样化发展。",
+        "risk_notes": [
+          "ATProto 去中心化的实际效果取决于用户是否真正迁移到不同托管服务，而非仅看服务器副本数量。",
+          "用户从 Bluesky 迁移到其他托管服务的过程基本自动，但仍有少数用户体验问题需要解决。"
+        ],
+        "score": 8.0,
+        "article_ids": [
+          "a16a8248af1715a8"
+        ],
+        "evidence_snippets": [
+          "atproto 在协议层面将托管与聚合分离开来，用户数据托管在自有服务或第三方托管上，应用作为投影从各处聚合展示内容。",
+          "atproto 的去中心化在结构上比一个应用的多个副本更丰富，用户可自由切换托管服务，也可尝试或开发新应用。",
+          "atproto 中每个应用都是整个 Atmosphere 的投影，如同 Feedly 和 Google Reader 是整个博客圈的投影，应用本身不持有用户数据。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Tangled",
+        "canonical_name": "Tangled",
+        "positioning": "Tangled 是 ATProto 生态中的独立第三方应用，展示了协议层面分离托管与聚合带来的应用多样性。",
+        "technical_signal": "Tangled 与 Bluesky 毫无关系，它是 atproto 生态中的独立第三方应用，证明了在 atproto 上开发新应用的可能性。",
+        "ecosystem_relevance": "作为独立于 Bluesky 的第三方应用，Tangled 验证了 ATProto 协议的开放性和可扩展性。",
+        "target_users": [],
+        "watch_reason": "Tangled 的出现证明了 ATProto 生态不依赖于单一应用，其发展情况是衡量协议去中心化程度的重要参考指标。",
+        "risk_notes": [
+          "Tangled 的具体功能、用户规模和发展状态在文章中信息有限，缺乏独立验证。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "a16a8248af1715a8"
+        ],
+        "evidence_snippets": [
+          "Tangled 和 Semble 与 Bluesky 毫无关系，它们是 atproto 生态中的独立第三方应用，证明了在 atproto 上开发新应用的可能性。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Semble",
+        "canonical_name": "Semble",
+        "positioning": "Semble 是 ATProto 生态中的独立第三方应用，与 Bluesky 无关，展示了协议的可扩展性和应用多样性。",
+        "technical_signal": "Semble 与 Bluesky 毫无关系，它是 atproto 生态中的独立第三方应用，证明了在 atproto 上开发新应用的可能性。",
+        "ecosystem_relevance": "作为独立于 Bluesky 的第三方应用，Semble 进一步验证了 ATProto 协议的开放性和应用生态多样性。",
+        "target_users": [],
+        "watch_reason": "Semble 与 Tangled 共同构成 ATProto 生态中第三方应用的典型案例，反映了协议去中心化设计的实际落地。",
+        "risk_notes": [
+          "Semble 的具体功能、用户规模和发展状态在文章中信息有限，缺乏独立验证。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "a16a8248af1715a8"
+        ],
+        "evidence_snippets": [
+          "Tangled 和 Semble 与 Bluesky 毫无关系，它们是 atproto 生态中的独立第三方应用，展示了协议层面分离托管与聚合带来的应用多样性。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Eurosky",
+        "canonical_name": "Eurosky",
+        "positioning": "Eurosky 是 ATProto 生态中的第三方托管服务商，为用户提供 Bluesky 默认托管之外的数据存储和身份管理服务。",
+        "target_users": [
+          "ATProto 用户",
+          "需要替代托管服务的 Bluesky 用户"
+        ],
+        "product_signal": "作者已完成从 Bluesky 默认托管到 Eurosky 的迁移，整个切换过程除三四个用户体验小问题外全是自动完成的。",
+        "market_signal": "Eurosky 作为 Bluesky 之外的托管选项，证明了 ATProto 用户实际切换托管服务的技术可行性和市场接受度。",
+        "differentiation": "与 Bluesky 默认托管不同，Eurosky 为用户提供了托管服务商的选择权，体现了 ATProto 去中心化设计的实际落地。",
+        "watch_reason": "Eurosky 是验证 ATProto 去中心化承诺的关键案例，用户是否真正迁移到非官方托管服务决定了协议的去中心化前景。",
+        "risk_notes": [
+          "Eurosky 的运营规模、服务稳定性和商业模式在文章中信息有限，缺乏独立验证。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "a16a8248af1715a8"
+        ],
+        "evidence_snippets": [
+          "作者本人已完成从 Bluesky 默认托管到 Eurosky 的迁移，除三四个用户体验小问题外，整个切换过程全是自动完成的。",
+          "作者的 atproto 数据现在存储在 Eurosky 上，如果他想更冒险一些，还可以在 Cloudflare 上免费自行托管所有数据。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Blacksky",
+        "canonical_name": "Blacksky",
+        "positioning": "Blacksky 是一个社区驱动的 Bluesky 数据库副本，旨在满足特定社区的自定义审核与内容管理策略需求。",
+        "technical_signal": "Blacksky 的出现是为了满足特定的审核策略需求，而非简单复制已有功能，体现了 atproto 协议的灵活性。",
+        "ecosystem_relevance": "Blacksky 展示了 ATProto 生态中可基于同一协议构建差异化社区治理方案的可能性。",
+        "target_users": [],
+        "watch_reason": "Blacksky 代表了 ATProto 生态中社区自主治理的实践案例，其审核策略和运营模式值得持续关注。",
+        "risk_notes": [
+          "Blacksky 的具体实现方式、运营模式和与主网的关系在文章中信息有限。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "a16a8248af1715a8"
+        ],
+        "evidence_snippets": [
+          "Blacksky 是一个社区驱动的 Bluesky 数据库副本，它的出现是为了满足特定的审核策略需求，而非简单复制已有功能。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -869,36 +1627,99 @@
     "pipeline_stage": "fact_extracted",
     "id": "a2a45337764ea7ab",
     "source_type": "community_discussion",
-    "tldr": "前OpenAI研究员用不到€5000搭建桌面级机器人操作研究平台，验证单人独立科研可行性。",
-    "objective_summary": "一位曾在OpenAI Robotics从事机械臂操作研究的研究者，以€4,569.80的总成本搭建了一套桌面级机器人操作研究系统，包含UFACTORY xArm Lite 6机械臂、Intel RealSense D405腕部相机、Logitech C920静态相机和SpaceMouse遥操作设备。",
-    "event_type": "application_landing",
+    "tldr": "一位前OpenAI机器人研究员（2017-2020）在桌边搭建了一套总价约€4,570的桌面机械臂操作研究平台，使用UFACTORY xArm Lite 6工业级机械臂、双目摄像头和自研软件栈，计划在未来数月进行开源独立研究。",
+    "objective_summary": "前OpenAI机器人操作研究员自费搭建了一套桌面机械臂研究平台，硬件预算低于€5,000，核心组件包括UFACTORY xArm Lite 6机械臂（€3,403）、Intel RealSense D405腕部相机和Logitech C920静态相机，通过3Dconnexion SpaceMouse进行遥操作，并由作者自研的Python软件栈驱动。该平台体积紧凑，可放置在书桌旁，支持快速迭代实验。作者认为工业级硬件成本下降和Hugging Face LeRobot等公开基础模型的普及，使个人研究者也能在真实硬件上进行有意义的机器人操作研究，并计划在未来数月以公开日志形式记录研究过程。",
+    "event_type": "infrastructure_update",
     "epistemic_status": "verified_fact",
     "entities": {
       "companies": [
+        "OpenAI",
         "UFACTORY",
         "Intel",
-        "OpenAI",
         "Hugging Face",
-        "IKEA",
-        "LeRobot",
         "Logitech",
-        "3Dconnexion"
+        "3Dconnexion",
+        "IKEA",
+        "NVIDIA",
+        "SmallRig",
+        "AGPTEK"
       ],
       "technologies": [
         "VLA",
         "RGB-D",
-        "TCP",
-        "Python SDK"
+        "TCP"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "机器人硬件成本大幅下降（€4,569.80，低于预算€10,000的一半）和开源基础模型（如Hugging Face LeRobot）的普及，使单人独立研究成为可能。",
-      "研究者选择UFACTORY xArm Lite 6工业级机械臂，看重其可靠性、精确性和易用的Python SDK，装配仅需30分钟。",
-      "采用单臂+双摄像头方案（Intel RealSense D405腕部相机+Logitech C920静态相机），有意接受非固定实验室环境带来的数据噪声，以此训练机器人在真实多变条件下的适应能力。",
-      "使用SpaceMouse Wireless进行6自由度遥操作数据采集，折叠桌将机器人区域与工作区隔开以提高安全性。",
-      "计划未来数月以公开研究日志的形式记录机器人操作研究过程，重点记录哪些方法有效、哪些失败，而非以论文或开源代码为主要产出。",
-      "研究者曾在OpenAI Robotics从事桌面机械臂操作研究（2019-2020），当时需约20人团队和10倍成本的硬件，如今单人即可起步。"
+      "作者曾是OpenAI机器人操作研究团队成员（2017-2020），认为机器人硬件成本大幅下降和公开基础模型普及，使个人研究者也能在真实硬件上开展有意义的研究。",
+      "作者设定了五项设计需求：预算低于€10,000、能放在桌边、零件易于购买、支持Python控制、软件栈无偏见。",
+      "最终搭建了一套单臂桌面操作方案，使用UFACTORY xArm Lite 6机械臂（€3,403）、Intel RealSense D405腕部相机和Logitech C920静态相机，总物料成本约€4,570（不含计算设备）。",
+      "作者从零编写了完整的Python软件栈来控制这套系统，包括遥操作数据记录和策略训练支持。",
+      "作者计划在未来数月进行独立的机械臂操作研究，并以公开研究日志形式记录成功与失败的经验，而非以论文或开源代码为主要产出。",
+      "作者认为单臂设置迫使策略通过行为补偿硬件局限（如利用桌面边缘固定物体），这恰好是值得研究的操作机制。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "UFACTORY xArm Lite 6",
+        "canonical_name": "UFACTORY xArm Lite 6",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "作者选择UFACTORY xArm Lite 6作为核心机械臂，因其精度高、耐用可靠且附带实用的Python SDK，价格为€3,403。",
+          "该机械臂支持通过关节位置、速度或TCP空间进行控制，具备自碰撞避免、力检测和急停等安全功能，从开箱到首次操作仅需约30分钟。"
+        ],
+        "article_id": "a2a45337764ea7ab"
+      },
+      {
+        "object_type": "project",
+        "name": "Hugging Face LeRobot",
+        "canonical_name": "Hugging Face LeRobot",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "作者引用Hugging Face的LeRobot项目，认为其致力于推动顶尖机器人研究的民主化，与本文降低机器人研究门槛的理念一致。",
+          "作者也购买了LeRobot SO-101套件（约€450）作为对比，但认为其玩具属性较强，不如工业级臂可靠。"
+        ],
+        "article_id": "a2a45337764ea7ab"
+      },
+      {
+        "object_type": "product",
+        "name": "Intel RealSense D405",
+        "canonical_name": "Intel RealSense D405",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Intel RealSense D405腕部相机体积小巧，采用全局快门，工作距离为7至50厘米，支持720p分辨率下30fps的16位深度输出。",
+          "作者假设深度信息有助于从零训练策略时让模型更好地泛化到不同的纹理、光照和背景变化。"
+        ],
+        "article_id": "a2a45337764ea7ab"
+      },
+      {
+        "object_type": "project",
+        "name": "pyrealsense2-macosx",
+        "canonical_name": "pyrealsense2-macosx",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "由于Intel官方的pyrealsense2 SDK不兼容macOS，社区维护的pyrealsense2-macosx版本提供了预编译的macOS安装包。",
+          "该社区版本免去了从源码自行编译的麻烦，使作者能在macOS上直接调用RealSense D405相机。"
+        ],
+        "article_id": "a2a45337764ea7ab"
+      },
+      {
+        "object_type": "product",
+        "name": "NVIDIA DGX Spark",
+        "canonical_name": "NVIDIA DGX Spark",
+        "confidence": "low",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "作者使用已有的NVIDIA DGX Spark设备作为策略训练和服务所需的GPU算力来源，未将其计入平台搭建成本。"
+        ],
+        "article_id": "a2a45337764ea7ab"
+      }
     ],
     "impact_score": {
       "score": 6.5,
@@ -953,7 +1774,81 @@
       "compound": "medium",
       "hype": "medium"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "UFACTORY xArm Lite 6",
+        "canonical_name": "UFACTORY xArm Lite 6",
+        "positioning": "高精度工业级桌面六轴机械臂，支持Python SDK直接控制，兼具工业级可靠性与个人级易用性，使单人研究者也能在书桌旁搭建完整的机械臂操作研究平台。",
+        "target_users": [
+          "个人机器人研究者",
+          "小型机器人研究团队",
+          "机械臂操作算法研究者"
+        ],
+        "product_signal": "xArm Lite 6精度高且耐用可靠，配套Python SDK使从开箱到首次控制仅需约30分钟，大幅降低了机器人操作研究的硬件准入门槛。",
+        "market_signal": "价格€3,403的工业级机械臂已进入个人研究者可负担区间，标志着机器人硬件成本经历了数量级的下降。",
+        "differentiation": "与传统工业机械臂需要专业工程师调试不同，xArm Lite 6的易用性和Python生态使其更接近消费级产品，是少数适合个人研究的工业级机械臂之一。",
+        "watch_reason": "作为个人级机器人研究成本下降的标志性硬件产品，xArm Lite 6的易用性和Python SDK支持正在改变机器人研究的入门方式，其后续迭代和市场反响值得持续关注。",
+        "risk_notes": [
+          "工业级机械臂的长期可靠性验证尚需时间，且个人采购的售后支持可能不如企业级客户完善。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "a2a45337764ea7ab"
+        ],
+        "evidence_snippets": [
+          "作者选择UFACTORY xArm Lite 6作为核心机械臂，因其精度高、耐用可靠且附带实用的Python SDK，价格为€3,403。",
+          "该机械臂支持通过关节位置、速度或TCP空间进行控制，具备自碰撞避免、力检测和急停等安全功能，从开箱到首次操作仅需约30分钟。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Intel RealSense D405",
+        "canonical_name": "Intel RealSense D405",
+        "positioning": "专为近距离机械臂操作设计的腕部深度相机，采用全局快门，工作距离7至50厘米，支持720p分辨率下30fps的16位深度输出。",
+        "target_users": [
+          "机器人操作研究人员",
+          "机械臂视觉系统开发者",
+          "桌面操作研究平台搭建者"
+        ],
+        "product_signal": "D405腕部相机体积小巧且采用全局快门，工作距离7-50厘米适合桌面操作场景，深度信息有助于策略模型在纹理、光照和背景变化下实现更好泛化。",
+        "watch_reason": "作为桌面机器人操作平台的关键视觉组件，D405的全局快门和近距离深度感知能力对基于视觉的机械臂操作研究有重要价值，其产品延续性也反映了Intel在机器人视觉领域的布局。",
+        "risk_notes": [
+          "Intel RealSense产品线历史上曾多次调整，长期产品路线图存在不确定性。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "a2a45337764ea7ab"
+        ],
+        "evidence_snippets": [
+          "Intel RealSense D405腕部相机体积小巧，采用全局快门，工作距离为7至50厘米，支持720p分辨率下30fps的16位深度输出。",
+          "作者假设深度信息有助于从零训练策略时让模型更好地泛化到不同的纹理、光照和背景变化。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "pyrealsense2-macosx",
+        "canonical_name": "pyrealsense2-macosx",
+        "positioning": "社区维护的Intel RealSense SDK macOS兼容项目，通过提供预编译安装包解决官方SDK无法在macOS上使用的兼容性问题。",
+        "technical_signal": "该项目填补了Intel官方SDK的macOS支持空白，通过提供预编译安装包免去了从源码自行编译的麻烦，简化了macOS上的机器人视觉开发流程。",
+        "adoption_signal": "被机器人研究个人开发者采用，作为在macOS上驱动RealSense D405相机的关键中间件，体现了社区项目在专业工具链中的补充价值。",
+        "ecosystem_relevance": "该项目是机器人研究开源工具链中的关键桥梁组件，解决了跨平台兼容性问题，使macOS用户也能参与基于RealSense相机的机器人视觉研究。",
+        "target_users": [],
+        "watch_reason": "该社区项目解决了macOS用户在机器人视觉开发中的关键兼容性痛点，其维护质量直接影响个人研究者的开发效率，值得关注其社区活跃度和长期可持续性。",
+        "risk_notes": [
+          "作为社区维护项目而非官方支持，存在依赖单一维护者的风险，长期更新持续性不确定。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "a2a45337764ea7ab"
+        ],
+        "evidence_snippets": [
+          "由于Intel官方的pyrealsense2 SDK不兼容macOS，社区维护的pyrealsense2-macosx版本提供了预编译的macOS安装包。",
+          "该社区版本免去了从源码自行编译的麻烦，使作者能在macOS上直接调用RealSense D405相机。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -1174,8 +2069,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "e2a1aac6929c6e9f",
     "source_type": "community_discussion",
-    "tldr": "HN讨论：多数人认为内存紧缺不会促使程序员写出更高效的代码，因缺乏激励机制和组织惯性",
-    "objective_summary": "Hacker News用户围绕「内存短缺是否会让程序员写出更高效的代码」展开讨论。多数评论者认为不会发生，原因包括：客户端内存优化缺乏激励（公地悲剧）、团队协作复杂性和架构僵化、时间-市场优先于硬件成本、以及语言和平台选择受制于商业因素而非技术因素。少数人指出服务器端优化因直接节省成本而可能推进。",
+    "tldr": "Hacker News 上关于\"内存短缺时程序员是否会写出更高效的代码\"的讨论。多数观点认为，除非内存成本直接与开发团队利益挂钩，否则客户端内存优化缺乏商业激励；服务器端优化因直接降低成本而更可能发生。",
+    "objective_summary": "2026年7月，Hacker News 上围绕内存短缺是否会导致程序员写出更高效代码展开讨论。多数参与者认为，客户端内存优化缺乏市场激励——用户无法直观感知单个应用的内存占用，因此开发者倾向于优先交付功能而非优化内存。服务器端优化因直接降低云服务成本而更可能推进，但需要优化成本低于开发成本。讨论还涉及技术栈选择（Rust、Go vs TypeScript、Java）对内存效率的影响，以及AI生成代码的普及（Google 75%、GitHub 46%、Microsoft 30%、Meta 65%）可能加剧或缓解内存效率问题的不同观点。",
     "event_type": "infrastructure_update",
     "epistemic_status": "theoretical_claim",
     "entities": {
@@ -1184,10 +2079,7 @@
         "Microsoft",
         "Meta",
         "Snap",
-        "AWS",
-        "SAP",
-        "Salesforce",
-        "GitHub"
+        "Amazon Web Services"
       ],
       "technologies": [
         "ESP32",
@@ -1195,27 +2087,42 @@
         "Zig",
         "Haskell",
         "Go",
-        "C",
-        "C++",
-        "C#",
-        "Node",
+        "Node.js",
         "PHP",
-        "TypeScript",
-        "Java",
-        "Electron",
         "Kubernetes",
         "React",
-        "UDP"
+        "JavaScript",
+        "TypeScript",
+        "Java",
+        "C",
+        "C++",
+        "Common Lisp"
       ],
       "key_people": []
     },
     "key_logic_flow": [
-      "多数评论者认为内存短缺不会促使程序员写出更高效的代码，因为客户端内存优化是「公地悲剧」——省下来的内存会被其他应用占用，用户无感知，开发者无激励。",
-      "服务器端内存优化有直接成本节省效果（如减少EC2实例费用），因此大公司（Google等）已将其列为下一年度目标，但优化成本（资深工程师时间）可能超过节省的成本。",
-      "代码膨胀的主要原因不是缺乏高级算法知识，而是大团队协作中数十个子模块即使不需要也被加载、做对架构设计很难且容易引入复杂bug，因此「维持现状」更便宜。",
-      "编程语言和技术栈的选择受商业因素制约——招聘难度、薪资成本、第三方SDK可用性、认证要求等，这些因素往往比技术效率更优先。",
-      "有评论者指出AI生成代码占比正在快速上升（Google 75%、GitHub 46%、Microsoft 30%、Meta/Snap约65%），这将对代码效率和内存使用产生深远影响。",
-      "部分评论者认为真正的出路在于用更高效的语言（Rust、Go等）替代Node和PHP等内存密集型技术栈，但这面临招聘、培训和迁移成本等现实障碍。"
+      "客户端内存优化缺乏商业激励，因为节省的内存量会被其他应用占用，用户无法感知单个应用的内存效率差异。",
+      "服务器端内存优化直接降低云服务成本，因此大公司已在规划将减少服务器端内存使用作为下一年度的核心目标。",
+      "优化工作通常由最资深的工程师完成，开发成本可能超过节省的硬件成本，导致多数优化尝试以失败告终。",
+      "技术栈的选择对内存效率有显著影响，但受制于招聘难度、第三方依赖、合规认证等业务因素，不能仅从内存效率出发做决策。",
+      "AI生成代码在Google、Microsoft、Meta等公司已占新代码的30%-75%，这对代码内存效率的影响存在分歧。",
+      "多数应用的内存浪费源于\"停止做蠢事\"级别的低效（如不必要的巨大缓冲区、过度依赖大型框架），而非缺乏高级算法。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "hydraulic.dev",
+        "canonical_name": "Hydraulic",
+        "url": "https://hydraulic.dev/",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "一位评论者以自我推广方式提到 hydraulic.dev，称其用于简化原生应用的发布和更新流程。",
+          "该评论者认为用传统Win32方式编写的应用在内存效率上远超Web应用，但交付和更新困难，hydraulic.dev旨在解决此问题。"
+        ],
+        "article_id": "e2a1aac6929c6e9f"
+      }
     ],
     "impact_score": {
       "score": 2.3,
@@ -1272,7 +2179,37 @@
       "compound": "medium",
       "hype": "low"
     },
-    "actionable_insight": "speculative_watch"
+    "actionable_insight": "speculative_watch",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "hydraulic.dev",
+        "canonical_name": "Hydraulic",
+        "url": "https://hydraulic.dev/",
+        "positioning": "简化原生桌面应用发布与更新流程的工具，旨在在保持传统Win32应用内存效率优势的同时解决其分发和更新困难的问题。",
+        "target_users": [
+          "原生桌面应用开发者",
+          "关注内存效率的应用团队",
+          "寻求轻量分发方案的独立开发者"
+        ],
+        "product_signal": "提供原生应用交付和更新流程的简化方案，降低传统Win32应用的分发门槛，让内存高效但难以交付的应用更易触达用户。",
+        "market_signal": "在Hacker News关于内存效率的讨论中被开发者提及为原生应用交付困境的解决方案，反映出对高效原生工具的实际市场需求。",
+        "differentiation": "定位在Web应用交付便利性与原生应用内存效率之间寻求平衡，填补了对内存敏感但需便捷分发的应用场景空白。",
+        "watch_reason": "hydraulic.dev在Hacker News关于内存短缺与代码效率的讨论中被提出，作为解决传统Win32应用交付困难的关键工具，反映出原生应用开发领域对简易分发方案的真实需求，值得关注其是否能成为内存高效应用生态中的基础设施。",
+        "risk_notes": [
+          "产品处于早期阶段，仅在HN评论中作为自我推广被提及，缺乏广泛用户验证。",
+          "桌面原生应用分发市场竞争激烈，需要面对成熟解决方案和平台自身分发渠道的竞争。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "e2a1aac6929c6e9f"
+        ],
+        "evidence_snippets": [
+          "一位评论者以自我推广方式提到 hydraulic.dev，称其用于简化原生应用的发布和更新流程。",
+          "该评论者认为用传统Win32方式编写的应用在内存效率上远超Web应用，但交付和更新困难，hydraulic.dev旨在解决此问题。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -1291,8 +2228,8 @@
     "pipeline_stage": "fact_extracted",
     "id": "f063f6005b1efe20",
     "source_type": "community_discussion",
-    "tldr": "AlphaFold领导者John Jumper宣布离开Google DeepMind，将加入Anthropic。",
-    "objective_summary": "John Jumper在任职近9年后宣布离开Google DeepMind，在短暂休整后将加入Anthropic。Jumper此前领导AlphaFold团队，其研究获诺奖级认可，此次跳槽引发AI界对Anthropic战略布局的关注。",
+    "tldr": "AlphaFold之父John Jumper在任职近9年后离开Google DeepMind，将加入Anthropic。",
+    "objective_summary": "2026年7月21日，John Jumper通过Twitter宣布，在Google DeepMind工作近9年后决定离职。他计划在休整一段时间后加入Anthropic。Jumper感谢Demis Hassabis在其博士毕业仅6个月后即委以领导AlphaFold团队的重任，并称Google DeepMind教会了他如何进行卓越的科学研究。",
     "event_type": "capital_movement",
     "epistemic_status": "verified_fact",
     "entities": {
@@ -1309,10 +2246,24 @@
       ]
     },
     "key_logic_flow": [
-      "John Jumper在任职近9年后决定离开Google DeepMind。",
-      "他将在休整一段时间后正式加入Anthropic。",
-      "Jumper在博士毕业仅6个月后就被Demis Hassabis委任领导AlphaFold团队。",
-      "Jumper对DeepMind团队的科学指导表示感激，认为DeepMind是一个特别的地方。"
+      "John Jumper在Google DeepMind工作近9年后决定离开该公司。",
+      "他将在短暂休整后加入Anthropic，开启新的职业生涯。",
+      "Jumper感谢Demis Hassabis在他博士毕业仅6个月后就信任他领导AlphaFold团队。",
+      "Jumper表示Google DeepMind是一个特别的地方，他会继续关注该团队的后续发现。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "AlphaFold",
+        "canonical_name": "AlphaFold",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "John Jumper在Google DeepMind期间领导AlphaFold团队，该团队由Demis Hassabis在他博士毕业仅6个月后交由其负责。"
+        ],
+        "article_id": "f063f6005b1efe20"
+      }
     ],
     "impact_score": {
       "score": 7.0,
@@ -1366,7 +2317,31 @@
       "compound": "medium",
       "hype": "high"
     },
-    "actionable_insight": "deep_dive"
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "AlphaFold",
+        "canonical_name": "AlphaFold",
+        "positioning": "AlphaFold是Google DeepMind开发的开创性蛋白质结构预测AI系统，由John Jumper领导团队实现突破，解决了生物学领域长期悬而未决的蛋白质折叠难题。",
+        "technical_signal": "AlphaFold核心负责人离职将使DeepMind在该领域的技术演进路线面临不确定性，团队知识传承与后续模型迭代节奏需要时间重新建立。",
+        "adoption_signal": "AlphaFold已在全球结构生物学研究领域获得广泛采用，但核心人才的变动可能影响社区对项目长期维护和版本升级的信心。",
+        "ecosystem_relevance": "AlphaFold作为AI for Science领域的标杆项目，其核心人才向Anthropic的流动折射出顶尖AI人才在大模型与科学AI之间的战略选择，影响整个生态的人才分布。",
+        "target_users": [],
+        "watch_reason": "John Jumper作为AlphaFold之父加入Anthropic，意味着Anthropic可能加速布局科学AI领域，而DeepMind在失去该项目灵魂人物后如何维持AlphaFold系列的技术优势，两者未来的战略动向均值得持续跟踪与深度研判。",
+        "risk_notes": [
+          "AlphaFold核心发明人离职可能导致DeepMind在蛋白质结构预测领域的项目战略出现调整或研发节奏放缓。",
+          "John Jumper加入Anthropic后能否获得足够的计算资源和团队支持以延续其在科学AI领域的研究，仍存在不确定性。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "f063f6005b1efe20"
+        ],
+        "evidence_snippets": [
+          "John Jumper在Google DeepMind期间领导AlphaFold团队，该团队由Demis Hassabis在他博士毕业仅6个月后交由其负责。"
+        ]
+      }
+    ]
   },
   {
     "source_dir": "hackernews",
@@ -1385,24 +2360,79 @@
     "pipeline_stage": "fact_extracted",
     "id": "f4dbc1a09b6f5455",
     "source_type": "community_discussion",
-    "tldr": "3-30-300城市绿化标准：每户看到3棵树、街区30%树冠覆盖率、300米内有公园",
-    "objective_summary": "Cecil Konijnendijk提出3-30-300城市绿化测试标准，要求住宅/学校/办公室看到至少3棵树、街区30%树冠覆盖率、距公园不超过300米。研究显示仅14%欧洲人满足全部标准，21%一项都不达标；全球八大城市仅新加坡通过全部测试。",
-    "event_type": "application_landing",
+    "tldr": "3-30-300规则由Cecil Konijnendijk提出，要求每个住所能看到至少三棵树、社区有30%树冠覆盖、距公园不超过300米。研究显示仅14%欧洲人满足全部三项标准，全球八大城市中只有新加坡达标。",
+    "objective_summary": "Cecil Konijnendijk提出3-30-300城市绿化标准，要求每栋建筑能看到至少三棵树、社区拥有30%树冠覆盖率、距离公园不超过300米。对862个欧洲城市的研究显示，仅14%居民满足全部三项标准，21%一项都不达标。对全球八大城市测试发现只有新加坡通过全部测试。该标准已被意大利佛罗伦萨、美国科罗拉多州柯林斯堡等城市采纳为规划目标。《柳叶刀》研究指出，若所有欧洲城市达到30%树冠覆盖率，每年可预防2,644例热死亡。",
+    "event_type": "policy_and_safety",
     "epistemic_status": "verified_fact",
     "entities": {
-      "companies": [],
+      "companies": [
+        "Google",
+        "Not-Ship",
+        "The Pudding",
+        "American Forests"
+      ],
       "technologies": [],
       "key_people": [
-        "Cecil Konijnendijk"
+        "Cecil Konijnendijk",
+        "Alvin Chang"
       ]
     },
     "key_logic_flow": [
-      "Cecil Konijnendijk提出3-30-300城市绿化标准：每户能看到至少3棵树、街区树冠覆盖率不低于30%、距公园不超过300米。",
-      "覆盖862个欧洲城市的研究显示，仅约半数居民能看到3棵树，约三分之一居住在30%树冠覆盖达标区域。",
-      "《柳叶刀》研究指出欧洲所有城市达到30%树冠覆盖率可每年预防2644例高温致死。",
-      "全球八大城市测试中仅新加坡满足3-30-300全部三项标准，其他城市均未通过。",
-      "全欧洲仅14%人口居住在满足全部三项标准的区域，21%人口一项标准都不达标。",
-      "达到3-30-300标准的居民有更好的心理健康状况且使用更少的药物。"
+      "3-30-300规则由Cecil Konijnendijk提出，要求每个住所、学校和办公室能看到至少三棵树、社区拥有30%树冠覆盖率、距离公园不超过300米。",
+      "对862个欧洲城市的研究发现，只有约一半人口能看到三棵树，三分之一人口生活在满足30%树冠覆盖率的区域。",
+      "全球八大城市测试中，只有新加坡通过了3-30-300全部三项标准。",
+      "《柳叶刀》研究指出，若所有欧洲城市达到30%树冠覆盖率，每年可预防2,644例夏季热死亡。",
+      "只有14%的欧洲人生活在满足全部三项标准的区域，21%的人口三项标准均不达标。",
+      "城市绿化水平与心理健康、心血管健康密切相关，炎夏中充足树冠覆盖对公共健康愈发重要。"
+    ],
+    "extract_result": "success",
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "Not-Ship",
+        "canonical_name": "Not-Ship",
+        "url": "https://www.not-ship.com",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "本文由Not-Ship发布，该平台采用10%读者付费以支持其余90%免费阅读的模式运作。"
+        ],
+        "article_id": "f4dbc1a09b6f5455"
+      },
+      {
+        "object_type": "product",
+        "name": "Tree Equity Score",
+        "canonical_name": "Tree Equity Score",
+        "url": "https://www.treeequityscore.org",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "文章建议英美读者使用Tree Equity Score工具查询所在社区的树冠覆盖率百分比。"
+        ],
+        "article_id": "f4dbc1a09b6f5455"
+      },
+      {
+        "object_type": "project",
+        "name": "One Minute Park",
+        "canonical_name": "One Minute Park",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "One Minute Park是2024年Tiny Awards获奖项目，让用户在世界各地的公共绿地里停留60秒后自动切换至下一个地点。"
+        ],
+        "article_id": "f4dbc1a09b6f5455"
+      },
+      {
+        "object_type": "project",
+        "name": "Tiny Awards",
+        "canonical_name": "Tiny Awards",
+        "confidence": "low",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Tiny Awards旨在表彰互联网上的小而美的事物，文章特别推荐了其2024年获奖项目One Minute Park。"
+        ],
+        "article_id": "f4dbc1a09b6f5455"
+      }
     ],
     "impact_score": {
       "score": 1.5,
@@ -1459,6 +2489,57 @@
       "compound": "low",
       "hype": "low"
     },
-    "actionable_insight": "speculative_watch"
+    "actionable_insight": "speculative_watch",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "Tree Equity Score",
+        "canonical_name": "Tree Equity Score",
+        "url": "https://www.treeequityscore.org",
+        "positioning": "提供社区树冠覆盖率查询的城市绿化评估工具，帮助居民和规划者量化本地绿化水平。",
+        "target_users": [
+          "英美城市居民",
+          "城市规划部门",
+          "环境政策研究者"
+        ],
+        "product_signal": "通过输入地址即可获取所在区域的树冠覆盖率百分比，为评估社区绿化是否达30%标准提供量化依据。",
+        "market_signal": "被文章推荐为英美读者查询树冠覆盖率的标准工具，表明其在该领域已建立初步权威性和用户认知。",
+        "differentiation": "专注于树冠覆盖率单一指标，相比通用地图工具提供更精准的量化评估结果，直接服务于3-30-300标准。",
+        "watch_reason": "作为3-30-300城市绿化标准的配套评估工具，其数据可用于衡量社区绿化公平性，在城市规划与公共健康决策中具有重要参考价值，值得持续关注其应用演进。",
+        "risk_notes": [
+          "数据覆盖范围目前主要支持英美地区，全球其他城市用户尚无法使用该工具进行查询。",
+          "树冠覆盖率数据的时效性和更新频率可能直接影响评估结果的准确性。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "f4dbc1a09b6f5455"
+        ],
+        "evidence_snippets": [
+          "文章建议英美读者使用Tree Equity Score工具查询所在社区的树冠覆盖率百分比，该工具可帮助居民评估本地绿化达标情况。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "One Minute Park",
+        "canonical_name": "One Minute Park",
+        "positioning": "虚拟漫游全球公共绿地的体验项目，让用户在世界各地公园停留60秒后自动切换至下一地点。",
+        "technical_signal": "采用自动计时切换机制，实现用户在全球公共绿地间连续切换的沉浸式浏览体验。",
+        "adoption_signal": "获得2024年Tiny Awards奖项，表明其在创新项目社区中获得认可与关注。",
+        "ecosystem_relevance": "属于城市绿化与数字体验交叉领域的创意项目，与城市自然环境推广和公众意识提升高度相关。",
+        "target_users": [],
+        "watch_reason": "作为连接城市绿地与数字体验的创新项目，其自动切换的浏览模式为推广城市绿化意识提供了新颖的交互方式，值得关注其在环境教育领域的应用潜力。",
+        "risk_notes": [
+          "项目偏向艺术与体验性质，缺乏可持续运营模式和技术迭代规划。",
+          "用户参与度和长期影响力有限，难以形成实质性的城市规划参考价值。"
+        ],
+        "score": 2.0,
+        "article_ids": [
+          "f4dbc1a09b6f5455"
+        ],
+        "evidence_snippets": [
+          "One Minute Park是2024年Tiny Awards获奖项目，让用户在世界各地的公共绿地里停留60秒后自动切换至下一个地点，提供沉浸式全球绿地体验。"
+        ]
+      }
+    ]
   }
 ]

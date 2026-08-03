@@ -15,22 +15,44 @@ id: 0ad09a0bcbacbedf
 manifest_dates:
 - '2026-07-08'
 source_type: community_discussion
-tldr: StreetComplete 通过小任务众包方式让用户边走边完善 OpenStreetMap 数据
-objective_summary: StreetComplete 是一款移动应用，通过在地图上显示小任务，引导用户前往实地位置并回答简单问题，从而将缺失的地图数据直接以用户名义提交到
-  OpenStreetMap，无需额外编辑器。
+tldr: StreetComplete 是一款通过任务化方式帮助用户改进 OpenStreetMap 数据的移动应用，用户只需前往现场回答简单问题即可直接更新地图。
+objective_summary: StreetComplete 是一款面向 OpenStreetMap 数据贡献的移动应用。它自动检测用户附近缺失的地图信息，将其转化为具体的小任务，用户只需前往任务地点并回答一个简单问题，所输入的信息就会直接以用户的名义同步到
+  OpenStreetMap 数据库中，无需额外使用其他编辑器。
 event_type: application_landing
 epistemic_status: verified_fact
 entities:
   companies:
-  - OpenStreetMap
+  - OpenStreetMap Foundation
   technologies: []
   key_people: []
 key_logic_flow:
-- StreetComplete 是一款帮助改善 OpenStreetMap 数据的移动应用。
-- 该应用自动识别用户附近缺失的地图数据，并以小任务的形式展示在地图上。
-- 用户需要亲自前往任务对应的实地位置，回答一个简单问题来完成该任务。
-- 用户提交的信息直接以用户本人的名义更新到 OpenStreetMap 中，无需使用其他编辑器。
+- StreetComplete 是一款帮助改进 OpenStreetMap 数据的移动应用，它以任务化的方式引导用户贡献地图信息。
+- 该应用会自动查找用户附近缺失的地图数据，并将其以任务的形式在地图上显示给用户。
+- 用户需要亲自前往任务所在的地理位置并回答一个简单问题，完成对该任务的解答。
+- 用户输入的信息会直接以用户的名义添加到 OpenStreetMap 数据库中，无需使用其他编辑器。
 extract_result: success
+object_mentions:
+- object_type: product
+  name: StreetComplete
+  canonical_name: StreetComplete
+  url: https://streetcomplete.app/
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - 该应用能够查找用户附近缺失的地图数据，并将其作为任务在地图上显示给用户。
+  - 用户需要亲自前往任务位置并回答简单问题，以此更新地图数据。
+  - 用户输入的信息会直接以用户的名义添加到OpenStreetMap中，无需使用其他编辑器。
+  article_id: 0ad09a0bcbacbedf
+- object_type: project
+  name: OpenStreetMap
+  canonical_name: OpenStreetMap
+  url: https://www.openstreetmap.org/
+  confidence: high
+  article_role: ecosystem_context
+  evidence_snippets:
+  - StreetComplete 帮助改进的是 OpenStreetMap 这一协作地图项目的数据质量。
+  - 用户通过回答任务输入的信息被直接添加到 OpenStreetMap 数据库中。
+  article_id: 0ad09a0bcbacbedf
 impact_score:
   score: 1.5
   reason: 这是一篇关于现有开源地图数据众包工具的功能介绍，而非 AI 行业的新技术或新产品发布。StreetComplete 本身已有多年历史，文章仅描述其基本使用流程，对
@@ -78,6 +100,35 @@ confidence:
   compound: medium
   hype: low
 actionable_insight: monitor
+object_insights:
+- object_type: product
+  name: StreetComplete
+  canonical_name: StreetComplete
+  url: https://streetcomplete.app/
+  positioning: 一款通过地理位置任务化方式，引导用户现场参与 OpenStreetMap 数据贡献的移动应用。
+  technical_signal: null
+  adoption_signal: null
+  ecosystem_relevance: null
+  target_users:
+  - OpenStreetMap 数据贡献者
+  - 对本地地图质量感兴趣的普通居民
+  - 希望以低门槛方式参与开源地图项目的非技术用户
+  product_signal: 自动检测用户附近缺失的地图数据并转化为可视化任务，用户现场回答即可直接以本人名义写入 OSM 数据库。
+  market_signal: null
+  differentiation: 与传统 OpenStreetMap 编辑器不同，StreetComplete 无需专业知识，通过问答式任务大幅降低地图数据贡献门槛。
+  watch_reason: StreetComplete 以任务化方式降低了 OpenStreetMap 数据贡献门槛，让非技术用户也能便捷地参与地图改进，这种模式若能扩大覆盖范围，有望显著提升
+    OSM 的数据质量和覆盖度。
+  risk_notes:
+  - 用户需要亲自到达现场才能完成任务，限制了应用的适用场景和覆盖范围。
+  - 简化的问答式贡献方式可能产生数据质量问题，缺乏专业编辑者的校验机制。
+  - 项目依赖 OpenStreetMap 生态，自身变现能力有限，长期维护可持续性存疑。
+  score: 5.0
+  article_ids:
+  - 0ad09a0bcbacbedf
+  evidence_snippets:
+  - StreetComplete 应用能够查找用户附近缺失的地图数据，并将其作为任务在地图上显示给用户。
+  - 用户需要亲自前往任务所在的地理位置并回答一个简单问题，以此完成地图数据的更新。
+  - 用户输入的信息会直接以用户的名义添加到OpenStreetMap中，无需使用其他编辑器。
 ---
 
 Help improve

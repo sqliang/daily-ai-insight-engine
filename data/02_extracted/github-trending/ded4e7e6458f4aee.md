@@ -1,0 +1,288 @@
+---
+title: MoonshotAI/FlashKDA
+source: https://github.com/MoonshotAI/FlashKDA
+author: []
+published: ''
+created: '2026-07-30'
+manifest_dates:
+- '2026-07-30'
+description: 'FlashKDA: high-performance Kimi Delta Attention kernelsFlashKDA FlashKDA:
+  Flash Kimi Delta Attention — high-performance KDA kernels built on CUTLASS News
+  2026-04-22 — Deep-Dive Blog: the design decisions behind FlashKDA v1, read it here.
+  Requirements SM90 and above CUDA 12.9 and above PyTorch 2.4 and above Installation
+  git clone https://github.com/MoonshotAI/FlashKDA.git flash-kda cd flash-kda git
+  submodule update --init --recursive pip install -v --no-build-isolation . By default,
+  the build detects the current CUDA device and compiles for that architecture. For
+  wheel or CI builds, compile all supported architectures explicitly: FLASH_KDA_CUDA_ARCHS=all
+  pip install -v --no-build-isolation . Supported values are auto (default), all,
+  or a comma-separated arch list such as 90a,100a. Using FlashKDA as an FLA backend
+  Once installed, FlashKDA is auto-dispatched from flash-linear-attention''s chunk_kda.
+  See fla-org/flash-linear-attention#852 for integration details. Requirements Install
+  flash-linear-attention >= 0.5.0:pip install -U flash-linear-attention Call chunk_kda
+  under torch.inference_mode()import torch from fla.ops.kda import chunk_kda with
+  torch.inference_mode(): out, final_state = chunk_kda( q=q, k=k, v=v, g=g, beta=beta,
+  scale=scale, initial_state=h0, output_final_state=True, use_gate_in_kernel=True,
+  use_qk_l2norm_in_kernel=True, use_beta_sigmoid_in_kernel=True, safe_gate=True, A_log=A_log,
+  dt_bias=dt_bias, lower_bound=lower_bound, transpose_state_layout=True, cu_seqlens=cu_seqlens,
+  ) Opt out: set FLA_FLASH_KDA=0 to fall back to the Triton path. Debug dispatch:
+  add logging.basicConfig(level=logging.INFO) to see [FLA Backend] kda.chunk_kda ->
+  flashkda on hit, or ... rejected: <reason> on miss. Performance See BENCHMARK_H20.md.
+  Tests bash tests/test.sh tests/test_fwd.py — correctness tests (exact match against
+  the torch reference; compared with flash-linear-attention) Kernel API flash_kda.fwd
+  flash_kda.fwd(q, k, v, g, beta, scale, out, A_log, dt_bias, lower_bound, initial_state=None,
+  final_state=None, cu_seqlens=None) Parameters: Parameter Dtype Shape Description
+  q bf16 [B, T, H, K] Query k bf16 [B, T, H, K] Key v bf16 [B, T, H, V] Value g bf16
+  [B, T, H, K] Gate before activation beta bf16 [B, T, H] Beta logits (pre-activation;
+  sigmoid applied internally) scale float scalar scaling factor out bf16 [B, T, H,
+  V] Output tensor A_log fp32 [H] Log-gate parameter dt_bias fp32 [H, K] Gate bias
+  lower_bound float scalar Gate lower bound (range from -5.0 to 0) initial_state bf16/fp32/None
+  [B, H, V, K] or [N, H, V, K] (optional) Initial recurrent state final_state bf16/fp32/None
+  [B, H, V, K] or [N, H, V, K] (optional, output) Final recurrent state cu_seqlens
+  int64 [N+1] (optional) Cumulative sequence lengths for variable-length batching
+  Currently requires K = V = 128. initial_state / final_state accept None (stateless),
+  bf16, or fp32 tensors. When both are provided, their dtypes must match. When cu_seqlens
+  is provided, B must be 1, T is the total length across all sequences, and initial_state
+  / final_state have shape [N, H, V, K]. When cu_seqlens is None, each batch element
+  is treated as an independent sequence, and the state shape is [B, H, V, K]. Development
+  To set up IntelliSense (clangd) for the CUDA/C++ sources, run: bash setup_clangd.sh
+  This generates a .clangd file with the correct repository paths and installs the
+  global clangd config.yaml to ~/.config/clangd/. Citation @misc{flashkda2026, title={FlashKDA:
+  Flash Kimi Delta Attention}, author={Yutian Chen, Zhiyuan Li, Yucheng Wang, Ming
+  Wei}, year={2026}, publisher = {GitHub}, howpublished = {\url{https://github.com/MoonshotAI/FlashKDA}},
+  }'
+tags:
+- clippings
+extraction_status: success
+pipeline_stage: fact_extracted
+id: ded4e7e6458f4aee
+source_type: community_discussion
+tldr: MoonshotAI 发布 FlashKDA v1，一个基于 CUTLASS 构建的高性能 Kimi Delta Attention（KDA）内核，面向
+  SM90 及以上 GPU。它可被 flash-linear-attention 的 chunk_kda 自动调度，支持可变长批量与 bf16/fp32 循环状态。
+objective_summary: 2026 年 4 月 22 日，MoonshotAI 在 GitHub 发布 FlashKDA（Flash Kimi Delta
+  Attention）v1，这是一个基于 CUTLASS 构建的高性能 KDA 计算内核。它要求 SM90 及以上 GPU 架构、CUDA 12.9 以上以及 PyTorch
+  2.4 以上，安装后会被 flash-linear-attention 的 chunk_kda 自动调度。当前实现要求 K=V=128，支持 bf16/fp32
+  的初始与最终循环状态，并可通过 cu_seqlens 处理可变长批量推理。
+event_type: framework_tools
+epistemic_status: verified_fact
+entities:
+  companies:
+  - MoonshotAI
+  - fla-org
+  technologies:
+  - CUTLASS
+  - KDA
+  - flash-linear-attention
+  - CUDA
+  - PyTorch
+  - Triton
+  key_people:
+  - Yutian Chen
+  - Zhiyuan Li
+  - Yucheng Wang
+  - Ming Wei
+key_logic_flow:
+- MoonshotAI 于 2026 年 4 月 22 日在 GitHub 发布 FlashKDA v1，这是一个基于 CUTLASS 构建的高性能 KDA 内核。
+- FlashKDA 的运行环境要求为 SM90 及以上 GPU 架构、CUDA 12.9 及以上版本以及 PyTorch 2.4 及以上版本。
+- 安装 FlashKDA 后，它会被 flash-linear-attention 的 chunk_kda 自动调度，用户无需手动切换后端。
+- 设置 FLA_FLASH_KDA=0 可以关闭 FlashKDA 并回退到 Triton 路径。
+- 当前 FlashKDA 要求 K=V=128，支持 bf16/fp32 的初始与最终循环状态，并通过 cu_seqlens 参数支持可变长批量推理。
+- 仓库附带 tests/test.sh 与 tests/test_fwd.py 正确性测试，结果与 torch 参考实现及 flash-linear-attention
+  进行对比。
+object_mentions:
+- object_type: project
+  name: MoonshotAI/FlashKDA
+  canonical_name: MoonshotAI/FlashKDA
+  url: https://github.com/MoonshotAI/FlashKDA
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - MoonshotAI 于 2026 年 4 月 22 日在 GitHub 发布 FlashKDA v1，这是一个基于 CUTLASS 构建的高性能 KDA
+    内核。
+  - FlashKDA 要求 SM90 及以上 GPU 架构、CUDA 12.9 及以上版本以及 PyTorch 2.4 及以上版本，安装后会被 flash-linear-attention
+    的 chunk_kda 自动调度。
+  - 当前实现要求 K=V=128，支持 bf16/fp32 的初始与最终循环状态，并可通过 cu_seqlens 参数处理可变长批量推理。
+  article_id: ded4e7e6458f4aee
+- object_type: project
+  name: fla-org/flash-linear-attention
+  canonical_name: fla-org/flash-linear-attention
+  url: https://github.com/fla-org/flash-linear-attention
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - FlashKDA 安装后被 flash-linear-attention 的 chunk_kda 自动调度，集成细节见 fla-org/flash-linear-attention
+    的 pull request 852。
+  - 使用 FlashKDA 需要安装 flash-linear-attention 0.5.0 及以上版本，并在 torch.inference_mode 下调用
+    fla.ops.kda 的 chunk_kda 函数。
+  article_id: ded4e7e6458f4aee
+extract_result: success
+---
+
+FlashKDA: Flash Kimi Delta Attention — high-performance KDA kernels built on CUTLASS
+
+**2026-04-22**— Deep-Dive Blog: the design decisions behind FlashKDA v1, read it here.
+
+- SM90 and above
+- CUDA 12.9 and above
+- PyTorch 2.4 and above
+
+```
+git clone https://github.com/MoonshotAI/FlashKDA.git flash-kda
+cd flash-kda
+git submodule update --init --recursive
+pip install -v --no-build-isolation .
+```
+
+By default, the build detects the current CUDA device and compiles for that architecture. For wheel or CI builds, compile all supported architectures explicitly:
+
+`FLASH_KDA_CUDA_ARCHS=all pip install -v --no-build-isolation .`
+
+Supported values are `auto`
+
+(default), `all`
+
+, or a comma-separated arch list such as `90a,100a`
+
+.
+
+Once installed, FlashKDA is auto-dispatched from `flash-linear-attention`
+
+'s `chunk_kda`
+
+. See fla-org/flash-linear-attention#852 for integration details.
+
+**Requirements**
+
+- Install
+`flash-linear-attention >= 0.5.0`
+
+:pip install -U flash-linear-attention
+
+- Call
+`chunk_kda`
+
+under`torch.inference_mode()`
+
+import torch from fla.ops.kda import chunk_kda with torch.inference_mode(): out, final_state = chunk_kda( q=q, k=k, v=v, g=g, beta=beta, scale=scale, initial_state=h0, output_final_state=True, use_gate_in_kernel=True, use_qk_l2norm_in_kernel=True, use_beta_sigmoid_in_kernel=True, safe_gate=True, A_log=A_log, dt_bias=dt_bias, lower_bound=lower_bound, transpose_state_layout=True, cu_seqlens=cu_seqlens, )
+
+
+**Opt out:** set `FLA_FLASH_KDA=0`
+
+to fall back to the Triton path.
+
+**Debug dispatch:** add `logging.basicConfig(level=logging.INFO)`
+
+to see `[FLA Backend] kda.chunk_kda -> flashkda`
+
+on hit, or `... rejected: <reason>`
+
+on miss.
+
+See BENCHMARK_H20.md.
+
+`bash tests/test.sh`
+
+`tests/test_fwd.py`
+
+— correctness tests (exact match against the torch reference; compared with`flash-linear-attention`
+
+)
+
+```
+flash_kda.fwd(q, k, v, g, beta, scale, out, A_log, dt_bias, lower_bound,
+initial_state=None, final_state=None, cu_seqlens=None)
+```
+
+**Parameters:**
+
+| Parameter | Dtype | Shape | Description |
+|---|---|---|---|
+`q` |
+bf16 | `[B, T, H, K]` |
+Query |
+`k` |
+bf16 | `[B, T, H, K]` |
+Key |
+`v` |
+bf16 | `[B, T, H, V]` |
+Value |
+`g` |
+bf16 | `[B, T, H, K]` |
+Gate before activation |
+`beta` |
+bf16 | `[B, T, H]` |
+Beta logits (pre-activation; sigmoid applied internally) |
+`scale` |
+float | scalar | scaling factor |
+`out` |
+bf16 | `[B, T, H, V]` |
+Output tensor |
+`A_log` |
+fp32 | `[H]` |
+Log-gate parameter |
+`dt_bias` |
+fp32 | `[H, K]` |
+Gate bias |
+`lower_bound` |
+float | scalar | Gate lower bound (range from -5.0 to 0) |
+`initial_state` |
+bf16/fp32/None | `[B, H, V, K]` or `[N, H, V, K]` |
+(optional) Initial recurrent state |
+`final_state` |
+bf16/fp32/None | `[B, H, V, K]` or `[N, H, V, K]` |
+(optional, output) Final recurrent state |
+`cu_seqlens` |
+int64 | `[N+1]` |
+(optional) Cumulative sequence lengths for variable-length batching |
+
+- Currently requires
+`K = V = 128`
+
+. `initial_state`
+
+/`final_state`
+
+accept`None`
+
+(stateless), bf16, or fp32 tensors. When both are provided, their dtypes must match.- When
+`cu_seqlens`
+
+is provided,`B`
+
+must be 1,`T`
+
+is the total length across all sequences, and`initial_state`
+
+/`final_state`
+
+have shape`[N, H, V, K]`
+
+. - When
+`cu_seqlens`
+
+is`None`
+
+, each batch element is treated as an independent sequence, and the state shape is`[B, H, V, K]`
+
+.
+
+To set up IntelliSense (clangd) for the CUDA/C++ sources, run:
+
+`bash setup_clangd.sh`
+
+This generates a `.clangd`
+
+file with the correct repository paths and installs the global clangd `config.yaml`
+
+to `~/.config/clangd/`
+
+.
+
+```
+@misc{flashkda2026,
+title={FlashKDA: Flash Kimi Delta Attention},
+author={Yutian Chen, Zhiyuan Li, Yucheng Wang, Ming Wei},
+year={2026},
+publisher = {GitHub},
+howpublished = {\url{https://github.com/MoonshotAI/FlashKDA}},
+}
+```

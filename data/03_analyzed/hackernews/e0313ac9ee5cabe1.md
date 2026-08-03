@@ -12,32 +12,44 @@ tags:
 - clippings
 id: e0313ac9ee5cabe1
 source_type: community_discussion
-tldr: 本文详述了通过屏幕空间后处理着色器，结合 Rayleigh 散射、Mie 散射和臭氧吸收实现逼真天空/日落渲染的技术方案。
-objective_summary: Maxime Heckel 撰写了一篇技术博客，从头实现基于 raymarching 的大气散射着色器。文章逐步构建了 Rayleigh
-  散射（蓝天）、Mie 散射（尘埃雾状辉光）和臭氧吸收（暮色加深）三种光学模型，并加入光源方向步进（light marching）以实现日落效果，最终讨论了
-event_type: application_landing
-epistemic_status: verified_fact
+tldr: 技术博主Maxime Heckel撰文详细讲解如何在浏览器中通过着色器实现大气散射效果，涵盖瑞利散射、米氏散射和臭氧吸收三个物理模型，最终渲染出逼真的天空、日落和行星大气层。
+objective_summary: Maxime Heckel在其技术博客上发表了一篇图文并茂的教程，分步讲解如何用片段着色器（fragment shader）实现真实感大气渲染。文章从光线步进（raymarching）基础出发，依次实现了瑞利散射（产生蓝色天空）、米氏散射（产生太阳周围的光晕）和臭氧吸收（加深天空色彩）三个物理模型，并引入次级光线步进来模拟日落时分的光线衰减。最后作者尝试了Sebastian
+  Hillaire提出的基于LUT的高性能大气渲染方案，所有效果均在浏览器中实时运行。
+event_type: framework_tools
+epistemic_status: theoretical_claim
 entities:
   companies: []
   technologies:
+  - raymarching
   - Rayleigh scattering
   - Mie scattering
-  - Ozone absorption
-  - Raymarching
+  - ozone absorption
   - Beer's Law
-  - light marching
-  - LUT (Look-Up Table)
-  - ACES film tone mapping
+  - ACESFilm
+  - LUT-based rendering
   key_people:
   - Maxime Heckel
   - Sebastian Hillaire
 key_logic_flow:
-- 使用 raymarching 从相机位置向场景投射射线，逐步采样大气密度以计算光学深度和透射率。
-- Rayleigh 散射模型通过瑞利密度函数和相位函数描述蓝光在空气中散射强烈、红光散射弱的物理机制，是天空呈现蓝色的主要原因。
-- Mie 散射模型模拟尘埃和气溶胶对光的散射，产生太阳周围的白雾状辉光，尤其在太阳接近地平线时更明显。
-- 臭氧吸收模型不散射光，仅吸收上层大气中特定波段的光，使地平线和日落时分天空颜色更深、偏紫红。
-- 引入光源方向步进，在每个采样点向太阳方向做二次步进，计算光线到达该点前的大气衰减，实现真实的日出/日落色彩变化。
-- 最后讨论 Sebastian Hillaire 基于 LUT（预计算查找表）的优化方法，以减少运行时计算开销、提升性能。
+- 文章从一张航天飞机在低地球轨道日落的照片出发，引出大气散射这一核心物理现象作为渲染目标。
+- 作者使用光线步进（raymarching）技术从摄像机位置向场景发射射线，逐段采样大气密度来计算光学深度和透射率。
+- 瑞利散射（Rayleigh scattering）解释了天空呈现蓝色的原因——短波长（蓝光）比长波长（红光）散射更强烈。
+- 米氏散射（Mie scattering）模拟了尘埃等大颗粒对光线的影响，产生太阳周围的白茫茫光晕效果。
+- 臭氧吸收（ozone absorption）通过去除部分波长来加深天空色彩，尤其在日落和黄昏时分效果显著。
+- 为实现真实的日落效果，作者在每个采样点引入次级光线步进循环，计算阳光到达该点前穿过大气层的光学衰减。
+extract_result: success
+object_mentions:
+- object_type: project
+  name: Rendering the Sky, Sunsets, and Planets interactive demo
+  canonical_name: Atmospheric scattering shader demo
+  url: https://blog.maximeheckel.com/posts/on-rendering-the-sky-sunsets-and-planets/
+  confidence: medium
+  article_role: primary_subject
+  evidence_snippets:
+  - 作者用了一个月时间构建了在浏览器中实时运行的大气散射着色器效果，包含天空、日落和行星渲染。
+  - 文章嵌入了多个可交互的WebGL widget，分别展示单条光线采样过程、纯瑞利散射效果以及加入米氏散射和臭氧吸收后的完整天空。
+  article_id: e0313ac9ee5cabe1
+pipeline_stage: fact_extracted
 impact_score:
   score: 2.0
   reason: 这是一篇高质量的计算机图形学技术教程，详述大气散射着色器的实现，但其内容完全属于实时渲染/图形学领域，与 AI 行业无直接关联。在 AI 行业监测语境下，该文既未涉及
@@ -87,6 +99,29 @@ confidence:
   compound: low
   hype: low
 actionable_insight: monitor
+object_insights:
+- object_type: project
+  name: Rendering the Sky, Sunsets, and Planets interactive demo
+  canonical_name: Atmospheric scattering shader demo
+  url: https://blog.maximeheckel.com/posts/on-rendering-the-sky-sunsets-and-planets/
+  positioning: 基于WebGL片段着色器的大气散射物理渲染教程项目，通过光线步进实现瑞利散射、米氏散射和臭氧吸收三个物理模型，在浏览器中实时生成逼真的天空、日落和行星大气效果。
+  technical_signal: 项目完整实现了瑞利散射（蓝色天空）、米氏散射（太阳光晕）和臭氧吸收（加深天空色彩）三个物理模型，所有效果均在浏览器中通过片段着色器实时运行。
+  adoption_signal: 该项目作为图文并茂的交互式技术教程发布，嵌入了多个可交互WebGL widget供读者直观体验和调试大气渲染效果。
+  ecosystem_relevance: 该项目展示了WebGL着色器在实时物理渲染方面的能力，对游戏开发、计算机图形学和Web端3D可视化领域具有参考价值。
+  target_users: []
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: 该项目系统性地将大气散射的物理模型通过着色器在浏览器中实现，融合了游戏级实时渲染技术与Web平台的可交互性，展现了WebGL在复杂视觉效果方面的潜力，值得关注其对Web端图形渲染技术发展的推动作用。
+  risk_notes:
+  - LUT（查找表）方案的实现是作者的舒适区外尝试，存在不完善的风险。
+  - 项目为个人技术博客的教程性质，缺乏持续的社区维护和正式的版本迭代计划。
+  score: 4.0
+  article_ids:
+  - e0313ac9ee5cabe1
+  evidence_snippets:
+  - 作者用了一个月时间构建了在浏览器中实时运行的大气散射着色器效果，包含天空、日落和行星渲染。
+  - 文章嵌入了多个可交互的WebGL widget，分别展示单条光线采样过程、纯瑞利散射效果以及加入米氏散射和臭氧吸收后的完整天空。
 ---
 
 # On Rendering the Sky, Sunsets, and Planets
