@@ -51,6 +51,11 @@ def _add_arguments(parser):
         help="只列出将处理的文件，不实际调用 LLM",
     )
     parser.add_argument(
+        "--target-date", type=str, default=None,
+        help="日期隔离：只处理 frontmatter created==该日期的文件 (格式: YYYY-MM-DD)。"
+             "大批量执行前务必先用它限定范围，防止历史积压被一并处理",
+    )
+    parser.add_argument(
         "--model", "-m", type=str, default=None,
         help="LLM 模型名称 (默认: 从 config.yaml 读取)",
     )
@@ -81,6 +86,16 @@ def execute(args) -> int:
     if args.input:
         input_path = Path(args.input).resolve()
 
+    # 解析日期隔离参数（格式非法时直接报错，避免"以为是隔离实际是全量"）
+    target_date = None
+    if args.target_date:
+        from datetime import date as _date
+        try:
+            target_date = _date.fromisoformat(args.target_date)
+        except ValueError:
+            print(f"错误: --target-date 格式无效: {args.target_date} (期望 YYYY-MM-DD)", file=sys.stderr)
+            return 1
+
     try:
         from .run_analysis import run_analysis
 
@@ -92,6 +107,7 @@ def execute(args) -> int:
             force=args.force,
             dry_run=args.dry_run,
             model=args.model,
+            target_date=target_date,
         ))
 
         from ..core.agent import StageResult

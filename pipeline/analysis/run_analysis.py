@@ -11,11 +11,14 @@ pipeline/analysis/run_analysis.py — Stage 3 深度分析管道编排
 
 import asyncio
 import logging
+import sys
+from datetime import date
 from pathlib import Path
 from typing import Optional
 
 from ..core.config_loader import get_llm_config, get_stage_config, resolve_data_dir
 from pipeline.utils.file_utils import ensure_dir
+from pipeline.utils.frontmatter import filter_by_created
 
 # ---------------------------------------------------------------------------
 # 日志
@@ -104,13 +107,15 @@ async def run_analysis(
     force: bool = False,
     dry_run: bool = False,
     model: Optional[str] = None,
+    # 日期隔离：只处理 frontmatter created == target_date 的文件
+    target_date: Optional[date] = None,
 ) -> list:
     """
     Stage 3 深度分析管道主入口。
 
     流程：
         1. 加载配置（模型名、并发数、路径）
-        2. 发现文件
+        2. 发现文件（target_date 非空时按 created 日期过滤）
         3. Dry run 检查
         4. 创建信号量 + 调用 run_deep_analysis_stage()
         5. 打印汇总
@@ -123,6 +128,9 @@ async def run_analysis(
         force: 强制重新分析（忽略 skip_existing）
         dry_run: 仅列出文件，不实际调用 LLM
         model: LLM 模型名称（默认从 config 读取）
+        target_date: 日期隔离开关。非空时只处理 frontmatter created 等于该日期
+            的文件（2026-07-29 事故后引入：裸跑 analyze 曾把 1381 篇历史积压
+            送进 LLM 跑 8 小时，其中目标日期仅占 16 篇）
     """
     from .deep_analysis_agent import run_deep_analysis_stage
 
@@ -146,8 +154,27 @@ async def run_analysis(
 
     output_base_dir = resolve_data_dir("analyzed")
 
+    # 裸跑警告：未限定日期且输入是目录时，处理范围是"全部未分析文件"
+    # （可能包含数月历史积压），让代价显性化。不阻断——保留人工全量处理的选择权
+    if target_date is None and input_path.is_dir():
+        print(
+            "⚠️  未指定 --target-date：将处理输入目录下所有未分析的文件"
+            "（可能包含历史积压，LLM 成本可能很高）。\n"
+            "    如只需处理某一天，请加 --target-date YYYY-MM-DD。",
+            file=sys.stderr,
+        )
+
     # --- 发现文件 ---
     files, input_base_dir = discover_files(input_path)
+
+    # --- 日期隔离过滤（target_date 非空时生效）---
+    if target_date is not None:
+        scanned = len(files)
+        files = filter_by_created(files, target_date)
+        print(f"日期过滤: created=={target_date.isoformat()}，"
+              f"扫描 {scanned} 篇 → 范围内 {len(files)} 篇，"
+              f"范围外跳过 {scanned - len(files)} 篇")
+
     output_base = compute_output_base(input_path, input_base_dir, output_base_dir)
 
     total = len(files)
