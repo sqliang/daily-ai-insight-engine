@@ -28,12 +28,14 @@ pipeline/extraction/orchestrator.py — Stage 2 编排入口
 
 import logging
 import sys
+from datetime import date
 from pathlib import Path
 from typing import Optional
 
 import asyncio
 
 from pipeline.utils.file_utils import get_project_root, ensure_dir, list_files
+from pipeline.utils.frontmatter import filter_by_created
 from ..core.config_loader import get_llm_config, get_stage_config, resolve_data_dir
 from .base_info.runner import run_base_info_stage
 from .fact_extraction.runner import run_fact_extraction_stage
@@ -332,13 +334,15 @@ async def run_extraction(
     dry_run: bool = False,
     # 支持自定义模型
     model: Optional[str] = None,
+    # 日期隔离：只处理 frontmatter created == target_date 的文件
+    target_date: Optional[date] = None,
 ) -> dict:
     """
     Stage 2 提取流水线主编排函数。
 
     执行流程：
         1. 加载配置（LLM 模型、并发数、路径）
-        2. 发现文件
+        2. 发现文件（target_date 非空时按 created 日期过滤）
         3. 如果 dry_run → 只打印文件列表，不执行
         4. Stage 2a: 全部文件并行执行 BaseInfo 提取
         5. 等待 Stage 2a 全部完成
@@ -353,6 +357,9 @@ async def run_extraction(
         force: 强制重新提取（忽略 skip_existing）
         dry_run: 只列出文件，不调用 LLM
         model: LLM 模型名称（None 时从 config.yaml 读取）
+        target_date: 日期隔离开关。非空时只处理 frontmatter created 等于该日期
+            的文件（2026-07-29 事故后引入：裸跑 extract 曾把 519 篇多日积压
+            送进 LLM，其中目标日期仅占 16 篇）
 
     返回：
         结果统计字典: {"base_info": [StageResult], "fact_extraction": [StageResult]}
@@ -385,8 +392,26 @@ async def run_extraction(
         else:
             input_path = resolve_data_dir("raw")
 
+    # 裸跑警告：未限定日期且未指定单文件输入时，处理范围是"全部未处理文件"
+    # （可能包含数月历史积压），让代价显性化。不阻断——保留人工全量处理的选择权
+    if target_date is None and input_path.is_dir():
+        print(
+            "⚠️  未指定 --target-date：将处理输入目录下所有未提取的文件"
+            "（可能包含历史积压，LLM 成本可能很高）。\n"
+            "    如只需处理某一天，请加 --target-date YYYY-MM-DD。",
+            file=sys.stderr,
+        )
+
     # --- 发现文件 ---
     file_paths, input_base_dir = discover_files(input_path)
+
+    # --- 日期隔离过滤（target_date 非空时生效）---
+    if target_date is not None:
+        scanned = len(file_paths)
+        file_paths = filter_by_created(file_paths, target_date)
+        print(f"日期过滤: created=={target_date.isoformat()}，"
+              f"扫描 {scanned} 篇 → 范围内 {len(file_paths)} 篇，"
+              f"范围外跳过 {scanned - len(file_paths)} 篇")
 
     if not file_paths:
         print(f"未找到任何 .md 文件: {input_path}")

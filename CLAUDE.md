@@ -18,6 +18,7 @@ This is a **dual-language** project: a Python offline pipeline ingests 26 AI inf
 - **Report archival:** Stage 4b writes both `daily-report-{date}.json` (archive) and `daily-report.json` (latest copy for frontend). The `/dashboard` page scans all `daily-report-*.json` files and displays a card list. `/dashboard/[date]` shows the visualization dashboard, `/report/[date]` shows the full markdown.
 - The pipeline uses `claude-agent-sdk` (Anthropic) with streaming, exponential backoff retry (3 attempts), and a 5-level JSON recovery parser for truncated LLM output.
 - Agent calls have `allowed_tools=[]` — the SDK agents are pure thinkers, no file system access.
+- Agent calls also set `mcp_servers={}` + `strict_mcp_config=True` (in `build_agent_options()`): without this, every SDK-spawned claude CLI loads user-scope Claude Code plugins (e.g. the official playwright plugin), starting `@playwright/mcp` and popping a headed Chrome window per LLM call. Browser use is restricted to the ingestion stages (`BrowserSession`); LLM stages must never touch a browser.
 - **Specialized briefs:** Stage 4b generates three topic-specific briefs — `projectInsights` (open-source projects & technical solutions), `paperInsights`/`paperHighlights` (AI papers), and `productInsights` (AI products) — alongside the general daily report. These briefs are built on top of Stage 2 specialized tags and Stage 3 deep analysis (not raw source classification), deduplicate against yesterday's report, and produce normalized insight items with traceable `sources` and `evidenceSnippets`. They are stored in the same `daily-report.json` and consumed by `/specialized/*` pages.
 
 **Styling:** Tailwind CSS v4.1+ is the **primary styling method**. Always prefer utility classes over CSS Modules, inline styles, or custom CSS. CSS Modules are a last resort — only when Tailwind genuinely cannot achieve the result (complex `@keyframes`, `::-webkit-scrollbar`, etc.). See `.claude/skills/tailwind-css-patterns/SKILL.md` for patterns and conventions.
@@ -159,12 +160,37 @@ uv run python pipeline/run.py aggregate          # Stage 4a: extract frontmatter
 uv run python pipeline/run.py synthesize --dry-run     # Estimate token usage, no LLM call
 uv run python pipeline/run.py analyze --stage qualitative  # Run only one analysis dimension
 uv run python pipeline/run.py extract --force          # Reprocess all, ignoring skip-existing
+uv run python pipeline/run.py extract --target-date 2026-07-21   # Date-scoped: only articles with created==2026-07-21
+uv run python pipeline/run.py analyze --target-date 2026-07-21   # Same date scoping for analyze
+# ⚠️ Bare extract/analyze (no --target-date / -i) processes ALL unprocessed files including
+#    multi-month backlog — the CLI prints a prominent warning. Always scope large runs.
 uv run python pipeline/run.py aggregate --lookback-days 0  # Standalone: include all historical articles (no time filter)
 uv run python pipeline/run.py aggregate --lookback-days 7  # Standalone: re-aggregate with wider lookback window
 uv run python pipeline/run.py synthesize --lookback-days 7  # Re-aggregate last 7 days before synthesis
 uv run python pipeline/run.py aggregate --target-date 2026-06-10  # Exact date: only articles with created==2026-06-10
 uv run python pipeline/run.py synthesize --target-date 2026-06-10  # Generate report for a specific past date
 ```
+
+## 指定日期日报流水线 skill（daily-report-pipeline）
+
+位置：`.agents/skills/daily-report-pipeline/`（`.claude/skills/` 下有完全相同的镜像副本，修改任一份后必须同步另一份）。
+
+用途：scout/ingest 由每日 17:30 定时任务完成后，从抓取完整性检查开始，按 **check → 定点 repair → 复检门禁** 的方式跑通 extract → analyze → synthesize，生成指定日期的日报。所有操作严格限定 frontmatter `created == 目标日期` 的文章；repair 为单文件粒度（控制 LLM 成本）；每阶段最多 2 轮修复循环。
+
+```bash
+GATE=.agents/skills/daily-report-pipeline/scripts/pipeline_gate.py
+uv run python $GATE check-ingest --date 2026-07-21    # 抓取完整性检查（JSON 报告，exit 0/1）
+uv run python $GATE repair-ingest --date 2026-07-21   # 定点修复（浏览器重抓 + Jina 兜底 + 劣化回滚 + arxiv manifest 自动补建）
+uv run python $GATE run-extract --date 2026-07-21     # 日期隔离执行 extract（单进程 --target-date，超 100 篇预检熔断拒跑）
+uv run python $GATE check-extract --date 2026-07-21   # Stage 2 后验检查
+uv run python $GATE repair-extract --date 2026-07-21  # 单文件 extract --force
+uv run python $GATE run-analyze --date 2026-07-21     # 日期隔离执行 analyze（同上）
+uv run python $GATE check-analyze --date 2026-07-21   # Stage 3 后验检查
+uv run python $GATE repair-analyze --date 2026-07-21  # 单文件 analyze --force
+```
+
+检查口径要点：正文质量启发式（反爬/HTML 泄漏/Jina 截断快照/过短，36kr 等短内容源有豁免阈值）；manifest 缺失判定已排除周末空窗（arxiv/nlp-elvis 周末无内容属正常）；extract/analyze 判定与前端 `determineProcessingStatus` 对齐。
+
 
 ## Python environment
 

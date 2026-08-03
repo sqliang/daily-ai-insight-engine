@@ -545,6 +545,17 @@ def build_agent_options(
         - permission_mode="bypassPermissions": 不进行交互式权限询问
         - allowed_tools=[]: Agent 无需文件系统工具，只做思考→输出文本
         - tools=[]: 禁用所有内置工具，减少不必要的 tool_use 消耗
+        - mcp_servers={} + strict_mcp_config=True: 彻底隔离用户的 Claude Code 环境。
+          背景（2026-07-29 排查）：SDK 每次调用都会拉起一个 claude CLI 子进程，
+          CLI 启动时默认加载用户级安装的插件（如 playwright 官方插件），
+          插件自带的 @playwright/mcp 会随之启动并弹出有窗口的 Chrome——
+          每次 LLM 调用弹一次，并发时浏览器窗口源源不断。
+          allowed_tools=[] 只禁止 agent「调用」工具，管不到 CLI 启动阶段的插件加载；
+          setting_sources=[] 实测也无效（插件注册信息在 ~/.claude/plugins/ 下，
+          不走 settings 文件）。只有显式置空 MCP 配置并开启严格模式，
+          才能阻止 CLI 加载任何外部 MCP server（已实测验证：0 个 MCP 进程拉起）。
+          原则：浏览器只允许在抓取阶段（ingest/repair 的 BrowserSession）按需使用，
+          LLM 阶段只做纯思考，绝不应该碰浏览器。
         - max_turns: 控制最大对话轮数（提取任务 1 轮即可完成）
         - stderr: 捕获 Claude CLI 子进程 stderr，用于诊断底层错误
 
@@ -564,5 +575,9 @@ def build_agent_options(
         permission_mode="bypassPermissions",
         allowed_tools=[],
         tools=[],
+        # 显式置空 MCP 配置 + 严格模式：CLI 只使用此处给出的（空）MCP 配置，
+        # 不加载用户 Claude Code 环境中的任何插件 MCP（详见上方 docstring）
+        mcp_servers={},
+        strict_mcp_config=True,
         stderr=stderr,
     )
