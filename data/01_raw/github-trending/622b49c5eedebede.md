@@ -7,6 +7,7 @@ created: '2026-08-02'
 manifest_dates:
 - '2026-08-02'
 - '2026-08-03'
+- '2026-08-04'
 description: 'Invidious is an alternative front-end to YouTube Invidious An open source
   alternative front-end to YouTube Website &nbsp;•&nbsp; Instances list &nbsp;•&nbsp;
   FAQ &nbsp;•&nbsp; Documentation &nbsp;•&nbsp; Contribute &nbsp;•&nbsp; Donate Chat

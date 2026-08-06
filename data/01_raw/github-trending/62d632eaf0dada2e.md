@@ -7,6 +7,8 @@ created: '2026-08-02'
 manifest_dates:
 - '2026-08-02'
 - '2026-08-03'
+- '2026-08-04'
+- '2026-08-05'
 description: '21 Lessons, Get Started Building with Generative AI 21 Lessons teaching
   everything you need to know to start building Generative AI applications 🌐 Multi-Language
   Support Supported via GitHub Action (Automated & Always Up-to-Date) Arabic | Bengali
