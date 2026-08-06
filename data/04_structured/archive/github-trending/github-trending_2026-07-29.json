@@ -1,0 +1,1573 @@
+[
+  {
+    "source_dir": "github-trending",
+    "title": "virgiliojr94/book-to-skill",
+    "source": "https://github.com/virgiliojr94/book-to-skill",
+    "author": [],
+    "published": "",
+    "created": "2026-07-29",
+    "manifest_dates": [
+      "2026-07-29",
+      "2026-07-30"
+    ],
+    "description": "Turn any technical book PDF into a Claude Code skill — ready to study, reference, and use while you work. book-to-skill Turn any technical book, document folder, or collection of sources into a unified agent skill — ready to study, reference, and use while you work in GitHub Copilot CLI, Amp, or Claude Code. 🏆 #10 Python Repository of the Day and #25 Repository of the Day on Trendshift (May 23, 2026) Why · What it generates · Beyond books · Usage · Requirements · How it works · Discovery Loop Tax · FAQ · Install · Changelog · Performance · Architecture 24×–51× fewer tokens than dumping the book into context to answer one question, measured on real books (how it's measured). How it works, in 3 steps: Point it at a file, folder, or glob — /book-to-skill ./my-book.pdf It distills the book into a skill — frameworks, decision rules, anti-patterns, and per-chapter files. Structure, not a summary. Your agent loads it on demand — ask /my-book replication and it reads the right chapter and answers from the real content, no hallucination. 🤔 Why You buy a great technical book. You read it once. Three months later you can't remember chapter 7 existed. The usual workarounds don't help: 📄 \"Let me just search the PDF\" → you get a list of pages, not answers 🧠 \"I'll ask the agent about this book\" → it either hallucinates or says it doesn't have the content 📝 \"I'll take notes as I read\" → you end up with a 200-line doc you never open again book-to-skill solves this by turning the book into a structured skill your agent loads on demand. Once installed, you just type /your-book-slug replication and the agent reads the right chapter and answers from the actual content. No hallucination. No digging through PDFs. The book becomes part of your workflow. Works with any host that supports the open Agent Skills standard — GitHub Copilot CLI, Amp, and Claude Code all read the same SKILL.md format. 📦 What it generates Running /book-to-skill your-book.pdf (or a folder, glob, or list of files) creates a full skill in your agent's skills directory (~/.copilot/skills/<slug>/ for Copilot CLI, ~/.agents/skills/<slug>/ for Amp or cross-agent, ~/.claude/skills/<slug>/ for Claude Code): File Purpose Size SKILL.md Core mental models + chapter index ~4,000 tokens chapters/ch01-*.md … One file per chapter, loaded on-demand ~1,000 tokens each glossary.md Every key term, alphabetically sorted with chapter refs ~1,500 tokens patterns.md All techniques, algorithms, and design patterns ~2,000 tokens cheatsheet.md Decision tables and quick-reference rules ~1,000 tokens Chapter files are loaded on-demand — they don't count against the skill budget until you ask about that topic. 🏢 Beyond books The name says \"book\", but the input is any structured prose. The same extraction works on knowledge you own and re-read constantly: Internal documentation — architecture decision records, runbooks, onboarding guides. Fold a whole docs/ folder into one skill and ask it while you code. Brand & design systems — voice guidelines, tone-of-voice docs, component principles. Turn a brand book into a skill your team queries instead of skimming a 60-page PDF. Research clusters — a stack of papers plus your own notes, merged into a single unified skill and updated as new material lands (see Update / fold-in). Specs & standards — RFCs, API contracts, compliance docs you reference but never memorize. If you re-open a document often enough to wish you'd memorized it, it's a candidate. 🚀 Usage /book-to-skill <path-to-document-folder-or-glob>... [skill-name-slug] Supported document formats: PDF, EPUB, DOCX, TXT, Markdown, reStructuredText, AsciiDoc, HTML, RTF, MOBI/AZW/AZW3. Examples: # Process several files together into a unified skill /book-to-skill ~/papers/paper1.pdf ~/notes/export.txt unified-research # Process all supported files in a folder together /book-to-skill ~/workspace/project-docs/ project-knowledge # Process files matching a glob pattern /book-to-skill \"~/books/*.epub\" my-library # Update/fold new material into an existing skill folder /book-to-skill ~/articles/new-paper.pdf ~/.claude/skills/project-knowledge After the skill is created, use it like any other agent skill: /designing-data-intensive-apps # load core mental models /designing-data-intensive-apps replication # find and explain a topic /designing-data-intensive-apps ch05 # dive into chapter 5 /designing-data-intensive-apps \"what chapters do you have?\" In GitHub Copilot CLI you may need to run /skills reload after the file is written so the new skill appears in /skills list. Claude Code and Amp pick it up on the next session. 🔧 Requirements The extractor tries tools in order per format and uses the first available. If nothing is installed, it tells you which command to run. Plain text, Markdown, reStructuredText and AsciiDoc need no extra deps. Check your setup in one command: python3 scripts/extract.py --check prints which extractors are installed for every format and the exact command to install anything missing — no file needed. PDF — choose by book type: Book type Tool Install Speed Text-heavy (prose, few tables) pdftotext (poppler) sudo apt install poppler-utils ⚡ instant Text-heavy fallback pypdf pip3 install pypdf ⚡ instant Text-heavy fallback pdfminer.six pip3 install pdfminer.six ⚡ instant Technical (code, tables, formulas) docling pip3 install docling ~1.5s/page Before extraction begins, the skill asks you whether the book is technical or text-heavy and picks the right tool automatically. Docling preserves markdown tables and code blocks; pdftotext is faster for prose-only books. EPUB: Tool Install Quality ebooklib + beautifulsoup4 pip3 install ebooklib beautifulsoup4 ⭐⭐⭐ Best stdlib zipfile built-in — no install needed ⭐⭐ Always available Other formats: Format Tool Install DOCX python-docx (fallback: stdlib ZIP/XML) pip3 install python-docx HTML beautifulsoup4 (fallback: stdlib html.parser) pip3 install beautifulsoup4 RTF striprtf (fallback: regex) pip3 install striprtf MOBI / AZW / AZW3 Calibre ebook-convert (external app, not pip) https://calibre-ebook.com/download TXT / Markdown / reStructuredText / AsciiDoc built-in — ⚙️ How it works One file · a folder · a glob · a list of paths │ ▼ Step 1.5 — \"Technical or text-heavy book?\" │ ├── technical → Docling (tables + code blocks as markdown, ~1.5s/page) └── text → pdftotext → pypdf → pdfminer (instant) │ ▼ scripts/extract.py <paths…> --mode <technical|text> per source: PDF → pdftotext/Docling · EPUB → ebooklib → stdlib zipfile · DOCX/HTML/RTF/… (one bad source is skipped with a warning; the rest still process) │ ├── /tmp/book_skill_work/full_text.txt (all sources merged, with source markers) └── /tmp/book_skill_work/metadata.json (aggregated stats + per-source array) │ ▼ Claude analyzes structure (title, author, chapters, ToC — spanning all sources) ── or, if targeting an existing skill: folds new content in (Mode 4) │ ▼ Generates per-chapter summaries (800–1,200 tokens each) technical → includes Code Examples + Reference Tables sections Generates glossary, patterns, cheatsheet Generates master SKILL.md with core mental models │ ▼ Skill written to one of: ~/.copilot/skills/<slug>/ (GitHub Copilot CLI) ~/.agents/skills/<slug>/ (Copilot CLI or Amp, cross-agent) ~/.claude/skills/<slug>/ (Claude Code) /tmp/book_skill_work/ 🗑️ cleaned up Extraction benchmark (103-page technical book, CPU only): Method Time Tokens Tables Code blocks pdftotext 0.1s 27K 0 0 Docling 164s 27K (+1.2%) 48 36 Real conversions (measured: pages, extracted tokens, chapters auto-detected, estimated one-pass cost on Claude Sonnet 4.5 at $3/$15 per MTok): Book Format Pages Tokens Chapters ~Cost Think Python 2 PDF 244 119K 19 $0.88 Working Backwards PDF 371 175K 10 $0.96 Pro Git PDF 501 229K — † $1.23 Moby-Dick EPUB — 301K — † $1.42 † Chapter auto-detection needs explicit Chapter N / Capítulo N headings. Pro Git uses section titles and Moby-Dick uses chapter titles / roman numerals, so neither auto-segments — extraction and conversion still work, but you point at sections manually. A full skill costs roughly $1 per book; far less than re-reading the PDF every session. Design principles (click to expand) Density over completeness — a 1,000-token summary beats a 10,000-token excerpt Practitioner voice — \"Use X when Y\", not \"The book explains X\" Front-loaded SKILL.md — compaction keeps the first ~5,000 tokens; the most important content comes first On-demand chapters — the topic index tells Claude which file to read; chapters load only when needed Never raw text — always synthesize, summarize, extract signal from the source 🧾 The Discovery Loop Tax A PDF-reading agent doesn't just read — it navigates. Ask it one question and it fetches the table of contents, notices a term it can't define, pulls more pages, backtracks. Every one of those hops lands in the conversation history and gets re-processed on every subsequent turn. To stay inside its budget, a sub-agent is then forced to compress what it read at brutal ratios, handing the main agent a degraded summary it can't fact-check against the source. book-to-skill pays the navigation cost once, at compile time. At runtime the assistant loads a small resident core plus the one pre-compiled chapter it needs — no discovery loop, no compress-to-fit, and the full extracted source stays on disk for verification. Measured, not asserted. Running tools/discovery_tax.py on three real books — tokens entering context to answer a single targeted question (book-to-skill = resident core + one compiled chapter ≈ 5,000 tokens): Book (size) Context-dump Discovery loop book-to-skill vs dump / loop Think Python 2 (119K, small chapters) 119,264 12,152 ~5,000 24× / 2.4× Working Backwards (175K, medium chapters) 175,253 33,444 ~5,000 35× / 6.7× AI Engineering (256K, large chapters) 256,287 77,866 ~5,000 51× / 15.6× The advantage scales with chapter size: against a context-dump it's consistently 24–51× (and that cost recurs every turn); against a one-time discovery loop it ranges from a modest 2.4× on a book of small chapters to 15.6× on one of large chapters. Reproduce on your own book: python3 tools/discovery_tax.py --full-text /tmp/book_skill_work/full_text.txt --target-chapter 5 Honest caveats: (1) the discovery figures are a one-time cost and a model using the book's real ToC/chapter sizes — a well-tuned agent lands nearer the best case; the context-dump cost, by contrast, recurs on every turn. (2) The tool needs explicit Chapter N / Capítulo N headings to segment a book; titles-only or roman-numeral books (and EPUBs extracted without ebooklib) won't segment cleanly. book-to-skill wins when you return to the knowledge repeatedly; for a single one-off read, a plain PDF agent is fine. ❓ FAQ \"Can't I just dump the PDF/EPUB into my Claude project context?\" You can — but every conversation will burn that token budget upfront. A 400-page book is ~200K tokens. With a skill, only the chapters relevant to your question load — typically a SKILL.md core (~4K) plus the one chapter you asked about (~1K). The rest stays on disk until you need it. The economics are amortization, not size. Pasting the book pays the full token bill on every turn of every session, forever. book-to-skill pays the extraction cost once and every future conversation loads only the slice it needs. The bigger your context window, the more this matters — a large window makes the dump possible, not cheap. More importantly: raw text injection is retrieval. A skill is reasoning. When you load a chapter file, Claude isn't searching for keyword matches — it's working with pre-extracted named frameworks, principles, and mental models structured for application, not for reading. \"Claude has a 1M-token context window now — can't I just keep the whole book loaded?\" A bigger window changes what fits, not what's smart. Three reasons it isn't a substitute: You pay per token, per call. A 1M window doesn't make those tokens free — it makes a large, recurring bill possible. The skill loads kilobytes, not megabytes. Recall degrades with fill. Models lose precision retrieving a specific fact buried in a near-full context (\"lost in the middle\"). A 1K curated chapter beats 200K of raw prose for answering one question. Window ≠ structure. A full book in context is still raw text the model must re-parse every turn. The skill ships pre-extracted frameworks — reasoning, not retrieval. Use the big window for what it's good at: a one-off pass over material you'll never need again. Use a skill for knowledge you'll reach for repeatedly. \"Isn't this just RAG?\" RAG works at query time: chunk the book → embed everything → find similar vectors → inject into prompt. It's optimized for \"find me the part that talks about X.\" book-to-skill works at compile time: one deep analysis run extracts the author's actual frameworks, names them, describes when to use each, captures the anti-patterns. The output is structure the author spent years building — not a similarity search over their sentences. RAG answers: \"here are chunks close to your query.\" A skill answers: \"here are the 12 frameworks this author built, ready to reason with.\" Pick by shape of the job: Wide and shallow — a library of dozens of books, \"find the part that mentions X\" → a RAG tool (e.g. CandleKeep) wins. Narrow and deep — one book or a tight cluster of related sources, frameworks you apply while you work → book-to-skill wins. They're complementary, not competing: RAG indexes a shelf, book-to-skill masters a spine. \"Popular books are already in Claude's training data. Why bother?\" For widely-known books (Clean Code, DDIA, Pragmatic Programmer), Claude has general knowledge — but it's compressed, averaged across the entire internet's discussion of the book, and may hallucinate specific quotes or chapter locations. book-to-skill works from your actual copy. Every framework name, every anti-pattern list, every chapter number is grounded in the text you provided. No training data drift, no hallucinated chapter titles. It also shines for books Claude doesn't know at all: niche technical references, internal company documentation, recent publications, translated works. \"NotebookLM handles multiple books better.\" Absolutely true — if your workflow is \"I have 80 separate books and I want to search across all of them,\" NotebookLM is the right tool. book-to-skill is built for a different job: you want to go deep on a specific topic or library, having multiple related documents (papers, chapters, notes) folded into a single unified skill, and even updating it over time as new material arrives! This integrates your customized knowledge base right into your coding or writing workflow, rather than in a separate browser tab. 📥 Install Two ways to use it, do not confuse them: As an agent skill (the /book-to-skill command in Claude Code, Copilot CLI, or Amp) → git clone into your skills folder (below). This is what gives you the slash command and the full convert-a-book flow. As a standalone CLI (just the text extractor) → pip install book-to-skill, then book-to-skill --help. This does not register the agent skill; it only installs the extraction engine. See the CLI section. The skill follows the open Agent Skills standard, so a single install works for any compatible host. GitHub Copilot CLI (personal skill): git clone https://github.com/virgiliojr94/book-to-skill.git ~/.copilot/skills/book-to-skill # then, in a `copilot` session: /skills reload /skills info book-to-skill Or the cross-agent path that Copilot CLI and Amp both discover: git clone https://github.com/virgiliojr94/book-to-skill.git ~/.agents/skills/book-to-skill Claude Code: Copy this into your Claude Code session: Install book-to-skill: https://raw.githubusercontent.com/virgiliojr94/book-to-skill/master/SKILL.md Or manually using standard git clone (ensures modular engine files are fetched correctly): git clone https://github.com/virgiliojr94/book-to-skill.git ~/.claude/skills/book-to-skill Then in any agent session: /book-to-skill ~/path/to/your-book.pdf # or /book-to-skill ~/path/to/your-book.epub Standalone CLI (pip) pip install book-to-skill is a separate, optional path. It installs only the text-extraction engine as a CLI, for scripting or to grab the optional extractors; it does not register the /book-to-skill agent skill (use the git clone above for that). pip install \"book-to-skill[pdf,epub,docx]\" # engine + optional extractors book-to-skill ~/path/to/book.pdf --mode text # or: python -m book_to_skill ... book-to-skill --check # report which extractors are installed 📁 Repository structure book-to-skill/ ├── SKILL.md # Skill definition + step-by-step instructions (the generator spec) ├── scripts/ │ ├── extract.py # Thin entrypoint wrapper │ └── extractor/ # Modular extraction package │ ├── config.py # Extensions, paths, dependency constants │ ├── dependencies.py # optional-dep probing + --check │ ├── exceptions.py # ExtractionError (per-source failures, batch-safe) │ ├── utils.py # CLI parsing, multi-source resolution, chapter detection, runner │ └── parsers/ # Format-specific parsers (pdf, epub, docx, html, rtf, calibre, text) ├── tools/ │ ├── discovery_tax.py # measures token cost vs context-dump / discovery loop │ └── validate_skill.py # checks a generated SKILL.md against host rules (--lens claude|copilot|amp) ├── tests/ # pytest suite (extraction, detection, discovery tax) ├── docs/ │ ├── PERFORMANCE.md # measured benchmarks, discovery tax, cost │ └── ARCHITECTURE.md # pipeline + component map ├── CHANGELOG.md # release history (semver) ├── CONTRIBUTING.md # dev setup, PR conventions, release process ├── SECURITY.md # vulnerability reporting └── README.md # This file ⚖️ Copyright & fair use book-to-skill ships no book content — not a single page. It's a converter you point at files you already own. Processing is local. Extraction and analysis run on your machine. Your files are never uploaded by this tool. (If your agent's model runs in the cloud, the text you feed it follows that provider's normal data terms — same as any prompt.) You use your own copy. Bring a book you bought, docs your company owns, or papers you have the right to read. The output is your notes. A generated skill is a structured, synthesized derivative — framework names, definitions, takeaways — not a reproduction of the text. The skill explicitly never copies raw passages (see Quality Rule #7). Treat it like handwritten study notes: yours, for personal use. Don't redistribute. Publishing or sharing a generated skill of a copyrighted work can infringe the rights holder. Keep skills of third-party books private. Internal docs, your own writing, and openly-licensed material are fine to share within the bounds of their license. When in doubt, follow the license or terms of the source document. This project is a tool; how you use it is on you. 💖 Sponsors book-to-skill is free and MIT-licensed, maintained on personal time. If it saves you tokens or study hours, consider sponsoring its upkeep: PR reviews, multilingual fixes, releases, and docs. Become a sponsor → github.com/sponsors/virgiliojr94 Every sponsor is listed in BACKERS.md. Thank you for keeping open, privacy-first tooling alive. ✨ License MIT — applies to the converter (code + skill definition) in this repository, not to any book or document you process with it. Star History",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "16a73b8e53c5832a",
+    "source_type": "community_discussion",
+    "tldr": "virgiliojr94/book-to-skill 开源工具可将技术书籍或文档集合蒸馏为结构化的 agent skill，供 GitHub Copilot CLI、Amp 和 Claude Code 按需加载，实测比把全书塞入上下文节省 24×–51× token，单本书转换成本约 1 美元。",
+    "objective_summary": "virgiliojr94 于 2026 年 5 月 23 日在 GitHub 发布开源项目 book-to-skill，它将技术书籍、文档文件夹或资料集合转化为可按需加载的 agent skill。工具生成约 4000 token 的 SKILL.md 核心、按需加载的分章文件、glossary、patterns 与 cheatsheet，章节仅在询问时才进入上下文。开发者在真实书籍上测量，宣称相较全文上下文注入可节省 24×–51× token，相较一次性发现循环提升 2.4×–15.6×。该项目曾获 Trendshift 当日第 10 名 Python 仓库，单本书转换成本约 1 美元。",
+    "event_type": "framework_tools",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [
+        "GitHub",
+        "Anthropic",
+        "Trendshift"
+      ],
+      "technologies": [
+        "Agent Skills",
+        "SKILL.md",
+        "Docling",
+        "pdftotext"
+      ],
+      "key_people": []
+    },
+    "key_logic_flow": [
+      "book-to-skill 是一个开源项目，能把技术书籍、文档文件夹或资料集合转化为统一的 agent skill，兼容 GitHub Copilot CLI、Amp 和 Claude Code 等支持开放 Agent Skills 标准的宿主。",
+      "工作流程为三步：用户通过 /book-to-skill 命令指向文件或文件夹，工具将内容蒸馏为结构化的 skill（框架、决策规则、反模式与分章文件），agent 按需加载对应章节回答问题。",
+      "生成的 skill 包含约 4000 token 的 SKILL.md 核心、每章约 1000 token 的分章文件、glossary、patterns 与 cheatsheet，章节不占用常驻 token 预算。",
+      "开发者在 Think Python 2、Working Backwards、AI Engineering 等真实书籍上测量，宣称相比全文上下文注入节省 24×–51× token，相比一次性发现循环提升 2.4×–15.6×。",
+      "工具支持 PDF、EPUB、DOCX、TXT、Markdown 等十余种格式，PDF 技术类书籍用 Docling、纯文本类用 pdftotext，单本书转换成本约 1 美元（基于 Claude Sonnet 4.5 估算）。",
+      "该项目于 2026 年 5 月 23 日获 Trendshift 当日第 10 名 Python 仓库与第 25 名总仓库的排名。"
+    ],
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "virgiliojr94/book-to-skill",
+        "canonical_name": "book-to-skill",
+        "url": "https://github.com/virgiliojr94/book-to-skill",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "book-to-skill 是一个开源项目，可将任意技术书籍、文档文件夹或资料集合转化为统一的 agent skill，供 GitHub Copilot CLI、Amp 或 Claude Code 按需加载使用。",
+          "该工具实测宣称，相比把整本书直接塞入上下文，回答单个问题可节省 24×–51× 的 token，且优势随章节大小放大。",
+          "该项目曾获 Trendshift 2026 年 5 月 23 日当日第 10 名 Python 仓库与第 25 名仓库的排名。"
+        ],
+        "article_id": "16a73b8e53c5832a"
+      },
+      {
+        "object_type": "product",
+        "name": "GitHub Copilot CLI",
+        "canonical_name": "GitHub Copilot CLI",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "book-to-skill 生成的 skill 会写入 ~/.copilot/skills/<slug>/ 目录，GitHub Copilot CLI 用户可能需要运行 /skills reload 才能看到新技能。"
+        ],
+        "article_id": "16a73b8e53c5832a"
+      },
+      {
+        "object_type": "product",
+        "name": "Claude Code",
+        "canonical_name": "Claude Code",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "book-to-skill 生成的 skill 会写入 ~/.claude/skills/<slug>/ 目录，Claude Code 会在下一个会话中自动识别并加载该技能。"
+        ],
+        "article_id": "16a73b8e53c5832a"
+      },
+      {
+        "object_type": "product",
+        "name": "Amp",
+        "canonical_name": "Amp",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "book-to-skill 生成的 skill 会写入 ~/.agents/skills/<slug>/ 目录，供 Amp 或跨 agent 场景使用，并与其他宿主读取同一 SKILL.md 格式。"
+        ],
+        "article_id": "16a73b8e53c5832a"
+      },
+      {
+        "object_type": "project",
+        "name": "Docling",
+        "canonical_name": "Docling",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "技术类 PDF 使用 Docling 提取，约 1.5 秒/页，能保留 markdown 表格和代码块，实测在 103 页技术书上提取出 48 个表格与 36 个代码块。"
+        ],
+        "article_id": "16a73b8e53c5832a"
+      }
+    ],
+    "extract_result": "success",
+    "impact_score": {
+      "score": 4.5,
+      "reason": "该工具将长格式书籍/文档蒸馏为'核心 SKILL.md + 按需加载分章文件'的懒加载技能，精准命中了上下文窗口有限与知识常驻成本高的现实痛点，且基于开放 Agent Skills 标准、兼容 Copilot CLI / Claude Code / Amp 三大宿主，属于能切实提升个体开发者效率的实用工具。但它本质是对既有 SKILL.md 生态的增强型封装（文档提取 + LLM 蒸馏 + 懒加载目录管理），没有引入新模型架构、新训练范式或新基础设施，属于局部效率优化而非范式转移；Trendshift 单日第 10 的排名也说明其热度有限、未改变竞争格局。综合评定为重要但非颠覆性的社区工具级影响。"
+    },
+    "sentiment": "positive",
+    "developer_sentiment": {
+      "tone": "excited",
+      "primary_focus": "宣称按需加载分章文件可比全文注入节省 24×–51× token、单本转换成本约 1 美元，开发者最关心 token 与成本的真实性以及技能与各自 agent 宿主（Copilot/Claude Code）的兼容性"
+    },
+    "hype_assessment": {
+      "level": "medium",
+      "reason": "24×–51× token 节省和 2.4×–15.6× 提升均基于真实书籍实测而非空谈，文件结构与 token 预算给出了具体数字，具备一定可信度；但存在营销包装：'no hallucination'表述过于绝对（按需加载正确章节只能降低幻觉概率而非消除），基准为作者自测、缺乏第三方独立复现，README 整体带有较强的推广修辞，需打折看待这些宣称。"
+    },
+    "information_entropy": "medium",
+    "domain_disruption": {
+      "technical_innovation": "将长格式文档分层蒸馏为'约 4000 token 核心 SKILL.md + 每章约 1000 token 分章文件 + glossary/patterns/cheatsheet'的懒加载技能结构，章节不占用常驻 token 预算直到被询问；文档提取阶段按书籍类型自动选择 Docling（保留代码/表格结构）或 pdftotext（快速处理纯文本），并支持 PDF/EPUB/DOCX 等十余种格式。属于对开放 Agent Skills 标准的工程化落地，创新点集中在蒸馏策略与上下文预算管理，而非底层模型或算法突破。",
+      "business_model": "以开源工具切入 agent 技能消费生态，潜在商业化路径包括：企业内部知识库/文档体系批量转技能的服务化（按转换量或订阅收费）、成为 Copilot CLI 与 Claude Code 生态中第三方技能生产管道，或向团队/文档密集型组织提供'可查询品牌手册/架构决策记录'的企业级技能托管。当前为个人社区项目，无明确商业模式与治理结构。"
+    },
+    "engineering_complexity": "production_ready",
+    "compound_value": {
+      "score": 6.0,
+      "reason": "该工具踩中 Agent Skills 开放标准（SKILL.md）成为智能体知识层的行业趋势，将'长文档→按需加载 skill'的转化成本从昂贵咨询压到约 1 美元/本，显著降低组织和个人的 skill 构建门槛。复利逻辑在于：skill 库一旦建立会随 Agent 生态同步增值，每新增一本书/文档都在沉淀可持续调用的知识资产，且 24×–51× 的 token 节省直接改善智能体长文档使用的成本结构。但扣分点在于：单点开源工具（个人开发者）可复制性强、护城河薄，价值主要流向 SKILL.md 标准持有方与宿主平台（Claude Code、Copilot CLI），而非该工具本身；若标准碎片化或该能力被平台原生功能内化，工具价值将快速稀释。故判定为细分赛道基础设施候选，仍需验证标准收敛与工具的持续差异化能力。"
+    },
+    "value_capture_layer": "agent_middleware",
+    "moat_impact": "democratizes_access",
+    "key_beneficiaries": [
+      "Anthropic",
+      "GitHub",
+      "IBM (Docling)"
+    ],
+    "competitive_casualty": [
+      "通用 RAG 文档问答中间件",
+      "传统企业知识管理/文档搜索 SaaS"
+    ],
+    "market_opportunities": [
+      "可将'文档蒸馏为 Agent Skill'模式产品化，为企业提供内部知识库（runbooks、架构决策记录、合规文档）到可按需加载 skill 的批量转换与托管服务，按转换量或订阅收费。",
+      "技术出版方与知识创作者可围绕畅销技术书生成官方配套 Agent Skill，作为书籍之外的新分发形态，降低读者使用门槛并形成差异化卖点。",
+      "面向垂直行业（金融合规、法律、医疗）构建带版本更新机制的领域级 skill 蒸馏管道，抢占 Agent Skills 生态中'知识保鲜与增量折叠'的工具链空白。"
+    ],
+    "risk_matrix": {
+      "regulatory": "版权与知识产权风险：将受版权保护的技术书籍蒸馏为结构化 skill 文件可能构成衍生作品或再分发，若用于盗版书籍或企业专有文档，易引发出版商诉讼与数据合规问题；AI 内容蒸馏相关的监管义务（如欧盟 AI Act）目前仍不明确。",
+      "technological": "技术替代风险：token 节省优势建立在当前有限的上下文窗口之上，若长上下文与低成本 token 成为主流，该范式可能被原生 RAG 或'整本书入上下文'取代；且其依赖的新兴 Agent Skills 标准仍在快速演进，存在不兼容与标准分叉风险。",
+      "competitive": "竞争格局风险：Anthropic、GitHub、OpenAI 等平台方很可能将'文档转 skill'内化为原生功能，令独立开源工具被边缘化；该赛道门槛低、易被 fork 同质化，同时与成熟的 RAG 工具链（LlamaIndex、LangChain）正面竞争。",
+      "ethical": "数据伦理风险：工具可能被用于蒸馏含敏感或专有信息的文档，skill 一旦被共享或泄漏将放大数据暴露面；蒸馏过程可能丢失原文语境与修正信息，导致 agent 基于不完整知识产生有偏或有误导性的回答。",
+      "additional": [
+        "知识保鲜问题：蒸馏产物是一次性快照，源文档更新后若不同步维护，skill 会逐渐过时并产生陈旧知识误导。",
+        "单点维护风险：项目为个人维护的开源仓库，存在停更、行为漂移或与上游标准脱节的风险。"
+      ]
+    },
+    "confidence": {
+      "impact": "medium",
+      "compound": "medium",
+      "hype": "medium"
+    },
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "virgiliojr94/book-to-skill",
+        "canonical_name": "book-to-skill",
+        "url": "https://github.com/virgiliojr94/book-to-skill",
+        "positioning": "面向开发者与知识工作者的开源工具，将技术书籍、文档与资料集合蒸馏为按需加载的 agent skill，兼容 Copilot CLI、Amp 与 Claude Code。",
+        "technical_signal": "以约 4000 token 的 SKILL.md 核心加每章约 1000 token 的分章文件实现按需加载，章节仅在询问时才进入上下文，支持十余种文档格式并自动选择 PDF 提取工具。",
+        "adoption_signal": "2026 年 5 月 23 日获 Trendshift 当日第 10 名 Python 仓库与第 25 名总仓库排名，真实书籍测量显示回答单问题可节省 24×–51× token。",
+        "ecosystem_relevance": "与开放 Agent Skills 标准对齐，生成的 skill 同时兼容 GitHub Copilot CLI、Amp 与 Claude Code 三类宿主，形成跨 agent 生态的通用技能格式。",
+        "target_users": [],
+        "watch_reason": "book-to-skill 切中技术书籍读完即忘的高频痛点，把书籍蒸馏为结构化 skill 的思路可能重塑 agent 知识管理方式；其 token 节省数据、低成本转换与 Trendshift 上榜均显示早期认可，值得跟踪其采用速度与对 Agent Skills 标准生态的贡献。",
+        "risk_notes": [
+          "宣称的 token 节省基于开发者个人测量，缺乏第三方复现，样本书籍与场景有限，效果可能随书籍类型变化。",
+          "项目由个人开发者于 2026 年 5 月发布，处于早期阶段，长期维护能力尚未验证，存在被平台原生知识功能替代的风险。",
+          "依赖 Docling、pdftotext 等外部提取工具，跨平台安装与配置较复杂，技术类书籍的表格与代码保真度是关键变量。"
+        ],
+        "score": 8.0,
+        "article_ids": [
+          "16a73b8e53c5832a"
+        ],
+        "evidence_snippets": [
+          "book-to-skill 是一个开源项目，可将任意技术书籍、文档文件夹或资料集合转化为统一的 agent skill，供 GitHub Copilot CLI、Amp 或 Claude Code 按需加载使用。",
+          "该工具实测宣称，相比把整本书直接塞入上下文，回答单个问题可节省 24×–51× 的 token，且优势随章节大小放大。",
+          "该项目曾获 Trendshift 2026 年 5 月 23 日当日第 10 名 Python 仓库与第 25 名仓库的排名。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "GitHub Copilot CLI",
+        "canonical_name": "GitHub Copilot CLI",
+        "positioning": "GitHub 推出的命令行 AI 编程助手，支持开放 Agent Skills 标准，可加载第三方生成的 skill 并按需调用。",
+        "target_users": [
+          "使用 GitHub 生态的命令行开发者"
+        ],
+        "product_signal": "可作为 book-to-skill 生成技能的目标宿主，技能写入 ~/.copilot/skills/ 目录后需运行 /skills reload 才能识别新技能。",
+        "market_signal": "文章确认其与 Claude Code、Amp 一样读取同一 SKILL.md 格式，是开放 Agent Skills 标准在编程助手端的主流宿主之一。",
+        "differentiation": "与自动识别新技能的 Claude Code 相比，GitHub Copilot CLI 需手动 /skills reload 才能加载新技能，加载体验略显繁琐。",
+        "watch_reason": "GitHub Copilot CLI 是开放 Agent Skills 标准的关键宿主，第三方工具如 book-to-skill 的输出能否在其生态普及，是观察该标准采纳进程的重要指标。",
+        "risk_notes": [
+          "文章仅将其作为宿主提及，未提供产品自身能力细节，标准支持深度与市场表现存在信息空白。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "16a73b8e53c5832a"
+        ],
+        "evidence_snippets": [
+          "book-to-skill 生成的 skill 会写入 ~/.copilot/skills/<slug>/ 目录，GitHub Copilot CLI 用户可能需要运行 /skills reload 才能看到新技能。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Claude Code",
+        "canonical_name": "Claude Code",
+        "positioning": "Anthropic 推出的命令行 AI 编程助手，支持开放 Agent Skills 标准，能在新会话中自动识别并加载外部技能。",
+        "target_users": [
+          "命令行开发者",
+          "Claude 生态使用者"
+        ],
+        "product_signal": "作为 book-to-skill 的目标宿主之一，技能写入 ~/.claude/skills/ 目录后会在下一个会话中自动识别并加载，无需手动刷新。",
+        "market_signal": "文章确认 Claude Code 与 Copilot CLI、Amp 同为支持开放 Agent Skills 标准的宿主，显示其深度参与 agent 技能生态建设。",
+        "differentiation": "与需手动 /skills reload 的 Copilot CLI 相比，Claude Code 自动识别新技能，加载机制更顺滑，对 skill 驱动的知识工作流更友好。",
+        "watch_reason": "Claude Code 是 book-to-skill 三大目标宿主之一且自动加载体验最佳，可作为观察开放 Agent Skills 标准在编程助手端落地成熟度的窗口。",
+        "risk_notes": [
+          "文章未披露技能加载的权限控制与冲突处理细节，自动识别机制的实际边界与稳定性尚待验证。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "16a73b8e53c5832a"
+        ],
+        "evidence_snippets": [
+          "book-to-skill 生成的 skill 会写入 ~/.claude/skills/<slug>/ 目录，Claude Code 会在下一个会话中自动识别并加载该技能。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Amp",
+        "canonical_name": "Amp",
+        "positioning": "支持开放 Agent Skills 标准的跨 agent 场景宿主，可读取与 Copilot CLI、Claude Code 一致的 SKILL.md 技能格式。",
+        "target_users": [
+          "跨 agent 工作流开发者"
+        ],
+        "product_signal": "作为 book-to-skill 的技能写入目标，skill 存放于 ~/.agents/skills/ 目录，供 Amp 或跨 agent 场景使用并与其他宿主共享同一格式。",
+        "market_signal": "文章将其定位为跨 agent 技能宿主，暗示面向多 agent 协同场景的生态角色，但未提供更多市场信息。",
+        "differentiation": "Amp 的差异化在于跨 agent 与跨宿主的技能共享定位，与面向单一编程助手的 Copilot CLI、Claude Code 形成互补。",
+        "watch_reason": "Amp 的置信度为 medium 且文章信息有限，其跨 agent 技能宿主定位可能预示多 agent 协作下的技能共享趋势，值得后续补充验证。",
+        "risk_notes": [
+          "对象为 mentioned_reference 且置信度 medium，文章描述有限，存在信息不准确或过时的风险，需以官方资料交叉验证。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "16a73b8e53c5832a"
+        ],
+        "evidence_snippets": [
+          "book-to-skill 生成的 skill 会写入 ~/.agents/skills/<slug>/ 目录，供 Amp 或跨 agent 场景使用，并与其他宿主读取同一 SKILL.md 格式。"
+        ]
+      }
+    ]
+  },
+  {
+    "source_dir": "github-trending",
+    "title": "microsoft/agent-governance-toolkit",
+    "source": "https://github.com/microsoft/agent-governance-toolkit",
+    "author": [],
+    "published": "",
+    "created": "2026-07-29",
+    "manifest_dates": [
+      "2026-07-29"
+    ],
+    "description": "AI Agent Governance Toolkit — Policy enforcement, zero-trust identity, execution sandboxing, and reliability engineering for autonomous AI agents. Covers 10/10 OWASP Agentic Top 10.🌍 English | 日本語 | 简体中文 | 한국어 Agent Governance Toolkit Ship agents to production without losing sleep 🚀 Quick Start · 📋 Specifications · 📦 PyPI · 📝 Changelog Important Public Preview -- production-quality public preview releases. May have breaking changes before GA. Policy enforcement, identity, sandboxing, and SRE for autonomous AI agents. One pip install, any framework. The Problem Your AI agents call tools, browse the web, query databases, and delegate to other agents. Once deployed, they make decisions autonomously. You need answers to three questions: 1. Is this action allowed? An agent with access to send_email and query_database should not be able to drop_table. OAuth scopes and IAM roles control which services an agent can reach, not what it does once connected. 2. Which agent did this? In a multi-agent system, five agents might share a single API key. When something goes wrong, \"an agent did it\" is not an incident response. 3. Can you prove what happened? Auditors and regulators need tamper-evident records of every decision: what policy was active, what the agent requested, and why it was allowed or denied. Prompt-level safety (\"please follow the rules\") is not a control surface. It is a polite request to a stochastic system. OWASP LLM01:2025 states this explicitly: \"it is unclear if there are fool-proof methods of prevention for prompt injection.\" The published numbers back this up. Andriushchenko et al. (ICLR 2025) report 100% attack success rate on GPT-4o, GPT-3.5, Claude 3, and Llama-3 using adaptive attacks with logprob access and suffix optimization, evaluated against the JailbreakBench benchmark (Chao et al., NeurIPS 2024). Microsoft's own AI Red Teaming Agent formalizes Attack Success Rate (ASR), the rate of policy violations under adversarial input, as the canonical metric for this class of failure. Lessons from Red Teaming 100 Generative AI Products reinforces the point: \"mitigations do not eliminate risk entirely\" and red teaming must be a continuous process because model-layer defenses are probabilistic by construction. AGT does not try to win that fight inside the prompt. Every tool call, message send, and delegation is intercepted in deterministic application code before the model's intent reaches the wire. Actions the AGT kernel denies are not \"unlikely.\" They are structurally impossible. That is the difference between asking an agent to behave and making it incapable of misbehaving. Quick Start Prerequisites: Python 3.10+ pip install agent-governance-toolkit[full] Use the [full] extra for the quick-start imports below. The base agent-governance-toolkit wheel installs the compliance CLI only; the governance modules live in the consolidated core distribution. The agentmesh quick-start import remains the current wrapper API. The agent_os PolicyEvaluator example below is legacy compatibility: importing agent_os currently emits a DeprecationWarning because the old agent-os-kernel distribution is deprecated. Use agent-governance-toolkit-core (or the [full] extra that includes it) as the replacement distribution, and prefer the AGT 5 agt-policies/ACS APIs for new policy-engine host code. For Claude Code, add AGT as a plugin marketplace and install the governance plugin: /plugin marketplace add microsoft/agent-governance-toolkit /plugin install agt-governance@agent-governance-toolkit Govern any tool function in two lines: from agentmesh.governance import govern safe_tool = govern(my_tool, policy=\"policy.yaml\") # every call checked, logged, enforced That's it. safe_tool evaluates your YAML policy on every call, logs the decision, and raises GovernanceDenied if the action is blocked. # policy.yaml apiVersion: governance.toolkit/v1 name: production-policy default_action: allow rules: - name: block-destructive condition: \"action.type in ['drop', 'delete', 'truncate']\" action: deny description: \"Destructive operations require human approval\" - name: require-approval-for-send condition: \"action.type == 'send_email'\" action: require_approval approvers: [\"security-team\"] >>> safe_tool(action=\"read\", table=\"users\") {'table': 'users', 'rows': 42} >>> safe_tool(action=\"drop\", table=\"users\") GovernanceDenied: Action denied by policy rule 'block-destructive': Destructive operations require human approval Or use the full PolicyEvaluator API for programmatic control: PolicyEvaluator example from agent_os.policies import ( PolicyEvaluator, PolicyDocument, PolicyRule, PolicyCondition, PolicyAction, PolicyOperator, PolicyDefaults ) evaluator = PolicyEvaluator(policies=[PolicyDocument( name=\"my-policy\", version=\"1.0\", defaults=PolicyDefaults(action=PolicyAction.ALLOW), rules=[PolicyRule( name=\"block-dangerous-tools\", condition=PolicyCondition( field=\"tool_name\", operator=PolicyOperator.IN, value=[\"execute_code\", \"delete_file\"] ), action=PolicyAction.DENY, priority=100, )], )]) result = evaluator.evaluate({\"tool_name\": \"web_search\"}) # Allowed result = evaluator.evaluate({\"tool_name\": \"delete_file\"}) # Blocked TypeScript / .NET / Rust / Go examples TypeScript import { PolicyEngine } from \"@microsoft/agent-governance-sdk\"; const engine = new PolicyEngine([ { action: \"web_search\", effect: \"allow\" }, { action: \"shell_exec\", effect: \"deny\" }, ]); engine.evaluate(\"web_search\"); // \"allow\" engine.evaluate(\"shell_exec\"); // \"deny\" .NET using AgentGovernance; using AgentGovernance.Extensions.ModelContextProtocol; using AgentGovernance.Policy; var kernel = new GovernanceKernel(new GovernanceOptions { PolicyPaths = new() { \"policies/default.yaml\" }, }); var result = kernel.EvaluateToolCall(\"did:mesh:agent-1\", \"web_search\", new() { [\"query\"] = \"latest AI news\" }); // MCP server integration builder.Services.AddMcpServer() .WithGovernance(options => options.PolicyPaths.Add(\"policies/mcp.yaml\")); Rust use agent_governance::{AgentMeshClient, ClientOptions}; let client = AgentMeshClient::new(\"my-agent\").unwrap(); let result = client.execute_with_governance(\"data.read\", None); assert!(result.allowed); Go import agentmesh \"github.com/microsoft/agent-governance-toolkit/agent-governance-golang\" client, _ := agentmesh.NewClient(\"my-agent\", agentmesh.WithPolicyRules([]agentmesh.PolicyRule{ {Action: \"data.read\", Effect: agentmesh.Allow}, {Action: \"*\", Effect: agentmesh.Deny}, }), ) result := client.ExecuteWithGovernance(\"data.read\", nil) CLI tools: agt doctor # check installation agt verify # OWASP compliance check agt verify --evidence ./agt-evidence.json --strict # fail CI on weak evidence agt red-team scan ./prompts/ --min-grade B # prompt injection audit agt lint-policy policies/ # validate policy files Full walkthrough: quickstart.md -- zero to governed agents in 5 minutes. 🌍 Also in: 日本語 | 简体中文 | 한국어 How It Works Agent ──► Policy Engine ──► Identity ──► Audit Log (YAML/OPA/Cedar) (SPIFFE/DID/mTLS) (Tamper-evident) │ │ ├── Allowed ──► Tool executes │ └── Denied ──► GovernanceDenied │ ▼ Decision Record Every layer is optional. Start with govern() and add layers as your risk profile grows. Most teams run policy enforcement + audit logging and never need the full stack. Packages Package Description Agent OS Policy engine, agent lifecycle, governance gate Agent Control Specification (README) Stateless, deterministic, fail-closed policy decision runtime (Rust core) backing the AGT policy layer Agent Mesh Agent discovery, routing, and trust mesh Agent Runtime Execution sandboxing with four privilege rings Agent SRE Kill switch, SLO monitoring, chaos testing Agent Compliance OWASP verification, policy linting, integrity checks Agent Marketplace Plugin governance and trust scoring Agent Lightning RL training governance with violation penalties Agent Hypervisor Execution audit, delta engine, in-memory commitment tracking, command denylist enforcement Additional Capabilities Capability Description MCP Security Gateway Tool poisoning detection, drift monitoring, typosquatting, hidden instruction scanning (Spec) Shadow AI Discovery Find unregistered agents across processes, configs, and repos (Discovery) Governance Dashboard Real-time fleet visibility for health, trust, and compliance (Dashboard) PromptDefense Evaluator 12-vector prompt injection audit (Evaluator) Contributor Reputation PR/issue author screening for social engineering. Reusable GitHub Action (Action) Install Language Package Command Python agent-governance-toolkit pip install agent-governance-toolkit[full] TypeScript @microsoft/agent-governance-sdk npm install @microsoft/agent-governance-sdk Copilot CLI @microsoft/agent-governance-copilot-cli npx @microsoft/agent-governance-copilot-cli install Claude Code @microsoft/agent-governance-claude-code claude --plugin-dir ./agent-governance-claude-code OpenCode @microsoft/agent-governance-opencode npm install @microsoft/agent-governance-opencode .NET Microsoft.AgentGovernance dotnet add package Microsoft.AgentGovernance .NET MCP Microsoft.AgentGovernance.Extensions.ModelContextProtocol dotnet add package Microsoft.AgentGovernance.Extensions.ModelContextProtocol Rust agent-governance cargo add agent-governance Go agent-governance-toolkit go get github.com/microsoft/agent-governance-toolkit/agent-governance-golang All five language SDKs implement core governance (policy, identity, trust, audit). Python has the full stack. Copilot CLI and Claude Code are first-party developer surfaces built on the TypeScript SDK. See Language Package Matrix for detailed per-language coverage. Python distributions (v4.1.0 — consolidated) As of v4.1.0, 45 packages have been consolidated into 5 top-level distributions: Distribution PyPI What's included agent-governance-toolkit-core agent-governance-toolkit-core Policy engine, capability model, audit, MCP gateway, zero-trust identity, trust scoring, A2A/MCP/IATP bridges agent-governance-toolkit-runtime agent-governance-toolkit-runtime Privilege rings, saga orchestration, termination control, execution plan validation, command denylist enforcement agent-governance-toolkit-sre agent-governance-toolkit-sre SLOs, error budgets, chaos engineering, circuit breakers agent-governance-toolkit-cli agent-governance-toolkit-cli agt CLI, OWASP verification, integrity checks, policy linting agent-governance-toolkit[full] agent-governance-toolkit Meta-package installing all of the above Previous package names (agent-os-kernel, agentmesh-platform, agentmesh-runtime, agent-sre, agent-discovery, agent-hypervisor, agentmesh-marketplace, agentmesh-lightning) remain installable as stub packages that redirect to the consolidated distributions. Prerequisites Python: 3.10+ Node.js: 18+ / npm 9+ (TypeScript SDK) .NET: 8+ Go: 1.25+ Rust: 1.70+ Optional: AZURE_CLIENT_ID, AZURE_TENANT_ID, AZURE_CLIENT_SECRET for Azure-integrated features Framework Support Framework Integration Microsoft Agent Framework Native Middleware Semantic Kernel Native (.NET + Python) AutoGen Adapter LangGraph / LangChain Adapter CrewAI Adapter OpenAI Agents SDK Middleware Claude Code Governance plugin package Google ADK Adapter LlamaIndex Middleware Haystack Pipeline Mastra Adapter Dify Plugin Azure AI Foundry Deployment Guide GitHub Copilot CLI Governance installer Full list: Framework Integrations · Quickstart Examples Examples Example Framework What it demonstrates openai-agents-governed OpenAI Agents SDK Policy-gated tool calls with trust tiers crewai-governed CrewAI Multi-agent governance with role-based policies smolagents-governed HuggingFace smolagents Lightweight agent governance maf-integration MAF Microsoft Agent Framework integration mcp-trust-verified-server MCP Trust-verified MCP server implementation cedarling-governed Cedar/Cedarling Janssen Cedarling policy engine integration governance-dashboard Streamlit Real-time fleet visibility dashboard Specifications Every major component has a formal RFC 2119 specification with conformance tests. These specs define the behavioral contract: what implementations MUST, SHOULD, and MAY do. Specification Scope Tests Agent OS Policy Engine Policy evaluation, rule merging, fail-closed semantics 68 Agent Control Specification Stateless intervention-point policy runtime, verdicts, transform, fail-closed -- AgentMesh Identity and Trust Credentials, trust scoring, delegation chains 135 Agent Hypervisor Execution Control Privilege rings, saga orchestration, kill switch 80 AgentMesh Trust and Coordination Peer trust negotiation, mesh-wide policy 62 Agent SRE Governance SLOs, error budgets, chaos, circuit breakers 111 MCP Security Gateway Tool poisoning, drift detection, hidden instructions 127 Agent Lightning Fast-Path RL training governance, violation penalties 100 Framework Adapter Contract 10 adapter integrations, interceptor chain 152 Audit and Compliance Merkle audit, compliance mapping, Decision BOM 157 AgentMesh Wire Protocol Message format, routing, serialization -- 992 conformance tests ensure code stays aligned to specs. 29 Architecture Decision Records document why. Standards Compliance Standard Coverage OWASP Agentic AI Top 10 All ASI risk categories mapped with deterministic controls NIST AI RMF 1.0 Full GOVERN, MAP, MEASURE, MANAGE alignment EU AI Act Compliance mapping with automated evidence SOC 2 Control mapping with audit trail export AARM Extended All R1–R9 requirements satisfied; verified Jun 14, 2026 ATF All five elements mapped: Agent Mesh (identity), Agent OS (policy), Agent Compliance (governance), Agent Runtime (sandboxing), Agent SRE (incident response) Security AGT enforces governance at the application middleware layer, not at the OS kernel level. The policy engine and agents share the same process boundary. Production recommendation: Run each agent in a separate container for OS-level isolation. See Architecture: Security Boundaries. Tool Coverage CodeQL Python + TypeScript SAST Gitleaks Secret scanning on PR/push/weekly ClusterFuzzLite 7 fuzz targets (policy, injection, MCP, sandbox, trust) Dependabot 13 ecosystems OpenSSF Scorecard Weekly scoring + SARIF upload See Known Limitations for honest design boundaries and recommended layered defense. Documentation Category Links Getting Started Quick Start · Tutorials (60+) · FAQ Architecture System Design · Threat Model · ADRs (29) Specifications All Specs (10 formal specs, 992 conformance tests) API Reference Agent OS · AgentMesh · Agent SRE Compliance OWASP · EU AI Act · NIST AI RMF · SOC 2 · AARM Extended · ATF Deployment Azure · AWS · GCP · Docker Compose Extensions VS Code · Framework Integrations Contributing Contributing Guide · Community · Discord · Security Policy · Changelog Using AGT? Add your organization to ADOPTERS.md. Governance Document Purpose GOVERNANCE.md Decision-making, roles, contributor ladder CHARTER.md Technical charter (LF Projects format) MAINTAINERS.md Maintainers and organizations SECURITY.md Vulnerability reporting and response SLAs CODE_OF_CONDUCT.md Microsoft Open Source Code of Conduct ANTITRUST.md Competition law guidelines for participants TRADEMARKS.md Trademark usage policy Important Notes If you use the Agent Governance Toolkit to build applications that operate with third-party agent frameworks or services, you do so at your own risk. We recommend reviewing all data being shared with third-party services and being cognizant of third-party practices for retention and location of data. Official Sources The only official sources for the Agent Governance Toolkit are: Resource Location Source code github.com/microsoft/agent-governance-toolkit Documentation microsoft.github.io/agent-governance-toolkit Python packages pypi.org/user/agentgovtoolkit npm packages @microsoft/agent-governance-sdk on npmjs.com NuGet packages Microsoft.AgentGovernance.* on nuget.org Rust crates agent-governance, agent-governance-mcp on crates.io The project team does not maintain or endorse any third-party websites, packages, or documentation sites claiming to be official. If you encounter a suspicious site or package using the Agent Governance Toolkit name, please report it through the channels described in SECURITY.md. License This project is licensed under the MIT License. Trademarks This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft trademarks or logos is subject to and must follow Microsoft's Trademark & Brand Guidelines. Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship. Any use of third-party trademarks or logos are subject to those third-party's policies.",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "699cb8262327828f",
+    "source_type": "community_discussion",
+    "tldr": "微软发布 agent-governance-toolkit（AGT）公开预览版，一个通过 pip 一键安装、可在任意框架中拦截 AI 代理工具调用的策略执行、身份认证、沙箱与 SRE 治理工具包，并提供多语言 SDK 与 CLI 合规审计工具。",
+    "objective_summary": "微软于 2026 年发布了 agent-governance-toolkit（AGT）的公开预览版，用于对自主 AI 代理的工具调用、消息发送与委派行为进行确定性策略执行。该工具包在应用代码层拦截每次调用，支持 YAML/OPA/Cedar 策略、SPIFFE/DID 身份以及防篡改审计日志，并覆盖 Python、TypeScript、.NET、Rust、Go 五种语言 SDK。v4.1.0 将 45 个包整合为 5 个顶层发行版，配套 agt CLI 支持 OWASP 合规检查与提示注入审计，可集成 OpenAI Agents SDK、LangGraph、CrewAI、Claude Code 等框架。",
+    "event_type": "framework_tools",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [
+        "Microsoft"
+      ],
+      "technologies": [
+        "MCP",
+        "OPA",
+        "Cedar",
+        "SPIFFE",
+        "DID",
+        "mTLS",
+        "A2A",
+        "IATP",
+        "OWASP"
+      ],
+      "key_people": []
+    },
+    "key_logic_flow": [
+      "微软发布 agent-governance-toolkit（AGT）公开预览版，面向自主 AI 代理提供策略执行、身份认证、沙箱隔离与 SRE 治理，一次 pip install 即可接入任意框架。",
+      "该工具解决三个核心问题：动作是否被允许、是哪个代理执行的、能否提供防篡改的审计证据，并引用 OWASP LLM01 与 Andriushchenko 等论文论证仅靠提示词层防护不可靠。",
+      "AGT 在确定性应用代码层拦截每一次工具调用、消息发送和委派，被内核拒绝的动作在结构上不可能执行，而非仅依赖提示层面的请求式约束。",
+      "核心用法是两行代码接入：govern(my_tool, policy=\"policy.yaml\") 即可对每次调用执行策略评估、记录决策并在被拦截时抛出 GovernanceDenied。",
+      "v4.1.0 将 45 个包整合为 5 个顶层发行版，其中 agent-governance-toolkit[full] 为安装全部模块的元包，旧包名保留为跳转到整合发行版的存根包。",
+      "AGT 内置 MCP 安全网关、影子 AI 发现、治理仪表盘、PromptDefense 提示注入审计等能力，并提供 agt doctor、verify、red-team scan、lint-policy 等 CLI 工具。"
+    ],
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "microsoft/agent-governance-toolkit",
+        "canonical_name": "microsoft/agent-governance-toolkit",
+        "url": "https://github.com/microsoft/agent-governance-toolkit",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "文章核心介绍微软开源的 agent-governance-toolkit 工具包，用于自主 AI 代理的策略执行、身份认证、沙箱与 SRE 治理。",
+          "该项目处于 Public Preview 公开预览阶段，宣称生产级质量但 GA 前可能有破坏性变更，并支持一次 pip install 接入任意框架。",
+          "项目仓库同时提供多语言 SDK、示例代码和框架集成清单，并支持作为插件市场安装到 Claude Code 等开发环境。"
+        ],
+        "article_id": "699cb8262327828f"
+      },
+      {
+        "object_type": "product",
+        "name": "agent-governance-toolkit-core",
+        "canonical_name": "agent-governance-toolkit-core",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "v4.1.0 起 45 个包被整合为 5 个顶层发行版，其中 agent-governance-toolkit-core 包含策略引擎、能力模型、审计、MCP 网关与零信任身份等模块。",
+          "旧的 agent-os-kernel 发行版已被弃用，推荐以 agent-governance-toolkit-core 作为替代发行版并优先使用 AGT 5 的 agt-policies 与 ACS API。"
+        ],
+        "article_id": "699cb8262327828f"
+      },
+      {
+        "object_type": "product",
+        "name": "agt",
+        "canonical_name": "agent-governance-toolkit-cli (agt)",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "agt CLI 提供 doctor 安装检查、verify OWASP 合规校验、red-team scan 提示注入审计和 lint-policy 策略文件校验等功能。",
+          "agent-governance-toolkit-cli 作为独立发行版发布，基础 wheel 仅安装合规 CLI，治理模块位于整合后的核心发行版中。"
+        ],
+        "article_id": "699cb8262327828f"
+      },
+      {
+        "object_type": "product",
+        "name": "@microsoft/agent-governance-sdk",
+        "canonical_name": "@microsoft/agent-governance-sdk",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "TypeScript SDK 以 @microsoft/agent-governance-sdk 发布，通过 npm install 安装后可用 PolicyEngine 对工具调用执行 allow 或 deny 评估。",
+          "Copilot CLI 与 Claude Code 治理插件均为基于 TypeScript SDK 构建的第一方开发者界面。"
+        ],
+        "article_id": "699cb8262327828f"
+      },
+      {
+        "object_type": "product",
+        "name": "Microsoft.AgentGovernance",
+        "canonical_name": "Microsoft.AgentGovernance",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          ".NET SDK 以 Microsoft.AgentGovernance 包通过 dotnet add package 安装，提供 GovernanceKernel 评估工具调用并支持 MCP 服务器集成。"
+        ],
+        "article_id": "699cb8262327828f"
+      },
+      {
+        "object_type": "product",
+        "name": "@microsoft/agent-governance-claude-code",
+        "canonical_name": "@microsoft/agent-governance-claude-code",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Claude Code 用户可通过 /plugin marketplace add 命令将 AGT 添加为插件市场并安装 agt-governance 治理插件。"
+        ],
+        "article_id": "699cb8262327828f"
+      }
+    ],
+    "extract_result": "success",
+    "impact_score": {
+      "score": 7.0,
+      "reason": "评分依据：微软以系统性方式切入 AI 代理治理这一行业刚需，一次性覆盖策略执行、身份认证、沙箱隔离与合规审计四大层面，并以五语言 SDK、MCP 安全网关和 CLI 审计工具实现框架无关的确定性拦截，直接回应了'提示词层防护不可靠'（OWASP LLM01、Andriushchenko 等 ICLR 2025 论文）这一行业共识性痛点。但本质上它是对既有治理范式（OPA/Cedar 策略引擎、SPIFFE/DID 身份体系、防篡改审计）的工程化整合与平台化，并非范式级原创；且尚处公共预览期、官方明示存在破坏性变更风险，落地生态有待验证。综合判断属于重要产品发布，足以改变代理安全治理领域的局部竞争格局并推动企业级代理部署进程，但未达到 ChatGPT 发布级别的行业范式转移。综合评分 7.0。"
+    },
+    "sentiment": "positive",
+    "developer_sentiment": {
+      "tone": "skeptical",
+      "primary_focus": "45 个包整合为 5 个发行版后的迁移成本与公共预览期 API 稳定性，以及'两行接入、任意框架'在真实多框架场景下的拦截完整性"
+    },
+    "hype_assessment": {
+      "level": "low",
+      "reason": "判定依据：文章以工程实现细节为主体（policy.yaml 示例、五种语言代码片段、CLI 工具清单、包分发说明），并引用 OWASP LLM01:2025、Andriushchenko 等 ICLR 2025 论文、微软自身红队经验等可核查依据支撑核心论断，没有出现无依据的'颠覆/革命'式 PR 话术。'结构上不可能'与'一次 pip 安装、任意框架'等表述带有一定宣传色彩，但核心能力（PyPI 可安装的真实包、多语言 SDK、审计工具）均是可验证事实，故判定为实打实的干货。"
+    },
+    "information_entropy": "high",
+    "domain_disruption": {
+      "technical_innovation": "将代理安全从概率性的提示词层防护迁移到确定性的应用代码层强制执行：在内核层拦截每一次工具调用、消息发送与委派，被拒绝的动作在结构上不可能发生而非'不太可能发生'；同时以 SPIFFE/DID 统一代理身份归属、以防篡改审计日志构建合规证据链，并通过 MCP 安全网关实现框架无关接入（OpenAI Agents SDK、LangGraph、CrewAI、Claude Code）。多策略语言（YAML/OPA/Cedar）与五语言 SDK 使其构成一套完整、可编程的代理治理控制面。",
+      "business_model": "为企业在生产环境规模化部署自主代理扫清了合规与审计障碍（OWASP LLM01、监管与审计证据链），有望成为代理治理领域的'事实标准'（类比 OPA 之于 Kubernetes 策略管理），并通过 Azure / AI Foundry 云产品捆绑、托管治理服务与合规审计 SaaS 形成商业闭环，重塑企业级代理应用的安全采购与交付模式。"
+    },
+    "engineering_complexity": "production_ready",
+    "compound_value": {
+      "score": 8.5,
+      "reason": "治理层是 Agent 大规模企业落地的刚需基础设施，具备极强的复利效应。首先，随着自主代理从原型走向生产，'动作是否被允许、哪个代理执行的、能否提供防篡改审计证据'成为每个企业都绕不开的结构性问题——这不是某一波技术潮流，而是与容器时代的 Kubernetes、云时代的身份与审计（IAM/CloudTrail）同级的长期基础设施需求。其次，AGT 在确定性应用代码层而非提示层做强制拦截，架构方向被 OWASP LLM01 与 JailbreakBench 100% 攻击成功率的实证数据反复验证，技术路线具备持久性，不会因模型能力迭代而失效。第三，微软的渠道优势（Azure + Entra ID + GitHub + Microsoft 365 企业分销）使其有独特的商业化路径：开源抢占标准、云侧收割，且已打通 OpenAI Agents SDK、LangGraph、CrewAI、Claude Code 等主流框架，政策模板、审计规范、合规认证的沉淀会随采用规模自我强化，形成网络效应。风险点在于治理工具本质偏'合规品'，开源可能使其被商品化，且公共预览阶段仍有破坏性变更风险，故不给满分。综合判断，3-5 年后 Agent 治理大概率成为企业 AI 栈的基石层，微软作为标准制定者将持续复利。"
+    },
+    "value_capture_layer": "agent_middleware",
+    "moat_impact": "creates_new_moat",
+    "key_beneficiaries": [
+      "Microsoft",
+      "Azure",
+      "LangChain",
+      "CrewAI",
+      "Anthropic",
+      "OpenAI"
+    ],
+    "competitive_casualty": [
+      "独立 AI 安全/治理初创公司（如 Lakera、Prompt Security）",
+      "提示层防护厂商（如 Guardrails AI）",
+      "传统 RPA 厂商"
+    ],
+    "market_opportunities": [
+      "企业治理服务商可将 AGT 作为底层引擎，为金融、医疗、政务等高合规行业封装开箱即用的策略模板包与人工审批工作流，以'治理即服务'模式变现",
+      "AI Agent 平台方（如 LangGraph/CrewAI 生态）可集成 AGT 作为默认治理层，将合规审计与防篡改日志能力包装为差异化卖点，降低企业客户对自主代理的采纳门槛",
+      "安全咨询团队可基于 AGT 的 red-team scan 与提示注入审计 CLI，推出面向企业代理部署的治理成熟度评估与红队测试付费服务"
+    ],
+    "risk_matrix": {
+      "regulatory": "AGT 公开预览阶段策略引擎与审计日志格式可能发生破坏性变更，企业若将其防篡改日志直接用于满足欧盟 AI 法案或金融行业审计要求，存在合规有效性未经验证的风险；且 AGT 承认提示注入无法根除，过度依赖工具层可能造成'已合规'的假象",
+      "technological": "该方案依赖确定性代码层拦截，未来若主流 Agent 框架（OpenAI Agents SDK、LangGraph 等）原生内置等价治理能力，或模型层安全能力显著进步，AGT 的差异化价值将被稀释；同时 OPA/Cedar 等通用策略引擎与本工具构成直接竞争与替代关系",
+      "competitive": "微软入场将显著挤压 Agent 安全治理领域创业公司的生存空间，AWS、Google 等云巨头亦可能推出同类开源工具包；叠加 AGT 以开源形式分发，治理能力面临商品化与价格战风险",
+      "ethical": "审计日志会记录每一次工具调用的请求内容与决策结果，可能包含敏感业务数据，日志集中存储本身构成隐私泄露面；影子 AI 发现功能涉及对员工 AI 使用行为的监控，易引发职场隐私争议；策略默认 allow 意味着未被规则覆盖的危险操作仍可执行，自动审批流可能沦为橡皮图章式人工监督",
+      "additional": [
+        "生态锁定风险：AGT 深度绑定微软技术栈（MCP、DID、SPIFFE、Azure），非微软技术栈企业集成改造成本较高",
+        "公开预览快速迭代风险：v4.1.0 将 45 个包整合为 5 个发行版，存量用户存在升级兼容与命名迁移成本"
+      ]
+    },
+    "confidence": {
+      "impact": "high",
+      "compound": "medium",
+      "hype": "medium"
+    },
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "microsoft/agent-governance-toolkit",
+        "canonical_name": "microsoft/agent-governance-toolkit",
+        "url": "https://github.com/microsoft/agent-governance-toolkit",
+        "positioning": "微软开源的 AI 代理治理工具包，在应用代码层对工具调用、消息发送与委派进行确定性策略执行，一次 pip install 即可接入任意框架。",
+        "technical_signal": "在确定性应用代码层拦截每次工具调用，被内核拒绝的动作在结构上不可能执行，支持 YAML/OPA/Cedar 策略、SPIFFE/DID 身份与防篡改审计日志。",
+        "adoption_signal": "项目处于公开预览阶段，宣称生产级质量但 GA 前可能有破坏性变更，并支持一次 pip install 接入任意框架，同时可安装为 Claude Code 插件市场。",
+        "ecosystem_relevance": "v4.1.0 将 45 个包整合为 5 个顶层发行版，覆盖 Python、TypeScript、.NET、Rust、Go 五种语言 SDK，可集成 OpenAI Agents SDK、LangGraph、CrewAI、Claude Code 等框架。",
+        "target_users": [],
+        "watch_reason": "微软将 AI 代理治理从提示词层防护转向确定性代码层拦截，直接回应 OWASP LLM01 与 100% 攻击成功率等核心安全痛点，并已形成多语言 SDK、CLI 与插件市场的完整生态，是观察企业级代理安全治理演进的关键开源项目，值得持续跟踪其 GA 进程与业界采用。",
+        "risk_notes": [
+          "项目仍处于公开预览阶段，GA 前可能存在破坏性变更，生产环境稳定性与 API 兼容性有待验证。",
+          "v4.1.0 将 45 个包整合为 5 个顶层发行版，迁移期存在版本碎片化与弃用包兼容风险。",
+          "治理效果依赖对各家框架工具调用的拦截能力，框架快速演进可能带来覆盖滞后与适配成本。"
+        ],
+        "score": 8.0,
+        "article_ids": [
+          "699cb8262327828f"
+        ],
+        "evidence_snippets": [
+          "文章核心介绍微软开源的 agent-governance-toolkit 工具包，用于自主 AI 代理的策略执行、身份认证、沙箱与 SRE 治理。",
+          "该项目处于 Public Preview 公开预览阶段，宣称生产级质量但 GA 前可能有破坏性变更，并支持一次 pip install 接入任意框架。",
+          "项目仓库同时提供多语言 SDK、示例代码和框架集成清单，并支持作为插件市场安装到 Claude Code 等开发环境。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "agent-governance-toolkit-core",
+        "canonical_name": "agent-governance-toolkit-core",
+        "positioning": "v4.1.0 整合后的核心发行版，包含策略引擎、能力模型、审计、MCP 网关与零信任身份等治理模块，替代已弃用的 agent-os-kernel。",
+        "target_users": [
+          "Python 代理应用开发者",
+          "企业治理与安全平台工程师"
+        ],
+        "product_signal": "作为整合后的核心发行版，包含策略引擎、能力模型、审计、MCP 网关与零信任身份等治理模块，并通过 [full] 元包随一键安装提供。",
+        "market_signal": "v4.1.0 起 45 个包被整合为 5 个顶层发行版，反映微软对 AGT 发行版结构的收敛重构，旨在降低安装与升级复杂度。",
+        "differentiation": "取代已弃用的 agent-os-kernel 成为 AGT 5 时代新宿主代码的推荐依赖，集中承载策略、身份与审计能力。",
+        "watch_reason": "agent-governance-toolkit-core 是 AGT 5 时代发行版整合的核心载体，承载策略引擎、零信任身份与 MCP 网关等关键模块，其 API 稳定性直接影响上层 SDK 与治理插件生态，值得跟踪版本演进与存量用户迁移进度。",
+        "risk_notes": [
+          "旧的 agent-os-kernel 发行版已弃用，存量用户迁移到核心发行版期间存在 API 断档与适配风险。",
+          "核心发行版仍处于公开预览，包接口在 GA 前可能调整，依赖其构建的产品存在兼容不确定性。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "699cb8262327828f"
+        ],
+        "evidence_snippets": [
+          "v4.1.0 起 45 个包被整合为 5 个顶层发行版，其中 agent-governance-toolkit-core 包含策略引擎、能力模型、审计、MCP 网关与零信任身份等模块。",
+          "旧的 agent-os-kernel 发行版已被弃用，推荐以 agent-governance-toolkit-core 作为替代发行版并优先使用 AGT 5 的 agt-policies 与 ACS API。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "agt",
+        "canonical_name": "agent-governance-toolkit-cli (agt)",
+        "positioning": "AGT 附带的合规审计命令行工具，提供 doctor 安装检查、verify OWASP 合规校验、red-team scan 提示注入审计与 lint-policy 策略文件校验等功能。",
+        "target_users": [
+          "安全合规工程师",
+          "平台 SRE 与运维人员"
+        ],
+        "product_signal": "提供 doctor 安装检查、verify OWASP 合规校验、red-team scan 提示注入审计与 lint-policy 策略文件校验，将治理审计能力工具化。",
+        "market_signal": "作为独立发行版与治理核心解耦发布，满足仅需合规审计、无需完整治理模块的轻量使用场景。",
+        "differentiation": "以命令行将 OWASP 合规与红队提示注入审计标准化，区别于仅提供 SDK 的同类治理方案，降低接入门槛。",
+        "watch_reason": "agt CLI 将 OWASP 合规校验与提示注入审计等治理能力封装为命令行工具，显著降低企业接入代理治理的门槛，其命令集的迭代可作为观察 AGT 治理体系能力边界与合规覆盖度的窗口。",
+        "risk_notes": [
+          "CLI 基础安装仅含合规审计能力，完整治理功能需额外安装核心发行版，存在功能拆分带来的使用门槛。",
+          "OWASP 合规校验与红队扫描的覆盖深度尚处预览阶段，审计结论有效性需在真实攻击场景中验证。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "699cb8262327828f"
+        ],
+        "evidence_snippets": [
+          "agt CLI 提供 doctor 安装检查、verify OWASP 合规校验、red-team scan 提示注入审计和 lint-policy 策略文件校验等功能。",
+          "agent-governance-toolkit-cli 作为独立发行版发布，基础 wheel 仅安装合规 CLI，治理模块位于整合后的核心发行版中。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "@microsoft/agent-governance-sdk",
+        "canonical_name": "@microsoft/agent-governance-sdk",
+        "positioning": "微软发布的 TypeScript 代理治理 SDK，通过 npm 安装后可用 PolicyEngine 对工具调用执行 allow 或 deny 策略评估。",
+        "target_users": [
+          "TypeScript/Node.js 代理开发者",
+          "基于 Copilot CLI 与 Claude Code 的治理插件用户"
+        ],
+        "product_signal": "通过 npm 安装后可用 PolicyEngine 对工具调用执行 allow 或 deny 评估，并支撑 Copilot CLI 与 Claude Code 治理插件等第一方开发者界面。",
+        "market_signal": "面向 JavaScript/TypeScript 生态发布治理 SDK，补齐 Python 之外的开发者覆盖面，并直接服务微软第一方代理开发环境。",
+        "differentiation": "作为 TypeScript 原生 SDK 成为 Copilot CLI 与 Claude Code 治理插件的构建底座，打通第一方代理工具链治理。",
+        "watch_reason": "TypeScript SDK 是 AGT 覆盖 JS 生态并落地第一方开发者界面的关键载体，其策略引擎 API 的演进与 Copilot CLI、Claude Code 插件的集成深度，直接反映治理能力在非 Python 环境的成熟度。",
+        "risk_notes": [
+          "相比 Python 核心发行版，TypeScript SDK 的功能覆盖面与策略表达能力可能滞后，跨语言一致性待验证。",
+          "SDK 版本与上游核心发行版联动，v4.1.0 之后的 API 演进可能带来迁移成本。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "699cb8262327828f"
+        ],
+        "evidence_snippets": [
+          "TypeScript SDK 以 @microsoft/agent-governance-sdk 发布，通过 npm install 安装后可用 PolicyEngine 对工具调用执行 allow 或 deny 评估。",
+          "Copilot CLI 与 Claude Code 治理插件均为基于 TypeScript SDK 构建的第一方开发者界面。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Microsoft.AgentGovernance",
+        "canonical_name": "Microsoft.AgentGovernance",
+        "positioning": "微软发布的 .NET 代理治理 SDK，以 NuGet 包形式提供 GovernanceKernel 评估工具调用并支持 MCP 服务器集成。",
+        "target_users": [
+          ".NET 后端与代理服务开发者"
+        ],
+        "product_signal": "提供 GovernanceKernel 评估工具调用，并支持通过 MCP 服务器集成在 .NET 服务中启用统一治理。",
+        "market_signal": "覆盖 .NET 生态，与 Python、TypeScript 等 SDK 共同构成 AGT 多语言矩阵，服务企业级 .NET 应用治理需求。",
+        "differentiation": "以 GovernanceKernel 与 MCP 服务器集成为 .NET 侧治理入口，贴合企业存量 .NET 服务的接入方式。",
+        "watch_reason": ".NET SDK 完善了 AGT 的多语言覆盖，其 MCP 服务器集成能力对企业存量 .NET 服务接入治理尤为关键，值得跟踪其与核心发行版的同步演进及 API 对齐程度。",
+        "risk_notes": [
+          "该对象置信度为 medium，证据相对有限，功能深度与生态采用情况有待更多来源验证。",
+          ".NET SDK 与 Python 核心版存在 API 差异，跨语言策略表达一致性需要实证。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "699cb8262327828f"
+        ],
+        "evidence_snippets": [
+          ".NET SDK 以 Microsoft.AgentGovernance 包通过 dotnet add package 安装，提供 GovernanceKernel 评估工具调用并支持 MCP 服务器集成。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "@microsoft/agent-governance-claude-code",
+        "canonical_name": "@microsoft/agent-governance-claude-code",
+        "positioning": "面向 Claude Code 的治理插件，用户可通过插件市场命令安装 agt-governance 插件，在编码代理中启用 AGT 治理。",
+        "target_users": [
+          "Claude Code 使用者",
+          "在编码代理中引入治理的企业开发者"
+        ],
+        "product_signal": "可通过 /plugin marketplace add 将 AGT 添加为插件市场并安装 agt-governance 治理插件，为 Claude Code 用户提供开箱即用的治理能力。",
+        "market_signal": "以插件市场形式接入 Claude Code 等第三方编码代理环境，将微软治理能力扩展到外部开发者工具链。",
+        "differentiation": "基于 TypeScript SDK 构建的第一方治理插件，将 AGT 治理直接嵌入 Claude Code 插件生态，免去自行集成成本。",
+        "watch_reason": "该插件是 AGT 落地第三方编码代理生态的直接入口，其对 Claude Code 的支持方式与治理覆盖范围，可反映微软跨工具链推广代理治理的策略和兼容能力，具有持续观察价值。",
+        "risk_notes": [
+          "该对象置信度为 medium，插件功能与稳定性证据有限，实际治理覆盖范围待验证。",
+          "Claude Code 插件市场与治理插件的版本兼容性可能随双方迭代波动，存在维护风险。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "699cb8262327828f"
+        ],
+        "evidence_snippets": [
+          "Claude Code 用户可通过 /plugin marketplace add 命令将 AGT 添加为插件市场并安装 agt-governance 治理插件。"
+        ]
+      }
+    ]
+  },
+  {
+    "source_dir": "github-trending",
+    "title": "huggingface/speech-to-speech",
+    "source": "https://github.com/huggingface/speech-to-speech",
+    "author": [],
+    "published": "",
+    "created": "2026-07-29",
+    "manifest_dates": [
+      "2026-07-29",
+      "2026-07-30",
+      "2026-07-31"
+    ],
+    "description": "Build local voice agents with open-source models &nbsp; Speech To Speech: Build voice agents with open-source models A low-latency, fully modular voice-agent pipeline: VAD -> STT -> LLM -> TTS, exposed through an OpenAI Realtime-compatible WebSocket API. Every component is swappable. The LLM slot speaks OpenAI-compatible protocols, so you can point it at a hosted provider, at HF Inference Providers, or at a vLLM or llama.cpp server on your own hardware for a fully local, fully open stack. This pipeline runs in production as the conversation backend for thousands of Reachy Mini robots. Quickstart pip install speech-to-speech export OPENAI_API_KEY=... speech-to-speech This starts an OpenAI Realtime-compatible server at ws://localhost:8765/v1/realtime using Parakeet TDT for local STT, an OpenAI-compatible LLM, and Qwen3-TTS for local speech output. From a source checkout, talk to it from a second terminal: python scripts/listen_and_play_realtime.py --host 127.0.0.1 --port 8765 Prefer to keep the LLM on your own machine? Serve Gemma 4 with llama.cpp: llama-server -hf ggml-org/gemma-4-E4B-it-GGUF -np 2 -c 65536 -fa on --swa-full Then point the OpenAI-compatible LLM backend at it: speech-to-speech \\ --model_name \"ggml-org/gemma-4-E4B-it-GGUF\" \\ --responses_api_base_url \"http://127.0.0.1:8080/v1\" \\ --responses_api_api_key \"\" Any OpenAI Realtime-compatible client can connect. See Realtime API for the protocol and LLM backends for provider and local-server options. Index How it works Installation Supported components Run modes Realtime API LLM backends Multi-language support Pocket TTS CLI reference Contributing Star history Citations How it works The pipeline is a cascade of four components, each running in its own thread and connected by queues: Voice Activity Detection (VAD): Silero VAD v5 detects speech boundaries and turn-taking. Speech to Text (STT): transcribes the user's turn, with optional live partial transcripts. Language Model (LLM): generates the response, streaming text and tool calls. Text to Speech (TTS): synthesizes audio and streams it back to the client. Every stage has multiple interchangeable backends, selected via CLI flags. The code is designed for easy modification, with a focus on models available through Transformers and the Hugging Face Hub. Installation Requires Python 3.10+. pip install speech-to-speech The default install covers the standard realtime path: Parakeet TDT for STT OpenAI-compatible API for the language model Qwen3-TTS for speech output, using the GGML backend by default on non-macOS platforms and mlx-audio on Apple Silicon local audio and realtime server modes macOS and non-macOS dependencies are resolved automatically via platform markers in pyproject.toml. CUDA Note for Qwen3-TTS On Linux, the Qwen3-TTS GGML backend comes from faster-qwen3-tts[ggml]. Its default qwentts-cpp-python wheel on PyPI targets CUDA 12.8. If your machine does not have the CUDA 12 runtime that wheel expects, install the matching wheel from the Hugging Face wheelhouse before installing speech-to-speech: # CUDA 13.x pip install \"qwentts-cpp-python==0.3.1+cu130\" \\ -f https://huggingface.co/datasets/andito/qwentts-cpp-python-wheels/tree/main/whl/cu130 # CUDA 12.4 pip install \"qwentts-cpp-python==0.3.1+cu124\" \\ -f https://huggingface.co/datasets/andito/qwentts-cpp-python-wheels/tree/main/whl/cu124 # CPU-only fallback pip install \"qwentts-cpp-python==0.3.1+cpu\" \\ -f https://huggingface.co/datasets/andito/qwentts-cpp-python-wheels/tree/main/whl/cpu pip install speech-to-speech To use the previous CUDA-graphs implementation instead of GGML, pass --qwen3_tts_backend torch. Optional Backends Extra backends are installed with pip extras: pip install \"speech-to-speech[kokoro]\" # Kokoro-82M TTS on non-macOS pip install \"speech-to-speech[pocket]\" # Pocket TTS pip install \"speech-to-speech[chattts]\" # ChatTTS pip install \"speech-to-speech[facebook-mms]\" # MMS TTS pip install \"speech-to-speech[faster-whisper]\" # Faster Whisper STT pip install \"speech-to-speech[whisper-mlx]\" # Lightning Whisper MLX STT on macOS pip install \"speech-to-speech[paraformer]\" # Paraformer STT through FunASR pip install \"speech-to-speech[mlx-lm]\" # mlx-vlm support for vision models on macOS Deprecated implementations, including MeloTTS, live in archive/ and are no longer wired into the CLI. Note on DeepFilterNet: DeepFilterNet, used for optional audio enhancement in VAD, requires numpy<2 and conflicts with Pocket TTS, which requires numpy>=2. Install it manually only in environments where you are not using Pocket TTS. From Source git clone https://github.com/huggingface/speech-to-speech.git cd speech-to-speech uv sync This installs the package in editable mode and makes the speech-to-speech CLI available. Supported Components Component Backend Platforms Install VAD Silero VAD v5 all built-in STT Parakeet TDT (default) CUDA / CPU through nano-parakeet, Apple Silicon through MLX built-in STT Whisper through Transformers CUDA / CPU built-in STT Faster Whisper CUDA / CPU faster-whisper STT Lightning Whisper MLX Apple Silicon whisper-mlx STT MLX Audio Whisper Apple Silicon built-in on macOS STT Paraformer CUDA / CPU paraformer LLM OpenAI-compatible API (responses-api, chat-completions) hosted providers or self-hosted servers built-in LLM Transformers CUDA / CPU built-in LLM mlx-lm Apple Silicon built-in on macOS TTS Qwen3-TTS (default) GGML / CUDA on Linux, mlx-audio on macOS built-in TTS Kokoro-82M CUDA / CPU, Apple Silicon kokoro on non-macOS; built-in on macOS TTS Pocket TTS CPU / CUDA pocket TTS ChatTTS CUDA / CPU chattts TTS MMS TTS CUDA / CPU facebook-mms Select implementations with --stt, --llm_backend, and --tts. Run speech-to-speech -h for exact values and backend-specific flags. Run Modes Mode Transport Use it when realtime (default) WebSocket, OpenAI Realtime protocol at /v1/realtime You are building an app or device against a standard voice API. local Your machine's microphone and speakers You want to talk to the pipeline directly, no client needed. websocket Raw PCM over WebSocket You want a minimal custom client without the Realtime protocol. socket Raw PCM over TCP Models run on a remote server, with a simple microphone/playback client. Realtime Server export OPENAI_API_KEY=... speech-to-speech This is equivalent to: speech-to-speech \\ --thresh 0.6 \\ --stt parakeet-tdt \\ --llm_backend responses-api \\ --tts qwen3 \\ --qwen3_tts_model_name Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice \\ --qwen3_tts_speaker Aiden \\ --qwen3_tts_language auto \\ --qwen3_tts_backend ggml \\ --qwen3_tts_non_streaming_mode True \\ --qwen3_tts_mlx_quantization 6bit \\ --model_name gpt-5.4-mini \\ --chat_size 30 \\ --responses_api_stream \\ --enable_live_transcription \\ --mode realtime The default model is gpt-5.4-mini through the OpenAI Responses API. Override it with --model_name, and set --responses_api_base_url for another OpenAI-compatible provider or server. Local Mac speech-to-speech --local_mac_optimal_settings Optionally with a specific LLM: speech-to-speech \\ --local_mac_optimal_settings \\ --model_name mlx-community/Qwen3-4B-Instruct-2507-bf16 This setting: Adds --device mps to use MPS for all models. Sets Parakeet TDT for STT. Sets MLX LM as the LLM backend. Sets Qwen3-TTS for TTS, using mlx-audio with the 6bit MLX variant by default. Sets --mode local. --tts pocket and --tts kokoro are also valid on macOS. To compare the MLX quantization variants locally: python scripts/benchmark_tts.py \\ --handlers qwen3 \\ --iterations 3 \\ --qwen3_mlx_quantizations bf16 4bit 6bit 8bit WebSocket Run the pipeline in WebSocket mode: speech-to-speech --mode websocket --ws_host 0.0.0.0 --ws_port 8765 Connect from your client at ws://<server-ip>:8765. Send raw audio bytes as 16 kHz, int16, mono PCM and receive generated audio bytes back. TCP Socket TCP socket mode is intentionally minimal. It streams raw PCM audio, but does not provide the full Realtime API feature set, including interruption handling, live transcript events, or tool-call events. Run the pipeline on the server: speech-to-speech --mode socket --recv_host 0.0.0.0 --send_host 0.0.0.0 Run the client locally to handle microphone input and playback: python scripts/listen_and_play.py --host <IP address of your server> Docker Install the NVIDIA Container Toolkit, then: docker compose up The compose file starts a llama.cpp server with Gemma 4, starts the TCP socket server, and exposes ports 8080, 12345, and 12346. Realtime API Realtime mode streams audio over a WebSocket using the OpenAI Realtime protocol, with live transcription and low-latency turn-taking. The server exposes /v1/realtime, and any OpenAI Realtime-compatible client can connect: from openai import OpenAI client = OpenAI( base_url=\"http://localhost:8765/v1\", websocket_base_url=\"ws://localhost:8765/v1\", api_key=\"not-needed\", ) with client.realtime.connect(model=\"local\") as conn: conn.send( { \"type\": \"session.update\", \"session\": { \"type\": \"realtime\", \"instructions\": \"You are a helpful assistant.\", \"audio\": { \"input\": { \"turn_detection\": { \"type\": \"server_vad\", \"interrupt_response\": True, } } }, }, } ) for event in conn: print(event.type) The server implements the core Realtime event set: input_audio_buffer.append, session.update, conversation.item.create, response.create, and response.cancel inbound; speech start/stop, streaming transcription, audio deltas, tool calls, and response.done outbound. The full event reference, architecture, and design details live in the Realtime Engine README. LLM Backends The LLM is the most compute-intensive and highest-latency component in the pipeline. A single forward pass through a large model can dominate end-to-end response time, so choosing the right backend for your hardware and latency budget matters. The pipeline supports: Local inference: transformers on CUDA / CPU and mlx-lm on Apple Silicon. Self-hosted servers: responses-api and chat-completions can point at a local vLLM or llama.cpp server. Provider APIs: the same backends work with OpenAI, HF Inference Providers, OpenRouter, and other OpenAI-compatible providers. Two API backends are available, sharing the same --responses_api_* connection flags: --llm_backend responses-api (default) targets /v1/responses. --llm_backend chat-completions targets /v1/chat/completions. The examples below pair Parakeet TDT for local STT and Qwen3-TTS for local TTS with different LLM backends. Responses API Backend Works with any provider or server that implements the OpenAI Responses API. Point --responses_api_base_url at the endpoint and set --model_name accordingly: Provider / server --responses_api_base_url --responses_api_api_key OpenAI omit, uses OpenAI default $OPENAI_API_KEY HF Inference Providers https://router.huggingface.co/v1 $HF_TOKEN OpenRouter https://openrouter.ai/api/v1 $OPENROUTER_API_KEY vLLM http://localhost:8000/v1 omit or any string llama.cpp http://127.0.0.1:8080/v1 empty string # OpenAI speech-to-speech \\ --mode local \\ --stt parakeet-tdt \\ --llm_backend responses-api \\ --tts qwen3 \\ --qwen3_tts_mlx_quantization 6bit \\ --model_name \"gpt-4o-mini\" \\ --responses_api_api_key \"$OPENAI_API_KEY\" \\ --responses_api_stream \\ --enable_live_transcription # HF Inference Providers: Qwen3.5-9B via Together speech-to-speech \\ --mode local \\ --stt parakeet-tdt \\ --llm_backend responses-api \\ --tts qwen3 \\ --qwen3_tts_mlx_quantization 6bit \\ --model_name \"Qwen/Qwen3.5-9B:together\" \\ --responses_api_base_url \"https://router.huggingface.co/v1\" \\ --responses_api_api_key \"$HF_TOKEN\" \\ --responses_api_stream \\ --enable_live_transcription # HF Inference Providers: GPT-oss-20B via Groq speech-to-speech \\ --stt parakeet-tdt \\ --llm_backend responses-api \\ --tts qwen3 \\ --qwen3_tts_mlx_quantization 6bit \\ --model_name \"openai/gpt-oss-20b:groq\" \\ --responses_api_base_url \"https://router.huggingface.co/v1\" \\ --responses_api_api_key \"$HF_TOKEN\" \\ --responses_api_stream \\ --enable_live_transcription Chat Completions Backend Identical configuration to responses-api, reusing the same --responses_api_* connection flags, but talks to /v1/chat/completions instead of /v1/responses. Prefer it when: the provider ignores chat_template_kwargs.enable_thinking on the Responses path and needs a reasoning_effort knob to suppress reasoning, or the server's Responses streaming tool-call path is unreliable, while its Chat Completions tool-call streaming is solid. This is useful for some vLLM builds; see #312. Add --responses_api_reasoning_effort none to disable reasoning on providers where the chat-template flag has no effect: # vLLM serving a Qwen model with tool calling speech-to-speech \\ --mode realtime \\ --stt parakeet-tdt \\ --llm_backend chat-completions \\ --tts qwen3 \\ --model_name \"Qwen/Qwen3-4B-Instruct-2507\" \\ --responses_api_base_url \"http://localhost:8000/v1\" \\ --responses_api_stream # Gemma 4 31B via the HF router on Cerebras, with reasoning disabled for low voice latency speech-to-speech \\ --mode realtime \\ --stt parakeet-tdt \\ --llm_backend chat-completions \\ --tts qwen3 \\ --model_name \"google/gemma-4-31B-it:cerebras\" \\ --responses_api_base_url \"https://router.huggingface.co/v1\" \\ --responses_api_api_key \"$HF_TOKEN\" \\ --responses_api_reasoning_effort none \\ --responses_api_stream Fully Local Run the LLM in a separate llama.cpp process for the lowest-friction fully local setup, as shown in the Reachy Mini local conversation guide: # Terminal 1: llama.cpp serving Gemma 4 llama-server -hf ggml-org/gemma-4-E4B-it-GGUF -np 2 -c 65536 -fa on --swa-full # Terminal 2: speech-to-speech using that local LLM server speech-to-speech \\ --mode realtime \\ --stt parakeet-tdt \\ --llm_backend responses-api \\ --tts qwen3 \\ --model_name \"ggml-org/gemma-4-E4B-it-GGUF\" \\ --responses_api_base_url \"http://127.0.0.1:8080/v1\" \\ --responses_api_api_key \"\" \\ --responses_api_stream \\ --enable_live_transcription You can use --mode local instead of --mode realtime when you want to talk through the machine running the server directly. In-process local backends are still available with --llm_backend mlx-lm on Apple Silicon or --llm_backend transformers on CUDA / CPU. Multi-Language Support Language coverage depends on the STT and TTS backends you pick, not on the pipeline itself: Component Backend Languages STT Parakeet TDT (default) 25 European languages STT Whisper / Whisper MLX / Faster Whisper Broad multilingual coverage, depending on the selected Whisper checkpoint STT Paraformer Depends on the selected FunASR checkpoint; the default is Chinese-oriented TTS Qwen3-TTS (default) Multilingual, with --qwen3_tts_language auto by default TTS Kokoro Multiple language/voice mappings, depending on backend availability TTS ChatTTS English and Chinese TTS MMS TTS Broad multilingual coverage through MMS checkpoints Make sure the STT, LLM, and TTS you pair all cover your target language(s). Two usage patterns: Single language: set --language to the target language code. The default is en. Language switching: set --language auto. The STT detects the language of each spoken prompt and forwards it to the LLM. Optionally add --enable_lang_prompt to append a \"Please reply to my message in ...\" instruction. It defaults to False; large LLMs usually infer the language from context, but the explicit instruction can help smaller models. Automatic language detection: speech-to-speech \\ --stt parakeet-tdt \\ --language auto \\ --llm_backend mlx-lm \\ --model_name \"mlx-community/Qwen3-4B-Instruct-2507-bf16\" A single non-English language, Chinese in this example: speech-to-speech \\ --stt whisper-mlx \\ --stt_model_name large-v3 \\ --language zh \\ --llm_backend mlx-lm \\ --model_name mlx-community/Qwen3-4B-Instruct-2507-bf16 Both commands also work on top of --local_mac_optimal_settings; explicit --stt flags override the defaults it sets. Pocket TTS Pocket TTS from Kyutai Labs provides streaming TTS with voice cloning: speech-to-speech \\ --tts pocket \\ --pocket_tts_voice jean \\ --pocket_tts_device cpu Available voice presets: alba, marius, javert, jean, fantine, cosette, eponine, azelma. Custom voice files and Hugging Face paths also work. CLI Reference References for all CLI arguments live in the arguments classes and in speech-to-speech -h. Module-Level Parameters See ModuleArguments. It allows setting: a common --device, if every part should run on the same device --mode: realtime (default), local, socket, or websocket STT implementation (--stt) LLM backend (--llm_backend: transformers, mlx-lm, responses-api, or chat-completions) TTS implementation (--tts) logging level realtime pipeline pool size (--num_pipelines) VAD Parameters See VADHandlerArguments. Notable options: --thresh: threshold value to trigger voice activity detection. --min_speech_ms: minimum duration of detected voice activity to be considered speech. --min_speech_continuation_ms: sustain-bar hysteresis threshold for speech that continues a reopenable soft-ended, uncommitted turn within the reopen window. The default and recommended pairing is --min_speech_ms 384 --min_speech_continuation_ms 192. --min_silence_ms: minimum length of silence intervals for segmenting speech. Default is 64 ms. --short_segment_merge_ms: optional merge window for stitching adjacent VAD segments that are each shorter than --min_speech_ms. --unanswered_reopen_ms: sanity cap on how long a soft-ended speculative turn that has not yet received any assistant output stays reopenable. STT, LLM, and TTS Parameters model_name, torch_dtype, and device are exposed for each STT, LLM, and TTS implementation. STT and TTS parameters use the handler prefix, for example --stt_model_name or --qwen3_tts_device. LLM model selection and chat settings are shared across backends via unprefixed flags, for example --model_name and --chat_size; backend-specific flags use the responses_api_ prefix for the responses-api and chat-completions backends and the llm_ prefix for local backends. For example: # Local transformers/mlx-lm backend --model_name google/gemma-2b-it # OpenAI-compatible backend --llm_backend responses-api --model_name deepseek-chat --responses_api_base_url https://api.deepseek.com Generation Parameters Other generation parameters can be set using the handler prefix plus _gen_, for example --stt_gen_max_new_tokens 128 or --llm_gen_temperature 0.7. Parameters not yet exposed can be added to the relevant arguments class. Contributing Issues and PRs are welcome. Good starting points are the open issues. For larger changes, open an issue first to discuss the approach. For local development: uv sync pytest ruff check Star History Citations If you use this pipeline, please also cite the component models you run. The defaults are: Silero VAD @misc{SileroVAD, author = {Silero Team}, title = {Silero VAD: pre-trained enterprise-grade Voice Activity Detector (VAD), Number Detector and Language Classifier}, year = {2021}, publisher = {GitHub}, journal = {GitHub repository}, howpublished = {\\url{https://github.com/snakers4/silero-vad}}, email = {hello@silero.ai} } Parakeet TDT @misc{parakeet-tdt, author = {NVIDIA}, title = {Parakeet TDT 0.6B v3}, publisher = {Hugging Face}, howpublished = {\\url{https://huggingface.co/nvidia/parakeet-tdt-0.6b-v3}} } Qwen3-TTS @misc{qwen3-tts, author = {Qwen Team}, title = {Qwen3-TTS}, publisher = {Hugging Face}, howpublished = {\\url{https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice}} } Citations for optional backends such as Kokoro, Pocket TTS, ChatTTS, Whisper variants, Paraformer, and MMS live in the respective component READMEs.",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "9207e699adc3a415",
+    "source_type": "community_discussion",
+    "tldr": "Hugging Face 发布 speech-to-speech 开源语音代理管线，采用 VAD→STT→LLM→TTS 四段级联架构，通过 OpenAI Realtime 兼容的 WebSocket API 暴露服务，所有组件均可替换，已在数千台 Reachy Mini 机器人上生产运行。",
+    "objective_summary": "Hugging Face 发布 speech-to-speech 项目，这是一个低延迟、全模块化的语音代理管线，由 VAD、STT、LLM、TTS 四个运行在独立线程并通过队列连接的组件级联组成，每个阶段都提供多种可替换后端。管线通过 OpenAI Realtime 兼容的 WebSocket 协议对外提供服务，默认组合为 Parakeet TDT 做本地语音识别、OpenAI 兼容接口调用大语言模型、Qwen3-TTS 做本地语音合成。项目支持 realtime、local、websocket、socket 四种运行模式，并能对接 OpenAI、HF Inference Providers、OpenRouter、vLLM、llama.cpp 等不同 LLM 后端，已在生产环境作为数千台 Reachy Mini 机器人的对话后端运行。",
+    "event_type": "framework_tools",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [
+        "Hugging Face",
+        "OpenAI"
+      ],
+      "technologies": [
+        "VAD",
+        "STT",
+        "LLM",
+        "TTS",
+        "WebSocket",
+        "OpenAI Realtime protocol",
+        "GGML",
+        "MLX",
+        "llama.cpp",
+        "vLLM",
+        "Transformers",
+        "Silero VAD"
+      ],
+      "key_people": []
+    },
+    "key_logic_flow": [
+      "Hugging Face 发布 speech-to-speech 开源项目，这是一个低延迟、全模块化的语音代理管线，核心架构为 VAD→STT→LLM→TTS 四段级联。",
+      "管线通过 OpenAI Realtime 兼容的 WebSocket API 暴露服务，默认监听 ws://localhost:8765/v1/realtime，任何兼容客户端都可接入。",
+      "每个阶段都支持多个可替换后端，默认组合为 Parakeet TDT 做本地 STT、OpenAI 兼容接口做 LLM、Qwen3-TTS 做本地 TTS。",
+      "该管线已在生产环境作为数千台 Reachy Mini 机器人的对话后端稳定运行，具备实际部署经验。",
+      "项目提供 realtime、local、websocket、socket 四种运行模式，LLM 后端可指向 OpenAI、HF Inference Providers、OpenRouter、vLLM 或本地 llama.cpp 服务器。"
+    ],
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "huggingface/speech-to-speech",
+        "canonical_name": "huggingface/speech-to-speech",
+        "url": "https://github.com/huggingface/speech-to-speech",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Hugging Face 发布了 speech-to-speech 开源项目，这是一个低延迟、全模块化的语音代理管线，由 VAD、STT、LLM、TTS 四个可替换组件级联组成。",
+          "该项目通过 OpenAI Realtime 兼容的 WebSocket API 暴露服务，任何兼容 OpenAI Realtime 协议的客户端都可以直接连接使用。",
+          "该管线已在生产环境作为数千台 Reachy Mini 机器人的对话后端稳定运行，并可通过 pip install speech-to-speech 快速安装。"
+        ],
+        "article_id": "9207e699adc3a415"
+      },
+      {
+        "object_type": "product",
+        "name": "Reachy Mini",
+        "canonical_name": "Reachy Mini",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "speech-to-speech 管线已在生产环境作为数千台 Reachy Mini 机器人的对话后端运行，说明该项目具备真实的机器人产品落地场景。"
+        ],
+        "article_id": "9207e699adc3a415"
+      },
+      {
+        "object_type": "model",
+        "name": "Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice",
+        "canonical_name": "Qwen3-TTS",
+        "url": "https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "默认 TTS 使用 Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice 模型，非 macOS 平台默认走 GGML 后端，Apple Silicon 上则使用 mlx-audio 实现。",
+          "Qwen3-TTS 是管线默认的语音合成后端，支持通过 --qwen3_tts_backend 在 GGML 与 Torch CUDA-graphs 两种实现之间切换。"
+        ],
+        "article_id": "9207e699adc3a415"
+      },
+      {
+        "object_type": "model",
+        "name": "ggml-org/gemma-4-E4B-it-GGUF",
+        "canonical_name": "gemma-4-E4B-it-GGUF",
+        "url": "https://huggingface.co/ggml-org/gemma-4-E4B-it-GGUF",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "文档示例使用 llama.cpp 本地服务 Gemma 4 模型，并将 OpenAI 兼容 LLM 后端指向本地服务器，实现完全本地的语音代理栈。"
+        ],
+        "article_id": "9207e699adc3a415"
+      }
+    ],
+    "extract_result": "success",
+    "impact_score": {
+      "score": 7.0,
+      "reason": "评分依据：该发布是语音代理领域的系统工程级重要工具，而非范式转移。其核心价值在于把 VAD→STT→LLM→TTS 四段级联管线标准化并封装为 OpenAI Realtime 兼容的 WebSocket 服务，使现有 Realtime 客户端生态可零迁移接入开源栈，同时支持从全云端到全本地（vLLM/llama.cpp/MLX）的灵活部署，直接降低了自托管语音代理的门槛，会显著改变该细分领域的竞争格局。但事件类型为框架/工具发布，技术上无全新模型或算法突破，故未达 8 分以上的范式转移级别。综合评定 7 分。"
+    },
+    "sentiment": "positive",
+    "developer_sentiment": {
+      "tone": "excited",
+      "primary_focus": "OpenAI Realtime 协议兼容 + 全组件可替换，能否真正落地全本地、全开源的语音代理栈"
+    },
+    "hype_assessment": {
+      "level": "low",
+      "reason": "判定依据：全文为扎实的技术文档，包含完整的组件兼容表、四种运行模式说明、平台相关依赖解析（CUDA 12.4/12.8/13.x wheel 细节、GGML vs MLX 选择）、安装与 CLI 用法，并给出\"数千台 Reachy Mini 机器人生产运行\"的可核验实证。未出现\"颠覆\"\"革命性\"等 PR 滥用词汇，工程细节密度高，宣传水分低。"
+    },
+    "information_entropy": "high",
+    "domain_disruption": {
+      "technical_innovation": "非单点模型突破，而是系统工程创新：以 OpenAI Realtime 协议为统一服务接口，将 VAD/STT/LLM/TTS 四段管线线程化解耦并通过队列连接，每段支持多后端热插拔（STT 涵盖 Parakeet/Whisper/Paraformer，TTS 涵盖 Qwen3-TTS/Kokoro/ChatTTS，LLM 兼容任意 OpenAI 协议端点），在 GGML/MLX/CUDA 多平台间自动解析依赖，实现从全云端到全本地的平滑切换，大幅降低语音代理工程落地门槛。",
+      "business_model": "对专有语音代理中间件/托管 SaaS 形成挤压——协议兼容意味着 OpenAI Realtime 既有客户端可近乎零成本切换到开源自托管栈，冲击按调用量计费的语音 API 商业模式；同时强化 Hugging Face 生态闭环（模型托管 + HF Inference Providers 推理收费），推动'模型开源免费、算力与服务层变现'的商业模式，可能重塑语音代理价值链的利润分布。"
+    },
+    "engineering_complexity": "production_ready",
+    "compound_value": {
+      "score": 7.5,
+      "reason": "评估逻辑：首先，语音代理（voice agent）是确定性增长的细分赛道，客服、机器人、IoT 场景均需低延迟语音交互，数千台 Reachy Mini 的生产级验证证明了真实需求而非 demo。其次，该项目的关键价值锚点在于用 OpenAI Realtime 兼容的 WebSocket 协议作为标准接口 + 全组件可替换的模块化架构——这让它成为开源语音栈的‘胶水层’与协议参考实现，任何 Realtime 客户端可即插即用，显著降低从闭源（OpenAI Realtime）迁移到开源栈的切换成本。第三，复利效应来自 Hugging Face 的发行渠道（pip 一键安装、HF Hub 模型生态深度绑定）：STT/TTS/LLM 单点模型持续进步时，管线标准本身会沉淀为基础设施，类似 Transformers 库的历史路径。但需谨慎：编排/中间件层的护城河历史上偏弱（LangChain 先例），且语音栈迭代极快，竞争者随时可能以更高性能组合切入；故评分落在 7.5——有潜力成为细分赛道基础设施，但 3-5 年是否仍是基石仍需持续验证，尤其是协议标准能否被更广泛生态采纳。"
+    },
+    "value_capture_layer": "agent_middleware",
+    "moat_impact": "democratizes_access",
+    "key_beneficiaries": [
+      "Hugging Face",
+      "NVIDIA",
+      "Qwen (Alibaba)",
+      "Pollen Robotics",
+      "llama.cpp / vLLM 生态"
+    ],
+    "competitive_casualty": [
+      "OpenAI Realtime API",
+      "Vapi",
+      "Retell AI",
+      "ElevenLabs 会话式语音 API"
+    ],
+    "market_opportunities": [
+      "企业可基于该模块化语音管线快速构建垂直行业语音客服或助手产品，借助 OpenAI Realtime 兼容协议直接复用现有客户端生态，显著降低集成与迁移成本",
+      "医疗、金融、政企等数据敏感行业可将 STT/LLM/TTS 全链路本地化部署，打造完全私有、可审计的语音对话系统，形成差异化合规卖点",
+      "机器人及智能硬件厂商可将该管线作为语音交互中间件集成进产品（参考 Reachy Mini 数千台生产案例），缩短语音能力研发周期"
+    ],
+    "risk_matrix": {
+      "regulatory": "语音合成与深度伪造监管（如深度合成内容标识、声音克隆限制）会传导至使用该管线的下游产品；欧盟 AI Act 对实时对话系统的透明度与可追溯性要求需纳入合规设计",
+      "technological": "四段级联架构存在延迟累积与误差传播，可能被 GPT-4o-realtime 类端到端原生语音模型逐步替代；管线强依赖 Parakeet TDT、Qwen3-TTS 等具体模型及 llama.cpp/vLLM 第三方生态的迭代节奏",
+      "competitive": "面临 OpenAI Realtime API、Google Gemini Live 等原生方案，以及 Pipecat、LiveKit Agents、Vapi 等开源与商业语音代理框架的激烈竞争，开源框架同质化风险较高",
+      "ethical": "实时语音交互涉及录音数据隐私与数据留存问题；TTS 语音克隆可能被滥用于欺诈或深度伪造；STT 对非标准口音与方言的识别偏差可能造成服务歧视",
+      "additional": [
+        "生产级稳定性与可维护性依赖社区贡献，企业采用时需评估长期维护风险及对 Hugging Face 生态的依赖程度"
+      ]
+    },
+    "confidence": {
+      "impact": "high",
+      "compound": "medium",
+      "hype": "medium"
+    },
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "huggingface/speech-to-speech",
+        "canonical_name": "huggingface/speech-to-speech",
+        "url": "https://github.com/huggingface/speech-to-speech",
+        "positioning": "Hugging Face 开源的模块化语音代理管线，以 VAD→STT→LLM→TTS 四段级联架构为核心，通过 OpenAI Realtime 兼容 WebSocket API 提供低延迟对话服务。",
+        "technical_signal": "管线由 VAD、STT、LLM、TTS 四个组件级联构成，各自运行在独立线程并通过队列连接，每个阶段均提供多种可替换后端，默认组合为 Parakeet TDT、OpenAI 兼容接口与 Qwen3-TTS。",
+        "adoption_signal": "该管线已在生产环境作为数千台 Reachy Mini 机器人的对话后端稳定运行，并可通过 pip install speech-to-speech 一键安装快速上手。",
+        "ecosystem_relevance": "项目深度绑定 Hugging Face 生态，组件模型经 Transformers 与 HF Hub 获取，LLM 后端可对接 HF Inference Providers，也兼容 vLLM 与 llama.cpp 自托管方案。",
+        "target_users": [],
+        "watch_reason": "speech-to-speech 是 Hugging Face 官方推出的模块化语音代理参考实现，OpenAI Realtime 兼容协议与全组件可替换设计有望成为语音代理标准化底座，叠加数千台机器人生产验证，值得持续跟踪其生态演进与行业采用。",
+        "risk_notes": [
+          "项目仍处快速迭代期，Qwen3-TTS 的 GGML 后端对 CUDA 版本敏感，需手动安装匹配 wheel，部署门槛较高。",
+          "可选组件间存在依赖冲突，如 DeepFilterNet 要求 numpy<2 而 Pocket TTS 需要 numpy>=2，安装时需人工处理环境。",
+          "语音代理领域协议尚未稳定，OpenAI Realtime 兼容性可能随上游协议演进而变动，存在接口漂移风险。"
+        ],
+        "score": 8.0,
+        "article_ids": [
+          "9207e699adc3a415"
+        ],
+        "evidence_snippets": [
+          "Hugging Face 发布了 speech-to-speech 开源项目，这是一个低延迟、全模块化的语音代理管线，由 VAD、STT、LLM、TTS 四个可替换组件级联组成。",
+          "该项目通过 OpenAI Realtime 兼容的 WebSocket API 暴露服务，任何兼容 OpenAI Realtime 协议的客户端都可以直接连接使用。",
+          "该管线已在生产环境作为数千台 Reachy Mini 机器人的对话后端稳定运行，并可通过 pip install speech-to-speech 快速安装。"
+        ]
+      }
+    ]
+  },
+  {
+    "source_dir": "github-trending",
+    "title": "hello245m/free-stockdb",
+    "source": "https://github.com/hello245m/free-stockdb",
+    "author": [],
+    "published": "",
+    "created": "2026-07-29",
+    "manifest_dates": [
+      "2026-07-29"
+    ],
+    "description": "面向 A 股日K、分钟K与ETF分钟数据的本地量化引擎，集成增量同步、本地缓存、复权、批量查询、回测与指标计算。[07-27]经过众多用户几个月测试，bug已基本消除，即将提供mac和linux版本！ free-stockdb 本地量化数据引擎 面向 A 股日K、分钟K与 ETF 分钟、tick级数据的本地量化引擎。free-stockdb 将数据同步、清洗、复权、组织为可直接用于批量查询、批量计算研究的数据底座。 ❤️双击更新 -> 双击启动 -> 直接调用。 下载地址1 数据本地落盘，研究不再依赖远程接口。 本地优先 增量同步 数据支持(按需) 本地指标计算 五种调用方式 数据在用户磁盘 只处理变化数据 日/周/月/1/5/15/30分钟/tick 39 种指标、5 种指数 Python / HTTP / Excel / HTML / MCP flowchart TB A[\"数据更新：同步、清洗、复权、增量\"] --> B[\"free-stockdb 本地数据与计算引擎\"] B --> C[\"Python SDK\"] B --> D[\"HTTP API\"] B --> E[\"Excel / WPS\"] B --> F[\"HTML 网页\"] B --> G[\"AI MCP\"] 同步后的查询、计算、回测和接口都使用本机数据，不与远程请求链路耦合。 为什么需要本地数据引擎 全市场批量回测的瓶颈不是策略代码，而是数据工程。以全市场 7000+ 股票分钟线回测为例，远程 API 方案的真实工作量： 环节 在线 API 方案的真实耗时 free-stockdb 数据下载 全市场分钟数据逐股请求，受限频/积分/IP 风控约束，实测需要3-5 天；爬虫方案批量拉取封号/限频 通过 sync_url.txt 配置数据源，Zstd 压缩传输，增量同步，断点续传 数据清洗 处理停牌、退市、代码变更、缺失补拉、时间排序，1-2 天 同步流程自动完成 复权处理 获取分红送转数据、推算复权因子、历史回刷，1-2 天 内置完整复权因子，查询时写时计算 存储设计 选型数据库、设计表结构、建索引、批量入库、优化查询，1-3 天 定制 C++ 时序引擎，开箱即用 指标计算 编写 MA/MACD/KDJ 等公式、pandas 全市场遍历极慢（单次数小时），2-3 天 内置 39 指标 + 5 指数，Rust 计算核心比 pandas 快 3 倍，数秒完成 板块映射 爬取概念/行业数据、构建双向索引、持续维护，1-2 天 内置申万一二三级 + 1200 概念板块，bk.get() 毫秒查询 接口对接 Python/HTTP/Excel/AI 各自对接维护，1-2 天 五种调用方式统一内置 合计 最少 10-15 个工作日才能跑通第一个全市场策略 30 分钟内从零到可运行 远程 API 方案在全市场回测场景下不是慢，是跑不通。free-stockdb 将数据工程与策略研究完整解耦：数据更新在同步层完成，策略只读本地数据集，数据源可替换，研究接口不变。 已集成的数据工程 使用者原本需要维护 启动后直接获得 接口 Token、限频、封ip、断点恢复和全市场数据调度 数据源增量同步、文件校验和本地存量数据 新股、停牌、退市、代码变更、时间排序与历史修正 统一的数据组织、复权因子与查询协议 数据库选型、表结构、索引、批量入库和查询优化 本地 C++ 时序数据服务，按代码和时间范围批量读取 pandas/DataFrame 拼接、指标滚动计算与中间缓存 zb.get() 批量指标和指数计算接口 Python、HTTP、Excel、网页、AI 工具的多套对接 一套本地协议对应 Python SDK、HTTP API、Excel/WPS、HTML、MCP 数据完成同步后，查询、计算和回测只依赖本地数据集；更新与研究彼此独立。 两分钟开始 Windows 使用者可从 Releases 下载发行包。首次运行： 1. 运行数据更新工具 2. 数据同步到 ./data 3. 启动 stockdb (仅2.2mb) 4. 直接使用 Python、HTTP、Excel/WPS、网页或 MCP 查询本机数据 已有数据完整落盘在 ./data；后续更新只处理变化数据，离线时仍可继续查询、回测和计算。 数据存储与数据源 历史数据采用 Zstd 压缩，不按未压缩记录体积占用磁盘，比csv/mysql小3倍以上。首次同步从配置的数据源获取历史数据，后续只更新增量，不走逐股、逐页的远程 API 拉取流程。 默认数据集聚焦高频行情与复权，底层数据库支持任意自定义数据存储，低频率数据：财报、宏观、资金流等可按需要接入同一套本地查询与计算引擎。 核心能力 本地全市场数据运行时 日线、周线、月线，以及 1/5/15/30 分钟 K 线，tick级数据(按需) 价格、成交量、成交额、换手率、估值、市值、ST 等常用字段 前复权、后复权、不复权和原始复权因子查询 股票、ETF、行业和概念板块的组织与双向查询 本地存储、无远程查询延迟，研究和回测不受远程 API 并发配额影响 可配置局域网服务，多人协作、分布式回测。 批量查询与计算 result = get_data( code=7000_codes, # 7000+ 股票 / ETF start=any_start, # 任意时间周期 end=any_end, frequency=any_frequency,# 分钟 / 日 / 周 / 月 fq=any_fq, # 前复权 / 后复权 / 不复权 fields=any_fields, # 任意单多字段筛选 as_df=False/True # 返回list、dict、 DataFrame ) result = zb.get( name=\"ma,kdj,macd,....\", # 39指标 / 5种指数计算 codes=7000_codes, # 单股 / 批量 / 全市场 start=any_start, # 任意时间范围 end=any_end, frequency=any_frequency, # 分钟 / 日 / 周 / 月 fq=any_fq, # 前复权 / 后复权 / 不复权 n=[\"5,10,20\", None, \"12,26,9\"], # 每个指标独立参数 cross=\"with_value\" # 原始指标 / 金叉信号 / 二者同时返回 ) result = bk.get( x=code_or_board_or_codes, # 股票代码 / 板块名称或代码 / 批量股票 category=0-3, # 概念板块 / 申万一级 / 申万二级 / 申万三级 fields=\"code,name,symbols\" # 任意单多字段筛选 ) get_data() 面向全市场、长周期和字段筛选；zb.get() 面向 39 种技术指标和 5 种指数计算；bk.get() 用于股票与行业/概念板块的双向映射。数据和计算始终在本机服务侧完成，避免研究代码反复把全市场数据搬运到远程 API 或临时 DataFrame 中。股票优化查询器rd.get/keys/vals()支持区间a>b，正则*，排序，截取[:num]，遍历，类SQL查询。 内置 39 种技术指标： 类别 指标 趋势类 MA、EMA、SMA、WMA、DMA、EXPMA、TRIX、DMI、DFMA、BBI 震荡类 MACD、KDJ、RSI、WR、CCI、PSY、BIAS、ROC、MTM、DPO 通道类 BOLL、KTN、TAQ 量价类 OBV、VR、EMV、MFI、CR、MASS 综合类 ATR、ASI、BRAR、XSII、STD、SUM、HHV、LLV、REF 5 种指数计算方法（zhishu）： 等权、流通市值加权、成交额加权、成交量加权、总市值加权 五种调用方式 调用方式 适用场景 Python SDK 回测、研究和策略开发（同步 get_data() / 异步 get_data_async()） HTTP API 任意语言与本地系统集成（http://127.0.0.1:7899/?cmd=get&t=...） Excel / WPS 宏 表格分析、选股和办公自动化 HTML 页面 无代码查看、筛选和浏览本地行情数据 AI MCP Claude、Cursor、Windsurf 等支持 MCP 协议的 AI 工具直接查询、计算和分析本地数据 MCP 协议为自实现，无需额外安装 MCP SDK。AI 工具通过 MCP 连接后可直接调用 get_data()、zb.get()、bk.get() 查询本地行情、计算指标和分析板块。 调用示例位于 调用方式/。 数据源可控与长期使用 数据源是输入，不是产品的唯一依赖。你可以： 在 sync_url.txt 切换到自己的同步节点、内网服务器或网络共享目录。 用 file:// 或本地目录离线同步已归档的数据快照。 通过本地写入接口接入其他行情来源，补充或更新自有数据。 保留本地数据快照，在任何没有外网、没有 Token 的环境中继续查询与回测。 因此，数据源服务的可用性变化不会让已同步的研究数据失效；更换输入源也不要求替换本地查询、计算和调用层。 数据质量与复权 本地数据保留不复权行情与复权因子，查询时可按需要返回前复权、后复权或不复权结果。可通过本地接口抽样检查复权因子、价格、成交量和公司行为日期；使用者也可以用自己认可的数据源生成或校验本地数据。 硬件与存储要求 项目 最低配置 推荐配置 磁盘空间 约 5GB（仅日线） 约 20GB（含全量分钟线） 内存 2GB 8GB+ 操作系统 Windows 7+ Windows 10+ 数据采用 Zstd 压缩存储，实际磁盘占用远小于同等 CSV/MySQL 方案。 本地网络与安全行为 服务默认监听 127.0.0.1:7899，不会主动暴露到公网。 同步器只访问 sync_url.txt 或 --source 指定的地址；配置为空时不会发起同步请求。 同步文件在写入前校验清单中的 SHA-256 与大小；公共同步节点应使用 HTTPS。 发布包应从 Releases 下载并核对对应版本提供的 SHA-256。 源码与构建 cpp/ 包含本地服务、同步器、客户端计算示例和 CMake 构建定义；sync_url.txt 和调用协议均公开。构建 C++ 组件需要 CMake 3.14+、C++17 编译器、libcurl 和 OpenSSL 开发包。Windows 用户可直接使用 Releases 中的预编译发行包，无需自行编译。 cmake -S cpp -B cpp/build cmake --build cpp/build --config Release 🚀️ 更新与运行示例 许可证与免责声明 本仓库适用 项目许可证。数据版权、使用授权和再分发条件由各数据源及其权利人决定；使用者应自行确认数据源条款。 本项目用于软件学习、数据管理与量化研究，不构成投资建议。任何数据完整性、及时性和交易决策风险均应由使用者独立评估。",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "e606790dc4c1c2aa",
+    "source_type": "community_discussion",
+    "tldr": "free-stockdb 是面向 A 股与 ETF 的本地量化数据引擎，将同步、清洗、复权后的数据本地落盘，内置 39 种技术指标与 5 种指数计算，提供 Python/HTTP/Excel/HTML/MCP 五种调用方式。项目已发布 Windows 版本，Mac 与 Linux 版本即将推出。",
+    "objective_summary": "hello245m 在 GitHub 发布 free-stockdb，一个面向 A 股日K、分钟K与 ETF 分钟、tick 级数据的本地量化引擎。它将数据同步、清洗、复权组织成本地数据底座，内置 39 种技术指标和 5 种指数计算方法，提供 Python SDK、HTTP API、Excel/WPS、HTML 页面与自实现 AI MCP 五种调用方式。数据以 Zstd 压缩本地落盘，支持增量同步与断点续传，并可通过 sync_url.txt 更换数据源。项目当前提供 Windows 预编译发行包，Mac 与 Linux 版本即将推出。",
+    "event_type": "framework_tools",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [],
+      "technologies": [
+        "MCP",
+        "Zstd",
+        "Python SDK",
+        "HTTP API",
+        "C++",
+        "Rust"
+      ],
+      "key_people": []
+    },
+    "key_logic_flow": [
+      "free-stockdb 是一个面向 A 股与 ETF 行情的本地量化数据引擎，将数据同步、清洗、复权与组织整合为可直接批量查询和计算的数据底座。",
+      "项目内置 39 种技术指标、5 种指数计算方法以及股票与行业/概念板块的双向映射，Rust 计算核心据称比 pandas 快 3 倍。",
+      "数据采用 Zstd 压缩本地落盘，支持增量同步、断点续传与 SHA-256 校验，更新与研究相互独立，离线时仍可查询和回测。",
+      "产品提供 Python SDK、HTTP API、Excel/WPS、HTML 页面和自实现的 AI MCP 五种调用方式，数据源可通过 sync_url.txt 自由替换。",
+      "当前已提供 Windows 预编译发行包，Mac 与 Linux 版本正在开发中，服务默认监听 127.0.0.1:7899 且不主动暴露公网。"
+    ],
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "hello245m/free-stockdb",
+        "canonical_name": "free-stockdb",
+        "url": "https://github.com/hello245m/free-stockdb",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "free-stockdb 是一个面向 A 股日K、分钟K与 ETF 分钟、tick级数据的本地量化引擎，将数据同步、清洗、复权、组织为可直接用于批量查询、批量计算研究的数据底座。",
+          "项目内置 39 种技术指标和 5 种指数计算方法，提供 Python SDK、HTTP API、Excel/WPS、HTML 页面以及自实现的 AI MCP 五种调用方式。",
+          "数据通过 Zstd 压缩本地落盘，支持增量同步和断点续传，Windows 用户可从 Releases 下载发行包，Mac 与 Linux 版本即将推出。"
+        ],
+        "article_id": "e606790dc4c1c2aa"
+      }
+    ],
+    "extract_result": "success",
+    "impact_score": {
+      "score": 5.5,
+      "reason": "该工具直击国内散户量化研究者最痛的环节——全市场回测受限于远程 API 限频、Token 订阅成本与数据工程耗时，通过本地落盘 + 增量同步 + 五合一调用方式（含自实现 MCP）实质降低了中文量化社区的研究门槛。其影响范围集中在 A 股/ETF 量化工具链这一细分领域，能改变局部竞争格局（尤其对 Tushare/akshare 类数据服务的使用方式），但本质是社区级工具型产品，单维护者驱动、尚未形成行业范式转移，故评分落在 4-7 分区间的中位。"
+    },
+    "sentiment": "positive",
+    "developer_sentiment": {
+      "tone": "excited",
+      "primary_focus": "数据本地落盘彻底摆脱远程 API 限频与 Token 依赖，且自实现 MCP 协议可直接被 Claude/Cursor 等 AI 工具调用"
+    },
+    "hype_assessment": {
+      "level": "medium",
+      "reason": "产品本身真实可用且经过社区数月测试、已发布 Windows 预编译包，但宣传存在明显包装：'远程 API 方案不是慢是跑不通'、'30 分钟从零到可运行'等对比式营销话术，'Rust 计算核心比 pandas 快 3 倍'未附基准测试数据与方法学，存在一定的宣传放大成分。"
+    },
+    "information_entropy": "high",
+    "domain_disruption": {
+      "technical_innovation": "以 C++ 定制时序引擎 + Rust 计算核心构建本地优先的数据底座，核心工程创新在于复权因子写时计算（保留不复权行情与因子、查询时按需返回前/后复权）、Zstd 压缩落盘 + 增量同步 + SHA-256 校验 + 断点续传的数据一致性机制，以及自实现免 SDK 的 MCP 协议打通 AI 工具链路，将数据工程与策略研究彻底解耦。",
+      "business_model": "以免费开源模式绕过国内行情 API 的 Token 订阅、积分与 IP 风控等持续付费机制，把数据获取从'按调用付费的远程服务'重构为'一次性同步的本地资产'，数据源可通过 sync_url.txt 自由替换，可能倒逼商业数据平台推出本地快照/私有化同步方案并重估其订阅定价模式。"
+    },
+    "engineering_complexity": "production_ready",
+    "compound_value": {
+      "score": 5.0,
+      "reason": "强制 CoT 推理：① 复利来源——该工具直击 A 股全市场回测最大的工程瓶颈（数据同步/清洗/复权/指标计算），以'本地落盘 + Zstd 压缩 + 增量同步 + 数据源可替换'的设计，把数据工程与策略研究解耦，具备成为 A 股本地量化数据层基础设施的潜质；② 增长飞轮——内置自实现 MCP 协议，使 Claude/Cursor/Windsurf 等 AI Agent 可直接消费本地行情数据，踩中'AI Agent + 金融数据工具链'的上升曲线，网络效应随社区用户数累积；③ 关键制约——项目为个人开源（hello245m），无公司主体与可持续商业模式，A 股行情数据的版权与再分发合规风险极高（上游数据源一旦收紧即可能致命），且当前仅 Windows 发行、Mac/Linux 未落地，维护延续性与社区化程度均未得到验证。综合判断处于'细分赛道基础设施'的早期验证期，若完成跨平台、合规数据源与商业化闭环，复利价值可上修，故给予 5.0 分。"
+    },
+    "value_capture_layer": "agent_middleware",
+    "moat_impact": "democratizes_access",
+    "key_beneficiaries": [
+      "hello245m / free-stockdb",
+      "Anthropic (Claude)",
+      "Cursor",
+      "Windsurf",
+      "A股个人量化开发者生态"
+    ],
+    "competitive_casualty": [
+      "tushare",
+      "akshare",
+      "Baostock",
+      "付费 A 股行情 API 中间商"
+    ],
+    "market_opportunities": [
+      "开发者可基于 free-stockdb 的本地数据底座 + 自实现 MCP 接口，开发面向 C 端散户与量化初学者的 AI 投研助手，将行情查询、39 种技术指标计算与板块映射能力封装成智能分析工具",
+      "量化研究者可将其作为本地数据工程基础设施，替代 akshare/tushare 等远程限频接口拉取，显著降低全市场回测的前期数据准备成本，围绕数据源可替换特性构建离线回测工作流",
+      "鉴于 sync_url.txt 支持更换数据源的设计，创业者可围绕合规的 A 股行情数据源提供订阅/分发或数据质量校验服务，补齐该开源项目在数据版权与合规方面的短板"
+    ],
+    "risk_matrix": {
+      "regulatory": "A 股行情数据在中国受交易所授权与版权保护约束，项目依赖第三方数据源的合法性存在不确定性，数据再分发、商用可能涉及数据版权侵权风险；需持续关注数据源授权条款及金融信息服务相关的资质要求。",
+      "technological": "存在被既有成熟方案（akshare、tushare、baostock、聚宽/米筐等）替代的风险；Rust 计算核心'比 pandas 快 3 倍'的宣称缺乏第三方独立验证，且项目迭代依赖单一维护者。",
+      "competitive": "Wind、东方财富 Choice、聚宽、米筐等商业平台拥有更完整的数据覆盖与生态体系；免费开源替代品众多，个人维护的开源项目面临生态挤压与用户迁移风险。",
+      "ethical": "若底层数据来源于未授权抓取或二次分发，存在数据来源合规与伦理隐患；本地指标与板块映射数据若存在偏差，可能误导个人投资者的交易决策（项目已声明不构成投资建议）。",
+      "additional": [
+        "单点维护风险：项目由个人开发者维护，Mac/Linux 版本尚未发布，长期维护与社区可持续性存疑",
+        "供应链安全：用户需下载预编译二进制发行包，存在恶意篡改与投毒风险，依赖 SHA-256 校验与发布者信誉"
+      ]
+    },
+    "confidence": {
+      "impact": "medium",
+      "compound": "medium",
+      "hype": "low"
+    },
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "hello245m/free-stockdb",
+        "canonical_name": "free-stockdb",
+        "url": "https://github.com/hello245m/free-stockdb",
+        "positioning": "面向 A 股与 ETF 的本地量化数据引擎，将数据同步、清洗与复权整合为本地数据底座，内置 39 种技术指标并支持 Python、HTTP、Excel、HTML 与 MCP 五种调用方式。",
+        "technical_signal": "Rust 计算核心实现 39 种技术指标与 5 种指数计算，数据 Zstd 压缩本地落盘并支持增量同步与断点续传，内置申万行业与 1200 概念板块双向映射。",
+        "adoption_signal": "已发布 Windows 预编译发行包，经数月用户测试后宣称 bug 基本消除，Mac 与 Linux 版本即将推出，尚未观察到规模化社区采用或第三方评测证据。",
+        "ecosystem_relevance": "通过自实现 AI MCP 协议使 Claude、Cursor、Windsurf 等 AI 工具可直接查询本地行情与计算指标，数据源以 sync_url.txt 可替换，生态耦合度低。",
+        "target_users": [],
+        "watch_reason": "free-stockdb 将全市场数据同步、复权与指标计算下沉到本地，声称 30 分钟即可跑通全市场回测策略，其本地优先理念契合 A 股量化长尾用户诉求；同时以自实现 MCP 连接主流 AI 工具，具备数据工程与 AI 生态结合的差异化想象空间，值得跟踪 Mac/Linux 版本落地与社区采用进展。",
+        "risk_notes": [
+          "项目仍处早期，Mac 与 Linux 版本未发布，跨平台能力与长期维护性有待验证。",
+          "数据版权与再分发条件由各数据源决定，使用者需自行确认条款，存在合规与数据时效风险。",
+          "比 pandas 快 3 倍、30 分钟跑通策略等性能声明缺乏第三方基准与可复现实验支撑。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "e606790dc4c1c2aa"
+        ],
+        "evidence_snippets": [
+          "free-stockdb 是一个面向 A 股日K、分钟K与 ETF 分钟、tick级数据的本地量化引擎，将数据同步、清洗、复权、组织为可直接用于批量查询、批量计算研究的数据底座。",
+          "项目内置 39 种技术指标和 5 种指数计算方法，提供 Python SDK、HTTP API、Excel/WPS、HTML 页面以及自实现的 AI MCP 五种调用方式。",
+          "数据通过 Zstd 压缩本地落盘，支持增量同步和断点续传，Windows 用户可从 Releases 下载发行包，Mac 与 Linux 版本即将推出。"
+        ]
+      }
+    ]
+  },
+  {
+    "source_dir": "github-trending",
+    "title": "paperswithbacktest/awesome-systematic-trading",
+    "source": "https://github.com/paperswithbacktest/awesome-systematic-trading",
+    "author": [],
+    "published": "",
+    "created": "2026-07-29",
+    "manifest_dates": [
+      "2026-07-29",
+      "2026-07-30",
+      "2026-07-31"
+    ],
+    "description": "A curated list of awesome libraries, packages, strategies, books, blogs, tutorials for systematic trading. Awesome Systematic Trading 希望阅读中文版？点我 We are collecting a list of resources papers, softwares, books, articles for finding, developing, and running systematic trading (quantitative trading) strategies. What will you find here? 97 libraries and packages for research and live trading 40+ strategies described by institutionals and academics 55 books for beginners and professionals 23 videos and interviews And also some blogs and courses 📈 Interested in trading strategies implemented in Python? Visit our comprehensive collection at paperswithbacktest.com for exclusive content! Click here to see the full table of content Libraries and packages Backtesting and Live Trading General - Event Driven Frameworks General - Vector Based Frameworks Cryptocurrencies Trading bots Analytics Indicators Metrics computation Optimization Pricing Risk Broker APIs Data Sources General Cryptocurrencies Data Science Databases Graph Computation Machine Learning TimeSeries Analysis Visualization Strategies Bonds, commodities, currencies, equities Bonds, commodities, equities, REITs Bonds, equities Bonds, equities, REITs Commodities Cryptos Currencies Equities Books Beginner Biography Coding Crypto General High Frequency Trading Machine Learning Videos Blogs Courses How can I help? You can help by submitting an issue with suggestions and by sharing on Twitter: Libraries and packages List of 97 libraries and packages implementing trading bots, backtesters, indicators, pricers, etc. Each library is categorized by its programming language and ordered by descending populatrity (number of stars). Backtesting and Live Trading General - Event Driven Frameworks Repository Description Stars Made with vnpy Python-based open source quantitative trading system development framework, officially released in January 2015, has grown step by step into a full-featured quantitative trading platform zipline Zipline is a Pythonic algorithmic trading library. It is an event-driven system for backtesting. backtrader Event driven Python Backtesting library for trading strategies QUANTAXIS QUANTAXIS 支持任务调度 分布式部署的 股票/期货/期权/港股/虚拟货币 数据/回测/模拟/交易/可视化/多账户 纯本地量化解决方案 QuantConnect Lean Algorithmic Trading Engine by QuantConnect (Python, C#) Rqalpha A extendable, replaceable Python algorithmic backtest && trading framework supporting multiple securities finmarketpy Python library for backtesting trading strategies & analyzing financial markets (formerly pythalesians) backtesting.py Backtesting.py is a Python framework for inferring viability of trading strategies on historical (past) data. Improved upon the vision of Backtrader, and by all means surpassingly comparable to other accessible alternatives, Backtesting.py is lightweight, fast, user-friendly, intuitive, interactive, intelligent and, hopefully, future-proof. zvt Modular quant framework WonderTrader WonderTrader——量化研发交易一站式框架 nautilus_trader A high-performance algorithmic trading platform and event-driven backtester PandoraTrader High-frequency quantitative trading platform based on c++ development, supporting multiple trading APIs and cross-platform HFTBacktest Highly precise backtest on HFT data in Python+Numba aat An asynchronous, event-driven framework for writing algorithmic trading strategies in python with optional acceleration in C++. It is designed to be modular and extensible, with support for a wide variety of instruments and strategies, live trading across (and between) multiple exchanges. sdoosa-algo-trade-python This project is mainly for newbies into algo trading who are interested in learning to code their own trading algo using python interpreter. lumibot A very simple yet useful backtesting and sample based live trading framework (a bit slow to run...) quanttrader Backtest and live trading in Python. Event based. Similar to backtesting.py. gobacktest A Go implementation of event-driven backtesting framework FlashFunk High Performance Runtime in Rust General - Vector Based Frameworks Repository Description Stars Made with vectorbt vectorbt takes a novel approach to backtesting: it operates entirely on pandas and NumPy objects, and is accelerated by Numba to analyze any data at speed and scale. This allows for testing of many thousands of strategies in seconds. pysystemtrade Systematic Trading in python from book Systematic Trading by Rob Carver bt Flexible backtesting for Python based on Algo and Strategy Tree Cryptocurrencies Repository Description Stars Made with Freqtrade Freqtrade is a free and open source crypto trading bot written in Python. It is designed to support all major exchanges and be controlled via Telegram. It contains backtesting, plotting and money management tools as well as strategy optimization by machine learning. Jesse Jesse is an advanced crypto trading framework which aims to simplify researching and defining trading strategies. OctoBot Cryptocurrency trading bot for TA, arbitrage and social trading with an advanced web interface Kelp Kelp is a free and open-source trading bot for the Stellar DEX and 100+ centralized exchanges openlimits A Rust high performance cryptocurrency trading API with support for multiple exchanges and language wrappers. bTrader Triangle arbitrage trading bot for Binance crypto-crawler-rs Crawl orderbook and trade messages from crypto exchanges Hummingbot A client for crypto market making cryptotrader-core Simple to use Crypto Exchange REST API client in rust. Trading bots Trading bots and alpha models. Some of them are old and not maintained. Repository Description Stars Made with Blackbird Blackbird Bitcoin Arbitrage: a long/short market-neutral strategy bitcoin-arbitrage Bitcoin arbitrage - opportunity detector ThetaGang ThetaGang is an IBKR bot for collecting money czsc 缠中说禅技术分析工具；缠论；股票；期货；Quant；量化交易 R2 Bitcoin Arbitrager R2 Bitcoin Arbitrager is an automatic arbitrage trading system powered by Node.js + TypeScript analyzingalpha Implementation of simple strategies PyTrendFollow PyTrendFollow - systematic futures trading using trend following Analytics Indicators Libraries of indicators to predict future price movements. Repository Description Stars Made with ta-lib Perform technical analysis of financial market data go-tart A Go implementation of the [ta-lib]((https://github.com/mrjbq7/ta-lib) with streaming update support pandas-ta Pandas Technical Analysis (Pandas TA) is an easy to use library that leverages the Pandas package with more than 130 Indicators and Utility functions and more than 60 TA Lib Candlestick Patterns finta Common financial technical indicators implemented in Pandas ta-rust Technical analysis library for Rust language Metrics computation Librairies of financial metrics. Repository Description Stars Made with quantstats Portfolio analytics for quants, written in Python ffn A financial function library for Python Optimization Repository Description Stars Made with PyPortfolioOpt Financial portfolio optimizations in python, including classical efficient frontier, Black-Litterman, Hierarchical Risk Parity Riskfolio-Lib Portfolio Optimization and Quantitative Strategic Asset Allocation in Python empyrial Empyrial is a Python-based open-source quantitative investment library dedicated to financial institutions and retail investors, officially released in March 2021 Deepdow Python package connecting portfolio optimization and deep learning. Its goal is to facilitate research of networks that perform weight allocation in one forward pass. spectre Portfolio Optimization and Quantitative Strategic Asset Allocation in Python Pricing Repository Description Stars Made with tf-quant-finance High-performance TensorFlow library for quantitative finance from Google FinancePy A Python Finance Library that focuses on the pricing and risk-management of Financial Derivatives, including fixed-income, equity, FX and credit derivatives PyQL Python wrapper of the famous pricing library QuantLib Risk Repository Description Stars Made with pyfolio Portfolio and risk analytics in Python Broker APIs Repository Description Stars Made with ccxt A JavaScript / Python / PHP cryptocurrency trading API with support for more than 100 bitcoin/altcoin exchanges Ib_insync Python sync/async framework for Interactive Brokers. Coinnect Coinnect is a Rust library aiming to provide a complete access to main crypto currencies exchanges via REST API. PENDAX Javascript SDK for Trading, Data, and Websockets for FTX, FTXUS, OKX, Bybit, & More. Data Sources General Repository Description Stars Made with OpenBB Terminal Investment Research for Everyone, Anywhere. TuShare TuShare is a utility for crawling historical data of China stocks yfinance yfinance offers a threaded and Pythonic way to download market data from Yahoo!Ⓡ finance. AkShare AKShare is an elegant and simple financial data interface library for Python, built for human beings! pandas-datareader Up to date remote data access for pandas, works for multiple versions of pandas. Quandl Get millions of financial and economic dataset from hundreds of publishers via a single free API. findatapy findatapy creates an easy to use Python API to download market data from many sources including Quandl, Bloomberg, Yahoo, Google etc. using a unified high level interface. Investpy Financial Data Extraction from Investing.com with Python Fundamental Analysis Data Fully-fledged Fundamental Analysis package capable of collecting 20 years of Company Profiles, Financial Statements, Ratios and Stock Data of 20.000+ companies. Wallstreet Wallstreet: Real time Stock and Option tools Cryptocurrencies Repository Description Stars Made with Cryptofeed Cryptocurrency Exchange Websocket Data Feed Handler with Asyncio Gekko-Datasets Gekko trading bot dataset dumps. Download and use history files in SQLite format. CryptoInscriber A live crypto currency historical trade data blotter. Download live historical trade data from any crypto exchange. Crypto Lake High frequency order book & trade data for crypto Data Science Repository Description Stars Made with TensorFlow Fundamental algorithms for scientific computing in Python Pytorch Tensors and Dynamic neural networks in Python with strong GPU acceleration Keras The most user friendly Deep Learning for humans in Python Scikit-learn Machine learning in Python Pandas Flexible and powerful data analysis / manipulation library for Python, providing labeled data structures similar to R data.frame objects, statistical functions, and much more Numpy The fundamental package for scientific computing with Python Scipy Fundamental algorithms for scientific computing in Python PyMC Probabilistic Programming in Python: Bayesian Modeling and Probabilistic Machine Learning with Aesara Cvxpy A Python-embedded modeling language for convex optimization problems. Databases Repository Description Stars Made with Marketstore DataFrame Server for Financial Timeseries Data Tectonicdb Tectonicdb is a fast, highly compressed standalone database and streaming protocol for order book ticks. ArcticDB (Man Group) High performance datastore for time series and tick data Graph Computation Repository Description Stars Made with Ray An open source framework that provides a simple, universal API for building distributed applications. Dask Parallel computing with task scheduling in Python with a Pandas like API Incremental (JaneStreet) Incremental is a library that gives you a way of building complex computations that can update efficiently in response to their inputs changing, inspired by the work of Umut Acar et. al. on self-adjusting computations. Incremental can be useful in a number of applications Man MDF Data-flow programming toolkit for Python GraphKit A lightweight Python module for creating and running ordered graphs of computations. Tributary Streaming reactive and dataflow graphs in Python Machine Learning Repository Description Stars Made with QLib (Microsoft) Qlib is an AI-oriented quantitative investment platform, which aims to realize the potential, empower the research, and create the value of AI technologies in quantitative investment. With Qlib, you can easily try your ideas to create better Quant investment strategies. An increasing number of SOTA Quant research works/papers are released in Qlib. FinRL FinRL is the first open-source framework to demonstrate the great potential of applying deep reinforcement learning in quantitative finance. MlFinLab (Hudson & Thames) MlFinLab helps portfolio managers and traders who want to leverage the power of machine learning by providing reproducible, interpretable, and easy to use tools. TradingGym Trading and Backtesting environment for training reinforcement learning agent or simple rule base algo. Stock Trading Bot using Deep Q-Learning Stock Trading Bot using Deep Q-Learning TimeSeries Analysis Repository Description Stars Made with Facebook Prophet Tool for producing high quality forecasts for time series data that has multiple seasonality with linear or non-linear growth. statsmodels Python module that allows users to explore data, estimate statistical models, and perform statistical tests. tsfresh Automatic extraction of relevant features from time series. pmdarima A statistical library designed to fill the void in Python's time series analysis capabilities, including the equivalent of R's auto.arima function. Visualization Repository Description Stars Made with D-Tale (Man Group) D-Tale is the combination of a Flask back-end and a React front-end to bring you an easy way to view & analyze Pandas data structures. mplfinance Financial Markets Data Visualization using Matplotlib btplotting btplotting provides plotting for backtests, optimization results and live data from backtrader. Strategies List of 40+ academic papers describing original systematic trading strategies. Each strategy is categorized by its asset class and ordered by descending Sharpe ratio. 👉 Strategies are now hosted here. Previous list of strategies: Bonds, commodities, currencies, equities Title Sharpe Ratio Volatility Rebalancing Implementation Source Time Series Momentum Effect 0.576 20.5% Monthly QuantConnect Paper Short Term Reversal with Futures -0.05 12.3% Weekly QuantConnect Paper Bonds, commodities, equities, REITs Title Sharpe Ratio Volatility Rebalancing Implementation Source Asset Class Trend-Following 0.502 10.4% Monthly QuantConnect Paper Momentum Asset Allocation Strategy 0.321 11% Monthly QuantConnect Paper Bonds, equities Title Sharpe Ratio Volatility Rebalancing Implementation Source Paired Switching 0.691 9.5% Quarterly QuantConnect Paper FED Model 0.369 14.3% Monthly QuantConnect Paper Bonds, equities, REITs Title Sharpe Ratio Volatility Rebalancing Implementation Source Value and Momentum Factors across Asset Classes 0.155 9.8% Monthly QuantConnect Paper Commodities Title Sharpe Ratio Volatility Rebalancing Implementation Source Skewness Effect in Commodities 0.482 17.7% Monthly QuantConnect Paper Return Asymmetry Effect in Commodity Futures 0.239 13.4% Monthly QuantConnect Paper Momentum Effect in Commodities 0.14 20.3% Monthly QuantConnect Paper Term Structure Effect in Commodities 0.128 23.1% Monthly QuantConnect Paper Trading WTI/BRENT Spread -0.199 11.6% Daily QuantConnect Paper Cryptos Title Sharpe Ratio Volatility Rebalancing Implementation Source Overnight Seasonality in Bitcoin 0.892 20.8% Intraday QuantConnect Paper Rebalancing Premium in Cryptocurrencies 0.698 27.5% Daily QuantConnect Paper Currencies Title Sharpe Ratio Volatility Rebalancing Implementation Source FX Carry Trade 0.254 7.8% Monthly QuantConnect Paper Dollar Carry Trade 0.113 5.8% Monthly QuantConnect Paper Currency Momentum Factor -0.01 6.7% Monthly QuantConnect Paper Currency Value Factor – PPP Strategy -0.103 5% Quarterly QuantConnect Paper Equities Title Sharpe Ratio Volatility Rebalancing Implementation Source Asset Growth Effect 0.835 10.2% Yearly QuantConnect Paper Short Term Reversal Effect in Stocks 0.816 21.4% Weekly QuantConnect Paper Reversal During Earnings-Announcements 0.785 25.7% Daily QuantConnect Paper Size Factor – Small Capitalization Stocks Premium 0.747 11.1% Yearly QuantConnect Paper Low Volatility Factor Effect in Stocks 0.717 11.5% Monthly QuantConnect Paper How to Use Lexical Density of Company Filings 0.688 10.4% Monthly QuantConnect Paper Volatility Risk Premium Effect 0.637 13.2% Monthly QuantConnect Paper Pairs Trading with Stocks 0.634 8.5% Daily QuantConnect Paper Crude Oil Predicts Equity Returns 0.599 11.5% Monthly QuantConnect Paper Betting Against Beta Factor in Stocks 0.594 18.9% Monthly QuantConnect Paper Trend-following Effect in Stocks 0.569 15.2% Daily QuantConnect Paper ESG Factor Momentum Strategy 0.559 21.8% Monthly QuantConnect Paper Value (Book-to-Market) Factor 0.526 11.9% Monthly QuantConnect Paper Soccer Clubs’ Stocks Arbitrage 0.515 14.2% Daily QuantConnect Paper Synthetic Lending Rates Predict Subsequent Market Return 0.494 13.7% Daily QuantConnect Paper Option-Expiration Week Effect 0.452 5% Weekly QuantConnect Paper Dispersion Trading 0.432 8.1% Monthly QuantConnect Paper Momentum in Mutual Fund Returns 0.414 13.6% Quarterly QuantConnect Paper Sector Momentum – Rotational System 0.401 14.1% Monthly QuantConnect Paper Combining Smart Factors Momentum and Market Portfolio 0.388 8.2% Monthly QuantConnect Paper Momentum and Reversal Combined with Volatility Effect in Stocks 0.375 17% Monthly QuantConnect Paper Market Sentiment and an Overnight Anomaly 0.369 3.6% Daily QuantConnect Paper January Barometer 0.365 7.4% Monthly QuantConnect Paper R&D Expenditures and Stock Returns 0.354 8.1% Yearly QuantConnect Paper Value Factor – CAPE Effect within Countries 0.351 20.2% Yearly QuantConnect Paper 12 Month Cycle in Cross-Section of Stocks Returns 0.34 43.7% Monthly QuantConnect Paper Turn of the Month in Equity Indexes 0.305 7.2% Daily QuantConnect Paper Payday Anomaly 0.269 3.8% Daily QuantConnect Paper Pairs Trading with Country ETFs 0.257 5.7% Daily QuantConnect Paper Residual Momentum Factor 0.24 9.7% Monthly QuantConnect Paper Earnings Announcement Premium 0.192 3.7% Monthly QuantConnect Paper ROA Effect within Stocks 0.155 8.7% Monthly QuantConnect Paper 52-Weeks High Effect in Stocks 0.153 19% Monthly QuantConnect Paper Combining Fundamental FSCORE and Equity Short-Term Reversals 0.153 17.6% Monthly QuantConnect Paper Betting Against Beta Factor in International Equities 0.142 9.1% Monthly QuantConnect Paper Consistent Momentum Strategy 0.128 28.8% 6 Months QuantConnect Paper Short Interest Effect – Long-Short Version 0.079 6.6% Monthly QuantConnect Paper Momentum Factor Combined with Asset Growth Effect 0.058 25.1% Monthly QuantConnect Paper Momentum Factor Effect in Stocks -0.008 21.8% Monthly QuantConnect Paper Momentum Factor and Style Rotation Effect -0.056 10% Monthly QuantConnect Paper Earnings Announcements Combined with Stock Repurchases -0.16 0.1% Daily QuantConnect Paper Earnings Quality Factor -0.18 28.7% Yearly QuantConnect Paper Accrual Anomaly -0.272 13.7% Yearly QuantConnect Paper ESG, Price Momentum and Stochastic Optimization N/A N/A Monthly Paper The Positive Similarity of Company Filings and Stock Returns N/A N/A Monthly Paper Books A comprehensive list of 55 books for quantitative traders. Beginner Title Reviews Rating A Beginner’s Guide to the Stock Market: Everything You Need to Start Making Money Today - Matthew R. Kratter How to Day Trade for a Living: A Beginner’s Guide to Trading Tools and Tactics, Money Management, Discipline and Trading Psychology - Andrew Aziz The Little Book of Common Sense Investing: The Only Way to Guarantee Your Fair Share of Stock Market Returns - John C. Bogle Investing QuickStart Guide: The Simplified Beginner’s Guide to Successfully Navigating the Stock Market, Growing Your Wealth & Creating a Secure Financial Future - Ted D. Snow Day Trading QuickStart Guide: The Simplified Beginner’s Guide to Winning Trade Plans, Conquering the Markets, and Becoming a Successful Day Trader - Troy Noonan Introduction To Algo Trading: How Retail Traders Can Successfully Compete With Professional Traders - Kevin J Davey Algorithmic Trading and DMA: An introduction to direct access trading strategies - Barry Johnson Biography Title Reviews Rating My Life as a Quant: Reflections on Physics and Finance - Emanuel Derman How I Became a Quant: Insights from 25 of Wall Street’s Elite: - Barry Schachter Coding Title Reviews Rating Python for Finance: Mastering Data-Driven Finance - Yves Hilpisch Trading Evolved: Anyone can Build Killer Trading Strategies in Python - Andreas F. Clenow Python for Algorithmic Trading: From Idea to Cloud Deployment - Yves Hilpisch Algorithmic Trading with Python: Quantitative Methods and Strategy Development - Chris Conlan Learn Algorithmic Trading: Build and deploy algorithmic trading systems and strategies using Python and advanced data analysis - Sebastien Donadio Crypto Title Reviews Rating The Bitcoin Standard: The Decentralized Alternative to Central Banking - Saifedean Ammous Bitcoin Billionaires: A True Story of Genius, Betrayal, and Redemption - Ben Mezrich Mastering Bitcoin: Programming the Open Blockchain - Andreas M. Antonopoulos Why Buy Bitcoin: Investing Today in the Money of Tomorrow - Andy Edstrom General Title Reviews Rating The Intelligent Investor: The Definitive Book on Value Investing - Benjamin Graham, Jason Zweig How I Invest My Money: Finance experts reveal how they save, spend, and invest - Joshua Brown, Brian Portnoy Naked Forex: High-Probability Techniques for Trading Without Indicators - Alex Nekritin The Four Pillars of Investing: Lessons for Building a Winning Portfolio - William J. Bernstein Option Volatility and Pricing: Advanced Trading Strategies and Techniques, 2nd Edition - Sheldon Natenberg The Art and Science of Technical Analysis: Market Structure, Price Action, and Trading Strategies - Adam Grimes The New Trading for a Living: Psychology, Discipline, Trading Tools and Systems, Risk Control, Trade Management (Wiley Trading) - Alexander Elder Building Winning Algorithmic Trading Systems: A Trader’s Journey From Data Mining to Monte Carlo Simulation to Live Trading (Wiley Trading) - Kevin J Davey Systematic Trading: A unique new method for designing trading and investing systems - Robert Carver Quantitative Momentum: A Practitioner’s Guide to Building a Momentum-Based Stock Selection System (Wiley Finance) - Wesley R. Gray, Jack R. Vogel Algorithmic Trading: Winning Strategies and Their Rationale - Ernest P. Chan Leveraged Trading: A professional approach to trading FX, stocks on margin, CFDs, spread bets and futures for all traders - Robert Carver Trading Systems: A New Approach to System Development and Portfolio Optimisation - Emilio Tomasini, Urban Jaekle Trading and Exchanges: Market Microstructure for Practitioners - Larry Harris Trading Systems 2nd edition: A new approach to system development and portfolio optimisation - Emilio Tomasini, Urban Jaekle Machine Trading: Deploying Computer Algorithms to Conquer the Markets - Ernest P. Chan Quantitative Equity Portfolio Management: An Active Approach to Portfolio Construction and Management (McGraw-Hill Library of Investment and Finance) - Ludwig B Chincarini, Daehwan Kim Active Portfolio Management: A Quantitative Approach for Producing Superior Returns and Controlling Risk - Richard Grinold, Ronald Kahn Quantitative Technical Analysis: An integrated approach to trading system development and trading management - Dr Howard B Bandy Advances in Active Portfolio Management: New Developments in Quantitative Investing - Richard Grinold, Ronald Kahn Professional Automated Trading: Theory and Practice - Eugene A. Durenard Algorithmic Trading and Quantitative Strategies (Chapman and Hall/CRC Financial Mathematics Series) - Raja Velu, Maxence Hardy, Daniel Nehren Quantitative Trading: Algorithms, Analytics, Data, Models, Optimization - Xin Guo, Tze Leung Lai, Howard Shek, Samuel Po-Shing Wong High Frequency Trading Title Reviews Rating Inside the Black Box: A Simple Guide to Quantitative and High Frequency Trading - Rishi K. Narang Algorithmic and High-Frequency Trading (Mathematics, Finance and Risk) - Álvaro Cartea, Sebastian Jaimungal, José Penalva The Problem of HFT – Collected Writings on High Frequency Trading & Stock Market Structure Reform - Haim Bodek An Introduction to High-Frequency Finance - Ramazan Gençay, Michel Dacorogna, Ulrich A. Muller, Olivier Pictet, Richard Olsen Market Microstructure in Practice - Charles-Albert Lehalle, Sophie Laruelle The Financial Mathematics of Market Liquidity - Olivier Gueant High-Frequency Trading - Maureen O’Hara, David Easley, Marcos M López de Prado Machine Learning Title Reviews Rating Dark Pools: The rise of A.I. trading machines and the looming threat to Wall Street - Scott Patterson Advances in Financial Machine Learning - Marcos Lopez de Prado Machine Learning for Algorithmic Trading: Predictive models to extract signals from market and alternative data for systematic trading strategies with Python, 2nd Edition - Stefan Jansen Machine Learning for Asset Managers (Elements in Quantitative Finance) - Marcos M López de Prado Machine Learning in Finance: From Theory to Practice - Matthew F. Dixon, Igor Halperin, Paul Bilokon Artificial Intelligence in Finance: A Python-Based Guide - Yves Hilpisch Algorithmic Trading Methods: Applications Using Advanced Statistics, Optimization, and Machine Learning Techniques - Robert Kissell Videos Title Likes Krish Naik - Machine learning tutorials and their Application in Stock Prediction QuantInsti Youtube - webinars about Machine Learning for trading Siraj Raval - Videos about stock market prediction using Deep Learning Quantopian - Webinars about Machine Learning for trading Sentdex - Machine Learning for Forex and Stock analysis and algorithmic trading QuantNews - Machine Learning for Algorithmic Trading 3 part series Sentdex - Python programming for Finance (a few videos including Machine Learning) Chat with Traders EP042 - Machine learning for algorithmic trading with Bert Mouler Tucker Balch - Applying Deep Reinforcement Learning to Trading Ernie Chan - Machine Learning for Quantitative Trading Webinar Chat with Traders EP147 - Detective work leading to viable trading strategies with Tom Starke Chat with Traders EP142 - Algo trader using automation to bypass human flaws with Bert Mouler Master Thesis presentation, Uni of Essex - Analyzing the Limit Order Book, A Deep Learning Approach Howard Bandy - Machine Learning Trading System Development Webinar Chat With Traders EP131 - Trading strategies, powered by machine learning with Morgan Slade Chat with Traders Quantopian 5 - Good Uses of Machine Learning in Finance with Max Margenot Hitoshi Harada, CTO at Alpaca - Deep Learning in Finance Talk Better System Trader EP028 - David Aronson shares research into indicators that identify Bull and Bear markets. Prediction Machines - Deep Learning with Python in Finance Talk Better System Trader EP064 - Cryptocurrencies and Machine Learning with Bert Mouler Better System Trader EP023 - Portfolio manager Michael Himmel talks AI and machine learning in trading Better System Trader EP082 - Machine Learning With Kris Longmore Blogs Title AAA Quants, Tom Starke Blog AI & Systematic Trading Blackarbs blog Hardikp, Hardik Patel blog Max Dama on Automated Trading Medallion.Club on Systematic Trading (FR) Proof Engineering: The Algorithmic Trading Platform Quantsportal, Jacques Joubert's Blog Quantstart - Machine Learning for Trading articles RobotWealth, Kris Longmore Blog Courses Title AI in Finance AI & Systematic Trading Algorithmic Trading for Cryptocurrencies in Python Coursera, NYU - Guided Tour of Machine Learning in Finance Coursera, NYU - Fundamentals of Machine Learning in Finance Coursera, NYU - Reinforcement Learning in Finance Coursera, NYU - Overview of Advanced Methods for Reinforcement Learning in Finance Hudson and Thames Quantitative Research NYU: Overview of Advanced Methods of Reinforcement Learning in Finance Udacity: Artificial Intelligence for Trading Udacity, Georgia Tech - Machine Learning for Trading",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "e8828a1202069954",
+    "source_type": "community_discussion",
+    "tldr": "GitHub 上的 awesome-systematic-trading 由 paperswithbacktest 维护，系统整理 97 个量化交易相关的开源库与包，按编程语言与星标数分类排序，覆盖回测框架、实盘交易机器人、技术指标、组合优化与数据接口等类别，并指向 paperswithbacktest.com 提供更多内容。",
+    "objective_summary": "该仓库是一个系统化交易（量化交易）资源的精选清单，收集 97 个实现交易机器人、回测器、指标与定价器的库与包。清单按编程语言分类，并以 GitHub 星标数降序排列，涵盖事件驱动与向量化回测框架、加密货币交易机器人、技术指标、投资组合优化、衍生品定价、市场数据接口、时序数据库与分布式计算等类别。仓库作者鼓励社区通过提交 issue 补充建议，并通过 Twitter 分享这份清单。",
+    "event_type": "framework_tools",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [
+        "QuantConnect",
+        "Google",
+        "Microsoft",
+        "Man Group",
+        "Jane Street",
+        "Interactive Brokers"
+      ],
+      "technologies": [
+        "systematic trading",
+        "algorithmic trading",
+        "backtesting",
+        "event-driven framework",
+        "technical analysis",
+        "portfolio optimization",
+        "high-frequency trading",
+        "machine learning"
+      ],
+      "key_people": [
+        "Rob Carver",
+        "Umut Acar"
+      ]
+    },
+    "key_logic_flow": [
+      "该仓库定位为系统化交易资源的精选清单，收集论文、软件、书籍与文章，用于发现、开发与运行量化交易策略。",
+      "清单收录 97 个库与包，覆盖交易机器人、回测器、指标计算与定价器等不同功能类别。",
+      "回测与实盘部分被划分为事件驱动与向量化两类框架，代表性项目包括 vnpy、zipline、backtrader、vectorbt 等。",
+      "加密货币交易部分收录 Freqtrade、Jesse、OctoBot、Hummingbot 等交易机器人与做市客户端。",
+      "其余类别涵盖技术指标、组合优化、定价、数据接口、数据存储、分布式计算与机器学习库，并包含微软的 QLib 等代表性项目。",
+      "作者邀请社区通过提交 issue 推荐更多项目，并通过 Twitter 传播这份清单。"
+    ],
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "paperswithbacktest/awesome-systematic-trading",
+        "canonical_name": "paperswithbacktest/awesome-systematic-trading",
+        "url": "https://github.com/paperswithbacktest/awesome-systematic-trading",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "该仓库由 paperswithbacktest 维护，收集 97 个量化交易相关的库与包，覆盖交易机器人、回测器、指标与定价器等类别。"
+        ],
+        "article_id": "e8828a1202069954"
+      },
+      {
+        "object_type": "project",
+        "name": "vnpy/vnpy",
+        "canonical_name": "vnpy",
+        "url": "https://github.com/vnpy/vnpy",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "vnpy 是基于 Python 的开源量化交易系统开发框架，于 2015 年 1 月正式发布，已逐步成长为一套功能完整的量化交易平台。"
+        ],
+        "article_id": "e8828a1202069954"
+      },
+      {
+        "object_type": "project",
+        "name": "quantopian/zipline",
+        "canonical_name": "zipline",
+        "url": "https://github.com/quantopian/zipline",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Zipline 是一个 Python 风格的算法交易库，采用事件驱动架构，主要被用于对交易策略进行回测。"
+        ],
+        "article_id": "e8828a1202069954"
+      },
+      {
+        "object_type": "project",
+        "name": "mementum/backtrader",
+        "canonical_name": "backtrader",
+        "url": "https://github.com/mementum/backtrader",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "backtrader 是一个事件驱动的 Python 回测库，用于对交易策略进行回测，是量化社区广泛使用的开源工具。"
+        ],
+        "article_id": "e8828a1202069954"
+      },
+      {
+        "object_type": "project",
+        "name": "QUANTAXIS/QUANTAXIS",
+        "canonical_name": "QUANTAXIS",
+        "url": "https://github.com/QUANTAXIS/QUANTAXIS",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "QUANTAXIS 支持任务调度与分布式部署，覆盖股票、期货、期权、港股和虚拟货币的数据、回测、模拟、交易、可视化与多账户场景，是纯本地的量化解决方案。"
+        ],
+        "article_id": "e8828a1202069954"
+      },
+      {
+        "object_type": "project",
+        "name": "QuantConnect/Lean",
+        "canonical_name": "QuantConnect/Lean",
+        "url": "https://github.com/QuantConnect/Lean",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "QuantConnect 开源的 Lean 算法交易引擎支持 Python 与 C#，被列入通用事件驱动回测与实盘交易框架。"
+        ],
+        "article_id": "e8828a1202069954"
+      },
+      {
+        "object_type": "project",
+        "name": "polakowo/vectorbt",
+        "canonical_name": "vectorbt",
+        "url": "https://github.com/polakowo/vectorbt",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "vectorbt 完全基于 pandas 和 NumPy 对象运行，并由 Numba 加速，能够在数秒内分析测试数千个交易策略。"
+        ],
+        "article_id": "e8828a1202069954"
+      },
+      {
+        "object_type": "project",
+        "name": "freqtrade/freqtrade",
+        "canonical_name": "Freqtrade",
+        "url": "https://github.com/freqtrade/freqtrade",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Freqtrade 是免费开源的加密货币交易机器人，支持所有主流交易所并可通过 Telegram 控制，内置回测、绘图与机器学习策略优化工具。"
+        ],
+        "article_id": "e8828a1202069954"
+      },
+      {
+        "object_type": "project",
+        "name": "nautechsystems/nautilus_trader",
+        "canonical_name": "nautilus_trader",
+        "url": "https://github.com/nautechsystems/nautilus_trader",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "nautilus_trader 是一个高性能算法交易平台与事件驱动回测器，定位覆盖从策略研究到实盘交易的完整流程。"
+        ],
+        "article_id": "e8828a1202069954"
+      },
+      {
+        "object_type": "project",
+        "name": "microsoft/qlib",
+        "canonical_name": "QLib",
+        "url": "https://github.com/microsoft/qlib",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "QLib 是微软面向 AI 的量化投资平台，旨在释放量化研究的潜力，并赋能机构与个人量化研究者。"
+        ],
+        "article_id": "e8828a1202069954"
+      },
+      {
+        "object_type": "project",
+        "name": "ccxt/ccxt",
+        "canonical_name": "ccxt",
+        "url": "https://github.com/ccxt/ccxt",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "ccxt 是一个加密货币交易 API，支持超过一百家比特币与山寨币交易所，提供 JavaScript、Python 与 PHP 语言封装。"
+        ],
+        "article_id": "e8828a1202069954"
+      },
+      {
+        "object_type": "project",
+        "name": "robertmartin8/PyPortfolioOpt",
+        "canonical_name": "PyPortfolioOpt",
+        "url": "https://github.com/robertmartin8/PyPortfolioOpt",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "PyPortfolioOpt 是 Python 投资组合优化库，涵盖经典有效前沿、Black-Litterman 模型与分层风险平价等组合方法。"
+        ],
+        "article_id": "e8828a1202069954"
+      },
+      {
+        "object_type": "product",
+        "name": "OpenBB-finance/OpenBBTerminal",
+        "canonical_name": "OpenBB Terminal",
+        "url": "https://github.com/OpenBB-finance/OpenBBTerminal",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "OpenBB Terminal 是面向投资研究的开源终端，聚合行情、数据与研究工具，目标是为任何人提供投资研究能力。"
+        ],
+        "article_id": "e8828a1202069954"
+      },
+      {
+        "object_type": "project",
+        "name": "mrjbq7/ta-lib",
+        "canonical_name": "ta-lib",
+        "url": "https://github.com/mrjbq7/ta-lib",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "ta-lib 用于对金融市场数据进行技术分析，是量化交易中广泛使用的技术指标计算库，并有多种语言移植版本。"
+        ],
+        "article_id": "e8828a1202069954"
+      },
+      {
+        "object_type": "product",
+        "name": "hummingbot/hummingbot",
+        "canonical_name": "Hummingbot",
+        "url": "https://github.com/hummingbot/hummingbot",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Hummingbot 是一个加密货币做市客户端，帮助用户在交易所上自动执行做市策略以提供市场流动性。"
+        ],
+        "article_id": "e8828a1202069954"
+      }
+    ],
+    "extract_result": "success",
+    "impact_score": {
+      "score": 2.5,
+      "reason": "该事件是一个精选资源清单仓库，收录 97 个已有量化交易库（vnpy、zipline、backtrader、Freqtrade 等均为业内成熟项目），本身未提出任何新技术、新架构或新范式，不改变局部竞争格局。其价值在于为量化开发者提供一个按语言与星标排序的索引入口，降低选型成本，属于小圈子的实用资料而非行业级事件，对 AI 行业冲击力有限。因此给出 2.5 分。"
+    },
+    "sentiment": "neutral",
+    "developer_sentiment": {
+      "tone": "neutral",
+      "primary_focus": "清单的维护活跃度与收录完整性，是否涵盖最新高性能框架"
+    },
+    "hype_assessment": {
+      "level": "low",
+      "reason": "仓库内容与其描述完全一致，就是一个按类别整理的资源索引，未出现'颠覆''革命性'等 PR 滥用词汇，也不存在夸大其词的技术宣称。唯一的商业包装是引流到 paperswithbacktest.com 的站内推广，属于温和的内容营销，不构成概念炒作。"
+    },
+    "information_entropy": "medium",
+    "domain_disruption": {
+      "technical_innovation": "无，该事件为纯资源索引，未提出任何新技术架构或工程实现，仅是对既有开源量化工具的汇编整理",
+      "business_model": "以'精选清单'形式聚合开源量化生态作为流量入口，导流至 paperswithbacktest.com 商业平台，体现了量化领域'开源内容引流 + 商业产品变现'的获客模式，也为同类垂直领域内容站提供了可复制的增长范式"
+    },
+    "engineering_complexity": "conceptual",
+    "compound_value": {
+      "score": 2.5,
+      "reason": "该事件本质是 GitHub 精选清单（awesome list），属于'索引'而非技术资产本身，不具备复利积累效应。清单的价值在于降低量化交易开源工具的发现成本，但这一功能可被搜索引擎、推荐算法或 AI 编程助手轻松替代；且清单按 GitHub 星标数降序排列，本质是既有热度的复述而非增量创造。对资本而言，它更多是量化交易开源生态成熟度的'信号灯'——提示该赛道工具链已进入整合期，而非自身具备长期护城河。真正的价值沉淀在清单所收录的头部框架（vnpy、QuantConnect Lean、Freqtrade 等）而非清单本身，故评分偏低。"
+    },
+    "value_capture_layer": "end_application",
+    "moat_impact": "democratizes_access",
+    "key_beneficiaries": [
+      "QuantConnect",
+      "vnpy",
+      "Freqtrade",
+      "Hummingbot",
+      "Microsoft (QLib)",
+      "Interactive Brokers"
+    ],
+    "competitive_casualty": [
+      "传统闭源量化交易平台",
+      "付费量化 SaaS 工具",
+      "中小私募自研量化系统"
+    ],
+    "market_opportunities": [
+      "量化开发者可基于该清单快速完成框架选型，创业者可围绕'量化框架评测、对比与最佳实践'打造内容或咨询服务，沉淀可复用的选型数据资产",
+      "事件驱动与向量化回测的二元分类暴露了'高精度与高速兼顾'的混合框架空白，团队可研发下一代开源回测引擎并在此基础上提供商业化托管服务",
+      "加密交易机器人生态（Freqtrade、Hummingbot 等）已相对成熟，可在此之上叠加 AI 信号订阅、策略托管与合规风控等增值服务，服务散户与小型机构"
+    ],
+    "risk_matrix": {
+      "regulatory": "量化与算法交易在全球多国面临趋严监管（如欧盟 MiFID II、中国程序化交易管理规定），开源回测与交易机器人可能被用于规避监管或市场操纵；加密交易机器人在部分司法辖区（如中国大陆）属非法金融活动，使用与传播均有合规风险。",
+      "technological": "该清单属社区维护的精选列表，技术壁垒低、内容易过时，且文中已标注部分项目'老旧且不再维护'；回测框架迭代快，vectorbt 等向量化范式可能快速淘汰传统事件驱动框架，依赖单一框架存在技术过时风险。",
+      "competitive": "市场上存在多个同类 awesome 清单与聚合站点，流量竞争激烈；QuantConnect 等商业平台以及微软 QLib、Man Group 等机构自带生态与资源，可能挤压纯社区列表的注意力与商业化空间。",
+      "ethical": "量化工具可能加剧市场波动与信息不对称，面向'新手'的自动交易机器人易造成财务损失；加密交易机器人存在被用于拉盘、价格操纵等行为的社会风险。",
+      "additional": []
+    },
+    "confidence": {
+      "impact": "medium",
+      "compound": "medium",
+      "hype": "low"
+    },
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "paperswithbacktest/awesome-systematic-trading",
+        "canonical_name": "paperswithbacktest/awesome-systematic-trading",
+        "url": "https://github.com/paperswithbacktest/awesome-systematic-trading",
+        "positioning": "系统化交易资源的精选清单，汇集 97 个量化交易相关库与包，按编程语言与星标数分类排序，覆盖回测、实盘、指标与数据接口等全链路工具。",
+        "technical_signal": "清单按编程语言与星标数分类，涵盖事件驱动与向量化回测框架、加密货币交易机器人、技术指标、组合优化、定价与数据接口等类别。",
+        "adoption_signal": "已收录 97 个库与包，作者邀请社区通过提交 issue 补充建议，并通过 Twitter 传播这份清单，具备社区协作特征。",
+        "ecosystem_relevance": "由 paperswithbacktest 维护并链接到其官网，收录 vnpy、zipline、vectorbt、Freqtrade、QLib 等生态代表性项目，形成量化开源资源索引。",
+        "target_users": [],
+        "watch_reason": "该清单是量化开源工具链的入口级索引，可追踪事件驱动与向量化回测、加密货币机器人、AI 量化平台等方向的选型格局与社区热度，适合作为量化领域长期观察的风向标。",
+        "risk_notes": [
+          "清单依赖社区维护，收录项目数量与排序会随建议而变化，部分项目可能已停止维护或活跃度不足。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "e8828a1202069954"
+        ],
+        "evidence_snippets": [
+          "该仓库由 paperswithbacktest 维护，收集 97 个量化交易相关的库与包，覆盖交易机器人、回测器、指标与定价器等类别。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "vnpy/vnpy",
+        "canonical_name": "vnpy",
+        "url": "https://github.com/vnpy/vnpy",
+        "positioning": "基于 Python 的开源量化交易系统开发框架，自 2015 年 1 月发布以来成长为功能完整的量化交易平台，支持策略研发到实盘的完整链路。",
+        "technical_signal": "采用事件驱动架构的 Python 量化交易框架，2015 年 1 月正式发布，覆盖策略回测与实盘交易的完整功能体系。",
+        "adoption_signal": "被 awesome-systematic-trading 收录于通用事件驱动回测与实盘框架首位，作为中文量化社区代表性项目用户基础广泛。",
+        "ecosystem_relevance": "在精选清单中位列通用事件驱动框架类别，是中文量化交易开源生态的重要基础设施，长期被社区引用。",
+        "target_users": [],
+        "watch_reason": "vnpy 是国内量化交易开源领域使用最广的框架之一，其功能演进与社区活跃度能反映中文量化工具链的整体生态状况，值得持续跟踪。",
+        "risk_notes": [
+          "文章仅提及 vnpy 的基本定位，未提供其最新版本、维护活跃度与实盘性能细节，实际状态需进一步核实。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "e8828a1202069954"
+        ],
+        "evidence_snippets": [
+          "vnpy 是基于 Python 的开源量化交易系统开发框架，于 2015 年 1 月正式发布，已逐步成长为一套功能完整的量化交易平台。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "quantopian/zipline",
+        "canonical_name": "zipline",
+        "url": "https://github.com/quantopian/zipline",
+        "positioning": "Python 风格的算法交易库，采用事件驱动架构，主要用于对交易策略进行历史数据回测，是量化社区经典的回测工具。",
+        "technical_signal": "采用事件驱动架构设计，面向 Python 生态，专门用于交易策略的历史回测，是该领域被广泛引用的经典实现。",
+        "adoption_signal": "被收录于 awesome-systematic-trading 通用事件驱动回测框架清单，作为经典回测工具被量化社区长期使用与参考。",
+        "ecosystem_relevance": "属于 Quantopian 组织下的经典回测项目，其事件驱动设计理念被后续多个框架借鉴，在量化回测生态中占据源头位置。",
+        "target_users": [],
+        "watch_reason": "zipline 是事件驱动回测领域的经典开源项目，其技术设计与历史沉淀影响深远，观察其维护状态可判断经典工具在现代量化生态中的存续情况。",
+        "risk_notes": [
+          "文章将其列入清单但未说明维护状态，作为老牌框架其活跃度、依赖兼容性与新生态适配能力需进一步核实。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "e8828a1202069954"
+        ],
+        "evidence_snippets": [
+          "Zipline 是一个 Python 风格的算法交易库，采用事件驱动架构，主要被用于对交易策略进行回测。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "mementum/backtrader",
+        "canonical_name": "backtrader",
+        "url": "https://github.com/mementum/backtrader",
+        "positioning": "事件驱动的 Python 回测库，用于对交易策略进行回测，是量化社区广泛使用的开源工具，被列入通用事件驱动框架清单。",
+        "technical_signal": "以事件驱动架构实现策略回测，聚焦 Python 生态的易用性与扩展性，是量化社区广泛使用的经典回测工具。",
+        "adoption_signal": "被 awesome-systematic-trading 收录为通用事件驱动回测框架，并催生 backtesting.py 等改进型项目，社区采用面广。",
+        "ecosystem_relevance": "作为量化回测生态的经典工具，其设计被 backtesting.py 等项目借鉴，在开源量化框架谱系中占据关键位置。",
+        "target_users": [],
+        "watch_reason": "backtrader 是量化社区广泛使用的回测库，其生态地位与社区采用情况能反映经典回测框架在当代量化开发中的持续价值。",
+        "risk_notes": [
+          "文章未提供其维护活跃度与性能表现，作为老牌框架其在速度与可扩展性上可能弱于 vectorbt 等向量化方案。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "e8828a1202069954"
+        ],
+        "evidence_snippets": [
+          "backtrader 是一个事件驱动的 Python 回测库，用于对交易策略进行回测，是量化社区广泛使用的开源工具。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "QUANTAXIS/QUANTAXIS",
+        "canonical_name": "QUANTAXIS",
+        "url": "https://github.com/QUANTAXIS/QUANTAXIS",
+        "positioning": "支持任务调度与分布式部署的纯本地量化解决方案，覆盖股票、期货、期权、港股与虚拟货币的数据、回测、模拟、交易与多账户场景。",
+        "technical_signal": "覆盖数据、回测、模拟、交易、可视化与多账户全场景，支持任务调度与分布式部署，是纯本地的多市场量化框架。",
+        "adoption_signal": "被 awesome-systematic-trading 收录于通用事件驱动框架清单，作为多市场全覆盖方案在量化社区中有一定采用。",
+        "ecosystem_relevance": "同时覆盖股票、期货、期权、港股与虚拟货币等多元资产，在中文量化生态中提供一站式的本地量化解决方案。",
+        "target_users": [],
+        "watch_reason": "QUANTAXIS 以多市场、多资产覆盖与本地化部署为特色，其全场景能力在量化开源框架中较为少见，值得跟踪其功能演进。",
+        "risk_notes": [
+          "文章未提供其项目活跃度、性能与文档质量信息，全场景覆盖也可能带来维护复杂度与稳定性风险。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "e8828a1202069954"
+        ],
+        "evidence_snippets": [
+          "QUANTAXIS 支持任务调度与分布式部署，覆盖股票、期货、期权、港股和虚拟货币的数据、回测、模拟、交易、可视化与多账户场景，是纯本地的量化解决方案。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "QuantConnect/Lean",
+        "canonical_name": "QuantConnect/Lean",
+        "url": "https://github.com/QuantConnect/Lean",
+        "positioning": "QuantConnect 开源的算法交易引擎，支持 Python 与 C#，被列入通用事件驱动回测与实盘交易框架。",
+        "technical_signal": "支持 Python 与 C# 双语言，同时覆盖回测与实盘交易场景，是事件驱动算法交易引擎的开源实现。",
+        "adoption_signal": "被 awesome-systematic-trading 收录为通用事件驱动回测与实盘框架，依托 QuantConnect 商业平台具备较广的社区基础。",
+        "ecosystem_relevance": "Lean 与 QuantConnect 商业云平台协同，开源引擎与托管服务构成完整生态，是量化交易开源生态的重要参与者。",
+        "target_users": [],
+        "watch_reason": "Lean 依托 QuantConnect 平台的商业实践，其开源引擎与云端服务的协同模式代表量化交易工具的商业化方向，值得跟踪。",
+        "risk_notes": [
+          "文章仅提及其基本定位，未提供版本与维护信息，其功能演进受 QuantConnect 商业策略影响的程度需进一步观察。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "e8828a1202069954"
+        ],
+        "evidence_snippets": [
+          "QuantConnect 开源的 Lean 算法交易引擎支持 Python 与 C#，被列入通用事件驱动回测与实盘交易框架。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "polakowo/vectorbt",
+        "canonical_name": "vectorbt",
+        "url": "https://github.com/polakowo/vectorbt",
+        "positioning": "完全基于 pandas 与 NumPy 对象运行的向量化回测框架，由 Numba 加速，能够在数秒内分析测试数千个交易策略。",
+        "technical_signal": "采用向量化架构，基于 pandas 与 NumPy 并由 Numba 加速，具备在数秒内测试数千策略的高性能回测能力。",
+        "adoption_signal": "被 awesome-systematic-trading 收录为向量化回测框架代表，其高性能特性使其成为策略批量测试的热门选择。",
+        "ecosystem_relevance": "作为向量化回测的代表性实现，与事件驱动框架互补，是量化开源工具链中性能导向方向的关键项目。",
+        "target_users": [],
+        "watch_reason": "vectorbt 以向量化与高性能为差异化卖点，代表量化回测从事件驱动向高性能批量分析演进的趋势，值得持续跟踪其性能迭代。",
+        "risk_notes": [
+          "文章未提供其维护状态与文档质量，向量化方案在复杂事件逻辑与实盘场景上的适用边界需关注。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "e8828a1202069954"
+        ],
+        "evidence_snippets": [
+          "vectorbt 完全基于 pandas 和 NumPy 对象运行，并由 Numba 加速，能够在数秒内分析测试数千个交易策略。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "freqtrade/freqtrade",
+        "canonical_name": "Freqtrade",
+        "url": "https://github.com/freqtrade/freqtrade",
+        "positioning": "免费开源的加密货币交易机器人，支持主流交易所并通过 Telegram 控制，内置回测、绘图与机器学习策略优化工具。",
+        "technical_signal": "支持所有主流交易所，内置回测、绘图与资金管理工具，并通过机器学习实现策略优化，具备 Telegram 远程控制能力。",
+        "adoption_signal": "被 awesome-systematic-trading 收录为加密货币交易机器人代表项目，作为免费开源方案在加密量化社区采用广泛。",
+        "ecosystem_relevance": "与 Jesse、OctoBot、Hummingbot 等同被列入加密交易工具生态，是加密货币量化开源社区的核心项目之一。",
+        "target_users": [],
+        "watch_reason": "Freqtrade 是加密货币交易机器人领域的高人气开源项目，其机器学习策略优化与多交易所支持能力代表加密量化工具的发展方向，值得跟踪。",
+        "risk_notes": [
+          "加密货币交易机器人涉及真实资金与市场波动风险，文章未提供其实际运行稳定性与收益表现的证据。"
+        ],
+        "score": 6.0,
+        "article_ids": [
+          "e8828a1202069954"
+        ],
+        "evidence_snippets": [
+          "Freqtrade 是免费开源的加密货币交易机器人，支持所有主流交易所并可通过 Telegram 控制，内置回测、绘图与机器学习策略优化工具。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "nautechsystems/nautilus_trader",
+        "canonical_name": "nautilus_trader",
+        "url": "https://github.com/nautechsystems/nautilus_trader",
+        "positioning": "高性能算法交易平台与事件驱动回测器，定位覆盖从策略研究到实盘交易的完整流程。",
+        "technical_signal": "以高性能为核心卖点，采用事件驱动架构，同时覆盖策略研究与实盘交易的完整流程。",
+        "adoption_signal": "被 awesome-systematic-trading 收录于通用事件驱动回测与实盘框架清单，作为高性能方案进入社区视野。",
+        "ecosystem_relevance": "其高性能定位填补了量化开源生态中低延迟实盘交易的细分需求，与通用回测框架形成差异化互补。",
+        "target_users": [],
+        "watch_reason": "nautilus_trader 面向高性能与低延迟实盘场景，代表量化开源工具向机构级性能方向演进，值得跟踪其工程能力发展。",
+        "risk_notes": [
+          "高性能框架通常学习与部署成本较高，文章未提供其社区规模、文档完整度与实盘验证证据。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "e8828a1202069954"
+        ],
+        "evidence_snippets": [
+          "nautilus_trader 是一个高性能算法交易平台与事件驱动回测器，定位覆盖从策略研究到实盘交易的完整流程。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "microsoft/qlib",
+        "canonical_name": "QLib",
+        "url": "https://github.com/microsoft/qlib",
+        "positioning": "微软面向 AI 的量化投资平台，旨在释放量化研究潜力，赋能机构与个人量化研究者，是 AI 与量化交叉领域的代表项目。",
+        "technical_signal": "将 AI 技术引入量化投资流程，作为微软开源平台面向机构与个人研究者，代表 AI 量化方向的技术范式。",
+        "adoption_signal": "被 awesome-systematic-trading 收录为机器学习类代表项目，依托微软背书在 AI 量化领域具备较高关注度。",
+        "ecosystem_relevance": "作为微软主导的开源项目，QLib 连接 AI 研究社区与量化投资领域，是 AI 量化生态中的标杆性项目。",
+        "target_users": [],
+        "watch_reason": "QLib 是微软推出的 AI 量化投资平台，直接对应 AI 与量化交易的交叉前沿，其功能演进能反映机构级 AI 量化的技术路线，值得重点跟踪。",
+        "risk_notes": [
+          "文章未提供 QLib 的模型性能与回测效果证据，AI 量化策略的实盘有效性存在不确定性。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "e8828a1202069954"
+        ],
+        "evidence_snippets": [
+          "QLib 是微软面向 AI 的量化投资平台，旨在释放量化研究的潜力，并赋能机构与个人量化研究者。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "ccxt/ccxt",
+        "canonical_name": "ccxt",
+        "url": "https://github.com/ccxt/ccxt",
+        "positioning": "加密货币交易 API 库，支持超过一百家比特币与山寨币交易所，提供 JavaScript、Python 与 PHP 语言封装。",
+        "technical_signal": "统一封装一百余家交易所的交易接口，支持 JavaScript、Python 与 PHP 多语言，是加密量化工具链的基础数据与交易层。",
+        "adoption_signal": "被 awesome-systematic-trading 收录，作为多语言统一的交易所接口层在加密量化生态中广泛复用。",
+        "ecosystem_relevance": "多交易所统一 API 使其成为加密交易机器人与量化工具的底层依赖，生态位置重要。",
+        "target_users": [],
+        "watch_reason": "ccxt 是加密货币量化生态的基础设施层，其交易所覆盖广度与接口稳定性影响大量上游工具，值得持续跟踪。",
+        "risk_notes": [
+          "加密货币交易所接口频繁变更，ccxt 的维护压力与交易所覆盖的持续性存在不确定性。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "e8828a1202069954"
+        ],
+        "evidence_snippets": [
+          "ccxt 是一个加密货币交易 API，支持超过一百家比特币与山寨币交易所，提供 JavaScript、Python 与 PHP 语言封装。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "robertmartin8/PyPortfolioOpt",
+        "canonical_name": "PyPortfolioOpt",
+        "url": "https://github.com/robertmartin8/PyPortfolioOpt",
+        "positioning": "Python 投资组合优化库，涵盖经典有效前沿、Black-Litterman 模型与分层风险平价等组合构建方法。",
+        "technical_signal": "实现经典有效前沿、Black-Litterman 模型与分层风险平价等组合优化方法，是量化策略组合构建层的常用工具。",
+        "adoption_signal": "被 awesome-systematic-trading 收录于组合优化类别，作为 Python 生态的主流组合优化库被量化开发者采用。",
+        "ecosystem_relevance": "填补量化开源生态中投资组合优化环节的工具缺口，与回测、交易框架形成上下游衔接。",
+        "target_users": [],
+        "watch_reason": "PyPortfolioOpt 覆盖从有效前沿到分层风险平价的多种组合方法，其功能演进可反映量化投资组合构建工具的发展趋势。",
+        "risk_notes": [
+          "文章未提供其模型实现的数值稳定性与维护活跃度信息，组合优化结果对参数敏感存在应用风险。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "e8828a1202069954"
+        ],
+        "evidence_snippets": [
+          "PyPortfolioOpt 是 Python 投资组合优化库，涵盖经典有效前沿、Black-Litterman 模型与分层风险平价等组合方法。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "OpenBB-finance/OpenBBTerminal",
+        "canonical_name": "OpenBB Terminal",
+        "url": "https://github.com/OpenBB-finance/OpenBBTerminal",
+        "positioning": "面向投资研究的开源终端，聚合行情、数据与研究工具，目标是为任何人提供平等的投资研究能力。",
+        "target_users": [
+          "个人投资者",
+          "量化研究者",
+          "金融数据开发者"
+        ],
+        "product_signal": "聚合行情、数据与研究工具于一体，以开源终端形态为投资研究提供一体化工作台，面向广泛用户群体。",
+        "market_signal": "以开源方式降低投资研究工具门槛，定位服务个人投资者与研究者，正处于投资研究工具民主化的市场进程中。",
+        "differentiation": "与商业化金融终端相比，以开源免费与聚合式工作台形成差异化，目标是将机构级研究能力开放给任何用户。",
+        "watch_reason": "OpenBB Terminal 以开源终端切入投资研究市场，其产品化路径与用户增长能反映投资研究工具民主化趋势，值得跟踪。",
+        "risk_notes": [
+          "文章未提供其商业化模式、数据来源合规性与实际用户规模，开源终端在数据质量与可持续性上存在不确定性。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "e8828a1202069954"
+        ],
+        "evidence_snippets": [
+          "OpenBB Terminal 是面向投资研究的开源终端，聚合行情、数据与研究工具，目标是为任何人提供投资研究能力。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "mrjbq7/ta-lib",
+        "canonical_name": "ta-lib",
+        "url": "https://github.com/mrjbq7/ta-lib",
+        "positioning": "面向金融市场数据的技术分析库，是量化交易中广泛使用的技术指标计算工具，并有多种语言移植版本。",
+        "technical_signal": "提供金融市场技术分析指标计算能力，并有多语言移植版本，是量化交易技术指标层的通用基础设施。",
+        "adoption_signal": "被 awesome-systematic-trading 收录于技术指标类别，作为广泛使用的指标计算库被各语言量化项目复用。",
+        "ecosystem_relevance": "其多语言移植版本（如 go-tart 等）围绕核心指标库形成生态，是量化工具链中高频依赖的底层组件。",
+        "target_users": [],
+        "watch_reason": "ta-lib 是技术指标计算的事实标准库之一，其跨语言生态与持续维护情况可反映量化技术分析工具的底层格局。",
+        "risk_notes": [
+          "文章未提供其维护状态与性能数据，老牌 C 库在接口现代化与并发性能上可能面临新替代方案的竞争。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "e8828a1202069954"
+        ],
+        "evidence_snippets": [
+          "ta-lib 用于对金融市场数据进行技术分析，是量化交易中广泛使用的技术指标计算库，并有多种语言移植版本。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "hummingbot/hummingbot",
+        "canonical_name": "Hummingbot",
+        "url": "https://github.com/hummingbot/hummingbot",
+        "positioning": "加密货币做市客户端，帮助用户在交易所上自动执行做市策略以提供市场流动性。",
+        "target_users": [
+          "加密货币做市商",
+          "量化交易团队",
+          "交易所流动性提供者"
+        ],
+        "product_signal": "以客户端形式自动执行做市策略，为交易所提供流动性，是加密做市场景的专用工具产品。",
+        "market_signal": "面向加密货币市场的做市需求，在 DeFi 与中心化交易所流动性竞争背景下具备明确的应用场景。",
+        "differentiation": "与通用交易机器人不同，聚焦做市与流动性提供这一细分场景，形成垂直化的产品定位。",
+        "watch_reason": "Hummingbot 聚焦加密做市与流动性提供，其产品演进能反映加密货币市场结构与做市工具的商业化进程，值得跟踪。",
+        "risk_notes": [
+          "做市策略涉及资金与市场风险，文章未提供其实际做市收益与风险控制能力证据。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "e8828a1202069954"
+        ],
+        "evidence_snippets": [
+          "Hummingbot 是一个加密货币做市客户端，帮助用户在交易所上自动执行做市策略以提供市场流动性。"
+        ]
+      }
+    ]
+  }
+]

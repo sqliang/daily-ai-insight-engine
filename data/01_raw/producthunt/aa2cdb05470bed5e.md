@@ -7,6 +7,7 @@ published: '2026-08-02'
 created: '2026-08-03'
 manifest_dates:
 - '2026-08-03'
+- '2026-08-04'
 description: 'Title: Inventory: Search every AI Agent & IDE Conversation | Product
   Hunt'
 tags:
