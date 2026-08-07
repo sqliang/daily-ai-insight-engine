@@ -8,6 +8,7 @@ created: '2026-08-04'
 manifest_dates:
 - '2026-08-04'
 - '2026-08-05'
+- '2026-08-06'
 description: LaunchesLaunch archive Most-loved launches by the communityLaunch Guide
   Checklists and pro tips for launching
 tags:

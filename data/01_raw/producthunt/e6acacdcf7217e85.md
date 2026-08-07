@@ -9,6 +9,7 @@ manifest_dates:
 - '2026-07-06'
 - '2026-07-07'
 - '2026-07-08'
+- '2026-08-06'
 description: 'Title: Meta: Building the next evolution of digital connection. | Product
   Hunt'
 tags:

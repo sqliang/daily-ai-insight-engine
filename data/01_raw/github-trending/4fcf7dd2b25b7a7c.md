@@ -7,6 +7,7 @@ created: '2026-08-04'
 manifest_dates:
 - '2026-08-04'
 - '2026-08-05'
+- '2026-08-06'
 description: 'Fast Rust library for PDF inspection, classification, and text extraction.
   Intelligently detects scanned vs text-based PDFs to enable smart routing decisions.pdf-inspector
   Fast Rust library for PDF classification and text extraction. Detects whether a
