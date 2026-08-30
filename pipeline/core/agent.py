@@ -81,6 +81,7 @@ async def call_agent(
     *,
     model: Optional[str] = None,
     max_turns: int = 3,
+    max_tokens: Optional[int] = None,
 ) -> str:
     """
     调用 claude-agent-sdk query() 并收集完整文本响应。
@@ -98,6 +99,9 @@ async def call_agent(
         system_prompt: 系统提示词（定义 Agent 角色和输出格式）
         model: 模型名称，None 时使用 CLI 默认模型
         max_turns: 最大对话轮数（默认 3，提取任务不需要多轮交互）
+        max_tokens: 输出 token 上限。通过 CLAUDE_CODE_MAX_OUTPUT_TOKENS 环境变量透传给
+            CLI 子进程（ClaudeAgentOptions 无 max_tokens 字段、CLI 无 --max-tokens flag）。
+            None 时不设 env，使用 CLI 默认输出上限。
 
     返回：
         Agent 响应的完整文本
@@ -113,6 +117,7 @@ async def call_agent(
         system_prompt=system_prompt,
         model=model,
         max_turns=max_turns,
+        max_tokens=max_tokens,
         stderr=stderr_file,
     )
 
@@ -189,6 +194,7 @@ async def call_agent_with_retry(
     max_turns: int = 3,
     max_retries: int = 3,
     initial_delay: float = 2.0,
+    max_tokens: Optional[int] = None,
 ) -> str:
     """
     带指数退避重试的 Agent 调用包装。
@@ -214,6 +220,8 @@ async def call_agent_with_retry(
         max_turns: 最大对话轮数
         max_retries: 最大重试次数（含首次调用）
         initial_delay: 初始延迟秒数
+        max_tokens: 输出 token 上限。通过 CLAUDE_CODE_MAX_OUTPUT_TOKENS 环境变量透传给
+            CLI 子进程，None 时使用 CLI 默认输出上限。
 
     返回：
         Agent 响应的完整文本
@@ -230,6 +238,7 @@ async def call_agent_with_retry(
                 system_prompt=system_prompt,
                 model=model,
                 max_turns=max_turns,
+                max_tokens=max_tokens,
             )
         except AgentCallError as exc:
             last_error = exc
@@ -536,6 +545,7 @@ def build_agent_options(
     *,
     model: Optional[str] = None,
     max_turns: int = 3,
+    max_tokens: Optional[int] = None,
     stderr: Optional[object] = None,
 ) -> ClaudeAgentOptions:
     """
@@ -557,17 +567,26 @@ def build_agent_options(
           原则：浏览器只允许在抓取阶段（ingest/repair 的 BrowserSession）按需使用，
           LLM 阶段只做纯思考，绝不应该碰浏览器。
         - max_turns: 控制最大对话轮数（提取任务 1 轮即可完成）
+        - max_tokens: 输出 token 上限。ClaudeAgentOptions 无 max_tokens 字段、CLI 无
+          --max-tokens flag，唯一出口是 CLAUDE_CODE_MAX_OUTPUT_TOKENS 环境变量——
+          经 env 字段合并进 CLI 子进程环境（显式 env 永远覆盖继承环境）。
+          None 时 env 置空 dict，等价于不设，沿用 CLI 默认输出上限。
         - stderr: 捕获 Claude CLI 子进程 stderr，用于诊断底层错误
 
     参数：
         system_prompt: 系统提示词
         model: 模型名称
         max_turns: 最大对话轮数
+        max_tokens: 输出 token 上限（透传为 CLAUDE_CODE_MAX_OUTPUT_TOKENS），None 时不设
         stderr: 文件对象，用于接收 CLI stderr
 
     返回：
         配置好的 ClaudeAgentOptions 实例
     """
+    # 输出 token 上限只能经环境变量透传（见上方 docstring）；空 dict 合并为 no-op，
+    # 与不设 env 的现状行为等价，避免回归
+    env = {"CLAUDE_CODE_MAX_OUTPUT_TOKENS": str(max_tokens)} if max_tokens is not None else {}
+
     return ClaudeAgentOptions(
         system_prompt=system_prompt,
         model=model,
@@ -580,4 +599,5 @@ def build_agent_options(
         mcp_servers={},
         strict_mcp_config=True,
         stderr=stderr,
+        env=env,
     )

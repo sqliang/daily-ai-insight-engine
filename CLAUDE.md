@@ -290,6 +290,7 @@ src/
 
 - `ANTHROPIC_API_KEY` — required for pipeline LLM calls
 - `AI_ENGINE_USE_CLAUDE` — set to `true` to use claude-agent-sdk (default: `false`)
+- `PRODUCTHUNT_API_TOKEN` — optional; Product Hunt GraphQL API developer token (create at https://www.producthunt.com/v2/oauth/applications, never expires). When set, producthunt article bodies are fetched via the official API, bypassing the site-wide Cloudflare managed challenge; without it the legacy browser/Jina fallback chain is used
 
 ## Data directories (all gitignored)
 

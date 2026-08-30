@@ -3,14 +3,19 @@ pipeline/ingestion/ingest/producthunt.py — Product Hunt 专用正文兜底
 
 Product Hunt 产品页常被 Cloudflare / JS challenge 拦截，通用 curl +
 trafilatura 链路容易写入 failed 兜底文件。本模块只服务 Stage 1b ingest：
-先用浏览器化请求头/Jina Reader/Playwright 获取页面，再把产品页压缩成
+配置 PRODUCTHUNT_API_TOKEN 时优先走官方 GraphQL API（2026-08 起 PH 整站
+开启 Cloudflare managed challenge，curl/Jina/Playwright 均被稳定拦截，
+官方 API 是唯一可靠通道）；无 token 或 API 失败时保持原有兜底链路
+（浏览器化请求头 → Jina Reader → Playwright），再把产品页压缩成
 下游 extract/analyze 可消费的产品信息 Markdown。
 """
 
 from __future__ import annotations
 
 import html
+import json
 import logging
+import os
 import re
 import urllib.error
 import urllib.request
@@ -20,6 +25,52 @@ from typing import Optional
 from pipeline.core.web_utils import extract_article_content, fetch_via_jina, is_bot_challenge_html
 
 logger = logging.getLogger(__name__)
+
+# Product Hunt 官方 GraphQL API 端点（v2，公开数据只读）
+_PH_GRAPHQL_URL = "https://api.producthunt.com/v2/api/graphql"
+
+# 产品页查询字段：覆盖 extract/analyze 所需的产品定位、描述、话题与社区信号
+_PH_POST_QUERY = """
+query($slug: String!) {
+  post(slug: $slug) {
+    name
+    tagline
+    description
+    votesCount
+    commentsCount
+    website
+    url
+    createdAt
+    topics { edges { node { name } } }
+    makers { name }
+  }
+}
+"""
+
+# 日期窗口兜底查询：/products/ slug 与 post slug 不一致时按发布日期 + 标题/slug 定位
+# 带分页：窗口跨多天时帖子数可能超过单页上限
+_PH_POSTS_BY_DATE_QUERY = """
+query($after: DateTime!, $before: DateTime!, $cursor: String) {
+  posts(postedAfter: $after, postedBefore: $before, first: 50, after: $cursor) {
+    pageInfo { hasNextPage endCursor }
+    edges {
+      node {
+        slug
+        name
+        tagline
+        description
+        votesCount
+        commentsCount
+        website
+        url
+        createdAt
+        topics { edges { node { name } } }
+        makers { name }
+      }
+    }
+  }
+}
+"""
 
 
 @dataclass
@@ -47,12 +98,24 @@ def fetch_producthunt_article(
 
     返回：
         ProductHuntIngestResult: 正文质量达标时返回；全部兜底失败时返回 None。
+
+    设计理由：
+        PH 整站处于 Cloudflare managed challenge 之后，HTTP/Jina/Playwright
+        三条链路实测均会被拦截（仅有概率性放行）。配置了官方 API token 时
+        优先走 GraphQL，结构化数据稳定且信息密度高于正文抓取。
     """
     url = article.get("url", "")
     if not url:
         return None
 
     timeout = int(source_config.get("timeout", 30))
+
+    # --- 优先通道：官方 GraphQL API（需要 PRODUCTHUNT_API_TOKEN）---
+    api_result = _fetch_via_graphql(url, article, timeout=timeout)
+    if api_result is not None:
+        return api_result
+
+    # --- 兜底链路：浏览器化 HTTP → Jina → Playwright ---
     candidates: list[str] = []
 
     direct_html = _fetch_with_browser_headers(url, timeout=timeout)
@@ -157,6 +220,221 @@ def _fetch_with_browser_headers(url: str, timeout: int) -> Optional[str]:
     except (urllib.error.URLError, TimeoutError, OSError) as exc:
         logger.info("Product Hunt 浏览器化请求失败 url=%s: %s", url, exc)
         return None
+
+
+# ---------------------------------------------------------------------------
+# 官方 GraphQL API 通道（优先）
+# ---------------------------------------------------------------------------
+
+def _extract_post_slug(url: str) -> str:
+    """
+    从 Product Hunt 产品页 URL 提取 post slug。
+
+    支持 /products/<slug> 与 /posts/<slug> 两种路径形态，容忍结尾斜杠与 query。
+    无法识别时返回空串（调用方据此跳过 API 通道）。
+    """
+    match = re.search(r"producthunt\.com/(?:products|posts)/([\w-]+)", url)
+    return match.group(1) if match else ""
+
+
+def _fetch_via_graphql(
+    url: str,
+    article: dict,
+    timeout: int,
+) -> Optional[ProductHuntIngestResult]:
+    """
+    通过 Product Hunt 官方 GraphQL API 获取产品结构化数据并组装结果。
+
+    参数：
+        url: 产品页 URL（从中提取 post slug）
+        article: manifest 条目，API 缺字段时兜底
+        timeout: 请求超时秒数
+
+    返回：
+        ProductHuntIngestResult: API 命中且关键字段齐备时返回；
+        未配置 token、slug 无法识别、API 报错或产品不存在时返回 None，
+        由调用方继续走旧兜底链路。
+    """
+    token = os.environ.get("PRODUCTHUNT_API_TOKEN", "").strip()
+    slug = _extract_post_slug(url)
+    if not token or not slug:
+        return None
+
+    try:
+        data = _graphql_request(token, _PH_POST_QUERY, {"slug": slug}, timeout)
+    except (urllib.error.URLError, TimeoutError, OSError, ValueError) as exc:
+        logger.warning("Product Hunt GraphQL 请求失败 url=%s: %s", url, exc)
+        return None
+
+    post = (data.get("data") or {}).get("post")
+    if not post:
+        # /products/<slug> 的 slug 是产品 Hub slug，与 post slug 不一定一致；
+        # 直接用 post(slug:) 查不到时，回退为"发布日期窗口 + 标题/slug 匹配"
+        logger.info("Product Hunt GraphQL 未找到 post slug=%s，尝试按日期窗口匹配", slug)
+        post = _find_post_in_date_window(token, article, slug, timeout)
+        if not post:
+            logger.info("Product Hunt GraphQL 日期窗口匹配失败 slug=%s", slug)
+            return None
+
+    return _result_from_api_post(post, article, url)
+
+
+def _graphql_request(token: str, query: str, variables: dict, timeout: int) -> dict:
+    """向 Product Hunt GraphQL API 发起一次查询，返回解析后的 JSON dict。"""
+    payload = json.dumps({"query": query, "variables": variables}).encode("utf-8")
+    req = urllib.request.Request(
+        _PH_GRAPHQL_URL,
+        data=payload,
+        headers={
+            "Authorization": f"Bearer {token}",
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+        },
+    )
+    with urllib.request.urlopen(req, timeout=max(timeout, 30)) as resp:
+        return json.loads(resp.read().decode("utf-8"))
+
+
+def _find_post_in_date_window(
+    token: str,
+    article: dict,
+    slug: str,
+    timeout: int,
+) -> Optional[dict]:
+    """
+    按发布日期窗口拉取 posts 列表，再用标题或 slug 匹配定位 post。
+
+    设计理由：
+        PH API 的 posts 查询不支持文本搜索，且 postedAfter/postedBefore 的
+        实际语义是"返回 before 当天上榜的那批帖子"（实测：窗口 08-09~08-16
+        返回的全部是 08-16 的帖子，after 不生效）。因此只能逐日查询：
+        按 published 前后窗口内每一天各查一次，在当天批次内做匹配。
+        匹配条件取并集：规范化标题相等、规范化名称与 slug 相等、post slug
+        与 Hub slug 相等（覆盖 manifest 标题与 PH 正式名称不一致的情况，
+        如标题 "Media Sharing" 对应产品 "argos"）。
+    """
+    from datetime import datetime, timedelta
+
+    title = (article.get("title") or "").strip()
+    published = (article.get("published") or "")[:10]
+    if not published:
+        return None
+    try:
+        day = datetime.strptime(published, "%Y-%m-%d")
+    except ValueError:
+        return None
+
+    # 规范化：小写 + 去除非字母数字，容忍标点、空格与大小写差异
+    def _norm(s: str) -> str:
+        return re.sub(r"[^a-z0-9]+", "", s.lower())
+
+    norm_title = _norm(title)
+    norm_slug = _norm(slug)
+
+    # 按可能性排序逐日探测：published 当天优先，再向前后扩展（容忍 RSS 日期偏差）
+    for offset in (0, 1, -1, 2, 3, -2, 4, 5):
+        ds = (day + timedelta(days=offset)).strftime("%Y-%m-%d")
+        base_variables = {"after": ds + "T00:00:00Z", "before": ds + "T23:59:59Z"}
+
+        # 当天批次可能超过单页 20 条上限，分页遍历（防御性上限 3 页）
+        matches: list[dict] = []
+        cursor: Optional[str] = None
+        for _ in range(3):
+            variables = dict(base_variables, cursor=cursor)
+            try:
+                data = _graphql_request(token, _PH_POSTS_BY_DATE_QUERY, variables, timeout)
+            except (urllib.error.URLError, TimeoutError, OSError, ValueError) as exc:
+                logger.warning("Product Hunt GraphQL 日期窗口查询失败: %s", exc)
+                return None
+
+            posts_data = (data.get("data") or {}).get("posts") or {}
+            for edge in posts_data.get("edges", []):
+                node = edge.get("node") or {}
+                norm_name = _norm(node.get("name", ""))
+                if norm_name and (
+                    (norm_title and norm_name == norm_title)
+                    or norm_name == norm_slug
+                    or _norm(node.get("slug", "")) == norm_slug
+                ):
+                    matches.append(node)
+
+            page_info = posts_data.get("pageInfo") or {}
+            if not page_info.get("hasNextPage"):
+                break
+            cursor = page_info.get("endCursor")
+            if not cursor:
+                break
+
+        if len(matches) == 1:
+            return matches[0]
+        if len(matches) > 1:
+            # 同一天出现歧义多个匹配时直接判失败，避免张冠李戴
+            return None
+
+    return None
+
+
+def _result_from_api_post(
+    post: dict,
+    article: dict,
+    url: str,
+) -> Optional[ProductHuntIngestResult]:
+    """
+    把 GraphQL post 对象组装为 ProductHuntIngestResult。
+
+    设计理由：
+        API 返回的 website 是 PH 跳转追踪链接而非真实官网，仍保留原值并标注；
+        正文字段与 _compose_markdown 的输出结构保持一致，保证下游 extract 的
+        提示词对两种来源的 Markdown 形状无感知。
+    """
+    title = (post.get("name") or article.get("title", "")).strip()
+    tagline = (post.get("tagline") or "").strip()
+    description = (post.get("description") or "").strip()
+    if not title or not (tagline or description):
+        return None
+
+    topics = [
+        edge["node"]["name"]
+        for edge in (post.get("topics") or {}).get("edges", [])
+        if edge.get("node", {}).get("name")
+    ]
+    makers = [m["name"] for m in post.get("makers") or [] if m.get("name")]
+
+    parts = [
+        f"# {title}",
+        "",
+        f"Product Hunt product page for {title}.",
+    ]
+    if tagline:
+        parts.extend(["", f"Tagline: {tagline}"])
+    if description:
+        parts.extend(["", f"Description: {description}"])
+    if post.get("website"):
+        parts.extend(["", f"Website: {post['website']}"])
+    if topics:
+        parts.extend(["", f"Launch tags: {', '.join(topics)}"])
+    if post.get("votesCount") is not None:
+        parts.extend(["", f"Product Hunt score: {post['votesCount']} upvotes, {post.get('commentsCount', 0)} comments"])
+    if makers:
+        parts.extend(["", f"Maker or submitter: {', '.join(makers)}"])
+    if post.get("createdAt"):
+        parts.extend(["", f"Feed published date: {post['createdAt'][:10]}"])
+    parts.extend(["", f"Source URL: {url}"])
+    parts.extend([
+        "",
+        "Ingestion note: this content was retrieved via the official Product Hunt GraphQL API. "
+        "It intentionally focuses on the product description, launch metadata, category tags, "
+        "and community signals available on the public product page.",
+    ])
+    body = "\n".join(parts).strip()
+    if len(body) < 300:
+        return None
+
+    return ProductHuntIngestResult(
+        title=title,
+        description=description or tagline or article.get("summary", ""),
+        content=body,
+    )
 
 
 def _to_readable_text(raw: str, url: str) -> str:

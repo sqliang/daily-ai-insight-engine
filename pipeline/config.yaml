@@ -245,9 +245,11 @@ sources:
     display_name: "GitHub Trending"
     description: "GitHub Trending (每日热门仓库)"
     display_description: "GitHub 每日热门开源仓库，过滤 AI/LLM/Agent/MCP 相关项目。追踪开发者社区关注的开源基础设施与框架变化，是技术选型的重要参考。"
-    url: "https://mshibanami.github.io/GitHubTrendingRSS/daily/all.xml"
+    url: "https://github.com/trending"
     language: en
-    fetch_strategy: rss
+    # scrape 策略 + github_trending.py 解析器实现双源容错：直连 github.com/trending 为主源，
+    # 原 RSS 镜像（GitHubTrendingRSS）降级为摘要补充源，避免镜像停更导致当日榜单为空
+    fetch_strategy: scrape
     filter:
       keywords:
         - "AI"
@@ -273,6 +275,8 @@ sources:
     description: "Product Hunt 热门产品"
     display_description: "Product Hunt 热门产品榜单，通过关键词过滤 AI/LLM/Agent/Copilot 相关产品。发现新兴 AI 工具与 SaaS 产品，捕捉 AI 产品化的早期信号。"
     url: "https://www.producthunt.com/feed"
+    # 正文抓取：PH 整站已开启 Cloudflare managed challenge（curl/Jina/Playwright 均会被拦），
+    # 配置 PRODUCTHUNT_API_TOKEN 后优先走官方 GraphQL API（见 .env.example），无 token 时走旧兜底链路
     language: en
     fetch_strategy: rss
     filter:
@@ -663,7 +667,9 @@ llm:
     synthesize:
       name: "deepseek-v4-pro"
       temperature: 0.4
-      max_tokens: 16384
+      # 输出 token 上限：由 pipeline/core/agent.py 经 env 字段透传为
+      # CLAUDE_CODE_MAX_OUTPUT_TOKENS 环境变量，作用于 CLI 子进程（ClaudeAgentOptions 无 max_tokens）
+      max_tokens: 65536
 
   retry:
     max_retries: 3
