@@ -1,0 +1,303 @@
+---
+title: '🤖 AI Agents Weekly: DeepSeek Harness, DeepSeek-V4-Pro, Grok Bot, GLM-5.3,
+  Gemini 3.7 Flash, Muse Glimmer, Harness Evolution Papers, and More'
+source: https://nlp.elvissaravia.com/p/ai-agents-weekly-deepseek-harness
+author: []
+published: '2026-08-15'
+created: '2026-08-16'
+manifest_dates:
+- '2026-08-16'
+- '2026-08-17'
+- '2026-08-18'
+- '2026-08-19'
+- '2026-08-20'
+- '2026-08-22'
+description: DeepSeek Harness, DeepSeek-V4-Pro, Grok Bot, GLM-5.3, Gemini 3.7 Flash,
+  Muse Glimmer, Harness Evolution Papers, and More
+tags:
+- clippings
+extraction_status: success
+pipeline_stage: fact_extracted
+id: f1b0cc7de4d9e7d9
+source_type: newsletter_rss
+tldr: DeepSeek 以 MIT 许可证开源智能体框架 DeepSeek Harness v0.1，并发布主打智能体工作负载的 V4-Pro-0813 正式版；本期周刊还涵盖
+  Grok Bot、GLM-5.3、Gemini 3.7 Flash、Muse Glimmer 等多项发布。
+objective_summary: DeepSeek 发布 DeepSeek Harness v0.1 开发者预览版，基于 Cordis 元框架将模型、工具、会话等作为独立插件挂载，提供四种运行时模式与可恢复的追加式会话日志。同时
+  DeepSeek 推出 V4-Pro-0813 正式版，专注智能体工作负载，在 Terminal Bench 2.1 等智能体基准上表现突出，并支持 OpenAI
+  Responses API 与分档推理力度。新 API 价格自 8 月 16 日生效，非高峰时段费率比高峰时段低 50%。此外 xAI、Z.ai、Meta、Zed
+  等多家公司也在本周发布各自的新产品。
+event_type: framework_tools
+epistemic_status: verified_fact
+entities:
+  companies:
+  - DeepSeek
+  - xAI
+  - Z.ai
+  - Meta
+  - Zed
+  technologies:
+  - Cordis meta-framework
+  - OpenAI Responses API
+  - Terminal Bench
+  - DeepSWE
+  - Toolathlon
+  - CyberGym
+  - AutomationBench
+  - TypeScript
+  key_people: []
+key_logic_flow:
+- DeepSeek 开源了其智能体框架 DeepSeek Harness v0.1，采用 MIT 许可证，面向所有构建智能体 harness 的开发者开放。
+- DeepSeek Harness 基于 Cordis 元框架构建，将模型、工具、技能、会话、沙箱、存储、循环、调度和 UI 作为独立插件进行挂载、卸载与依赖解析。
+- DeepSeek Harness 采用追加式会话日志，模型看到的所有内容都会被记录，会话可以恢复、分叉、搜索和重放。
+- DeepSeek 发布 V4-Pro-0813 正式版，重点面向智能体工作负载，在 Terminal Bench 2.1 上取得 87.9 分，在 DeepSWE
+  上取得 62.7 分。
+- V4-Pro 与 V4-Flash 提供低、高、最大三档推理力度调节，并原生支持 OpenAI Responses API 与一键 Codex 配置，模型名称保持不变。
+- 新 API 价格自 8 月 16 日生效，非高峰时段费率比高峰时段低 50%，适用于可调度的批处理和智能体工作负载。
+object_mentions:
+- object_type: project
+  name: DeepSeek Harness
+  canonical_name: DeepSeek Harness
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - DeepSeek 以 MIT 许可证开源了智能体框架 DeepSeek Harness v0.1，面向所有构建智能体 harness 的开发者开放，仓库已超过
+    9.3 万星。
+  - 该框架基于 Cordis 元框架构建，将模型、工具、技能、会话、沙箱、存储、循环、调度和 UI 作为独立插件进行挂载与依赖解析。
+  - 框架提供标准、代码、极简和创建者四种运行时模式，并可通过 npx @deepseek-ai/dsh web 命令或从源码安装运行。
+  article_id: f1b0cc7de4d9e7d9
+- object_type: model
+  name: DeepSeek-V4-Pro-0813
+  canonical_name: DeepSeek V4-Pro
+  url: null
+  confidence: high
+  article_role: primary_subject
+  evidence_snippets:
+  - DeepSeek 发布 V4-Pro-0813 正式版，作为几乎完全面向智能体工作负载的通用可用版本，通过 DeepSeek Harness 极简模式完成基准测试。
+  - V4-Pro 在 Terminal Bench 2.1 上取得 87.9 分，在 DeepSWE 上取得 62.7 分，在 Toolathlon-Verified
+    上取得 74.1 分。
+  - V4-Pro 原生支持 OpenAI Responses API 与一键 Codex 配置，且模型名称保持不变，现有集成可继续工作。
+  article_id: f1b0cc7de4d9e7d9
+- object_type: project
+  name: Cordis meta-framework
+  canonical_name: Cordis
+  url: null
+  confidence: medium
+  article_role: ecosystem_context
+  evidence_snippets:
+  - DeepSeek Harness 建立在 Cordis 元框架之上，该内核为模型、工具、技能、会话、沙箱、存储等组件提供挂载、卸载与依赖解析能力。
+  article_id: f1b0cc7de4d9e7d9
+- object_type: model
+  name: DeepSeek-V4-Flash
+  canonical_name: DeepSeek V4-Flash
+  url: null
+  confidence: medium
+  article_role: mentioned_reference
+  evidence_snippets:
+  - V4-Pro 与 V4-Flash 都提供低、高、最大三档推理力度调节，开发者可以按任务控制推理成本而无需为简单调用支付过高费用。
+  article_id: f1b0cc7de4d9e7d9
+- object_type: product
+  name: Grok Bot
+  canonical_name: Grok Bot
+  url: null
+  confidence: low
+  article_role: mentioned_reference
+  evidence_snippets:
+  - xAI 推出 Grok Bot 团队协作者，该消息仅在本期周刊的今日要闻标题中列出，文章未提供更多细节。
+  article_id: f1b0cc7de4d9e7d9
+- object_type: model
+  name: GLM-5.3
+  canonical_name: GLM-5.3
+  url: null
+  confidence: low
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Z.ai 发布了面向编码场景的 GLM-5.3，该消息仅在本期周刊的今日要闻标题中提及，未提供具体细节。
+  article_id: f1b0cc7de4d9e7d9
+- object_type: model
+  name: Gemini 3.7 Flash
+  canonical_name: Gemini 3.7 Flash
+  url: null
+  confidence: low
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Gemini 3.7 Flash 将编码成本减半，该消息仅在本期周刊的今日要闻标题中提及，未提供具体细节。
+  article_id: f1b0cc7de4d9e7d9
+- object_type: model
+  name: Muse Glimmer
+  canonical_name: Muse Glimmer
+  url: null
+  confidence: low
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Meta 开源了 Muse Glimmer，该消息仅在本期周刊的今日要闻标题中提及，未提供更多细节。
+  article_id: f1b0cc7de4d9e7d9
+- object_type: model
+  name: Grok 4.6
+  canonical_name: Grok 4.6
+  url: null
+  confidence: low
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Grok 4.6 以半价达到前沿水平，该消息仅在本期周刊的今日要闻标题中提及，未提供更多细节。
+  article_id: f1b0cc7de4d9e7d9
+- object_type: product
+  name: Zed Delta
+  canonical_name: Zed Delta
+  url: null
+  confidence: low
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Zed 推出了面向智能体团队的 Delta，该消息仅在本期周刊的今日要闻标题中提及，未提供更多细节。
+  article_id: f1b0cc7de4d9e7d9
+- object_type: project
+  name: Evo-Bench
+  canonical_name: Evo-Bench
+  url: null
+  confidence: low
+  article_role: mentioned_reference
+  evidence_snippets:
+  - Evo-Bench 用于衡量智能体 harness 的演进，该消息仅在本期周刊的今日要闻标题中提及，未提供更多细节。
+  article_id: f1b0cc7de4d9e7d9
+extract_result: success
+impact_score:
+  score: 6.5
+  reason: 评分依据：本期并非单一事件，而是多事件叠加——DeepSeek 以 MIT 许可证开源智能体框架 Harness v0.1，同时发布专攻智能体工作负载的
+    V4-Pro-0813 正式版，并推出非高峰时段 API 五折的分时计价。三者组合对智能体开发工具链、模型选型与算力成本结构构成实质性冲击，会改变智能体框架与模型定价的局部竞争格局；但
+    Harness 仍为 v0.1 开发者预览版，V4-Pro 的智能体基准多为自家 Harness 自测，且周刊内多数条目（Grok Bot、GLM-5.3、Gemini
+    3.7 Flash 等）属于常规迭代，尚未达到范式转移级别，故评 6.5 分。
+sentiment: positive
+developer_sentiment:
+  tone: excited
+  primary_focus: DeepSeek Harness 的 MIT 开源插件化架构，以及 V4-Pro 在智能体基准上的自测分数与非高峰时段五折 API
+    定价
+hype_assessment:
+  level: low
+  reason: 逐条核对正文，给出的多为可验证事实：许可证类型（MIT）、版本号（v0.1/0813）、具体基准分数（Terminal Bench 2.1 的
+    87.9、DeepSWE 的 62.7）、价格生效日期（8 月 16 日）与兼容性声明（模型名保持不变、支持 Responses API），未见'颠覆''革命性'等
+    PR 滥词。唯一需要警惕的是 V4-Pro 的智能体分数标注为'通过 DeepSeek Harness minimal 模式自测'，存在以自家框架测自家模型的方法学水分，但整体仍属低度包装而非概念炒作，故判定为
+    low。
+information_entropy: high
+domain_disruption:
+  technical_innovation: DeepSeek Harness 基于 Cordis 元框架构建插件化内核，把模型、工具、技能、会话、沙箱、存储、循环、调度与
+    UI 全部抽象为可挂载/卸载并自动解析依赖的独立插件，配合追加式（append-only）会话日志实现会话的恢复、分叉、搜索与重放，是智能体 harness
+    架构层面的工程化创新；V4-Pro 则引入低/高/最大三档推理力度调节，按任务复杂度弹性分配推理开销，避免在简单调用上浪费推理成本，这两点共同指向'面向智能体的模型与运行时一体化'这一新方向。
+  business_model: DeepSeek 推出高峰/非高峰分时计价，非高峰费率较高峰低 50%，专为可调度的批处理与智能体工作负载设计——本质是把电力行业的峰谷电价逻辑引入
+    LLM API 定价，鼓励开发者将非实时智能体任务调度到低成本时段，可能重塑智能体应用的算力成本结构并倒逼竞品跟进同类定价策略。
+engineering_complexity: prototype
+compound_value:
+  score: 7.5
+  reason: DeepSeek 采取'开源 Harness 引流 + Agent 专用模型 API 变现 + 非高峰定价'的组合打法，形成模型层与中间件层联动的复利飞轮：Harness
+    的 9.3 万 star 说明开发者心智已快速建立，而 V4-Pro 在 Terminal Bench/DeepSWE 等 Agent 基准上的领先加上 OpenAI
+    Responses API 兼容，显著降低开发者迁移成本，非高峰 50% 折扣则从成本结构上重塑 Agent 推理的经济模型。若 DeepSeek Harness
+    依循 PyTorch 式的开源标准路径演进，3-5 年后有望成为 Agent 编排层事实基础设施，并为模型层持续引流。但需注意两点不确定性：其一 v0.1
+    仍是开发者预览版，功能成熟度待验证；其二 MIT 许可能被竞对 fork，中间件层历史上（如 LangChain）易被商品化。综合评分落在'细分赛道基础设施'上限，尚不足以确认'行业基石'级别，故给
+    7.5。
+value_capture_layer: agent_middleware
+moat_impact: creates_new_moat
+key_beneficiaries:
+- DeepSeek
+- Cordis
+- 开源 Agent 开发者社区
+- 成本敏感的 AI 创业公司
+competitive_casualty:
+- LangChain
+- CrewAI
+- 闭源 Agent 编排平台
+- OpenAI
+market_opportunities:
+- 开源框架 DeepSeek Harness 采用 MIT 许可证、将模型/工具/会话/沙箱等插件化，开发者可基于其快速搭建垂直行业智能体编排底座，节省从零构建
+  harness 基础设施的成本
+- V4-Pro 非高峰时段 API 费率较高峰低 50%，适合可调度批处理与定时智能体任务的团队设计错峰执行架构，以大幅压缩推理成本并优化单位任务毛利
+- 追加式会话日志支持会话恢复/分叉/搜索/重放，可围绕智能体调试、可观测性、回归测试与审计合规衍生出工具链与咨询服务的创业机会
+risk_matrix:
+  regulatory: DeepSeek 为中国公司主体，面临美国出口管制与部分国家/企业的数据出境限制，企业将核心数据接入其 API 存在合规审查风险；MIT
+    仅覆盖 harness 代码，模型权重与 API 使用条款仍需单独审查
+  technological: 智能体框架赛道快速迭代，Harness v0.1 仍为开发者预览版，面临 LangGraph、OpenAI Agents SDK
+    等成熟生态的替代压力；追加式会话日志与 Cordis 插件机制能否成为事实标准仍不确定
+  competitive: 巨头同周密集发布智能体产品：OpenAI、Google（Gemini 3.7 Flash 编码成本减半）、xAI（Grok Bot、Grok
+    4.6）、Z.ai（GLM-5.3）同步施压，价格战与生态挤压显著
+  ethical: MIT 开源智能体框架降低自主 Agent 的构建门槛，可能被用于规模化滥用、自动化攻击或误导性内容生成；会话日志记录模型所见全部内容，涉及敏感数据留存与隐私伦理问题
+  additional:
+  - API 定价与模型命名策略可能随版本迭代调整，存在成本与兼容性波动风险
+  - 基准成绩为厂商自报（经自家 Harness minimal 模式测试），缺乏第三方独立验证，长期能力对标需审慎
+confidence:
+  impact: high
+  compound: medium
+  hype: medium
+actionable_insight: deep_dive
+object_insights:
+- object_type: project
+  name: DeepSeek Harness
+  canonical_name: DeepSeek Harness
+  url: null
+  positioning: DeepSeek 官方开源的智能体框架，以 MIT 许可证开放，基于 Cordis 元框架将模型、工具、会话等以插件方式解耦挂载，提供四种运行时模式。
+  technical_signal: 基于 Cordis 元框架，将模型、工具、技能、会话、沙箱、存储、循环、调度与 UI 作为独立插件挂载与依赖解析，并采用追加式会话日志支持会话恢复、分叉、搜索与重放。
+  adoption_signal: 仓库发布后已超过 9.3 万星，吸引大量构建智能体 harness 的开发者关注，并可通过 npx @deepseek-ai/dsh
+    web 一键启动降低上手门槛。
+  ecosystem_relevance: 作为 DeepSeek 智能体生态的核心基础设施，与 V4-Pro 正式版形成配套组合，MIT 许可证允许外部开发者自由集成与二次开发。
+  target_users:
+  - 构建智能体 harness 的开发者
+  - 需要可恢复、可回放会话日志的 Agent 工程团队
+  product_signal: null
+  market_signal: null
+  differentiation: null
+  watch_reason: DeepSeek Harness 是头部模型厂商罕见地以 MIT 许可证开源自家智能体框架的案例，其插件化架构与追加式会话日志代表了
+    Agent 工程的前沿方向，且与 V4-Pro 官方基准测试深度绑定，有望成为智能体开发基础设施的重要变量。
+  risk_notes:
+  - 框架尚处 v0.1 开发者预览阶段，接口与生态稳定性仍需观察。
+  - 四类运行时与插件机制的工程复杂度较高，实际项目落地效果仍缺少大规模生产案例验证。
+  score: 8.0
+  article_ids:
+  - f1b0cc7de4d9e7d9
+  evidence_snippets:
+  - DeepSeek 以 MIT 许可证开源了智能体框架 DeepSeek Harness v0.1，面向所有构建智能体 harness 的开发者开放，仓库已超过
+    9.3 万星。
+  - 该框架基于 Cordis 元框架构建，将模型、工具、技能、会话、沙箱、存储、循环、调度和 UI 作为独立插件进行挂载与依赖解析。
+  - 框架提供标准、代码、极简和创建者四种运行时模式，并可通过 npx @deepseek-ai/dsh web 命令或从源码安装运行。
+---
+
+# 🤖 AI Agents Weekly: DeepSeek Harness, DeepSeek-V4-Pro, Grok Bot, GLM-5.3, Gemini 3.7 Flash, Muse Glimmer, Harness Evolution Papers, and More
+
+### DeepSeek Harness, DeepSeek-V4-Pro, Grok Bot, GLM-5.3, Gemini 3.7 Flash, Muse Glimmer, Harness Evolution Papers, and More
+
+In today’s issue:
+
+DeepSeek open-sources its agent harness
+
+DeepSeek-V4-Pro ships agent upgrades
+
+xAI launches Grok Bot teammates
+
+Z.ai drops GLM-5.3 for coding
+
+Gemini 3.7 Flash halves coding cost
+
+Meta open-sources Muse Glimmer
+
+Grok 4.6 hits frontier at half price
+
+Zed launches Delta for agent teams
+
+Evo-Bench measures harness evolution
+
+Study finds 91.8% of skills defective
+
+
+And all the top AI dev news, papers, and tools.
+
+## Top Stories
+
+### DeepSeek Open-Sources Its Agent Harness
+
+DeepSeek released DeepSeek Harness v0.1 as a developer preview, open-sourcing the codebase under MIT and opening it to anyone building agent harnesses.
+
+**Everything is a plugin:**The harness is built on the Cordis meta-framework, a kernel that mounts, unmounts, and resolves dependencies for models, tools, skills, sessions, sandboxes, storage, loops, scheduling, and UI as independent plugins.**Append-only session log:**Everything the model sees is recorded, so sessions can be resumed, forked, searched, and replayed rather than reconstructed from chat history.**Four runtime modes:**Standard ships the full toolset, Code orchestrates operations through TypeScript, Minimal strips down for benchmark runs, and Creator is for building custom presets.**Install path:**Runs via`npx @deepseek-ai/dsh web`
+
+or from source, and the repo has already cleared 93,000 stars.
+
+### DeepSeek Launches V4-Pro
+
+DeepSeek shipped V4-Pro-0813, a general availability release centered almost entirely on agent workloads.
+
+**Agentic benchmarks:**87.9 on Terminal Bench 2.1, 62.7 on DeepSWE, 74.1 on Toolathlon-Verified, 83.3 on CyberGym, and 31.8 on public AutomationBench, tested through DeepSeek Harness in minimal mode.**Flexible reasoning effort:**Low, high, and max tiers across V4-Pro and V4-Flash let you dial spend per task instead of paying reasoning cost on trivial calls.**Native Responses API:**Ships OpenAI Responses API support with one-click Codex setup, and model names stay unchanged so existing integrations keep working.**Peak and off-peak pricing:**New API rates take effect August 16, with off-peak rates 50% below peak for schedulable batch and agent workloads.

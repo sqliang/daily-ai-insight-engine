@@ -1,0 +1,41 @@
+---
+title: Frontier Model Security
+source: https://www.anthropic.com/news/frontier-model-security
+author: []
+published: '2026-08-26'
+created: '2026-08-27'
+manifest_dates:
+- '2026-08-27'
+- '2026-08-28'
+- '2026-08-29'
+description: ''
+tags:
+- clippings
+extraction_status: success
+pipeline_stage: ingested
+id: 5a51bac8c3b3abfe
+---
+
+# Frontier model security
+
+As the capabilities of frontier artificial intelligence models continue to increase rapidly, ensuring the security of these systems has become a critical priority. In our previous posts, we’ve focused on Anthropic’s approach to safety, and Claude’s capabilities and applications. In this post, we are sharing some of the steps we are taking to ensure our models are developed securely. We hope to advance public discussion about how all labs can deploy top models securely, as well as share recommendations for government regulatory approaches that encourage adoption of strong cybersecurity practices. Below we discuss some of our recommendations for cybersecurity best practices, which Anthropic itself is in the process of implementing.
+
+## Summary
+
+Future advanced AI models have the potential to upend economic and national security affairs within and among nation-states. Given the strategic nature of this technology, frontier AI research and models must be secured to levels far exceeding standard practices for other commercial technologies in order to protect them from theft or misuse.
+
+In the near term, governments and frontier AI labs must be ready to protect advanced models and model weights, and the research that feeds into them. This should include measures such as the development of robust best practices widely diffused among industry, as well as treating the advanced AI sector as something akin to “critical infrastructure” in terms of the level of public-private partnership in securing these models and the companies developing them.
+
+Many of these measures can begin as voluntary arrangements, but in time it may be appropriate to use government procurement or regulatory powers to mandate compliance.
+
+## Cybersecurity Best Practices
+
+We believe “two-party control” is necessary to secure advanced AI systems. Two-party control is already used in a range of domains; for example, two people with two keys are needed to open the most secure vaults, and multi-party review patterns have been applied in manufacturing (GMP, ISO 9001), food (FSMA PCQI, ISO 22000), medical (ISO 13485) and finance tech (SOX).
+
+- This pattern should be applied to all systems involved in the development, training, hosting, and deployment of frontier AI models.
+- This pattern is already in widespread use within major tech companies to defend against the most advanced threat actors and mitigate insider risk.
+- It is manifested as a system design where no person has persistent access to production-critical environments, and they must ask a coworker for time-limited access with a business justification for that request.
+- Even emerging AI labs, without large enterprise resources, can implement these controls.
+
+
+We call this **multi-party authorization to AI-critical infrastructure design**. This is a leading security requirement that depends on the gamut of cybersecurity best practices to implement correctly.

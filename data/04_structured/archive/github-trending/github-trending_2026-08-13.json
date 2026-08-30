@@ -1,0 +1,1252 @@
+[
+  {
+    "source_dir": "github-trending",
+    "title": "NVIDIA-NeMo/Switchyard",
+    "source": "https://github.com/NVIDIA-NeMo/Switchyard",
+    "author": [],
+    "published": "",
+    "created": "2026-08-13",
+    "manifest_dates": [
+      "2026-08-13",
+      "2026-08-14"
+    ],
+    "description": "Switchyard Switchyard is a Rust proxy and library for LLM traffic. It routes requests across providers, translates between OpenAI and Anthropic APIs, records operational metrics, and provides typed, composable routing algorithms. Why Switchyard? Point a coding agent such as Claude Code or Codex at an open-source model. Switchyard translates between the OpenAI Chat, Anthropic Messages, and OpenAI Responses formats, so the agent keeps speaking its native API while the request is served by vLLM, NVIDIA NIM, Ollama, or any OpenAI-compatible endpoint. The same proxy can spread traffic across several models for A/B benchmarking, apply signal-driven stage routing, or run a custom algorithm you write yourself. Features Protocol Translation: convert between OpenAI Chat, Anthropic Messages, and OpenAI Responses formats Multi-Backend Routing: random routing, LLM-as-classifier routing, signal-driven stage-router, or your own algorithm Operational Metrics: Prometheus metrics cover requests, errors, latency, tokens, and routing overhead Maturity Switchyard is pre-alpha software that is evolving rapidly. The API and algorithms are expected to change significantly before we reach v1.0. Warning Experimental software. Not for production use. Quick Start Choose the launcher path to run Claude Code, Codex CLI, or OpenClaw through Switchyard. Choose the server path to run Switchyard as a standalone proxy. Choose the library path to embed routing in your own Rust application. Launcher Path Install uv if it is not already available, then install the published Switchyard tool: curl -LsSf https://astral.sh/uv/install.sh | sh source \"$HOME/.local/bin/env\" uv tool install --python 3.10 \"nemo-switchyard[cli]\" The coding agent you launch must also be installed and on your PATH. This does not install the standalone switchyard-server binary; use the Server Path for that. Set an OpenRouter key and launch against the packaged deployment: export OPENROUTER_API_KEY=\"your-openrouter-key\" # pragma: allowlist secret switchyard launch claude --model switchyard switchyard launch codex --model switchyard switchyard launch openclaw --model switchyard To use your own native TOML deployment, pass its route ID and configuration: switchyard launch claude --model my-route --config routes.toml Server Path Use this path to install and run the standalone Rust proxy. Install Rust with Cargo, then install the published binary: cargo install --locked switchyard-server switchyard-server --help Cargo builds the release binary and installs it into ~/.cargo/bin by default. Create routes.toml using the Getting Started guide, then validate it and start the server: export OPENROUTER_API_KEY=\"your-openrouter-key\" # pragma: allowlist secret switchyard-server --config routes.toml --dry-run switchyard-server --config routes.toml --host 127.0.0.1 --port 4000 Verify the proxy in another terminal: curl http://localhost:4000/health For a complete configuration and a test request, follow Getting Started. Library Path switchyard-libsy embeds the routing algorithms in your own Rust application. It never calls a model itself: an algorithm decides which target to use and hands every model call back to you, so it drops into an existing proxy, gateway, or agent runtime without owning an HTTP stack. Pair it with switchyard-llm-client when you want the calls made for you. [dependencies] switchyard-libsy = { git = \"https://github.com/NVIDIA-NeMo/Switchyard.git\" } switchyard-protocol = { git = \"https://github.com/NVIDIA-NeMo/Switchyard.git\" } See Getting Started for setup and the algorithm list, or the switchyard-libsy crate docs. Routing Strategies Strategy Use it when Route type LLM Classifier Request content should decide whether a turn needs the weak or strong tier. llm_classifier Stage Router Signals already in the conversation, such as tool results and errors, should route most turns without an extra model call. stage_router Escalation Router Every turn runs on the weak tier first, and a judge reads that answer to decide whether to send the same request to the strong tier. llm_classifier with mode = \"escalation\" Random You need a fixed traffic split for A/B tests, baselines, or cost experiments. random A passthrough route registers one target under one model ID with no routing decision. See the Routing Overview for the common route shape and self-hosted targets. Architecture flowchart LR clients[\"Clients\"] switchyard[\"Switchyard<br/>routing · translation · fallback\"] backends[\"Model backends\"] clients -->|\"OpenAI / Anthropic API\"| switchyard switchyard -->|\"provider-native format\"| backends Clients keep their native OpenAI or Anthropic API format. Switchyard picks a configured backend, forwards the request in that backend's own format, and translates the response back into the shape the client expects. The server accepts OpenAI Chat Completions, OpenAI Responses, and Anthropic Messages. Each configured LLM client selects one upstream format. Documentation Getting Started: complete launcher and standalone server walkthroughs Core Concepts: LLM clients, targets, routes, model IDs, and routing algorithms Routing Overview: choose and configure a routing algorithm switchyard-server: server configuration, routing algorithms, and metrics switchyard-libsy: embed routing algorithms in a Rust application switchyard-protocol: provider-neutral request, response, and streaming types switchyard-translation: request, response, and stream translation Community Issues: GitHub Issues Code of Conduct: Code of Conduct License Apache 2.0 License. Copyright NVIDIA Corporation.",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "1da80cd2d3f3e0fd",
+    "source_type": "community_discussion",
+    "tldr": "NVIDIA NeMo 开源了 Switchyard：一个用 Rust 编写的 LLM 流量代理与库，可在 OpenAI/Anthropic API 与 vLLM、NVIDIA NIM、Ollama 等后端之间做协议转换与多后端路由，目前为 pre-alpha 实验软件。",
+    "objective_summary": "NVIDIA 的 NeMo 团队在 GitHub 上发布了名为 Switchyard 的 Rust 项目，这是一个面向大语言模型流量的代理与库。它通过转换 OpenAI Chat、Anthropic Messages 和 OpenAI Responses 协议，把来自 Claude Code、Codex CLI 等编码代理的请求路由到 vLLM、NVIDIA NIM、Ollama 等后端，并支持随机、LLM 分类器、信号驱动阶段路由等算法以及 Prometheus 运维指标。项目目前处于 pre-alpha 阶段，API 与算法在 v1.0 前预计会有较大变化，不建议用于生产环境。",
+    "event_type": "framework_tools",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [
+        "NVIDIA"
+      ],
+      "technologies": [
+        "Rust",
+        "LLM proxy",
+        "OpenAI API",
+        "Anthropic Messages API",
+        "OpenAI Responses API",
+        "vLLM",
+        "NVIDIA NIM",
+        "Ollama",
+        "Prometheus",
+        "TOML"
+      ],
+      "key_people": []
+    },
+    "key_logic_flow": [
+      "Switchyard 是用 Rust 编写的 LLM 流量代理与库，核心能力包括协议转换、多后端路由和运维指标采集。",
+      "在 Launcher 路径中，用户安装 nemo-switchyard CLI 后，可将 Claude Code、Codex CLI、OpenClaw 等编码代理的 OpenAI/Anthropic 格式请求转接至 OpenRouter 或本地 TOML 配置的后端。",
+      "在 Server 路径中，用户通过 cargo 安装 switchyard-server，用 routes.toml 配置并启动独立代理服务，对外暴露 /health 等端点。",
+      "在 Library 路径中，switchyard-libsy 把路由算法嵌入用户自己的 Rust 应用，switchyard-protocol 提供供应商中立的请求/响应/流类型，可与 switchyard-llm-client 配对使用。",
+      "项目支持随机路由、LLM 分类器、阶段路由、升级路由等策略，也支持 passthrough 直连单个目标。",
+      "Switchyard 当前为 pre-alpha 软件，API 与算法在达到 v1.0 前预计会大幅变化，不适用于生产环境。"
+    ],
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "NVIDIA-NeMo/Switchyard",
+        "canonical_name": "Switchyard",
+        "url": "https://github.com/NVIDIA-NeMo/Switchyard",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "文章指出，Switchyard 是一个面向大模型流量的 Rust 代理与库，可在不同供应商之间转发请求并完成 OpenAI 与 Anthropic API 的协议转换。",
+          "它记录 Prometheus 运维指标，并提供类型化、可组合的路由算法。",
+          "项目采用 Apache 2.0 许可证，版权归 NVIDIA Corporation 所有。"
+        ],
+        "article_id": "1da80cd2d3f3e0fd"
+      },
+      {
+        "object_type": "product",
+        "name": "nemo-switchyard",
+        "canonical_name": "nemo-switchyard",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "文章介绍 Launcher 路径时指出，可通过 uv tool install --python 3.10 'nemo-switchyard[cli]' 安装已发布的 Switchyard 命令行工具。",
+          "安装后可用 switchyard launch claude --model switchyard 等命令把编码代理的流量导入 Switchyard。"
+        ],
+        "article_id": "1da80cd2d3f3e0fd"
+      },
+      {
+        "object_type": "product",
+        "name": "switchyard-server",
+        "canonical_name": "switchyard-server",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Server 路径使用 cargo install --locked switchyard-server 安装独立 Rust 代理，并用 switchyard-server --config routes.toml 启动服务。",
+          "启动后可通过 curl http://localhost:4000/health 验证代理是否正常运行。"
+        ],
+        "article_id": "1da80cd2d3f3e0fd"
+      },
+      {
+        "object_type": "project",
+        "name": "switchyard-libsy",
+        "canonical_name": "switchyard-libsy",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "Library 路径中，switchyard-libsy 把路由算法嵌入用户自己的 Rust 应用，本身不调用模型，只决定目标并把模型调用交回调用方。",
+          "用户可在 Cargo 依赖中通过 GitHub 仓库地址引入 switchyard-libsy。"
+        ],
+        "article_id": "1da80cd2d3f3e0fd"
+      },
+      {
+        "object_type": "project",
+        "name": "switchyard-protocol",
+        "canonical_name": "switchyard-protocol",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "switchyard-protocol 提供与供应商无关的请求、响应和流式类型，支撑在不同后端之间完成格式转换。",
+          "它可以与 switchyard-libsy 一起通过 GitHub 仓库地址引入到 Rust 项目中。"
+        ],
+        "article_id": "1da80cd2d3f3e0fd"
+      },
+      {
+        "object_type": "project",
+        "name": "switchyard-llm-client",
+        "canonical_name": "switchyard-llm-client",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "当需要由库自动发起模型调用时，用户可以将 switchyard-libsy 与 switchyard-llm-client 配对使用。",
+          "这样既能复用 Switchyard 的路由算法，又不必自己实现上游模型的 HTTP 调用。"
+        ],
+        "article_id": "1da80cd2d3f3e0fd"
+      }
+    ],
+    "extract_result": "success",
+    "impact_score": {
+      "score": 6.5,
+      "reason": "NVIDIA NeMo 在 LLM 网关/代理赛道开源了一个 Rust 实现的协议转换与路由工具，直接连接 Claude Code、Codex CLI 等主流 coding agent 与 vLLM、NIM、Ollama 等后端。考虑到 NVIDIA 的硬件-软件生态号召力、NeMo 品牌以及当前 LLM 路由市场的热度，这是一个重要产品发布，可能改变局部竞争格局。但它仍处于 pre-alpha，明确不建议生产使用，因此尚未达到 ChatGPT 或 Transformer 级别的范式转移。"
+    },
+    "sentiment": "positive",
+    "developer_sentiment": {
+      "tone": "excited",
+      "primary_focus": "Rust 高性能实现与 OpenAI/Anthropic/vLLM 多后端互操作性，以及 pre-alpha 阶段的稳定性和 API 演进风险"
+    },
+    "hype_assessment": {
+      "level": "low",
+      "reason": "文章没有使用“颠覆”“革命性”等 PR 滥用词汇，反而反复强调 pre-alpha、experimental、not for production，并给出了具体的功能清单、安装命令和路由算法对比。虽然 NVIDIA 品牌本身会带来关注，但信息披露较为克制，干货多于包装。"
+    },
+    "information_entropy": "high",
+    "domain_disruption": {
+      "technical_innovation": "以 Rust 提供 LLM 流量的协议转换（OpenAI Chat、Anthropic Messages、OpenAI Responses）与多后端路由，封装为 CLI 启动器、独立 server 和可嵌入库三种形态；内置随机、LLM-as-classifier、信号驱动阶段路由、升级路由等算法，并提供 Prometheus 运维指标。",
+      "business_model": "巩固 NVIDIA NeMo/NIM 在开源推理后端和 AI agent 工具链中的入口地位，可能对 LiteLLM 等 LLM 网关/代理产品形成竞争压力；通过 Rust 高性能定位吸引需要自建网关的企业用户，但 pre-alpha 阶段短期内难以形成直接商业变现。"
+    },
+    "engineering_complexity": "prototype",
+    "compound_value": {
+      "score": 5.5,
+      "reason": "Switchyard 切中 LLM 应用落地的真实痛点：OpenAI / Anthropic / OpenAI Responses 协议并存，企业需要在自托管（vLLM/NIM/Ollama）与商业 API 之间灵活切换。协议转换 + 多后端路由 + 可嵌入 Rust 库的组合，使其具备成为 Agent 与模型 serving 之间基础设施的潜力，长期复利来自生态位卡位。但当前为 pre-alpha，API 与算法在 v1.0 前会大幅变动，商业化路径也不清晰（Apache 2.0 开源，大概率不直接收费，而是为 NVIDIA NIM / GPU 销售导流）。同类竞品已有 LiteLLM、OpenRouter、Kong 等，且协议层转换本身壁垒不高，用户迁移成本低。因此不能给高分；5.5 分反映‘赛道方向正确、巨头背书加分、但尚处早期且护城河未验证’的投资判断。"
+    },
+    "value_capture_layer": "agent_middleware",
+    "moat_impact": "democratizes_access",
+    "key_beneficiaries": [
+      "NVIDIA",
+      "NVIDIA NIM",
+      "vLLM",
+      "Ollama",
+      "OpenRouter"
+    ],
+    "competitive_casualty": [
+      "LiteLLM 商业版",
+      "闭源 LLM 网关 / API 代理初创公司",
+      "依赖 API 锁定生态的单一模型供应商"
+    ],
+    "market_opportunities": [
+      "企业级 LLM 网关厂商可基于 Switchyard 封装私有化多模型路由产品，面向金融、医疗等对数据主权和成本敏感的客户提供统一接入、协议转换与可观测能力。",
+      "AI Agent 与编码工具团队可借鉴其阶段路由与协议翻译设计，将 Claude Code、Codex CLI 等客户端请求转接到 vLLM、NVIDIA NIM 或 Ollama 后端，显著降低 Token 成本并增强数据可控性。",
+      "基础设施开发者应关注 Rust 在 LLM 代理与高性能路由中的工程实践，把多后端调度、A/B 评测和 Prometheus 指标作为云原生 AI 架构的技能补充点。"
+    ],
+    "risk_matrix": {
+      "regulatory": "无",
+      "technological": "项目处于 pre-alpha 阶段，API 与路由算法在 v1.0 前可能大幅调整，早期集成存在迁移成本；协议转换层需持续跟进 OpenAI/Anthropic API 的更新与兼容。",
+      "competitive": "LLM 路由/代理赛道已有 LiteLLM、Kong、Envoy Gateway、Cloudflare AI Gateway 等成熟方案，Switchyard 虽有 NVIDIA 生态与 Rust 性能优势，但市场教育和生态份额面临挤压。",
+      "ethical": "代理层会转发用户请求与模型响应，若部署不当可能导致敏感数据经过不可控组件；路由策略设计不当时也可能放大模型偏见、错误输出或被用于规避内容安全过滤。",
+      "additional": [
+        "pre-alpha 软件不建议用于生产环境，存在稳定性、文档完善度与社区支持不足的风险。",
+        "NVIDIA 品牌背书虽带来关注度，但也可能使项目过度依赖 NVIDIA 生态（如 NIM、Triton），削弱其中立性与跨厂商兼容性。"
+      ]
+    },
+    "confidence": {
+      "impact": "high",
+      "compound": "medium",
+      "hype": "medium"
+    },
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "NVIDIA-NeMo/Switchyard",
+        "canonical_name": "Switchyard",
+        "url": "https://github.com/NVIDIA-NeMo/Switchyard",
+        "positioning": "NVIDIA NeMo 团队开源的 Rust LLM 流量代理与库，专注于多供应商协议转换、智能路由与运维指标采集。",
+        "technical_signal": "项目用 Rust 实现 OpenAI Chat、Anthropic Messages 与 OpenAI Responses 三种协议互转，并内置随机、LLM 分类器、信号驱动阶段路由等算法。",
+        "adoption_signal": "当前处于 pre-alpha 阶段，API 与算法在 v1.0 前预计大幅变化，官方明确不建议用于生产环境。",
+        "ecosystem_relevance": "可桥接 Claude Code、Codex CLI 等编码代理与 vLLM、NVIDIA NIM、Ollama 等后端，补全开源模型 serving 生态中的协议兼容层。",
+        "target_users": [],
+        "watch_reason": "NVIDIA 背书加上 Rust 高性能实现与多协议翻译能力，使其在 AI 代理基础设施赛道具备长期跟踪价值，但需关注 v1.0 前的稳定性演进。",
+        "risk_notes": [
+          "项目为 pre-alpha 软件，API 与路由算法在 v1.0 前可能发生大幅变化。",
+          "官方文档已标注实验性质，不建议将 Switchyard 用于生产环境。"
+        ],
+        "score": 8.0,
+        "article_ids": [
+          "1da80cd2d3f3e0fd"
+        ],
+        "evidence_snippets": [
+          "文章指出，Switchyard 是一个面向大模型流量的 Rust 代理与库，可在不同供应商之间转发请求并完成 OpenAI 与 Anthropic API 的协议转换。",
+          "它记录 Prometheus 运维指标，并提供类型化、可组合的路由算法，支持随机、LLM 分类器、信号驱动阶段路由等多种策略。",
+          "项目采用 Apache 2.0 许可证，版权归 NVIDIA Corporation 所有，目前为 pre-alpha 实验软件，不建议用于生产环境。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "nemo-switchyard",
+        "canonical_name": "nemo-switchyard",
+        "positioning": "Switchyard 的 Python CLI 启动器，用于将 Claude Code、Codex CLI、OpenClaw 等编码代理的流量导入 Switchyard 路由层。",
+        "target_users": [
+          "Claude Code 用户",
+          "Codex CLI 用户",
+          "OpenClaw 用户",
+          "希望用开源模型替代商业 API 的开发者"
+        ],
+        "product_signal": "通过 uv tool install 一键安装，支持 launch claude/codex/openclaw 等子命令，并可用 --config routes.toml 指向自定义路由配置。",
+        "market_signal": "作为已发布的 PyPI 工具降低上手门槛，瞄准希望用开源或第三方模型替代商业 API 的编码代理用户。",
+        "differentiation": "以命令行封装方式让现有编码代理无需改造即可使用 Switchyard 的多后端路由与协议转换能力。",
+        "watch_reason": "CLI 形态是 Switchyard 生态触达终端用户的关键入口，其安装体验、命令覆盖度与路由配置灵活性将决定项目早期采用曲线。",
+        "risk_notes": [
+          "依赖 uv 与 Python 3.10 环境，且未随工具安装 switchyard-server 二进制。",
+          "作为 pre-alpha 项目的一部分，CLI 稳定性与后端兼容性存在不确定性。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "1da80cd2d3f3e0fd"
+        ],
+        "evidence_snippets": [
+          "文章介绍 Launcher 路径时指出，可通过 uv tool install --python 3.10 'nemo-switchyard[cli]' 安装已发布的 Switchyard 命令行工具，用于启动编码代理。",
+          "安装后可用 switchyard launch claude --model switchyard 等命令，把 Claude Code、Codex CLI、OpenClaw 等编码代理的流量导入 Switchyard，实现多后端路由与协议转换。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "switchyard-server",
+        "canonical_name": "switchyard-server",
+        "positioning": "Switchyard 的独立 Rust 代理服务，对外暴露 HTTP 端点并承担协议转换与多后端路由的核心职责。",
+        "target_users": [
+          "需要自托管 LLM 网关的团队",
+          "使用 vLLM/NIM/Ollama 后端的运维人员",
+          "Rust 生态开发者"
+        ],
+        "product_signal": "通过 cargo install --locked 安装，使用 routes.toml 配置路由，提供 --dry-run 校验与 /health 健康检查端点。",
+        "market_signal": "面向需要自托管 LLM 代理网关的团队，可与 OpenRouter 或本地 vLLM、NVIDIA NIM、Ollama 等后端集成。",
+        "differentiation": "以纯 Rust 二进制提供高性能独立代理，适合嵌入现有 serving 架构作为网关层，且不会强制接管 HTTP 栈。",
+        "watch_reason": "作为 Switchyard 的服务端核心，其路由策略丰富度、运维指标能力与部署灵活性将决定项目在 enterprise serving 场景中的落地潜力。",
+        "risk_notes": [
+          "需要 Rust/Cargo 环境，构建与部署门槛高于 Python CLI 工具，对非 Rust 团队不够友好。",
+          "pre-alpha 阶段，routes.toml 配置格式与服务端 API 可能发生变化。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "1da80cd2d3f3e0fd"
+        ],
+        "evidence_snippets": [
+          "Server 路径使用 cargo install --locked switchyard-server 安装独立 Rust 代理，并用 switchyard-server --config routes.toml 启动服务，对外提供 LLM 流量路由与协议转换能力。",
+          "启动后可通过 curl http://localhost:4000/health 验证代理是否正常运行，服务对外暴露 OpenAI/Anthropic 兼容接口并完成协议转换。"
+        ]
+      }
+    ]
+  },
+  {
+    "source_dir": "github-trending",
+    "title": "ZuodaoTech/everyone-can-use-english",
+    "source": "https://github.com/ZuodaoTech/everyone-can-use-english",
+    "author": [],
+    "published": "",
+    "created": "2026-08-13",
+    "manifest_dates": [
+      "2026-08-13"
+    ],
+    "description": "人人都能用英语 AI 是当今世界上最好的外语老师，Enjoy 做 AI 最好的助教。 网页版 Enjoy 全新版本已经上线，可访问 https://enjoy.bot 直接使用。 浏览器插件 Enjoy 浏览器插件已经上线，支持 YouTube 和 Netflix。可访问 Chrome Web Store 安装使用。 桌面版 新版桌面版将会是对网页版的套壳和增强，即将发布。 相关阅读 一千小时（2024） 简要说明 训练任务 语音塑造 大脑内部 自我训练 人人都能用英语（2010） 简介 第一章：起点 第二章：口语 第三章：语音 第四章：朗读 第五章：词典 第六章：语法 第七章：精读 第八章：叮嘱 后记 常见问题 请查询 文档 FAQ。",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "3b7443283136d07b",
+    "source_type": "community_discussion",
+    "tldr": "该 GitHub 页面正文仅包含会话刷新提示，未提供可提取的项目实质内容。",
+    "objective_summary": "来源为 GitHub 仓库 ZuodaoTech/everyone-can-use-english，但抓取的页面正文只显示「已在另一标签页登录/登出/切换账户」等系统提示，没有任何项目介绍、功能说明或技术细节。因此无法从正文提取有效事实。",
+    "event_type": "framework_tools",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [
+        "ZuodaoTech"
+      ],
+      "technologies": [],
+      "key_people": []
+    },
+    "key_logic_flow": [
+      "来源 URL 指向 GitHub 仓库 ZuodaoTech/everyone-can-use-english。",
+      "页面正文仅包含三条 GitHub 会话状态提示和关闭按钮，无有效项目信息。",
+      "因缺乏实质内容，无法提取功能描述、技术栈或使用场景等事实。"
+    ],
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "ZuodaoTech/everyone-can-use-english",
+        "canonical_name": "ZuodaoTech/everyone-can-use-english",
+        "url": "https://github.com/ZuodaoTech/everyone-can-use-english",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "文章标题与来源 URL 均明确指向 GitHub 仓库 ZuodaoTech/everyone-can-use-english。",
+          "页面正文未显示 README 或代码内容，仅出现 GitHub 会话刷新提示，无法进一步确认项目细节。"
+        ],
+        "article_id": "3b7443283136d07b"
+      }
+    ],
+    "extract_result": "success",
+    "impact_score": {
+      "score": 1.0,
+      "reason": "该页面没有返回任何项目实质内容，仅包含 GitHub 会话刷新提示，无法识别其技术方案、功能特性或社区影响。因此它既无局部竞争格局改变，也无范式转移潜力，属于无效/空内容条目。"
+    },
+    "sentiment": "neutral",
+    "developer_sentiment": {
+      "tone": "neutral",
+      "primary_focus": "抓取的页面无实质内容，仅显示会话状态提示，无法评估项目技术价值"
+    },
+    "hype_assessment": {
+      "level": "low",
+      "reason": "正文中不存在任何产品宣称、'颠覆'或'革命性'等 PR 词汇，也没有任何可包装的信息；这是一条因反爬/会话问题导致的内容缺失记录，谈不上炒作。"
+    },
+    "information_entropy": "low",
+    "domain_disruption": {
+      "technical_innovation": "无",
+      "business_model": "无"
+    },
+    "engineering_complexity": "conceptual",
+    "compound_value": {
+      "score": 1.0,
+      "reason": "正文仅包含 GitHub 会话刷新提示，没有任何项目介绍、功能说明或技术细节，无法判断该项目的用户价值、商业模式或技术壁垒。从投资角度看，这属于无信息增量的噪声来源，既不能证明其长期复利价值，也无法构成对任何细分赛道基础设施的预判。除非能重新抓取到仓库 README 或 release 信息，否则不应给出高于'昙花一现'的评分。"
+    },
+    "value_capture_layer": "end_application",
+    "moat_impact": "neutral",
+    "key_beneficiaries": [
+      "ZuodaoTech"
+    ],
+    "competitive_casualty": [],
+    "market_opportunities": [
+      "当前正文无法提取项目实质内容，暂无可识别的商业化机会；建议优先修复 GitHub 仓库类信源的抓取成功率，再评估项目价值"
+    ],
+    "risk_matrix": {
+      "regulatory": "无",
+      "technological": "无",
+      "competitive": "无",
+      "ethical": "无",
+      "additional": [
+        "信源抓取失败导致事实缺失，存在数据完整性与项目真实性无法验证的风险",
+        "GitHub 会话状态提示可能反映反爬或登录态变化，需关注后续抓取策略调整"
+      ]
+    },
+    "confidence": {
+      "impact": "low",
+      "compound": "low",
+      "hype": "low"
+    },
+    "actionable_insight": "ignore",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "ZuodaoTech/everyone-can-use-english",
+        "canonical_name": "ZuodaoTech/everyone-can-use-english",
+        "url": "https://github.com/ZuodaoTech/everyone-can-use-english",
+        "positioning": "该 GitHub 仓库名称为 everyone-can-use-english，定位于英语学习相关的开源项目，但当前页面未展示具体内容。",
+        "target_users": [],
+        "watch_reason": "仓库名称显示其可能与英语学习相关，但由于正文仅含 GitHub 会话提示，无法确认功能、技术栈与活跃度，仅能作为待回填信息记录。",
+        "risk_notes": [
+          "页面正文被会话提示替换，缺乏 README、代码与技术细节，无法评估项目真实价值。",
+          "抓取的仓库页面可能处于未登录或反爬状态，需重新获取有效内容后再做分析。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "3b7443283136d07b"
+        ],
+        "evidence_snippets": [
+          "文章标题与来源 URL 均明确指向 GitHub 仓库 ZuodaoTech/everyone-can-use-english。",
+          "页面正文未显示 README 或代码内容，仅出现 GitHub 会话刷新提示，无法进一步确认项目细节。"
+        ]
+      }
+    ]
+  },
+  {
+    "source_dir": "github-trending",
+    "title": "embabel/embabel-agent",
+    "source": "https://github.com/embabel/embabel-agent",
+    "author": [],
+    "published": "",
+    "created": "2026-08-13",
+    "manifest_dates": [
+      "2026-08-13"
+    ],
+    "description": "Agent framework for the JVM. Pronounced Em-BAY-bel /ɛmˈbeɪbəl/Embabel Agent Framework &nbsp;&nbsp;&nbsp;&nbsp; Embabel (Em-BAY-bel) is a framework for authoring agentic flows on the JVM that seamlessly mix LLM-prompted interactions with code and domain models. Supports intelligent path finding towards goals. Written in Kotlin but offers a natural usage model from Java. From the creator of Spring. &nbsp; Talk to the Docs Have questions? Talk to the docs via the Embabel-powered hub — an Embabel agent that answers your questions about the framework in natural language. Key Concepts Models agentic flows in terms of: Actions: Steps an agent takes Goals: What an agent is trying to achieve Conditions: Conditions to assess before executing an action or determining that a goal has been achieved. Conditions are reassessed after each action is executed. Domain model: Objects underpinning the flow and informing Actions, Goals and Conditions. Plan: A sequence of actions to achieve a goal. Plans are dynamically formulated by the system, not the programmer. The system replans after the completion of each action, allowing it to adapt to new information as well as observe the effects of the previous action. This is effectively an OODA loop. Application developers don't usually have to deal with these concepts directly, as most conditions result from data flow defined in code, allowing the system to infer pre and post conditions. These concepts underpin these differentiators versus other agent frameworks: Sophisticated planning. Goes beyond a finite state machine or sequential execution with nesting by introducing a true planning step, using a non-LLM AI algorithm. This enables the system to perform tasks it wasn’t programmed to do by combining known steps in a novel order, as well as make decisions about parallelization and other runtime behavior. Superior extensibility and reuse: Because of dynamic planning, adding more domain objects, actions, goals and conditions can extend the capability of the system, without editing FSM definitions or existing code. Strong typing and the benefits of object orientation: Actions, goals and conditions are informed by a domain model, which can include behavior. Everything is strongly typed and prompts and manually authored code interact cleanly. No more magic maps. Enjoy full refactoring support. Other benefits: Platform abstraction: Clean separation between programming model and platform internals allows running locally while potentially offering higher QoS in production without changing application code. Designed for LLM mixing: It is easy to build applications that mix LLMs, ensuring the most cost-effective yet capable solution. This enables the system to leverage the strengths of different models for different tasks. In particular, it facilitates the use of local models for point tasks. This can be important for cost and privacy. Built on Spring and the JVM, making it easy to access existing enterprise functionality and capabilities. For example: Spring can inject and manage agents, including using Spring AOP to decorate functions. Robust persistence and transaction management solutions are available. Designed for testability from the ground up. Both unit testing and agent end to end testing are easy. Flows can be authored in one of two ways: An annotation-based model similar to Spring MVC, with types annotated with the Spring stereotype @Agent, using @Goal, @Condition and @Action methods. Idiomatic Kotlin DSL with agent { and action { blocks. Either way, flows are backed by a domain model of objects that can have rich behavior. We are working toward allowing natural language actions and goals to be deployed. The planning step is pluggable. The default planning approach is Goal Oriented Action Planning. GOAP is a popular AI planning algorithm used in gaming. It allows for dynamic decision-making and action selection based on the current state of the world and the goals of the agent. Goals, actions and plans are independent of GOAP. Embabel also supports Utility AI out of the box, which can run the same actions but chooses actions based on (potentially dynamic) utility scores rather than strict preconditions and postconditions. This is valuable for exploration and open-ended tasks, when we do not need to achieve a specific goal but want to maximize overall utility. The framework executes via an AgentPlatform implementation. An agent platform supports the following modes of execution: Focused, where user code requests particular functionality: User code calls a method to run a particular agent, passing in input. This is ideal for code-driven flows such as a flow invoked in response to an incoming event. Closed, where user intent (or another incoming event) is classified to choose an agent. The platform tries to find a suitable agent among all the agents it knows about. Agent choice is dynamic, but only actions defined within the particular agent will run. Open, where the user's intent is assessed and the platform uses all its resources to try to achieve it. The platform tries to find a suitable goal among all the goals it knows about and builds a custom agent to achieve it from the start state, including relevant actions and conditions. The platform will not proceed if it is unconvinced as to the applicability of any goal. The GoalChoiceApprover interface provides developers a way to limit goal choice further. Open mode is the most powerful, but least deterministic. In open mode, the platform is capable of finding novel paths that were not envisioned by developers, and even combining functionality from multiple providers. Even in open mode, the platform will only perform individual steps that have been specified. (Of course, steps may themselves be LLM transforms, in which case the prompts are controlled by user code but the results are still non-deterministic.) Possible future modes: Evolving mode: Where the platform can work with multiple goals in the same process and modify a running process to add further goals and agents. For example, an action can realize that it has become important to achieve additional goals. Embabel agent systems will also support federation, both with other Embabel systems (allowing planning to incorporate remote actions and goals) and third party agent frameworks. Quick Start Get an agent running in under 5 minutes. Create your own agent repo from our Java or Kotlin GitHub template by clicking the \"Use this template\" button. You'll have an agent running in under a minute if you already have an OPENAI_API_KEY and have Maven installed. 📚 For examples and tutorials, see the Embabel Agent Examples Repository 🚗 For a sophisticated, realistic example application, see the Tripper travel planner agent AI-generated travel itinerary with detailed recommendations Map link included in output Why Is Embabel Needed? TL;DR Because the evolution of agent frameworks is early and there's a lot of room for improvement; because an agent framework on the JVM will deliver great business value. Why do we need an agent framework at all? We can write code without higher level abstractions, directly invoking LLMs and controlling flow directly in code. However, a higher level agent framework offers compelling benefits. For example: Breaking up LLM interactions, making them simpler and more focused. This maximizes reuse and minimizes cost and errors. It often allows us to use cheaper models for point interactions. Facilitating both unit and integration testing, which remain as important with agentic systems as with any other software systems. Increasing composability where subflows and individual actions can be reused Making applications more manageable and robust, enabling a workflow manager to control their execution and retry operations while maintaining previous state Enhancing safety through the ability to apply guardrails in many places Why do we need an agent framework for the JVM when solutions exist in Python?: While agent frameworks initially appeared predominantly Python, it's early and there's plenty of room for novel and superior approaches. The key adjacency is not the LLM--which is a simple HTTP call away--but existing code and infrastructure assets that are more valuable on the JVM than in Python. Why not use just Spring AI? Spring AI is great. We build on it, and embrace the Spring component model. However, we believe that most applications should work with higher level APIs. An analogy: Spring AI exists at the level of the Servlet API, while Embabel is more like Spring MVC. Complex requirements are much easier to express and test in Embabel than with direct use of Spring AI. Why not attempt to contribute this project to Spring? This project requires different governance from Spring, where most projects exist in stable environments and dependability and stability outweighs rapid innovation. Second, the concepts are not JVM-specific. We hope that Embabel will become the leading agent framework across platforms. While the Spring brand is valuable in Java, it is not in TypeScript or Python. Show Me The Code In Java or Kotlin, agent implementation code is intuitive and easy to test. Java @Agent(description = \"Find news based on a person's star sign\") public class StarNewsFinder { private final HoroscopeService horoscopeService; private final int storyCount; // Services are injected by Spring public StarNewsFinder( HoroscopeService horoscopeService, @Value(\"${star-news-finder.story.count:5}\") int storyCount) { this.horoscopeService = horoscopeService; this.storyCount = storyCount; } @Action public StarPerson extractStarPerson(UserInput userInput, Ai ai) { return ai .withLlm(OpenAiModels.GPT_41) .createObjectIfPossible( \"\"\" Create a person from this user input, extracting their name and star sign: %s\"\"\".formatted(userInput.getContent()), StarPerson.class ); } @Action public Horoscope retrieveHoroscope(StarPerson starPerson) { return new Horoscope(horoscopeService.dailyHoroscope(starPerson.sign())); } // toolGroups specifies tools that are required for this action to run @Action(toolGroups = {CoreToolGroups.WEB}) public RelevantNewsStories findNewsStories( StarPerson person, Horoscope horoscope, Ai ai) { var prompt = \"\"\" %s is an astrology believer with the sign %s. Their horoscope for today is: <horoscope>%s</horoscope> Given this, use web tools and generate search queries to find %d relevant news stories summarize them in a few sentences. Include the URL for each story. Do not look for another horoscope reading or return results directly about astrology; find stories relevant to the reading above. For example: - If the horoscope says that they may want to work on relationships, you could find news stories about novel gifts - If the horoscope says that they may want to work on their career, find news stories about training courses.\"\"\".formatted( person.name(), person.sign(), horoscope.summary(), storyCount); return ai .withDefaultLlm() .createObject(prompt, RelevantNewsStories.class); } // The @AchievesGoal annotation indicates that completing this action // achieves the given goal, so the agent can be complete @AchievesGoal( description = \"Write an amusing writeup for the target person based on their horoscope and current news stories\", export = @Export( remote = true, name = \"starNewsWriteupJava\", startingInputTypes = {StarPerson.class, UserInput.class}) ) @Action public Writeup writeup( StarPerson person, RelevantNewsStories relevantNewsStories, Horoscope horoscope, Ai ai) { var llm = LlmOptions .withModel(OpenAiModels.GPT_41_MINI) // High temperature for creativity .withTemperature(0.9); var newsItems = relevantNewsStories.getItems().stream() .map(item -> \"- \" + item.getUrl() + \": \" + item.getSummary()) .collect(Collectors.joining(\"\\n\")); var prompt = \"\"\" Take the following news stories and write up something amusing for the target person. Begin by summarizing their horoscope in a concise, amusing way, then talk about the news. End with a surprising signoff. %s is an astrology believer with the sign %s. Their horoscope for today is: <horoscope>%s</horoscope> Relevant news stories are: %s Format it as Markdown with links.\"\"\".formatted( person.name(), person.sign(), horoscope.summary(), newsItems); return ai .withLlm(llm) .createObject(prompt, Writeup.class); } } Kotlin @Agent(description = \"Find news based on a person's star sign\") class StarNewsFinder( // Services such as Horoscope are injected by Spring private val horoscopeService: HoroscopeService, // Potentially externalized by Spring @param:Value(\"\\${star-news-finder.story.count:5}\") private val storyCount: Int = 5, ) { @Action fun extractPerson( userInput: UserInput, ai: Ai ): StarPerson = // All prompts are typesafe ai.withDefaultLlm() .createObject(\"Create a person from this user input, extracting their name and star sign: $userInput\") // This action doesn't use an LLM // Embabel makes it easy to mix LLM use with regular code @Action fun retrieveHoroscope(starPerson: StarPerson) = Horoscope(horoscopeService.dailyHoroscope(starPerson.sign)) // This action uses tools // \"toolGroups\" specifies tools that are required for this action to run @Action(toolGroups = [ToolGroup.WEB]) fun findNewsStories( person: StarPerson, horoscope: Horoscope, ai: Ai, ): RelevantNewsStories = ai.withDefaultLlm().createObject( \"\"\" ${person.name} is an astrology believer with the sign ${person.sign}. Their horoscope for today is: <horoscope>${horoscope.summary}</horoscope> Given this, use web tools and generate search queries to find $storyCount relevant news stories summarize them in a few sentences. Include the URL for each story. Do not look for another horoscope reading or return results directly about astrology; find stories relevant to the reading above. For example: - If the horoscope says that they may want to work on relationships, you could find news stories about novel gifts - If the horoscope says that they may want to work on their career, find news stories about training courses. \"\"\".trimIndent() ) // The @AchievesGoal annotation indicates that completing this action // achieves the given goal, so the agent run will be complete @AchievesGoal( description = \"Write an amusing writeup for the target person based on their horoscope and current news stories\", ) @Action fun writeup( person: StarPerson, relevantNewsStories: RelevantNewsStories, horoscope: Horoscope, ai: Ai, ): Writeup = ai .withLlm( LlmOptions .withModel(model) .withTemperature(0.9) ) .createObject( \"\"\" Take the following news stories and write up something amusing for the target person. Begin by summarizing their horoscope in a concise, amusing way, then talk about the news. End with a surprising signoff. ${person.name} is an astrology believer with the sign ${person.sign}. Their horoscope for today is: <horoscope>${horoscope.summary}</horoscope> Relevant news stories are: ${relevantNewsStories.items.joinToString(\"\\n\") { \"- ${it.url}: ${it.summary}\" }} Format it as Markdown with links. \"\"\".trimIndent() ) } The following domain classes ensure type safety: Java @JsonClassDescription(\"Person with astrology details\") @JsonDeserialize(as = StarPerson.class) public record StarPerson( String name, @JsonPropertyDescription(\"Star sign\") String sign ) implements Person { @JsonCreator public StarPerson( @JsonProperty(\"name\") String name, @JsonProperty(\"sign\") String sign ) { this.name = name; this.sign = sign; } @Override public String getName() { return name; } } public record Horoscope(String summary) { } @JsonClassDescription(\"Writeup relating to a person's horoscope and relevant news\") public record Writeup(String text) implements HasContent { @JsonCreator public Writeup(@JsonProperty(\"text\") String text) { this.text = text; } @Override public String getContent() { return text; } } Kotlin data class RelevantNewsStories( val items: List<NewsStory> ) data class NewsStory( val url: String, val summary: String, ) data class Subject( val name: String, val sign: String, ) data class Horoscope( val summary: String, ) data class FunnyWriteup( override val text: String, ) : HasContent It's easy to unit test your agents to ensure that they correctly execute logic and pass the correct prompts and hyperparameters to LLMs. For example: public class StarNewsFinderTest { @Test void writeupPromptMustContainKeyData() { HoroscopeService horoscopeService = mock(HoroscopeService.class); StarNewsFinder starNewsFinder = new StarNewsFinder(horoscopeService, 5); var context = new FakeOperationContext(); context.expectResponse(new com.embabel.example.horoscope.Writeup(\"Gonna be a good day\")); NewsStory cockatoos = new NewsStory( \"https://fake.com.au\", \"Cockatoo behavior\", \"Cockatoos are eating cabbages\" ); NewsStory emus = new NewsStory( \"https://morefake.com.au\", \"Emu movements\", \"Emus are massing\" ); StarPerson starPerson = new StarPerson(\"Lynda\", \"Scorpio\"); RelevantNewsStories relevantNewsStories = new RelevantNewsStories(Arrays.asList(cockatoos, emus)); Horoscope horoscope = new Horoscope(\"This is a good day for you\"); starNewsFinder.writeup(starPerson, relevantNewsStories, horoscope, context); var prompt = context.getLlmInvocations().getFirst().getPrompt(); var toolGroups = context.getLlmInvocations().getFirst().getInteraction().getToolGroups(); assertTrue(prompt.contains(starPerson.getName())); assertTrue(prompt.contains(starPerson.sign())); assertTrue(prompt.contains(cockatoos.getSummary())); assertTrue(prompt.contains(emus.getSummary())); assertTrue(toolGroups.isEmpty(), \"The LLM should not have been given any tool groups\"); } } Dog Food Policy We believe that all aspects of software development and business can and should be greatly accelerated through the use of AI agents. The ultimate decision makers remain human, but they can and should be greatly augmented. This project practices extreme dogfooding. Our key principles: We will use AI agents to help every aspect of the project: coding, documentation, community management, producing marketing copy etc. Any human performing a task should ask why it cannot be automated, and strive toward maximum automation. Developers retain ultimate control. Developers are responsible for guiding agents toward the solution and iterating as necessary. A developer who commits or merges an agent contribution is responsible for ensuring that it meets the project coding standards, which are independent of the use of agents. For example, code must be human-readable. We will favour open source agents built on the Embabel platform, and contribute improvements. While commercial agents may be more advanced in some areas, we believe that our platform is the best general solution for automation and by dogfooding we will improve it fastest. By open sourcing agents used on our open source projects, we will maximize benefit to the community. We will prioritize agents that help accelerate our progress. Per the flight safety advice to fit your own mask before helping others, we will prioritize agents that help us accelerate our own progress. This will not only produce useful examples, but increase overall project velocity. Developers must carefully read all code they commit and improve generated code if possible. Coding agents are a special case. While the embabel-agent-code submodule offers support for project modification that is useful for project bootstrapping, coding agents are the most mature of commercial agents, and their vendors are heavily subsidising their users, making it economically irrational to insist on our own platform. Getting Started Get the bits Set up your environment Run the application Getting the bits Choose one of the following: Clone the repository via git clone https://github.com/embabel/embabel-agent Create a new Spring Boot project and add the necessary dependencies (see \"Using Embabel Agent Framework in Your Project\" below) Environment variables Environment variables are consistent with common usage, rather than Spring AI. For example, we prefer OPENAI_API_KEY to SPRING_AI_OPENAI_API_KEY. Required: OPENAI_API_KEY: For the OpenAI API Optional: ANTHROPIC_API_KEY: For the Anthropic API. Necessary for the coding agent. MINIMAX_API_KEY: For the MiniMax API. Supports MiniMax-M3, MiniMax-M2.7 and MiniMax-M2.7-highspeed models. ZAI_API_KEY: For the Z.ai (Zhipu AI) API. Supports GLM-5.2, GLM-4.7, GLM-4.6, GLM-4.5-Air and GLM-4.7-Flash models. OCI Generative AI uses OCI SDK authentication providers. Add embabel-agent-starter-oci-genai and set embabel.agent.platform.models.ocigenai.compartment-id; OCI config file, instance principal, resource principal, workload identity, session token and simple key authentication are supported. We strongly recommend providing both an OpenAI and Anthropic key, as some examples require both. And it's important to try to find the best LLM for a given task, rather than automatically choose a familiar provider. Services You will need a Docker Desktop version >4.43.2. Be sure to activate the following MCP tools from the catalog: Brave Search Fetch Puppeteer Wikipedia You can also set up your own MCP tools using Spring AI conventions. See the application-docker-desktop.yml file for an example. If you're running Ollama locally, include the embabel ollama starter and Embabel will automatically connect to your Ollama endpoint and make all models available. <dependency> <groupId>com.embabel.agent</groupId> <artifactId>embabel-agent-starter-ollama</artifactId> </dependency> Running Create your own agent project with uvx --from git+https://github.com/embabel/project-creator.git project-creator Example Agents 📚 For examples and tutorials, see the Embabel Agent Examples Repository # Clone and run examples git clone https://github.com/embabel/embabel-agent-examples cd embabel-agent-examples/scripts/kotlin ./shell.sh Shell Commands Spring Shell is an easy way to interact with the Embabel agent framework, especially during development. Type help to see available commands. Use execute or x to run an agent: execute \"Lynda is a Scorpio, find news for her\" -p -r This will look for an agent, choose the star finder agent and run the flow. -p will log prompts -r will log LLM responses. Omit these for less verbose logging. Options: -p logs prompts -r logs LLM responses Use the chat command to enter an interactive chat with the agent. It will attempt to run the most appropriate agent for each command. Spring Shell supports history. Type !! to repeat the last command. This will survive restarts, so is handy when iterating on an agent. Further examples Example commands within the shell: # Perplexity style deep research # Requires both OpenAI and Anthropic keys and Docker Desktop with the MCP extension (or your own web tools) execute \"research the recent australian federal election. what is the position of the greens party?\" # x is a shortcut for execute x \"fact check the following: holden cars are still made in australia; the koel is a bird native only to australia; fidel castro is justin trudeau's father\" Bringing in additional LLMs Local models with well-known providers The Embabel Agent Framework supports local models from: Ollama: Simply add embabel-agent-starter-ollama starter to your pom.xml and your local Ollama endpoint will be queries. All local models will be available. Docker: Add the embabel-agent-starter-dockermodels starter to your pom.xml and your local Docker endpoint will be queried. All local models will be available. LMStudio: This uses the openAI compatible client. Just include LMStudio as a dependency and make sure your LMStudio server is running. OCI Generative AI Add embabel-agent-starter-oci-genai to use OCI Generative AI chat and embedding models. <dependency> <groupId>com.embabel.agent</groupId> <artifactId>embabel-agent-starter-oci-genai</artifactId> </dependency> Configure embabel.agent.platform.models.ocigenai.compartment-id and, if needed, set embabel.agent.platform.models.ocigenai.authentication-type to FILE, INSTANCE_PRINCIPAL, RESOURCE_PRINCIPAL, WORKLOAD_IDENTITY, SESSION_TOKEN or SIMPLE. When the standard OpenAI provider is not on the classpath, the OCI starter supplies OCI defaults for Embabel's default LLM and embedding model: embabel.models.default-llm=cohere.command-a-03-2025 embabel.models.default-embedding-model=cohere.embed-v4.0 Override those values in application configuration if you want another OCI model. Use OCI model ids such as cohere.command-a-03-2025 or meta.llama-3.3-70b-instruct for Embabel model selection. The Spring bean names registered by the starter are Java-friendly aliases such as cohere_command_a and llama_33_70b. If your application exposes Spring Boot Actuator env or configprops values, keep those endpoints secured and ensure OCI credential fields such as pass-phrase, session-token and private-key are sanitized. Custom LLMs You can define an LLM for any provider for which a Spring AI ChatModel is available. Simply define Spring beans of type Llm. See the OpenAiConfiguration class as an example. Remember: Provide the knowledge cutoff date if you know it Make the configuration class conditional on any required API key. Roadmap This project is in its early stages, but we have big plans. The milestones and issues in this repository are a good reference. Our key goals: Become the natural way to Gen AI-enable Java applications, and especially those built on Spring. Prove the power of the approach. Demonstrate that this approach is the best way to build safe, dependable, Gen AI applications. In particular: Demonstrate the power of extensibility without modification, by adding goals and actions Demonstrate the potential to become the PaaS for natural language Demonstrate the potential of agent federation within the GOAP model Demonstrate budget-aware agents, such as \"Research the following topic, spending up to 20c if you are still learning\" Integrate with data stores and demonstrate the power of surfacing existing functionality inside an organization Take the model to other platforms: The conceptual framework is not JVM specific. Once established, we intend to create TypeScript and Python projects. There is a lot to do, and you are awesome. We look forward to your contribution! Application Design Domain objects Applications center around domain objects. These can be instantiated by LLMs or user code, and manipulated by user code. Use Jackson annotations to help LLMs with descriptions as well as mark fields to ignore. For example: @JsonClassDescription(\"Person with astrology details\") data class StarPerson( override val name: String, @get:JsonPropertyDescription(\"Star sign\") val sign: String, ) : Person See Java Json Schema Generation - Module Jackson for documentation of the library used. Domain objects can have behaviors that are automatically exposed to LLMs when they are in scope. Simply annotate methods with the Spring AI @Tool annotation. When exposing @Tool methods on domain objects, be sure that the tool is safe to invoke. Even the best LLMs can get trigger-happy. For example, be careful about methods that can mutate or delete data. This is likely better modeled via an explicit call to a non-tool method on the same domain class, in a code action. Using Embabel as an MCP server You can use the Embabel agent platform as an MCP server from a UI like Claude Desktop. The Embabel MCP server is available over SSE. Configure Claude Desktop as follows in your claude_desktop_config.yml: { \"mcpServers\": { \"embabel\": { \"command\": \"npx\", \"args\": [ \"-y\", \"mcp-remote\", \"http://localhost:8080/sse\" ] } } } See MCP Quickstart for Claude Desktop Users for how to configure Claude Desktop. The MCP Inspector is a helpful tool for interacting with your Embabel SSE server, manually invoking tools and checking the exposed prompts and resources. Start the MCP Inspector with: npx @modelcontextprotocol/inspector Consuming MCP Servers The Embabel Agent Framework provides built-in support for consuming Model Context Protocol (MCP) servers, allowing you to extend your applications with powerful AI capabilities through standardized interfaces. What is MCP? Model Context Protocol (MCP) is an open protocol that standardizes how applications provide context and extra functionality to large language models. Introduced by Anthropic, MCP has emerged as the de facto standard for connecting AI agents to tools, functioning as a client-server protocol where: Clients (like Embabel Agent) send requests to servers Servers process those requests to deliver necessary context to the AI model MCP simplifies integration between AI applications and external tools, transforming an \"M×N problem\" into an \"M+N problem\" through standardization - similar to what USB did for hardware peripherals. Configuring MCP in Embabel Agent To configure MCP servers in your Embabel Agent application, add the following to your application.yml: spring: ai: mcp: client: enabled: true name: embabel version: 1.0.0 request-timeout: 30s type: SYNC stdio: connections: docker-mcp: command: docker args: - run - -i - --rm - alpine/socat - STDIO - TCP:host.docker.internal:8811 This configuration sets up an MCP client that connects to a Docker-based MCP server. The connection uses STDIO transport through Docker's socat utility to connect to a TCP endpoint. Docker Desktop MCP Integration Docker has embraced MCP with their Docker MCP Catalog and Toolkit, which provides: Centralized Discovery - A trusted hub for discovering MCP tools integrated into Docker Hub Containerized Deployment - Run MCP servers as containers without complex setup Secure Credential Management - Centralized, encrypted credential handling Built-in Security - Sandbox isolation and permissions management The Docker MCP ecosystem includes over 100 verified tools from partners like Stripe, Elastic, Neo4j, and more, all accessible through Docker's infrastructure. Learn More Docker MCP Documentation Docker MCP Servers Repository Introducing Docker MCP Catalog and Toolkit MCP Introduction and Overview A2A Embabel integrates with the A2A protocol, allowing you to connect to other A2A-enabled agents and services. Enable the a2a Spring profile to start the A2A server. You'll need the following environment variable: GOOGLE_STUDIO_API_KEY: Your Google Studio API key, which is used for Gemini. Start the Google A2A web interface using the a2a Docker profile: docker compose --profile a2a up Go to the web interface running within the container at http://localhost:12000/. Connect to your agent at host.docker.internal:8080/a2a. Note that localhost:8080/a2a won't work as the server cannot access it when running in a Docker container. Running Tests Unit tests Run the unit tests via Maven. This will not require an internet connection or any external services. mvn test Integration tests Integration tests (*IT) hit real provider APIs and are excluded from the default mvn test run. To run them, ensure the following environment variables are set: OPENAI_API_KEY ANTHROPIC_API_KEY DEEPSEEK_API_KEY MISTRAL_API_KEY Then run: mvn -Dtest='*IT,!LLMOllama*IT' -Dsurefire.failIfNoSpecifiedTests=false test This runs all integration tests except Ollama (which requires a local Ollama server). To run a specific module's integration tests, add -pl: mvn -Dtest='*IT,!LLMOllama*IT' -Dsurefire.failIfNoSpecifiedTests=false test -pl embabel-agent-openai Spring profiles Spring profiles are used to configure the application for different environments and behaviors. Model profiles: docker-desktop: Talking to Docker Desktop with the MCP extension. This is recommended for the best experience, with Docker-provided web tools. Logging profiles: severance: Severance specific logging. Praise Kier! starwars: Star Wars specific logging. Feel the force colossus: Colossus specific logging. The Forbin Project. Testing A key goal of this framework is ease of testing. Just as Spring eased testing of early enterprise Java applications, this framework facilitates testing of AI applications. Types of testing: Unit tests: All agents are unit testable, like any Spring-managed beans. Construct them with mock objects; call individual action methods. The testing library facilitates testing prompts. Integration tests: tbd Logging All logging in this project is either debug logging in the relevant class itself, or results from the stream of events of type AgentEvent. Edit application.yml if you want to see debug logging from the relevant classes and packages. Available logging experiences: severance: Severance logging. Praise Kier starwars: Star Wars logging. Feel the force. The default as it's understood throughout the galaxy. colossus: Colossus logging. The Forbin Project. montypython: Monty Python logging. No one expects it. hh: Hitchhiker's Guide to the Galaxy logging. The answer is 42. If none of these profiles is chosen, Embabel will use vanilla logging. This makes me sad. Adding Embabel Agent Framework to Your Project Maven Central Availability Since version 0.2.0, Embabel Agent Framework is available directly on Maven Central, simplifying dependency management. You no longer need to configure custom repositories for stable releases. Maven For version 0.2.0 and above (Recommended) Simply add the Embabel Spring Boot starter dependency to your pom.xml: <dependency> <groupId>com.embabel.agent</groupId> <artifactId>embabel-agent-starter</artifactId> <version>${embabel-agent.version}</version> </dependency> No additional repository configuration is needed! Maven Central is configured by default. For versions prior to 0.2.0 or for SNAPSHOT versions You need to add the Embabel repositories to your pom.xml: <repositories> <repository> <id>embabel-releases</id> <url>https://repo.embabel.com/artifactory/libs-release</url> <releases> <enabled>true</enabled> </releases> <snapshots> <enabled>false</enabled> </snapshots> </repository> <repository> <id>embabel-snapshots</id> <url>https://repo.embabel.com/artifactory/libs-snapshot</url> <releases> <enabled>false</enabled> </releases> <snapshots> <enabled>true</enabled> </snapshots> </repository> </repositories> Then add the dependency: <dependency> <groupId>com.embabel.agent</groupId> <artifactId>embabel-agent-starter</artifactId> <version>${embabel-agent.version}</version> </dependency> Gradle (Kotlin DSL) For version 0.2.0 and above (Recommended) Add the required repositories to your build.gradle.kts: repositories { mavenCentral() maven { name = \"Spring Milestones\" url = uri(\"https://repo.spring.io/milestone\") } } Add the Embabel Agent starter: dependencies { implementation(\"com.embabel.agent:embabel-agent-starter:${embabelAgentVersion}\") } For versions prior to 0.2.0 or for SNAPSHOT versions Add all required repositories to your build.gradle.kts: repositories { mavenCentral() maven { name = \"embabel-releases\" url = uri(\"https://repo.embabel.com/artifactory/libs-release\") mavenContent { releasesOnly() } } maven { name = \"embabel-snapshots\" url = uri(\"https://repo.embabel.com/artifactory/libs-snapshot\") mavenContent { snapshotsOnly() } } maven { name = \"Spring Milestones\" url = uri(\"https://repo.spring.io/milestone\") } } Add the Embabel Agent starter: dependencies { implementation(\"com.embabel.agent:embabel-agent-starter:${embabelAgentVersion}\") } Gradle (Groovy DSL) For version 0.2.0 and above (Recommended) Add the required repositories to your build.gradle: repositories { mavenCentral() maven { name = 'Spring Milestones' url = 'https://repo.spring.io/milestone' } } Add the Embabel Agent starter: dependencies { implementation \"com.embabel.agent:embabel-agent-starter:${embabelAgentVersion}\" } For versions prior to 0.2.0 or for SNAPSHOT versions Add all required repositories to your build.gradle: repositories { mavenCentral() maven { name = 'embabel-releases' url = 'https://repo.embabel.com/artifactory/libs-release' mavenContent { releasesOnly() } } maven { name = 'embabel-snapshots' url = 'https://repo.embabel.com/artifactory/libs-snapshot' mavenContent { snapshotsOnly() } } maven { name = 'Spring Milestones' url = 'https://repo.spring.io/milestone' } } Add the Embabel Agent starter: dependencies { implementation 'com.embabel.agent:embabel-agent-starter:${embabelAgentVersion}' } Important Notes Spring Milestones Repository The Spring Milestones repository is required because the Embabel BOM (embabel-agent-dependencies) has transitive dependencies on experimental Spring components, specifically the mcp-bom. This BOM is not available on Maven Central and is only published to the Spring milestone repository. Note for Gradle users: Unlike Maven, Gradle does not inherit repository configurations declared in parent POMs or BOMs. Therefore, it is necessary to explicitly declare the Spring milestone repository in your repositories block to ensure proper resolution of all transitive dependencies. Repository Types Maven Central (since v0.2.0): For stable releases 0.2.0 and above Embabel Releases Repository: For stable releases prior to 0.2.0 Embabel Snapshots Repository: For development/snapshot versions (e.g., 0.3.0-SNAPSHOT) Quick Start Examples Maven with latest stable version <dependency> <groupId>com.embabel.agent</groupId> <artifactId>embabel-agent-starter</artifactId> <version>0.3.0</version> </dependency> Gradle Kotlin DSL with latest stable version implementation(\"com.embabel.agent:embabel-agent-starter:0.3.0\") Gradle Groovy DSL with latest stable version implementation 'com.embabel.agent:embabel-agent-starter:0.3.0' Getting Started with Observability Add full tracing and metrics to your Embabel agents with zero code changes. 1. Add the dependency <dependency> <groupId>com.embabel.agent</groupId> <artifactId>embabel-agent-starter-observability</artifactId> <version>${embabel-agent.version}</version> </dependency> 2. Add an exporter Pick one (or combine multiple): Zipkin (simplest — no account needed): <dependency> <groupId>io.opentelemetry</groupId> <artifactId>opentelemetry-exporter-zipkin</artifactId> </dependency> Langfuse (LLM-focused observability): <dependency> <groupId>com.quantpulsar</groupId> <artifactId>opentelemetry-exporter-langfuse</artifactId> <version>0.4.0</version> </dependency> 3. Configure # Enable observability embabel: agent: platform: observability: enabled: true service-name: my-agent-app # Enable Spring Boot tracing management: tracing: export: enabled: true sampling: probability: 1.0 # Zipkin exporter zipkin: tracing: endpoint: http://localhost:9411/api/v2/spans To use Langfuse instead of (or alongside) Zipkin: management: langfuse: enabled: true endpoint: https://cloud.langfuse.com/api/public/otel # or your self-hosted URL public-key: pk-lf-... secret-key: sk-lf-... 4. Start Zipkin and run docker run -d -p 9411:9411 openzipkin/zipkin ./mvnw spring-boot:run Open http://localhost:9411 — run an agent and you will see traces like: Agent: CustomerServiceAgent ├── Action: AnalyzeRequest │ └── ChatModel: gpt-4 (Spring AI) │ └── tool:searchKnowledgeBase ├── Action: GenerateResponse │ └── ChatModel: gpt-4 (Spring AI) └── status: completed [duration=2340ms] With Langfuse, you get a rich LLM-focused view of your agent traces: What gets traced automatically Agent lifecycle (creation, execution, completion, failures) Every action as a child span LLM calls with token usage (via Spring AI) Tool invocations with input/output Planning and replanning iterations State transitions and lifecycle states Track custom operations with @Tracked Use the @Tracked annotation to add observability spans to your own methods — inputs, outputs, duration, and errors are captured automatically: @Tracked(\"enrichCustomer\") public Customer enrich(Customer input) { // Your logic here } You can specify a type and description for richer traces: @Tracked(value = \"callPaymentApi\", type = TrackType.EXTERNAL_CALL, description = \"Payment gateway call\") public PaymentResult processPayment(Order order) { // ... } When called within an agent execution, @Tracked spans are automatically nested under the current action: Agent: CustomerServiceAgent ├── Action: ProcessOrder │ ├── @Tracked: enrichCustomer (PROCESSING) │ ├── ChatModel: gpt-4 │ └── @Tracked: callPaymentApi (EXTERNAL_CALL) └── status: completed For the full configuration reference, MDC log correlation, and advanced options, see the Observability Module Documentation. Contributing We welcome contributions to the Embabel Agent Framework. Look at the coding style guide for style guidelines. This file also informs coding agent behavior. Miscellaneous Why the name Embabel? The \"babel\" part is ultimately inspired by the story of the Tower of Babel, perhaps via Douglas Adams' babelfish. Per @lasuac: While Adams' fish in the ear enabled universal translation between species, Embabel aims at translating human intent to JVM code, AI models, and enterprise systems. \"embabel\" also sounds like \"enable.\" Milestone names are Australian animals. Mythical animals such as \"bunyip\" and \"yowie\" are used for futures that may or not be implemented. README badges come from here and here. Don't forget to join Discord to collaborate with the Embabel community. It is a good place to receive support, showcase your work, discuss ideas and connect with like-minded people. Star History Contributors (c) Embabel Software Inc 2024-2026.",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "406a85b388590eb0",
+    "source_type": "community_discussion",
+    "tldr": "Embabel 是由 Spring 创始人推出的 JVM 智能体框架，支持以动态规划混合 LLM 调用与代码域模型，面向 Kotlin/Java 企业应用。",
+    "objective_summary": "Embabel（仓库 embel/embabel-agent）是一个用于在 JVM 上构建智能体流程的框架，由 Spring 创始人主导开发。该框架基于 Kotlin 编写，同时提供自然的 Java API，通过 Action、Goal、Condition、Plan 与 Domain model 抽象智能体行为，并默认采用 GOAP 算法进行动态规划。它与 Spring 和 Spring AI 深度集成，支持 Focused、Closed、Open 三种执行模式，旨在为企业级 Java/Kotlin 应用提供可测试、可扩展且类型安全的智能体开发能力。",
+    "event_type": "framework_tools",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [],
+      "technologies": [
+        "Embabel",
+        "JVM",
+        "Kotlin",
+        "Java",
+        "Spring",
+        "Spring AI",
+        "LLM",
+        "GOAP",
+        "Utility AI",
+        "OODA"
+      ],
+      "key_people": []
+    },
+    "key_logic_flow": [
+      "Embabel 定位为 JVM 上的智能体框架，由 Spring 创始人创建，目标是将 LLM 调用与代码、领域模型无缝结合。",
+      "框架使用 Action、Goal、Condition、Plan 和 Domain model 五大核心概念描述智能体流程，其中 Plan 由系统通过非 LLM 算法动态生成。",
+      "默认规划算法为 GOAP（目标导向动作规划），同时内置 Utility AI，规划步骤可插拔。",
+      "应用可通过注解模型（类似 Spring MVC）或 Kotlin DSL 编写，Spring 负责依赖注入与管理。",
+      "执行模式分为 Focused（代码直接调用）、Closed（意图分类选择智能体）和 Open（动态构建智能体以达成目标）。",
+      "框架强调强类型、可测试性、平台抽象与多模型混合，未来计划支持 Evolving 模式和联邦能力。"
+    ],
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "embel/embabel-agent",
+        "canonical_name": "embel/embabel-agent",
+        "url": "https://github.com/embel/embabel-agent",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Embabel（发音 Em-BAY-bel）是一个面向 JVM 的智能体流程编写框架，能够无缝混合 LLM 提示交互、代码与领域模型。",
+          "该仓库由 Spring 的创始人创建，使用 Kotlin 编写但提供自然的 Java 使用模型。",
+          "框架内置默认 GOAP 规划算法，并支持 Utility AI，计划由系统动态制定并在每个动作执行后重新规划。"
+        ],
+        "article_id": "406a85b388590eb0"
+      },
+      {
+        "object_type": "project",
+        "name": "Embabel Agent Examples Repository",
+        "canonical_name": "Embabel Agent Examples",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "文章指出，如需示例和教程，可查看 Embabel Agent Examples Repository。",
+          "该仓库被定位为学习 Embabel 框架的示例与教程资源。"
+        ],
+        "article_id": "406a85b388590eb0"
+      },
+      {
+        "object_type": "product",
+        "name": "Tripper travel planner agent",
+        "canonical_name": "Tripper",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "文章将 Tripper 描述为一个复杂、真实的示例应用，是一个旅行规划智能体。",
+          "Tripper 可生成带有详细推荐和地图链接的 AI 旅行行程。"
+        ],
+        "article_id": "406a85b388590eb0"
+      },
+      {
+        "object_type": "project",
+        "name": "Spring AI",
+        "canonical_name": "Spring AI",
+        "url": "https://spring.io/projects/spring-ai",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Embabel 构建在 Spring 和 JVM 之上，并基于 Spring AI 提供的功能进行开发。",
+          "文档解释 Embabel 与 Spring AI 的关系类似于 Spring MVC 与 Servlet API 的层次差异。"
+        ],
+        "article_id": "406a85b388590eb0"
+      }
+    ],
+    "extract_result": "success",
+    "impact_score": {
+      "score": 7.0,
+      "reason": "该框架由 Spring 创始人背书发布，具备极强的社区号召力；它填补了 JVM 企业级 Agent 框架的空白，将 GOAP 目标导向动作规划、Utility AI 与 Spring/Spring AI 生态深度集成，对 Java/Kotlin 企业开发者具有直接吸引力，可能改变该生态内 LLM Agent 开发的局部格局。然而其影响主要限于 JVM 企业开发圈，尚未达到通用 LLM 范式转移的级别。基于以上判断，评分为 7.0。"
+    },
+    "sentiment": "positive",
+    "developer_sentiment": {
+      "tone": "excited",
+      "primary_focus": "Spring 创始人背书下，JVM 企业级 Agent 框架的强类型、可测试性、GOAP 动态规划与 Spring 原生集成能力"
+    },
+    "hype_assessment": {
+      "level": "medium",
+      "reason": "README 中使用了 'sophisticated planning'、'superior extensibility and reuse'、'seamlessly mix' 等典型 PR 包装词汇，存在一定程度的营销修辞；但框架同时明确披露了 GOAP、Utility AI、Focused/Closed/Open 执行模式、Spring 依赖注入等具体技术机制，并提供了 Kotlin DSL 与 Java 注解两种开发方式，整体炒作成分可控，并非空洞概念炒作。基于以上判断，判定为 medium。"
+    },
+    "information_entropy": "medium",
+    "domain_disruption": {
+      "technical_innovation": "将游戏 AI 领域的 GOAP 目标导向动作规划与 Utility AI 引入 LLM Agent 框架，在 JVM 强类型、Spring 依赖注入和企业级可测试性基础上，实现代码、领域模型与 LLM 调用的混合编排；支持 Focused、Closed、Open 三种执行模式，并计划支持 Evolving 等更动态的执行形态。",
+      "business_model": "有望在企业级 Java/Kotlin 中间件市场形成新的 Agent 开发标准，增强 Spring 生态对 LLM 应用的吸引力和开发者粘性；未来可衍生企业级技术支持、托管式 Agent 运行时、云原生 Agent 平台以及与 Spring Cloud/Spring AI 结合的 SaaS 化商业化路径。"
+    },
+    "engineering_complexity": "production_ready",
+    "compound_value": {
+      "score": 6.5,
+      "reason": "Embabel 由 Spring 创始人主导，天然具备企业 Java 社区的信任与传播势能；JVM + Spring 生态拥有庞大的企业存量系统，若能成为 Java/Kotlin AI Agent 的默认编排层，将具备极强的长期复利价值。然而，项目尚处早期，实际采用率、社区规模、与 Spring AI 的协同深度仍需验证，且 Agent 框架赛道竞争激烈，未达“已锁定行业基石”的确定性，因此评分落在中高区间而非 8 分以上。"
+    },
+    "value_capture_layer": "agent_middleware",
+    "moat_impact": "creates_new_moat",
+    "key_beneficiaries": [
+      "Spring",
+      "Spring AI",
+      "VMware",
+      "Broadcom",
+      "Kotlin"
+    ],
+    "competitive_casualty": [
+      "Java 版 LangChain/LangChain4j 等编排库",
+      "传统 RPA 厂商",
+      "企业级 BPM/工作流引擎厂商",
+      "聚焦 Java 生态的独立 Agent 编排初创项目"
+    ],
+    "market_opportunities": [
+      "企业级 Java/Kotlin 团队可围绕 Embabel 构建垂直领域智能体中间件与咨询交付服务，抢占 Spring 生态 AI 升级红利",
+      "开发者可关注 GOAP + LLM 混合规划在企业流程自动化、运维排障等确定性要求较高场景的落地机会",
+      "围绕 Spring AI 与 Embabel 的集成可催生训练课程、代码生成插件和迁移工具等周边产品"
+    ],
+    "risk_matrix": {
+      "regulatory": "作为开源框架本身监管风险较低，但企业用户将其用于金融、医疗等受监管领域时，需关注 AI 决策可解释性、审计追踪与数据跨境合规要求",
+      "technological": "智能体框架迭代极快，LangChain、AutoGen、Semantic Kernel 等已有先发优势，Embabel 的 GOAP 规划算法在企业复杂场景中的实际效果尚需验证，存在被更成熟方案替代的风险",
+      "competitive": "Spring 生态内部已有 Spring AI，外部有微软 Semantic Kernel、Java 生态的 Quarkus 等，Embabel 需在开发者心智和生态插件上建立差异化壁垒，否则易被边缘化",
+      "ethical": "企业应用中的智能体可能涉及敏感业务数据访问、自动化决策与权限控制，若规划结果不可解释或权限边界模糊，可能引发偏见放大、隐私泄露和责任归属争议",
+      "additional": [
+        "项目处于早期阶段，API 和概念模型可能不稳定，生产环境采用存在迁移成本",
+        "JVM 生态在企业 AI 开发者中的吸引力弱于 Python，社区规模和第三方集成增长速度存在不确定性"
+      ]
+    },
+    "confidence": {
+      "impact": "medium",
+      "compound": "medium",
+      "hype": "medium"
+    },
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "embel/embabel-agent",
+        "canonical_name": "embel/embabel-agent",
+        "url": "https://github.com/embel/embabel-agent",
+        "positioning": "面向 JVM 企业级 Java/Kotlin 应用的智能体流程框架，由 Spring 创始人主导，将 LLM 调用、代码与领域模型无缝融合。",
+        "technical_signal": "使用 Action、Goal、Condition、Plan 与 Domain model 五元抽象描述智能体流程，默认采用非 LLM 的 GOAP 动态规划并在动作执行后重新规划。",
+        "adoption_signal": "提供类 Spring MVC 的注解模型和 Kotlin DSL 两种编写方式，并与 Spring 及 Spring AI 深度集成。",
+        "ecosystem_relevance": "基于 Spring 生态与 JVM 企业能力构建，可复用 Spring 依赖注入、AOP 与持久化等企业基础设施。",
+        "target_users": [],
+        "watch_reason": "作为 Spring 创始人主导的新框架，Embabel 将 AI 智能体规划引入 JVM 企业应用，具备强类型、可测试和动态规划等差异化能力，值得跟踪其对企业 AI 工程化路径的影响。",
+        "risk_notes": [
+          "新框架尚未经过大规模生产验证，成熟度与长期维护力度仍需观察。",
+          "GOAP 与 Utility AI 的规划开销在复杂企业场景中的实际表现尚待评估。"
+        ],
+        "score": 8.0,
+        "article_ids": [
+          "406a85b388590eb0"
+        ],
+        "evidence_snippets": [
+          "Embabel（发音 Em-BAY-bel）是一个面向 JVM 的智能体流程编写框架，能够无缝混合 LLM 提示交互、代码与领域模型。",
+          "该仓库由 Spring 的创始人创建，使用 Kotlin 编写但提供自然的 Java 使用模型。",
+          "框架内置默认 GOAP 规划算法，并支持 Utility AI，计划由系统动态制定并在每个动作执行后重新规划。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Embabel Agent Examples Repository",
+        "canonical_name": "Embabel Agent Examples",
+        "positioning": "作为 Embabel 框架官方示例与教程的辅助仓库，帮助开发者学习如何编写智能体流程。",
+        "adoption_signal": "提供示例与教程资源，帮助开发者降低上手门槛并复现框架能力。",
+        "ecosystem_relevance": "属于 Embabel 学习资源的组成部分，对框架早期采用者和社区推广有一定价值。",
+        "target_users": [],
+        "watch_reason": "作为配套示例资源，该仓库的覆盖深度可反映 Embabel 框架用法的成熟度，但目前仅为学习辅助仓库，独立产品形态不足，专题优先级一般。",
+        "risk_notes": [
+          "内容更新取决于主框架演进，独立价值和维护持续性有限。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "406a85b388590eb0"
+        ],
+        "evidence_snippets": [
+          "文章指出，如需示例和教程，可查看 Embabel Agent Examples Repository。",
+          "该仓库被定位为学习 Embabel 框架的示例与教程资源。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Tripper travel planner agent",
+        "canonical_name": "Tripper",
+        "positioning": "基于 Embabel 构建的旅行规划示例产品，可生成带详细推荐和地图链接的 AI 旅行行程。",
+        "target_users": [
+          "旅行规划用户",
+          "Embabel 框架学习者"
+        ],
+        "product_signal": "展示 Embabel 在复杂真实场景中的智能体编排能力，支持生成可行动的旅行推荐。",
+        "market_signal": "当前作为框架示例应用出现，尚未呈现独立的商业化产品信号。",
+        "differentiation": "依托 Embabel 的 GOAP 动态规划能力，可在旅行场景中组合多步骤动作并动态调整行程。",
+        "watch_reason": "Tripper 是 Embabel 在复杂真实场景下的参考实现，其功能完整性与用户反馈可验证框架在开放域任务中的动态规划能力，对理解 Embabel 落地价值有参考意义。",
+        "risk_notes": [
+          "当前仅为示例应用，商业化路径和独立运营前景均不明朗。"
+        ],
+        "score": 5.0,
+        "article_ids": [
+          "406a85b388590eb0"
+        ],
+        "evidence_snippets": [
+          "文章将 Tripper 描述为一个复杂、真实的示例应用，是一个旅行规划智能体。",
+          "Tripper 可生成带有详细推荐和地图链接的 AI 旅行行程。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "Spring AI",
+        "canonical_name": "Spring AI",
+        "url": "https://spring.io/projects/spring-ai",
+        "positioning": "Spring 生态中面向 AI 应用的官方集成项目，为 Embabel 等框架提供底层模型访问与抽象能力。",
+        "technical_signal": "提供模型调用、提示工程与向量存储等 AI 能力抽象，并与 Spring 应用栈无缝集成。",
+        "adoption_signal": "已被 Embabel 等上层框架作为基础能力采用，在企业 Java 社区具有较高关注度。",
+        "ecosystem_relevance": "是 Spring 生态进入 AI 领域的关键基础设施，连接 LLM 与企业 Java 应用。",
+        "target_users": [],
+        "watch_reason": "作为 Embabel 的底层依赖和 Spring 生态的 AI 基石，Spring AI 的模型抽象与工具链演进将直接影响 JVM 企业 AI 开发范式，值得持续跟踪。",
+        "risk_notes": [
+          "上层框架若过度依赖 Spring AI，可能受限于其 API 演进节奏。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "406a85b388590eb0"
+        ],
+        "evidence_snippets": [
+          "Embabel 构建在 Spring 和 JVM 之上，并基于 Spring AI 提供的功能进行开发。",
+          "文档解释 Embabel 与 Spring AI 的关系类似于 Spring MVC 与 Servlet API 的层次差异。"
+        ]
+      }
+    ]
+  },
+  {
+    "source_dir": "github-trending",
+    "title": "infiniflow/ragflow",
+    "source": "https://github.com/infiniflow/ragflow",
+    "author": [],
+    "published": "",
+    "created": "2026-08-13",
+    "manifest_dates": [
+      "2026-08-13",
+      "2026-08-14",
+      "2026-08-15"
+    ],
+    "description": "RAGFlow is a leading open-source Retrieval-Augmented Generation (RAG) engine that fuses cutting-edge RAG with Agent capabilities to create a superior context layer for LLMs Cloud | Documentation | Roadmap | Discord 📕 Table of Contents 💡 What is RAGFlow? 🎮 Get Started 🔥 Latest Updates 🌟 Key Features 🔎 System Architecture 🎬 Self-Hosting 🔧 Configurations 🔧 Build a Docker Image 🔨 Launch Service from Source for Development 📚 Documentation 📜 Roadmap 🏄 Community 🙌 Contributing 💡 What is RAGFlow? RAGFlow is a leading open-source Retrieval-Augmented Generation (RAG) engine that fuses cutting-edge RAG with Agent capabilities to create a superior context layer for LLMs. It offers a streamlined RAG workflow adaptable to enterprises of any scale. Powered by a converged context engine and pre-built agent templates, RAGFlow enables developers to transform complex data into high-fidelity, production-ready AI systems with exceptional efficiency and precision. 🎮 Get Started Try our cloud service at https://cloud.ragflow.io. 🔥 Latest Updates 2026-06-15 Support multiple chat channels such as Feishu, Discord, Telegram, Line, etc. 2026-04-24 Supports DeepSeek v4. 2026-03-24 RAGFlow Skill on OpenClaw — Provides an official skill for accessing RAGFlow datasets via OpenClaw. 2025-12-26 Supports 'Memory' for AI agent. 2025-11-19 Supports Gemini 3 Pro. 2025-11-12 Supports data synchronization from Confluence, S3, Notion, Discord, Google Drive. 2025-10-23 Supports MinerU & Docling as document parsing methods. 2025-10-15 Supports orchestrable ingestion pipeline. 2025-08-08 Supports OpenAI's latest GPT-5 series models. 2025-08-01 Supports agentic workflow and MCP. 2025-05-23 Adds a Python/JavaScript code executor component to Agent. 2025-03-19 Supports using a multi-modal model to make sense of images within PDF or DOCX files. 🎉 Stay Tuned ⭐️ Star our repository to stay up-to-date with exciting new features and improvements! Get instant notifications for new releases! 🌟 🌟 Key Features 🍭 \"Quality in, quality out\" Deep document understanding-based knowledge extraction from unstructured data with complicated formats. Finds \"needle in a data haystack\" of literally unlimited tokens. 🍱 Template-based chunking Intelligent and explainable. Plenty of template options to choose from. 🌱 Grounded citations with reduced hallucinations Visualization of text chunking to allow human intervention. Quick view of the key references and traceable citations to support grounded answers. 🍔 Compatibility with heterogeneous data sources Supports Word, Slides, Excel, TXT, images, scanned copies, structured data, web pages, and more. 🛀 Automated and effortless RAG workflow Streamlined RAG orchestration catered to both personal and large businesses. Configurable LLMs as well as embedding models. Multiple recall paired with fused re-ranking. Intuitive APIs for seamless integration with business. 🔎 System Architecture 🎬 Self-Hosting 📝 Prerequisites CPU >= 4 cores RAM >= 16 GB Disk >= 50 GB Docker >= 24.0.0 & Docker Compose >= v2.26.1 Python >= 3.13 gVisor: Required only if you intend to use the code executor (sandbox) feature of RAGFlow. Tip If you have not installed Docker on your local machine (Windows, Mac, or Linux), see Install Docker Engine. 🚀 Start up the server Ensure vm.max_map_count >= 262144: To check the value of vm.max_map_count: sysctl vm.max_map_count Reset vm.max_map_count to a value at least 262144 if it is not. # In this case, we set it to 262144: sudo sysctl -w vm.max_map_count=262144 This change will be reset after a system reboot. To ensure your change remains permanent, add or update the vm.max_map_count value in /etc/sysctl.conf accordingly: vm.max_map_count=262144 Clone the repo: git clone https://github.com/infiniflow/ragflow.git Start up the server using the pre-built Docker images: Caution All Docker images are built for x86 platforms. We don't currently offer Docker images for ARM64. If you are on an ARM64 platform, follow this guide to build a Docker image compatible with your system. The command below downloads the v0.26.4 edition of the RAGFlow Docker image. See the following table for descriptions of different RAGFlow editions. To download a RAGFlow edition different from v0.26.4, update the RAGFLOW_IMAGE variable accordingly in docker/.env before using docker compose to start the server. cd ragflow/docker git checkout v0.26.4 # Optional: use a stable tag (see releases: https://github.com/infiniflow/ragflow/releases) # This step ensures the **entrypoint.sh** file in the code matches the Docker image version. # Use CPU for DeepDoc tasks: docker compose -f docker-compose.yml up -d # To use GPU to accelerate DeepDoc tasks: # sed -i '1i DEVICE=gpu' .env # docker compose -f docker-compose.yml up -d Note: Prior to v0.22.0, we provided both images with embedding models and slim images without embedding models. Details as follows: RAGFlow image tag Image size (GB) Has embedding models? Stable? v0.21.1 ≈9 ✔️ Stable release v0.21.1-slim ≈2 ❌ Stable release Starting with v0.22.0, we ship only the slim edition and no longer append the -slim suffix to the image tag. Check the server status after having the server up and running: docker logs -f docker-ragflow-cpu-1 The following output confirms a successful launch of the system: ____ ___ ______ ______ __ / __ \\ / | / ____// ____// /____ _ __ / /_/ // /| | / / __ / /_ / // __ \\| | /| / / / _, _// ___ |/ /_/ // __/ / // /_/ /| |/ |/ / /_/ |_|/_/ |_|\\____//_/ /_/ \\____/ |__/|__/ * Running on all addresses (0.0.0.0) If you skip this confirmation step and directly log in to RAGFlow, your browser may prompt a network abnormal error because, at that moment, your RAGFlow may not be fully initialized. In your web browser, enter the IP address of your server and log in to RAGFlow. With the default settings, you only need to enter http://IP_OF_YOUR_MACHINE (sans port number) as the default HTTP serving port 80 can be omitted when using the default configurations. In service_conf.yaml.template, select the desired LLM factory in user_default_llm and update the API_KEY field with the corresponding API key. See llm_api_key_setup for more information. The show is on! 🔧 Configurations When it comes to system configurations, you will need to manage the following files: .env: Keeps the fundamental setups for the system, such as SVR_HTTP_PORT, MYSQL_PASSWORD, and MINIO_PASSWORD. service_conf.yaml.template: Configures the back-end services. The environment variables in this file will be automatically populated when the Docker container starts. Any environment variables set within the Docker container will be available for use, allowing you to customize service behavior based on the deployment environment. docker-compose.yml: The system relies on docker-compose.yml to start up. The ./docker/README file provides a detailed description of the environment settings and service configurations which can be used as ${ENV_VARS} in the service_conf.yaml.template file. To update the default HTTP serving port (80), go to docker-compose.yml and change 80:80 to <YOUR_SERVING_PORT>:80. Updates to the above configurations require a reboot of all containers to take effect: docker compose -f docker-compose.yml up -d Switch doc engine from Elasticsearch to Infinity RAGFlow uses Elasticsearch by default for storing full text and vectors. To switch to Infinity, follow these steps: Stop all running containers: docker compose -f docker/docker-compose.yml down -v Warning -v will delete the docker container volumes, and the existing data will be cleared. Set DOC_ENGINE in docker/.env to infinity. Start the containers: docker compose -f docker/docker-compose.yml up -d Warning Switching to Infinity on a Linux/arm64 machine is not yet officially supported. 🔧 Build a Docker Image This image is approximately 2 GB in size and relies on external LLM and embedding services. git clone https://github.com/infiniflow/ragflow.git cd ragflow/ docker build --platform linux/amd64 -f Dockerfile -t infiniflow/ragflow:nightly . Or if you are behind a proxy, you can pass proxy arguments: docker build --platform linux/amd64 \\ --build-arg http_proxy=http://YOUR_PROXY:PORT \\ --build-arg https_proxy=http://YOUR_PROXY:PORT \\ -f Dockerfile -t infiniflow/ragflow:nightly . 🔨 Launch Service from Source for Development Important After cloning the repository for the first time, run git config --local --unset core.hooksPath, uv tool install lefthook and lefthook install once from the repo root to enable local Git hooks. Install uv, or skip this step if it is already installed: pipx install uv Clone the source code and install Python dependencies: git clone https://github.com/infiniflow/ragflow.git cd ragflow/ uv sync --python 3.13 # install RAGFlow dependent python modules uv run python3 ragflow_deps/download_deps.py git config --local --unset core.hooksPath uv tool install lefthook lefthook install Launch the dependent services (MinIO, Elasticsearch, Redis, and MySQL) using Docker Compose: docker compose -f docker/docker-compose-base.yml up -d Add the following line to /etc/hosts to resolve all hosts specified in docker/.env to 127.0.0.1: 127.0.0.1 es01 infinity mysql minio redis sandbox-executor-manager If you cannot access HuggingFace, set the HF_ENDPOINT environment variable to use a mirror site: export HF_ENDPOINT=https://hf-mirror.com If your operating system does not have jemalloc, please install it as follows: # Ubuntu sudo apt-get install libjemalloc-dev # CentOS sudo yum install jemalloc # OpenSUSE sudo zypper install jemalloc # macOS brew install jemalloc Launch backend service: source .venv/bin/activate export PYTHONPATH=$(pwd) bash docker/launch_backend_service.sh Install frontend dependencies: cd web npm install Launch frontend service: npm run dev The following output confirms a successful launch of the system: Stop RAGFlow front-end and back-end service after development is complete: pkill -f \"ragflow_server.py|task_executor.py\" 📚 Documentation Quickstart Configuration Release notes User guides Developer guides References FAQs 📜 Roadmap See the RAGFlow Roadmap 2026 🏄 Community Discord X GitHub Discussions 🙌 Contributing RAGFlow flourishes via open-source collaboration. In this spirit, we embrace diverse contributions from the community. If you would like to be a part, review our Contribution Guidelines first.",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "5ff4bf30ae94874f",
+    "source_type": "community_discussion",
+    "tldr": "RAGFlow 是 infiniflow 团队维护的开源 RAG 引擎，融合检索增强生成与智能体能力，提供面向企业的可编排知识库工作流与多模态文档解析能力。当前 Docker 镜像版本为 v0.26.4，并可通过 https://cloud.ragflow.io 使用云服务。",
+    "objective_summary": "infiniflow 在 GitHub 上维护的开源项目 RAGFlow 定位为企业级 RAG 引擎，通过统一的上下文引擎与预置 Agent 模板，将非结构化数据转化为可投产的人工智能系统。项目近期持续迭代：2026 年 6 月支持多聊天渠道，2026 年 4 月支持 DeepSeek v4，2025 年 12 月支持 AI Agent 记忆，2025 年 8 月支持 GPT-5 系列、Agentic Workflow 与 MCP。部署以 Docker 为主流方式，硬件最低要求为 4 核 CPU、16 GB 内存、50 GB 磁盘与 Docker 24.0.0+。",
+    "event_type": "framework_tools",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [
+        "infiniflow"
+      ],
+      "technologies": [
+        "RAG",
+        "Retrieval-Augmented Generation",
+        "LLM",
+        "Agent",
+        "MCP",
+        "DeepSeek v4",
+        "Gemini 3 Pro",
+        "GPT-5",
+        "Docker",
+        "Elasticsearch",
+        "Infinity",
+        "Python 3.13",
+        "MinerU",
+        "Docling"
+      ],
+      "key_people": []
+    },
+    "key_logic_flow": [
+      "RAGFlow 是 infiniflow 维护的开源 RAG 引擎，核心目标是为大语言模型构建高质量的上下文层，并融合 Agent 能力。",
+      "项目采用融合上下文引擎与预置 Agent 模板，支持复杂格式非结构化数据的深度理解、多路召回、融合重排以及可追溯引用。",
+      "近期版本持续扩展模型支持与企业集成能力，包括 DeepSeek v4、Gemini 3 Pro、GPT-5 系列、MCP、多聊天渠道以及 Confluence/S3/Notion/Google Drive 数据同步。",
+      "部署以 Docker Compose 为主流方式，当前推荐镜像标签为 v0.26.4，同时提供基于 https://cloud.ragflow.io 的云服务。",
+      "运行环境最低要求为 4 核 CPU、16 GB RAM、50 GB 磁盘、Docker 24.0.0+ 与 Docker Compose v2.26.1+，默认使用 Elasticsearch 存储全文与向量，也可切换至 Infinity。"
+    ],
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "infiniflow/ragflow",
+        "canonical_name": "RAGFlow",
+        "url": "https://github.com/infiniflow/ragflow",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "RAGFlow 是 infiniflow 维护的开源 RAG 引擎，融合检索增强生成与 Agent 能力，为企业级大语言模型应用提供上下文层。",
+          "仓库 README 列出当前推荐 Docker 镜像版本为 v0.26.4，并提供了 docker compose -f docker-compose.yml up -d 等部署命令。",
+          "项目支持多模态文档解析、可编排的 ingestion pipeline、代码执行沙箱以及面向个人与大型企业的 RAG 编排能力。"
+        ],
+        "article_id": "5ff4bf30ae94874f"
+      },
+      {
+        "object_type": "product",
+        "name": "RAGFlow Cloud",
+        "canonical_name": "RAGFlow Cloud",
+        "url": "https://cloud.ragflow.io",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "README 中明确引导用户通过 https://cloud.ragflow.io 试用 RAGFlow 的云服务。",
+          "云服务与开源自托管版本并行存在，作为项目官方提供的托管部署选项。"
+        ],
+        "article_id": "5ff4bf30ae94874f"
+      },
+      {
+        "object_type": "project",
+        "name": "OpenClaw",
+        "canonical_name": "OpenClaw",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "2026-03-24 的更新日志提到 RAGFlow Skill on OpenClaw，表示 RAGFlow 提供了通过 OpenClaw 访问其数据集官方技能。",
+          "该条目说明 RAGFlow 正在与外部 Agent/工具生态进行集成。"
+        ],
+        "article_id": "5ff4bf30ae94874f"
+      },
+      {
+        "object_type": "project",
+        "name": "MinerU",
+        "canonical_name": "MinerU",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "2025-10-23 的更新日志显示 RAGFlow 支持 MinerU 与 Docling 作为文档解析方法。",
+          "这表明 RAGFlow 的文档解析能力可替换，并整合了外部开源解析工具。"
+        ],
+        "article_id": "5ff4bf30ae94874f"
+      },
+      {
+        "object_type": "project",
+        "name": "Docling",
+        "canonical_name": "Docling",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "2025-10-23 的更新日志显示 RAGFlow 支持 MinerU 与 Docling 作为文档解析方法。",
+          "该集成扩展了 RAGFlow 对复杂格式文档的理解与抽取能力。"
+        ],
+        "article_id": "5ff4bf30ae94874f"
+      }
+    ],
+    "extract_result": "success",
+    "impact_score": {
+      "score": 5.5,
+      "reason": "RAGFlow 是国内较活跃的开源企业级 RAG 引擎，本次信息主要是一次常规版本（v0.26.4）与近期功能迭代的汇总：接入 DeepSeek v4 / GPT-5 / Gemini 3 Pro、支持 MCP、多聊天渠道、多模态文档解析与云服务等。这些更新会加剧 RAG/Agent 框架之间的局部竞争，对已经采用或评估 RAGFlow 的开发者与企业有直接参考价值，但并不构成检索增强或 Agent 范式的底层突破，也未达到 ChatGPT 式行业震动。因此判定为‘重要产品迭代，影响局部竞争格局’，处于 4–7 分区间中段偏上。"
+    },
+    "sentiment": "positive",
+    "developer_sentiment": {
+      "tone": "excited",
+      "primary_focus": "RAG 与 Agent 编排的落地体验、对最新模型与 MCP 生态的集成 completeness，以及官方云服务是否会导致开源版功能阉割或锁定"
+    },
+    "hype_assessment": {
+      "level": "medium",
+      "reason": "项目 README 使用了较多 PR 色彩词汇，如‘leading open-source’、‘superior context layer’、‘exceptional efficiency and precision’、‘needle in a data haystack’等，带有明显的营销包装；但同时提供了具体的版本号（v0.26.4）、发布时间线、Docker 部署命令、硬件要求和云服务地址，整体可验证、可落地，水分可控，因此判定为‘存在一定包装’而非严重炒作。"
+    },
+    "information_entropy": "medium",
+    "domain_disruption": {
+      "technical_innovation": "本质上是企业 RAG 流水线的工程封装与编排增强：融合上下文引擎、多路召回+融合重排、可解释引用、多模态文档解析（MinerU/Docling）以及 Agentic Workflow 与 MCP 集成。其创新点不在底层算法，而在于把非结构化数据接入、检索、生成与 Agent 执行整合为相对完整的可部署方案。",
+      "business_model": "采用开源核心 + 官方云服务（https://cloud.ragflow.io）的双轨模式，既通过 GitHub 社区获取用户与贡献者，又以托管服务探索商业化；对 Dify、LangChain、FastGPT 等同类 RAG/Agent 平台形成竞争压力，也可能推动国内 RAG 基础设施进一步向‘开源免费+云端付费’形态收敛。"
+    },
+    "engineering_complexity": "production_ready",
+    "compound_value": {
+      "score": 6.5,
+      "reason": "RAGFlow 定位为企业级 RAG + Agent 中间件，解决的是非结构化数据到可投产 AI 系统的持续痛点，市场需求真实且随 LLM 普及而扩大。项目已迭代至 v0.26.4，持续集成 DeepSeek v4、GPT-5、Gemini 3 Pro、MCP 等最新模型与协议，显示较强的工程活力和生态跟进能力。开源模式有助于建立开发者生态，并通过 cloud.ragflow.io 云服务探索商业化。但 RAG 赛道技术门槛正在快速降低，向量数据库、云厂商（Azure AI Search、AWS Kendra）和 LLM 平台都在内置类似能力，RAGFlow 的长期壁垒和货币化路径仍需验证，因此暂不能给出 8 分以上的高确定性评分。"
+    },
+    "value_capture_layer": "agent_middleware",
+    "moat_impact": "democratizes_access",
+    "key_beneficiaries": [
+      "infiniflow",
+      "Elasticsearch",
+      "Infinity",
+      "OpenAI",
+      "DeepSeek",
+      "Google",
+      "云服务厂商"
+    ],
+    "competitive_casualty": [
+      "闭源 RAG 平台",
+      "传统知识库与文档管理厂商",
+      "单一文档解析工具",
+      "小型 RAG 初创公司"
+    ],
+    "market_opportunities": [
+      "企业可将 RAGFlow 作为私有化知识库与智能客服底座，快速搭建支持多源文档、多模型接入的 RAG/Agent 应用，降低非结构化数据落地 AI 的成本。",
+      "ISV 与系统集成商可基于 RAGFlow 的 Docker 部署与可编排 ingestion pipeline，为金融、法律、制造等垂直行业交付可解释、可溯源的文档问答解决方案。",
+      "开发者与运维团队可关注其 MCP/Agentic Workflow 与多聊天渠道集成能力，抢先布局面向企业内部协同的 AI 助手插件生态。"
+    ],
+    "risk_matrix": {
+      "regulatory": "企业私有化部署虽有助于数据主权合规，但仍需关注文档解析、检索召回与生成内容中的版权、个人信息保护及跨境模型 API 调用合规风险；使用第三方 LLM API 时应审查服务条款与数据留存策略。",
+      "technological": "RAGFlow 官方仅提供 x86 Docker 镜像，ARM64 需自行构建；同时大模型与 embedding 模型快速迭代（如 DeepSeek v4、GPT-5、Gemini 3 Pro），存在版本适配、性能回退及架构被更轻量方案替代的风险。",
+      "competitive": "开源 RAG/Agent 框架竞争激烈（如 Dify、LangChain、LlamaIndex、MaxKB 等），且云厂商与头部模型厂商正在集成原生 RAG/知识库能力，RAGFlow 面临生态挤压与价格战压力。",
+      "ethical": "RAG 系统可能基于不完整或有偏的检索结果生成误导性回答，或在处理企业敏感文档时造成信息泄露、权限越界；需关注可解释性、访问控制与人工介入机制。",
+      "additional": [
+        "运行门槛较高（最低 4 核 16GB 内存、50GB 磁盘、Elasticsearch/Infinity 依赖），中小企业落地成本与运维复杂度不可忽视。",
+        "代码执行器（sandbox）依赖 gVisor，若配置不当可能引入容器逃逸或恶意代码执行的安全风险。",
+        "项目迭代频繁，MCP/Agent 记忆等新功能尚处于快速演进期，API 与配置存在不稳定或破坏性变更的可能。"
+      ]
+    },
+    "confidence": {
+      "impact": "high",
+      "compound": "medium",
+      "hype": "medium"
+    },
+    "actionable_insight": "strategic_invest",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "infiniflow/ragflow",
+        "canonical_name": "RAGFlow",
+        "url": "https://github.com/infiniflow/ragflow",
+        "positioning": "RAGFlow 是面向企业级 LLM 应用的开源 RAG 引擎，通过融合上下文引擎与预置 Agent 模板，将复杂非结构化数据转化为可投产的人工智能系统。",
+        "technical_signal": "项目采用融合上下文引擎、多路召回与融合重排、可追溯引用以及代码执行沙箱，支持多模态文档解析与可编排 ingestion pipeline。",
+        "adoption_signal": "README 标注当前推荐 Docker 镜像为 v0.26.4，提供完整 Docker Compose 部署文档与硬件最低要求，并同步推出 cloud.ragflow.io 云服务。",
+        "ecosystem_relevance": "作为开源 RAG 引擎，RAGFlow 持续集成 DeepSeek v4、GPT-5、Gemini 3 Pro、MCP、MinerU/Docling 以及 Confluence/S3/Notion/Google Drive 同步，生态兼容性较强。",
+        "target_users": [],
+        "watch_reason": "RAGFlow 迭代节奏快、版本功能密集，且同时提供开源自托管与官方云服务两种交付模式，企业落地路径清晰；其持续扩展的模型与数据源集成能力使其成为 RAG/Agent 基础设施领域值得长期跟踪的对象。",
+        "risk_notes": [
+          "Docker 镜像仅提供 x86 平台构建，ARM64 用户需自行编译镜像。",
+          "最低硬件要求为 4 核 CPU、16 GB 内存、50 GB 磁盘，中小团队部署成本不可忽视。",
+          "功能迭代密集可能带来版本兼容性与运维复杂度上升的风险。"
+        ],
+        "score": 8.0,
+        "article_ids": [
+          "5ff4bf30ae94874f"
+        ],
+        "evidence_snippets": [
+          "RAGFlow 是 infiniflow 维护的开源 RAG 引擎，融合检索增强生成与 Agent 能力，为企业级大语言模型应用提供上下文层。",
+          "仓库 README 列出当前推荐 Docker 镜像版本为 v0.26.4，并提供了 docker compose -f docker-compose.yml up -d 等部署命令。",
+          "项目支持多模态文档解析、可编排的 ingestion pipeline、代码执行沙箱以及面向个人与大型企业的 RAG 编排能力。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "RAGFlow Cloud",
+        "canonical_name": "RAGFlow Cloud",
+        "url": "https://cloud.ragflow.io",
+        "positioning": "RAGFlow Cloud 是 RAGFlow 官方提供的托管云服务，与开源自托管版本并行，为用户提供免部署的 RAG/Agent 体验入口。",
+        "target_users": [
+          "希望快速试用 RAGFlow 的企业与开发者",
+          "缺乏运维资源但需企业级 RAG/Agent 能力的团队"
+        ],
+        "product_signal": "云服务基于同一 RAGFlow 引擎，支持 README 中列举的多聊天渠道、多数据源同步、代码执行沙箱与企业级 RAG 编排能力。",
+        "market_signal": "官方将云服务作为试用入口与开源部署并列推荐，显示出项目正在探索托管 SaaS 商业化路径。",
+        "differentiation": "与纯开源项目相比，RAGFlow Cloud 提供零运维的托管选项，可降低企业试用与部署门槛。",
+        "watch_reason": "RAGFlow Cloud 是该项目从开源工具向托管服务延伸的关键载体，其商业化进展、定价策略与稳定性将直接影响 RAGFlow 生态的落地规模，值得持续关注。",
+        "risk_notes": [
+          "托管服务的 SLA、数据隐私与合规政策在 README 中未详细披露。",
+          "云版本功能更新与开源版本可能存在差异，企业需评估锁定风险。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "5ff4bf30ae94874f"
+        ],
+        "evidence_snippets": [
+          "README 中明确引导用户通过 https://cloud.ragflow.io 试用 RAGFlow 的云服务。",
+          "云服务与开源自托管版本并行存在，作为项目官方提供的托管部署选项。"
+        ]
+      }
+    ]
+  },
+  {
+    "source_dir": "github-trending",
+    "title": "macro-inc/macro",
+    "source": "https://github.com/macro-inc/macro",
+    "author": [],
+    "published": "",
+    "created": "2026-08-13",
+    "manifest_dates": [
+      "2026-08-13",
+      "2026-08-14",
+      "2026-08-15"
+    ],
+    "description": "Macro is a unified workspace for teams: email, chat, docs, tasks, agents, calls, and CRM — @-linked together with shared AI memory. Sign up · Docs · Book demo · Website · Feature requests · Contribute · Hiring Macro is the all-in-one workspace for you and your team. It unifies email + messages + docs + tasks + agents + CRM into a single fast interface with shared team-level memory. Everything in your workspace is @linked and searchable so your team (and your agents) never have to switch tools. Why Macro We built Macro because we wanted a single operating system for our startup. There are many good software products, and we used them all — Slack, Linear, Notion, HubSpot, and Superhuman — but they don't work together as one system. As we scaled our last venture to ~20 people things started to break: every team got their own tools and the company was held together by MCP and Zapier. The company was not computable. It was chaotic. Macro is a complete redesign of work software from the ground up as a single system. Designed by us in NYC and Toronto, dogfooded by our team of ~15 for two years. Built in SolidJS and Rust for speed and reliability. We're focused on building something that any small company or team at a larger company can use as their \"operating system\". Features Macro is composed of 'blocks' designed to be modular, extensible, and work together like Lego. For each block, we studied the best prior art and tried to make it even better. Each surface is purpose-built for its job rather than composed from a generic block primitive — but every one of them shares the same backend; cross-references between a doc and a task, or a channel message and an email, are natively stored as a bidirectional graph. Block Docs What it does Email Docs → Multi-account unified inbox, keyboard shortcuts, and shared inboxes. Gmail. Messages Docs → Channels and direct messages designed for focused technical discussions. Tasks Docs → Linear-inspired tasks, tightly integrated with channels, email, and agents. Docs Docs → Real-time collaborative, markdown-native docs built on CRDTs, with @mentions. Canvas Docs → 2D board with embedded @links to tasks, files, and emails. Agents Docs → Unified, team-level memory. Can take action on your behalf. Calls Docs → Recorded, transcribed, and logged to team memory for agents. File storage Docs → Auto-imported from email and channels, fully searchable. Pull requests Docs → Linked to tasks, embeddable in channels, available to agents. CRM Docs → Customer and contact objects, custom properties, email sync, enrichment. Multiple email inboxes w/ good AI tools, integrated CRM Macro Mail is inspired by Superhuman's keyboard-first interface with a few key additions: Multi-account. Triage all your Google accounts in a single inbox, with the same tagging and sharing system. Or triage individually. Unified inbox: emails, messages, @mentions, and tasks to complete, all in the same list. Use j k and e to navigate everything. Better AI, with a tools/MCP surface designed to work across inboxes and to help your agents more accurately retrieve information. For example, we expose a unified search tool that allows agents to search all file attachment PDFs (parsed out of email) directly, rather than pulling email threads then attachments. You can also draft, edit and send emails right from AI chats, without opening your email. Multitasking ability — Macro has a built-in window manager that lets you create 3+ splits (scales with monitor size) so you can draft emails while reviewing prior threads. Company/Contact objects. Macro has native CRM capability so you can cmd+k to a contact, like tim@acme.com to see all emails between you and that person, or companies, to see all emails and files between everyone on your team and everyone at that company, e.g. @acme.com. All of this right from your email without having to open a heavyweight CRM like HubSpot or Salesforce. Email aggregation by contact or company is also available to your agents so they can better assist with CRM-type queries and actions. Macro Mail lives in the same interface as channels, docs, tasks, and code. From any email, hit \"task\" to create a linked task, e.g. a ticket for an engineer from a customer support email. @mention emails in documents, e.g. @Re: Contract Signature.eml inside of Todos.md. In Macro, your email is brought into the fold with all of your tools, and your team, in the same permissions system: just hit Share to share an email to any DM or channel — no need to screenshot. Email docs → Team chat for focused technical discussions Macro Chat is designed to be more focused than Slack. The first couple of replies show inline and the rest collapse into a thread, so a busy channel stays readable. Threads are permissioned severally so you can share threads across channels by copying links. Everything is stored in a bidirectional graph, so tasks @link to messages that created them, customer support emails tie into support channels, CRM records get updated when they're discussed in messages, etc. The core idea is that (i) messaging should be the centerpiece around which tasks, mail, docs, and content management are built, all in a lightweight way, and agents should be first-class citizens like human users and (ii) messaging needs to be more focused and readable for technical conversations, and not turn into battles where context is lost and progress is indistinguishable from noise. Messages docs → Task management built around chat Linear recently published a report that issue tracking is dead. We agree with that, but the stronger form is that issue tracking never really worked, at least for us. We really tried and we blamed ourselves, but as we talked to other companies, it turns out that nobody was using their issue tracker \"correctly\". And if that's the case, the problem is the design of the tool, not the companies that use it. The core problem with traditional issue trackers or project management tools is that they get out of date. The reason they get out of date is that (i) they're a separate system from where the conversation really happens in team chat (e.g. Slack, Macro, Discord, etc.) and (ii) they don't add much benefit beyond tracking the work. They're a chore with near-term costs and only the promise of long-term benefit. They're too rigid compared to a 2D canvas, too opinionated, and don't match how your project actually functions. The solution isn't to forgo tracking entirely. We tried that and it was a different form of chaos. The solution we've found is lightweight issues tightly coupled to your channels and DMs, so that issue tracking naturally occurs where the conversation itself happens. Creating tasks in Macro is easy. Where possible, tasks created are bidirectionally linked to the creating context (e.g. a customer email) so the full chain is auditable from \"why are we doing this\" → task → agent → pull request, all in one system. Create a task from an email From anywhere via c t From a markdown doc with /task From any - [ ] bullet by highlighting and clicking \"Task\" @Macro create tasks in any channel or DM In any agent chat Via external MCP, API or SDK Tasks docs → @linked markdown docs powered by CRDTs We wanted everything in a single markdown editor without switching tools. Native markdown compatibility and bulk/import export (see \"file over app\" paradigm) Live collaboration with CRDTs and Cloudflare durable objects make it feel like you're editing on the same computer. Edits come in ~instantly instead of ka-chunking like Google Docs Version control: history and forking, with a neat UI for scrubbing history. This is still in v1, there's a lot to do to get it closer to git, or we may eventually add git compatibility. Offline editing and reconciliation. @-linked to everything in your workspace: email, docs, tasks, messages, channels, companies, contacts, etc. Like Notion but multi-modal Mobile-friendly, in our iOS app or on the web (Android app coming soon) Agent native editing, powered by swarms of agents operating as peers in the CRDT collaboration system like human collaborators. See Wolf's tech blog on this. Use via MCP or internal agent. Agents can edit documents that are open or closed. One interesting use case for agentic editing is to maintain team-context. For example we have a Macro Automation that runs daily to update our in-office Pool Games markdown doc. It scans through all of the channels to see if anyone has one and then updates the doc. If somebody has already edited the doc, it can know that and forgo the update. Conflicts are handled natively by the CRDT collaboration system. Docs → CRM that keeps itself up to date The problem with standalone CRM is the same as with task trackers: it's not up to date. The CRM only partially reflects reality, so if you want to know what the latest status on a deal is you still have to message the AE/SDR and ask for context. CRMs are also too rigid and closed-source, while DIY CRMs in Airtable/Notion don't provide email aggregation by Company/Contact/Deal that is the core feature of CRM. We went through all the CRMs, including the new AI-native ones, and while they're well-designed they're just structurally set up to fail over time. Macro fixes this by colocating your CRM with your team chat and email, instead of having a separate system. When you @mention a company record in a message, your team can click that record to see the latest — it's much faster than navigating to your CRM to find the record, going back to Slack and pasting it in, and this speed difference makes all the difference. Secondly, @mentioning a Company/Contact creates a bidirectional link between that message and the record, so from the record later you can trace the conversations that happened. This fixes the core issue we had with Attio/HubSpot/Salesforce: the actual important conversation about a deal happens not in the CRM but over messages. Macro makes this a feature rather than making you feel disorganized about it. It's not your fault, it was the CRM's fault! We haven't innovated on the core idea of CRM other than what you read in the above paragraph. None of this should be that interesting: Kanban board and customizable deal stages, list view, saved views, shareable views, personal and team views, etc. \"Notes\" on the company actually use the same system as channels/DMs, so you can @mention and do all of the things you expect in a channel. Basically, every deal gets its own channel, automatically, that's pinned right to the deal record @mention the company or contact from any note, message, task, pull request, etc., to create a bidirectional link between the record and that thing. For example, @mention a company from an engineering task to note their request. It all ties together. CRM docs → Agents and unified team-level memory Since Macro has the team context in a single database, it is uniquely positioned to offer team-level memory with full context of all of the operations of the business. We do this every day via a cron job. Your memory is updated from team conversations, your DMs, your sent and received emails, tasks created and completed, etc. All of this is synthesized together in one pass, rather than severally, and combined with your previous memory to form the new memory output. The net result: Macro has the best memory on what you're working on and what you care about vs. chatbots that only build memory from prior chats This memory is available to external agents via MCP, or any AI model (OpenAI, Google, Anthropic, etc.) through the model picker for maximum portability The memory is plainly stored in markdown so you can export it as you please. To manually update it, just ask the AI to remember something/update your memory Team memory comes in quite handy. For example, I took a screenshot of some features I'd written in a paper notepad and asked the agent to create tickets and assign to the appropriate engineer which it did perfectly without any runtime tool use. Memory isn't supposed to encompass everything. Macro also has a tool/MCP surface with near 100% coverage of the things you can do in Macro's UI, so that your agents aren't limited in what they can do like they are in most SaaS. There are also no rate limits on MCP. Agents docs → Your coding agents can use Macro too. Point Claude Code, Codex, or any MCP client at your workspace: claude mcp add --transport http macro https://mcp-server.macro.com/mcp See MCP setup and agent recipes for what they can do once connected. How it all works together As we've discussed above, each of the blocks is designed to be best-in-class. We have thoughtfully designed each of Chat, Docs, Email, Agents, etc., to improve on your status quo individually. But where it all comes together is how it's more than the sum of its modules; it's how they work together. Bidirectional @linking. @mention a doc in a message and both know about each other. Your workspace becomes a web of context you can navigate in either direction. Channel-based permissions. Anything you @mention in a channel is automatically shared with its members. Join a channel, gain access; leave, lose it. No permission-request dance. Unified memory. Agents remember what your whole team is doing across email, messages, tasks, docs, and calls, not just your own chat history. Refreshed nightly. One inbox. Emails, channel messages, task assignments, @mentions, and agent responses all land in one place, split into Signal and Noise. Keyboard-first throughout. Deeper reading: key concepts covers blocks, mentions, properties, and permissions; the FAQ covers comparisons, licensing, and self-hosting. Using the hosted app Sign up and connect your Gmail or Google Workspace account. Macro runs in any modern browser, with an iOS app for your phone. The getting started guide takes you from a fresh account to a working setup in about 15 minutes. Coming from Notion, Slack, Superhuman, or Linear? See Switch to Macro. Running it locally To run the full app on your machine, follow Running locally. To contribute, see CONTRIBUTING.md. Layout macro/ ├── apps/ │ ├── web/ SolidJS client — browser, Tauri desktop, mobile │ └── docs/ docs.macro.com ├── services/ 42 deployable services, workers, and Lambda handlers ├── crates/ 167 Rust libraries — domain logic, models, db clients ├── packages/ shared TypeScript — collaboration, lexical-core, loro-mirror ├── infra/ Pulumi definitions ├── docker/ local Compose stack ├── nix/ pinned dev shell and build inputs └── tooling/ repo scripts and code generators Services follow a hexagonal layout: inbound adapters, a domain core with ports, outbound adapters. docs/STYLE_GUIDE.md has the conventions and CONTRIBUTING.md covers the PR process. Security Enterprise-grade security. Zero data retention with model providers, including no training on customer data. SOC 2 Type II certified. We welcome responsible security reports and pay bounties in accordance with severity and impact. Send reports to security@macro.com. License Macro is fully open source — not \"open core\" — under the GNU Affero General Public License v3.0. See LICENSE.txt for details. You can self-host Macro under the terms of the AGPLv3; the FAQ covers what that involves. If you want to build on top of Macro under a different license, contact licensing@macro.com. For managed hosting or commercial arrangements, contact self-host@macro.com. Community Have an idea, want to contribute, or want to work on Macro? Feature requests: contact@macro.com Contributions: see our contribution guidelines Hiring: teo@macro.com Star us on GitHub If Macro is interesting/useful to you, please scroll up and give the repo a star (scroll to the top of this page -> click Star in top right). Stars are how most users hear about Macro because they move us up GitHub's search and trending pages.",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "844fbd0518c26ea6",
+    "source_type": "community_discussion",
+    "tldr": "Macro 是一款由 macro-inc 团队打造的 all-in-one 团队协作工作空间，将邮件、即时消息、文档、任务、Agent、CRM 等整合到统一界面，并以双向图和团队级记忆为核心架构。",
+    "objective_summary": "macro-inc 团队公开介绍其新产品 Macro，定位为面向初创公司和小团队的统一工作操作系统。该产品采用 SolidJS 前端与 Rust 后端构建，通过模块化 Block 与全局双向图关联邮件、消息、文档、任务、CRM 和 Agent，并支持 MCP 与外部模型对接。团队在纽约和多伦多设计开发，已内部试用约两年，目前正面向公众推广。",
+    "event_type": "application_landing",
+    "epistemic_status": "pr_statement",
+    "entities": {
+      "companies": [
+        "macro-inc"
+      ],
+      "technologies": [
+        "SolidJS",
+        "Rust",
+        "CRDT",
+        "MCP",
+        "Cloudflare Durable Objects"
+      ],
+      "key_people": []
+    },
+    "key_logic_flow": [
+      "Macro 是 macro-inc 团队推出的 all-in-one 团队工作空间，整合邮件、消息、文档、任务、Agent、通话、文件存储、Pull Request 与 CRM。",
+      "产品采用 SolidJS 与 Rust 构建，设计为模块化 Block 体系，所有模块共享同一后端，并通过双向图原生关联不同工作对象。",
+      "Macro Mail 提供多账号统一收件箱、键盘优先交互、AI/MCP 工具面和原生 CRM 联系人/公司聚合能力。",
+      "Macro Chat 通过线程折叠与权限分离减少信息噪音，并让消息、任务、邮件、CRM 在双向图中相互引用。",
+      "任务系统主张将 issue tracking 嵌入频道和私信场景，实现轻量问题追踪与对话上下文的双向绑定。",
+      "文档基于 CRDT 与 Cloudflare Durable Objects 实现实时协作、版本历史、离线编辑和 Agent 原生编辑。",
+      "团队级记忆通过定时任务综合邮件、消息、任务等数据生成 markdown 记忆，并通过 MCP 或模型选择器供外部 Agent 使用。"
+    ],
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "Macro",
+        "canonical_name": "Macro",
+        "url": "https://github.com/macro-inc/macro",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Macro 是面向团队的一体化工作空间，将 email、messages、docs、tasks、agents、CRM 统一到一个快速界面中。",
+          "产品由位于纽约和多伦多的团队设计，约 15 人团队内部 dogfood 了两年，并采用 SolidJS 和 Rust 构建。",
+          "Macro 由多个模块化的 Block 组成，每个 Block 共享同一后端，模块之间通过双向图进行原生关联。"
+        ],
+        "article_id": "844fbd0518c26ea6"
+      },
+      {
+        "object_type": "product",
+        "name": "Macro Mail",
+        "canonical_name": "Macro Mail",
+        "url": "https://github.com/macro-inc/macro",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "Macro Mail 借鉴 Superhuman 的键盘优先界面，并新增多账号统一收件箱、更好的 AI/MCP 工具和原生 CRM 联系人/公司聚合。",
+          "用户可以在同一界面中处理邮件、消息、@mentions 和待办任务，并通过快捷键 j/k/e 进行导航。",
+          "Macro Mail 与 channels、docs、tasks、code 共处同一界面，支持从邮件一键创建关联任务或分享到任意频道。"
+        ],
+        "article_id": "844fbd0518c26ea6"
+      },
+      {
+        "object_type": "product",
+        "name": "Macro Chat",
+        "canonical_name": "Macro Chat",
+        "url": "https://github.com/macro-inc/macro",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "Macro Chat 设计得比 Slack 更聚焦，前几轮回复直接内联显示，后续回复折叠为线程以保持频道可读。",
+          "所有消息存储在双向图中，任务可与创建它们的消息双向链接，CRM 记录也能在讨论中自动更新。",
+          "线程权限独立设置，因此可以通过复制链接在不同频道之间共享线程。"
+        ],
+        "article_id": "844fbd0518c26ea6"
+      }
+    ],
+    "extract_result": "success",
+    "impact_score": {
+      "score": 5.5,
+      "reason": "这是一篇产品发布/PR 声明，而非学术研究或基础设施发布。Macro 尝试用统一双向图、CRDT、MCP 与团队级记忆把邮件、消息、文档、任务、CRM 等整合为 all-in-one 工作空间，技术方向对 AI Agent 时代的工具集成有启发。但短期行业影响受限于：团队规模小、市场已被 Slack/Notion/Linear/HubSpot 等占据、迁移成本与生态锁定极高、'all-in-one 替代一切' 的口号仍需验证。因此属于有局部竞争格局潜力的产品发布，尚未达到范式转移。评分：5.5/10。"
+    },
+    "sentiment": "mixed",
+    "developer_sentiment": {
+      "tone": "skeptical",
+      "primary_focus": "SolidJS/Rust 技术栈与 MCP/Agent 集成是否只是营销亮点，以及 all-in-one 平台能否在工程上真正替代现有最佳单品工具"
+    },
+    "hype_assessment": {
+      "level": "medium",
+      "reason": "文中出现 'complete redesign from the ground up'、'single operating system'、'issue tracking is dead'、'agents first-class citizens' 等典型 PR 话术，存在夸大一体化替代前景的倾向；不过也披露了具体技术选型（SolidJS、Rust、CRDT、Cloudflare Durable Objects）和功能模块，整体属于有实质内容的包装，尚未到纯概念炒作。判定为中等水分。"
+    },
+    "information_entropy": "medium",
+    "domain_disruption": {
+      "technical_innovation": "核心创新在于把邮件、消息、文档、任务、CRM 等工作对象统一建模为后端双向图，使跨模块引用成为原生能力；同时以 CRDT + Cloudflare Durable Objects 支持实时协作与离线编辑，并以 MCP 将团队级记忆和工具暴露给外部 Agent，形成 Agent 可操作的统一工作上下文。",
+      "business_model": "面向初创公司和小团队的 all-in-one SaaS，试图用单一订阅替代多个独立工具（Slack、Linear、Notion、HubSpot 等），通过降低工具碎片和 Agent 集成复杂度获取用户；风险在于巨头生态锁定、迁移成本高，以及功能深度可能不及各垂直领域的成熟产品。"
+    },
+    "engineering_complexity": "production_ready",
+    "compound_value": {
+      "score": 4.5,
+      "reason": "Macro 试图以 all-in-one 团队工作空间统一邮件、IM、文档、任务、CRM 与 Agent，并通过双向图和团队级记忆把离散的工作数据连成可计算图。一旦用户规模起来，这张图会带来搜索、自动化、CRM 洞察等复利能力，理论上可形成迁移成本和数据网络效应，具备成为初创团队‘操作系统’的潜力。但目前仅是产品发布/PR 阶段，缺乏客户数量、ARR、CAC、分发渠道和 PMF 的实证；all-in-one 赛道被 Microsoft/Google/Slack/Notion/Linear/Salesforce 等巨头与垂直冠军把持，替换成本极高；SolidJS/Rust/CRDT/Cloudflare Durable Objects/MCP 等技术选型只能说明工程质量，尚不足以单独构成护城河。因此它属于‘有潜力成为细分基础设施，但需持续验证’的区间，而非 8-10 分的确定性基石，给予 4.5 分。"
+    },
+    "value_capture_layer": "end_application",
+    "moat_impact": "creates_new_moat",
+    "key_beneficiaries": [
+      "macro-inc",
+      "Cloudflare"
+    ],
+    "competitive_casualty": [
+      "Slack",
+      "Notion",
+      "Linear",
+      "HubSpot",
+      "Salesforce",
+      "Superhuman",
+      "垂直 SaaS 工具厂商"
+    ],
+    "market_opportunities": [
+      "面向初创公司和小型团队的一体化工作操作系统存在差异化空间，可围绕'邮件+消息+文档+任务+CRM+Agent'原生整合构建垂直产品",
+      "团队级记忆与MCP外部模型对接能力代表新兴机会，可开发供第三方Agent调用的上下文感知中间件或企业服务插件",
+      "基于双向图的工作对象关联架构可延伸至自动化工作流、智能客户支持与销售赋能等B2B SaaS场景"
+    ],
+    "risk_matrix": {
+      "regulatory": "跨账号邮件聚合、团队级记忆和外部Agent数据访问可能触发数据隐私、GDPR/个人信息保护及邮件服务条款合规风险",
+      "technological": "一体化架构复杂度高，存在功能深度不及专业工具、CRDT/Cloudflare Durable Objects稳定性及长期可扩展性风险",
+      "competitive": "Slack/Teams、Notion、Linear、Superhuman、HubSpot/Salesforce等巨头已占据用户心智，极易陷入多面竞争和生态挤压",
+      "ethical": "团队级记忆与Agent原生访问可能引发员工监控、数据所有权、跨账户数据边界模糊等数据伦理争议",
+      "additional": [
+        "产品定位过于宽泛，可能导致用户认知模糊和迁移成本过高",
+        "早期团队规模和资金能力是否能支撑全栈产品的研发与运营存在不确定性"
+      ]
+    },
+    "confidence": {
+      "impact": "medium",
+      "compound": "medium",
+      "hype": "medium"
+    },
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "Macro",
+        "canonical_name": "Macro",
+        "url": "https://github.com/macro-inc/macro",
+        "positioning": "Macro 是面向初创公司和小型团队的 all-in-one 工作操作系统，通过统一界面与共享团队记忆整合邮件、消息、文档、任务和 CRM。",
+        "target_users": [
+          "初创公司和小型团队",
+          "大型企业内的子团队",
+          "需要统一工作流的技术团队"
+        ],
+        "product_signal": "Macro 的邮件、消息、文档、任务、画布、Agent、通话、文件、Pull Request 与 CRM 等 Block 共享同一后端，支持统一收件箱、CRM 联系人聚合与 Agent 工具面。",
+        "market_signal": "产品已由约 15 人的团队内部 dogfood 近两年，现公开面向初创公司及大型企业内部团队推广，试图替代现有多种工具组合。",
+        "differentiation": "产品以双向图原生关联邮件、消息、任务与 CRM 等对象，并提供团队级记忆与 MCP 工具面，使 Agent 与人类用户一样成为一等公民。",
+        "watch_reason": "Macro 试图以双向图与团队级记忆重构工作软件，用一个统一系统替代割裂的邮件、聊天、文档、任务与 CRM，并内置 MCP 让 Agent 成为一等公民，对 AI 协作平台的演进方向具有代表性，值得跟踪其市场接受度与产品迭代。",
+        "risk_notes": [
+          "作为新进入者，面临 Slack、Notion、Linear、HubSpot 等成熟产品的生态锁定与用户迁移成本。",
+          "产品采用 All-in-one 路径，覆盖邮件、聊天、文档、任务与 CRM 等多个领域，可能带来功能复杂度与学习成本。",
+          "团队级记忆与双向图架构需要持续证明其能真正减少工具切换、提升效率，而非增加认知负担。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "844fbd0518c26ea6"
+        ],
+        "evidence_snippets": [
+          "Macro 是面向团队的一体化工作空间，将邮件、消息、文档、任务、Agent 和 CRM 整合到统一的高速界面，并具备共享的团队级记忆。",
+          "产品由纽约和多伦多的团队设计，约 15 人的团队已内部 dogfood 近两年，并采用 SolidJS 与 Rust 构建，以追求速度与可靠性。",
+          "Macro 由多个模块化的 Block 组成，各 Block 共享同一后端，不同模块间的邮件、消息、文档、任务与 CRM 等对象通过双向图实现原生关联。",
+          "Macro Mail 提供多账号统一收件箱、键盘优先交互、AI/MCP 工具面，以及按任意联系人或公司聚合邮件的强大原生 CRM 能力。",
+          "团队级记忆会定时综合邮件、消息和任务等数据生成 markdown 记忆，并可通过 MCP 或模型选择器供外部智能体调用。"
+        ]
+      }
+    ]
+  },
+  {
+    "source_dir": "github-trending",
+    "title": "cactus-compute/needle",
+    "source": "https://github.com/cactus-compute/needle",
+    "author": [],
+    "published": "",
+    "created": "2026-08-13",
+    "manifest_dates": [
+      "2026-08-13",
+      "2026-08-14",
+      "2026-08-15",
+      "2026-08-16",
+      "2026-08-17"
+    ],
+    "description": "14MB foundation model for tiny devices; phones, wearables, smart home, and robots. Needle 2 Needle 2 is an open 45M-parameter model for tool calling, device use and structured extraction. The whole model is a single 14MB binary that runs a full session in about 28MB of RAM. It is built on our Simple Attention Network findings, compressed to CQ2-bit with Cactus Quants, and baked into its own engine. On the benchmarks below, Needle 2 trades wins with other small models like FunctionGemma 270M, LFM2.5 230M and Apple FM, at 5x to 70x smaller, and 2 bits against their f16. This repository is the Python package: inference, LoRA fine-tuning, and export. pip install cactus-needle, describe your tools, and call them from Python. The inference engine is fetched once from Hugging Face and cached; there is nothing else to build. Self-contained: weights baked into a single 14MB engine; no separate model files to manage, and inference does no network. Simple contract: tool calls come back as structured data, text in, JSON out; a byte-level grammar compiled from your schemas constrains every token. Confidence-gated: every response carries a calibrated confidence score from a learned head; set a threshold, act above it, escalate below it. Tool retrieval: declare a large catalogue and a built-in retrieval head renders only the top five tools per turn, with the grammar constrained to that subset. Bounded memory: a 256-token sliding window with the tools pinned as KV sinks, so total memory stays near 28MB no matter how long the conversation runs. Weights: huggingface.co/Cactus-Compute/needle2 · source: github.com/cactus-compute/needle. Simple Attention Network Needle 2 is a Simple Attention Network, our dense small-model recipe: a Hadamard MLP in place of the FFN, GQA attention, engram key-value memory, and multi-lane hyper-connections. See the paper for the design and ablations: arXiv:2607.18363. Each block carries its update rule. Here x̂ is the RMS-normalised flattening of the four residual streams, H the orthonormal Walsh-Hadamard transform (a fixed matrix, applied in n log n time with no weights to read), (kₜ, vₜ) rows gathered from hashed n-gram tables, and P the doubly-stochastic normalisation of the routing logits A, computed by Sinkhorn iteration; a, b, g and all σ-gates are learned and input-dependent. Both attention and MLP residuals are sandwich-normed and gated, the engram sites fire at two layers, and decoding is constrained by a byte-level grammar compiled from the declared schemas. Quickstart pip install cactus-needle Needle reads your tool descriptions to decide what to call and how to fill arguments, so describing them well is the whole game. You can do it three ways, from least to most control. Simple: decorate a function. The signature gives the argument types, the docstring is the tool description, and run() completes the loop: model picks the call, Needle executes your function, feeds the result back, and returns the final response with the executed tool results attached as results. import needle @needle.tool def get_weather(city: str): \"Get the current weather for a city.\" return {\"city\": city, \"temp_c\": 27, \"sky\": \"clear\"} agent = needle.Needle(tools=[get_weather]) print(agent.run(\"what's it like in Lagos right now?\")[\"results\"]) # [{'city': 'Lagos', 'temp_c': 27, 'sky': 'clear'}] Medium: describe each argument and offer choices. Needle reads a Google-style Args: block for per-parameter descriptions; a default makes an argument optional; a Literal becomes a fixed set the model must choose from (it cannot emit anything else). from typing import Literal @needle.tool def set_thermostat(temperature: int, mode: Literal[\"heat\", \"cool\", \"auto\"] = \"auto\"): \"\"\"Set the thermostat. Args: temperature: target temperature in Celsius mode: heating strategy to use \"\"\" return {\"temperature\": temperature, \"mode\": mode} agent = needle.Needle(tools=[set_thermostat]) agent.run(\"make it 21 and cool the room\") Advanced: constrain the values with needle.Field, attached inline via Annotated. Ranges, patterns, lengths, and item counts are compiled into the decode grammar, so the model can only ever emit values that satisfy them. from typing import Annotated @needle.tool def send_money( amount: Annotated[float, needle.Field(gt=0, le=10000, description=\"USD, up to 10,000\")], to: Annotated[str, needle.Field(pattern=r\"^@[a-z0-9_]+$\", description=\"recipient handle\")], memo: Annotated[str, needle.Field(max_length=80)] = \"\", ): \"Send money to a handle.\" return {\"sent\": amount, \"to\": to} Field supports description, enum, const, ge/le/gt/lt, multiple_of, min_length/max_length, pattern, format, min_items/max_items, and unique_items. Extraction: to pull structured data out of text, declare the shape and call extract(). Pass a Pydantic model and you get a typed object back. from pydantic import BaseModel class Invoice(BaseModel): vendor: str total: float due_date: str invoice = needle.extract(\"Invoice from Acme Corp, $1,200.00, due 2026-09-01\", Invoice) print(invoice.vendor, invoice.total) # -> Acme Corp 1200.0 By hand - the decorator just builds a JSON schema; you can pass that schema directly, which is exactly what Needle consumes. This is how you set descriptions and constraints without the decorator: tools = [{ \"name\": \"set_lights\", \"description\": \"Turn a room's lights on or off and set brightness\", \"parameters\": { \"type\": \"object\", \"properties\": { \"room\": {\"type\": \"string\", \"description\": \"which room to control\"}, \"on\": {\"type\": \"boolean\"}, \"brightness\": {\"type\": \"integer\", \"minimum\": 0, \"maximum\": 100}, }, \"required\": [\"room\", \"on\"], }, }] agent = needle.Needle(tools=tools) Prefer to drive the loop yourself instead of run()? complete() returns the raw call and you execute it: import json response = agent.complete(\"dim the living room to 30\") if response[\"type\"] == \"call\": result = set_lights(**response[\"function_calls\"][0][\"arguments\"]) response = agent.complete(json.dumps(result)) # feed the result back With a large catalogue, persist tool embeddings across runs with needle.Needle(tools=..., tool_index_path=\"tools.idx\"). Every turn returns one JSON object: { \"type\": \"call\", \"success\": true, \"error\": null, \"error_code\": null, \"function_calls\": [ { \"name\": \"set_lights\", \"arguments\": { \"room\": \"living room\", \"on\": true, \"brightness\": 30 } } ], \"reasoning\": \"'living room' -> room; 'dim' -> on true, brightness 30\", \"confidence\": 0.94, \"prefill_tps\": 4300.0, \"decode_tps\": 850.0 } Playground Try any model in the browser: pick a preset, edit the tools or prompt, and Run. Follow-up queries continue the same conversation. needle playground # base model, http://127.0.0.1:7860 needle playground --weights my.cact # a tuned model The server downloads and initializes the model before serving, so the first query is instant. The Finetune on these tools button runs the fine-tuning pipeline below from the UI and hands back a downloadable .cact. Behaviour Needle solves every problem as a function call. The context declares what may be called; the model answers with calls. Performing an action and extracting structured data are the same operation, the only difference is what you declare. A request no declared tool can serve is refused with the empty call []. That is the whole contract for off-topic input; there is no free-text fallback. Arguments contain only values evidenced by the input. An optional field with no evidence is omitted, not guessed; omission is the field-level []. reasoning is the model's short derivation of each argument from its source span ('ten minutes' -> minutes 10). It is generated unconstrained; only the call itself is grammar-constrained, so the JSON cannot be malformed while the derivation stays legible. After you execute a call, pass the result back as the next complete(). The model continues from it, and later arguments may depend on earlier results: search_for_contact first, then send_instant_message with the returned contact_id. A final \"type\": \"respond\" with empty function_calls signals the loop is done; the answer is the tool results themselves, which run() collects on the final response as results. No free text is generated. A session shares one toolset. Later turns are bare queries against the same tools; reset() rewinds the conversation and keeps the tools loaded. Extraction Extraction is not a separate mode - it is tool calling with one tool. Declare the record as the only schema and pass the content where the query goes; the returned call's arguments are the extracted fields. With one declared tool the grammar admits exactly one call of that name, so schema conformance is guaranteed rather than requested. Use the extract() helper for a typed result (shown in Quickstart), or pass a plain schema and read the call: receipt = [{ \"name\": \"receipt\", \"description\": \"A purchase receipt shared as text\", \"parameters\": { \"type\": \"object\", \"properties\": { \"merchant\": {\"type\": \"string\"}, \"total\": {\"type\": \"number\"}, \"currency\": {\"type\": \"string\"}, \"line_items\": {\"type\": \"array\", \"items\": {\"type\": \"object\"}}, }, \"required\": [\"merchant\", \"total\"], }, }] agent = needle.Needle(tools=receipt) print(agent.complete(\"GreenMart receipt: oat milk 3.50, total 7.75 paid by visa\")[\"function_calls\"]) # -> [{\"name\": \"receipt\", \"arguments\": {\"merchant\": \"GreenMart\", \"total\": 7.75}}] Because it is the same operation, everything else applies unchanged: confidence gates the extraction, unsupported input returns the empty call [], and fine-tuning uses the same data format (the record as the tool, the passage as the query). System facts An optional system turn carries environment state as facts, never instructions: agent = needle.Needle(tools=tools, system=\"date: 2026-07-21 Tue 14:30; locale: en-US; device: phone; battery: 62%\") Recognized keys are date, locale, device, battery, network, location, user, and assistant. The model resolves relative language against them: \"tomorrow at 7\" becomes an absolute time only when a date: fact licenses it, otherwise the human phrase passes through verbatim. assistant: declares the identity the model binds to. Needle trains with and without the turn, so omitting it is safe; instructions placed there do not steer the model. Tool retrieval Five or fewer declared tools render directly. Above that, retrieval engages: at init every tool schema is embedded once by a built-in contrastive head, each turn embeds the query, and only the five highest-scoring tools enter the context, with the grammar rebuilt over just that subset. An unselected tool is unreachable, not merely unlikely. tool_index_path persists the embeddings on disk, keyed by a fingerprint over the schemas and the model; a matching fingerprint loads instantly, a changed schema re-embeds only what changed. Confidence The confidence field is the minimum of two signals: a calibrated post-hoc head that scores the full prompt plus the call the model just produced, and the decoding probability of the call tokens. A call is accepted only when both agree, so the failure mode is escalation, not wrong execution. The contract: pick a threshold for your product, act at or above it, re-ask or route to a bigger model below it. Off-topic requests return the empty call []. Fine-tuning Needle fine-tunes with LoRA on the frozen base and merges the adapter at export, so a run is cheap and the tuned model is still a single .cact that runs on the same engine. The workflow is: (optionally) synthesize data, LoRA fine-tune, then build a tuned .cact. Data format. A JSONL file, one example per line. reasoning is optional; an off-topic example has answers: []. {\"query\": \"dim the kitchen to 10\", \"tools\": [{\"name\": \"set_lights\", \"parameters\": {\"type\": \"object\", \"properties\": {\"room\": {\"type\": \"string\"}, \"brightness\": {\"type\": \"integer\"}}, \"required\": [\"room\"]}}], \"answers\": [{\"name\": \"set_lights\", \"arguments\": {\"room\": \"kitchen\", \"brightness\": 10}}], \"reasoning\": \"'kitchen' -> room; 'dim to 10' -> brightness 10\"} 1. Synthesize data (optional). Needs OPENROUTER_API_KEY. Seed from a tool schema file, or expand an existing set: export OPENROUTER_API_KEY=sk-or-... needle generate-data --tools my_tools.json --num-samples 500 --output data.jsonl needle generate-data --augment data.jsonl --num-samples 500 # expand an existing JSONL 2. LoRA fine-tune. The base checkpoint auto-downloads from Hugging Face if you do not pass --checkpoint. --generate N first synthesizes N more examples from the tools in your data (also needs OPENROUTER_API_KEY). needle finetune data.jsonl --epochs 3 needle finetune data.jsonl --epochs 3 --generate 300 --lora-rank 16 --lora-alpha 32 Key options: --lora-rank (default 16), --lora-alpha (32), --lr (1e-4), --batch-size (16), --max-len (1024), --checkpoint <base.pkl>, --out <adapter.pkl>. The adapter is written to checkpoints/needle_lora.pkl. 3. Build a tuned .cact. Merge the adapter into the base and quantize. The base auto-downloads if absent. needle build checkpoints/needle2.pkl --lora checkpoints/needle_lora.pkl --out my_needle.cact Add --bits 2 (default 4) for a smaller model, or set NEEDLE_HF_REPO=<you>/<model> and pass --upload to publish the .cact. 4. Run it. The engine is weights-agnostic, so a tuned .cact runs on it directly - no recompilation: import needle agent = needle.Needle(weights=\"my_needle.cact\", tools=[...]) agent.run(\"...\") Citation Needle 2 is built by the Cactus Compute team. If you use it in your work, please cite: @misc{needle2_2026, title = {Needle 2: A 45M-Parameter Foundation Tool-Calling Model for Tiny Devices}, author = {Ndubuaku, Henry and Mosoyan, Karen and Mroz, Jakub and Cylich, Noah and Kumar, Satyajit and Sandhu, Parkirat and Shemet, Roman and Lee, Justin H.}, year = {2026}, organization = {Cactus Compute, Inc.}, howpublished = {\\url{https://github.com/cactus-compute/needle}} } Reach out on founders@cactuscompute.com for partnerships, collaborations, synergies and deploying Needle2 in your product.",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "e1739cedc6f9ead7",
+    "source_type": "community_discussion",
+    "tldr": "Needle 2 是 Cactus Compute 开源的 4500 万参数工具调用模型，单个 14MB 二进制文件可在约 28MB RAM 中运行，支持从 Python 函数或 Pydantic 模型直接生成受约束的 JSON 工具调用与结构化抽取。",
+    "objective_summary": "Cactus Compute 在 GitHub 上发布了 Needle 2，一个基于 Simple Attention Network 的 45M 参数工具调用与结构化抽取模型。该模型使用 Cactus Quants 量化为 CQ2-bit，整个推理引擎与权重打包为单个 14MB 二进制，典型会话内存占用约 28MB。它通过 Python 包 cactus-needle 提供，支持用装饰器、JSON Schema 或 Pydantic 模型声明工具，并以内置的字节级语法、置信度打分、工具检索头和 256-token 滑动窗口 KV sink 来保证输出合法、可控且低内存。论文为 arXiv:2607.18363，权重托管于 HuggingFace 的 Cactus-Compute/needle2。",
+    "event_type": "framework_tools",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [
+        "Cactus Compute"
+      ],
+      "technologies": [
+        "Needle 2",
+        "Simple Attention Network",
+        "GQA",
+        "LoRA",
+        "CQ2-bit",
+        "Cactus Quants",
+        "Walsh-Hadamard transform",
+        "Sinkhorn iteration",
+        "Pydantic"
+      ],
+      "key_people": []
+    },
+    "key_logic_flow": [
+      "Cactus Compute 发布并开源了 Needle 2，定位为小型工具调用、设备控制与结构化抽取模型。",
+      "Needle 2 基于 Simple Attention Network，采用 Hadamard MLP、GQA 注意力、engram KV 记忆与多通道超连接，并用 CQ2-bit 量化将全模型压入 14MB。",
+      "Python 包 cactus-needle 提供装饰器与 Schema 驱动接口，输入文本后模型输出受语法约束的 JSON 工具调用。",
+      "内置置信度头对每次调用打分，并支持工具检索头从大量工具中只选择前 5 个进入当前轮次上下文。",
+      "通过 256-token 滑动窗口将工具作为 KV sink 固定，可在约 28MB RAM 内维持长会话。",
+      "支持 LoRA 微调并导出为单个 .cact 文件，同时提供 needle playground 浏览器界面用于快速试验。"
+    ],
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "cactus-compute/needle",
+        "canonical_name": "cactus-compute/needle",
+        "url": "https://github.com/cactus-compute/needle",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "该 GitHub 仓库对应 Python 包 cactus-needle，提供推理、LoRA 微调和导出功能，安装命令为 pip install cactus-needle。",
+          "开发者可用 @needle.tool 装饰器自动从函数签名与文档字符串生成 JSON Schema，并通过 agent.run() 完成调用—执行—返回的闭环。",
+          "包内同时提供 needle.extract 与 complete() 接口，分别用于 Pydantic 模型驱动的结构化抽取和手动控制工具调用循环。"
+        ],
+        "article_id": "e1739cedc6f9ead7"
+      },
+      {
+        "object_type": "model",
+        "name": "Needle 2",
+        "canonical_name": "Needle 2",
+        "url": "https://huggingface.co/Cactus-Compute/needle2",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Needle 2 是 Cactus Compute 发布的 45M 参数开源模型，面向工具调用、设备使用与结构化抽取任务。",
+          "模型基于 Simple Attention Network，经 Cactus Quants 量化为 CQ2-bit，整个引擎与权重打包为一个 14MB 二进制文件。",
+          "在公开基准上，Needle 2 与 FunctionGemma 270M、LFM2.5 230M 和 Apple FM 互有胜负，但体积仅为这些 f16 模型的 5 到 70 分之一。"
+        ],
+        "article_id": "e1739cedc6f9ead7"
+      },
+      {
+        "object_type": "product",
+        "name": "needle playground",
+        "canonical_name": "needle playground",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "命令行工具 needle playground 可在浏览器中启动交互式界面，默认监听 127.0.0.1:7860，支持选择预设并编辑工具或提示词。",
+          "浏览器界面提供 Finetune on these tools 按钮，能直接触发 LoRA 微调流程并生成可下载的 .cact 模型文件。"
+        ],
+        "article_id": "e1739cedc6f9ead7"
+      }
+    ],
+    "extract_result": "success",
+    "impact_score": {
+      "score": 6.8,
+      "reason": "Needle 2 把 45M 参数的工具调用与结构化抽取模型压缩到单个 14MB 二进制、约 28MB RAM 运行，直接冲击端侧/边缘 AI Agent 的落地门槛；它在极小体积内提供受约束 JSON 输出、工具检索头和 LoRA 微调，属于重要的产品/工程发布。但尚未达到 ChatGPT/Transformer 级别的范式转移，主要改变的是小模型工具调用与边缘部署的局部竞争格局，因此评 6.8 分。"
+    },
+    "sentiment": "positive",
+    "developer_sentiment": {
+      "tone": "excited",
+      "primary_focus": "45M 小模型在 28MB 内存内能否稳定完成工具调用与结构化抽取，以及实际精度与延迟表现"
+    },
+    "hype_assessment": {
+      "level": "medium",
+      "reason": "原文使用了 'trades wins'、'5x to 70x smaller'、'whole model is a single 14MB binary' 等 PR 化表述，具有一定包装色彩；但同时提供了具体参数量、量化位数、内存占用、Python 接口、论文 arXiv 编号和 HuggingFace 权重，属于可验证的工程发布，炒作程度中等，不算严重概念炒作。"
+    },
+    "information_entropy": "high",
+    "domain_disruption": {
+      "technical_innovation": "基于 Simple Attention Network（Hadamard MLP、GQA、engram KV、多通道超连接）与 CQ2-bit 量化，将完整推理引擎与权重打包为 14MB 单文件；通过字节级语法约束、置信度头、工具检索头和 256-token KV sink 实现低内存、可控的 JSON 工具调用与结构化抽取。",
+      "business_model": "以开源模型 + pip 包 + playground 的方式切入边缘/设备端 Agent 市场，可能替代部分依赖云端 API 的工具调用与结构化抽取场景；潜在商业化路径包括企业级微调服务、设备厂商授权、边缘推理优化工具及托管 API。"
+    },
+    "engineering_complexity": "production_ready",
+    "market_opportunities": [
+      "创业者可围绕 Needle 2 等超小模型开发端侧 AI Agent 运行方案，面向智能家居、工业控制器、可穿戴设备等低内存场景提供本地化工具调用与结构化抽取能力",
+      "可基于 Needle 2 的 LoRA 微调与 .cact 单文件导出能力，为垂直行业（如金融合规、医疗表单、物联网控制）提供领域特定的工具调用模型微调与部署服务",
+      "建议关注置信度门控与字节级语法约束结合的安全产品机会，为自动化工具调用场景提供可解释的风险控制与人工升级机制"
+    ],
+    "risk_matrix": {
+      "regulatory": "无显著监管风险；模型开源且参数量小，暂不受出口管制关注，但若用于金融转账、设备控制等关键场景，需关注行业-specific 合规要求",
+      "technological": "存在替代风险；Simple Attention Network 与 CQ2-bit 量化方案仍需社区验证，且 45M 参数模型在复杂多步推理、长上下文工具链上的能力可能弱于更大模型，存在被 FunctionGemma、LFM 等同类小模型或新一代端侧模型超越的风险",
+      "competitive": "小模型工具调用赛道竞争激烈，FunctionGemma 270M、LFM2.5 230M、Apple FM 以及各大厂商的端侧模型均可能快速跟进，Cactus Compute 作为初创公司面临生态与品牌壁垒",
+      "ethical": "工具调用模型若部署在智能家居、支付、工业控制等场景，置信度阈值设置不当可能导致误操作；此外端侧结构化抽取若处理敏感个人信息，存在隐私泄露与滥用风险",
+      "additional": [
+        "2-bit 极端量化可能带来精度损失和输出不稳定风险",
+        "项目生态与社区成熟度尚处早期，长期维护和工具链完善度存在不确定性",
+        "依赖 HuggingFace 分发引擎与权重，存在供应链与可用性风险"
+      ]
+    },
+    "confidence": {
+      "impact": "medium",
+      "compound": "low",
+      "hype": "medium"
+    },
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "cactus-compute/needle",
+        "canonical_name": "cactus-compute/needle",
+        "url": "https://github.com/cactus-compute/needle",
+        "positioning": "Needle 2 是 Cactus Compute 开源的 45M 参数工具调用与结构化抽取小模型，以单 14MB 二进制实现端侧低内存运行。",
+        "technical_signal": "基于 Simple Attention Network，采用 Hadamard MLP、GQA 注意力、engram KV 记忆与 CQ2-bit 量化，全模型压入 14MB 并可在约 28MB RAM 中推理。",
+        "adoption_signal": "通过 pip install cactus-needle 直接安装，提供装饰器、JSON Schema、Pydantic 三种工具声明方式，并支持 LoRA 微调与浏览器 Playground。",
+        "ecosystem_relevance": "面向工具调用、设备控制与结构化抽取场景，与 FunctionGemma 270M 等小模型竞争，权重托管于 HuggingFace，提供本地推理引擎。",
+        "target_users": [],
+        "watch_reason": "该项目将 45M 参数工具调用模型压缩到 14MB 单文件，在端侧和物联网设备上具备极低部署门槛，若 benchmark 表现持续稳定，可能成为小型 Agent 和设备控制的新基座。",
+        "risk_notes": [
+          "模型规模仅 45M，复杂多步推理与长上下文能力仍需验证。",
+          "CQ2-bit 极端量化可能带来精度损失，需关注实际任务置信度。",
+          "生态尚处早期，工具市场和社区贡献度有限。"
+        ],
+        "score": 8.0,
+        "article_ids": [
+          "e1739cedc6f9ead7"
+        ],
+        "evidence_snippets": [
+          "该 GitHub 仓库对应 Python 包 cactus-needle，提供推理、LoRA 微调和导出功能，安装命令为 pip install cactus-needle。",
+          "开发者可用 @needle.tool 装饰器自动从函数签名与文档字符串生成 JSON Schema，并通过 agent.run() 完成调用—执行—返回的闭环。",
+          "包内同时提供 needle.extract 与 complete() 接口，分别用于 Pydantic 模型驱动的结构化抽取和手动控制工具调用循环。"
+        ]
+      }
+    ],
+    "compound_value": {
+      "score": 6.5,
+      "reason": "Needle 2 切中的是端侧/边缘设备上的工具调用与结构化抽取需求，这一场景随 AI Agent 向本地、低功耗、隐私敏感部署渗透而结构性增长。14MB 单二进制、28MB RAM、CQ2-bit 量化与字节级语法约束显著降低了部署门槛和推理成本，使其可能成为物联网、机器人、本地 Agent 等细分赛道的“轻量基础设施”。然而，长期复利价值存在三点不确定性：其一，Cactus Compute 作为初创公司，商业化路径（开源+企业服务/企业版？）尚未清晰；其二，大模型厂商随时可能以类似的蒸馏/量化方案进入端侧工具调用市场；其三，45M 参数模型虽然极致压缩，但能力边界较云上大模型窄，需持续验证在更复杂任务上的泛化能力。因此它属于“有细分赛道基础设施潜力，但仍需验证”的区间，而非 3-5 年后大概率仍是行业基石的标的。"
+    },
+    "value_capture_layer": "agent_middleware",
+    "moat_impact": "democratizes_access",
+    "key_beneficiaries": [
+      "Cactus Compute",
+      "HuggingFace",
+      "端侧 AI 与边缘计算开发者生态",
+      "Pydantic/Python 开发者生态"
+    ],
+    "competitive_casualty": [
+      "FunctionGemma 270M",
+      "LFM2.5 230M",
+      "Apple FM",
+      "云端 Function Calling API 服务商（如 OpenAI、Google）",
+      "规则式/正则工具调用解析方案"
+    ]
+  }
+]

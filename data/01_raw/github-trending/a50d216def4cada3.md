@@ -46,6 +46,14 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: a50d216def4cada3
+manifest_dates:
+- '2026-06-01'
+- '2026-08-15'
+- '2026-08-16'
+- '2026-08-21'
+- '2026-08-22'
+- '2026-08-23'
+- '2026-08-29'
 ---
 
 Official Cursor plugins for popular developer tools, frameworks, and SaaS products. Each plugin is a standalone directory at the repository root with its own `.cursor-plugin/plugin.json`

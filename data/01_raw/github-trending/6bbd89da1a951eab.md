@@ -50,6 +50,11 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: 6bbd89da1a951eab
+manifest_dates:
+- '2026-06-19'
+- '2026-08-21'
+- '2026-08-23'
+- '2026-08-25'
 ---
 
 **Modern project management for all teams**

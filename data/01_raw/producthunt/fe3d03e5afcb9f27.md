@@ -7,6 +7,8 @@ published: '2026-08-05'
 created: '2026-08-06'
 manifest_dates:
 - '2026-08-06'
+- '2026-08-07'
+- '2026-08-08'
 description: 'Title: Aveiro: Publish sites, newsletters and social posts with AI agents
   | Product Hunt'
 tags:

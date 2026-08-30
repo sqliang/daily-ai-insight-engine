@@ -9,6 +9,8 @@ manifest_dates:
 - '2026-07-25'
 - '2026-07-26'
 - '2026-07-27'
+- '2026-08-15'
+- '2026-08-16'
 description: 'The best browser for both you and your AI agents work in parallel. The
   best browser for both you and your AI agents work in parallel. ego (lite) is a browser
   where you and your AI agents work in parallel. Your agents run multiple browser

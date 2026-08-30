@@ -6,6 +6,7 @@ published: ''
 created: '2026-07-15'
 manifest_dates:
 - '2026-07-15'
+- '2026-08-08'
 description: '面向 Grok Build、Grok Web 与 Grok Console 的多账号 API 网关 面向 Grok Build、Grok
   Web 与 Grok Console 的多账号 API 网关 Tip 个人新项目 推荐个人新项目 DEEIX-AI：DEEIX-Chat 轻量化 AI 平台：企业级模型路由、对话、文件、工具、计费、身份和运维的一体化
   AI 平台，全面且极致的低占用，空载运行时仅占用 34 MB。 Note 本项目仅供学习与研究交流。请务必遵循 Grok 的使用条款及当地法律法规，不得用于非法用途！

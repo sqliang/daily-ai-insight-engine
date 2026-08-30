@@ -1,0 +1,1056 @@
+[
+  {
+    "source_dir": "github-trending",
+    "title": "jundot/omlx",
+    "source": "https://github.com/jundot/omlx",
+    "author": [],
+    "published": "",
+    "created": "2026-08-18",
+    "manifest_dates": [
+      "2026-08-18",
+      "2026-08-19",
+      "2026-08-20"
+    ],
+    "description": "LLM inference server with continuous batching & SSD caching for Apple Silicon — managed from the macOS menu barhttps://omlx.ai oMLX LLM inference, optimized for your MacContinuous batching and tiered KV caching, managed directly from your menu bar. junkim.dot@gmail.com · https://omlx.ai/me Install · Quickstart · Features · Models · CLI Configuration · Benchmarks · oMLX.ai English · 中文 · 한국어 · 日本語 Every LLM server I tried made me choose between convenience and control. I wanted to pin everyday models in memory, auto-swap heavier ones on demand, set context limits - and manage it all from a menu bar. oMLX persists KV cache across a hot in-memory tier and cold SSD tier - even when context changes mid-conversation, all past context stays cached and reusable across requests, making local LLMs practical for real coding work with tools like Claude Code. That's why I built it. Install macOS App Download the .dmg from Releases, drag to Applications, done. The app includes in-app auto-update, so future upgrades are just one click. The macOS app also installs a lightweight ~/.omlx/bin/omlx CLI shim so terminal commands and Apple Shortcuts can control the app-managed server. Homebrew brew tap jundot/omlx https://github.com/jundot/omlx brew install jundot/omlx/omlx # Upgrade to the latest version brew update && brew upgrade omlx # Run as a background service (auto-restarts on crash) omlx start # Optional: MCP (Model Context Protocol) support /opt/homebrew/opt/omlx/libexec/bin/pip install mcp Optional GLM-5.2 / MiniMax M3 native custom kernels currently require a HEAD build: brew install jundot/omlx/omlx --HEAD --with-custom-kernel From Source git clone https://github.com/jundot/omlx.git cd omlx pip install -e . # Core only pip install -e \".[mcp]\" # With MCP (Model Context Protocol) support # GLM-5.2 / MiniMax M3 / Qwen3.5 native custom kernels (strongly recommended # if you serve those families -- see note below) OMLX_WITH_CUSTOM_KERNEL=1 pip install -e . Requires macOS 15.0+ (Sequoia), Python 3.11–3.13, and Apple Silicon (M1/M2/M3/M4). Note on native custom kernels: a plain pip install -e . does NOT build them, and the affected model families then silently fall back to much slower generic paths -- for GLM-5.2 the fused DSA prefill is roughly 30x faster with the kernels (measured 845 vs ~29 tok/s on an M3 Ultra), and the fallback also uses more memory (#2137). Building them requires the Metal toolchain, which Command Line Tools alone do not provide (xcrun: error: unable to find utility \"metal\"): install full Xcode, or use the official DMG which ships the kernels precompiled. Homebrew can build them with brew install jundot/omlx/omlx --HEAD --with-custom-kernel, but that build also needs full Xcode. To verify your install: python -c \"from omlx.custom_kernels import native_kernel_status; print(native_kernel_status())\" Quickstart macOS App Launch oMLX from your Applications folder. The Welcome screen guides you through three steps - model directory, server start, and first model download. That's it. To connect OpenClaw, OpenCode, Codex, Hermes Agent, or Copilot, see Integrations. CLI # Managed background server (macOS app or Homebrew install) omlx start omlx stop omlx restart # Foreground server attached to this terminal omlx serve --model-dir ~/models The server discovers LLMs, VLMs, embedding models, and rerankers from subdirectories automatically. Any OpenAI-compatible client can connect to http://localhost:8000/v1. A built-in chat UI is also available at http://localhost:8000/admin/chat. Homebrew Service If you installed via Homebrew, you can run oMLX as a managed background service: omlx start # Start via brew services omlx stop # Stop omlx restart # Restart brew services start omlx # Start (auto-restarts on crash) brew services stop omlx # Stop brew services restart omlx # Restart brew services info omlx # Check status The service runs omlx serve with zero-config defaults (~/.omlx/models, port 8000). omlx start, omlx stop, and omlx restart are the portable lifecycle commands; Homebrew installs delegate them to brew services. To customize, either set environment variables (OMLX_MODEL_DIR, OMLX_PORT, etc.) or run omlx serve --model-dir /your/path once to persist settings to ~/.omlx/settings.json. Logs are written to two locations: Service log: $(brew --prefix)/var/log/omlx.log (stdout/stderr) Server log: ~/.omlx/logs/server.log (structured application log) Features Supports text LLMs, vision-language models (VLM), OCR models, embeddings, and rerankers on Apple Silicon. Admin Dashboard Web UI at /admin for real-time monitoring, model management, chat, benchmark, and per-model settings. Supports English, Korean, Japanese, Chinese, French, Russian, Spanish, and Brazilian Portuguese. All CDN dependencies are vendored for fully offline operation. Experimental Multi-Mac Inference Source builds can split one downloaded language model across unequal-memory Macs using MLX pipeline ranks over Ring or Thunderbolt RDMA/JACCL. The Cluster dashboard handles read-only peer discovery, strict SSH/runtime verification, byte-aware unequal shard planning, measured compute/link rebalancing, headroom-aware execution tuning, activation, and a live shard/performance map on both Macs. Interactive, balanced, and throughput profiles expose coalesced batching, prompt-cache affinity, rotating-KV limits, Ring connection tuning, and a capability-gated experimental token-only output path. See Distributed inference across Macs for setup, security boundaries, current limitations, and the physical-hardware validation checklist. Vision-Language Models Run VLMs with the same continuous batching and tiered KV cache stack as text LLMs. Supports multi-image chat, base64/URL/file image inputs, and tool calling with vision context. OCR models (DeepSeek-OCR, DOTS-OCR, GLM-OCR) are auto-detected with optimized prompts. Tiered KV Cache (Hot + Cold) Block-based KV cache management inspired by vLLM, with prefix sharing and Copy-on-Write. The cache operates across two tiers: Hot tier (RAM): Frequently accessed blocks stay in memory for fast access. Cold tier (SSD): When the hot cache fills up, blocks are offloaded to SSD in safetensors format. On the next request with a matching prefix, they're restored from disk instead of recomputed from scratch - even after a server restart. Continuous Batching Handles concurrent requests through mlx-lm's BatchGenerator. Max concurrent requests is configurable via CLI or admin panel. Claude Code Optimization Context scaling support for running smaller context models with Claude Code. Scales reported token counts so that auto-compact triggers at the right timing, and SSE keep-alive prevents read timeouts during long prefill. Multi-Model Serving Load LLMs, VLMs, embedding models, and rerankers within the same server. Models are managed through a combination of automatic and manual controls: LRU eviction: Least-recently-used models are evicted automatically when memory runs low. Manual load/unload: Interactive status badges in the admin panel let you load or unload models on demand. Model pinning: Pin frequently used models to keep them always loaded. Per-model TTL: Set an idle timeout per model to auto-unload after a period of inactivity. Process memory enforcement: Total memory limit (default: system RAM - 8GB) prevents system-wide OOM. Per-Model Settings Configure sampling parameters, chat template kwargs, TTL, model alias, model type override, and more per model directly from the admin panel. Changes apply immediately without server restart. Model alias: set a custom API-visible name. /v1/models returns the alias, and requests accept both the alias and directory name. Model type override: manually set a model as LLM or VLM regardless of auto-detection. Profiles: save named bundles of per-model settings and switch between them from the admin panel. A profile can optionally be exposed as its own model: /v1/models then also lists <model>:<profile> (e.g. qwen3-8b:thinking), which serves on the same engine as the base model with the profile's settings overlaid per request — no extra memory, no reload. When the base model has an alias, the exposed ID is advertised as <alias>:<profile>; the directory-name form keeps working, just like for the base model. Built-in Chat Chat directly with any loaded model from the admin panel. Supports conversation history, model switching, dark mode, reasoning model output, and image upload for VLM/OCR models. Model Downloader Search and download MLX models from HuggingFace directly in the admin dashboard. Browse model cards, check file sizes, and download with one click. Integrations Set up OpenClaw, OpenCode, Codex, Hermes Agent, Copilot, and Pi directly from the admin dashboard with a single click. No manual config editing required. Performance Benchmark One-click benchmarking from the admin panel. Measures prefill (PP) and text generation (TG) tokens per second, with partial prefix cache hit testing for realistic performance numbers. macOS Menubar App Native Swift / SwiftUI menubar app (not Electron). Start, stop, and monitor the server without opening a terminal. Includes persistent serving stats (survives restarts), auto-restart on crash, and built-in auto-update. API Compatibility Drop-in replacement for OpenAI and Anthropic APIs. Supports streaming usage stats (stream_options.include_usage), Anthropic adaptive thinking, and vision inputs (base64, URL). Endpoint Description POST /v1/chat/completions Chat completions (streaming) POST /v1/completions Text completions (streaming) POST /v1/messages Anthropic Messages API POST /v1/embeddings Text embeddings POST /v1/rerank Document reranking GET /v1/models List available models Tool Calling & Structured Output Supports all function calling formats available in mlx-lm, JSON schema validation, and MCP tool integration. Tool calling requires the model's chat template to support the tools parameter. The following model families are auto-detected via mlx-lm's built-in tool parsers: Model Family Format Llama, Qwen, DeepSeek, etc. JSON <tool_call> Qwen3.5 Series XML <function=...> Gemma <start_function_call> GLM (4.7, 5) <arg_key>/<arg_value> XML MiniMax Namespaced <minimax:tool_call> Mistral [TOOL_CALLS] Kimi K2 <|tool_calls_section_begin|> Longcat <longcat_tool_call> Models not listed above may still work if their chat template accepts tools and their output uses a recognized <tool_call> XML format. For tool-enabled streaming, assistant text is emitted incrementally while known tool-call control markup is suppressed from visible content; structured tool calls are emitted after parsing the completed turn. Models Point --model-dir at a directory containing MLX-format model subdirectories. Two-level organization folders (e.g., mlx-community/model-name/) are also supported. ~/models/ ├── Step-3.5-Flash-8bit/ ├── Qwen3-Coder-Next-8bit/ ├── gpt-oss-120b-MXFP4-Q8/ ├── Qwen3.5-122B-A10B-4bit/ └── bge-m3/ Models are auto-detected by type. You can also download models directly from the admin dashboard. Type Models LLM Any model supported by mlx-lm VLM Qwen3.5 Series, GLM-4V, Pixtral, and other mlx-vlm models OCR DeepSeek-OCR, DOTS-OCR, GLM-OCR Embedding BERT, BGE-M3, ModernBERT Reranker ModernBERT, XLM-RoBERTa CLI Configuration # Managed background server (macOS app or Homebrew install) omlx start omlx stop omlx restart # Start with default settings (memory guard tier = balanced, manage via admin UI) omlx serve --model-dir ~/models # Choose a memory guard tier at startup omlx serve --model-dir ~/models --memory-guard safe # Set a custom memory guard ceiling in GB omlx serve --model-dir ~/models --memory-guard-gb 48 # Enable SSD cache for KV blocks omlx serve --model-dir ~/models --paged-ssd-cache-dir ~/.omlx/cache # Set in-memory hot cache size omlx serve --model-dir ~/models --hot-cache-max-size 20% # Adjust max concurrent requests (default: 8) omlx serve --model-dir ~/models --max-concurrent-requests 16 # With MCP tools omlx serve --model-dir ~/models --mcp-config mcp.json # HuggingFace mirror endpoint (for restricted regions) omlx serve --model-dir ~/models --hf-endpoint https://hf-mirror.com # API key authentication omlx serve --model-dir ~/models --api-key your-secret-key # Localhost-only: skip verification via admin panel global settings All settings can also be configured from the web admin panel at /admin. Settings are persisted to ~/.omlx/settings.json, and CLI flags take precedence. Architecture FastAPI Server (OpenAI / Anthropic API) │ ├── EnginePool (multi-model, LRU eviction, TTL, manual load/unload) │ ├── BatchedEngine (LLMs, continuous batching) │ ├── VLMEngine (vision-language models) │ ├── EmbeddingEngine │ └── RerankerEngine │ ├── ProcessMemoryEnforcer (total memory limit, TTL checks) │ ├── Scheduler (FCFS, configurable concurrency) │ └── mlx-lm BatchGenerator │ └── Cache Stack ├── PagedCacheManager (GPU, block-based, CoW, prefix sharing) ├── Hot Cache (in-memory tier, write-back) └── PagedSSDCacheManager (SSD cold tier, safetensors format) Development CLI Server git clone https://github.com/jundot/omlx.git cd omlx pip install -e \".[dev]\" pytest -m \"not slow\" macOS App The native SwiftUI app lives at apps/omlx-mac/. Requires Xcode 26.5+ and Python 3.11+. venvstacks is declared as a dev dependency so pip install -e \".[dev]\" (or uv sync --dev) brings the pinned version in. The build script also falls back to uvx venvstacks or pipx run venvstacks if you prefer a host-global tool runner. # Stage a runnable oMLX.app (xcodebuild + venvstacks Python layers + ad-hoc sign) apps/omlx-mac/Scripts/build.sh release # Result lands at apps/omlx-mac/build/Stage/oMLX.app open apps/omlx-mac/build/Stage/oMLX.app # Force a fresh venvstacks rebuild (otherwise it's cached by fingerprint) apps/omlx-mac/Scripts/build.sh release --rebuild-donor # Stage with optional GLM-5.2 / MiniMax M3 native custom kernels apps/omlx-mac/Scripts/build.sh release --with-custom-kernel First cold build takes 10–20 minutes (venvstacks Python layer assembly). Subsequent builds reuse the cached packaging/_export/ and finish in about 4 minutes. See packaging/README.md for the layer configuration and apps/omlx-mac/ for the Swift sources. Contributing Contributions are welcome! See Contributing Guide for details. Bug fixes and improvements Performance optimizations Documentation improvements License Apache 2.0 Acknowledgments MLX and mlx-lm by Apple mlx-vlm - Vision-language model inference on Apple Silicon vllm-mlx - oMLX started from vllm-mlx v0.1.0 and evolved significantly with multi-model serving, tiered KV caching, VLM with full paged cache support, an admin panel, and a macOS menu bar app venvstacks - Portable Python environment layering for the macOS app bundle mlx-embeddings - Embedding model support for Apple Silicon dflash-mlx - Block diffusion speculative decoding on Apple Silicon MTPLX - Lightning MTP's verify-shape Metal kernels are powered by MTPLX by Youssof Altoukhi, which also inspired the depth-k pipeline mlx-serve - The fused GDN verify prework kernel is adapted from mlx-serve's port of the mlxfast-challenge qwen35_packed_gdn_prework kernel SiliconScope - The menu bar statistics take their design and rendering approach from SiliconScope by Kennt Kim, which also inspired the energy-efficient re-render gating",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "0bcb55082c56199e",
+    "source_type": "community_discussion",
+    "tldr": "oMLX 是面向 Apple Silicon Mac 的本地 LLM 推理服务器，提供菜单栏原生应用与 CLI，支持两级 KV 缓存、跨 Mac 分布式推理及 OpenAI/Anthropic API 兼容。可通过 .dmg、Homebrew 或源码安装，并在管理面板中一键接入 Claude Code、Codex、Copilot 等客户端。",
+    "objective_summary": "开发者 jundot 发布了 oMLX，一款面向 Apple Silicon Mac 的本地 LLM 推理服务器与菜单栏原生应用。它采用受 vLLM 启发的块级 KV 缓存管理，将缓存持久化在热内存层与冷 SSD 层之间，并支持跨 Mac 分布式推理、模型固定、LRU 淘汰与按模型 TTL 等内存管理策略。oMLX 兼容 OpenAI 与 Anthropic API，支持文本 LLM、VLM、OCR、嵌入和重排序模型，可在管理面板中一键接入 Claude Code、Codex、Copilot 等客户端。用户可通过 .dmg、Homebrew 或源码安装，官方 DMG 附带预编译的 GLM-5.2/MiniMax M3 自定义内核。",
+    "event_type": "framework_tools",
+    "epistemic_status": "pr_statement",
+    "entities": {
+      "companies": [
+        "Apple",
+        "HuggingFace",
+        "Anthropic",
+        "OpenAI",
+        "GitHub",
+        "Meta",
+        "Alibaba",
+        "DeepSeek",
+        "Google",
+        "Zhipu AI",
+        "MiniMax",
+        "Mistral",
+        "Moonshot AI"
+      ],
+      "technologies": [
+        "MLX",
+        "mlx-lm",
+        "KV Cache",
+        "Continuous Batching",
+        "MCP",
+        "vLLM",
+        "Safetensors",
+        "VLM",
+        "OCR",
+        "RDMA",
+        "JACCL",
+        "SSE"
+      ],
+      "key_people": []
+    },
+    "key_logic_flow": [
+      "oMLX 是作者为解决本地 LLM 服务器在便利性与控制性之间取舍而构建的 macOS 应用，支持从菜单栏管理模型常驻、自动换入重模型与上下文限制。",
+      "其核心机制是受 vLLM 启发的块级 KV 缓存管理，采用前缀共享与写时复制，将缓存持久化在热内存层与冷 SSD 层，即使会话中途改变上下文也可复用历史缓存。",
+      "oMLX 兼容 OpenAI 与 Anthropic API，支持 MCP 工具集成，可在管理面板中一键接入 Claude Code、Codex、Copilot、OpenClaw 等客户端。",
+      "服务器通过 MLX pipeline ranks 支持跨 Mac 分布式推理，可将单个大模型拆分到内存不均等的多台 Mac 上运行，并支持 Ring 或 Thunderbolt RDMA/JACCL 连接。",
+      "内存管理包含 LRU 自动淘汰、手动加载卸载、模型固定、按模型 TTL 与总内存上限守护，防止系统级 OOM。",
+      "GLM-5.2/MiniMax M3/Qwen3.5 的原生自定义内核需要完整 Xcode 的 Metal 工具链才能从源码构建，缺失时会静默回退到慢得多的通用路径，官方 DMG 已预编译内核。"
+    ],
+    "object_mentions": [
+      {
+        "object_type": "product",
+        "name": "oMLX",
+        "canonical_name": "oMLX",
+        "url": "https://github.com/jundot/omlx",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "oMLX 是面向 Apple Silicon Mac 的本地 LLM 推理服务器，可通过菜单栏原生应用、Homebrew 或 CLI 安装使用。",
+          "oMLX 在热内存层与冷 SSD 层之间持久化 KV 缓存，即使会话中途改变上下文也能复用历史缓存，使本地 LLM 可用于真实编码工作。",
+          "oMLX 兼容 OpenAI 与 Anthropic API，支持文本 LLM、VLM、OCR、嵌入与重排序模型，并内置 Web 管理界面与聊天 UI。"
+        ],
+        "article_id": "0bcb55082c56199e"
+      },
+      {
+        "object_type": "project",
+        "name": "mlx-lm",
+        "canonical_name": "mlx-lm",
+        "url": "https://github.com/ml-explore/mlx-lm",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "oMLX 基于 mlx-lm 的 BatchGenerator 处理并发请求，最大并发请求数可通过 CLI 或管理面板配置。",
+          "oMLX 支持任何被 mlx-lm 支持的模型，并通过 mlx-lm 内置工具解析器自动识别各模型家族的函数调用格式。"
+        ],
+        "article_id": "0bcb55082c56199e"
+      },
+      {
+        "object_type": "project",
+        "name": "vLLM",
+        "canonical_name": "vLLM",
+        "url": "https://github.com/vllm-project/vllm",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "oMLX 采用受 vLLM 启发的块级 KV 缓存管理，包含前缀共享与 Copy-on-Write（写时复制）特性。",
+          "当热缓存占满时，oMLX 会将缓存块以 safetensors 格式卸载到 SSD，下次请求匹配前缀时从磁盘恢复而非重新计算。"
+        ],
+        "article_id": "0bcb55082c56199e"
+      },
+      {
+        "object_type": "product",
+        "name": "Claude Code",
+        "canonical_name": "Claude Code",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "oMLX 的持续批处理与分级 KV 缓存使本地 LLM 对 Claude Code 等真实编码工具变得实用。",
+          "oMLX 支持上下文缩放，可配合 Claude Code 运行较小上下文模型，使自动压缩在正确时机触发并避免读取超时。"
+        ],
+        "article_id": "0bcb55082c56199e"
+      },
+      {
+        "object_type": "product",
+        "name": "Codex",
+        "canonical_name": "Codex",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "oMLX 可在管理面板中一键配置 Codex 等外部客户端，使编码代理直接连接本地推理服务器而无需手动编辑配置。"
+        ],
+        "article_id": "0bcb55082c56199e"
+      },
+      {
+        "object_type": "product",
+        "name": "Copilot",
+        "canonical_name": "Copilot",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "oMLX 支持在管理面板中一键设置 Copilot 客户端，使其连接本地 oMLX 服务器进行推理。"
+        ],
+        "article_id": "0bcb55082c56199e"
+      },
+      {
+        "object_type": "product",
+        "name": "Hermes Agent",
+        "canonical_name": "Hermes Agent",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "oMLX 支持在管理面板中一键配置 Hermes Agent，使代理工具直接接入本地 oMLX 推理服务。"
+        ],
+        "article_id": "0bcb55082c56199e"
+      },
+      {
+        "object_type": "project",
+        "name": "OpenClaw",
+        "canonical_name": "OpenClaw",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "oMLX 可在管理面板中一键设置 OpenClaw 客户端，无需手动编辑配置即可使用本地推理服务。"
+        ],
+        "article_id": "0bcb55082c56199e"
+      },
+      {
+        "object_type": "project",
+        "name": "OpenCode",
+        "canonical_name": "OpenCode",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "oMLX 支持在管理面板中一键配置 OpenCode 客户端，使开源编码代理接入本地推理服务器。"
+        ],
+        "article_id": "0bcb55082c56199e"
+      },
+      {
+        "object_type": "model",
+        "name": "GLM-5.2",
+        "canonical_name": "GLM-5.2",
+        "confidence": "high",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "oMLX 为 GLM-5.2 提供原生自定义内核，缺失时该模型家族会静默回退到慢得多的通用路径并占用更多内存。",
+          "实测 GLM-5.2 的融合 DSA prefill 在 M3 Ultra 上使用自定义内核约为每秒 845 token，回退路径仅约 29 token。"
+        ],
+        "article_id": "0bcb55082c56199e"
+      }
+    ],
+    "extract_result": "success",
+    "impact_score": {
+      "score": 4.5,
+      "reason": "评分依据：oMLX 属于本地 LLM 推理服务器赛道，该赛道已有 Ollama、LM Studio、llama.cpp、MLX-LM 等成熟玩家，本次发布是单个开发者发起的开源项目，行业关注度与用户基数有限；其差异化亮点——受 vLLM 启发的两级（热内存/冷 SSD）KV 缓存持久化、跨上下文缓存复用、以及经 MLX pipeline ranks 跨 Mac 分布式推理——属于扎实的工程创新，能改善 Apple Silicon 开发者本地长会话推理体验，但并未改变模型训练/推理的范式，也未对云端 API 格局形成结构性冲击。综合评定为局部竞争格局内的有意义更新，非范式转移。"
+    },
+    "sentiment": "positive",
+    "developer_sentiment": {
+      "tone": "excited",
+      "primary_focus": "KV 缓存跨上下文持久化让本地模型在 Claude Code 等编码工具中的长会话推理真正可落地"
+    },
+    "hype_assessment": {
+      "level": "low",
+      "reason": "判定依据：标题 'optimized for your Mac' 仅属轻度营销包装，全文未出现'颠覆''革命'等滥用词汇；性能声明具体且可验证（GLM-5.2 fused DSA prefill 在 M3 Ultra 上 845 vs ~29 tok/s，约 30 倍），并诚实披露了无自定义内核时的静默回退路径、构建门槛（需完整 Xcode）与分布式推理的安全边界与局限。整体是有实物的技术项目，水分较低。"
+    },
+    "information_entropy": "high",
+    "domain_disruption": {
+      "technical_innovation": "受 vLLM 启发的块级 KV 缓存管理是本作核心创新：将缓存按块持久化在热内存层与冷 SSD 层，配合前缀共享与写时复制，即使对话中途改变上下文也能复用全部历史缓存，从机制上解决了本地推理长会话中 KV 缓存随上下文滚动失效的痛点；此外支持经 MLX pipeline ranks 将单个大模型拆分到内存不均等的多台 Mac 上分布式推理（Ring/Thunderbolt RDMA/JACCL），在 Apple Silicon 本地推理栈中属于首创级能力。",
+      "business_model": "开源工具 + DMG/Homebrew 分发，当前无明确商业模式。潜在影响是显著降低本地编码助手（Claude Code、Codex、Copilot 等）对云端 API 的依赖成本，推动本地优先的 AI 开发工作流，长期可能分流部分长尾云端推理 API 的开发者预算，但整体对现有 SaaS 生态冲击有限。"
+    },
+    "engineering_complexity": "production_ready",
+    "compound_value": {
+      "score": 5.5,
+      "reason": "长期复利价值取决于 oMLX 能否成为 Apple Silicon 生态中本地 LLM 推理的默认基础设施。看多逻辑：(1) 本地推理是确定性长期趋势——开源模型能力上移、隐私合规与成本诉求推动开发者从小额云 API 调用转向本地常驻，曲线随 M 系列芯片性能提升而陡峭；(2) 受 vLLM 启发的两级 KV 缓存（热内存+冷 SSD）与跨 Mac 分布式推理是真实技术差异化，解决了长会话编码/Agent 多轮调用的上下文复用痛点，可形成体验壁垒；(3) 与 Claude Code、Codex、Copilot 等主流智能体工具一键集成，卡位 Agent 工作流的数据通路，具备网络效应潜力。风险面：(1) 单开发者主导的开源项目，可持续性与企业级支持存疑；(2) 赛道拥挤，Ollama/LM Studio/llama.cpp 竞争激烈，且 Apple 官方 MLX 栈随时可能覆盖同类能力；(3) 变现模式不清晰，难以独立成为大生意。综合判断：具备成为细分赛道（Mac 本地 LLM 服务）基础设施的潜力，但护城河与社区规模仍需持续验证，故给 5.5 分。"
+    },
+    "value_capture_layer": "agent_middleware",
+    "moat_impact": "democratizes_access",
+    "key_beneficiaries": [
+      "Apple",
+      "HuggingFace",
+      "Zhipu AI",
+      "Alibaba",
+      "DeepSeek",
+      "MiniMax"
+    ],
+    "competitive_casualty": [
+      "Ollama",
+      "LM Studio",
+      "OpenAI 长尾开发者 API 收入",
+      "Anthropic 长尾开发者 API 收入"
+    ],
+    "market_opportunities": [
+      "面向 Apple Silicon 的本地 LLM 推理是确定性增长方向，开发者可借鉴 oMLX 的块级双层 KV 缓存（热内存+冷 SSD）与菜单栏常驻模型管理思路，为 Mac 开发者/企业打造开箱即用的本地推理运维产品。",
+      "跨 Mac 分布式推理（内存异构分片 + Thunderbolt RDMA/JACCL）打开了'用现有 Mac 集群替代部分 GPU 云负载'的想象空间，服务商可围绕 MLX pipeline ranks 提供多机推理集群的部署工具链与咨询服务。",
+      "oMLX 一键接入 Claude Code/Codex/Copilot 的模式印证了'本地推理后端 + AI 编码代理'是真实需求，隐私敏感型团队将青睐数据不出本地的方案，工具类产品可集成类 oMLX 服务作为差异化卖点。"
+    ],
+    "risk_matrix": {
+      "regulatory": "整体监管风险较低，但需注意：本地推理服务器若暴露到局域网/公网且未做鉴权，可能被用于搭建未经授权的模型服务，涉及服务合规与数据安全责任；跨 Mac 分布式推理涉及 SSH/凭据管理，需符合数据安全与访问控制法规。",
+      "technological": "核心技术依赖 MLX 生态与 Apple Silicon 硬件演进，存在被 Ollama/LM Studio/llama.cpp/mlx-lm 或 Apple 官方推理栈替代的风险；自定义内核在缺少完整 Xcode/Metal 工具链时静默回退到慢约 30 倍的通用路径，构成显著可用性陷阱；单维护者个人项目存在可持续性与架构迭代风险。",
+      "competitive": "本地推理服务器赛道高度拥挤，Ollama、LM Studio、llama.cpp、vLLM 等成熟方案在生态与社区规模上占优；oMLX 作为个人开源项目，其差异化优势（双层 KV 缓存、跨 Mac 分片、API 兼容）需快速形成壁垒，否则易被巨头入场或既有玩家复制挤压。",
+      "ethical": "本地推理将敏感数据保留在设备端（隐私优势），但 KV 缓存持久化到 SSD 会在磁盘留存会话内容残留，存在数据泄露与清理不彻底隐患；本地大模型能力下沉整体上降低了内容生成滥用的门槛，属通用性伦理风险。",
+      "additional": [
+        "本地 API 服务默认监听 localhost:8000 且兼容 OpenAI/Anthropic 协议，若被错误暴露到局域网将构成未授权访问与算力滥用风险。",
+        "官方 DMG 预编译的第三方自定义内核（GLM-5.2/MiniMax M3/Qwen3.5）涉及供应链与分发完整性，用户需自行评估可信度与更新来源。"
+      ]
+    },
+    "confidence": {
+      "impact": "medium",
+      "compound": "medium",
+      "hype": "medium"
+    },
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "product",
+        "name": "oMLX",
+        "canonical_name": "oMLX",
+        "url": "https://github.com/jundot/omlx",
+        "positioning": "面向 Apple Silicon Mac 的本地 LLM 推理服务器，以菜单栏原生应用与 CLI 双形态交付，通过分级 KV 缓存与跨 Mac 分布式推理支撑真实编码工作。",
+        "technical_signal": "采用受 vLLM 启发的块级 KV 缓存管理，前缀共享与写时复制结合，热内存与冷 SSD 双层持久化，会话中途改上下文仍可复用历史缓存。",
+        "adoption_signal": "支持 .dmg、Homebrew 与源码三种安装方式，官方 DMG 预编译 GLM-5.2 与 MiniMax M3 内核，可在管理面板一键接入主流编码代理。",
+        "ecosystem_relevance": "兼容 OpenAI 与 Anthropic API，支持 MCP 工具集成，可接入 Claude Code、Codex、Copilot、OpenClaw、OpenCode 等客户端生态。",
+        "target_users": [
+          "Apple Silicon Mac 用户",
+          "本地优先的 LLM 开发者",
+          "编码代理使用者"
+        ],
+        "product_signal": "支持文本 LLM、VLM、OCR、嵌入与重排序模型，内置 Web 管理界面与聊天 UI，提供实时监控、模型管理与按模型设置。",
+        "market_signal": "以菜单栏便捷管理与分级缓存技术为卖点，切入 Apple Silicon 本地 LLM 服务器细分市场，并绑定主流编码代理工具生态。",
+        "differentiation": "分级 KV 缓存使本地 LLM 可用于真实编码工作，跨 Mac 分布式推理可将大模型拆分到不等内存机器，构成区别于同类工具的核心差异。",
+        "watch_reason": "oMLX 作为面向 Apple Silicon 的本地推理服务器，其分级 KV 缓存与编码代理一键接入能力代表了本地 LLM 工具化的新方向，且持续迭代 GLM-5.2 等新模型内核与跨 Mac 分布式推理，值得持续跟踪其性能数据与生态扩展情况。",
+        "risk_notes": [
+          "原生自定义内核需完整 Xcode 的 Metal 工具链，缺失时静默回退到约 30 倍慢的通用路径，源码安装用户体验不一致。",
+          "跨 Mac 分布式推理依赖 Ring 或 Thunderbolt RDMA/JACCL 连接，受硬件条件与安全边界限制，实际部署门槛较高。",
+          "项目处于早期发布阶段，模型生态与稳定性仍需更多验证数据。"
+        ],
+        "score": 9.0,
+        "article_ids": [
+          "0bcb55082c56199e"
+        ],
+        "evidence_snippets": [
+          "oMLX 是面向 Apple Silicon Mac 的本地 LLM 推理服务器，可通过菜单栏原生应用、Homebrew 或 CLI 安装使用。",
+          "oMLX 在热内存层与冷 SSD 层之间持久化 KV 缓存，即使会话中途改变上下文也能复用历史缓存，使本地 LLM 可用于真实编码工作。",
+          "oMLX 兼容 OpenAI 与 Anthropic API，支持文本 LLM、VLM、OCR、嵌入与重排序模型，并内置 Web 管理界面与聊天 UI。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "vLLM",
+        "canonical_name": "vLLM",
+        "url": "https://github.com/vllm-project/vllm",
+        "positioning": "高性能开源大模型推理引擎，其块级 KV 缓存、前缀共享与写时复制设计成为 oMLX 等本地推理工具的参考范式。",
+        "technical_signal": "oMLX 采用受 vLLM 启发的块级 KV 缓存管理，包含前缀共享与写时复制特性，验证了该缓存机制向 Apple Silicon 本地推理迁移的可行性。",
+        "adoption_signal": "其缓存管理设计思想被 oMLX 借鉴并落地到本地推理场景，显示出 vLLM 技术方案在端侧工具中的扩散影响力。",
+        "ecosystem_relevance": "作为 LLM 推理基础设施的代表项目，其缓存与调度设计持续影响下游推理框架与本地工具的实现路线。",
+        "target_users": [],
+        "watch_reason": "vLLM 虽在本篇仅作为技术参照出现，但其块级 KV 缓存与写时复制设计正被 oMLX 等本地推理工具迁移落地，验证了服务端推理技术向端侧下沉的路径，值得持续跟踪其设计演进与生态影响。",
+        "risk_notes": [
+          "vLLM 面向数据中心 GPU 场景，其设计迁移到 Apple Silicon 本地推理时可能面临内存层级与硬件差异带来的适配挑战。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "0bcb55082c56199e"
+        ],
+        "evidence_snippets": [
+          "oMLX 采用受 vLLM 启发的块级 KV 缓存管理，包含前缀共享与 Copy-on-Write（写时复制）特性。",
+          "当热缓存占满时，oMLX 会将缓存块以 safetensors 格式卸载到 SSD，下次请求匹配前缀时从磁盘恢复而非重新计算。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Claude Code",
+        "canonical_name": "Claude Code",
+        "positioning": "Anthropic 推出的终端编码代理工具，可通过 oMLX 等本地推理服务器接入本地 LLM，实现隐私优先的编码工作流。",
+        "target_users": [
+          "开发者",
+          "终端编码用户"
+        ],
+        "product_signal": "oMLX 的持续批处理与分级 KV 缓存使本地 LLM 对 Claude Code 等真实编码工具变得实用，支持上下文缩放与自动压缩避免读取超时。",
+        "market_signal": "本地推理工具将 Claude Code 列为可直接接入的客户端之一，显示编码代理与本地 LLM 结合的市场需求正在形成。",
+        "differentiation": "凭借上下文缩放能力可配合较小上下文模型运行，使自动压缩在正确时机触发，是本地编码场景下较易落地的代理工具。",
+        "watch_reason": "Claude Code 作为主流编码代理，被 oMLX 定位为核心接入客户端之一，其与本地推理服务器的集成效果将直接影响本地 LLM 编码工作流的实用度，值得持续观察。",
+        "risk_notes": [
+          "本地模型推理速度与能力可能不及云端模型，编码代理在本地推理下的任务质量与稳定性仍需验证。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "0bcb55082c56199e"
+        ],
+        "evidence_snippets": [
+          "oMLX 的持续批处理与分级 KV 缓存使本地 LLM 对 Claude Code 等真实编码工具变得实用。",
+          "oMLX 支持上下文缩放，可配合 Claude Code 运行较小上下文模型，使自动压缩在正确时机触发并避免读取超时。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Codex",
+        "canonical_name": "Codex",
+        "positioning": "OpenAI 的编码代理工具，可通过 oMLX 管理面板一键接入本地推理服务器，无需手动编辑配置。",
+        "target_users": [
+          "开发者"
+        ],
+        "product_signal": "oMLX 可在管理面板中一键配置 Codex 等外部客户端，使编码代理直接连接本地推理服务器而无需手动编辑配置。",
+        "market_signal": "被 oMLX 列为可一键接入的客户端之一，显示编码代理工具向本地推理生态开放的兼容趋势。",
+        "watch_reason": "Codex 被 oMLX 作为一键接入的编码代理客户端，其与本地推理服务器的兼容方式反映了代理工具接入本地 LLM 的通用路径，值得跟踪其生态扩展。",
+        "risk_notes": [
+          "本地推理服务器的性能与稳定性将直接决定 Codex 在本地工作流中的可用性，实际体验待验证。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "0bcb55082c56199e"
+        ],
+        "evidence_snippets": [
+          "oMLX 可在管理面板中一键配置 Codex 等外部客户端，使编码代理直接连接本地推理服务器而无需手动编辑配置。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Copilot",
+        "canonical_name": "Copilot",
+        "positioning": "GitHub 的 AI 编程助手，可通过 oMLX 管理面板设置连接本地推理服务器，实现本地化代码补全与推理。",
+        "target_users": [
+          "开发者",
+          "编程用户"
+        ],
+        "product_signal": "oMLX 支持在管理面板中一键设置 Copilot 客户端，使其连接本地 oMLX 服务器进行推理。",
+        "market_signal": "被 oMLX 列为可配置客户端，显示其已向本地推理服务开放接入，扩展了传统云端助手的部署形态。",
+        "watch_reason": "Copilot 作为覆盖面广的编程助手，其对本地推理服务器的支持是编码工具本地化趋势的信号，值得观察其接入模式是否被更多工具跟进。",
+        "risk_notes": [
+          "仅见配置层面支持，本地推理对 Copilot 实际编码效果的影响缺乏公开数据。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "0bcb55082c56199e"
+        ],
+        "evidence_snippets": [
+          "oMLX 支持在管理面板中一键设置 Copilot 客户端，使其连接本地 oMLX 服务器进行推理。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Hermes Agent",
+        "canonical_name": "Hermes Agent",
+        "positioning": "可接入本地推理服务的代理工具，通过 oMLX 管理面板一键配置后直接使用本地 oMLX 推理。",
+        "target_users": [
+          "AI 代理开发者",
+          "自动化工作流用户"
+        ],
+        "product_signal": "oMLX 支持在管理面板中一键配置 Hermes Agent，使代理工具直接接入本地 oMLX 推理服务。",
+        "watch_reason": "Hermes Agent 被 oMLX 列为一键接入的代理客户端之一，反映出本地推理服务正在构建覆盖多类代理工具的接入生态，值得跟踪其后续集成深度。",
+        "risk_notes": [
+          "公开信息有限，Hermes Agent 与本地推理集成的具体能力与效果尚待更多资料佐证。"
+        ],
+        "score": 2.0,
+        "article_ids": [
+          "0bcb55082c56199e"
+        ],
+        "evidence_snippets": [
+          "oMLX 支持在管理面板中一键配置 Hermes Agent，使代理工具直接接入本地 oMLX 推理服务。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "OpenClaw",
+        "canonical_name": "OpenClaw",
+        "positioning": "支持本地推理接入的代理客户端项目，可通过 oMLX 管理面板一键设置，无需手动编辑配置即可使用本地推理服务。",
+        "adoption_signal": "oMLX 可在管理面板中一键设置 OpenClaw 客户端，无需手动编辑配置即可使用本地推理服务，显示其接入便捷性。",
+        "ecosystem_relevance": "作为 oMLX 支持的代理客户端之一，OpenClaw 融入本地推理服务生态，反映代理工具向本地 LLM 迁移的共性需求。",
+        "target_users": [],
+        "watch_reason": "OpenClaw 作为 oMLX 一键接入的代理客户端，其接入方式体现了代理工具本地化部署的趋势，值得跟踪其在本地推理生态中的角色发展。",
+        "risk_notes": [
+          "本篇仅提及配置方式，OpenClaw 自身的技术能力与社区活跃度缺乏更多依据。"
+        ],
+        "score": 2.0,
+        "article_ids": [
+          "0bcb55082c56199e"
+        ],
+        "evidence_snippets": [
+          "oMLX 可在管理面板中一键设置 OpenClaw 客户端，无需手动编辑配置即可使用本地推理服务。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "OpenCode",
+        "canonical_name": "OpenCode",
+        "positioning": "开源编码代理客户端，可通过 oMLX 管理面板一键配置，使编码代理直接接入本地推理服务器。",
+        "adoption_signal": "oMLX 支持在管理面板中一键配置 OpenCode 客户端，使开源编码代理接入本地推理服务器，凸显其接入低成本。",
+        "ecosystem_relevance": "作为开源编码代理，OpenCode 被 oMLX 纳入一键接入列表，显示开源代理工具与本地推理生态的融合趋势。",
+        "target_users": [],
+        "watch_reason": "OpenCode 作为开源编码代理，被 oMLX 列为可直接接入的客户端，其与本地推理服务器的集成路径代表开源代理本地化方向，值得跟踪。",
+        "risk_notes": [
+          "文章仅提及接入方式，OpenCode 的功能特性与本地推理下的实际表现缺乏公开证据。"
+        ],
+        "score": 2.0,
+        "article_ids": [
+          "0bcb55082c56199e"
+        ],
+        "evidence_snippets": [
+          "oMLX 支持在管理面板中一键配置 OpenCode 客户端，使开源编码代理接入本地推理服务器。"
+        ]
+      }
+    ]
+  },
+  {
+    "source_dir": "github-trending",
+    "title": "akitaonrails/ai-memory",
+    "source": "https://github.com/akitaonrails/ai-memory",
+    "author": [],
+    "published": "",
+    "created": "2026-08-18",
+    "manifest_dates": [
+      "2026-08-18",
+      "2026-08-19",
+      "2026-08-21"
+    ],
+    "description": "Solution for long term memory for agent coding CLIs and to facilitate handoff between different agent vendors Long-term memory for AI coding agents. Quit Claude Code mid-task, start OpenAI Codex in the same directory, continue without re-explaining the architecture, the failed approaches, or the open questions. Support Matrix Area Status Notes Linux Supported Primary Docker/server target and CI platform. Published Docker images support linux/amd64 and linux/arm64. Native Arch/AUR packages include system and user systemd units. macOS Supported Workspace tests run in CI; tagged releases publish native ai-memory-macos-aarch64.tar.gz and ai-memory-macos-x86_64.tar.gz binaries. The native binary is the recommended path on Apple Silicon. See docs/macos.md. Windows via WSL2 Supported Use the Linux install path inside WSL2 when the agent runs there. Native Windows Experimental Tagged releases publish ai-memory-windows-x86_64.zip with ai-memory.exe; Docker Desktop wrapper and source builds are also available. Local supported profiles default to host-native hook commands; Claude Code may use its Windows exec form, while other agents use native single command strings matching their hook schema. PowerShell/Git Bash scripts are compatibility fallbacks. See docs/windows.md. Claude Code Supported MCP config + lifecycle hooks; native commands enforce capture exclusions. install-mcp --session-aware optionally enables per-session auto-scope isolation through a local stdio bridge. Optionally captures the assistant's final turn on Stop when installed with --capture-assistant and the server enables capture_assistant (double opt-in, off by default). Codex Supported MCP config + lifecycle hooks; native commands enforce capture exclusions. No automatic true session-end hook, so run ai-memory finalize-session when you need a final summary/handoff. Command Code Supported MCP config (~/.commandcode/mcp.json) + its four stable lifecycle-hook events (~/.commandcode/settings.json); native commands enforce capture exclusions and SessionStart injects handoffs. Stop is only a turn boundary, so use ai-memory finalize-session --agent command-code after the final turn. ai-memory run command-code adds exact v3 native-session resume and visible-event import; experimental unsandboxed Mods remain excluded. Devin CLI Supported MCP config + lifecycle hooks. Hooks use Devin's PostCompaction event, inject handoffs via hookSpecificOutput.additionalContext, and omit subagent events because Devin does not expose them. OpenCode Supported Remote MCP config + generated TypeScript plugin; generated plugin enforces capture exclusions. Cursor Supported MCP config + lifecycle hooks. Gemini CLI Supported MCP config + lifecycle hooks. Oh My Pi / OMP Supported Use --client omp / --agent omp (or oh-my-pi) for native .omp MCP config + TypeScript extension; generated extension enforces capture exclusions. Pi Supported Generated ~/.pi/agent/extensions/ai-memory.ts extension provides lifecycle capture and an HTTP MCP bridge; generated extension enforces capture exclusions. Crush Managed-only ai-memory run crush resumes its project-local session database and supplies portable context through a temporary supported global-context file; no lifecycle-hook installer is provided. Managed workstreams Opt-in ai-memory run provides transparent cross-harness continuity for Claude Code, Codex, OpenCode, Pi, Crush, Kimi Code, Command Code, both incompatible Kiro CLI engines, OMP, Grok Build CLI, and Antigravity CLI. Direct launches remain unchanged. See docs/managed-workstreams.md. Claude Desktop MCP-only Uses mcp-remote; no lifecycle hooks. OpenClaw Supported MCP config + native plugin lifecycle hooks; generated plugin enforces capture exclusions. Antigravity CLI Supported MCP config (serverUrl) + lifecycle hooks (agy alias). Only PreInvocation with invocationNum = 0 maps to SessionStart; later model calls cannot consume a next-session handoff. No automatic true session-end hook, so run ai-memory finalize-session --agent antigravity-cli after the final turn when you need a summary, handoff, and opt-in SessionEnd consolidation. ai-memory run antigravity (aliases antigravity-cli, agy) adds managed workstream resume via --conversation; conversation text is not decoded, so the ledger for this harness comes from hook capture. Grok Build CLI Supported MCP config (install-mcp --client grok → $GROK_HOME/config.toml, default ~/.grok/config.toml) + lifecycle hooks (install-hooks --agent grok → $GROK_HOME/hooks/ai-memory.json, default ~/.grok/hooks/ai-memory.json, Grok-specific hook bundle). Capture works; no hook handoff injection — Grok ignores SessionStart stdout, so recover handoffs via MCP memory_handoff_accept. ai-memory run grok adds managed workstream resume with the context packet delivered natively through --rules. Skills root: .grok/skills / $GROK_HOME/skills (default ~/.grok/skills). Swival CLI MCP-only install-mcp --client swival --apply merges a native HTTP entry into the project-root .swival/mcp.json, preserving sibling servers. Lifecycle and managed-workstream support are not claimed because Swival's callback contract does not expose a stable session identifier. Zero Supported install-mcp --client zero (native HTTP + bearer in ~/.config/zero/config.json) + lifecycle hooks via install-hooks --agent zero --apply (exec-form native commands in ~/.config/zero/hooks.json, JSON payload on stdin, no shell). Capture works incl. specialist (subagent) events; no handoff injection — Zero discards sessionStart stdout, so recover handoffs via MCP memory_handoff_accept. Kimi Code Supported MCP config (url entry in ~/.kimi-code/mcp.json) + lifecycle hooks ([[hooks]] in ~/.kimi-code/config.toml, 10 events including subagent start/stop and PostToolUseFailure for tool-failure capture); both paths honor $KIMI_CODE_HOME. Handoffs inject via UserPromptSubmit stdout (Kimi Code discards SessionStart hook stdout); ai-memory run kimi adds managed workstream resume. Kiro CLI Supported MCP config uses install-mcp --client kiro-cli (alias kiro) and Kiro's Bedrock-compatible schema flavor. install-hooks --agent kiro-cli merges v2 hooks into existing agent configs; the explicit --agent kiro-cli-v3 target writes the incompatible standalone v3 registration. Both preserve unrelated entries, honor $KIRO_HOME, enforce capture exclusions, and inject pending handoffs at session start. Kiro has no true SessionEnd hook; use ai-memory finalize-session --agent kiro-cli, with --session-id <uuid> for concurrent sessions. ai-memory run kiro manages v2; add --v3, --mode, or --agent-engine v3 for version-safe v3 resume. VS Code Copilot MCP-only .vscode/mcp.json for Copilot agent mode; no lifecycle hooks (Copilot does not expose them yet). Zed MCP-only Native remote MCP under context_servers in Zed's user settings.json; no lifecycle hooks or managed-workstream support. Hermes Agent Community Core hook ingestion recognizes agent=hermes and Hermes' documented shell-hook tool_name / tool_input payload for concrete session attribution, tool-family titles, and capture exclusions. A community-maintained ai-memory-hermes-plugin is available, but no first-party installer is shipped; review its compatibility matrix, install/uninstall scripts, and secret handling before using it. Hermes ignores session-start hook stdout, so recover handoffs through MCP. LLM/auth providers Supported Anthropic, OpenAI, OpenAI OAuth/Codex, GitHub Copilot, Gemini, OpenCode Zen/Go, OpenAI-compatible endpoints, and generic OIDC device auth for native hooks. Embedding providers Supported OpenAI, Voyage, Google Gemini, and keyless OpenAI-compatible endpoints such as Ollama, LM Studio, and vLLM. What it is LLM coding agents lose context when a session ends. ai-memory gives them a shared, persistent wiki compiled from sanitized lifecycle observations. When a session ends, relevant observations become a coherent summary; the next agent receives a bounded handoff. Optional ai-memory run launches add a portable visible-event ledger and native per-harness resume for higher-fidelity cross-harness continuity. The wiki is plain markdown in a git repo - grep-able, openable in Obsidian, backed up with rsync. No vector database to babysit, no write_note ceremony, no manual context-loading. The full design is in docs/ARCHITECTURE.md; the influences and priors are at the bottom. Key features Zero-friction lifecycle capture. Hooks fire-and-forget bounded, sanitized prompt, tool-lifecycle, and session-boundary observations. Direct launches keep this lightweight path; it is not a complete native transcript. User prompts and post-compaction summaries retain up to 16 KiB; notifications and tool excerpts retain up to 2 KB, with a 16 KiB durable backstop for every observation body. Opt-in managed workstreams. ai-memory run claude, then ai-memory run codex --yolo, then ai-memory run command-code, transparently resumes one logical workstream with native per-harness sessions, a portable visible-event ledger, and full-ledger search. Delivered packets are origin-marked; Claude transcript import rejects a packet that Claude persisted and read back through a tool. ai-memory run with no harness continues the newest usable Claude Code, Codex, OpenCode, Pi, Crush, Kimi Code, Command Code, or Kiro CLI v2/v3 session for this checkout. On first explicit use, an interactive launcher can adopt a previous session from the same checkout; later switches cannot select unrelated native history. Native arguments pass through unchanged except the wrapper-owned --yolo and --fresh; direct commands are unaffected. kimi-code and kimi-cli are accepted aliases for the installed kimi command; commandcode, cmdc, and cmd select the cross-platform command-code executable (cmdc on native Windows); and kiro-cli selects the installed kiro-cli command. Kiro defaults to v2; ai-memory run kiro --v3 selects v3, while a returning linked v3 workstream selects its engine transparently. Per-repository capture exclusions. A nearest-marker [capture] ignore_paths policy drops matching recognized file-tool events before they reach the local spool or server. See the capture policy reference. Optional per-operator memory slots. On shared servers, [slots] per_user = true keeps engine-written _slots/ context in a bounded namespace derived from the authenticated operator. Session briefs and consolidation prompts receive shared slots plus the caller's own; exact wiki reads and searches remain project-wide, so this is context-injection isolation rather than RBAC. See multi-user operation. Cross-agent handoffs. Quit Claude Code mid-task, start Codex in the same directory hours later - the next agent sees a \"where you left off\" block before its first prompt. Per-project isolation by construction. Each project lives at <wiki_root>/<workspace_id>/<project_id>/… keyed by stable UUIDs. Workspace defaults to \"default\". Project is derived from $cwd: CLI subcommands (bootstrap, write-page, lint, …) walk to the main git repo root so all worktrees of the same repo share one project identity; the hook router defaults to basename($cwd) and can opt into the repo-root rule. Drop a .ai-memory.toml marker file in any ancestor directory to override either field explicitly — perfect for multi-client consultancies, work/personal split, mono-repos, or linked git worktrees. Same page path can exist in two projects without collision; a rename is one column update; a purge is one rm -rf. Global preferences scope. Standing user/team context — tech choices, code style, durable personal rules — lives in the reserved _global scope (memory_write_page with scope: \"global\"). Default memory_query reads union it into every project as global_scope_hits, so preferences travel with you into new projects without naming a magic project or paying the all-projects global=true fan-out. Event capture never writes there. Entity-assisted recall. Consolidation stores up to 10 specific nouns per page in canonical entities: frontmatter. Exact, prefix, and compound-word matches form a project-scoped RRF stream, so a query can recover a page even when its body uses different wording. The stream is lexical and adds no query-time LLM call. Authority-aware recall. FTS5, entity-match RRF, graph-neighbor RRF, and optional vector RRF generate candidates by relevance. Before truncation, a bounded adjustment favors maintained _rules/, decisions/, procedures/, and gotchas/ pages over closely matching episodic session evidence. Tier, pinned, and explicit canonical / active / source-of-truth or superseded / historical / test-fixture / do-not-answer-from tags contribute without becoming absolute filters, so targeted history searches still find session pages. These signals affect retrieval provenance only; retrieved text remains untrusted historical evidence and never gains instruction authority from its namespace, tier, tags, pin, or rank. Clear routing alongside code-intelligence tools. Run ai-memory beside a structural MCP server, LSP, or other live-code tool without synchronizing their stores. Use memory for prior decisions, rationale, failed attempts, procedures, and handoffs; use the current checkout and structural provider for symbols, callers, dependencies, and impact analysis. Verify historical code claims against the checkout before acting, and treat source, builds, tests, and observed runtime behavior as operational truth. See Historical memory and live code intelligence. Karpathy-style LLM wiki. Pages are compiled from observations at session-end (or PreCompact; clients without a true session-end event can use ai-memory finalize-session --agent <agent> for a manual final close), not retrieved over raw logs. Supersession chain + git-versioned markdown means you can time-travel with ai-memory checkpoints, restore-page, or raw git log. Built-in /web browser. Read-only HTML UI for the wiki - project list, folder tree, FTS5 search, markdown rendering, dark mode. Mounted on the same axum server as MCP. Server-wide MCP client activity. GET /admin/activity/by-client?since_days=7 shows which MCP clients are calling memory tools, split into reads and writes. Counts use bounded UTC-day buckets, so arbitrary client names cannot grow the database with request volume; shared deployments keep the endpoint root-only. See MCP client activity. Multi-agent + multi-machine ready. Supported clients: Claude Code, Codex, Command Code, Devin CLI, OpenCode, Cursor, Claude Desktop (via mcp-remote), Gemini CLI, Antigravity CLI, Grok Build CLI, Kimi Code, OpenClaw, Oh My Pi / OMP (omp / oh-my-pi), Pi via generated bridge extension, VS Code GitHub Copilot agent mode (MCP-only, workspace .vscode/mcp.json), Kiro CLI (MCP + v2 lifecycle hooks), and Zed (MCP-only, user settings.json). Server runs local (loopback) OR on a homelab box (LAN/VPN/cloud) with bearer-token auth. Shared servers can opt into [auto_scope] modes for per-user or session-aware current-project routing; Claude Code has a built-in opt-in bridge via install-mcp --session-aware. Thin-client CLI. ai-memory status, bootstrap, checkpoints, restore-page, purge-project, rename-project, move-project, move-session, audit-contamination, lint, curator, auto-improve, auto-improve-report, pending-writes, embed, forget-sweep, backup, finalize-session are all HTTP clients of the running server - never touch SQLite or wiki files directly. status also reports passive LLM/embedding provider health from the last real provider call. Server is the single source of truth. finalize-session lists matching open sessions through GET /admin/open-sessions, then posts synthetic session-end hooks back to the server. On shared deployments it defaults to the caller's own plus unattributed sessions; root can pass --all-owners for explicit cross-operator recovery. When concurrent sessions share an agent and scope, pass --session-id <uuid> to target one exact open session; it cannot be combined with --all. LLM is opt-in. Zero-LLM mode still gives you FTS5, manually declared entity, and graph-neighbor search plus rule-based summarisation. Add a provider when you want consolidated pages, lint contradictions, or staged auto-improvement proposals. Use cases \"Quit Claude Code and continue the same work in Codex.\" Use the optional managed launcher when you want native session resume plus the portable visible history, not only a summary handoff: cd /path/to/project ai-memory run claude # Quit Claude Code, then continue the same workstream in Codex. ai-memory run codex --yolo # Continue in Command Code, preserving its own exact native session. ai-memory run command-code # Later, omit the name to resume the newest usable managed session here. ai-memory run # Start a new Codex session in the same workstream, keeping portable history. ai-memory run --fresh codex # Kiro defaults to v2; select its incompatible v3 engine explicitly once. ai-memory run kiro --v3 \"Pick the project instead of remembering where it lives.\" Start from a directory containing your checkouts and choose the checkout before the managed harness: ai-memory show # Machine-readable discovery without launching anything. ai-memory show --json Each successful ai-memory run saves a client-local checkout link keyed by the configured server plus workspace/project. show joins those links with the server's public activity and page-count metadata. A fast, bounded depth-1 scan of the current directory also finds new checkouts carrying a project marker (.git, Cargo.toml, package.json, go.mod, pyproject.toml, and friends), while skipping dependency and build directories. The server never exposes a checkout path, so two client machines can safely use different local paths for the same project on a remote homeserver. The list always leads with + New project: type a name and ai-memory validates a portable directory name, stages the new checkout privately, pins its workspace and project in .ai-memory.toml, and installs the routing block and managed Agent Skills for the chosen agent. The final directory appears only after every setup step succeeds, then show launches from it. The harness menu only offers agents actually installed on the host, using the same PATH lookup run enforces at launch. --no-scan uses only saved links; --workspace filters both sources; --yolo, --fresh, and trailing native arguments are forwarded unchanged. Non-terminal use must pass --json; JSON mode is discovery-only and never launches a harness. The first explicit run can offer an existing session from this exact checkout or start a new one. Switching harnesses starts or resumes the native session linked to the shared workstream, so an obsolete local session cannot replace newer cross-harness history. After a normal quit, the next launch waits briefly if the previous launcher is still finalizing; handled failures release the workstream immediately. If a linked native transcript was deleted, ai-memory detects the orphan before launch and starts fresh; --fresh forces that recovery for one harness. Managed mode currently covers Claude Code, Codex, OpenCode, Pi, Crush, Kimi Code, Command Code, Kiro CLI v2/v3, OMP, Grok Build CLI, and Antigravity CLI; direct harness launches remain unchanged. See Managed cross-harness workstreams. \"Just put me back where I was.\" From any directory, with no name to type and no list to read: ai-memory continue It picks the checkout whose managed launch is most recent, revalidates the path and its resolved scope, then continues there exactly as bare ai-memory run would. A link whose directory moved, was replaced, now resolves to a different project, or has a corrupt ordering timestamp is reported on stderr and skipped, so a resume never quietly lands in the wrong project. --workspace narrows the search; --yolo and --fresh are forwarded. \"Quit at 4 PM, pick up at 9 AM in a different agent.\" The classic. SessionStart hook in the next supported hook client prepends a typed handoff with open questions, next steps, and a session summary. Grok captures lifecycle events but ignores SessionStart stdout, so ask it to call memory_handoff_accept when resuming from a handoff. Zero has the same no-stdout behavior and also must call memory_handoff_accept. \"What did we decide about X six weeks ago?\" Use memory_query X from the agent for FTS5 fused with entity matches and linked-page expansion (plus vector similarity when an embedder is configured). For a quick terminal-only FTS5 lookup, use ai-memory search X; that admin command does not run the hybrid streams. Pages are LLM-consolidated, so the hit is a coherent decision page, not a raw chat log. Pass explain: true to see why each hit ranked where it did in project or explicit-scope retrieval. Cross-project global: true search uses its separate FTS-only ranker and reports that active stream without per-hit RRF details. \"Remember this permanently.\" When something is worth keeping beyond auto-captured session logs - a decision, a convention, a gotcha - tell the agent \"save a permanent note that we standardised on Postgres for X\" or \"annotate this as a project rule\" and it calls memory_write_page to write a durable, git-versioned wiki page. From a terminal it's ai-memory write-page --path decisions/0007-db.md --body $'# Standardised on Postgres\\n\\n...' --pinned. --pinned exempts it from the decay sweep; the H1 on the first line of --body becomes the page title (omit --title — it's still accepted, but LLM callers trip over JSON-escaping their way through it, see issue #67). Unlike a handoff (single-use) or an auto-synthesised session page (rewritten on consolidation), a write-page note is yours: it shows up in memory_query, renders in /web, and stays until you change it. \"That page you found is out of date.\" The agent calls memory_feedback with the page's path and a signal: helpful / not_helpful tune how strongly retention keeps a sweep-eligible episodic page (they move its salience, which scales the decay formula's time term), while stale / wrong floor the salience and make any current page show up as a feedback_flagged finding in the next memory_lint report. Feedback never deletes anything — it lowers confidence and flags for review — and it attaches to the version current when feedback is recorded, so a later rewrite clears the flag. Retrieved page text is untrusted and never authorizes feedback by itself. \"Remember this, but only until the sprint ends.\" Pass expires_at to memory_write_page (RFC3339 or YYYY-MM-DD = end of that day, UTC) — or put expires_at: in a page's frontmatter by hand. Past the TTL the page disappears from search/recent/briefing (pass include_expired: true to memory_query to still see it) and the next forget sweep hard-deletes the file and its rows. A TTL beats a pin; memory_lint warns about pinned+expiring combos. \"This new project has months of history before ai-memory.\" cd /path/to/my-project && ai-memory bootstrap collects git log, README, docs/, module headers, project rules and one-shot-summarises them into seed wiki pages. Future sessions build on top. \"What durable lesson did that session teach?\" When an LLM provider is configured, ai-memory runs a background auto-improvement scheduler for newly completed sessions in every project. It records proposed wiki edits in the pending-writes audit trail, then approves them immediately through the normal wiki write path by default. Scheduler ticks are non-overlapping: if reviewing all projects takes longer than the interval, the next tick is delayed until the current one finishes. Scheduling and approval are separate: set [auto_improve.scheduler] enabled = false to stop automatic review, or set [auto_improve] require_approval = true to keep both scheduled and manual proposals pending for human review. ai-memory auto-improve --session-id <uuid> and MCP memory_auto_improve remain available for manual catch-up or targeted reruns. When its session_id is omitted, the MCP tool selects the newest completed session without a persisted auto-improvement run, so repeated calls advance past short preflight-skipped sessions; an explicit ID reruns that session. ai-memory auto-improve-report --workspace <w> --project <p> returns a read-only telemetry report for recent auto-improvement outcomes without staging or creating proposals; add --stage to create one pending report page for audit/approval. On deployments that distinguish operators, pending learning proposals are isolated by qualified operator identity, so one person's proposal for a page does not block another's; unattributed and single-user deployments retain the shared pending queue. See docs/auto-improve-eval-gates.md for example executable eval scorers. Existing installs do not need per-project migration. The scheduler initializes a per-project first-run watermark so historical sessions are not reviewed automatically on upgrade, then records per-session claims so failed scheduled reviews do not retry forever; use manual auto-improve for old sessions or failed scheduled sessions you want to catch up. Older configs may still contain an [auto_improve] mode = ... line; current ai-memory ignores that legacy key, so you can remove it when convenient. \"What housekeeping should I consider?\" ai-memory curator runs a no-LLM, rule-based maintenance report over cold episodic pages, stale slots, duplicate exact normalized titles, and dangling cross-project links. It is report-only unless --stage is passed; staging queues one report page for approval and still performs no maintenance actions itself. Shared servers can opt into [decay] breadth_weight to give pages reinforced by several identified operators a retention bonus; the default 0.0 leaves existing retention scores unchanged. \"Run one ai-memory for the whole household.\" Stand the server up on a homelab box at 0.0.0.0:49374 with a bearer token; every laptop/desktop talks to it. Per-cwd routing keeps each project's pages cleanly separated; the /web UI is reachable from a browser anywhere on the LAN. \"Audit what landed before sharing with a teammate.\" Browse the wiki at http://<server>:49374/web - HTTP Basic dialog if auth is on, paste the token as password. Per-project tree view, rendered markdown, supersession chain visible per page. \"Undo one bad page edit without rolling back the whole server.\" ai-memory checkpoints shows recent wiki commits, then ai-memory restore-page --path notes/foo.md --from <rev> restores that one markdown file and reindexes it into SQLite. Full backup / restore is still the answer for DB-only state such as sessions, observations, handoffs, users, audit rows, and embeddings. \"Drop an experiment, keep the rest.\" ai-memory purge-project --project experimental --confirm. Atomic: that project's DB rows cascade away, its wiki subdir gets rm -rf'd, every sibling project is untouched by construction. Quick start Arch Linux (AUR) For native Arch installs, use the AUR packages. They install /usr/bin/ai-memory, packaged hook sources, and both system-level and user-level systemd units. yay -S ai-memory-bin # prebuilt Linux x86_64/aarch64 binary yay -S ai-memory # builds from source Single-user workstation: mkdir -p ~/.config/ai-memory ~/.local/share/ai-memory ai-memory --data-dir ~/.local/share/ai-memory \\ --config ~/.config/ai-memory/config.toml init systemctl --user enable --now ai-memory.service ai-memory install-mcp --client claude-code --apply ai-memory install-hooks --agent claude-code --apply System service installs use /var/lib/ai-memory and /etc/ai-memory/ via the packaged unit. Full user-service, system-service, auth, and provider setup is in docs/install.md#arch-linux-native-packages-aur. Docker You need: Docker + an agent CLI from the Support Matrix, or anything else that speaks MCP. The published Docker image includes linux/amd64 and linux/arm64 variants, so Apple Silicon Macs and ARM64 Linux hosts can pull akitaonrails/ai-memory without --platform linux/amd64 emulation. The default quick-start has no authentication - the server binds to loopback only, so on a single-user laptop nothing else can reach it. Adding a bearer token is a one-line change once you're ready to expose the server on the LAN; see Security below. # 1. Install the ai-memory CLI wrapper (a small shell script that # runs the binary inside docker with your $HOME mounted). This is # the only thing that needs to live on the host filesystem. mkdir -p ~/.local/bin wrapper_tmp=\"$(mktemp -d)\" trap 'rm -rf \"$wrapper_tmp\"' EXIT wrapper_base=https://github.com/akitaonrails/ai-memory/releases/latest/download/ai-memory-wrapper curl -fsSL \"$wrapper_base\" -o \"$wrapper_tmp/ai-memory-wrapper\" curl -fsSL \"$wrapper_base.sha256\" -o \"$wrapper_tmp/ai-memory-wrapper.sha256\" expected=\"$(awk 'NR == 1 { print $1 }' \"$wrapper_tmp/ai-memory-wrapper.sha256\")\" if command -v sha256sum >/dev/null 2>&1; then actual=\"$(sha256sum \"$wrapper_tmp/ai-memory-wrapper\" | awk '{ print $1 }')\" else actual=\"$(shasum -a 256 \"$wrapper_tmp/ai-memory-wrapper\" | awk '{ print $1 }')\" fi [ -n \"$expected\" ] && [ \"$actual\" = \"$expected\" ] || { echo \"wrapper checksum mismatch\" >&2; exit 1; } install -m 0755 \"$wrapper_tmp/ai-memory-wrapper\" ~/.local/bin/ai-memory rm -rf \"$wrapper_tmp\" trap - EXIT # Most distros put ~/.local/bin on PATH automatically. If `which # ai-memory` comes up empty, add this to ~/.bashrc / ~/.zshrc: # export PATH=\"$HOME/.local/bin:$PATH\" # 2. Start the server. `--restart unless-stopped` makes it come back # on docker daemon restart and on machine boot (provided your # docker service is enabled at boot — `sudo systemctl enable # docker` on most distros). Loopback-only bind (`127.0.0.1:49374`) # so nothing outside this machine can reach it. Omit the LLM / # EMBEDDING lines for zero-LLM mode — FTS5 search still works # without any keys. docker run -d --name ai-memory \\ --restart unless-stopped \\ -p 127.0.0.1:49374:49374 \\ -v ai-memory-data:/data \\ -e AI_MEMORY_LLM_PROVIDER=anthropic \\ -e ANTHROPIC_API_KEY=sk-ant-... \\ -e AI_MEMORY_EMBEDDING_PROVIDER=openai \\ -e OPENAI_API_KEY=sk-... \\ akitaonrails/ai-memory:latest # 3. Wire your agent CLI in two commands. The wrapper takes care of # mounts and each client's config-path detection. Re-run with # `--agent codex`, `--agent command-code`, `--agent devin`, `--agent opencode`, `--agent gemini-cli`, # `--agent grok`, `--agent kimi-code`, `--agent kiro-cli`, `--agent omp`, # `--agent oh-my-pi`, `--client cursor`, # `--client gemini-cli`, `--client grok`, `--client kiro-cli`, etc. # for additional agents; full list in docs/install.md. ai-memory install-mcp --client claude-code --apply ai-memory install-hooks --agent claude-code --apply # Grok Build CLI example: # ai-memory install-mcp --client grok --apply # ai-memory install-hooks --agent grok --apply # Kiro CLI v2 example (requires an existing Kiro agent config): # ai-memory install-mcp --client kiro-cli --apply # ai-memory install-hooks --agent kiro-cli --apply # Kiro CLI v3 example (standalone hook registration): # ai-memory install-hooks --agent kiro-cli-v3 --apply # Command Code stable MCP + lifecycle example: # ai-memory install-mcp --client command-code --apply # ai-memory install-hooks --agent command-code --apply On Linux/macOS, that's it. Start a Claude Code session as usual - every prompt and tool call now lands in ai-memory, and the next session you open in this project will see a handoff with where you left off. On macOS, the native release binary is also supported and recommended when you do not need Docker; see docs/macos.md. If two Claude Code sessions use the same server concurrently, enable per-session routing on the server and replace only the ai-memory MCP entry with the optional bridge: # <ai-memory data dir>/config.toml [auto_scope] mode = \"per_session\" ai-memory install-mcp --client claude-code --session-aware --apply The bridge still connects to the configured local or remote HTTP server and forwards its bearer token, but also attaches Claude's lifecycle session id to every MCP request. Existing static HTTP installs remain the default. See docs/auto-scope.md for Claude's /clear and implicit-resume limitations. The install-mcp / install-hooks commands use AI_MEMORY_SERVER_URL / AI_MEMORY_AUTH_TOKEN when set; otherwise they default to http://127.0.0.1:49374 (matching the server above) and no bearer token. If hooks are installed after an ai-memory MCP entry already exists, install-hooks reuses that endpoint so a remote MCP setup cannot silently regenerate loopback-only hooks. Both commands are idempotent - re-runs replace ai-memory's entry, preserve every other server / hook you have configured, and write a timestamped .bak-<ts> next to the file before each modifying write. The hook scripts are staged into ~/.local/share/ai-memory/hooks/<agent>/ automatically; re-running overwrites them so future image updates ship updated hooks. Drop --apply to print the snippet instead of mutating. For Claude Code, CLAUDE_CONFIG_DIR relocates MCP registration to $CLAUDE_CONFIG_DIR/.claude.json, hooks to $CLAUDE_CONFIG_DIR/settings.json, and global managed skills to $CLAUDE_CONFIG_DIR/skills. The Docker wrapper forwards this variable when the directory is under its existing $HOME bind mount. Use the native binary when the Claude config root is outside $HOME. Uninstall checks both the active relocated paths and Claude's home defaults, so enabling the variable does not leave an older default-path ai-memory installation behind. If your agent often starts inside repository subdirectories or linked worktrees, add --project-strategy repo-root to install-hooks so captures collapse to the main git repo name; see docs/install.md and docs/marker-file.md for details. Later bare --apply refreshes, including ai-memory upgrade, preserve that choice; pass --project-strategy basename explicitly to remove it. The Docker wrapper also bridges thin-client commands such as ai-memory status and ai-memory bootstrap back to the host's loopback server. With the local Docker quick start above, no AI_MEMORY_SERVER_URL override is needed. Managed workstreams are optional. They execute the harness on the host while the server may remain local or remote: ai-memory run claude # later, continue the same workstream in another harness ai-memory run codex --yolo # omit the name to continue the newest usable local harness session ai-memory run # or resume the newest managed checkout without changing directories first ai-memory continue To remove ai-memory later, run ai-memory uninstall --apply from the same host environment. It removes ai-memory-owned config entries, instruction blocks, default-root managed skill files, and generated plugin files only after matching their ai-memory signatures; custom skill roots installed with --target-dir are cleaned up manually. Use --mcp-url if you installed MCP with a custom endpoint, and --mcp-name only when you need to narrow removal to one matching entry. Install Notes SELinux: on enforcing Linux hosts, the wrapper automatically adds --security-opt label=disable only to short-lived helper commands that touch bind-mounted host files. It does not alter the long-lived server container or relabel $HOME; do not add :z/:Z to the whole home bind. Rootless engines also get -u 0:0 for those commands. Docker and podman report rootless mode and SELinux support under different info keys; both are read. The same treatment applies whenever AI_MEMORY_DATA_DIR selects a host directory or an explicit --config reads a host file. See docs/install.md. Windows: use the Linux path inside WSL2, or the native Windows wrapper from PowerShell/cmd. Local supported profiles default to host-native commands: Claude Code may use its supported ai-memory.exe exec form, while other agents use native single command strings matching their hook schema. The Docker wrapper protects .ps1 fallback commands from nested PowerShell expansion with -EncodedCommand; rerun install-hooks --agent <agent> --apply after upgrading so existing hook entries receive the current form. PowerShell/Git Bash script bundles are compatibility fallbacks and do not enforce capture-policy v1. Do not mix path worlds. See docs/windows.md. Docker compose: docker compose -f docker/docker-compose.yml up -d is supported; agent setup is the same as step 3 above. Remote server: set AI_MEMORY_SERVER_URL=http://<server-ip>:49374 and AI_MEMORY_AUTH_TOKEN=<token> on the client before installing MCP/hooks. Explicit --server-url flags still work, but are no longer required when the env vars are set. Any non-loopback server should use bearer auth. Managed-launch wrapper: ai-memory run, ai-memory show, and ai-memory continue must be intercepted by the current host wrapper so local checkouts, native harnesses, and session stores remain accessible. An old wrapper may pass these commands into Docker and fail to find a checkout or host executable. Run ai-memory upgrade on the agent machine to refresh it. The host-native runner inherits AI_MEMORY_SERVER_URL, AI_MEMORY_AUTH_TOKEN, and the host PATH. Upgrades: for Docker-wrapper installs, run ai-memory upgrade on each agent machine. It refreshes the local wrapper, pulls the latest image, and re-stages hook scripts under ~/.local/share/ai-memory/hooks/<agent>/. Native package/source installs should rerun ai-memory install-hooks --agent <agent> --apply after upgrading the binary. Remote/homelab servers must still be redeployed separately; local wrapper upgrade only updates the client machine. Existing project prompt files keep working. Refresh the managed ai-memory routing package (ai-memory install-instructions, or --target AGENTS.md for AGENTS-based projects) when you want new tool guidance. The refresh writes the slim markered snippet and managed Agent Skills from the same binary-owned assets. For every client in the Support Matrix, plus curl-based hook installs, source builds, CLI environment variables, and the full subcommand reference, see docs/install.md. Tab completion for the CLI is available in bash, zsh, fish, PowerShell, and elvish: ai-memory completions fish > ~/.config/fish/completions/ai-memory.fish See docs/shell-completions.md for the other shells' install paths. Security Loopback-only (127.0.0.1:49374) with no auth is the default because it is safe for a single-user laptop: no process outside the machine can reach the server. Unauthenticated non-loopback HTTP now fails closed. Set AI_MEMORY_AUTH_TOKEN or bind loopback; --allow-insecure-no-auth is an intentional, dangerous exception for plain HTTP only. Authentication does not encrypt bearer tokens: for LAN or remote access, use the ready Caddy or Cloudflare Tunnel templates described in the HTTPS reverse-proxy guide. Enable bearer auth when the server is exposed beyond loopback, when untrusted local processes share the machine, or when the data dir holds sensitive project history: TOKEN=$(ai-memory generate-auth-token) docker run -d --name ai-memory \\ --restart unless-stopped \\ -p 0.0.0.0:49374:49374 \\ -v ai-memory-data:/data \\ -e AI_MEMORY_AUTH_TOKEN=\"$TOKEN\" \\ -e AI_MEMORY_ALLOWED_HOSTS=\"<server-ip>,localhost,127.0.0.1\" \\ akitaonrails/ai-memory:latest ai-memory install-mcp --client claude-code --apply \\ --server-url \"http://<server-ip>:49374/mcp\" --auth-token \"$TOKEN\" ai-memory install-hooks --agent claude-code --apply \\ --server-url \"http://<server-ip>:49374\" --auth-token \"$TOKEN\" Bearer auth protects /mcp, /hook, /handoff, /admin/*, and /web/*. Browser access to /web uses HTTP Basic auth with the token as the password. When /web is exposed through an HTTPS reverse proxy, set AI_MEMORY_AUTH__SECURE_COOKIE=true; it makes the browser cookie HTTPS-only. Close or redirect direct HTTP access to that hostname. Non-loopback binds should also set AI_MEMORY_ALLOWED_HOSTS to guard against DNS rebinding. Busy shared hook servers can also set AI_MEMORY_HOOK_RATE_PER_SEC (tokens per second per actor/session source) and optionally AI_MEMORY_HOOK_RATE_BURST to bound one runaway session without blocking unrelated hook sources. Unset or 0 rate leaves the limiter disabled. For shared servers where each developer should authenticate their own hook writes, native Claude Code hooks can use a stored OIDC device token instead of embedding a shared static token: ai-memory auth login oidc-device \\ --issuer \"https://issuer.example.com/realms/team\" \\ --client-id \"ai-memory-cli\" ai-memory install-hooks --agent claude-code --apply \\ --server-url \"http://<server-ip>:49374\" OIDC hook auth requires the native ai-memory hook ... command path. The Docker wrapper keeps shell-script hooks by default; set up OIDC from a native release binary or source install. Thin-client HTTP commands such as ai-memory status and ai-memory search also use the stored OIDC access token when no static AI_MEMORY_AUTH_TOKEN / [auth].bearer_token is configured; the static bearer still wins when present. This is for OIDC-aware gateways/bridges; native ai-memory server auth still accepts static root bearer / DB-user tokens, and /admin/* remains root-only unless a gateway translates accepted OIDC auth into upstream auth that ai-memory accepts. OIDC/Keycloak session ids are login-provider sessions, not ai-memory agent sessions. Shared servers that rely on [auto_scope] session isolation still need explicit workspace + project / scopes, or a bridge that forwards the real lifecycle-hook session id on MCP requests. Want HTTPS? ai-memory deliberately does not terminate TLS itself — the right answer is a battle-tested reverse proxy in front of it. docs/https-via-proxy.md is the deployment guide, with copy-paste docker compose templates in docker/compose.tls.caddy.yml (Caddy with Let's Encrypt or internal CA) and docker/compose.tls.cloudflared.yml (Cloudflare Tunnel — no open ports). Both are recommended once you turn on multi-user or bind beyond loopback. The Quick Start happy path of single-user on loopback doesn't need TLS — that case is called out explicitly in the guide so you don't add ceremony where it doesn't earn its keep. Multi-user attribution (v0.8, optional). When more than one human shares a server, ai-memory can attribute each write to a named user. The bearer token continues to authenticate at the wire level; users created via ai-memory user add get their own tokens that resolve to their identity in audit logs, page frontmatter, /api/v1 responses, and the page view UI. Data stays single-tenant — there is no per-page RBAC. A [auth].token_pepper is required for DB-user authentication, but creating the first user row is what immediately switches every /admin/* endpoint to root-only, including status/search/read-page and user-management routes. ai-memory init generates a pepper for new installs without changing single-user behavior until a user is added. An SSO gateway can instead use a dedicated [auth].actor_proxy_bearer_token and trusted X-Memory-Actor-* headers; its credential is deliberately separate from the root bearer so a missing identity cannot become root. See docs/users.md for the full walkthrough and the four-rung auth ladder. See docs/deploy.md for the full homelab pattern with bearer auth, host allowlisting, and TLS/reverse-proxy options. Using Memory Day to day, you mostly do not think about ai-memory. Lifecycle hooks capture prompts, tool calls, compaction checkpoints, and session boundaries. SessionStart hooks fetch pending handoffs before your first prompt in the next agent. Useful entry points: Ask \"where did we leave off?\" to continue from the pending handoff. Ask \"have we discussed X?\" or \"search memory for Y\" to query the wiki. Ask \"catch me up\" for a prose digest of recent project activity. Run ai-memory bootstrap once when adopting ai-memory in an existing project with months of history. Start the server with --enable-web and visit /web for a read-only browser view of the markdown wiki. --enable-web also mounts a read-only JSON frontend API at /api/v1 (workspaces, projects, pages, recent, briefing, search) so custom web UIs can read the memory without opening SQLite or wiki files directly: GET /api/v1/workspaces GET /api/v1/projects?workspace=... GET /api/v1/workspaces/{workspace}/projects/{project}/pages GET /api/v1/workspaces/{workspace}/projects/{project}/pages/{path} GET /api/v1/workspaces/{workspace}/projects/{project}/recent?limit=... GET /api/v1/workspaces/{workspace}/projects/{project}/briefing?limit=... GET /api/v1/workspaces/{workspace}/overview?limit=... GET /api/v1/workspaces/{workspace}/projects/{project}/overview?limit=... GET /api/v1/workspaces/{workspace}/projects/{project}/handoffs?state=...&limit=... GET /api/v1/search?q=...&workspace=...&project=...&limit=... POST /api/v1/search { \"q\": \"...\", \"scopes\": [{ \"workspace\": \"...\", \"project\": \"...\" }] } overview bundles the open handoff + briefing + memory-health for a workspace or project in one call (the data a project overview screen needs). The handoff history defaults to the caller's own plus shared rows; root can use all_owners=true for recovery across operators. Full integration guide: see docs/frontend-api.md for auth setup, response schemas, error model, limits/pagination, custom-UI hosting, a worked fetch/curl example, and the canonical source-of-truth files. Read that first if you're building a frontend. To serve your own static frontend instead of the built-in UI, point --web-ui-dir at the frontend's build output (same-origin with /api/v1, /mcp, /admin/*, so the existing auth applies): ai-memory serve --transport http --bind 127.0.0.1:49374 \\ --enable-web --web-ui-dir ../ai-memory-ui/dist A reference implementation — a SolidJS knowledge browser with screenshots and e2e tests — lives at djalmajr/ai-memory-ui. Richer products such as import/migration pipelines and write-capable browser chat/editors should live as optional companion crates or projects that call ai-memory's public HTTP/MCP surfaces. The first implemented companion is the standalone OMC wiki importer at companions/ai-memory-importer, which is intentionally not a root workspace member and is not included in root cargo test --workspace. See docs/companion-crates.md for the boundary. When a reverse proxy hosts ai-memory under a URL subpath, set --base-path (or AI_MEMORY_BASE_PATH) so every HTTP surface moves together. Example: --base-path /wiki serves MCP at /wiki/mcp, hooks at /wiki/hook, the API at /wiki/api/v1, and the default browser at /wiki/web. Set --web-slug / if you want the browser or custom SPA at /wiki itself. Install the managed routing package once so agents proactively call the right MCP tool for those prompts: ai-memory install-instructions That command writes or updates the slim <!-- ai-memory:start --> block and the managed ai-memory Agent Skills that carry the detailed routing guidance. See docs/usage.md for handoff examples, proactive query routing, bootstrap details, web UI screenshots, and the raw-wiki inspection commands. CLI URL/auth configuration lives in docs/install.md. Entity retrieval Consolidation extracts specific technologies, components, services, files, and domain nouns into each page's canonical frontmatter. Hand-edited wiki pages can declare the same bounded index explicitly: --- title: Queue choice entities: - nats jetstream - delivery guarantees --- Names are lowercased, whitespace-normalized, de-duplicated, capped at 10 per page and 64 characters each, and rebuilt from Markdown during a clean-store ai-memory reindex. Entity lookup is project-scoped, ignores expired pages by default, and reports entity_rank, its raw inverse-frequency entity_weight, matched_entities, and its RRF contribution under memory_query(..., explain: true). LLM Providers ai-memory runs without an LLM: hooks still capture sessions, search uses FTS5 + declared entities + graph neighbors, and summaries fall back to rule-based output. Add an LLM provider when you want LLM consolidation (on PreCompact, on demand via memory_consolidate, or opt-in at session end with AI_MEMORY_CONSOLIDATE_ON_SESSION_END), richer linting, and bootstrap. Substantive session ends always write a rule-based summary page + handoff either way. A session containing only SessionStart / SessionEnd boundaries is closed without a page, handoff, or provider job. When that empty session had accepted startup context, its session-bound handoff is returned to the open pool for the next receiver instead of being lost. When the session-end opt-in is enabled, provider work is durably queued after those deterministic writes and handled by one bounded server worker, so hook drain latency does not cancel it. Failed jobs retry with backoff and survive a server restart. A resumed native session is ended again only after its observation generation advances; the persisted generation watermark makes duplicate SessionEnd delivery and system clock skew converge without repeated provider work. The end watermark and automatic handoff commit atomically, and an interrupted keyed replay finishes the wiki commit, queue insert, and key completion without duplicating that handoff. On the next SessionStart, the newest cwd-eligible automatic handoff wins; accepting it expires older eligible automatic handoffs without consuming manual or sibling-directory work. A new automatic handoff also expires prior open automatic handoffs from its exact cwd, so repeated SessionEnds cannot accumulate there before a receiver starts. To keep consolidation style project-specific, write _prompts/consolidation.md in that project's wiki. Its body can express preferences such as \"prefer Portuguese titles\" or \"omit routine CI noise\". Automatic, single-page, and multi-page consolidation use the page; a manual memory_consolidate call can pass instructions to override it once. ai-memory sanitizes and caps the value at 2,000 characters, JSON-encodes it in the user message, and treats it as untrusted advisory data. It cannot supply facts, request tool use or disclosure, or override the consolidation schema and faithfulness rules. TTL-expired preference pages are ignored. With no active page or argument, no preference block is appended. Recommended defaults: Provider Default Use when anthropic claude-haiku-4-5 Best default for consolidation quality and rule classification. anthropic-oauth claude-sonnet-4-6 Use a Claude Pro/Max subscription via claude setup-token, no API key. openai gpt-5.4-mini Cheaper and faster hosted option. openai-oauth gpt-5.5 ChatGPT Pro/Plus/Codex backend via ai-memory auth login openai-oauth; no Platform API key. copilot gpt-5.5 GitHub Copilot Chat backend via ai-memory auth login copilot or COPILOT_GITHUB_TOKEN; requires a Copilot subscription. gemini gemini-2.5-flash Google-hosted option with a generous free tier. openai-compat no default OpenRouter, Atlas Cloud, Ollama, vLLM, LM Studio, and other compatible endpoints. openai-oauth stores a refresh token in <data_dir>/auth.json and talks to the ChatGPT/Codex Responses backend, not api.openai.com. For Docker quick starts, run ai-memory auth login openai-oauth with the wrapper so the token lands in the same ai-memory-data volume as the server. anthropic-oauth hits the same /v1/messages endpoint as anthropic but authenticates with an OAuth bearer token instead of an API key. Run claude setup-token once, then set AI_MEMORY_LLM_PROVIDER=anthropic-oauth and ANTHROPIC_OAUTH_TOKEN=<token> (or CLAUDE_CODE_OAUTH_TOKEN, which claude setup-token writes automatically). No ANTHROPIC_API_KEY is needed. The Docker wrappers forward either token by name to short-lived helper commands such as llm-test; configure the long-lived server container separately as shown in the installation guide. For both Anthropic providers, ai-memory omits temperature for Claude 4.7 and later models and Claude Mythos Preview because those models reject non-default sampling parameters. llm-test sends the same representative 0.2 value as the normal pipeline before the provider applies that compatibility rule. ⚠️ Unofficial and against Anthropic's usage policies — use at your own risk; it may get your account rate-limited or banned. See the warning in docs/install.md. copilot stores a GitHub user token in the same auth file, exchanges it for a short-lived Copilot API token via GitHub's /copilot_internal/v2/token, and uses the Copilot Chat endpoint with vscode-chat integration headers. You can also set COPILOT_GITHUB_TOKEN, GH_TOKEN, or GITHUB_TOKEN on the server. Tip For the OAuth/subscription backends (anthropic-oauth, openai-oauth, copilot), pick a small, fast model via AI_MEMORY_LLM_MODEL — e.g. claude-haiku-4-5 or gpt-5-mini. ai-memory's LLM work (consolidation, lint, explore) is summarisation, not hard reasoning, so a Haiku/mini-class model is plenty and is much easier on subscription rate limits. Save the high-effort thinking models for your coding agent. Tip OpenAI-compatible structured output is schema-constrained by default. ai-memory sends each operation's JSON Schema through response_format=json_schema, which recent Ollama, vLLM, LM Studio, and llama.cpp releases honour. It falls back to the tolerant parser when an endpoint explicitly rejects that field or returns a malformed shape. Set AI_MEMORY_LLM_COMPAT_STRICT=false only for an incompatible endpoint. For small-context local models, configure both consolidation limits. The input target accounts for the complete rendered prompt, including bounded slot and current-page context plus the structured-output schema; the output limit is sent to the provider. Their sum must fit the model context window, with extra headroom because provider tokenizers differ: [consolidation] max_input_tokens = 6500 max_output_tokens = 1000 The equivalent environment variables are AI_MEMORY_CONSOLIDATION__MAX_INPUT_TOKENS and AI_MEMORY_CONSOLIDATION__MAX_OUTPUT_TOKENS. Provider failures during an automatic PreCompact/PostCompaction checkpoint fall back to the deterministic rule-based page; admission, storage, and scope errors still fail closed. The validated minimums are 6,000 input and 1,000 output tokens. Reranking is optional and off by default. With an LLM provider configured, AI_MEMORY_RERANKER=llm makes project and explicit-scope memory_query calls over-fetch from the hybrid stage, fuse scopes, and make at most one LLM call to reorder the best candidates. This can promote a relevant page that RRF ranked below the requested cut, at the cost of LLM latency and usage. The request sends the query plus at most 30 bounded page titles and search snippets to the configured provider; all values are JSON-encoded and treated as untrusted data. A timeout, provider error, or incomplete/invalid score set preserves the normal order. global=true and supplemental global-preference hits keep their existing non-RRF ranking. Concurrent provider calls are capped at four; saturated queries keep their local ranking without waiting. Embeddings are optional and separate from the LLM provider. Set AI_MEMORY_EMBEDDING_PROVIDER=openai, voyage, google/gemini, or openai-compat when you want vector retrieval in addition to FTS5 + entity + graph-neighbor retrieval. openai-compat targets self-hosted engines (Ollama, LM Studio, vLLM): it needs no API key and requires explicit AI_MEMORY_EMBEDDING_BASE_URL, AI_MEMORY_EMBEDDING_MODEL, and AI_MEMORY_EMBEDDING_DIM. Both the FTS-only and hybrid paths apply the same bounded page-authority adjustment after candidate generation; embeddings improve relevance recall but do not decide which source is canonical. See docs/install.md#llm-provider-tiers for env vars and Ollama/OpenRouter/Atlas Cloud examples, and docs/llm-provider-comparison.md for the empirical model comparison. Architecture One Rust binary runs an MCP/HTTP server and owns one data directory: <data_dir>/ ├── wiki/ # markdown source of truth, git-versioned ├── raw/ # immutable sanitized managed-workstream transcript segments ├── db/ # SQLite indexes, including FTS5, entities, and embeddings ├── models/ # reserved for local embedding models └── logs/ # rolling tracing output Hooks POST observations to the server. The server serializes writes through one SQLite writer, compiles session observations into markdown pages, and serves retrieval through FTS5, entity-match and graph-neighbor RRF, optional vector RRF, bounded source-authority adjustment, and bounded raw-observation fallback for non-global searches. See docs/ARCHITECTURE.md for the data-flow diagram, crate breakdown, schema notes, and invariants. Docs File What it is docs/install.md Installation cookbook. Every agent CLI, every alternative (curl, source build, no-docker, no-auth), and the server-on-a-different-machine (homelab/LAN) walkthrough. Read after the Quick start if your setup doesn't match the happy path. docs/usage.md Handoffs, proactive memory queries, slim routing snippet + managed Agent Skills, migration from other memory tools, web UI, raw-wiki inspection, and rules-vs-facts workflow. docs/managed-workstreams.md Optional ai-memory run continuity across Claude Code, Codex, OpenCode, Pi, Crush, Kimi Code, Command Code, Kiro CLI v2/v3, OMP, Grok Build CLI, and Antigravity CLI: automatic harness selection, native resume, argument forwarding, ledger search, privacy, and recovery. docs/managed-harness-contributions.md Protocol and acceptance bar for contributors adding managed resume, read-only transcript import, and startup context delivery to another harness. docs/marker-file.md .ai-memory.toml workspace/project routing for multi-client trees, mono-repos, worktrees, and work/personal separation. docs/auto-scope.md [auto_scope] modes for shared servers: default single-slot routing, session-aware isolation, and multi-user per_actor behavior. docs/macos.md macOS install paths: native release binary (recommended), source build, the Docker wrapper, hook-platform notes, and current macOS limitations. docs/windows.md Windows install modes: full WSL2, native Windows with Docker Desktop, prebuilt native release zip, native source builds, and current hook/MCP harness caveats. docs/mcp-install.md Per-client MCP and lifecycle notes, handoff-injection limits, and community bridge guidance. docs/deploy.md Homelab deploy: bin/deploy, bearer-token auth, pointers to the TLS guide. docs/users.md Multi-user attribution (v0.8). Four-rung auth ladder, ai-memory user add/list/expire/revive/rotate-token walkthrough, backward-compat migration for pre-v0.8 installs, token storage rationale. docs/https-via-proxy.md HTTPS via a reverse proxy. When you need TLS (multi-user, non-loopback) and when you don't (loopback / stdio). Copy-paste docker compose templates for Caddy + Let's Encrypt, Caddy + internal CA (LAN-only), Cloudflare Tunnel (no open ports), and external cert files; plus native-Caddy + nginx recipes. The \"thinking you're secure when you're not\" failure modes explicitly called out. docs/lifecycle-ops.md Read before running purge / rename / backup / restore / reset / reindex / restore-page. Safety matrix for state-touching commands, per-project disk layout (how isolation actually works), checkpoint-based page recovery, and operator workflows for \"fresh start\", \"snapshot before risky op\", \"drop one project\", and rebuilding SQLite from wiki files. docs/auto-improvement-loop.md Auto-improvement design notes: Hermes-inspired scheduled review, auto-approval default, manual review opt-in, pending proposal storage, and curator work. docs/companion-crates.md Boundary and implementation plan for optional companion projects, including the standalone importer at companions/ai-memory-importer, without widening core ai-memory. docs/llm-provider-comparison.md Empirical notes behind the recommended LLM defaults. docs/ARCHITECTURE.md Operational summary: data flow, crate layout, cross-cutting invariants, schema. docs/design-decisions.md The full v1 spec. Research docs under docs/ Karpathy LLM Wiki notes, Hermes Agent, agentmemory / basic-memory / cognee deep-dives, lessons-learned from upstream issues. Influences and prior art Karpathy LLM Wiki - the compile-not-retrieve pattern. agentmemory - most of the right ideas; this project is the Rust successor. basic-memory - the markdown-on-disk source-of-truth model. cognee - pipeline composition and triplet embeddings. Hermes Agent - the self-improvement loop: post-turn review, approval gates, and curator boundaries. A-MEM - Zettelkasten-style atomic notes with link evolution. License MIT - see LICENSE. Acknowledgements This codebase is being built collaboratively with Claude Code (Anthropic Claude Opus 4.7) following the plan documented in docs/design-decisions.md.",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "4138778ebbc75ba6",
+    "source_type": "community_discussion",
+    "tldr": "ai-memory 是一个为 AI 编程智能体提供长期记忆的开源工具：用户可在任务中途退出 Claude Code，随后在同一目录改用 OpenAI Codex 等智能体而无需重新解释项目架构。它通过生命周期钩子采集会话观察，生成纯 Markdown 的共享持久化 wiki，并支持跨智能体托管工作流恢复。",
+    "objective_summary": "akitaonrails/ai-memory 是一个开源项目，通过 MCP 配置与生命周期钩子采集经过净化的会话观察，并将其编译为存储在 git 仓库中的纯 Markdown 共享 wiki，刻意避免使用向量数据库。项目声称支持 Claude Code、OpenAI Codex、Cursor、Gemini CLI、Kimi Code、Kiro CLI 等数十种智能体，并提供可选的 ai-memory run 托管工作流用于跨工具链无缝恢复。捕获机制依赖 Anthropic、OpenAI、Google 等厂商的认证体系，以及 OpenAI、Voyage、Google Gemini 等嵌入服务。项目还提供按项目 UUID 隔离、按仓库捕获排除规则与跨智能体交接等能力。",
+    "event_type": "framework_tools",
+    "epistemic_status": "pr_statement",
+    "entities": {
+      "companies": [
+        "Anthropic",
+        "OpenAI",
+        "Google",
+        "GitHub",
+        "Cursor",
+        "Voyage AI",
+        "Cognition",
+        "Ollama"
+      ],
+      "technologies": [
+        "MCP",
+        "Embeddings",
+        "OIDC",
+        "Docker"
+      ],
+      "key_people": [
+        "akitaonrails"
+      ]
+    },
+    "key_logic_flow": [
+      "ai-memory 定位为 AI 编程智能体的长期记忆层，核心场景是让用户在一个目录下从 Claude Code 切换到 Codex 等另一智能体时，无需重新解释项目架构、已失败方案或未决问题。",
+      "该工具通过生命周期钩子以 fire-and-forget 方式采集经过净化的提示、工具生命周期与会话边界观察，观察数据有大小上限，并在本地暂存或服务端写入前按规则排除敏感文件工具事件。",
+      "记忆以纯 Markdown wiki 形式存放在 git 仓库中，可用 grep 检索、用 Obsidian 打开、用 rsync 备份，明确不依赖向量数据库。",
+      "项目通过 MCP 配置与各智能体原生钩子协议适配 Claude Code、Codex、Command Code、Devin CLI、OpenCode、Cursor、Gemini CLI、Kimi Code、Kiro CLI、Antigravity CLI 等大量客户端。",
+      "可选的 ai-memory run 托管工作流能在 Claude Code、Codex、OpenCode、Pi、Crush 等工具链之间透明恢复同一逻辑工作流，并附带可移植的可见事件账本；跨智能体交接时下一智能体会在首个提示前看到 where-you-left-off 交接块。",
+      "记忆按 <wiki_root>/<workspace_id>/<project_id> 目录结构以稳定 UUID 隔离项目，支持 .ai-memory.toml 标记覆盖项目与工作区归属，并提供按操作者的可选记忆槽位用于多用户服务器场景。"
+    ],
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "akitaonrails/ai-memory",
+        "canonical_name": "akitaonrails/ai-memory",
+        "url": "https://github.com/akitaonrails/ai-memory",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "ai-memory 为 AI 编程智能体提供长期记忆，允许用户在任务中途退出 Claude Code 后在相同目录启动 OpenAI Codex 继续，无需重新解释架构、失败方案或未决问题。",
+          "该项目通过 MCP 配置与生命周期钩子采集经过净化的提示、工具生命周期与会话边界观察，编译为纯 Markdown 的共享持久化 wiki，无需维护向量数据库。",
+          "ai-memory 支持 Linux、macOS 与 Windows 等平台，并适配 Claude Code、Codex、Cursor、Gemini CLI 等数十种智能体，提供可选的托管工作流恢复功能。"
+        ],
+        "article_id": "4138778ebbc75ba6"
+      },
+      {
+        "object_type": "product",
+        "name": "Claude Code",
+        "canonical_name": "Claude Code",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "文章明确 ai-memory 支持 Claude Code，通过 MCP 配置与生命周期钩子实现捕获，并可选用 --capture-assistant 在 Stop 事件时捕获智能体最终回合。"
+        ],
+        "article_id": "4138778ebbc75ba6"
+      },
+      {
+        "object_type": "product",
+        "name": "OpenAI Codex",
+        "canonical_name": "OpenAI Codex",
+        "confidence": "medium",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "Codex 通过 MCP 配置与生命周期钩子获得 ai-memory 支持，由于没有自动的会话结束钩子，需要手动运行 ai-memory finalize-session 生成最终交接总结。"
+        ],
+        "article_id": "4138778ebbc75ba6"
+      },
+      {
+        "object_type": "project",
+        "name": "ai-memory-hermes-plugin",
+        "canonical_name": "ai-memory-hermes-plugin",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "文章提到社区维护的 ai-memory-hermes-plugin 可为 Hermes Agent 提供集成，但官方不提供安装器，使用时需审查其兼容性矩阵、安装脚本与秘密处理。"
+        ],
+        "article_id": "4138778ebbc75ba6"
+      }
+    ],
+    "extract_result": "success",
+    "impact_score": {
+      "score": 6.0,
+      "reason": "该事件属于开源工具发布，聚焦 AI 编程智能体长期记忆这一细分赛道。核心价值在于跨智能体记忆可移植——允许用户从 Claude Code 中途切换到 Codex 等工具而无需重新解释项目架构与失败方案，直接触及各智能体厂商通过上下文/会话历史形成的生态锁定。工程成熟度较高：数十种智能体适配矩阵、原生二进制、CI、Docker 镜像、systemd 单元，具备真实可部署性。但事件本质仍是个人开源项目的社区发布，无大厂背书或资本事件，也未提出全新学习范式，短期冲击力限定在智能体工具链细分市场，尚不足以改变整体竞争格局。综合评分为 6.0。"
+    },
+    "sentiment": "positive",
+    "developer_sentiment": {
+      "tone": "excited",
+      "primary_focus": "跨智能体记忆可移植性，以及纯 Markdown/git 存储、刻意不用向量数据库的务实设计立场"
+    },
+    "hype_assessment": {
+      "level": "low",
+      "reason": "README 虽以 'quit Claude Code mid-task, start Codex' 作为宣传钩子，但全文对支持程度极为诚实：明确区分 Supported / Managed-only / MCP-only / Experimental，逐项标注哪些智能体缺少 handoff 注入（如 Grok、Zero 需通过 MCP memory_handoff_accept 兜底）、哪些无真实会话结束钩子需手动 finalize-session。所谓'支持数十种智能体'实为适配矩阵而非深度整合，存在一定包装成分，但精确披露限制的做法与滥用'颠覆''革命'词汇的 PR 形成鲜明对比，整体属于实打实的干货，水分低。"
+    },
+    "information_entropy": "high",
+    "domain_disruption": {
+      "technical_innovation": "将智能体记忆与单一厂商上下文窗口解耦：通过生命周期钩子以 fire-and-forget 方式采集净化后的会话观察（含提示、工具生命周期与会话边界），编译为存放在 git 仓库中可 grep、可被 Obsidian 打开、可 rsync 备份的纯 Markdown 共享 wiki，刻意规避向量数据库；对数十种客户端做 MCP + 原生钩子协议适配，并以 'where-you-left-off' 交接块实现跨智能体（Claude Code ↔ Codex 等）的首提示前上下文恢复，ai-memory run 托管工作流进一步提供可移植的可见事件账本用于跨工具链无缝续跑。",
+      "business_model": "开源项目，潜在商业化路径包括：托管式团队记忆服务、多操作者共享记忆槽位的企业/多人服务器场景，以及将可选嵌入服务（OpenAI/Voyage/Gemini Embeddings）作为增值收费点。更深远的影响在于：跨智能体记忆可移植性直接降低开发者切换编码智能体的转换成本，削弱头部厂商通过对话历史与上下文形成的生态锁定，可能催生'记忆即基础设施'的独立中间层，并对以封闭上下文为壁垒的智能体商业模式形成挤压。"
+    },
+    "engineering_complexity": "production_ready",
+    "compound_value": {
+      "score": 6.5,
+      "reason": "核心逻辑：ai-memory 占据'跨智能体长期记忆层'这一独特生态位，位于 agent_middleware 层，具备记忆资产的复利效应——记忆越积越多、切换成本越低、用户越难离开该体系。其厂商中立定位正是大厂各自不愿主动做的（Anthropic/OpenAI 都有锁定用户的动机），因此该中立层有被生态长期依赖的潜力；集成广度（20+ 智能体、MCP 原生协议适配）是显著先发壁垒。但两个风险制约评分上限：(1) 纯开源项目，记忆托管在用户自有 git 仓库，项目自身商业化路径不明、价值捕获能力弱；(2) 大厂可能在各自产品中原生实现记忆功能（如 Claude Code 的 CLAUDE.md 自动维护、Codex 会话记忆），挤压独立中间件生存空间。若未来 1-2 年未被平台吸收且形成事实标准，则具备细分赛道基础设施地位；当前处于'有潜力但需持续验证'区间。"
+    },
+    "value_capture_layer": "agent_middleware",
+    "moat_impact": "democratizes_access",
+    "key_beneficiaries": [
+      "OpenAI Codex",
+      "Cursor",
+      "Google Gemini CLI",
+      "Kimi Code"
+    ],
+    "competitive_casualty": [
+      "Anthropic Claude Code（用户切换锁定被削弱）",
+      "闭源一体式 Agent 平台",
+      "轻量级向量数据库创业公司"
+    ],
+    "market_opportunities": [
+      "创业者可围绕'跨智能体记忆互操作'这一真实痛点，构建基于 MCP 的标准化上下文迁移层，帮助企业在多 Agent 工具链（Claude Code、Codex、Cursor 等）之间无缝交接工程上下文，打造跨平台的工作流恢复基础设施",
+      "该项目验证了'纯 Markdown + git 仓库、刻意不用向量数据库'的轻量记忆路径，可启发面向中小团队的低成本 Agent 知识管理/记忆工具创业方向（grep 可检索、Obsidian 可打开、rsync 可备份）",
+      "随着 AI 编程智能体碎片化加剧，'记忆即服务'（memory-as-a-service）与托管工作流恢复（类似 ai-memory run）存在增量市场机会，特别是面向企业内部合规要求的会话捕获与交接审计工具"
+    ],
+    "risk_matrix": {
+      "regulatory": "该工具捕获提示词、工具生命周期事件与会话边界观察并写入 git 仓库，企业场景下可能违反数据保密与合规要求（如专有源代码/敏感信息经 GitHub 等云端仓库外泄）；捕获机制依赖 Anthropic、OpenAI、Google 等厂商认证体系（OIDC）与嵌入服务，厂商策略变动会直接传导为合规风险。",
+      "technological": "过度依赖各家智能体生命周期钩子与 MCP 协议，这些 API 高频变动且跨数十种客户端维护成本极高；随着 Anthropic/OpenAI 等将记忆能力原生内建到自家智能体，纯第三方记忆层的架构定位可能被边缘化；纯 Markdown 无向量库方案在记忆规模扩大后检索效率与相关性将受限。",
+      "competitive": "巨头将记忆功能原生内置（Claude Code、Codex、Cursor 等）会压缩第三方工具生存空间；memory-server、context 等同类 MCP 记忆项目以及云厂商 Agent 平台形成双重挤压；项目 PR 宣称的数十种智能体支持因生态分化可能难以稳定兑现，商业模式不明朗。",
+      "ethical": "会话捕获涉及提示词、工具调用与未决问题等敏感内容，存在隐私与数据泄露风险；共享 wiki 若被注入恶意或错误内容会污染后续智能体上下文（数据投毒）；跨智能体交接在按操作者分槽的多用户服务器场景下可能造成信息越界或不当持久化。",
+      "additional": [
+        "安全性：捕获的提示词与工具事件可能内含密钥、凭据或机密路径，若 wiki 仓库被设为公开将直接造成凭据与商业机密泄漏",
+        "供应链风险：该工具深度挂钩智能体运行时、钩子协议与厂商认证体系，一旦上游 API 变更或项目停止维护，依赖方的工作流恢复能力将受严重影响"
+      ]
+    },
+    "confidence": {
+      "impact": "medium",
+      "compound": "medium",
+      "hype": "medium"
+    },
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "akitaonrails/ai-memory",
+        "canonical_name": "akitaonrails/ai-memory",
+        "url": "https://github.com/akitaonrails/ai-memory",
+        "positioning": "为 AI 编程智能体提供长期记忆层的开源工具，让用户在任务中途切换不同智能体时无需重新解释项目架构、失败方案或未决问题，以纯 Markdown 持久化会话记忆。",
+        "technical_signal": "通过 MCP 配置与生命周期钩子采集经过净化的会话观察，编译为纯 Markdown 的共享 wiki，刻意避免向量数据库。",
+        "adoption_signal": "支持 Linux、macOS 与 Windows，适配 Claude Code、Codex、Cursor、Gemini CLI 等数十种智能体客户端。",
+        "ecosystem_relevance": "位于 AI 编程智能体工具链的长期记忆层，可跨 Claude Code、Codex、OpenCode、Pi 等多家厂商智能体实现交接。",
+        "target_users": [],
+        "watch_reason": "AI 编程智能体长期记忆是当前多智能体协作场景的关键缺口，ai-memory 以无向量数据库的纯 Markdown 方案切入，并已覆盖主流智能体生态，其跨智能体工作流恢复能力与多客户端适配演进值得持续跟踪验证。",
+        "risk_notes": [
+          "项目依赖 Anthropic、OpenAI、Google 等厂商的认证体系与嵌入服务，第三方认证或服务变更可能影响捕获机制的稳定性。",
+          "部分智能体缺少真正的会话结束钩子，需要手动运行 finalize-session 才能生成交接摘要，跨智能体交接体验存在差异。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "4138778ebbc75ba6"
+        ],
+        "evidence_snippets": [
+          "ai-memory 为 AI 编程智能体提供长期记忆，允许用户在任务中途退出 Claude Code 后在相同目录启动 OpenAI Codex 继续，无需重新解释架构、失败方案或未决问题。",
+          "该项目通过 MCP 配置与生命周期钩子采集经过净化的提示、工具生命周期与会话边界观察，编译为纯 Markdown 的共享持久化 wiki，无需维护向量数据库。",
+          "ai-memory 支持 Linux、macOS 与 Windows 等平台，并适配 Claude Code、Codex、Cursor、Gemini CLI 等数十种智能体，提供可选的托管工作流恢复功能。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "ai-memory-hermes-plugin",
+        "canonical_name": "ai-memory-hermes-plugin",
+        "positioning": "社区维护的 ai-memory 集成插件，为 Hermes Agent 提供长期记忆能力对接，官方不提供安装器，使用时需自行审查兼容性与安全处理。",
+        "technical_signal": "作为社区插件为非官方支持的 Hermes Agent 提供 ai-memory 集成，属于生态扩展层实现，官方未提供安装器。",
+        "adoption_signal": "文章仅提及该插件可为 Hermes Agent 提供集成，未提供安装使用数据或成熟度证据，采用情况不明。",
+        "ecosystem_relevance": "扩展了 ai-memory 在 Hermes Agent 上的覆盖范围，但属于长尾生态组件，对主流智能体生态影响有限。",
+        "target_users": [],
+        "watch_reason": "该插件反映 ai-memory 向非官方智能体生态的社区扩展路径，其兼容性与安全性审查方式可为评估 ai-memory 生态成熟度与社区活跃度提供参考。",
+        "risk_notes": [
+          "官方不提供安装器，插件兼容性矩阵、安装脚本与秘密处理方式需要使用者自行审查，存在安全与稳定性风险。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "4138778ebbc75ba6"
+        ],
+        "evidence_snippets": [
+          "文章提到社区维护的 ai-memory-hermes-plugin 可为 Hermes Agent 提供集成，但官方不提供安装器，使用时需审查其兼容性矩阵、安装脚本与秘密处理。"
+        ]
+      }
+    ]
+  },
+  {
+    "source_dir": "github-trending",
+    "title": "agalwood/Motrix",
+    "source": "https://github.com/agalwood/Motrix",
+    "author": [],
+    "published": "",
+    "created": "2026-08-18",
+    "manifest_dates": [
+      "2026-08-18",
+      "2026-08-19"
+    ],
+    "description": "A full-featured download manager.https://motrix.app Motrix A modern, full-featured download manager that stays simple to use English | 简体中文 Overview Motrix is a clean, full-featured desktop download manager for HTTP, FTP, BitTorrent, magnet links, and more. Motrix Turbo is Motrix v2, rebuilt from the ground up with Electron, React, and TypeScript while keeping the clean, straightforward experience of v1. The download core is independent of the UI. Browser extensions and command-line tools communicate with the app over MDXP (Motrix Download eXchange Protocol), an open protocol built on JSON-RPC 2.0, while plugins run in isolated sandboxes. The same core powers two ways to run Motrix: Desktop app: Runs on macOS, Windows, and Linux Headless server: Runs without a desktop environment, either directly on Node.js or in Docker, and includes a web UI for NAS devices and home servers 🧪 Beta testing Motrix Turbo v2 is currently in beta. After its remaining release gates pass, download v2.0.0-beta.18 from GitHub Releases and read the full release notes before installing it. Back up your existing Motrix data and downloads before testing. Migration from Motrix v1 data has not yet been validated, so do not use your only copy of v1 data with this beta. When practical, test v2 in parallel using a separate OS account, machine, or Docker data directory. Screenshots Dashboard Downloads Settings ✨ Features 🕹 Clean, intuitive interface with dark mode 🦄 BitTorrent downloads with per-file selection, plus magnet link support 📡 Built-in tracker list management with automatic updates and health checks 🔌 UPnP and NAT-PMP port mapping 🚥 Upload and download limits with multiple speed-limit profiles 💾 SQLite-backed sessions that restore downloads after a restart 📊 Customizable Dashboard with transfer stats, live activity, and task tiles 🔔 System notifications when downloads finish, plus an in-app notification center 🧩 QuickJS-based plugin sandboxing, fine-grained permissions, and an in-app marketplace 🌐 Chrome and Firefox extensions that hand browser downloads off to Motrix in one click ⌨️ Official @motrix/cli client for everyday shell use and AI agents 🐳 Docker-ready headless server with secure device-code pairing for remote CLI and agent clients 🎬 Extensible URL Resolver plugins for extracting media from supported sites 🤖 System tray integration and launch at startup 🌍 Simplified Chinese and English UI, with more languages planned 🔗 Handlers for motrix:// and magnet: links, plus .torrent file associations 🧩 Ecosystem Motrix extends beyond the desktop app with a shared protocol library, command-line client, browser extensions, and a complete plugin toolchain: Project Distribution What it does @motrix/mdxp npm package Defines the shared JSON-RPC 2.0 wire schemas and Zod types for MDXP, with helpers for bidirectional connections @motrix/cli npm package Provides the motrix command, automatically discovers a local desktop app, and pairs with remote instances Motrix Browser Extension Browser extension Intercepts downloads in Chrome and Firefox (Manifest V3), hands them off to Motrix, and pairs securely with the desktop app over native messaging Motrix Plugin SDK Four npm packages Includes @motrix/plugin-manifest-schema, @motrix/plugin-api, @motrix/plugin-cli, and create-motrix-plugin for developing, testing, and packaging plugins Builtin Plugins Signed .moext packages Includes three official plugins: Filename Template for renaming files from a template before they are saved, Page Scraper for extracting direct file links from HTML pages, and URL Resolver as the foundation for site-specific media resolution Plugin Registry Public JSON feed Publishes plugin listings and install metadata at dl.motrix.app/registry/plugins.json for both the website and the in-app marketplace CLI quick start npm install -g @motrix/cli # Requires Node.js 22 or later motrix add https://example.com/file.iso --save-dir ~/Downloads motrix list # List downloads motrix watch --stats # Stream live progress as NDJSON motrix pair --name my-nas # Pair with a remote or headless instance Build a plugin The Motrix Plugin SDK provides the TypeScript API, manifest schema, project scaffolder, and CLI used throughout the plugin development workflow: pnpm create motrix-plugin my-plugin cd my-plugin && pnpm install pnpm dev # Watch-build and launch Motrix with the plugin pnpm exec motrix-plugin validate # Validate motrix-plugin.json pnpm run pack # Create dist/<id>-<version>.moext pnpm exec motrix-plugin lint # Check the packed bundle The default scaffold starts with a beforeCreate URL resolver. Pass post-action after the project name to start with an afterComplete notification plugin instead. Plugins can hook into beforeCreate, beforeFinalize, afterComplete, and onError, contribute callable commands and settings, and access the runtime through the motrix:plugin-api virtual module. Plugins are bundled as a single ES2020 module and run inside a QuickJS sandbox without Node.js APIs or direct file and network access. Declare activation events, required capabilities, and URL-scoped host permissions in motrix-plugin.json; Motrix shows those requests to the user before granting access. See the Plugin SDK documentation for templates, the manifest and runtime API references, localization, sandbox constraints, packaging, and distribution. 📦 Installation Desktop app Download Motrix from motrix.app and choose the package for your operating system. Most Mac users should choose the Apple Silicon build; Intel builds are available for older Macs with Intel processors. After the remaining release gates pass, the current beta desktop packages will be distributed through the GitHub prerelease linked above. Snap is not published for this beta; prerelease tag runs stop after source validation and do not build or publish Snap artifacts. Choose the package that matches your operating system and architecture: Platform Architectures Packages / channel Recommendation macOS 12+ arm64 (Apple Silicon), x64 (Intel) .dmg / .zip Use the .dmg matching your Mac; choose x64 only for an Intel-based Mac Windows x64 .exe (NSIS installer) / .zip Use the .exe installer for a normal installation or .zip for a manually extracted copy Linux x64, arm64 .deb / .rpm Use .deb on Debian or Ubuntu, or .rpm on Fedora or openSUSE This beta does not publish an AppImage or Snap. Flatpak is validated separately and is not published by the release tag. Windows arm64 and all 32-bit packages are not available. Windows x64 packages are unsigned and may trigger a Windows SmartScreen warning. Command-line client npm install -g @motrix/cli You can also install it from Settings → Integration → Command-line tools in the desktop app. Headless server with Docker Tagged releases publish a multi-architecture Server image to Docker Hub and GHCR. Beta releases publish only the immutable version tag and do not update latest; the included compose.yaml keeps Server state separate from downloaded resources: mkdir -p motrix-data downloads sudo chown 1000:1000 motrix-data downloads export MOTRIX_IMAGE='docker.io/motrixapp/motrix-server:2.0.0-beta.18' export MOTRIX_PUBLIC_URL='http://nas.example.lan:8080' docker compose pull server docker compose up -d --wait The runtime is non-root, supports a read-only root filesystem, validates mount permissions before accepting work, and preserves downloads, sessions, and installed plugins across container replacement. The standard direct-LAN setup publishes the Web service on port 8080 and MDXP on port 16801. Set MOTRIX_PUBLIC_URL to the Web approval URL that remote clients can actually reach; the Compose files do not substitute a misleading localhost URL. If the Web approval URL is temporarily unavailable, an SSH operator can list and approve the exact client code without exposing another port: docker compose exec server motrix-admin pairing pending docker compose exec server motrix-admin pairing approve ABCD-EFGH Remote CLI and agent clients pair through the device-code flow. Browser extensions pair with the desktop app through native messaging; first-time extension pairing is not provided by the headless server. Direct HTTP is appropriate only on a trusted LAN. Internet or untrusted-LAN access requires a TLS reverse proxy and firewall rules around the origin ports. See the Docker Server deployment guide for ownership setup, Docker Hub/GHCR image and tag selection, DSM 7 and fnOS installation, ports, diagnostics, and backup/upgrade instructions. 🛠 Development Development requires Node.js 22 or later and pnpm. Use the pnpm version specified by the packageManager field in package.json. git clone https://github.com/agalwood/Motrix.git cd Motrix pnpm install # Install dependencies, download aria2 for your platform, and rebuild native modules pnpm start # Start the Electron app in development mode with Vite HMR in the renderer pnpm test # Run the Vitest unit tests pnpm test:e2e # Run the Playwright E2E tests pnpm run lint # Run Biome checks pnpm build # Fetch signed built-in plugins, then build the native host and four Vite targets Preview the in-window application menu on macOS Windows and Linux render the application menu inside the Motrix window. To preview that chrome while developing on macOS, start the app with the preview flag enabled: MOTRIX_PREVIEW_MAC_MENU=1 pnpm start The flag hides the main window's macOS traffic-light buttons and enables the renderer dropdown menu. Restart the development process after changing the flag because both Electron and Vite read it at startup. This mode is intended for layout and command-item debugging. Electron routes macOS role items through AppKit's native menu, so role-backed actions such as Window → Minimize do not behave identically when invoked from the preview dropdown. Validate those native role actions on Windows or Linux. See the scripts in package.json for the available packaging commands. Platform-specific settings for macOS, Windows, and Linux live in electron-builder.json. 🔧 Tech stack Area Stack Desktop shell Electron 43 UI React 19 + Tailwind CSS 4 + shadcn/ui Language TypeScript in strict mode Build system Vite 8 with separate main, preload, worker, and renderer targets Validation Zod 4 for settings, IPC payloads, and wire schemas Download engine A Motrix-maintained fork of aria2, bundled with the app Persistence better-sqlite3 for download session storage and recovery Plugin sandbox quickjs-emscripten Server runtime Node.js + Fastify + WebSocket Internationalization i18next + react-i18next Quality tooling Biome, Vitest, and Playwright The codebase has four strict layers. CI enforces the dependency boundaries between them, keeping the core portable and leaving a clear path for a future Rust rewrite: renderer (React UI) │ IPC via window.motrix app core (tasks, settings, plugins, bridge) │ engine adapter │ aria2 (download engine) The Electron desktop app and the Node.js headless server share the same core. Platform-specific capabilities such as notifications and secret storage have separate implementations with consistent behavior. 📜 License MIT © 2018-present Dr_rOot See THIRD_PARTY_NOTICES.md for third-party license information. Release packages also include a generated dependency inventory, consolidated license texts, and an SPDX 2.3 SBOM under legal/.",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "aa7d42be0fc780a6",
+    "source_type": "community_discussion",
+    "tldr": "Motrix Turbo 是下载管理器 Motrix 的 v2 完全重写版本，采用 Electron、React 与 TypeScript 构建，下载核心与 UI 解耦，CLI 与浏览器扩展通过开放协议 MDXP 通信。当前 v2.0.0-beta.18 处于 beta 阶段，提供桌面应用与 Docker 无头服务器两种运行方式。",
+    "objective_summary": "Motrix 是一款支持 HTTP、FTP、BitTorrent 与磁力链接的桌面下载管理器，其 v2 版本 Motrix Turbo 使用 Electron、React 和 TypeScript 从零重写，下载核心独立于 UI，浏览器扩展与命令行工具通过基于 JSON-RPC 2.0 的开放协议 MDXP 交互，插件在 QuickJS 沙箱中运行。当前发布 v2.0.0-beta.18，官方提示 v1 数据迁移未经验证并建议备份。项目同时提供 Docker 无头服务器、@motrix/cli、浏览器扩展与完整插件 SDK 构成的工具链。",
+    "event_type": "framework_tools",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [
+        "agalwood"
+      ],
+      "technologies": [
+        "MDXP",
+        "JSON-RPC 2.0",
+        "QuickJS",
+        "Electron",
+        "React",
+        "TypeScript",
+        "aria2",
+        "BitTorrent",
+        "SQLite",
+        "Fastify",
+        "WebSocket",
+        "Docker",
+        "Vite"
+      ],
+      "key_people": [
+        "Dr_rOot"
+      ]
+    },
+    "key_logic_flow": [
+      "Motrix 是一款支持 HTTP、FTP、BitTorrent 与磁力链接的桌面下载管理器，Motrix Turbo 是使用 Electron、React 与 TypeScript 完全重写的 v2 版本。",
+      "Motrix Turbo 将下载核心与 UI 解耦，命令行工具和浏览器扩展通过基于 JSON-RPC 2.0 的开放协议 MDXP 与应用通信，插件则在 QuickJS 沙箱中隔离运行。",
+      "Motrix Turbo 提供桌面应用与无头服务器两种运行形态，无头服务器可直接运行于 Node.js 或 Docker，并附带面向 NAS 和家用服务器的 Web UI。",
+      "当前 v2.0.0-beta.18 处于 beta 阶段，官方提醒 v1 数据迁移尚未验证，建议备份现有数据并在独立账号、机器或 Docker 数据目录中并行测试。",
+      "项目生态包含 @motrix/mdxp 协议库、@motrix/cli 命令行客户端、Chrome 与 Firefox 浏览器扩展、Motrix Plugin SDK 以及三个官方内置插件。",
+      "技术栈上桌面壳采用 Electron 43，UI 为 React 19 与 Tailwind CSS 4，下载引擎使用 Motrix 维护的 aria2 分支，会话持久化基于 better-sqlite3。"
+    ],
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "agalwood/Motrix",
+        "canonical_name": "Motrix",
+        "url": "https://github.com/agalwood/Motrix",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Motrix 是一款支持 HTTP、FTP、BitTorrent 与磁力链接的桌面下载管理器，当前正以 Motrix Turbo 名义发布 v2 重写版本。"
+        ],
+        "article_id": "aa7d42be0fc780a6"
+      },
+      {
+        "object_type": "product",
+        "name": "Motrix Turbo",
+        "canonical_name": "Motrix Turbo",
+        "url": "https://github.com/agalwood/Motrix/releases",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "Motrix Turbo 是 Motrix v2，使用 Electron、React 与 TypeScript 从零重写，同时保留 v1 简洁直观的使用体验。"
+        ],
+        "article_id": "aa7d42be0fc780a6"
+      },
+      {
+        "object_type": "project",
+        "name": "@motrix/mdxp",
+        "canonical_name": "@motrix/mdxp",
+        "url": "https://www.npmjs.com/package/@motrix/mdxp",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "@motrix/mdxp 定义了基于 JSON-RPC 2.0 的 MDXP 开放协议的共享线格式与 Zod 类型，并提供双向连接的辅助工具。"
+        ],
+        "article_id": "aa7d42be0fc780a6"
+      },
+      {
+        "object_type": "project",
+        "name": "@motrix/cli",
+        "canonical_name": "@motrix/cli",
+        "url": "https://www.npmjs.com/package/@motrix/cli",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "@motrix/cli 提供 motrix 命令，可自动发现本地桌面应用并与远程或无头实例配对，用于日常 shell 操作和 AI 智能体调用。"
+        ],
+        "article_id": "aa7d42be0fc780a6"
+      },
+      {
+        "object_type": "project",
+        "name": "Motrix Browser Extension",
+        "canonical_name": "Motrix Browser Extension",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "Motrix 浏览器扩展可在 Chrome 与 Firefox 中拦截下载，通过原生消息与桌面应用安全配对并一键将下载交给 Motrix 处理。"
+        ],
+        "article_id": "aa7d42be0fc780a6"
+      },
+      {
+        "object_type": "project",
+        "name": "Motrix Plugin SDK",
+        "canonical_name": "Motrix Plugin SDK",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "Motrix Plugin SDK 由四个 npm 包组成，包含插件清单 schema、插件 API、CLI 与项目脚手架，用于插件的开发、测试与打包。"
+        ],
+        "article_id": "aa7d42be0fc780a6"
+      },
+      {
+        "object_type": "product",
+        "name": "motrixapp/motrix-server",
+        "canonical_name": "Motrix Server",
+        "url": "https://hub.docker.com/r/motrixapp/motrix-server",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "Motrix Server 是 Docker 就绪的无头服务器镜像，支持设备码配对远程 CLI 与智能体客户端，并附带面向 NAS 设备的 Web UI。"
+        ],
+        "article_id": "aa7d42be0fc780a6"
+      }
+    ],
+    "extract_result": "success",
+    "impact_score": {
+      "score": 4.0,
+      "reason": "Motrix 是 GitHub 上知名的开源下载管理器，v2 完全重写带来的核心/UI 解耦、基于 JSON-RPC 2.0 的开放协议 MDXP、QuickJS 插件沙箱等架构设计对开发者有参考价值，且 CLI 明确面向 AI agents 提供接口，具备一定生态意义。但下载管理并非 AI 核心赛道，事件属于开发者工具/基础设施类更新，且当前处于 beta 阶段（官方明确数据迁移未验证），短期对 AI 行业竞争格局无实质改变，故给予中等偏低评分。"
+    },
+    "sentiment": "positive",
+    "developer_sentiment": {
+      "tone": "excited",
+      "primary_focus": "下载核心与 UI 解耦的开放协议架构，以及面向 AI agents 的 CLI 与无头服务器能力"
+    },
+    "hype_assessment": {
+      "level": "low",
+      "reason": "官方明确标注 beta 阶段，主动披露 v1 数据迁移未验证并建议备份，全文未出现'颠覆'、'革命性'等 PR 滥用词汇；技术细节（Electron 43、React 19、QuickJS 沙箱、JSON-RPC 2.0、better-sqlite3）具体可验证，属于实打实的工程发布，无概念炒作成分。"
+    },
+    "information_entropy": "high",
+    "domain_disruption": {
+      "technical_innovation": "下载核心与 UI 彻底解耦，通过基于 JSON-RPC 2.0 的开放协议 MDXP 统一桌面端、CLI 与浏览器扩展的交互方式；插件以单 ES2020 模块在 QuickJS 沙箱中运行，无 Node.js API 与直接文件/网络访问，配合 URL 作用域权限声明实现细粒度隔离；底层采用 Motrix 维护的 aria2 分支与 better-sqlite3 会话持久化，并支持 Docker 无头服务器 + Web UI 的部署形态，架构层面具备一定范式创新。",
+      "business_model": "沿用开源免费模式，无直接商业变现；插件注册表与内置插件市场构成生态分发渠道，为周边工具链（CLI、浏览器扩展、Plugin SDK）提供潜在商业化空间，但下载管理器赛道整体变现路径有限，商业模式冲击力较弱。"
+    },
+    "engineering_complexity": "prototype",
+    "compound_value": {
+      "score": 4.5,
+      "reason": "从资本视角看，Motrix Turbo 的机会在于把'下载'这一 commodity 能力协议化（MDXP）+ Agent 化（@motrix/cli 明确面向 AI agents、Docker 无头服务器 + 设备码配对），切入 AI Agent 文件摄取这一真实需求缺口——下载/检索是 agent 工作流的基础动作，当前缺少现代、开放的协议层。架构上核心与 UI 解耦、QuickJS 沙箱插件生态、SQLite 会话持久化，具备成为'自托管下载与 agent 文件摄取细分基础设施'的潜力。但复利效应受三个硬约束压制：一是下载是成熟红海品类，浏览器/云存储/操作系统持续内置化吞噬独立价值；二是开源项目商业化路径不明（依赖捐赠与周边服务，缺乏可持续营收引擎）；三是 MDXP 目前仍是 Motrix 自有的协议，采纳范围局限于其生态，能否成为行业标准未经验证，存在被更上层 agent 协议（如 MCP）覆盖的风险。综合判断处于'细分赛道基础设施候选、需持续验证'区间的下沿，长期是否具备 3-5 年复利需观察 MDXP 生态渗透率与商业化落地。"
+    },
+    "value_capture_layer": "agent_middleware",
+    "moat_impact": "creates_new_moat",
+    "key_beneficiaries": [
+      "Motrix（agalwood）核心团队",
+      "@motrix/mdxp 与插件 SDK 生态开发者",
+      "AI Agent 开发者与工作流",
+      "自托管/NAS 用户社区"
+    ],
+    "competitive_casualty": [
+      "aria2",
+      "闭源商业下载管理器（IDM、Free Download Manager）",
+      "通用下载 SaaS 工具"
+    ],
+    "market_opportunities": [
+      "AI 工程师可借鉴 Motrix Turbo 的 MDXP 开放协议与无头服务器形态，将大文件、数据集与模型权重下载能力封装为可供 CLI 和 AI Agent 直接调用的基础设施服务",
+      "自托管与 NAS 场景可关注其 Docker 无头服务器 + Web UI + 设备码配对方案，作为家庭与边缘节点统一下载及媒体归档的选型参考",
+      "开发者可参考其 QuickJS 插件沙箱 + 细粒度权限声明 + 公开插件注册表的插件体系，作为桌面应用安全扩展与插件分发的范式"
+    ],
+    "risk_matrix": {
+      "regulatory": "下载管理器支持 BitTorrent 与磁力链接，在版权监管趋严的司法辖区存在与盗版内容分发相关的合规联想风险；项目本身为开源工具，协议与分发层面的直接监管风险较低",
+      "technological": "v2 仍处于 beta 阶段且 v1 数据迁移未经验证；Electron 桌面壳体积与内存占用偏高；下载核心依赖 Motrix 维护的 aria2 分支，存在上游分叉的长期维护与兼容性风险",
+      "competitive": "下载管理赛道竞争激烈，面临 qBittorrent、aria2、Internet Download Manager、Free Download Manager 以及浏览器原生下载能力的挤压；无头服务器 + NAS 场景还与 JDownloader 等成熟工具直接竞争",
+      "ethical": "QuickJS 沙箱与权限声明体系降低了恶意插件风险，但插件市场开放后仍需防范恶意插件伪装与数据窃取；SQLite 会话与下载历史涉及用户隐私数据；BitTorrent/磁力能力存在被用于版权内容的伦理争议",
+      "additional": [
+        "单维护者长期维护风险：Motrix v1 曾多年更新停滞，v2 重写版的持续投入与稳定版发布时间表存在不确定性",
+        "beta 版发布门禁尚未全部通过，功能与 v1 的完整对等性未经充分验证，早期采用需承担不稳定成本"
+      ]
+    },
+    "confidence": {
+      "impact": "medium",
+      "compound": "low",
+      "hype": "high"
+    },
+    "actionable_insight": "monitor",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "agalwood/Motrix",
+        "canonical_name": "Motrix",
+        "url": "https://github.com/agalwood/Motrix",
+        "positioning": "开源桌面下载管理器项目，支持 HTTP、FTP、BitTorrent 与磁力链接，正以 Motrix Turbo 名义推进 v2 全面重写。",
+        "technical_signal": "v2 采用 Electron、React 与 TypeScript 从零重写，下载核心与 UI 解耦，通过基于 JSON-RPC 2.0 的开放协议 MDXP 与命令行和浏览器扩展通信。",
+        "adoption_signal": "作为长期维护的开源下载管理器，v1 已积累大量用户，v2 当前发布 v2.0.0-beta.18，处于 beta 测试与数据迁移验证阶段。",
+        "ecosystem_relevance": "项目生态包含 @motrix/mdxp 协议库、@motrix/cli 命令行客户端、浏览器扩展、插件 SDK 与官方内置插件，形成桌面加无头服务器的完整工具链。",
+        "target_users": [],
+        "watch_reason": "Motrix 是下载管理领域的知名开源项目，v2 重写选择核心与 UI 解耦、开放协议与插件沙箱的架构路线，对理解桌面工具向无头化、Agent 可调用方向演进具有典型参考价值。",
+        "risk_notes": [
+          "v1 数据迁移尚未验证，官方明确建议测试前备份数据，迁移兼容性存在不确定性。",
+          "v2 当前仅发布 beta 版本，正式版仍有剩余发布门禁待通过，且 Snap 渠道未同步发布。"
+        ],
+        "score": 8.0,
+        "article_ids": [
+          "aa7d42be0fc780a6"
+        ],
+        "evidence_snippets": [
+          "Motrix 是一款支持 HTTP、FTP、BitTorrent 与磁力链接的桌面下载管理器，当前正以 Motrix Turbo 名义发布 v2 重写版本。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Motrix Turbo",
+        "canonical_name": "Motrix Turbo",
+        "url": "https://github.com/agalwood/Motrix/releases",
+        "positioning": "Motrix 的 v2 桌面下载管理器产品，采用 Electron、React 与 TypeScript 重写，提供桌面应用与 Docker 无头服务器两种运行形态。",
+        "target_users": [
+          "桌面下载用户",
+          "NAS 与家用服务器用户",
+          "需要通过 CLI 或 AI Agent 驱动下载的高级用户"
+        ],
+        "product_signal": "提供桌面应用与 Docker 无头服务器两种运行形态，内置 BitTorrent 文件级选择、Tracker 管理、SQLite 会话恢复与 QuickJS 插件沙箱。",
+        "market_signal": "下载管理是用户基数庞大但迭代相对缓慢的领域，v2 以 beta 版本通过 GitHub Releases 分发，尚处于正式版发布前的验证窗口。",
+        "differentiation": "与同类下载工具相比，核心与 UI 解耦、MDXP 开放协议、插件沙箱与无头化设计，使其同时具备桌面工具与可编程 Agent 工具的双重形态。",
+        "watch_reason": "Motrix Turbo 代表经典桌面工具向 v2 全面重写的典型路径，其核心与 UI 解耦、开放协议通信与无头化部署方向，正在把下载管理器拓展为可被 CLI 和 AI Agent 调用的基础设施。",
+        "risk_notes": [
+          "v2 仍处 beta 阶段，v1 数据迁移未经验证，正式版发布节奏存在不确定性。",
+          "浏览器扩展依赖原生消息配对，远程与跨平台配对复杂度较高，可能影响普通用户体验。"
+        ],
+        "score": 7.0,
+        "article_ids": [
+          "aa7d42be0fc780a6"
+        ],
+        "evidence_snippets": [
+          "Motrix Turbo 是 Motrix v2，使用 Electron、React 与 TypeScript 从零重写，同时保留 v1 简洁直观的使用体验。"
+        ]
+      }
+    ]
+  },
+  {
+    "source_dir": "github-trending",
+    "title": "nautechsystems/nautilus_trader",
+    "source": "https://github.com/nautechsystems/nautilus_trader",
+    "author": [],
+    "published": "",
+    "created": "2026-08-18",
+    "manifest_dates": [
+      "2026-08-18",
+      "2026-08-20"
+    ],
+    "description": "Production-grade Rust-native trading engine with deterministic event-driven architecturehttps://nautilustrader.io Branch Version Status master nightly develop Platform Rust Python Linux (x86_64) 1.97.1 3.12-3.14 Linux (ARM64) 1.97.1 3.12-3.14 macOS (ARM64) 1.97.1 3.12-3.14 Windows (x86_64) 1.97.1 3.12-3.14 Docs: https://nautilustrader.io/docs/ Website: https://nautilustrader.io Support: support@nautilustrader.io Introduction NautilusTrader is an open-source, production-grade, Rust-native engine for multi-asset, multi-venue trading systems. The system spans research, deterministic simulation, and live execution within a single event-driven architecture, with Python serving as the control plane for strategy logic, configuration, and orchestration. This separation provides the performance and safety of a compiled trading engine with the flexibility of Python for system composition and strategy development. Trading systems can also be written entirely in Rust for mission-critical workloads. The same execution semantics and deterministic time model operate in both research and live systems. Strategies deploy from research to production with no code changes, providing research-to-live parity and reducing the divergence that typically introduces deployment risk. NautilusTrader is asset-class-agnostic. Any venue with a REST API or WebSocket feed can be integrated through modular adapters. Current integrations span crypto exchanges (CEX and DEX), traditional markets (FX, equities, futures, options), and betting exchanges. Features Fast: Rust core with the mimalloc allocator and asynchronous networking using tokio. Reliable: Type- and thread-safety backed by Rust, with optional Redis-backed state persistence. Portable: Runs on Linux, macOS, and Windows. Deploy using Docker. Flexible: Modular adapters integrate any REST API or WebSocket feed. Advanced: Time in force IOC, FOK, GTC, GTD, DAY, AT_THE_OPEN, AT_THE_CLOSE, advanced order types and conditional triggers. Execution instructions post-only, reduce-only, and icebergs. Contingency orders including OCO, OUO, OTO. Customizable: User-defined components, or assemble entire systems from scratch using the cache and message bus. Backtesting: Multiple venues, instruments, and strategies simultaneously using historical quote tick, trade tick, bar, order book, and custom data with nanosecond resolution. Live: Identical strategy implementations between research and live deployment. Multi-venue: Run market-making and cross-venue strategies across multiple venues simultaneously. AI Training: Engine fast enough to train AI trading agents (RL/ES). nautilus - from ancient Greek 'sailor' and naus 'ship'. The nautilus shell consists of modular chambers with a growth factor which approximates a logarithmic spiral. The idea is that this can be translated to the aesthetics of design and architecture. Why NautilusTrader? Trading strategy research is often conducted in Python using vectorized approaches, while production trading systems are implemented separately using event-driven architectures in compiled languages. NautilusTrader removes this separation. A Rust-native core provides a deterministic event-driven runtime for both research and live execution, while Python serves as the control plane. The same architecture, execution semantics, and time model operate across both environments, allowing strategies to move from research to production without reimplementation. Python bindings are provided via PyO3 for the Rust‑native v2 runtime. During the v2 transition, v1 receives only critical security backports on the develop_v1 branch. See the v2 migration guide for migration steps and compatibility details. No Rust toolchain is required to install prebuilt wheels. This project makes the Soundness Pledge: \"The intent of this project is to be free of soundness bugs. The developers will do their best to avoid them, and welcome help in analyzing and fixing them.\" Note MSRV: NautilusTrader relies heavily on improvements in the Rust language and compiler. As a result, the Minimum Supported Rust Version (MSRV) is generally equal to the latest stable release of Rust. Integrations NautilusTrader is modularly designed to work with adapters, enabling connectivity to trading venues and data providers by translating their raw APIs into a unified interface and normalized domain model. The following integrations are currently supported; see docs/integrations/ for details: Name ID Type Status Docs AX Exchange AX Perpetuals Exchange Guide Betfair BETFAIR Sports Betting Exchange Guide Binance BINANCE Crypto Exchange (CEX) Guide BitMEX BITMEX Crypto Exchange (CEX) Guide Bybit BYBIT Crypto Exchange (CEX) Guide Coinbase COINBASE Crypto Exchange (CEX) Guide Databento DATABENTO Data Provider Guide Deribit DERIBIT Crypto Exchange (CEX) Guide Derive DERIVE Crypto Exchange (DEX) Guide dYdX DYDX Crypto Exchange (DEX) Guide Hyperliquid HYPERLIQUID Crypto Exchange (DEX) Guide Interactive Brokers INTERACTIVE_BROKERS Brokerage (multi‑venue) Guide Kraken KRAKEN Crypto Exchange (CEX) Guide Lighter LIGHTER Crypto Exchange (DEX) Guide OKX OKX Crypto Exchange (CEX) Guide Polymarket POLYMARKET Prediction Market (DEX) Guide Tardis TARDIS Crypto Data Provider Guide ID: The default client ID for the integrations adapter clients. Type: The type of integration (often the venue type). Status planned: Planned for future development. building: Under construction and likely not in a usable state. beta: Completed to a minimally working state and in a beta testing phase. stable: Stabilized feature set and API, the integration has been tested by both developers and users to a reasonable level (some bugs may still remain). See the Integrations documentation for further details. Roadmap The Roadmap outlines NautilusTrader's strategic direction. Current priorities include stabilizing the Rust‑native core, improving documentation, and enhancing code ergonomics. The open-source project focuses on single-node backtesting and live trading for individual and small-team quantitative traders. UI dashboards, distributed orchestration, and built-in AI/ML tooling are out of scope to maintain focus on the core engine and ecosystem sustainability. New integration proposals should start with an RFC issue to discuss suitability before submitting a PR. See Community-contributed integrations for guidelines. Security Security is a priority for the NautilusTrader project, and we value the work of those who help identify and resolve vulnerabilities. We apply layered controls across the development and release lifecycle, with signed releases, continuous vulnerability management, and transparent development practices: Source and review controls: CODEOWNERS gate critical infrastructure, dependency manifests, and lock files; protected branches require signed commits and passing CI; release tags are immutable; and Rust dependencies are sourced only from crates.io. Dependency intake: lock files pin every dependency with cryptographic checksums, third-party Python packages install from wheels only, new dependency and tooling versions observe a publication cooldown before adoption, cargo-vet audits Rust provenance, and license checks enforce LGPL-3.0-or-later compatibility. Scanning and fuzzing: Gitleaks secret screening and Zizmor Actions auditing run pre-commit; CodeQL runs on PRs to master and pushes to nightly; cargo-audit, cargo-deny, cargo-vet, OSV Scanner, and pip-audit run on audit-relevant PRs and daily schedules; cargo-fuzz targets cover selected adapter and signing surfaces. Build and release integrity: GitHub Actions are pinned to commit SHAs, CI runners are hardened with egress allow-listing, Python artifacts carry SLSA build provenance, container images are Sigstore-signed with attested SPDX SBOMs, and PyPI and crates.io publishing uses OIDC Trusted Publishing gated to a protected release environment that never runs pull request or fork code. Runtime cryptography: TLS and most runtime cryptography use aws-lc-rs, the Rust binding for AWS-LC, with Ed25519 signing via ed25519-dalek. The OpenSSF Scorecard badge above is one automated repository-health signal; it complements manual review, CI hardening, and security audits rather than replacing them. Reporting a vulnerability Report privately through GitHub Security Advisories, or email security@nautechsystems.io (PGP key available on request). We acknowledge reports within 48 hours and patch critical vulnerabilities within 30 days. A careful vulnerability report takes real time and effort. We appreciate that, and unless you prefer to remain anonymous, we credit reporters in the relevant security advisory and release notes. The Security Policy details scope, coordinated disclosure, and step-by-step release verification. The Security Architecture describes the release supply chain end-to-end. For the full policies, see the Responsible Disclosure and Supply Chain Security policies; CI/CD security is documented in .github/OVERVIEW.md. Versioning and releases Warning NautilusTrader is still under active development. Some features may be incomplete, and while the API is becoming more stable, breaking changes can occur between releases. We strive to document these changes in the release notes on a best-effort basis. We aim to follow a bi-weekly release schedule, though experimental or larger features may cause delays. Branches We aim to maintain a stable, passing build across all branches. master: Reflects the source code for the latest released version; recommended for production use. nightly: Daily snapshots of the develop branch for early testing; merged at 14:00 UTC and as required. develop: Active development branch for contributors and feature work. Note The v2 release-candidate line is the transition toward a stable API for version 2.x. Once this milestone is reached, we plan to implement a formal deprecation process for any API changes. This approach allows us to maintain a rapid development pace for now. Precision mode NautilusTrader supports two precision modes for its core value types (Price, Quantity, Money), which differ in their internal bit-width and maximum decimal precision. High-precision: 128-bit integers with up to 16 decimals of precision, and a larger value range. Standard-precision: 64-bit integers with up to 9 decimals of precision, and a smaller value range. Note By default, the official Python wheels ship in high‑precision (128‑bit) mode on all supported platforms. For pure Rust crates, high-precision works on all platforms (including Windows) since Rust handles i128/u128 via software emulation. The default is standard-precision unless you explicitly enable the high-precision feature flag. See the Installation Guide for further details. Rust feature flag: To enable high-precision mode in Rust, add the high-precision feature to your Cargo.toml: [dependencies] nautilus_model = { version = \"*\", features = [\"high-precision\"] } Installation We recommend using the latest supported version of Python and installing nautilus_trader inside a virtual environment to isolate dependencies. There are two supported ways to install: Pre-built binary wheel from PyPI or the Nautech Systems package index. Build from source. Tip We highly recommend installing using the uv package manager with a \"vanilla\" CPython. Conda and other Python distributions may work but aren't officially supported. From PyPI To install the latest binary wheel (or sdist package) from PyPI using Python's pip package manager: pip install -U nautilus_trader To test the v2 release-candidate wheels from PyPI: pip install -U nautilus_trader --pre The v2 release-candidate wheels use 2.0.0rcN versions and are intended for community testing before the final 2.0.0 release. We do not recommend using release candidates in production environments, such as live trading controlling real capital. Install optional dependencies for interactive tearsheets and charts with the visualization extra: pip install -U \"nautilus_trader[visualization]\" See the Installation Guide for details. From the Nautech Systems package index The Nautech Systems package index (packages.nautechsystems.io) complies with PEP-503 and hosts both stable and development binary wheels for nautilus_trader. This enables users to install either the latest stable release or pre-release versions for testing. Stable wheels Stable wheels correspond to official releases of nautilus_trader on PyPI, and use standard versioning. To install the latest stable release: pip install -U nautilus_trader --index-url=https://packages.nautechsystems.io/simple Tip Use --extra-index-url instead of --index-url if you want pip to fall back to PyPI automatically. Development wheels The main package index publishes v2 development wheels from both the nightly and develop branches, allowing users to test features and fixes ahead of stable releases. This process also helps preserve compute resources and provides easy access to the exact binaries tested in CI pipelines, while adhering to PEP-440 versioning standards: develop wheels use the version suffix .devYYYYMMDD+run. nightly wheels use .devYYYYMMDD when the base version is already a pre‑release, and aYYYYMMDD otherwise. Platform Develop Nightly Linux (x86_64) ✓ ✓ Linux (ARM64) - ✓ macOS (ARM64) - ✓ Windows (x86_64) - ✓ Warning We do not recommend using development wheels in production environments, such as live trading controlling real capital. Installation commands By default, pip will install the latest stable release. Adding the --pre flag ensures that pre-release versions, including development wheels, are considered. To install the latest available pre-release (including development wheels): pip install -U nautilus_trader --pre --index-url=https://packages.nautechsystems.io/simple Available versions You can view all available versions of nautilus_trader on the package index. To programmatically fetch and list available versions: curl -s https://packages.nautechsystems.io/simple/nautilus-trader/index.html | sed -n 's/.*<a href=\"\\([^\"]*\\)\".*/\\1/p' | awk -F'#' '{print $1}' | sort Note On Linux, confirm your glibc version with ldd --version and ensure it reports 2.35 or newer before installing binary wheels. Branch updates develop branch wheels (.devYYYYMMDD+run): Build and publish continuously with every merged commit. nightly branch wheels (.devYYYYMMDD or aYYYYMMDD): Build and publish daily when we automatically merge the develop branch at 14:00 UTC (if there are changes). Retention policies develop branch wheels: We retain only the most recent wheel build. nightly branch wheels: We retain only the 30 most recent publication dates per platform. Verifying build provenance All release artifacts published by the project carry cryptographic attestations generated by the CI/CD pipeline: Python wheels and source distribution (PyPI, GitHub Releases, Nautech Systems package index): SLSA build provenance. Docker images (ghcr.io/nautechsystems/nautilus_trader, ghcr.io/nautechsystems/jupyterlab): keyless cosign signatures plus SPDX SBOM attestations. Both are issued via Sigstore and bound to a specific commit SHA, so verification ensures the artifact was produced by the official NautilusTrader GitHub Actions workflow and has not been tampered with since. For step-by-step verification commands, see Verifying releases in SECURITY.md. Note Verification requires the GitHub CLI (gh) for Python artifacts and cosign for Docker images. Development wheels from develop and nightly branches are also attested. From source It's possible to install from source using pip if you first install the build dependencies as specified in the pyproject.toml. Install rustup (the Rust toolchain installer): Linux and macOS: curl https://sh.rustup.rs -sSf | sh Windows: Download and install rustup-init.exe Install \"Desktop development with C++\" using Build Tools for Visual Studio 2022 Verify (any system): from a terminal session run: rustc --version Enable cargo in the current shell: Linux and macOS: source $HOME/.cargo/env Windows: Start a new PowerShell Install clang (a C language frontend for LLVM): Linux (also installs lld, used as the Rust linker for faster builds): sudo apt-get install clang lld macOS: xcode-select --install Windows: Add Clang to your Build Tools for Visual Studio 2022: Start | Visual Studio Installer | Modify | C++ Clang tools for Windows (latest) = checked | Modify Enable clang in the current shell: [System.Environment]::SetEnvironmentVariable('path', \"C:\\Program Files\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\Llvm\\x64\\bin\\;\" + $env:Path,\"User\") Verify (any system): from a terminal session run: clang --version Install uv (see the uv installation guide for more details): Linux and macOS: curl -LsSf https://astral.sh/uv/install.sh | sh Windows (PowerShell): irm https://astral.sh/uv/install.ps1 | iex Clone the source with git, then sync its dependencies from the project root: git clone --branch develop --depth 1 https://github.com/nautechsystems/nautilus_trader cd nautilus_trader make sync Note The --depth 1 flag fetches just the latest commit for a faster, lightweight clone. Set environment variables for PyO3 compilation (Linux and macOS only). Run these commands from the repository root after make sync: # Set the Python executable path for PyO3 export PYO3_PYTHON=\"$PWD/.venv/bin/python\" # Linux only: Set the library path for the uv-managed Python runtime PYTHON_LIB_DIR=\"$(\"$PYO3_PYTHON\" -c 'import sysconfig; print(sysconfig.get_config_var(\"LIBDIR\"))')\" export LD_LIBRARY_PATH=\"$PYTHON_LIB_DIR${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}\" # Required for Rust tests when using uv-installed Python export PYTHONHOME=\"$(\"$PYO3_PYTHON\" -c 'import sys; print(sys.base_prefix)')\" Note The LD_LIBRARY_PATH export is Linux-specific and not needed on macOS. The PYTHONHOME variable is required when running make cargo-test with a uv-installed Python. Without it, tests that depend on PyO3 may fail to locate the Python runtime. Build and install NautilusTrader in release mode: make build See the Installation Guide for other options and further details. Redis Using Redis with NautilusTrader is optional and only required if configured as the backend for a cache database or message bus. See the Redis section of the Installation Guide for further details. Makefile A Makefile is provided to automate most installation and build tasks for development. Some of the targets include: make install: Installs in release build mode with all dependency groups and extras. make install-debug: Same as make install but with debug build mode. make sync: Installs Python dependencies without building the package. make build: Builds and installs the package in release mode (default). make build-debug: Builds and installs the package in debug mode. make build-wheel: Builds a wheel in release mode. make cargo-test: Runs all Rust crate tests using cargo-nextest. make clean: Deletes build artifacts, caches, and build directories. make distclean: CAUTION Removes all artifacts not in the git index when run with FORCE=1. This includes source files which have not been git added. make docs: Builds the Python documentation with Sphinx and the Rust documentation with Cargo. make pre-commit: Runs the pre-commit checks over all files. make ruff: Runs Ruff over all files using python/pyproject.toml (with autofix). make pytest: Runs all tests with pytest. make cargo-ci-benches: Builds the Rust benchmarks used by CI. Tip Run make help for documentation on all available make targets. Tip See the crates/infrastructure/TESTS.md file for running the infrastructure integration tests. Examples Indicators and strategies can be developed in Python or Rust. For performance and latency-sensitive applications, we recommend Rust. Below are some examples: indicator example written in Python. indicator implementations exposed through PyO3. strategy example written in Python. backtest examples using a BacktestEngine directly. EMA crossover backtest example written in Rust. Docker Docker containers are built with the following variant tags: nautilus_trader:latest has the latest release version installed. nautilus_trader:nightly has the head of the nightly branch installed. jupyterlab:latest has the latest release version installed along with jupyterlab and an example backtest notebook with accompanying data. jupyterlab:nightly has the head of the nightly branch installed along with jupyterlab and an example backtest notebook with accompanying data. You can pull the container images as follows: docker pull ghcr.io/nautechsystems/<image_variant_tag> --platform linux/amd64 You can launch the backtest example container by running: docker pull ghcr.io/nautechsystems/jupyterlab:nightly --platform linux/amd64 docker run -p 8888:8888 ghcr.io/nautechsystems/jupyterlab:nightly Then open your browser at the following address: http://127.0.0.1:8888/lab Warning Examples use log_level=\"ERROR\" because Nautilus logging exceeds Jupyter's stdout rate limit, causing notebooks to hang at lower log levels. Development We aim to provide the most pleasant developer experience possible for this hybrid Rust and Python codebase. See the Developer Guide for helpful information. Tip Run make build-debug to compile after Rust changes for the most efficient development workflow. After changes to PyO3 bindings, stub annotations, or wrapped Rust docs, regenerate the generated Python artifacts from the repository root: make py-stubs Commit the generated .pyi files and PyO3 wrapper doc comments changed by this target. See Generated Python artifacts for details. Testing with Rust cargo-nextest is the standard Rust test runner for NautilusTrader. Its key benefit is isolating each test in its own process, ensuring test reliability by avoiding interference. See the Rust testing guidance for details about full‑suite support and the limits of plain cargo test. You can install cargo-nextest by running: cargo install cargo-nextest Tip Run Rust tests with make cargo-test, which uses cargo-nextest with an efficient profile. Contributing Thank you for considering a contribution to NautilusTrader. We welcome high‑quality work that improves the project. Before starting a substantial change, open an issue to discuss the problem and approach with the team. Small, self‑contained fixes do not require prior agreement. Before getting started, be sure to review the open-source scope outlined in the project's roadmap to understand what's in and out of scope. Once you're ready to start working on your contribution, make sure to follow the guidelines outlined in the CONTRIBUTING.md file. This includes signing a Contributor License Agreement (CLA) to ensure that your contributions can be included in the project. Note Pull requests should target the develop branch (the default branch). This is where new features and improvements are integrated before release. Thank you again for your interest in NautilusTrader! We look forward to reviewing your contributions and working with you to improve the project. Community Join our community of users and contributors on Discord to chat and stay up-to-date with the latest announcements and features of NautilusTrader. Whether you're a developer looking to contribute or just want to learn more about the platform, all are welcome on our Discord server. Warning NautilusTrader does not issue, promote, or endorse any cryptocurrency tokens. Any claims or communications suggesting otherwise are unauthorized and false. All official updates and communications from NautilusTrader will be shared exclusively through https://nautilustrader.io, our GitHub, our Discord server, or our verified X (Twitter) account: @NautilusTrader. If you encounter any suspicious activity, please report it to the appropriate platform and contact us at info@nautechsystems.io. License The source code for NautilusTrader is available on GitHub under the GNU Lesser General Public License v3.0. Contributions to the project are welcome and require the completion of a standard Contributor License Agreement (CLA). NautilusTrader™ is developed and maintained by Nautech Systems, a technology company specializing in the development of high-performance trading systems. For more information, visit https://nautilustrader.io. Use of this software is subject to the Disclaimer. © 2015-2026 Nautech Systems Pty Ltd. All rights reserved.",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "f9593f1f67353de2",
+    "source_type": "community_discussion",
+    "tldr": "NautilusTrader 是 Nautech Systems 开源的 Rust 原生生产级交易引擎，以事件驱动架构统一研究、确定性回测与实盘执行，Python 作为策略控制平面，实现研究到实盘零代码切换。当前处于 v2 候选版本过渡期，采用双周发布节奏。",
+    "objective_summary": "Nautech Systems 发布了 NautilusTrader，一个开源的 Rust 原生、生产级多资产多交易所交易引擎。引擎用事件驱动架构将研究、确定性模拟和实盘执行统一在单套运行时内，Rust 内核负责性能与安全，Python 通过 PyO3 绑定作为策略逻辑与控制平面。同一执行语义和确定性时间模型在回测与实盘同时生效，策略无需改代码即可从研究部署到生产。目前支持 Binance、Bybit、Hyperliquid、Interactive Brokers 等约 20 家交易所与数据源适配器，通过 PyPI 分发预编译 wheel，处于 v2 release-candidate 过渡期。",
+    "event_type": "framework_tools",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [
+        "Nautech Systems",
+        "Interactive Brokers",
+        "Binance",
+        "Bybit",
+        "Coinbase",
+        "Kraken",
+        "OKX",
+        "Hyperliquid"
+      ],
+      "technologies": [
+        "Rust",
+        "Python",
+        "PyO3",
+        "tokio",
+        "mimalloc",
+        "RL",
+        "ES"
+      ],
+      "key_people": []
+    },
+    "key_logic_flow": [
+      "NautilusTrader 是一个 Rust 原生、生产级的开源交易引擎，面向多资产与多交易所交易系统。",
+      "系统用单一事件驱动架构统一研究、确定性模拟和实盘执行，Rust 内核承载交易引擎，Python 作为策略逻辑与编排的控制平面。",
+      "同一执行语义和确定性时间模型在回测与实盘同时生效，策略无需重新实现即可从研究直接部署到生产。",
+      "引擎通过模块化适配器接入约 20 家交易所与数据源，涵盖 CEX、DEX、传统市场及博彩交易所。",
+      "项目当前处于 v2 候选版本过渡期，v1 仅接收关键安全补丁，官方采用双周发布节奏并推荐在 master 分支用于生产。",
+      "官方通过 PyPI 分发预编译二进制 wheel，支持高精度（128 位）与标准精度（64 位）两种数值模式，并强调安全供应链控制。"
+    ],
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "nautechsystems/nautilus_trader",
+        "canonical_name": "nautilus_trader",
+        "url": "https://github.com/nautechsystems/nautilus_trader",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "NautilusTrader 是 Nautech Systems 开源的 Rust 原生生产级交易引擎，面向多资产与多交易所交易系统。",
+          "引擎采用事件驱动架构统一研究、确定性模拟和实盘执行，Python 作为策略逻辑与控制平面。",
+          "官方通过 PyPI 分发预编译二进制 wheel，无需安装 Rust 工具链即可使用，并支持高精度模式。"
+        ],
+        "article_id": "f9593f1f67353de2"
+      }
+    ],
+    "extract_result": "success",
+    "impact_score": {
+      "score": 6.0,
+      "reason": "评分依据：该事件是开源量化交易框架 NautilusTrader 的 v2 候选版本里程碑。其核心价值在于用 Rust 原生事件驱动架构以同一确定性时间模型统一回测与实盘，实现研究到生产零代码切换，这在量化交易基础设施领域是重要的架构进展，且引擎宣称可支撑 RL/ES 交易智能体训练，与 AI 领域直接交叉。但影响范围主要集中于量化/算法交易开发者圈层，属于局部竞争格局改变（相对 QuantConnect/Lean、Hummingbot、vnpy 等同类框架形成差异化优势），远未达到行业范式转移级别，故给予 6.0 分。"
+    },
+    "sentiment": "positive",
+    "developer_sentiment": {
+      "tone": "excited",
+      "primary_focus": "Rust 内核性能与 Python 控制平面结合的研究到实盘执行语义一致性"
+    },
+    "hype_assessment": {
+      "level": "low",
+      "reason": "判定依据：文中虽出现 'production-grade'、'mission-critical' 等营销修饰语，但核心主张（确定性时间模型、回测与实盘执行语义一致、Rust 类型与线程安全）均可通过工程实践验证；约 20 家交易所/数据源适配器清单、双周发布节奏、v2 RC 过渡期安排与 MSRV 跟随最新稳定版等均是具体可核查的事实，全文未使用 '颠覆'、'革命性' 等 PR 滥用词汇，属于工程干货，炒作成分低。"
+    },
+    "information_entropy": "high",
+    "domain_disruption": {
+      "technical_innovation": "以 Rust 原生事件驱动内核承载交易引擎（tokio + mimalloc），通过 PyO3 绑定将 Python 定位为策略逻辑与控制平面，同一套确定性时间模型和执行语义同时作用于研究回测与实盘执行，从根本上消除传统量化中向量化研究代码与事件驱动生产代码分叉部署的风险；该运行时速度还使其可直接用于训练 RL/ES 交易智能体，打通了 AI 训练与实盘交易之间的架构鸿沟。",
+      "business_model": "开源核心 + 模块化适配器的双轮模式，通过适配器矩阵（CEX/DEX/传统经纪商/博彩交易所/数据商）降低接入成本形成生态壁垒；潜在商业化路径包括企业级托管交易基础设施、专业支持与咨询，以及与 Databento、Tardis 等数据提供商合作的增值数据链路服务，短期则通过 PyPI 预编译 wheel 降低分发门槛来扩大采用面。"
+    },
+    "engineering_complexity": "production_ready",
+    "compound_value": {
+      "score": 7.5,
+      "reason": "评估逻辑：①结构性痛点——交易策略研究(Python向量化)与生产实盘(编译型事件驱动)长期割裂，是量化与AI交易行业的普遍摩擦点；NautilusTrader 以单套Rust事件驱动运行时统一研究/回测/实盘，research-to-live parity直接消除策略重写与部署风险，切中真实需求。②生态护城河雏形——约20家交易所与数据源适配器(CEX/DEX/传统市场/博彩)形成连接层网络效应，适配器越多越吸引开发者，数据接入边际成本递减，具备复利积累特征。③AI交易浪潮卡位——引擎自述足够快用于训练RL/ES交易智能体，且确定性时间模型在回测与实盘语义一致，正好承接AI交易智能体从模拟走向生产的基础设施需求；若AI交易成为主流，其作为'交易智能体运行时'的卡位价值将显著放大。④风险对冲——交易引擎为细分赛道，天花板受制于量化/AI交易人群规模；v2候选版过渡期存在版本分裂风险；开源项目长期维护与商业化路径尚未验证，且QuantConnect Lean等对手并存。综合定7.5：有潜力成为AI交易子赛道基础设施，但需持续验证生态粘性与商业化能力。"
+    },
+    "value_capture_layer": "agent_middleware",
+    "moat_impact": "democratizes_access",
+    "key_beneficiaries": [
+      "Nautech Systems",
+      "Databento",
+      "Tardis",
+      "Hyperliquid",
+      "Binance"
+    ],
+    "competitive_casualty": [
+      "QuantConnect (Lean)",
+      "Hummingbot",
+      "传统 Python 回测框架（backtrader/zipline）",
+      "自研交易系统的量化团队"
+    ],
+    "market_opportunities": [
+      "量化交易团队可基于 NautilusTrader 的研究到实盘零代码切换能力，快速搭建覆盖 Binance、Bybit、Hyperliquid 等多交易所的多资产做市与套利策略，显著降低从研究到生产的部署风险与运维成本",
+      "AI 交易智能体创业者可借助其 Rust 内核的高吞吐特性与对 RL/ES 强化学习训练的原生支持，开发面向智能体训练、确定性回测与实盘部署的一体化平台，形成差异化技术壁垒",
+      "金融基础设施服务商可围绕其约 20 家交易所的模块化适配器生态，向中小量化机构提供策略托管、实时风控、性能监控与合规审计的 SaaS 服务，实现生态周边变现"
+    ],
+    "risk_matrix": {
+      "regulatory": "NautilusTrader 可接入加密货币交易所、Polymarket 预测市场及 Betfair 博彩交易所，涉及多个司法管辖区的牌照与合规要求；在中国大陆开展加密货币实盘交易存在明确的监管红线风险，量化团队需提前评估属地法规、KYC/AML 与资金合规要求。",
+      "technological": "项目正处于 v2 release-candidate 迁移期，v1 仅保留关键安全补丁，API 与数据模型存在破坏性变更风险；MSRV 紧跟 Rust 最新稳定版，对构建与运行环境要求较高；引擎若存在底层 soundness bug，实盘执行可能造成直接资金损失。",
+      "competitive": "交易引擎赛道竞争激烈，国内有社区生态成熟的 vn.py，轻量方案有 ccxt、Hummingbot、Freqtrade 等，券商与交易所也多自研交易系统；NautilusTrader 当前社区生态与中文文档相对薄弱，存在被更易用或更本地化方案替代的竞争压力。",
+      "ethical": "高频与做市策略可能放大市场波动，AI 强化学习智能体若被用于拉盘、洗量等市场操纵行为将引发严重伦理与法律后果；接入预测市场与博彩类交易所亦涉及赌博伦理争议，使用场景需保持审慎。",
+      "additional": [
+        "PyPI 预编译 wheel 分发依赖第三方构建与供应链，存在依赖投毒或篡改风险，需加强依赖锁定与签名校验",
+        "官方推荐直接在 master 分支用于生产并采用双周发布节奏，版本治理与稳定性存在一定不确定性",
+        "实盘模式直接对接资金托管与交易账户，账户权限泄露、误操作或配置失误将带来直接资金风险"
+      ]
+    },
+    "confidence": {
+      "impact": "high",
+      "compound": "medium",
+      "hype": "low"
+    },
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "nautechsystems/nautilus_trader",
+        "canonical_name": "nautilus_trader",
+        "url": "https://github.com/nautechsystems/nautilus_trader",
+        "positioning": "Rust 原生、生产级的多资产多交易所开源交易引擎，以事件驱动架构统一研究、确定性回测与实盘执行，Python 作为策略控制平面。",
+        "technical_signal": "Rust 内核基于 tokio 异步运行时与 mimalloc 分配器，通过 PyO3 提供 Python 绑定，支持 128 位高精度与 64 位标准精度两种数值模式。",
+        "adoption_signal": "项目处于 v2 候选版本过渡期，采用双周发布节奏，官方通过 PyPI 分发预编译 wheel，v1 分支仅接收关键安全补丁。",
+        "ecosystem_relevance": "已通过模块化适配器接入约 20 家交易所与数据源，覆盖 Binance、Bybit、Hyperliquid、Interactive Brokers 等 CEX、DEX 与传统市场。",
+        "target_users": [],
+        "differentiation": "以单一事件驱动架构与确定性时间模型实现研究到实盘零代码切换，区别于业界常见的向量化研究加独立实盘实现的分离式做法。",
+        "watch_reason": "NautilusTrader 以单一事件驱动运行时消除研究到实盘的鸿沟，策略零代码切换是其核心差异化，v2 迁移期间的双周发布节奏与约 20 家交易所适配器生态值得持续跟踪其采用进展。",
+        "risk_notes": [
+          "v2 候选版本过渡期意味着 API 仍可能变动，策略迁移需对照官方迁移指南并承担兼容性风险。",
+          "项目高度依赖最新稳定版 Rust 工具链，MSRV 与最新稳定版对齐，可能带来构建与维护成本。"
+        ],
+        "score": 8.0,
+        "article_ids": [
+          "f9593f1f67353de2"
+        ],
+        "evidence_snippets": [
+          "NautilusTrader 是 Nautech Systems 开源的 Rust 原生生产级交易引擎，面向多资产与多交易所交易系统。",
+          "引擎采用事件驱动架构统一研究、确定性模拟和实盘执行，Python 作为策略逻辑与控制平面。",
+          "官方通过 PyPI 分发预编译二进制 wheel，无需安装 Rust 工具链即可使用，并支持高精度模式。"
+        ]
+      }
+    ]
+  }
+]

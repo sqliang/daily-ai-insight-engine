@@ -1,0 +1,216 @@
+---
+title: What sort of maths are LLMs good at?
+source: https://gowers.wordpress.com/2026/08/12/what-sort-of-maths-are-llms-good-at/
+author:
+- '[[ColinWright]]'
+published: '2026-08-12'
+created: '2026-08-12'
+manifest_dates:
+- '2026-08-12'
+description: ''
+tags:
+- clippings
+extraction_status: success
+pipeline_stage: fact_extracted
+id: 42f0bdb1cffb628d
+source_type: community_discussion
+tldr: 数学家 Timothy Gowers 针对 OpenAI 近期宣称用 LLM 解决十大数学难题一事，讨论 LLM 更擅长寻找反例还是证明定理，并通过具体例子说明简单按“反例”分类并不成立。
+objective_summary: 2026 年 8 月初，OpenAI 宣布其 LLM 在数学和理论计算机科学领域解决了十个重要问题，包括首个非 sofic 群的构造以及关于多色
+  Ramsey 数超指数增长的证明。数学家 Timothy Gowers 随后发文探讨 LLM 的数学能力边界，尤其质疑“LLM 特别擅长寻找反例”这一说法。他通过对比
+  Vinogradov 的三素数定理与 Gluskin 关于 Banach-Mazur 紧统直径的结果，说明逻辑形式相似的命题也可能分别被视作定理或反例，因而不能仅凭存在性量化解释
+  LLM 的数学优势。
+event_type: application_landing
+epistemic_status: pr_statement
+entities:
+  companies:
+  - OpenAI
+  technologies:
+  - LLM
+  key_people:
+  - Timothy Gowers
+  - Ivan Vinogradov
+  - Fritz John
+  - Efim Gluskin
+key_logic_flow:
+- OpenAI 近期宣称其 LLM 解决了数学和理论计算机科学领域的十个重大问题。
+- 这些成果中许多以构造反例的方式呈现，例如非 sofic 群、Jacobian 猜想和单位距离猜想。
+- 作者提出需要检验“LLM 特别擅长寻找反例”这一假设，并首先界定“寻找反例”的精确含义。
+- 通过对比 Vinogradov 的三素数定理与 Gluskin 的 Banach-Mazur 紧统结果，作者指出逻辑形式相似的命题仍可分别被视为定理或反例。
+- 作者进一步指出，Skolemization 以及存在性证明在数学研究中无处不在，难以单独解释 LLM 的优势。
+- 因此，简单的“擅长反例”分类不足以刻画 LLM 的数学能力，仍需更深入的理论分析。
+object_mentions:
+- object_type: company
+  name: OpenAI
+  canonical_name: OpenAI
+  url: null
+  confidence: high
+  article_role: mentioned_reference
+  evidence_snippets:
+  - OpenAI 在 2026 年 8 月初宣布其已解决数学和理论计算机科学领域的十大重要问题。
+  - 文中提到的代表性成果包括首个非 sofic 群的构造以及多色 Ramsey 数超指数增长的证明。
+  article_id: 42f0bdb1cffb628d
+extract_result: success
+impact_score:
+  score: 5.5
+  reason: 该事件的本质是数学家 Timothy Gowers 对 OpenAI 宣称 LLM 解决十大数学难题的评论文章，而非新的产品、论文或融资。虽然
+    OpenAI 的原始声明若属实将具有范式转移意义，但 Gowers 的发文属于学术社区的反思性讨论，主要影响在于推动业界对 LLM 数学能力边界进行更严谨的评估，短期内不会直接改变竞争格局，却能放大对
+    OpenAI 声明可验证性的关注。
+sentiment: mixed
+developer_sentiment:
+  tone: skeptical
+  primary_focus: LLM 数学能力的真实边界、OpenAI 声明的可验证性，以及"擅长反例"这类简单叙事是否掩盖了更复杂的能力刻画问题
+hype_assessment:
+  level: medium
+  reason: OpenAI 宣称"LLM 解决十大数学难题"本身带有较强的 PR 色彩和"突破性"话术，容易引发过度解读；但 Gowers 的文章通过 Vinogradov
+    三素数定理、Banach-Mazur 紧统等具体数学案例进行降温，指出简单按"反例/定理"分类无法解释 LLM 的优势，因此事件整体属于"有包装但正在被学术共同体祛魅"，水分中等。
+information_entropy: high
+domain_disruption:
+  technical_innovation: 无直接技术创新。该文的价值在于提出一个元问题：如何精确定义和评估 LLM 在数学问题上的能力边界，特别是"寻找反例"这一概念在形式化表述中的模糊性。它推动学术界对
+    LLM 数学能力进行更细粒度的分类，而非简单接受存在性/全称性命题的二分。
+  business_model: 无直接商业模式影响。长期来看，若此类反思促使行业对 AI4Science/Math 产品的能力宣传趋于谨慎，可能影响相关工具的市场预期、监管审查强度以及科研客户对
+    LLM 辅助证明系统的信任建立速度。
+engineering_complexity: conceptual
+compound_value:
+  score: 6.5
+  reason: OpenAI 宣称用 LLM 解决十大数学难题，如果最终被学术共同体复现并扩展，将显著扩大基础模型的可触达市场（TAM），从文本、代码延伸至科学发现、理论证明和研发加速，具备成为「AI
+    for Science」核心基础设施的长期复利潜力；然而当前事件本质上是 PR 声明加学者评论，Gowers 也指出「擅长反例」这一简单分类并不成立，说明能力边界尚未被清晰刻画，且历史上
+    AI 数学突破常伴随可复现性争议。因此其价值更偏向「叙事升级+赛道打开」，而非已验证的护城河，仍需持续的产品化、 peer review 和商业化验证，评分落在
+    4–7 区间的中上段。
+value_capture_layer: foundation_model
+moat_impact: strengthens_monopoly
+key_beneficiaries:
+- OpenAI
+- NVIDIA
+- Microsoft
+competitive_casualty:
+- Anthropic
+- Google DeepMind
+- xAI
+- 传统计算机代数系统厂商（如 Wolfram Research、Maplesoft）
+market_opportunities:
+- 数学研究辅助工具存在落地空间，可围绕反例发现、定理证明辅助与形式化验证开发垂直产品，服务高校与科研机构
+- LLM 与形式化证明系统（如 Lean、Coq）的集成值得布局，帮助数学家将自然语言直觉转化为可验证证明
+- 面向高等数学教育的智能辅导产品可借鉴 LLM 在构造性证明与反例搜索上的能力，提供个性化解题路径
+risk_matrix:
+  regulatory: 无
+  technological: OpenAI 的突破性成果尚未经过广泛同行评议与复现，存在声明被夸大或后续被撤回的技术替代风险；若核心方法依赖特定训练数据，可复制性存疑
+  competitive: OpenAI 在数学推理领域的领先声明可能加剧科研与算力军备竞赛，学术机构与初创团队面临被巨头挤出核心高地的竞争压力
+  ethical: 若数学家过度依赖 LLM 生成证明而减少严格验证，可能引发学术诚信与知识可靠性危机；同时高级数学研究岗位的劳动价值认知可能受到冲击
+  additional:
+  - 认识论风险：公众与媒体可能将单一企业的 PR 声明等同于数学界共识，放大错误信息
+  - 同行评议制度风险：LLM 产出的大规模复杂证明可能超出传统审稿人的验证能力，迫使学术界重构评审流程
+confidence:
+  impact: medium
+  compound: low
+  hype: high
+actionable_insight: monitor
+---
+
+For the sake of anyone who might read this blog post in the distant future (a month from now, say), let me mention that I am writing it a few days after OpenAI announced that it had solved ten major problems in mathematics and theoretical computer science, including the first construction of a non-sofic group, and a proof that the multicolour Ramsey number (where there are 3’s) grows superexponentially in . The first was, to judge from various talks I have been to, one of the most important unsolved problems in group theory, and the second was a major open problem in Ramsey theory that I didn’t necessarily expect to see solved in my lifetime, though of course such expectations now have to be revised. The reason I want to be clear about the timing is that I shall be discussing the current capabilities of LLMs in the full expectation that those will continue to change rapidly. So it is likely that in not too long from now, if there is anything interesting in what I write, it will be interesting mainly as a record of what the situation looked like in early August 2026.
+
+These results, and the other eight on the list, are extraordinarily impressive, but it still doesn’t seem to be the case that LLMs are better than all humans at all aspects of mathematics. If they were, then their big speed advantage over us would mean that there would be much more of a flood of results. So it is natural to wonder about what kinds of problems LLMs are good at, and about where there is still room for improvement. I don’t pretend to have a good answer to this question, where a good answer would be a crisp classification that would fit the current examples well, but it is an interesting exercise to try to rule out some bad answers, and to try to identify potential answers that aren’t obviously contradicted by the evidence.
+
+## Are LLMs particularly good at finding counterexamples?
+
+A first remark here is that LLMs are not just good at finding counterexamples: they can find proofs of difficult statements as well. However, it is notable that the most famous problems they have solved have almost all been with counterexamples rather than proofs. That is true of the two problems mentioned above, and also of the Jacobian conjecture and the unit distance conjecture.
+
+If one wants to theorize that LLMs are particularly good at finding counterexamples, then there are two things it would be good to do to make the theory more convincing. The first may sound unproblematic: it is to decide when solving a problem counts as finding a counterexample. Once that is sorted out, the second is to come up with a potential explanation of why LLMs would be particularly well suited to solving problems of that particular kind.
+
+### What does it mean to find a counterexample?
+
+Why am I suggesting that it is not completely obvious what it means to find a counterexample? Surely, one might suggest, all it means is that you have a statement of the form “Every object of such and such a type has such and such a property,” and you exhibit an object of the given type that does not have the given property.
+
+However, this doesn’t always work. Consider a famous result of Vinogradov, which states that every sufficiently large positive integer is a sum of three primes. The negation of this statement is (or is equivalent to) the statement that for every positive integer there exists an integer such that is not a sum of three primes. In other words, it states that every positive integer has a certain property. Seen in this light, Vinogradov found an example of a positive integer that does *not* have the given property. Do we want to say that Vinogradov found a counterexample? Clearly not — the result should obviously be classified as a theorem and not a counterexample.
+
+Thus, we cannot just naively say that LLMs are particularly good at negating universally quantified statements: there has to be something about the *nature* of the universal quantification. With the three-primes example, it is clear that Vinogradov did not think, “How am I going to find with this property?” Rather, what he thought would have been more like, “I’ve got an integer that is very large. How am I going to show that it is a sum of three primes?” In other words, all his focus would have been on the universally quantified , with the existentially quantified being a sort of afterthought once the details of the proof have been worked out.
+
+In general, many interesting results, when they are stated formally, begin with an alternation of two or three (or more) quantifiers. The question then becomes to determine which is the first “interesting” quantified variable in some sense. Here’s another example to illustrate the point, from the theory of finite-dimensional normed spaces. I’ll give a few mathematical details for those curious, but if you don’t care about those, then you can skip the next three paragraphs and should get the gist of what I am saying about this example.
+
+Let and be two -dimensional normed spaces and let be a linear map from to . We say that is a –*isomorphism* if there exists such that for every . By rescaling we can always take to be 1, in which case we have that for every . If , then this tells us that is an isometry. In general, the *Banach-Mazur distance* between and is defined to be the smallest such that there exists a -isomorphism from to . It is easy to see that the logarithm of the Banach-Mazur distance is a metric on the set of isometry classes of -dimensional normed spaces. A less easy fact, but still not too hard, is that the resulting metric space is compact: in fact, it is known as the Banach-Mazur compactum.
+
+It is natural to wonder what the diameter of the Banach-Mazur compactum is, and here things get interesting. A result of Fritz John states that every -dimensional space has distance at most from . (The idea of the proof is as follows: pick inside the unit ball of an -dimensional ellipsoid of maximal volume; that is the unit ball of a normed space that is isometric to ; it can be shown that the identity map is a -isomorphism between and .) From Fritz John’s theorem and the (multiplicative) triangle inequality, it follows that for any two -dimensional normed spaces. That is, the diameter of the Banach-Mazur compactum is at most . But might it be substantially less than that?
+
+An indication that the answer is not obvious comes from looking at the spaces and . The identity map between these two spaces is an -isomorphism, but one can do much better by mapping the standard basis vectors not to themselves but to vertices of the unit cube, with the vertices chosen to be as orthogonal as possible. In particular, if there exists an Hadamard matrix, then the corresponding linear map is a -isomorphism. One can push this observation and deduce that for any the Banach-Mazur distance between and is . It is also easy to show that , so -spaces hardly improve on the easy lower bound, and do not improve on it at all in dimensions for which an Hadamard matrix exists.
+
+In 1981, Gluskin famously solved the problem by determining the correct asymptotics for the diameter of the Banach-Mazur compactum. Informally, what he showed was that the diameter is within a constant of the upper bound that follows immediately from Fritz John’s theorem. If we make the quantification explicit, then the statement we end up with is
+
+,
+
+where I have written for the set of all -dimensional normed spaces. (If you want to argue that it is not a set, then let me specify in addition that the underlying vector space is .) In words, there is a positive constant such that for every positive integer there are -dimensional normed spaces and such that the Banach-Mazur distance between and is at least .
+
+I can’t continue without very briefly describing the beautiful and highly influential idea Gluskin had for solving this problem. He took and to be normed spaces whose unit balls were random symmetric convex sets defined as follows: take the standard basis vectors and a handful of other random unit vectors, as well as the negatives of all these vectors, and take the convex hull. Gluskin then showed that if two normed spaces are chosen from this distribution, then with high probability their Banach-Mazur distance is at least .
+
+But back to the main point, which is that the logical form of the above statement is very similar to the logical form of Vinogradov’s theorem, which is
+
+where I have written for the set of primes. And yet, Vinogradov’s result is unquestionably a theorem, while Gluskin’s result is unquestionably a counterexample, or at least an example.
+
+What is the important difference between the two statements? It seems to be that in Vinogradov’s three-primes theorem the number plays a more essential role in the statement that is to be proved about the various quantified variables. In Vinogradov’s theorem, that statement is , whereas for Gluskin’s theorem the statement to be proved is
+
+and ,
+
+which we can write equivalently as
+
+and .
+
+In the case of Vinogradov’s theorem, the whole challenge is to get those three primes to add up to , whereas for Gluskin it is not remotely challenging to get the dimensions of and to equal : the challenge is to get and to be very far from each other, relative to their common dimension.
+
+There is a further complication to bear in mind here, which is that via the process known as Skolemization, a universally quantified statement of the form can be converted into an existentially quantifed statement . (For this to be an equivalence one needs the axiom of choice, but it is certainly a sufficient condition.) This is not just a piece of logical trickery, but it often reflects quite accurately how we think about some problems. For instance, it is more natural to think of Gluskin’s example as a recipe for constructing (or at least proving the existence of) a pair of suitable normed spaces for any given dimension , or in other words to construct a suitable function from to pairs of normed spaces by giving its value at each , than it is to think of it as a statement that says that every positive integer has a certain complicated property.
+
+Yet another complication is that some universally quantified statements follow naturally from existentially quantified statements, or may even be equivalent to them. For example, the theorem that a 2-dimensional torus is not homeomorphic to a 2-dimensional sphere is a universally quantified statement (every map from the torus to the sphere fails to be a homeomorphism), but the natural way to prove it is to prove the existential statement that there is an invariant that distinguishes the two spaces. For an example of where a universal statement is equivalent to an existential statement, consider a statement of the form that a vector does not belong to the convex hull of a certain compact set . The statement that no convex combination of elements of is equal to is equivalent to the existence of a linear functional and a such that and for every . In both these cases it feels natural to regard the result as a theorem that is proved via an existential statement, perhaps because it is the theorem that is ultimately what interests us. But using “what interests us” as a criterion to determine what counts as a counterexample seems a little vague, and is a difficult criterion to use if we want to explain convincingly why AI should be good at finding counterexamples.
+
+A more general argument against the notion that there is something about existential statements that is particularly suited to AI is that the need to establish existential statements pervades almost all of mathematical research, regardless of the nature of the headline result being aimed for. For example, if I want to prove a statement by induction, I may well look for a strengthening of the statement that serves better as an inductive hypothesis. Or if I want to prove that every object of type with property also has property , then I may well look for a property that follows from and can be used to prove . These are more metamathematical existence problems, but the distinction can be somewhat blurred, and more importantly, when trying to prove a statement , it is often the case that the main question in our minds is less, “Why is true?” and more, “What could a proof of be like?” To give an example, I feel I understand pretty well why Goldbach’s conjecture is true — a highly plausible probabilistic model of the primes implies it and agrees closely with computational data — but if I were making a serious attempt to prove it, that understanding, which many mathematicians have had for a century or so, would be of limited help. Rather, my main task would be to try to find proof techniques that were powerful enough to make those heuristic ideas rigorous.
+
+### What is the difference between an example and a counterexample?
+
+Logically, every statement of the form is a counterexample to the universally quantified statement . However, we do not describe all existential statements as counterexamples. For example, if I were to say, “The -spaces with are all separable, as is , but is not separable,” I would not describe the second part of that assertion as a counterexample to the claim that all Banach spaces are separable. Rather, I would present it as probably the most basic example of a non-separable space. The important point seems to be that there was no particular reason to think that all Banach spaces would be separable, and finding an example of a non-separable space is not very difficult.
+
+I think the first point is more important here: we are more inclined to call an object a counterexample if the existence of that object disproves a statement that we had quite good reason to believe. It often happens that after repeated unsuccessful attempts to prove a statement, mathematicians begin to feel that it has no particular reason to be true, even if it seems to be hard to come up with a counterexample to it. In such a situation, if a counterexample is eventually found, it may have lost something of its “counter” feel. My impression is that the construction of a non-sofic group comes into this category. There have been several proposals in the literature for how one might construct such a group, and I don’t think there were many (or even any?) experts who strongly believed that all groups were sofic. So it feels more natural to say, “OpenAI came up with the first example of a non-sofic group” than to say, “OpenAI found a counterexample to the soficity conjecture” (despite the fact that that section of their paper is entitled “A counterexample to the soficity conjecture”).
+
+Likewise, it seems to me that the new lower bound for multicolour Ramsey numbers is more of an example than a counterexample. I think quite a lot of people believed that the bound should be exponential, so for them it was a counterexample, but others, myself included, were more neutral about it. As a matter of fact, I have worked on the problem in the past (a long time ago) in an equivalent formulation, which asks how many triangle-free graphs on vertices you need if you want their union to be the complete graph . If you take bipartite graphs, then it’s easy to see that you need of them, but that bound can be improved if instead you observe that a complete 5-partite graph can be written as a union of two triangle-free subgraphs, and therefore it is possible to write the complete graph as a union of triangle-free graphs. It is then tempting to try to do better, with triangle-free graphs that are less dense but that make up for it with unbounded chromatic number — a necessary condition if one wishes to use a sublogarithmic number of graphs, which is equivalent to showing a superexponential lower bound for . All this is to say that when I worked on the problem, my efforts were concentrated on what turned out to be the right direction, so for me OpenAI found an example of what I (weakly) expected, rather than a counterexample.
+
+## Where does this leave us?
+
+I would like to find a coherent explanation of the conjunction of the following facts.
+
+- The most notable mathematical results proved by LLMs have tended to be ones that we would classify as examples or counterexamples, where counterexamples are, broadly speaking, existence statements that disprove statements that we expected to be true.
+- Many statements can be formulated as existence statements when we would usually think of them as universal statements, and vice versa, so what we consider to be an example depends on the mathematical context of a statement as well as its logical form.
+- LLMs are pretty good at proving universal statements as well: it’s just that the strongest statements they have proved that we would think of as theorems have mainly not been at the level of the strongest statements that we would think of as counterexamples.
+
+Given these facts, it seems likely that what LLMs are good at is something else, which happens to have as a consequence that they are good at the kind of existence problem that we would normally classify as asking to find a non-trivial example.
+
+Let us consider two things that we can be confident that LLMs are good at. One of them is knowing a lot of mathematics: if a problem can be solved by means of a relatively standard argument, it is highly likely that an LLM will be able to find and use that argument. The other is the ability that an LLM has simply by virtue of being a computer: it can work at huge speed (compared with humans at least) and can therefore afford to make a large number of unsuccessful attempts at a problem before it finds a solution.
+
+Without even looking at what LLMs have actually managed to solve, one might guess that these two features would lead to their having a somewhat different style from human mathematicians. Very roughly, LLMs would have the edge when there is more of a probabilistic element to the proof-finding process: they would be good at problems for which the best method is to try a lot of ideas, not necessarily particularly novel, until at some point you get lucky. Humans on the other hand would be better (for the moment) at finding more “surprising” and “conceptual” arguments, where the appropriate method is to dig deeper and deeper into a problem until the solution reveals itself. (It is hard to say exactly what this means, but I hope that any experienced researcher reading this will know what I am talking about.)
+
+This raises two questions: does the guess above correspond at all to the reality that we are observing, and is there any reason to suppose that what I have tentatively described as the “LLM style” of doing mathematics would lead naturally to LLMs discovering several counterexamples (or just examples) to long-standing conjectures, even if that was by no means all they could do?
+
+I don’t pretend to have a scientific answer to either question, but the reactions of experts to several of the remarkable solutions that ChatGPT has found do lend some support to the idea that LLMs work in more of a try-lots-of-things-till-you-get-lucky way. People often seem to react by saying something like, “Initially I was amazed that the problem had been solved, but on closer inspection I realized that the approach was actually not all that novel, and one that with the right small hint a suitably expert human could have found quite easily.”
+
+For the second question — whether the LLM style is well suited to finding (counter)examples — I think matters are less clear, because there are many ways of searching for a counterexample, and some of them fit better than others the style I have described. Here are a few general methods. (I don’t claim that the list is exhaustive.)
+
+**Look for an off-the-shelf example**. Here one has a stock of fairly standard examples and one simply tries them out one after another to see whether any of them fails to satisfy the given statement. For example, Ryan O’Donnell ends his wonderful book on the analysis of Boolean functions with some tips, one of which is, “If you have a conjecture about Boolean functions, test it on dictators, majority, parity, tribes (and maybe recursive majority of 3). If it’s true for these functions, it’s probably true.”**Build an example from basic examples and standard construction methods.**For an algebraic problem, for instance, one might start with some standard examples, but then take products or quotients or limits.**Make heavy use of metavariables.**The word “metavariable” comes from computer science, and in particular from automatic theorem proving, and refers to the practice that in mathematics would correspond to writing, “where is to be chosen later,” (in which case is the metavariable). In a paper we usually do this only in fairly simple situations such as when we need to choose a number that is small enough for later arguments to work. But when we search for an example of an object that satisfies some property (which may well be a conjunction of simpler properties ), it is often not a good strategy to specify completely and only then to check whether it satisfies . Instead, it can be more fruitful to do almost the opposite: we start by saying virtually nothing about and simply launch into proving that it satisfies . In the course of doing so, we find that we need to satisfy a property . If we are lucky we can describe in a nice way a very general class of objects that satisfy . For instance, we may be able to find a parametrized class: we identify some function and show that satisfies for every of a certain type. The problem is then reduced to finding such that $Q(f(y))$ holds, which is a more specific version of the original problem. There may be many iterations of this process, or a mixture of this process and other processes, before an example is eventually found.**Try to prove the opposite.**If one wishes to find such that , it can be surprisingly helpful to start by attempting to prove the statement . The reason this can be helpful is that using our standard methods of attempting to prove something, we may end up identifying a key lemma that would suffice: that is, we may find an intermediate property that implies in a non-trivial way and thus reduce the problem to . Turning things round again, it may well then be that finding a counterexample to is easier than finding a counterexample to (that is, an example that satisfies ). Of course, there is no guarantee that a counterexample to will be an example of , but sometimes we are lucky and it is. More often, we can use the idea of the previous method, noting that it is at least a necessary condition of an example of that it should not be an example of , so one can try to describe a general class of objects that fail and in that way reduce the problem.**Successive approximation.**Sometimes, when we are searching for an example of such that , we write down a moderately plausible guess not because we think it has a chance of working (if we did, then we would be using the first strategy), but because we hope that if does not satisfy , then we will be able to diagnose what went wrong and specify a new guess that does not have that defect. Again, this strategy can either be iterated or combined with one or more of the other strategies.**Just-do-it proofs.**Sometimes we need to satisfy infinitely many properties , each of which is, individually, quite easy to satisfy. In such situations, we often “build” inductively bit by bit, ensuring at the th stage of the process that however the building process continues, will satisfy .**Pick a random example.**Often it is very hard to give an explicit example of an that satisfies , but there is a natural probability distribution for which one can show that if one chooses randomly from that distribution, then with high probability (or at least non-zero probability) it will satisfy .**Pick a generic example.**In more infinite contexts, it may again be quite hard to give an explicit example of an that satisfies , but one may be able to show that the set of that fail is or measure zero, or is a meagre set, or is small in some other way.
+
+There is no particular reason to suppose that LLMs would be equally good at each of the methods above. So perhaps what we are observing is not quite that LLMs have a particular ability to find examples, but more that they are particularly good at finding examples (and proofs) in a certain way. Looking at the above techniques, one might imagine that they would be very well suited to checking off-the-shelf examples, finding just-do-it proofs (since that is a rather standard method with lots of instances in their training data), using the probabilistic method (unless, as often happens, significant new ideas are needed to show that the probabilities work out), and picking generic examples. The other three methods described above — use of metavariables, trying to prove the opposite, and using successive approximation — require more of an ability to judge whether the approach one is taking is likely to be fruitful. Here it seems at least possible that humans will sometimes have an advantage, but the conditions that a problem would need to satisfy are quite stringent. One would need an example to be one that lies at a leaf of a very large search tree — too large to be searched for by a combination of moderate mathematical ability and brute force — but that can be found by a mathematician with a sufficiently good nose for when they are making progress that they can prune the search tree very substantially.
+
+Why wouldn’t LLMs also have that “nose”? I don’t rule out that “nose” is an emergent property of the way LLMs are trained, and that within a year or two they will have it to the same extent that we have it. But for now, in my interactions with ChatGPT, I do have a distinct impression that they haven’t got there quite yet. When I discuss an open problem with 5.6 Pro, I am often presented with approaches that sound promising until I think about them carefully, and then seem quite a lot less promising. And they will also often end a response by saying, “I have not managed to answer the question you asked, but have managed to reduce it to the following much narrower and more precise question,” which sounds very promising until it has happened five times without any obvious progress having been made. It isn’t completely obvious how they will get better at this, since their training data will not be full of examples of fruitful and less fruitful directions to pursue when trying to solve problems: all they will typically see is tidied up proofs that hide the thought processes of their discoverers. Of course, human mathematicians also don’t get to learn much about how to do research from the experience of other mathematicians, and yet we somehow manage to pick it up. But the situation is a little different for us, in that a lot of what we learn is by *doing* rather than *emulating*.
+
+Another reason it is not obvious that “nose” is a property that emerges naturally when LLMs are scaled up is that if LLMs make heavy use of their broad knowledge and can afford to do a lot more brute-force search than humans can, then they will lack the incentive that humans have to prune the search tree ruthlessly. It could conceivably be that their successes so far are achieved using methods that for a human would be considered extremely inefficient, but that because of their superior speed and knowledge, the combinatorial explosion these methods will lead to has not yet become apparent.
+
+It would be very interesting to try to test this experimentally, but it is also difficult, because if an LLM has what looks like the kind of idea that could only be the result of “deep thought” about a problem, we can never be sure that it has actually carried out that deep thought, as opposed to finding a model argument already in the literature, or in other words exploiting the deep thought of a human mathematician. It would probably be easier (but still not easy) to test it by using models that are less powerful than the latest ones and that have been to some extent shielded from the mathematical literature: one could give them a carefully designed suite of problems and see whether the ones that the LLMs solve have particular characteristics.
+
+It may seem as though I am desperately clinging to the hope that humans will continue to be able to make meaningful contributions to mathematical discovery for a while yet, but while I do indeed hope that, I am not making any assertions of the form “LLMs will never be able to do X”. I think it is likely that they will, and given the pace of progress over the last three years it will probably happen quite soon. But I do think that there may be a hurdle for LLMs to clear and it seems at least possible that it won’t be cleared as straightforwardly as some of the previous hurdles.
+
+In that connection, it would also be interesting to see whether a different reward structure leads to LLMs being able to solve different kinds of problems. For example, if during training an LLM (or machine-learning system of some other kind) is not just rewarded if it ends up with a solution, but also penalized if it explores too many dead ends or if it “cheats” by getting the answer from the literature, perhaps it would be incentivized to go about the research process in a more human way and thereby achieve better results for classes of problems where it is yet to make a big impact.
+
+If the hurdle is cleared, either by pure scaling up or by some more thoughtful method, it will be quite difficult to know when that has happened, since, as just mentioned, an idea that seems very original and surprising may just be lurking somewhere in an LLM’s training data. But I would be confident that it had been cleared if an LLM were to come up with a proof that was as surprising to me as the solution of the cap-set problem was in 2016: the previous best known bounds were completely eclipsed, the method was utterly different from anything I had thought about trying, and afterwards there was a flurry of activity as people came to understand what this wonderful new technique was capable of.
+
+## Conclusion
+
+I wasn’t quite sure where I would end up when I started this post, and now that I’ve got to the end, I feel that my main conclusions are not particularly new or surprising, but I hope that the route to them is of some interest. The main points I have made are the following.
+
+- “Finding an example” is in practice not the same thing as proving a statement that begins with an existential quantifier.
+- If it is true that current models are particularly good at finding examples, that is probably not because they have a particular affinity for existential statements, but more because the proof-discovery methods that are appropriate for finding certain kinds of examples play to the obvious strengths of LLMs: wide knowledge and the ability to explore many paths of the search tree that humans would judge to have a low probability of success.
+- It seems likely that LLMs will carry on improving very quickly. However, if, contrary to expectations (mine at least), there turns out to be some residual class of problems (or other mathematical activities) for which humans continue to have the edge for a while, it is likely that those will be problems for which the mysterious human ability to prune the proof-discovery search tree is particularly advantageous: that is to say, problems where the search tree is deep and has a large amount of branching, so that without rigorous pruning a search is not feasible even for a computer.
+- A good sign that LLMs have reached human level for a much wider class of problems will be if they start proving theorems using methods that, like much of the very best human mathematics, are new and surprising but that with hindsight come to seem beautiful and natural. They should also be methods that are difficult to stumble on by accident. It is hard to say precisely what would count as such a proof, but I think we’ll recognise it when we see it.
+
+Tags: ai, mathematics
