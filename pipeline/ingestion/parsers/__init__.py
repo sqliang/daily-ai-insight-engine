@@ -9,11 +9,13 @@ from .tldrai import parse_tldrai
 from .anthropic import parse_anthropic
 from .zhihu import parse_zhihu_browser
 from .openai import parse_openai_browser
+from .github_trending import parse_github_trending
 
 # curl-based scrape 策略解析器
 SCRAPE_PARSERS = {
     "tldrai": parse_tldrai,
     "anthropic-blog": parse_anthropic,
+    "github-trending": parse_github_trending,
     # machine-heart 已移除: jiqizhixin.com 网站改版为数据服务营销页，不再展示文章列表
 }
 

@@ -26,7 +26,7 @@ from pipeline.utils.frontmatter import filter_by_created
 logger = logging.getLogger(__name__)
 
 # Stage 3 回退模型（在 config.yaml 和 CLI 参数均未指定时使用）
-DEFAULT_MODEL = "deepseek-v4-flash"
+DEFAULT_MODEL = "kimi-k2.6"
 
 
 

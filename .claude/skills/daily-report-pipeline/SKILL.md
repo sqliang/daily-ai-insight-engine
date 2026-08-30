@@ -24,9 +24,14 @@ description: >
 
 ```
 .agents/skills/daily-report-pipeline/scripts/
-  pipeline_gate.py     # check/repair 门禁（本文件的双份镜像见 .claude/skills/，修改后必须同步）
-  backfill_arxiv.py    # arxiv manifest 缺失补建（被 repair-ingest 自动调用）
+  pipeline_gate.py        # check/repair 门禁（本文件的双份镜像见 .claude/skills/，修改后必须同步）
+  backfill_arxiv.py       # arxiv manifest 缺失补建（被 repair-ingest 自动调用）
+  backfill_hackernews.py  # hackernews manifest 缺失补建（Algolia HN API 按日期回溯，--date [--ingest]）
+  backfill_substack.py    # Substack 系源 manifest 缺失补建（--source <name> --date [--ingest]），
+                          # 覆盖 interconnects/oneusefulthing/nlp-elvis 等；beehiiv 源（theneuron/therundown）不适用
 ```
+
+缺 manifest 的非 arxiv 源 gate 不会自动补，需手动调对应 backfill 脚本；无匹配工具的平台（beehiiv、WordPress 等）接受缺失并告知用户。
 
 所有命令在项目根目录执行。`--date` 省略时用今天（`date +%F`）。
 
@@ -63,6 +68,7 @@ uv run python $GATE check-extract --date <date>
 ```
 
 - 有问题 → `uv run python $GATE repair-extract --date <date>`（逐文件 `extract -i <文件> --force`）→ 复检（最多 2 轮）
+- 注意：repair-extract 与 repair-analyze 同为单文件串行修复，只适合少量失败；若出现大批量失败（≥10 篇，多为模型/API 临时故障），直接重跑 `run-extract --date <date>` 并发补齐剩余文件
 - 检查口径：缺 02_extracted 对应文件 / `extract_result=failed` / `tldr` 与 `objective_summary` 均缺失 / 正文与上游不一致（stale）
 
 ### Phase 3 — analyze 阶段
@@ -72,7 +78,9 @@ uv run python $GATE run-analyze --date <date>       # 单进程 --target-date + 
 uv run python $GATE check-analyze --date <date>
 ```
 
-- 有问题 → `uv run python $GATE repair-analyze --date <date>` → 复检（最多 2 轮）
+- 有问题 → 先按失败规模选修复路径：
+  - **少量失败（<10 篇，多为单篇文章自身问题）** → `uv run python $GATE repair-analyze --date <date>`（逐文件串行 `analyze -i <文件> --force`，成本可控）→ 复检（最多 2 轮）
+  - **大批量失败（≥10 篇，典型场景是模型/API 临时不可用导致的批量 SDK 报错）** → 直接重跑 `uv run python $GATE run-analyze --date <date>`：skip-existing 只处理剩余文件且并发执行，比串行 repair 快一个数量级（2026-08-23 实战：32 篇串行 repair 预计 2h+，并发重跑约 15 分钟跑完）。repair-analyze 的串行单文件语义只在小规模时有成本优势
 - 检查口径：缺 03_analyzed 对应文件 / `impact_score` 或 `sentiment` 缺失 / 正文与上游不一致（stale）
 
 ### Phase 4 — synthesize

@@ -703,7 +703,7 @@ async def run_editor_in_chief(
     *,
     model: Optional[str] = None,
     max_detail: int = DEFAULT_MAX_DETAIL,
-    max_tokens: int = DEFAULT_MAX_TOKENS,
+    max_tokens: Optional[int] = None,
     target_date: Optional[str] = None,
 ) -> dict:
     """
@@ -723,13 +723,19 @@ async def run_editor_in_chief(
         all_articles_path: all_articles.json 文件路径
         model: LLM 模型名称（默认从 config.yaml / ANTHROPIC_MODEL 环境变量读取）
         max_detail: user prompt 中完整展示的文章数
-        max_tokens: Agent max_tokens
+        max_tokens: Agent 输出 token 上限。None 时从 config.yaml llm.models.synthesize.max_tokens
+            解析（兜底 DEFAULT_MAX_TOKENS），再经 CLAUDE_CODE_MAX_OUTPUT_TOKENS 透传给 CLI
         target_date: 目标报告日期（YYYY-MM-DD），None 时由 LLM 自主决定
 
     返回：
         日报 dict（符合 dailyReportSchema 结构，含 specializedBrief）
     """
     model = model or _resolve_default_synthesis_model()
+
+    # 解析输出 token 上限：显式传参 > config.yaml llm.models.synthesize.max_tokens > 兜底。
+    # 此前该值从未透传到 LLM 调用（死代码），大日报会被 CLI 默认输出上限截断
+    if max_tokens is None:
+        max_tokens = get_llm_config("synthesize").get("max_tokens") or DEFAULT_MAX_TOKENS
 
     system_prompt, user_prompt = _build_prompts(
         all_articles_path, max_detail=max_detail, target_date=target_date
@@ -749,6 +755,7 @@ async def run_editor_in_chief(
         max_turns=1,
         max_retries=3,
         initial_delay=2.0,
+        max_tokens=max_tokens,
     )
 
     report = parse_json_response(response_text)
@@ -780,7 +787,7 @@ def run_editor_in_chief_sync(
     *,
     model: Optional[str] = None,
     max_detail: int = DEFAULT_MAX_DETAIL,
-    max_tokens: int = DEFAULT_MAX_TOKENS,
+    max_tokens: Optional[int] = None,
     target_date: Optional[str] = None,
 ) -> dict:
     """同步包装器，方便 CLI 调用。"""

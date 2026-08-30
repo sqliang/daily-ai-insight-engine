@@ -50,7 +50,7 @@ logger = logging.getLogger(__name__)
 # 默认模型的常量定义
 # ---------------------------------------------------------------------------
 # Stage 2 回退模型（在 config.yaml 和 CLI 参数均未指定时使用）
-DEFAULT_MODEL = "deepseek-v4-flash"
+DEFAULT_MODEL = "kimi-k2.6"
 
 
 

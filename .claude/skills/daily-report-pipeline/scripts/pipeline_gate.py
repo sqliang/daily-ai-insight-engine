@@ -171,15 +171,18 @@ def _body_problems(body: str, source: str = "") -> list[str]:
     return problems
 
 
-def _run_cli(args: list[str]) -> tuple[int, str]:
+def _run_cli(args: list[str], timeout: int = 1800) -> tuple[int, str]:
     """
     调用项目 CLI（pipeline/run.py），返回 (returncode, 输出摘要)。
 
     修复动作统一走现有 CLI 而不是直接调内部函数，保证行为与日常流水线完全一致
     （包括 extract/analyze 后的自动 aggregate）。
+
+    timeout 默认 1800s 面向单文件 repair；run_stage 全天执行需显式传更大的值
+    （实测 60+ 篇 × 3 分析维度会超过 30 分钟，2026-08-14 曾因超时中断）。
     """
     cmd = ["uv", "run", "python", "pipeline/run.py"] + args
-    proc = subprocess.run(cmd, cwd=_ROOT, capture_output=True, text=True, timeout=1800)
+    proc = subprocess.run(cmd, cwd=_ROOT, capture_output=True, text=True, timeout=timeout)
     tail = (proc.stdout + proc.stderr).strip().splitlines()
     return proc.returncode, "\n".join(tail[-5:])
 
@@ -480,7 +483,9 @@ def run_stage(stage: str, target: date, max_files: int = 100, allow_large: bool 
         )
 
     # --- 单进程执行（pipeline CLI 内部完成日期过滤 + skip-existing + 一次 aggregate）---
-    code, tail = _run_cli([cfg["cli"], "--target-date", ds])
+    # 超时给 4 小时：analyze 是 3 维度 × 篇数的 LLM 调用，60+ 篇远超默认 1800s；
+    # skip-existing 保证中断后重跑只处理剩余文件，重复执行成本低
+    code, tail = _run_cli([cfg["cli"], "--target-date", ds], timeout=4 * 3600)
 
     _emit(
         {

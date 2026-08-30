@@ -5,6 +5,11 @@
 // 渲染为总洞察报告下的轻量延伸入口。
 // 这里不展开专题摘要和对象列表，避免打断 /dashboard/[date] 的主报告阅读链路。
 // GitHub 与 Product 已恢复；Paper 当前保持关闭，未来有数据后可自然加入入口。
+//
+// 入口存在性判断采用“新字段优先、旧字段兜底”：
+// Stage 4b 偶尔漏输出 githubHighlights/productHighlights（如 2026-08-11 的产品块），
+// 但 projectInsights/productInsights 数据完整，因此入口判断同时认两套字段，
+// 与 src/lib/data/specialized.ts 的 loadGithubBrief/loadProductBrief 读取口径对齐。
 // ============================================================================
 
 import Link from 'next/link';
@@ -39,6 +44,9 @@ interface SpecializedBrief {
   githubHighlights?: GithubHighlights | null;
   productHighlights?: ProductHighlights | null;
   paperHighlights?: PaperHighlights | null;
+  // 新版专题简报字段：入口只需判断存在性，不展开内部结构
+  projectInsights?: unknown | null;
+  productInsights?: unknown | null;
 }
 
 interface SpecializedBriefSectionProps {
@@ -73,7 +81,7 @@ export function SpecializedBriefSection({
 
   const links: InsightLink[] = [];
 
-  if (data.githubHighlights) {
+  if (data.projectInsights || data.githubHighlights) {
     links.push({
       label: "项目洞察",
       href: `/specialized/github/${date}`,
@@ -81,7 +89,7 @@ export function SpecializedBriefSection({
     });
   }
 
-  if (data.productHighlights) {
+  if (data.productInsights || data.productHighlights) {
     links.push({
       label: "产品洞察",
       href: `/specialized/product/${date}`,
