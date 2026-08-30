@@ -7,6 +7,7 @@ published: '2026-08-28'
 created: '2026-08-29'
 manifest_dates:
 - '2026-08-29'
+- '2026-08-30'
 description: 'PLUS: Meta secretly bankrolls the rival it just badmouthed'
 tags:
 - clippings

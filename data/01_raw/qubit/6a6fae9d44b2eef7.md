@@ -7,6 +7,7 @@ published: '2026-08-28'
 created: '2026-08-29'
 manifest_dates:
 - '2026-08-29'
+- '2026-08-30'
 description: 久久不愿来到台前的智元掌舵人
 tags:
 - clippings
