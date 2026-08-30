@@ -9,6 +9,10 @@ manifest_dates:
 - '2026-07-18'
 - '2026-07-19'
 - '2026-07-20'
+- '2026-08-21'
+- '2026-08-22'
+- '2026-08-23'
+- '2026-08-25'
 description: '🦔 PostHog is the leading platform for building self-driving products.
   Our developer tools – AI observability, analytics, session replay, flags, experiments,
   error tracking, logs, and more – capture all the context agents need to diagnose

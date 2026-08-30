@@ -1,0 +1,328 @@
+[
+  {
+    "source_dir": "github-trending",
+    "title": "uber/ADR",
+    "source": "https://github.com/uber/ADR",
+    "author": [],
+    "published": "",
+    "created": "2026-08-05",
+    "manifest_dates": [
+      "2026-08-05"
+    ],
+    "description": "ADR secures enterprise AI agents through observability, security benchmarking, and threat detection. Deployed at Uber.ADR: Agentic AI Detection and Response ADR (Agentic AI Detection and Response) is an enterprise security system for AI agents. It helps organizations secure employee-facing agents such as Cursor, Claude Code, and Codex, as well as customer-facing agents such as AI support agents. ADR is deployed in production at Uber, and the accompanying paper was accepted to MLSys 2026: Paper PDF · Slides PDF How ADR secures enterprise AI agents ADR secures enterprise AI agents through four complementary capabilities: observing agent activity, evaluating defenses, detecting threats, and preventing unsafe actions. ADR Observability: Understand what AI agents are doing and why. In production, ADR captures agent intent, tool use, and execution traces across 7+ AI coding tools on macOS, Linux, and Windows, as well as internal automation and customer-facing support agents. ADR Benchmark: Test agent security under realistic enterprise conditions. ADR-Bench includes 300+ tasks, 133 MCP servers, and coverage of all 17 agent attack techniques. ADR Detection: Detect risky agent behavior efficiently. Its two-tier architecture combines high-recall triage with deeper agentic reasoning for suspicious sessions. ADR Prevention: Stop unsafe actions before they cause harm. This component is not included in the current open-source release. Stay tuned. Repository layout This repository contains the open-source ADR Sensor, ADR-Bench, and ADR Detector described in the paper. The offline ADR Explorer engine, which hardens ADR Detection through pre-deployment red teaming, is not included here. Path ADR component Description Sensor/ ADR Observability Collect and normalize agent telemetry from Claude Code, Cursor, Codex, and others Detection/ ADR Benchmark + Detection Dual-agent detector, 133 MCP servers, 303 benchmark tasks, baselines, figure scripts docs/REPRODUCIBILITY.md Evaluation Step-by-step workflow to reproduce benchmark detection and paper figures Quick start: ADR Detection git clone https://github.com/uber/ADR cd ADR/Detection uv sync export ANTHROPIC_API_KEY=\"...\" OPENAI_API_KEY=\"...\" Default detector is adr (ADR dual-agent). For keyless smoke tests, use --detector llamafirewall (see Detection/README.md). See docs/REPRODUCIBILITY.md for the full evaluation workflow (inflate packed benchmark → run detectors → plot figures). Component documentation: Sensor/README.md: telemetry collection and unified schema Detection/README.md: ADR-Bench, detector baselines, MCP infrastructure Citation @inproceedings{li2026adr, title={ADR: An Agentic Detection System for Enterprise Agentic AI Security}, author={Li, Chenning and Hu, Pan and Xu, Justin and Ozbas, Baris and Liu, Olivia and Van, Caroline and Li, Manxue and Zhou, Wei and Alizadeh, Mohammad and Zhang, Pengyu and Sriramadhesikan, KK and Zhang, Ming}, booktitle={Proceedings of the Ninth Conference on Machine Learning and Systems}, year={2026} } Or use CITATION.cff. License Apache License 2.0. See LICENSE. Detection/benchmark/agentdojo/ is vendored third-party code under its own LICENSE (MIT). Data notice Detection/ includes synthetic benchmark fixtures (fake credentials, emulated environments, prompt-injection scenarios) for defensive security research only. Details: docs/OPEN_SOURCE_REVIEW.md.",
+    "tags": [
+      "clippings"
+    ],
+    "extraction_status": "success",
+    "pipeline_stage": "fact_extracted",
+    "id": "65d8793b2289e139",
+    "source_type": "community_discussion",
+    "tldr": "Uber 开源了 ADR（Agentic AI Detection and Response）企业级 AI 智能体安全系统，该系统已在 Uber 生产环境部署，相关论文被 MLSys 2026 接收。本次开源包含 ADR Sensor、ADR-Bench 与 ADR Detector 三个组件，预防组件未开放。",
+    "objective_summary": "Uber 于 2026 年开源了 ADR（Agentic AI Detection and Response），这是一套面向企业 AI 智能体的安全系统，用于保护员工侧智能体（如 Cursor、Claude Code、Codex）与客户侧智能体（如 AI 客服）。ADR 已在 Uber 生产环境部署，配套论文《ADR: An Agentic Detection System for Enterprise Agentic AI Security》被 MLSys 2026 接收。系统提供观测、基准测试、检测与预防四类能力，其中预防组件未包含在当前开源版本中。本仓库以 Apache License 2.0 协议开源了 ADR Sensor、ADR-Bench 与 ADR Detector 组件。",
+    "event_type": "framework_tools",
+    "epistemic_status": "verified_fact",
+    "entities": {
+      "companies": [
+        "Uber",
+        "Anthropic",
+        "OpenAI"
+      ],
+      "technologies": [
+        "ADR",
+        "MCP",
+        "Agentic AI",
+        "AI Coding Tools"
+      ],
+      "key_people": [
+        "Chenning Li",
+        "Pan Hu",
+        "Justin Xu",
+        "Mohammad Alizadeh",
+        "Ming Zhang"
+      ]
+    },
+    "key_logic_flow": [
+      "Uber 已在其生产环境部署 ADR 系统，用于保护员工侧 AI 编码工具与客户侧 AI 客服等智能体。",
+      "ADR 提供观测、基准测试、检测与预防四项互补能力，对应 ADR Observability、ADR-Bench、ADR Detection 与 ADR Prevention。",
+      "ADR Observability 可在 macOS、Linux、Windows 上捕获 7 种以上 AI 编码工具及内部自动化流程的智能体意图、工具调用与执行轨迹。",
+      "ADR-Bench 包含 300 多个任务与 133 个 MCP 服务器，覆盖全部 17 种智能体攻击技术，用于在真实企业条件下测试智能体安全性。",
+      "ADR Detection 采用两层架构，先用高召回分类器对会话进行分流，再对可疑会话进行深层智能体推理。",
+      "本次开源版本包含 ADR Sensor、ADR-Bench 与 ADR Detector，而预防组件与离线红队引擎 ADR Explorer 未包含在内。"
+    ],
+    "object_mentions": [
+      {
+        "object_type": "project",
+        "name": "uber/ADR",
+        "canonical_name": "uber/ADR",
+        "url": "https://github.com/uber/ADR",
+        "confidence": "high",
+        "article_role": "primary_subject",
+        "evidence_snippets": [
+          "uber/ADR 是 Uber 开源的企业级 AI 智能体安全系统，已在 Uber 生产环境部署，相关论文被 MLSys 2026 接收。",
+          "本仓库以 Apache License 2.0 协议开源了 ADR Sensor、ADR-Bench 与 ADR Detector 三个组件。"
+        ],
+        "article_id": "65d8793b2289e139"
+      },
+      {
+        "object_type": "project",
+        "name": "ADR Sensor",
+        "canonical_name": "ADR Sensor",
+        "url": "https://github.com/uber/ADR/tree/main/Sensor",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "ADR Sensor 负责采集并归一化来自 Claude Code、Cursor、Codex 等工具的智能体遥测数据，是 ADR 可观测性能力的开源实现。"
+        ],
+        "article_id": "65d8793b2289e139"
+      },
+      {
+        "object_type": "project",
+        "name": "ADR-Bench",
+        "canonical_name": "ADR-Bench",
+        "url": "https://github.com/uber/ADR/tree/main/Detection",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "ADR-Bench 是 ADR 的智能体安全基准测试，包含 300 多个任务与 133 个 MCP 服务器，覆盖全部 17 种智能体攻击技术。"
+        ],
+        "article_id": "65d8793b2289e139"
+      },
+      {
+        "object_type": "project",
+        "name": "ADR Detector",
+        "canonical_name": "ADR Detector",
+        "url": "https://github.com/uber/ADR/tree/main/Detection",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "ADR Detector 采用双智能体架构，先用高召回分类器对会话进行分流，再对可疑会话做深层智能体推理，属于本次开源的检测组件。"
+        ],
+        "article_id": "65d8793b2289e139"
+      },
+      {
+        "object_type": "project",
+        "name": "ADR Explorer",
+        "canonical_name": "ADR Explorer",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "ADR Explorer 是用于上线前红队演练的离线引擎，可强化 ADR 检测能力，但未包含在本次开源版本中。"
+        ],
+        "article_id": "65d8793b2289e139"
+      },
+      {
+        "object_type": "paper",
+        "name": "ADR: An Agentic Detection System for Enterprise Agentic AI Security",
+        "canonical_name": "ADR: An Agentic Detection System for Enterprise Agentic AI Security",
+        "confidence": "high",
+        "article_role": "ecosystem_context",
+        "evidence_snippets": [
+          "题为《ADR: An Agentic Detection System for Enterprise Agentic AI Security》的论文被 MLSys 2026 接收，系统已在 Uber 生产环境部署。"
+        ],
+        "article_id": "65d8793b2289e139"
+      },
+      {
+        "object_type": "product",
+        "name": "Cursor",
+        "canonical_name": "Cursor",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Cursor 是 ADR 系统在 Uber 生产环境中保护的一类员工侧 AI 编码工具。"
+        ],
+        "article_id": "65d8793b2289e139"
+      },
+      {
+        "object_type": "product",
+        "name": "Claude Code",
+        "canonical_name": "Claude Code",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Claude Code 是 ADR 系统在 Uber 生产环境中保护的一类员工侧 AI 编码工具。"
+        ],
+        "article_id": "65d8793b2289e139"
+      },
+      {
+        "object_type": "product",
+        "name": "Codex",
+        "canonical_name": "Codex",
+        "confidence": "medium",
+        "article_role": "mentioned_reference",
+        "evidence_snippets": [
+          "Codex 是 ADR 系统在 Uber 生产环境中保护的一类员工侧 AI 编码工具。"
+        ],
+        "article_id": "65d8793b2289e139"
+      }
+    ],
+    "extract_result": "success",
+    "impact_score": {
+      "score": 7.5,
+      "reason": "评分依据：Uber 开源了已在自身生产环境验证的企业级智能体安全系统，包含观测（跨 macOS/Linux/Windows 捕获 7+ 种 AI 编码工具轨迹）、基准（133 个 MCP 服务器、303 个任务、覆盖全部 17 种攻击技术）与检测（双智能体两层架构）三大组件，且配套论文被 MLSys 2026 接收、提供完整可复现工作流。这是来自大型科技公司的首个生产级智能体安全开源框架，直击 agentic AI 规模化落地中的安全空白，很可能改变企业 AI 安全领域的竞争格局，并成为该赛道的参照基准。但尚未达到范式转移级别：预防组件未开源，智能体安全作为新兴领域仍在快速演化中，且开源内容以检测/观测为主，故给予 7.5 分而非更高。"
+    },
+    "sentiment": "positive",
+    "developer_sentiment": {
+      "tone": "excited",
+      "primary_focus": "双智能体检测架构与 ADR-Bench 基准（133 个 MCP 服务器、覆盖全部 17 种攻击技术）能否在真实企业环境中有效检出智能体威胁"
+    },
+    "hype_assessment": {
+      "level": "low",
+      "reason": "判定依据：核心主张均有实打实支撑——Uber 生产部署实例、MLSys 2026 同行评审论文、可运行的 uv 复现流程与论文图表脚本，且仓库坦诚标注预防组件与 ADR Explorer 未包含在当前开源版本中。全文未见'颠覆''革命性'等 PR 滥用词汇，属于干货型发布，不存在概念包装。"
+    },
+    "information_entropy": "high",
+    "domain_disruption": {
+      "technical_innovation": "两层检测架构（高召回分流分类器 + 对可疑会话的深层智能体推理）在工程上是本质突破：跨平台归一化采集 7+ 种 AI 编码工具与内部自动化的智能体意图、工具调用和执行轨迹为统一模式，并以覆盖全部 17 种智能体攻击技术、含 133 个 MCP 服务器的基准测试体系量化检测效果，把智能体安全从点状加固推向可观测、可基准、可检测的系统化工程。",
+      "business_model": "以 Apache 2.0 开源生产级智能体安全系统，可能显著抬升商业 Agentic AI 安全产品的门槛并压缩其差异化空间，同时通过 ADR-Bench 和 MCP 基础设施推动智能体安全评估的标准化，重塑该赛道'卖工具'向'卖深度能力'的竞争逻辑，利好整个 MCP 生态的安全合规演进。"
+    },
+    "engineering_complexity": "production_ready",
+    "compound_value": {
+      "score": 7.5,
+      "reason": "强制CoT推理：第一步看需求是否结构性——智能体安全是 AI 落地企业后必然出现的攻击面，随着 Claude Code/Cursor/Codex 等编码智能体与企业客服智能体规模化部署，'智能体在做什么、为什么这么做'的观测与检测需求是刚性且持续扩张的，不是一次性炒作。第二步看复利来源——ADR 的价值不只是产品，而是'基准+遥测协议+检测器'三件套的组合：ADR-Bench 的 303 个任务与 133 个 MCP 服务器有潜力成为智能体安全的事实评测标准（类比 SWE-bench 对代码智能体的地位），Sensor 的统一遥测 schema 可能演变为智能体观测的事实协议，这类标准的网络效应会自我强化：基准成为标准→更多企业采用→更多数据回流→标准地位巩固。第三步看可信度背书——Uber 生产环境部署 + MLSys 2026 论文接收 + Apache 2.0 开源，三者叠加使其在一众早期智能体安全初创中具备稀缺的真实生产验证。第四步看风险——最高商业价值的预防组件（ADR Prevention）与离线红队引擎未开源，商业化路径不明；开源可能导致碎片化；CrowdStrike/Wiz/云厂商等安全巨头可能后来居上。综合判断处于'细分赛道基础设施'区间的上沿，3-5 年后智能体安全赛道大概率存在，但 ADR 是否能守住标准统治权仍需验证。故给 7.5 分。"
+    },
+    "value_capture_layer": "agent_middleware",
+    "moat_impact": "creates_new_moat",
+    "key_beneficiaries": [
+      "Uber",
+      "Anthropic",
+      "OpenAI",
+      "Anysphere (Cursor)",
+      "智能体安全初创公司",
+      "MCP 生态"
+    ],
+    "competitive_casualty": [
+      "传统 EDR/DLP 厂商（CrowdStrike、Zscaler）",
+      "闭源智能体安全点方案初创",
+      "缺乏智能体遥测能力的 CASB/数据安全厂商"
+    ],
+    "market_opportunities": [
+      "安全厂商可基于开源的 ADR Sensor 与两层检测架构，打造面向企业 AI 编码智能体（Cursor、Claude Code、Codex）的 Agent Security Posture Management（ASPM）产品，并将智能体遥测与现有 SIEM/SOC 工作流打通，形成从观测到告警的闭环。",
+      "ADR-Bench 提供的 300+ 任务、133 个 MCP 服务器及 17 种攻击技术覆盖，可作为智能体安全测试的标准底座，催生'红队评估/合规检测即服务'的第三方业务，帮助企业在采购和上线 AI 智能体前完成安全验收。",
+      "企业内部安全团队可参考 ADR 的'高召回分流 + 深层智能体推理'两级检测范式，在已大规模落地的编码智能体场景中快速搭建行为审计、异常告警与离职/权限风险管控能力，降低对单一厂商封闭方案的依赖。"
+    ],
+    "risk_matrix": {
+      "regulatory": "智能体遥测涉及员工行为数据采集，需评估欧盟 GDPR、中国《个人信息保护法》（PIPL）等对员工监控的合规边界；随着欧盟 AI Act 等法规落地，企业部署智能体安全系统可能被纳入高风险 AI 系统的合规义务范围。",
+      "technological": "检测类方案本质是攻击与检测的军备竞赛，当前覆盖的 17 种攻击技术清单可能快速过时，新型越狱、多步提示注入与工具链滥用手段可能绕过两层检测器；同时运行时沙箱、MCP 权限策略、最小权限编排等替代技术路线可能挤压'检测中心'方案的生存空间。",
+      "competitive": "Microsoft、Palo Alto、CrowdStrike、Wiz 等安全巨头及云厂商正加速布局 AI 智能体安全，Uber 并非专业安全厂商，其开源项目在生态运营、检测能力迭代与商业化变现上可能被专业厂商快速反超或边缘化。",
+      "ethical": "Sensor 持续捕获员工智能体的意图、工具调用与执行轨迹，存在工作场所监控与隐私争议；'风险行为'检测模型的判定标准可能引入偏见并产生误伤；基准中包含的合成越狱与提示注入场景若被恶意复用，可能助长攻击技术扩散。",
+      "additional": [
+        "开源版本刻意排除 Prevention 组件与离线红队引擎 ADR Explorer，采用者只能获得'检测'能力而缺乏'响应'闭环，实际落地存在能力缺口，需自行补齐防护层。",
+        "仓库内包含合成的伪造凭证、模拟环境与提示注入测试数据，尽管声明仅限防御性安全研究用途，仍存在被滥用或引发争议的潜在风险。"
+      ]
+    },
+    "confidence": {
+      "impact": "high",
+      "compound": "medium",
+      "hype": "high"
+    },
+    "actionable_insight": "deep_dive",
+    "object_insights": [
+      {
+        "object_type": "project",
+        "name": "uber/ADR",
+        "canonical_name": "uber/ADR",
+        "url": "https://github.com/uber/ADR",
+        "positioning": "企业级 AI 智能体安全系统，通过观测、基准测试、检测与预防四类能力保护员工侧与客户侧智能体，已在 Uber 生产环境部署。",
+        "technical_signal": "ADR Observability 可在 macOS、Linux、Windows 上捕获 7 种以上 AI 编码工具的智能体意图、工具调用与执行轨迹，检测层采用高召回分流加深层智能体推理的两层架构。",
+        "adoption_signal": "该系统已在 Uber 生产环境部署，用于保护员工侧 Cursor、Claude Code、Codex 等编码工具与客户侧 AI 客服智能体。",
+        "ecosystem_relevance": "以 Apache License 2.0 开源 ADR Sensor、ADR-Bench 与 ADR Detector，配套论文被 MLSys 2026 接收，填补企业级智能体安全开源空白。",
+        "target_users": [],
+        "watch_reason": "ADR 是极少数已在大型科技企业生产环境验证的 AI 智能体安全系统，其开源将企业级检测方案带入社区，配套 300+ 任务基准与 17 种攻击技术覆盖，有望成为企业 AI 安全的事实标准参考。",
+        "risk_notes": [
+          "预防组件 ADR Prevention 未包含在当前开源版本中，防御能力不完整，实际防护依赖闭源能力或后续发布。",
+          "基准测试包含合成凭证与提示注入等攻击场景，仅用于防御研究，使用或再发布存在安全合规风险。",
+          "项目由 Uber 内部驱动开源，社区治理、外部贡献与长期维护投入仍存在不确定性。"
+        ],
+        "score": 9.0,
+        "article_ids": [
+          "65d8793b2289e139"
+        ],
+        "evidence_snippets": [
+          "uber/ADR 是 Uber 开源的企业级 AI 智能体安全系统，已在 Uber 生产环境部署，相关论文被 MLSys 2026 接收。",
+          "本仓库以 Apache License 2.0 协议开源了 ADR Sensor、ADR-Bench 与 ADR Detector 三个组件。"
+        ]
+      },
+      {
+        "object_type": "project",
+        "name": "ADR Explorer",
+        "canonical_name": "ADR Explorer",
+        "positioning": "用于智能体上线前红队演练的离线安全引擎，通过模拟攻击强化 ADR 检测能力，是 ADR 安全体系的前置校验组件。",
+        "technical_signal": "该引擎聚焦上线前红队演练，以离线方式模拟攻击并强化 ADR 检测能力，与生产环境实时检测形成互补。",
+        "target_users": [],
+        "watch_reason": "ADR Explorer 代表 ADR 体系中闭环的红队演练能力，本次未随开源版本发布，未来若与预防组件一同开放将显著补全企业智能体安全防线，其发布动向值得跟踪。",
+        "risk_notes": [
+          "该组件未包含在本次开源版本中，社区无法验证其实际检测与强化效果。"
+        ],
+        "score": 4.0,
+        "article_ids": [
+          "65d8793b2289e139"
+        ],
+        "evidence_snippets": [
+          "ADR Explorer 是用于上线前红队演练的离线引擎，可强化 ADR 检测能力，但未包含在本次开源版本中。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Cursor",
+        "canonical_name": "Cursor",
+        "positioning": "AI 代码编辑器，作为员工侧 AI 编码工具被 Uber 的 ADR 安全系统纳入保护范围，是智能体安全治理的观测对象。",
+        "target_users": [
+          "软件开发者"
+        ],
+        "product_signal": "Cursor 是 ADR 系统在 Uber 生产环境中保护的一类员工侧 AI 编码工具，其工具调用与执行轨迹会被统一采集与监控。",
+        "watch_reason": "Cursor 作为被 Uber 生产环境安全体系纳入观测的 AI 编码工具，反映主流编码智能体已成为企业安全治理的现实对象，其与 ADR 等检测系统的协同演进值得长期跟踪。",
+        "risk_notes": [
+          "作为提及对象，缺乏独立的产品功能与市场信息，本洞察仅基于 ADR 生态视角。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "65d8793b2289e139"
+        ],
+        "evidence_snippets": [
+          "Cursor 是 ADR 系统在 Uber 生产环境中保护的一类员工侧 AI 编码工具。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Claude Code",
+        "canonical_name": "Claude Code",
+        "positioning": "AI 编程智能体，作为员工侧编码工具被 Uber 的 ADR 企业安全系统纳入保护范围，是智能体安全治理的观测对象。",
+        "target_users": [
+          "软件开发者"
+        ],
+        "product_signal": "Claude Code 是 ADR 系统在 Uber 生产环境中保护的一类员工侧 AI 编码工具，其智能体意图与执行轨迹会被统一采集分析。",
+        "watch_reason": "Claude Code 作为被 Uber 生产环境安全系统直接观测的编码智能体，其行为采集与检测方式可反映主流 AI 编程工具在企业环境中的安全暴露面，值得作为安全生态样本持续跟踪。",
+        "risk_notes": [
+          "作为提及对象，缺乏独立的产品功能与市场信息，本洞察仅基于 ADR 生态视角。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "65d8793b2289e139"
+        ],
+        "evidence_snippets": [
+          "Claude Code 是 ADR 系统在 Uber 生产环境中保护的一类员工侧 AI 编码工具。"
+        ]
+      },
+      {
+        "object_type": "product",
+        "name": "Codex",
+        "canonical_name": "Codex",
+        "positioning": "企业级 AI 编程智能体，作为员工侧编码工具被 Uber 的 ADR 安全系统纳入保护范围，是智能体安全观测的目标对象。",
+        "target_users": [
+          "软件开发者"
+        ],
+        "product_signal": "Codex 是 ADR 系统在 Uber 生产环境中保护的一类员工侧 AI 编码工具，其智能体意图与工具调用会被统一捕获分析。",
+        "watch_reason": "Codex 作为被 Uber 生产环境安全系统观测的编码智能体，其企业场景下的安全防护经验可作为衡量 AI 编程工具安全成熟度的参照，值得持续跟踪其在安全生态中的演进。",
+        "risk_notes": [
+          "作为提及对象，缺乏独立的产品功能与市场信息，本洞察仅基于 ADR 生态视角。"
+        ],
+        "score": 3.0,
+        "article_ids": [
+          "65d8793b2289e139"
+        ],
+        "evidence_snippets": [
+          "Codex 是 ADR 系统在 Uber 生产环境中保护的一类员工侧 AI 编码工具。"
+        ]
+      }
+    ]
+  }
+]

@@ -63,6 +63,10 @@ tags:
 extraction_status: success
 pipeline_stage: ingested
 id: 82a901da1b9bedec
+manifest_dates:
+- '2026-06-01'
+- '2026-08-12'
+- '2026-08-14'
 ---
 
 Note:This repository contains Anthropic's implementation of skills for Claude. For information about the Agent Skills standard, see agentskills.io.
