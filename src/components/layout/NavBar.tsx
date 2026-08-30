@@ -37,11 +37,14 @@ export function NavBar() {
         {/* Nav links */}
         <div className="flex items-center">
           {links.map(({ href, label }) => {
-            // / 匹配首页和 /sources/* 子路由；/dashboard 匹配卡片列表和 /dashboard/[date] 子路由
+            // / 匹配首页和 /sources/* 子路由；/dashboard 匹配卡片列表、/dashboard/[date]
+            // 以及 /specialized/* 专题洞察页（同属洞察报告体系）
             const active =
               href === "/"
                 ? pathname === "/" || pathname.startsWith("/sources/")
-                : pathname === href || pathname.startsWith(href + "/");
+                : pathname === href ||
+                  pathname.startsWith(href + "/") ||
+                  pathname.startsWith("/specialized/");
             return (
               <Link
                 key={href}
