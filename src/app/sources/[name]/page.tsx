@@ -47,18 +47,15 @@ export default async function SourceDetailPage({
   // 日期范围计算：
   //   preset=latest  → 不筛选，仅加载最新 manifest（无 archive 分片）
   //   有 from/to  → 显式日期范围（兼容旧 URL 和书签）
-  //   无参数       → 默认最近 7 天
+  //   无参数       → 默认「全部」（from=2000-01-01，触发 archive 冷数据加载）
   const dateRange: DateRange | undefined = (() => {
     if (sp.preset === "latest") return undefined;
     if (sp.from || sp.to) return { from: sp.from, to: sp.to };
-    // 默认最近7天
+    // 默认全部：覆盖热数据 + 全部 archive 分片
     const pad = (n: number) => String(n).padStart(2, "0");
     const today = new Date();
     const to = `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(today.getDate())}`;
-    const fromDate = new Date(today);
-    fromDate.setDate(fromDate.getDate() - 14);
-    const from = `${fromDate.getFullYear()}-${pad(fromDate.getMonth() + 1)}-${pad(fromDate.getDate())}`;
-    return { from, to };
+    return { from: "2000-01-01", to };
   })();
 
   // 分页 + 排序均在服务端完成：排序必须先于切片，否则跨页顺序错乱

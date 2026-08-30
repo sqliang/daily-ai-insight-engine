@@ -30,16 +30,6 @@ interface DashboardSearchParams {
 }
 
 // ---------------------------------------------------------------------------
-// 默认日期范围（近 15 天）
-// ---------------------------------------------------------------------------
-
-function defaultDateRange(): DateRange {
-  const to = new Date().toISOString().slice(0, 10);
-  const from = new Date(Date.now() - 14 * 86400000).toISOString().slice(0, 10);
-  return { from, to };
-}
-
-// ---------------------------------------------------------------------------
 // Page
 // ---------------------------------------------------------------------------
 
@@ -50,14 +40,12 @@ export default async function DashboardPage({
 }) {
   const sp = await searchParams;
 
-  // 日期范围：from/to 优先 → preset=latest 无限定 → 默认半个月
+  // 日期范围：有 from/to → 显式范围；否则（含默认与 preset=latest）→ 不限定，显示全部
   let dateRange: DateRange | undefined;
   if (sp.from || sp.to) {
     dateRange = { from: sp.from, to: sp.to };
-  } else if (sp.preset !== "latest") {
-    dateRange = defaultDateRange();
   }
-  // preset=latest → dateRange=undefined，显示全部
+  // 默认「全部」：dateRange=undefined，listReports 不做日期过滤
 
   // 服务端分页：仅解析当前页命中的日报 JSON，避免全量 parse 导致卡顿
   const { reports, totalCount, page, totalPages, oldestDate, latestDate } =
