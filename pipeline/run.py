@@ -12,7 +12,8 @@ pipeline/run.py — Daily AI Insight Engine 管道入口
     uv run python pipeline/run.py extract            Stage 2: 元信息与事实提取 (自动 aggregate)
     uv run python pipeline/run.py analyze            Stage 3: 深度分析 (自动 aggregate)
     uv run python pipeline/run.py aggregate          Stage 4a: Frontmatter 聚合 (独立运行，用于配置变更)
-    uv run python pipeline/run.py synthesize         Stage 4b: 日报合成
+    uv run python pipeline/run.py synthesize         Stage 4b: 日报合成 (成功后自动 publish)
+    uv run python pipeline/run.py publish            Stage 5: 发布站点数据到 PostgreSQL
 
 修复子命令（自动发现并修复失败文章）：
     uv run python pipeline/run.py repair             Stage 1c: 自动修复 ingest 失败的文章
@@ -293,6 +294,11 @@ if __name__ == "__main__":
   uv run python pipeline/run.py aggregate --target-date 2026-06-10  精确日期回溯
   uv run python pipeline/run.py synthesize --dry-run        Stage 4b: 显示 prompt 预估
   uv run python pipeline/run.py synthesize --target-date 2026-06-10  回溯历史日报
+
+发布到 PostgreSQL（synthesize 成功后自动执行）:
+  uv run python pipeline/run.py publish                     Stage 5: 发布站点数据（热数据）
+  uv run python pipeline/run.py publish --force             全量历史 backfill（含 archive 冷数据）
+  uv run python pipeline/run.py publish --target-date 2026-06-10  只发指定日期
         """,
     )
     parser.add_argument(
@@ -309,6 +315,7 @@ if __name__ == "__main__":
     from pipeline.analysis.cli import register_subparser as _reg_analyze
     from pipeline.synthesis.cli import register_aggregate_subparser as _reg_aggregate
     from pipeline.synthesis.cli import register_synthesize_subparser as _reg_synthesize
+    from pipeline.publish.cli import register_subparser as _reg_publish
 
     _reg_scout(subparsers)
     _reg_ingest(subparsers)
@@ -317,6 +324,7 @@ if __name__ == "__main__":
     _reg_analyze(subparsers)
     _reg_aggregate(subparsers)
     _reg_synthesize(subparsers)
+    _reg_publish(subparsers)
     _register_repair(subparsers)  # 自动修复 ingest 失败的文章
     _register_extract_repair(subparsers)  # 自动修复 extract 失败的文章
     _register_schedule_status(subparsers)  # 定时任务状态查询（在 run.py 内定义）

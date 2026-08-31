@@ -118,6 +118,19 @@ def synthesize_report(
     print(f"  风险信号:   {len(report.get('riskSignals', []))}")
     print(f"  机会信号:   {len(report.get('opportunitySignals', []))}")
 
+    # --- 自动发布到 PostgreSQL（Stage 5） ---
+    # 参照 analyze/extract 完成后自动 aggregate 的模式：日报落盘后即同步站点数据。
+    # 失败只记 warning 不阻断——日报文件已成功落盘，DB 发布可随时用
+    # `run.py publish` 幂等重试，不应反过来让 synthesize 失败。
+    try:
+        from ..publish.publishers import publish_all
+
+        stats = publish_all(include_archive=False)
+        print(f"\n  自动发布: reports={stats['reports']} manifests={stats['manifests']} articles={stats['articles']}")
+    except Exception as exc:
+        logger.warning("自动 publish 失败（不影响日报生成，可用 run.py publish 重试）: %s", exc)
+        print(f"\n  ⚠️ 自动发布到 PostgreSQL 失败（日报已正常生成）: {exc}")
+
     return report
 
 
