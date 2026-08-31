@@ -1,21 +1,17 @@
 // ============================================================================
-// sources/manifests.ts — Manifest 文件加载、合并和 URL 规范化
+// sources/manifests.ts — Manifest 加载、合并和 URL 规范化
 //
-// 负责读取 data/00_manifest/ 目录下的 JSON 文件，解析并校验 manifest
-// schema，按 source 分组去重（保留最新的 manifest），以及跨 manifest
-// 的文章合并。
+// 从 PostgreSQL manifests 表（pipeline Stage 5 publish 写入）读取 manifest
+// payload，按 source 分组去重（保留最新的 manifest），以及跨 manifest
+// 的文章合并。URL 规范化与合并逻辑为纯函数，与存储层无关。
 // ============================================================================
 
-import { readFile, readdir } from "node:fs/promises";
-import { join } from "node:path";
+import { eq, sql } from "drizzle-orm";
 import { z } from "zod";
+
+import { getDb } from "@/lib/db/client";
+import { manifests as manifestsTable } from "@/lib/db/schema";
 import { manifestSchema } from "./types";
-
-// ---------------------------------------------------------------------------
-// 路径常量
-// ---------------------------------------------------------------------------
-
-const MANIFEST_DIR = join(process.cwd(), "data/00_manifest");
 
 // ---------------------------------------------------------------------------
 // URL 规范化
@@ -41,46 +37,44 @@ export function normalizeUrl(url: string): string {
 /**
  * 加载所有 source 的最新 manifest。
  *
- * 扫描 data/00_manifest/ 目录，对每个 source 只保留 generated_at 最新
- * 的那份 manifest。
+ * 查询 manifests 表，对每个 source 只保留 generated_at 最新
+ * 的那份 manifest（DISTINCT ON + 降序）。
  *
  * 返回：
- *     Map<source名称, manifest数据>，目录不存在或为空时返回空 Map
+ *     Map<source名称, manifest数据>，表为空时返回空 Map
  */
 export async function loadManifests(): Promise<
   Map<string, z.infer<typeof manifestSchema>>
 > {
-  const manifests = new Map<string, z.infer<typeof manifestSchema>>();
-  let entries: string[];
-  try {
-    entries = await readdir(MANIFEST_DIR);
-  } catch {
-    return manifests;
-  }
+  const db = getDb();
+  const rows = await db
+    .selectDistinctOn([manifestsTable.source], {
+      source: manifestsTable.source,
+      payload: manifestsTable.payload,
+    })
+    .from(manifestsTable)
+    // generated_at 可能为空（历史数据缺字段），NULLS LAST 保证有效值优先
+    .orderBy(
+      manifestsTable.source,
+      sql`${manifestsTable.generatedAt} DESC NULLS LAST`,
+    );
 
-  for (const filename of entries) {
-    if (!filename.endsWith(".json")) continue;
-    const sourceName = filename.replace(/_\d{4}-\d{2}-\d{2}\.json$/, "");
+  const result = new Map<string, z.infer<typeof manifestSchema>>();
+  for (const row of rows) {
     try {
-      const raw = await readFile(join(MANIFEST_DIR, filename), "utf8");
-      const data = manifestSchema.parse(JSON.parse(raw));
-      // Keep only the newest manifest per source
-      const existing = manifests.get(sourceName);
-      if (!existing || data.generated_at > existing.generated_at) {
-        manifests.set(sourceName, data);
-      }
+      result.set(row.source, manifestSchema.parse(row.payload));
     } catch {
-      // Skip malformed manifest files silently
+      // 跳过校验失败的行（数据损坏或格式不兼容）
     }
   }
-  return manifests;
+  return result;
 }
 
 /**
  * 加载指定 source 的所有历史 manifest（按 generated_at 降序排列）。
  *
  * 参数：
- *     sourceName: source 名称，对应 manifest 文件名前缀
+ *     sourceName: source 名称
  *
  * 返回：
  *     manifest 数组，按 generated_at 降序排列
@@ -88,28 +82,22 @@ export async function loadManifests(): Promise<
 export async function loadManifestsForSource(
   sourceName: string,
 ): Promise<z.infer<typeof manifestSchema>[]> {
-  const manifests: z.infer<typeof manifestSchema>[] = [];
-  let entries: string[];
-  try {
-    entries = await readdir(MANIFEST_DIR);
-  } catch {
-    return manifests;
-  }
+  const db = getDb();
+  const rows = await db
+    .select({ payload: manifestsTable.payload })
+    .from(manifestsTable)
+    .where(eq(manifestsTable.source, sourceName))
+    .orderBy(sql`${manifestsTable.generatedAt} DESC NULLS LAST`);
 
-  const prefix = `${sourceName}_`;
-  for (const filename of entries) {
-    if (!filename.startsWith(prefix) || !filename.endsWith(".json")) continue;
+  const result: z.infer<typeof manifestSchema>[] = [];
+  for (const row of rows) {
     try {
-      const raw = await readFile(join(MANIFEST_DIR, filename), "utf8");
-      const data = manifestSchema.parse(JSON.parse(raw));
-      manifests.push(data);
+      result.push(manifestSchema.parse(row.payload));
     } catch {
-      // Skip malformed manifest files silently
+      // 跳过校验失败的行
     }
   }
-
-  manifests.sort((a, b) => b.generated_at.localeCompare(a.generated_at));
-  return manifests;
+  return result;
 }
 
 // ---------------------------------------------------------------------------
