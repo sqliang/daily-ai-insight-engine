@@ -18,11 +18,11 @@ export default function DashboardError({
       <div className="rounded-xl border border-line bg-panel p-8 text-center shadow-sm">
         <h2 className="text-lg font-bold text-foreground">仪表板渲染失败</h2>
         <p className="mt-3 max-w-md mx-auto text-sm leading-relaxed text-muted">
-          日报数据可能不完整或格式异常，导致仪表板组件渲染失败。请确认数据文件
+          日报数据可能不完整或格式异常，导致仪表板组件渲染失败。请确认数据库
           <code className="mx-1 rounded bg-muted px-1.5 py-0.5 font-mono text-xs">
-            data/05_reports/daily-report.json
+            daily_reports
           </code>
-          结构完整，或重新运行数据管道。
+          表中对应日期的数据结构完整，或重新运行数据管道与 publish。
         </p>
         <p className="mt-2 font-mono text-xs text-muted">
           {error.message}

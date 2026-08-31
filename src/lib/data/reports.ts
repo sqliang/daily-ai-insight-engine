@@ -1,23 +1,19 @@
 // ============================================================================
 // reports.ts — 日报数据访问层
 //
-// 提供日报列表扫描和按日期读取的能力，供 /dashboard（卡片列表）、
+// 提供日报列表和按日期读取的能力，供 /dashboard（卡片列表）、
 // /dashboard/[date]（可视化仪表盘）、/report/[date]（Markdown 全文）消费。
 //
-// 文件命名约定：daily-report-{YYYY-MM-DD}.json / .md
-// daily-report.json / .md 为最新版（管道 Stage 4b 写入），不在列表中返回。
+// 数据源：PostgreSQL daily_reports 表（由 pipeline Stage 5 publish 写入）。
 // ============================================================================
 
-import { readFile, readdir } from "node:fs/promises";
-import { join } from "node:path";
+import { and, desc, eq, gte, inArray, lte } from "drizzle-orm";
 
 import { dailyReportSchema, type DailyReport } from "@/lib/agent/schema";
 import type { DateRange } from "@/lib/data/types";
+import { getDb } from "@/lib/db/client";
+import { dailyReports } from "@/lib/db/schema";
 import { paginate } from "@/lib/utils/pagination";
-
-// 日报文件命名前缀，用于识别和解析文件名中的日期
-const REPORT_PREFIX = "daily-report-";
-const REPORT_SUFFIX = ".json";
 
 // ============================================================================
 // 类型定义
@@ -128,17 +124,14 @@ export interface ListReportsResult {
 }
 
 /**
- * 扫描 data/05_reports/ 目录，分页列出历史日报摘要。
+ * 查询日报日期列表（按日期范围过滤 + 降序排序）。
  *
  * 两阶段实现（性能考虑）：
- *   1. 仅根据文件名做格式校验 + 日期范围过滤 + 降序排序 —— 零 JSON 解析，
+ *   1. 仅查 date 列做范围过滤与排序 —— 不搬运 JSONB，
  *      totalCount 与 oldest/latest 日期都在这一阶段得出
- *   2. 只对当前页 slice 命中的文件做 read + Zod parse
- * 全量范围（"全部"预设）下，旧实现需解析目录内每一个日报 JSON（44+ 个、
- * 共数 MB）才能渲染卡片列表，是 /dashboard 卡顿的根因之一。
- *
- * 仅匹配 daily-report-{YYYY-MM-DD}.json 格式的文件，
- * 排除 daily-report.json（最新版管道输出）。
+ *   2. 只对当前页 slice 命中的日期取整行 JSONB + Zod parse
+ * 全量范围（"全部"预设）下，旧文件实现需解析目录内每一个日报 JSON
+ * （44+ 个、共数 MB）才能渲染卡片列表，是 /dashboard 卡顿的根因之一。
  *
  * 参数：
  *   dateRange:  可选日期范围过滤
@@ -148,45 +141,21 @@ export async function listReports(
   dateRange?: DateRange,
   pagination?: ListReportsPagination,
 ): Promise<ListReportsResult> {
-  const reportsDir = join(process.cwd(), "data/05_reports");
-  let entries: string[];
+  const db = getDb();
 
-  try {
-    entries = await readdir(reportsDir);
-  } catch {
-    entries = []; // 目录不存在，按空列表处理
-  }
+  // ---- 阶段 1：date 列级过滤与排序（不搬运 JSONB） ----
+  const conditions = [];
+  if (dateRange?.from) conditions.push(gte(dailyReports.date, dateRange.from));
+  if (dateRange?.to) conditions.push(lte(dailyReports.date, dateRange.to));
 
-  // ---- 阶段 1：文件名级别的过滤与排序（零 JSON 解析） ----
-  const dates: string[] = [];
-  for (const filename of entries) {
-    // 仅匹配 daily-report-YYYY-MM-DD.json，排除 daily-report.json
-    if (!filename.startsWith(REPORT_PREFIX) || !filename.endsWith(REPORT_SUFFIX)) {
-      continue;
-    }
+  const dateRows = await db
+    .select({ date: dailyReports.date })
+    .from(dailyReports)
+    .where(conditions.length > 0 ? and(...conditions) : undefined)
+    .orderBy(desc(dailyReports.date));
+  const dates = dateRows.map((r) => r.date);
 
-    const date = filename.slice(
-      REPORT_PREFIX.length,
-      filename.length - REPORT_SUFFIX.length,
-    );
-    // 日期格式校验：YYYY-MM-DD
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
-      continue;
-    }
-
-    // 日期范围过滤
-    if (dateRange) {
-      if (dateRange.from && date < dateRange.from) continue;
-      if (dateRange.to && date > dateRange.to) continue;
-    }
-
-    dates.push(date);
-  }
-
-  // 按日期降序排列（最新在前）
-  dates.sort((a, b) => b.localeCompare(a));
-
-  // ---- 阶段 2：仅解析当前页 slice 命中的文件 ----
+  // ---- 阶段 2：仅取当前页 slice 命中的行 ----
   // 未传分页参数时以 totalCount 为页大小，退化为全量返回（兼容旧行为）
   const paged = paginate(
     dates,
@@ -194,14 +163,21 @@ export async function listReports(
     pagination?.pageSize ?? Math.max(dates.length, 1),
   );
 
+  const reportRows = paged.items.length
+    ? await db
+        .select({ date: dailyReports.date, report: dailyReports.report })
+        .from(dailyReports)
+        .where(inArray(dailyReports.date, paged.items))
+    : [];
+  // inArray 不保证返回顺序，按 date 建索引后按分页顺序重组
+  const byDate = new Map(reportRows.map((r) => [r.date, r.report]));
+
   const summaries: ReportSummary[] = [];
   for (const date of paged.items) {
+    const raw = byDate.get(date);
+    if (raw === undefined) continue;
     try {
-      const raw = await readFile(
-        join(reportsDir, `${REPORT_PREFIX}${date}${REPORT_SUFFIX}`),
-        "utf8",
-      );
-      const report = dailyReportSchema.parse(JSON.parse(raw));
+      const report = dailyReportSchema.parse(raw);
       summaries.push({
         date,
         reportTitle: report.reportTitle,
@@ -212,7 +188,7 @@ export async function listReports(
         specialized: detectSpecializedAvailability(report),
       });
     } catch {
-      // 跳过解析失败的文件（数据损坏或格式不兼容）
+      // 跳过解析失败的行（数据损坏或格式不兼容）
     }
   }
 
@@ -237,15 +213,18 @@ export async function listReports(
  *   DailyReport 或 null（该日期无报告或解析失败）
  */
 export async function getReport(date: string): Promise<DailyReport | null> {
-  const filePath = join(
-    process.cwd(),
-    "data/05_reports",
-    `daily-report-${date}.json`,
-  );
+  const db = getDb();
+  const rows = await db
+    .select({ report: dailyReports.report })
+    .from(dailyReports)
+    .where(eq(dailyReports.date, date))
+    .limit(1);
+
+  const raw = rows[0]?.report;
+  if (raw === undefined) return null;
 
   try {
-    const raw = await readFile(filePath, "utf8");
-    return dailyReportSchema.parse(JSON.parse(raw));
+    return dailyReportSchema.parse(raw);
   } catch {
     return null;
   }
@@ -254,34 +233,31 @@ export async function getReport(date: string): Promise<DailyReport | null> {
 /**
  * 读取指定日期的日报 Markdown 全文。
  *
- * 优先读取 daily-report-{date}.md（管道直接产出），
- * 不存在时降级为 JSON → generateMarkdown() 转换。
+ * 优先读取 daily_reports.report_md（管道 Stage 4b 产出、publish 入库），
+ * 为空时降级为 report JSON → generateMarkdown() 转换。
  *
  * 参数：
  *   date: 日报日期，格式 YYYY-MM-DD
  *
  * 返回：
- *   Markdown 字符串或 null（该日期无任何报告文件）
+ *   Markdown 字符串或 null（该日期无报告）
  */
 export async function getReportMarkdown(date: string): Promise<string | null> {
-  const reportsDir = join(process.cwd(), "data/05_reports");
-  const mdPath = join(reportsDir, `daily-report-${date}.md`);
+  const db = getDb();
+  const rows = await db
+    .select({ reportMd: dailyReports.reportMd })
+    .from(dailyReports)
+    .where(eq(dailyReports.date, date))
+    .limit(1);
 
-  // 优先读取 .md 文件
-  try {
-    const raw = await readFile(mdPath, "utf8");
-    // 去除 YAML frontmatter（--- ... ---）
-    return raw.replace(/^---[\s\S]*?---\n*/, "").trimStart();
-  } catch {
-    // .md 不存在，降级为 JSON 转换
-  }
+  // 优先返回入库的 .md 全文（publish 时已剥离 YAML frontmatter）
+  const md = rows[0]?.reportMd;
+  if (md) return md;
 
   // JSON → Markdown 降级
   const report = await getReport(date);
   if (!report) return null;
 
   const { generateMarkdown } = await import("@/lib/report/generate-markdown");
-  return generateMarkdown(report)
-    .replace(/^---[\s\S]*?---\n*/, "")
-    .trimStart();
+  return generateMarkdown(report);
 }

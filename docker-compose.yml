@@ -1,0 +1,29 @@
+# ---------------------------------------------------------------------------
+# 本地开发用 PostgreSQL — 站点数据（日报 / manifest / 文章结构化字段）存储
+#
+# 仅用于本地开发与调试；生产环境使用 Neon（Vercel 环境变量 DATABASE_URL）。
+# 启动：docker compose up -d；连接串见 .env 的 DATABASE_URL。
+# ---------------------------------------------------------------------------
+
+services:
+  postgres:
+    image: postgres:17
+    container_name: ai-insight-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres # 仅本地开发使用，非生产凭据
+      POSTGRES_DB: ai_insight
+    ports:
+      # 宿主机 5432 已被其他进程占用，映射到 5433（.env 的 DATABASE_URL 需同步）
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data # 命名卷持久化，容器重建不丢数据
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d ai_insight"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  pgdata:

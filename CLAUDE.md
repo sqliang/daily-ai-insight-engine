@@ -4,18 +4,18 @@ This file provides guidance to AI coding agents (Claude Code, Cursor, Copilot, e
 
 ## Architecture
 
-This is a **dual-language** project: a Python offline pipeline ingests 26 AI information sources (23 active) through a 6-stage Map/Reduce process (5 runnable commands — aggregate auto-executes after extract and analyze), and a Next.js 16 App Router dashboard renders the final daily report as interactive charts.
+This is a **dual-language** project: a Python offline pipeline ingests 26 AI information sources (23 active) through a 6-stage Map/Reduce process (6 runnable commands — aggregate auto-executes after extract and analyze, publish auto-executes after synthesize), and a Next.js 16 App Router dashboard renders the final daily report as interactive charts.
 
-**Data flow:** `26 RSS/scrape/browser sources → Stage 1a (scout URL manifests) → Stage 1b (ingest content download, with browser fallback for anti-bot pages) → Stage 2 (extract facts + source-aware specialized tags for projects/papers/products) → Stage 3 (3-dimension analysis × concurrency + project/paper/product deep analysis) → Stage 4a (aggregate frontmatter JSON + hot/cold split) → Stage 4b (Editor-in-Chief synthesis: daily report + project/paper/product specialized briefs) → Next.js reads JSON directly from disk`
+**Data flow:** `26 RSS/scrape/browser sources → Stage 1a (scout URL manifests) → Stage 1b (ingest content download, with browser fallback for anti-bot pages) → Stage 2 (extract facts + source-aware specialized tags for projects/papers/products) → Stage 3 (3-dimension analysis × concurrency + project/paper/product deep analysis) → Stage 4a (aggregate frontmatter JSON + hot/cold split) → Stage 4b (Editor-in-Chief synthesis: daily report + project/paper/product specialized briefs) → Stage 5 (publish: upsert reports/manifests/articles from data/ into PostgreSQL via psycopg, idempotent ON CONFLICT upsert, no LLM calls, auto-executes after synthesize) → Next.js reads from PostgreSQL via Drizzle`
 
 **Key design:**
-- The pipeline and frontend are **decoupled by JSON files on disk**. The Next.js server reads `data/05_reports/daily-report.json` via `node:fs` at request time — no database, no API layer. Sources page reads `pipeline/config.yaml` + `data/00_manifest/*.json` via `src/lib/data/sources.ts`.
+- The pipeline and frontend are **decoupled by PostgreSQL**. The Next.js server reads `daily_reports` / `manifests` / `articles` tables via Drizzle (`src/lib/db/`, postgres.js driver) at request time — no API layer. Local `data/` files remain the pipeline's working storage (and the only place with full article bodies) but are no longer read by the site. `pipeline/config.yaml` + `pipeline/tiers.yaml` remain file-based: they are the pipeline's source of truth and ship with the repo, so the frontend keeps reading them from disk. Local dev uses Docker Compose PostgreSQL (`docker compose up -d`, port 5433); production uses Neon (Vercel env `DATABASE_URL`).
 - **Dual schema contract:** Python side uses Pydantic v2 (in `pipeline/schemas/`), TypeScript side uses Zod (in `src/lib/agent/schema.ts`). Both describe the same data shapes.
 - All pipeline stages support `--skip-existing` (idempotent) and `--force` (reprocess).
 - **Multi-stage aggregate:** Stage 4a `aggregate` scans `data/01_raw/` + `data/02_extracted/` + `data/03_analyzed/` by default, deduplicating by `(source, article_id)` with priority `03 > 02 > 01`. This ensures per-source JSONs contain every article at its latest processing stage, regardless of which pipeline stage triggered aggregate. See "Aggregate Stage Design" section below for details.
-- **Hot/cold data split:** `{source}.json` stores only recent `hot_days` (default: 7) of articles for fast frontend reads. Older articles are archived as date-sharded JSON files under `archive/{source}/{source}_{date}.json`. The frontend transparently merges archive shards when a `dateRange` query parameter is active on the source detail page. See "04_structured hot/cold split" below for details.
+- **Hot/cold data split:** `{source}.json` stores only recent `hot_days` (default: 7) of articles. Older articles are archived as date-sharded JSON files under `archive/{source}/{source}_{date}.json`. **Since the PostgreSQL migration these files are local pipeline cache only** — the site queries the `articles` table directly; Stage 5 publish merges hot + archive shards (URL-dedup, hot first) when upserting. See "04_structured hot/cold split" below for details.
 - **Time slicing:** `all_articles.json` (daily report input) filters by `created` field with `lookback_days` (default: 1, today only). Use `--lookback-days 0` to include all history.
-- **Report archival:** Stage 4b writes both `daily-report-{date}.json` (archive) and `daily-report.json` (latest copy for frontend). The `/dashboard` page scans all `daily-report-*.json` files and displays a card list. `/dashboard/[date]` shows the visualization dashboard, `/report/[date]` shows the full markdown.
+- **Report archival:** Stage 4b writes both `daily-report-{date}.json` (archive) and `daily-report.json` (latest copy); Stage 5 publish upserts them into the `daily_reports` table. The `/dashboard` page lists all rows from that table. `/dashboard/[date]` shows the visualization dashboard, `/report/[date]` shows the full markdown.
 - The pipeline uses `claude-agent-sdk` (Anthropic) with streaming, exponential backoff retry (3 attempts), and a 5-level JSON recovery parser for truncated LLM output.
 - Agent calls have `allowed_tools=[]` — the SDK agents are pure thinkers, no file system access.
 - Agent calls also set `mcp_servers={}` + `strict_mcp_config=True` (in `build_agent_options()`): without this, every SDK-spawned claude CLI loads user-scope Claude Code plugins (e.g. the official playwright plugin), starting `@playwright/mcp` and popping a headed Chrome window per LLM call. Browser use is restricted to the ingestion stages (`BrowserSession`); LLM stages must never touch a browser.
@@ -24,7 +24,7 @@ This is a **dual-language** project: a Python offline pipeline ingests 26 AI inf
 **Styling:** Tailwind CSS v4.1+ is the **primary styling method**. Always prefer utility classes over CSS Modules, inline styles, or custom CSS. CSS Modules are a last resort — only when Tailwind genuinely cannot achieve the result (complex `@keyframes`, `::-webkit-scrollbar`, etc.). See `.claude/skills/tailwind-css-patterns/SKILL.md` for patterns and conventions.
 
 **Routing:**
-- `/` — Sources page (homepage): reads config.yaml + manifest JSONs, renders tier-grouped source inventory
+- `/` — Sources page (homepage): reads config.yaml (repo file) + `manifests` table, renders tier-grouped source inventory
 - `/sources` — redirects to `/`
 - `/sources/[name]` — Source detail page with hero banner + sortable article list
 - `/dashboard` — 日报卡片列表：扫描 `data/05_reports/daily-report-*.json`，按日期降序展示所有历史日报卡片
@@ -146,12 +146,15 @@ pnpm lint                # ESLint (flat config)
 pnpm typecheck           # tsc --noEmit
 
 # Pipeline (Python — run from repo root with uv)
-# Essential 5-command workflow (aggregate auto-executes after extract & analyze):
+# Essential workflow (aggregate auto-executes after extract & analyze; publish auto-executes after synthesize):
 uv run python pipeline/run.py scout              # Stage 1a: generate URL manifests
 uv run python pipeline/run.py ingest             # Stage 1b: download + clean articles
 uv run python pipeline/run.py extract            # Stage 2: BaseInfo + FactExtraction → auto-aggregates
 uv run python pipeline/run.py analyze            # Stage 3: 3-dimension deep analysis → auto-aggregates
-uv run python pipeline/run.py synthesize         # Stage 4b: Editor-in-Chief daily report generation
+uv run python pipeline/run.py synthesize         # Stage 4b: Editor-in-Chief daily report generation → auto-publishes
+uv run python pipeline/run.py publish            # Stage 5: upsert data/ → PostgreSQL (idempotent; hot articles + all manifests/reports)
+uv run python pipeline/run.py publish --force    # Stage 5 full backfill: include archive cold-data shards
+uv run python pipeline/run.py publish --target-date 2026-07-21  # Stage 5: only that date's articles/manifests/report
 
 # Standalone aggregate (for edge cases: config changes, --lookback-days, --hot-days, --target-date, --force):
 uv run python pipeline/run.py aggregate          # Stage 4a: extract frontmatter → all_articles.json
@@ -233,6 +236,7 @@ pipeline/
   aggregation/              # Stage 4a: Frontmatter aggregation + hot/cold split
   synthesis/                # Stage 4b: Editor-in-Chief report generation（daily report + specialized briefs）
     prompts/                #   System + user prompts for report synthesis
+  publish/                  # Stage 5: data/ → PostgreSQL upsert（db.py 连接 / publishers.py 映射+upsert / cli.py）
 
 src/
   app/
@@ -264,14 +268,15 @@ src/
       prompts.ts            # LLM prompt templates
       heuristics.ts         # Analysis heuristics
       index.ts              # Barrel export
+    db/
+      schema.ts             # Drizzle 表定义（daily_reports / manifests / articles）
+      client.ts             # Drizzle 客户端（postgres.js 驱动，惰性单例）
     data/
-      files.ts              # Type-safe JSON read/write with Zod validation
-      sources.ts            # Reads config.yaml + manifests → SourceStatus/SourceDetail
+      sources/              # config（YAML）+ manifests（DB）+ structured-data（DB）→ SourceStatus/SourceDetail
       status.ts             # Processing status types, StructuredArticle schema
       tiers.ts              # Tier colors, labels, type labels, language labels
-      reports.ts            # 日报列表扫描 + 按日期读取（listReports / getReport / getReportMarkdown）
+      reports.ts            # 日报列表 + 按日期读取（listReports / getReport / getReportMarkdown，查 daily_reports 表）
       specialized.ts        # 专题洞察数据加载（loadGithubBrief / loadPaperArticles / loadProductBrief）
-      cleaner.ts            # Text cleaning utilities
     report/
       labels.ts             # Chinese label mappings (event types, sentiments, severities)
       generate-markdown.ts  # JSON-to-Markdown fallback for /report page
@@ -291,17 +296,21 @@ src/
 - `ANTHROPIC_API_KEY` — required for pipeline LLM calls
 - `AI_ENGINE_USE_CLAUDE` — set to `true` to use claude-agent-sdk (default: `false`)
 - `PRODUCTHUNT_API_TOKEN` — optional; Product Hunt GraphQL API developer token (create at https://www.producthunt.com/v2/oauth/applications, never expires). When set, producthunt article bodies are fetched via the official API, bypassing the site-wide Cloudflare managed challenge; without it the legacy browser/Jina fallback chain is used
+- `DATABASE_URL` — required for Stage 5 `publish` (e.g. `postgresql://postgres:postgres@localhost:5433/ai_insight`); tables are managed by drizzle migrations, the pipeline only writes
 
 ## Data directories (all gitignored)
 
-- `data/00_manifest/{source}_{date}.json` — URL manifests from scout stage
+> 自 PostgreSQL 迁移起，`data/` 全部目录为 pipeline 本地工作存储（含文章正文），站点不再读取。
+> 站点数据由 Stage 5 publish 写入 PostgreSQL（`daily_reports` / `manifests` / `articles` 三表，schema 见 `src/lib/db/schema.ts`）。
+
+- `data/00_manifest/{source}_{date}.json` — URL manifests from scout stage → publish → `manifests` 表
 - `data/01_raw/{source}/*.md` — cleaned article text with YAML frontmatter (after ingest)
 - `data/02_extracted/{source}/*.md` — articles + extracted BaseInfo and FactExtraction (after extract)
 - `data/03_analyzed/{source}/*.md` — articles + 3 analysis dimensions appended (after analyze)
-- `data/04_structured/{source}.json` — per-source JSON array: recent `hot_days` (default: 7) articles at their latest processing stage. Consumed by frontend source detail page for enrichment via `loadStructuredData()`
+- `data/04_structured/{source}.json` — per-source JSON array: recent `hot_days` (default: 7) articles at their latest processing stage → publish（含 archive 合并）→ `articles` 表
 - `data/04_structured/all_articles.json` — time-window filtered merge (controlled by `lookback_days`). Includes metadata: `aggregated_stages`, `lookback_days`, `coverage_period`, `skipped_old`, `sources`. Input to Stage 4b synthesize
-- `data/04_structured/archive/{source}/{source}_{YYYY-MM-DD}.json` — cold data date shards. Contains articles older than `hot_days`, grouped by `created` date. Loaded on-demand by frontend when `dateRange` query param is active. Shards are overwritten each aggregate run (articles may have been further processed). Expired shards (older than `max_history_days`, default 365) are cleaned up automatically
-- `data/05_reports/daily-report.json` + `daily-report.md` — latest report for frontend consumption，包含 `specializedBrief` 专题洞察块（`projectInsights` / `paperHighlights` / `productInsights`）。Archive copies `daily-report-{date}.json` / `.md` are written alongside
+- `data/04_structured/archive/{source}/{source}_{YYYY-MM-DD}.json` — cold data date shards. Contains articles older than `hot_days`, grouped by `created` date. Consumed by Stage 5 publish (full backfill merges hot + shards, URL-dedup). Shards are overwritten each aggregate run. Expired shards (older than `max_history_days`, default 365) are cleaned up automatically
+- `data/05_reports/daily-report.json` + `daily-report.md` — latest report output，包含 `specializedBrief` 专题洞察块（`projectInsights` / `paperHighlights` / `productInsights`）。Archive copies `daily-report-{date}.json` / `.md` are written alongside → publish → `daily_reports` 表
 
 Each `.md` file has YAML frontmatter that accumulates fields across pipeline stages. Key fields: `id` (SHA-256 hash of source URL), `created` (ingestion date, set to `date.today()` at Stage 1b), `published` (original publication date), `tldr` / `objective_summary` (Stage 2 fields), `impact_score` / `sentiment` (Stage 3 fields), `specialized_tags` / `github_assessment` / `paper_assessment` / `product_assessment` (source-aware 专题标注与分析字段)。
 
@@ -338,7 +347,7 @@ data/03_analyzed/{source}/*.md ──┘                   (全量，去重保�
 
 | Output | Filtering | Purpose | Consumer |
 |--------|-----------|---------|----------|
-| `{source}.json` | No time filter, all articles | Frontend source detail page enrichment | `src/lib/data/sources.ts:loadStructuredData()` |
+| `{source}.json` | No time filter, all articles | Stage 5 publish 输入（→ `articles` 表） | `pipeline/publish/publishers.py` |
 | `all_articles.json` | `lookback_days` time window | Daily report input | Stage 4b synthesize (`run_synthesis.py`) |
 
 ### Frontend processing status
@@ -351,7 +360,7 @@ if (article.tldr || article.objective_summary)  → "extracted"  // Stage 2 done
 else                                             → "scout"      // Stage 1 only
 ```
 
-Articles in manifest but NOT in per-source JSON get `status = "scout"` and `enriched = null` (see `src/lib/data/sources.ts:408-424`). Multi-stage aggregate ensures articles appear in the JSON as soon as they complete ANY stage.
+Articles in manifest but NOT in `articles` 表 get `status = "scout"` and `enriched = null` (see `src/lib/data/sources/index.ts`). Multi-stage aggregate + publish ensure articles appear in the table as soon as they complete ANY stage.
 
 ## 04_structured hot/cold split
 
@@ -389,16 +398,10 @@ Articles are split by `created` date relative to today:
 4. 冷数据按日期分组，覆盖写 `archive/{source}/{source}_{date}.json`（文章可能被后续阶段更新）
 5. 清理超过 `max_history_days`（默认 365）的过期分片
 
-### Frontend read behavior
+### 读取行为（publish + 前端）
 
-`loadStructuredData(sourceName, dateRange?)` 在 `src/lib/data/sources.ts:319`：
-
-1. 总是先加载 `{source}.json`（热数据）
-2. 如果 `dateRange` 有值且指向了热窗口之外的日期：
-   - 列出 `archive/{source}/` 下所有分片
-   - 按文件名中的日期筛选匹配的分片
-   - 合并到结果中（URL 去重，热数据优先）
-3. 如果 `archive/` 目录不存在（兼容旧 aggregate）：降级为只读热数据
+1. Stage 5 publish（`pipeline/publish/publishers.py`）合并热数据与 archive 分片：热数据优先、冷数据按 URL 规范化去重，upsert 到 `articles` 表
+2. 前端 `loadStructuredData(sourceName, dateRange?)`（`src/lib/data/sources/structured-data.ts`）直接查询 `articles` 表：`source_dir` 过滤 + 可选 `created` 范围条件——热/冷之分在 DB 查询中消失
 
 ### Config reference
 
@@ -416,7 +419,8 @@ stages:
 | 文件 | 职责 |
 |------|------|
 | `pipeline/aggregation/aggregate_frontmatter.py` | `aggregate_frontmatter()` 热冷分流 + `_cleanup_expired_archives()` |
-| `src/lib/data/sources.ts` | `loadStructuredData()` 热数据 + archive 按需加载 |
+| `pipeline/publish/publishers.py` | 热数据 + archive 合并去重，upsert 到 `articles` 表 |
+| `src/lib/data/sources/structured-data.ts` | `loadStructuredData()` 查询 `articles` 表 |
 | `pipeline/synthesis/cli.py` | `--hot-days` / `--max-history-days` CLI 参数 |
 
 ## Source configuration

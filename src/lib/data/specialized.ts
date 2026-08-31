@@ -3,13 +3,13 @@
 //
 // 职责：
 //   - 定义项目 / 论文 / 产品三类洞察的 TypeScript 类型
-//   - 从 daily-report-{date}.json 的 specializedBrief 块加载当日简报
-//   - 保留从 all_articles.json 加载原始专题文章的回退能力
+//   - 从 daily_reports 表的 specializedBrief 块加载当日简报
+//   - 从 articles 表加载论文专题文章（source_dir = arxiv-cs-ai）
 //
 // 设计理由：
 //   专题洞察与综合日报在 Stage 4b 由主编 Agent 统一生成，前端不应再次聚合原始文章。
 //   因此项目 / 产品详情页优先读取日报 JSON 中的 projectInsights / productInsights；
-//   论文洞察目前仍直接读取 all_articles.json 中带有 specialized_tags.paper 的文章（等待
+//   论文洞察目前仍直接读取 articles 表中带有 specialized_tags.paper 的文章（等待
 //   Stage 4b 论文简报稳定后迁移）。
 //
 // 消费方：
@@ -19,8 +19,32 @@
 //   - src/components/dashboard/SpecializedBriefSection.tsx
 // ============================================================================
 
-import { readFile } from "node:fs/promises";
-import { join } from "node:path";
+import { and, eq } from "drizzle-orm";
+
+import { getDb } from "@/lib/db/client";
+import { articles, dailyReports } from "@/lib/db/schema";
+
+// ---------------------------------------------------------------------------
+// 日报 payload 加载（专题简报共用）
+// ---------------------------------------------------------------------------
+
+/**
+ * 读取指定日期日报的完整 JSON（未校验的原始 payload）。
+ *
+ * 专题简报只需 specializedBrief 子树，且要对新旧两套字段做兼容处理，
+ * 因此这里不做 Zod 校验、返回原始 JSON，由各 load*Brief 自行提取。
+ */
+async function loadReportPayload(
+  date: string,
+): Promise<Record<string, unknown> | null> {
+  const db = getDb();
+  const rows = await db
+    .select({ report: dailyReports.report })
+    .from(dailyReports)
+    .where(eq(dailyReports.date, date))
+    .limit(1);
+  return (rows[0]?.report as Record<string, unknown> | undefined) ?? null;
+}
 
 // ---------------------------------------------------------------------------
 // 类型定义
@@ -98,81 +122,13 @@ export interface GithubBrief {
 }
 
 // ---------------------------------------------------------------------------
-// 数据加载
+// GitHub 当日简报加载（从日报表读取）
 // ---------------------------------------------------------------------------
 
 /**
- * 加载指定日期的项目洞察文章。
+ * 从日报中加载指定日期的 GitHub 当日简报。
  *
- * 从 all_articles.json 中筛选带有 specialized_tags.github 或 Stage 3
- * github_assessment 的文章（Stage 2 标注 + Stage 3 深度分析），
- * 提取项目标注字段与分析结果。
- *
- * 参数：
- *    date: 目标日期，格式 YYYY-MM-DD（当前未强制过滤，预留接口）
- *
- * 返回：
- *    GithubProjectEntry 数组，无数据时返回空数组
- */
-export async function loadGithubArticles(
-  _date: string,
-): Promise<GithubProjectEntry[]> {
-  const allArticlesPath = join(
-    process.cwd(),
-    "data/04_structured/all_articles.json",
-  );
-
-  try {
-    const raw = await readFile(allArticlesPath, "utf8");
-    const data = JSON.parse(raw);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const articles = (data.articles || []) as any[];
-
-    return articles
-      .filter((a) => a.source_dir === "github-trending")
-      .map((a) => {
-        const gh = a.specialized_tags?.github || {};
-
-        return {
-          articleId: a.id || "",
-          title: a.title || "",
-          url: a.url || "",
-          projectName: gh.project_name || gh.projectName || "",
-          projectUrl: gh.project_url || gh.projectUrl || "",
-          primaryLanguage: gh.primary_language || gh.primaryLanguage || "",
-          licenseType: gh.license_type || gh.licenseType || "",
-          domain: gh.domain || "other",
-          crossTags: gh.cross_tags || gh.crossTags || [],
-          aiDetail: gh.ai_detail || gh.aiDetail || null,
-          techAssessment: {
-            techStackQuality: a.tech_assessment?.tech_stack_quality || "",
-            architectureHighlights:
-              a.tech_assessment?.architecture_highlights || "",
-          },
-          communityHealth: {
-            contributorActivity: a.community_health?.contributor_activity || "",
-            starsTrend: a.community_health?.stars_trend || "",
-          },
-          adoptionGuidance: {
-            recommendedFor: a.adoption_guidance?.recommended_for || [],
-            cautionFor: a.adoption_guidance?.caution_for || [],
-            timeToProduction: a.adoption_guidance?.time_to_production || "",
-          },
-        };
-      });
-  } catch {
-    return [];
-  }
-}
-
-// ---------------------------------------------------------------------------
-// GitHub 当日简报加载（从日报 JSON 读取）
-// ---------------------------------------------------------------------------
-
-/**
- * 从日报归档 JSON 中加载指定日期的 GitHub 当日简报。
- *
- * 这是 /specialized/github/{date} 页面的主要数据源。与 loadGithubArticles 不同：
+ * 这是 /specialized/github/{date} 页面的主要数据源：
  *   - 数据来自 Stage 4b 生成的 specializedBrief.projectInsights / githubHighlights
  *   - 已做跨天去重和汇总，前端无需再次处理原始文章
  *   - 与 /dashboard/{date} 卡片上的专题数据口径一致
@@ -190,55 +146,51 @@ export async function loadGithubArticles(
  *    GithubBrief 或 null（该日期无日报或无 GitHub 简报）
  */
 export async function loadGithubBrief(date: string): Promise<GithubBrief | null> {
-  const reportPath = join(process.cwd(), "data/05_reports", `daily-report-${date}.json`);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const data: any = await loadReportPayload(date);
+  if (!data) return null;
 
-  try {
-    const raw = await readFile(reportPath, "utf8");
-    const data = JSON.parse(raw);
-    const projectInsights = data?.specializedBrief?.projectInsights;
-    if (projectInsights) {
-      return {
-        summary: projectInsights.summary || "",
-        articleCount: projectInsights.items?.length || 0,
-        topProjects: (projectInsights.items || []).map(
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (item: any) => item.canonicalName || item.name,
-        ),
-        domainDistribution: projectInsights.distribution || {},
-        aiCategoryDistribution: null,
-        keyJudgment: projectInsights.keyJudgment || "",
-        watchSignals: projectInsights.watchSignals || [],
-        sourceCoverage: projectInsights.sourceCoverage || [],
-        items: projectInsights.items || [],
-      };
-    }
-
-    const gh = data?.specializedBrief?.githubHighlights;
-    if (!gh) return null;
-
+  const projectInsights = data?.specializedBrief?.projectInsights;
+  if (projectInsights) {
     return {
-      summary: gh.summary || "",
-      articleCount: gh.articleCount || 0,
-      topProjects: gh.topProjects || [],
-      domainDistribution: gh.domainDistribution || {},
-      aiCategoryDistribution: gh.aiCategoryDistribution || null,
-      items: (gh.topProjects || []).map((name: string, index: number) => ({
-        name,
-        canonicalName: name,
-        url: /^[\w.-]+\/[\w.-]+$/.test(name) ? `https://github.com/${name}` : null,
-        oneLine: "历史报告中的项目简报条目。",
-        whyItMatters: "该项目出现在历史专题简报中，可作为当日项目线索继续查看。",
-        signals: [],
-        risks: [],
-        score: Math.max(1, 8 - index * 0.5),
-        articleIds: [],
-        sources: [],
-        evidenceSnippets: [],
-      })),
+      summary: projectInsights.summary || "",
+      articleCount: projectInsights.items?.length || 0,
+      topProjects: (projectInsights.items || []).map(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (item: any) => item.canonicalName || item.name,
+      ),
+      domainDistribution: projectInsights.distribution || {},
+      aiCategoryDistribution: null,
+      keyJudgment: projectInsights.keyJudgment || "",
+      watchSignals: projectInsights.watchSignals || [],
+      sourceCoverage: projectInsights.sourceCoverage || [],
+      items: projectInsights.items || [],
     };
-  } catch {
-    return null;
   }
+
+  const gh = data?.specializedBrief?.githubHighlights;
+  if (!gh) return null;
+
+  return {
+    summary: gh.summary || "",
+    articleCount: gh.articleCount || 0,
+    topProjects: gh.topProjects || [],
+    domainDistribution: gh.domainDistribution || {},
+    aiCategoryDistribution: gh.aiCategoryDistribution || null,
+    items: (gh.topProjects || []).map((name: string, index: number) => ({
+      name,
+      canonicalName: name,
+      url: /^[\w.-]+\/[\w.-]+$/.test(name) ? `https://github.com/${name}` : null,
+      oneLine: "历史报告中的项目简报条目。",
+      whyItMatters: "该项目出现在历史专题简报中，可作为当日项目线索继续查看。",
+      signals: [],
+      risks: [],
+      score: Math.max(1, 8 - index * 0.5),
+      articleIds: [],
+      sources: [],
+      evidenceSnippets: [],
+    })),
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -318,69 +270,60 @@ export interface PaperEntry {
 /**
  * 加载指定日期的论文洞察文章。
  *
- * 从 all_articles.json 中筛选带有 specialized_tags.paper 或 Stage 3
- * paper_assessment 的文章（Stage 2 标注 + Stage 3 深度分析），
+ * 从 articles 表筛选 source_dir = 'arxiv-cs-ai' 且 created = date 的文章
+ * （Stage 2 specialized_tags.paper 标注 + Stage 3 paper_assessment 深度分析），
  * 提取论文标注字段与分析结果。
  *
  * 参数：
- *    _date: 目标日期，格式 YYYY-MM-DD（当前未强制过滤，预留接口）
+ *    date: 目标日期，格式 YYYY-MM-DD（按 frontmatter created 过滤）
  *
  * 返回：
  *    PaperEntry 数组，无数据时返回空数组
  */
 export async function loadPaperArticles(
-  _date: string,
+  date: string,
 ): Promise<PaperEntry[]> {
-  const allArticlesPath = join(
-    process.cwd(),
-    "data/04_structured/all_articles.json",
-  );
+  const db = getDb();
+  const rows = await db
+    .select({ payload: articles.payload })
+    .from(articles)
+    .where(and(eq(articles.sourceDir, "arxiv-cs-ai"), eq(articles.created, date)));
 
-  try {
-    const raw = await readFile(allArticlesPath, "utf8");
-    const data = JSON.parse(raw);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return (rows.map((r) => r.payload) as any[]).map((a) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const articles = (data.articles || []) as any[];
+    const paperTags: any = a.specialized_tags?.paper || {};
 
-    return articles
-      .filter((a) => a.source_dir === "arxiv-cs-ai")
-      .map((a) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const paperTags: any = a.specialized_tags?.paper || {};
+    // 论文分析字段（可能以 snake_case 存储在 frontmatter 中）
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const pa: any = a.paper_assessment || {};
 
-        // 论文分析字段（可能以 snake_case 存储在 frontmatter 中）
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const pa: any = a.paper_assessment || {};
-
-        return {
-          articleId: a.id || "",
-          title: a.title || "",
-          url: a.url || "",
-          // Stage 2 标注字段
-          paperTitle: paperTags.paper_title || paperTags.paperTitle || a.title || "",
-          authors: paperTags.authors || [],
-          affiliations: paperTags.affiliations || [],
-          venue: paperTags.venue || "",
-          codeUrl: paperTags.code_url || paperTags.codeUrl || "",
-          datasetUrl: paperTags.dataset_url || paperTags.datasetUrl || "",
-          researchArea: paperTags.research_area || paperTags.researchArea || "unknown",
-          methodType: paperTags.method_type || paperTags.methodType || "",
-          // Stage 3 论文分析字段
-          paperMetadata: pa.paper_metadata || pa.paperMetadata || undefined,
-          researchProblem: pa.research_problem || pa.researchProblem || undefined,
-          methodology: pa.methodology || undefined,
-          experimentalRigor: pa.experimental_rigor || pa.experimentalRigor || undefined,
-          limitationsAndHonesty: pa.limitations_and_honesty || pa.limitationsAndHonesty || undefined,
-          industrialRelevance: pa.industrial_relevance || pa.industrialRelevance || undefined,
-          relatedWorkContext: pa.related_work_context || pa.relatedWorkContext || undefined,
-          // 标准字段
-          tldr: a.tldr || "",
-          objectiveSummary: a.objective_summary || a.objectiveSummary || "",
-        };
-      });
-  } catch {
-    return [];
-  }
+    return {
+      articleId: a.id || "",
+      title: a.title || "",
+      url: a.url || a.source || "",
+      // Stage 2 标注字段
+      paperTitle: paperTags.paper_title || paperTags.paperTitle || a.title || "",
+      authors: paperTags.authors || [],
+      affiliations: paperTags.affiliations || [],
+      venue: paperTags.venue || "",
+      codeUrl: paperTags.code_url || paperTags.codeUrl || "",
+      datasetUrl: paperTags.dataset_url || paperTags.datasetUrl || "",
+      researchArea: paperTags.research_area || paperTags.researchArea || "unknown",
+      methodType: paperTags.method_type || paperTags.methodType || "",
+      // Stage 3 论文分析字段
+      paperMetadata: pa.paper_metadata || pa.paperMetadata || undefined,
+      researchProblem: pa.research_problem || pa.researchProblem || undefined,
+      methodology: pa.methodology || undefined,
+      experimentalRigor: pa.experimental_rigor || pa.experimentalRigor || undefined,
+      limitationsAndHonesty: pa.limitations_and_honesty || pa.limitationsAndHonesty || undefined,
+      industrialRelevance: pa.industrial_relevance || pa.industrialRelevance || undefined,
+      relatedWorkContext: pa.related_work_context || pa.relatedWorkContext || undefined,
+      // 标准字段
+      tldr: a.tldr || "",
+      objectiveSummary: a.objective_summary || a.objectiveSummary || "",
+    };
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -438,26 +381,6 @@ export function computeResearchAreaDistribution(
 // 产品类型定义
 // ---------------------------------------------------------------------------
 
-export interface ProductEntry {
-  articleId: string;
-  title: string;
-  url: string;
-  // Stage 2 产品标注字段 (specialized_tags.product)
-  productName: string;
-  productUrl: string;
-  companyTeam: string;
-  launchContext: string;
-  pricingModel: string;
-  productCategory: string;
-  targetUsers: string[];
-  // Stage 3 产品分析字段
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  productAssessment?: Record<string, any>;
-  // 标准 Stage 2/3 字段（回退展示）
-  tldr: string;
-  objectiveSummary: string;
-}
-
 /**
  * 产品当日简报数据结构。
  *
@@ -476,98 +399,13 @@ export interface ProductBrief {
 }
 
 // ---------------------------------------------------------------------------
-// 产品数据加载
+// 产品当日简报加载（从日报表读取）
 // ---------------------------------------------------------------------------
 
 /**
- * 加载指定日期的产品洞察文章。
+ * 从日报中加载指定日期的产品当日简报。
  *
- * 从 all_articles.json 中筛选带有 specialized_tags.product 或 Stage 3
- * product_assessment 的文章（Stage 2 标注 + Stage 3 深度分析），
- * 提取产品标注字段与分析结果。
- *
- * 参数：
- *    _date: 目标日期，格式 YYYY-MM-DD（当前未强制过滤，预留接口）
- *
- * 返回：
- *    ProductEntry 数组，无数据时返回空数组
- */
-export async function loadProductArticles(
-  _date: string,
-): Promise<ProductEntry[]> {
-  const allArticlesPath = join(
-    process.cwd(),
-    "data/04_structured/all_articles.json",
-  );
-
-  try {
-    const raw = await readFile(allArticlesPath, "utf8");
-    const data = JSON.parse(raw);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const articles = (data.articles || []) as any[];
-
-    return articles
-      .filter(
-        (a) =>
-          a.source_dir === "producthunt" || a.source_dir === "whytryai",
-      )
-      .map((a) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const productTags: any = a.specialized_tags?.product || {};
-
-        // 产品分析字段（以 snake_case/camelCase 存储在 frontmatter 中）
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const pa: any = a.product_assessment || {};
-
-        return {
-          articleId: a.id || "",
-          title: a.title || "",
-          url: a.url || "",
-          // Stage 2 标注字段
-          productName:
-            productTags.product_name ||
-            productTags.productName ||
-            a.title ||
-            "",
-          productUrl:
-            productTags.product_url || productTags.productUrl || "",
-          companyTeam:
-            productTags.company_team || productTags.companyTeam || "",
-          launchContext:
-            productTags.launch_context ||
-            productTags.launchContext ||
-            "",
-          pricingModel:
-            productTags.pricing_model ||
-            productTags.pricingModel ||
-            "unknown",
-          productCategory:
-            productTags.product_category ||
-            productTags.productCategory ||
-            "",
-          targetUsers:
-            productTags.target_users || productTags.targetUsers || [],
-          // Stage 3 产品分析字段
-          productAssessment: Object.keys(pa).length > 0 ? pa : undefined,
-          // 标准字段
-          tldr: a.tldr || "",
-          objectiveSummary:
-            a.objective_summary || a.objectiveSummary || "",
-        };
-      });
-  } catch {
-    return [];
-  }
-}
-
-// ---------------------------------------------------------------------------
-// 产品当日简报加载（从日报 JSON 读取）
-// ---------------------------------------------------------------------------
-
-/**
- * 从日报归档 JSON 中加载指定日期的产品当日简报。
- *
- * 这是 /specialized/product/{date} 页面的主要数据源。与 loadProductArticles 不同：
+ * 这是 /specialized/product/{date} 页面的主要数据源：
  *   - 数据来自 Stage 4b 生成的 specializedBrief.productInsights / productHighlights
  *   - 已做跨天去重和汇总，前端无需再次处理原始文章
  *   - 与 /dashboard/{date} 卡片上的专题数据口径一致
@@ -585,53 +423,49 @@ export async function loadProductArticles(
  *    ProductBrief 或 null（该日期无日报或无产品简报）
  */
 export async function loadProductBrief(date: string): Promise<ProductBrief | null> {
-  const reportPath = join(process.cwd(), "data/05_reports", `daily-report-${date}.json`);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const data: any = await loadReportPayload(date);
+  if (!data) return null;
 
-  try {
-    const raw = await readFile(reportPath, "utf8");
-    const data = JSON.parse(raw);
-    const productInsights = data?.specializedBrief?.productInsights;
-    if (productInsights) {
-      return {
-        summary: productInsights.summary || "",
-        articleCount: productInsights.items?.length || 0,
-        notableProducts: (productInsights.items || []).map(
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (item: any) => item.canonicalName || item.name,
-        ),
-        launchContextDistribution: productInsights.distribution || {},
-        keyJudgment: productInsights.keyJudgment || "",
-        watchSignals: productInsights.watchSignals || [],
-        sourceCoverage: productInsights.sourceCoverage || [],
-        items: productInsights.items || [],
-      };
-    }
-
-    const ph = data?.specializedBrief?.productHighlights;
-    if (!ph) return null;
-
+  const productInsights = data?.specializedBrief?.productInsights;
+  if (productInsights) {
     return {
-      summary: ph.summary || "",
-      articleCount: ph.articleCount || 0,
-      notableProducts: ph.notableProducts || [],
-      launchContextDistribution: ph.launchContextDistribution || {},
-      items: (ph.notableProducts || []).map((name: string, index: number) => ({
-        name,
-        canonicalName: name,
-        url: null,
-        oneLine: "历史报告中的产品简报条目。",
-        whyItMatters: "该产品出现在历史专题简报中，可作为当日产品化线索继续查看。",
-        signals: [],
-        risks: [],
-        score: Math.max(1, 8 - index * 0.5),
-        articleIds: [],
-        sources: [],
-        evidenceSnippets: [],
-      })),
+      summary: productInsights.summary || "",
+      articleCount: productInsights.items?.length || 0,
+      notableProducts: (productInsights.items || []).map(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (item: any) => item.canonicalName || item.name,
+      ),
+      launchContextDistribution: productInsights.distribution || {},
+      keyJudgment: productInsights.keyJudgment || "",
+      watchSignals: productInsights.watchSignals || [],
+      sourceCoverage: productInsights.sourceCoverage || [],
+      items: productInsights.items || [],
     };
-  } catch {
-    return null;
   }
+
+  const ph = data?.specializedBrief?.productHighlights;
+  if (!ph) return null;
+
+  return {
+    summary: ph.summary || "",
+    articleCount: ph.articleCount || 0,
+    notableProducts: ph.notableProducts || [],
+    launchContextDistribution: ph.launchContextDistribution || {},
+    items: (ph.notableProducts || []).map((name: string, index: number) => ({
+      name,
+      canonicalName: name,
+      url: null,
+      oneLine: "历史报告中的产品简报条目。",
+      whyItMatters: "该产品出现在历史专题简报中，可作为当日产品化线索继续查看。",
+      signals: [],
+      risks: [],
+      score: Math.max(1, 8 - index * 0.5),
+      articleIds: [],
+      sources: [],
+      evidenceSnippets: [],
+    })),
+  };
 }
 
 // ---------------------------------------------------------------------------

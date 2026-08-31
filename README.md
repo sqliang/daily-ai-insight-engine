@@ -205,7 +205,7 @@ pnpm dev
 
 **数据源探索**（`/`、`/sources/[name]`）—— 按黄金三角分层浏览所有信源，钻取到每篇文章在各阶段的提取与分析结果，理解 Agent 的分析链路。
 
-**交互看板**（`/dashboard/[date]`）—— 零后端架构，Server Component 直接 `readFile` 读取 JSON。KPI 指标、事件分布 & 情绪分布双饼图、影响力 Top 10 柱状图、四维趋势卡片、深度解读面板、风险/机会信号双列表，并在顶部提供项目 / 论文 / 产品三大专题入口。
+**交互看板**（`/dashboard/[date]`）—— 零 API 层架构，Server Component 通过 Drizzle 直查 PostgreSQL。KPI 指标、事件分布 & 情绪分布双饼图、影响力 Top 10 柱状图、四维趋势卡片、深度解读面板、风险/机会信号双列表，并在顶部提供项目 / 论文 / 产品三大专题入口。
 
 **可读报告**（`/report/[date]`）—— Markdown 全文，含执行摘要、数据概览、Top 事件与支撑证据、深度分析、趋势判断、风险与机会信号表格。适合阅读、分享、归档。
 
@@ -302,7 +302,7 @@ daily-ai-insight-engine/
 | 流水线 | Python 3.11+ asyncio |
 | LLM 引擎 | `claude-agent-sdk`（Anthropic），支持 deepseek-v4-pro / claude-opus-4-7 等模型切换 |
 | 数据校验 | Pydantic v2（Python）+ Zod（TypeScript）双端契约 |
-| 前端 | Next.js 16 App Router + Turbopack，Server Component 直接 `readFile` 零 API 层 |
+| 前端 | Next.js 16 App Router + Turbopack，Server Component 经 Drizzle 直查 PostgreSQL，零 API 层 |
 | 图表 | Recharts |
 | 样式 | Tailwind CSS 4（暗色主题 + glass morphism） |
 | 抓取 | feedparser / trafilatura / readability-lxml / Playwright |
