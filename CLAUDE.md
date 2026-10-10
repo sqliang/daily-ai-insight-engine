@@ -296,6 +296,7 @@ src/
 - `ANTHROPIC_API_KEY` — required for pipeline LLM calls
 - `AI_ENGINE_USE_CLAUDE` — set to `true` to use claude-agent-sdk (default: `false`)
 - `PRODUCTHUNT_API_TOKEN` — optional; Product Hunt GraphQL API developer token (create at https://www.producthunt.com/v2/oauth/applications, never expires). When set, producthunt article bodies are fetched via the official API, bypassing the site-wide Cloudflare managed challenge; without it the legacy browser/Jina fallback chain is used
+- `JINA_API_KEY` — optional but recommended; Jina AI Reader API key (free tier at https://jina.ai). Anonymous r.jina.ai access is rejected with 401 when the egress IP has bad reputation (common with proxy exits); with the key set, `fetch_via_jina` sends `Authorization: Bearer` and the anti-bot fallback chain works again
 - `DATABASE_URL` — required for Stage 5 `publish` (e.g. `postgresql://postgres:postgres@localhost:5433/ai_insight`); tables are managed by drizzle migrations, the pipeline only writes
 
 ## Data directories (all gitignored)
