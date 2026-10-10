@@ -15,7 +15,7 @@ pipeline_gate.py — 指定日期日报流水线的"检查→定点修复"门禁
 
 命令：
     check-ingest     检查 Stage 1 抓取完整性（manifest 覆盖 + 状态 + 正文质量启发式）
-    repair-ingest    定点修复抓取问题（浏览器重抓 + Jina 兜底 + 劣化回滚）
+    repair-ingest    定点修复抓取问题（浏览器重抓 + Jina/Wayback 兜底 + 劣化回滚）
     run-extract      日期隔离地执行 Stage 2（单进程 --target-date + 预检熔断）
     check-extract    检查 Stage 2 提取结果（缺失文件 / extract_result / 关键字段 / 过期）
     repair-extract   对问题文章单独重跑 extract（LLM 调用，单文件粒度）
@@ -52,7 +52,11 @@ with contextlib.redirect_stdout(sys.stderr):
     setup_proxy()
 
 from pipeline.core.config_loader import get_sources, resolve_data_dir
-from pipeline.core.web_utils import fetch_via_jina, is_bot_challenge_html
+from pipeline.core.web_utils import (
+    fetch_via_jina,
+    fetch_via_wayback,
+    is_bot_challenge_html,
+)
 from pipeline.ingestion.repair import repair_failed_articles
 from pipeline.utils.frontmatter import read_frontmatter, write_frontmatter
 
@@ -280,7 +284,7 @@ def repair_ingest(target: date):
     流程（只处理检查出的问题文件，不影响健康文章）：
     1. 内存备份旧正文（用于劣化回滚），把问题文件状态重置为 failed
     2. 调 repair_failed_articles(target_date) 走浏览器重抓（该函数内部按 created 过滤）
-    3. 仍失败的逐个用 Jina Reader 新鲜抓取兜底
+    3. 仍失败的逐个兜底：先 Jina Reader 新鲜抓取，失败后落 Wayback 快照
     4. 劣化回滚：新正文比旧的更差时恢复旧正文（状态标回 success 之外的 partial 以留痕）
     5. 缺 manifest 的源：arxiv-cs-ai 自动调 backfill_arxiv.py 补建并 ingest；
        其他源无法自动补救，在报告中列出由人工决策
@@ -338,9 +342,12 @@ def repair_ingest(target: date):
 
         fm, _ = read_frontmatter(fp)
         if fm.get("extraction_status") != "success":
-            # 浏览器仍被拦/失败 → Jina 新鲜抓取兜底
-            # 三重把关：反爬页、错误页（404 等）、劣化内容都不接受
+            # 浏览器仍被拦/失败 → Jina 新鲜抓取兜底；
+            # Jina 匿名 401 / 余额 402 时落到 Wayback 快照（免费无需认证，
+            # 2026-10-10 实战：gizmodo 反爬页经 Wayback 成功救回）
             content = fetch_via_jina(fm.get("source", ""), timeout=90)
+            if not content:
+                content = fetch_via_wayback(fm.get("source", ""), timeout=90)
             if (content and not is_bot_challenge_html(content)
                     and not _is_error_page(content)
                     and not _is_degraded(old_body, content)):

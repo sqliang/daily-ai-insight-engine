@@ -183,7 +183,7 @@ uv run python pipeline/run.py synthesize --target-date 2026-06-10  # Generate re
 ```bash
 GATE=.agents/skills/daily-report-pipeline/scripts/pipeline_gate.py
 uv run python $GATE check-ingest --date 2026-07-21    # 抓取完整性检查（JSON 报告，exit 0/1）
-uv run python $GATE repair-ingest --date 2026-07-21   # 定点修复（浏览器重抓 + Jina 兜底 + 劣化回滚 + arxiv manifest 自动补建）
+uv run python $GATE repair-ingest --date 2026-07-21   # 定点修复（浏览器重抓 + Jina/Wayback 兜底 + 劣化回滚 + arxiv manifest 自动补建）
 uv run python $GATE run-extract --date 2026-07-21     # 日期隔离执行 extract（单进程 --target-date，超 200 篇预检熔断拒跑）
 uv run python $GATE check-extract --date 2026-07-21   # Stage 2 后验检查
 uv run python $GATE repair-extract --date 2026-07-21  # 单文件 extract --force
@@ -296,7 +296,7 @@ src/
 - `ANTHROPIC_API_KEY` — required for pipeline LLM calls
 - `AI_ENGINE_USE_CLAUDE` — set to `true` to use claude-agent-sdk (default: `false`)
 - `PRODUCTHUNT_API_TOKEN` — optional; Product Hunt GraphQL API developer token (create at https://www.producthunt.com/v2/oauth/applications, never expires). When set, producthunt article bodies are fetched via the official API, bypassing the site-wide Cloudflare managed challenge; without it the legacy browser/Jina fallback chain is used
-- `JINA_API_KEY` — optional but recommended; Jina AI Reader API key (free tier at https://jina.ai). Anonymous r.jina.ai access is rejected with 401 when the egress IP has bad reputation (common with proxy exits); with the key set, `fetch_via_jina` sends `Authorization: Bearer` and the anti-bot fallback chain works again
+- `JINA_API_KEY` — optional; Jina AI Reader API key (https://jina.ai). Anonymous r.jina.ai access is rejected with 401 when the egress IP has bad reputation (common with proxy exits), and new accounts require prepaid balance (402) — when Jina is unavailable the repair chain falls back to Wayback Machine snapshots (free, no auth); set the key only if the account has balance
 - `DATABASE_URL` — required for Stage 5 `publish` (e.g. `postgresql://postgres:postgres@localhost:5433/ai_insight`); tables are managed by drizzle migrations, the pipeline only writes
 
 ## Data directories (all gitignored)
