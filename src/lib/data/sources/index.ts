@@ -86,6 +86,14 @@ function sortArticlesByImpact(articles: EnrichedArticle[]): EnrichedArticle[] {
   return [...articles].sort((a, b) => getImpactScore(b) - getImpactScore(a));
 }
 
+// 详情页兜底定位用的全量时间范围：覆盖所有 manifest 日期，确保任何
+// 列表页可达的文章都能被详情页找到。仅用于"按 id/url 定位文章"，
+// 不影响 prev/next 导航沿用的筛选上下文（见 getSourceArticleDetail）。
+const ARTICLE_LOCATE_FULL_RANGE: DateRange = {
+  from: "1970-01-01",
+  to: "9999-12-31",
+};
+
 // ============================================================================
 // 纯转换函数：SourceConfig → SourceStatus
 // ============================================================================
@@ -377,6 +385,11 @@ export async function getSourceDetailEnriched(
  *
  * 文章定位优先使用 manifest 中的 article.id；缺 ID 的历史文章使用 url-* slug。
  * previous/next 基于当前日期筛选后的文章列表，并可按影响力排序。
+ *
+ * 定位兜底：dateRange 过滤后的列表找不到时，用全量时间范围再定位一次。
+ * 详情页的 dateRange 默认值（近 14 天，见 page.tsx resolveDateRange）会裁掉
+ * 老文章，而列表页默认"全部"可达任意历史文章——不兜底的话，从列表点进
+ * 任何早于 14 天的文章都会 404（issue #147）。
  */
 export async function getSourceArticleDetail(
   sourceName: string,
@@ -387,20 +400,37 @@ export async function getSourceArticleDetail(
   const source = await getSourceDetailEnriched(sourceName, dateRange);
   if (!source) return null;
 
-  const articles =
-    sort === "impact" ? sortArticlesByImpact(source.articles) : source.articles;
-
   const fallbackUrl = articleIdOrSlug.startsWith("url-")
     ? decodeUrlSlug(articleIdOrSlug.slice(4))
     : null;
   const fallbackKey = fallbackUrl ? normalizeUrl(fallbackUrl) : null;
 
-  const index = articles.findIndex((article) => {
-    if (article.id && article.id === articleIdOrSlug) return true;
-    return fallbackKey !== null && normalizeArticleUrl(article.url) === fallbackKey;
-  });
+  const locate = (candidates: EnrichedArticle[]) =>
+    candidates.findIndex((article) => {
+      if (article.id && article.id === articleIdOrSlug) return true;
+      return fallbackKey !== null && normalizeArticleUrl(article.url) === fallbackKey;
+    });
 
-  if (index < 0) return null;
+  let articles =
+    sort === "impact" ? sortArticlesByImpact(source.articles) : source.articles;
+  let index = locate(articles);
+
+  // 筛选窗口内未命中：改用全量范围重新加载并定位。
+  // 命中后 prev/next 也基于全量列表（"全部"上下文），保证导航可用
+  if (index < 0) {
+    const fullSource = await getSourceDetailEnriched(
+      sourceName,
+      ARTICLE_LOCATE_FULL_RANGE,
+    );
+    if (!fullSource) return null;
+    const fullArticles =
+      sort === "impact"
+        ? sortArticlesByImpact(fullSource.articles)
+        : fullSource.articles;
+    index = locate(fullArticles);
+    if (index < 0) return null;
+    articles = fullArticles;
+  }
 
   const article = articles[index];
   return {
