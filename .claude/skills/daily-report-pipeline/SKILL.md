@@ -57,7 +57,7 @@ uv run python $GATE check-ingest --date <date>     # exit 0 通过；exit 1 输�
 ```
 
 - 有问题 → `uv run python $GATE repair-ingest --date <date>` → 再 check-ingest（最多 2 轮）
-- repair-ingest 自动处理：状态重置 + 浏览器重抓 + Jina 兜底 + 劣化回滚；arxiv 缺 manifest 时自动调 backfill_arxiv.py 补建并 ingest；其他源缺 manifest 无法自动补救，报告给用户
+- repair-ingest 自动处理：状态重置 + 浏览器重抓 + Jina/Wayback 兜底 + 劣化回滚；arxiv 缺 manifest 时自动调 backfill_arxiv.py 补建并 ingest；其他源缺 manifest 无法自动补救，报告给用户
 - 2 轮后仍有 `still_failed` → 停止，把遗留清单交给用户决策（通常是源站持续反爬，可接受跳过）
 
 ### Phase 2 — extract 阶段

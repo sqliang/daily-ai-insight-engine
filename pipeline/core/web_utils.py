@@ -398,7 +398,9 @@ def fetch_via_jina(url: str, timeout: int = 60) -> Optional[str]:
     try:
         jina_url = f"{_JINA_READER_URL}/{url}"
         headers = {"User-Agent": "Googlebot/2.1", "Accept": "text/markdown"}
-        # 匿名访问被 401 拦截时，带 API key 的请求走独立配额不受 IP 信誉影响
+        # 匿名访问被 401 拦截时，带 API key 的请求走独立配额不受 IP 信誉影响；
+        # 但 2026-10 起 Jina 对新账号要求预充值（402 InsufficientBalanceError），
+        # 免费场景应以 fetch_via_wayback 作为主要兜底，Jina 仅在有余额时生效
         jina_api_key = os.environ.get("JINA_API_KEY")
         if jina_api_key:
             headers["Authorization"] = f"Bearer {jina_api_key}"
@@ -410,3 +412,48 @@ def fetch_via_jina(url: str, timeout: int = 60) -> Optional[str]:
     except Exception as exc:
         logger.warning("Jina AI Reader 兜底失败 url=%s: %s", url, exc)
     return None
+
+
+# ============================================================
+# Wayback Machine 兜底（免费、无需认证）
+# ============================================================
+
+def fetch_via_wayback(url: str, timeout: int = 60) -> Optional[str]:
+    """
+    通过 Internet Archive Wayback Machine 的最近快照提取页面正文。
+
+    定位：Jina 匿名访问被 401（IP 信誉）/ 402（余额不足）封死后的零成本兜底。
+    新闻、博客、HN 外链这类高热度页面通常在发布几小时内即被 archive.org
+    收录，命中率较高；交互式 JS 应用页的快照同样没有正文，不适用。
+
+    实现要点：
+        1. 不用 availability API（实测短时间内同一 URL 时而有快照时而返回空，
+           有限流/抖动），改走 `/web/2/{url}` 重定向端点：`2` 匹配最近快照，
+           curl -L 自动落到具体快照 URL
+        2. 不能用 `id_` 后缀取原始页——该端点返回 gzip 字节流而 fetch_url
+           未带 --compressed，解码必失败；带 Wayback 工具栏的普通快照页
+           经 trafilatura 提取后正文依然干净（2026-10-10 gizmodo 实测）
+        2. 无快照时 Wayback 返回错误页而非 4xx 状态码（curl 不报错），
+           用错误页特征文本识别后放弃
+        3. 正文提取复用 trafilatura（extract_article_content）
+
+    参数：
+        url:   原始文章 URL
+        timeout: 请求超时秒数
+
+    返回：
+        提取出的正文文本；无可用快照或提取失败返回 None
+    """
+    try:
+        snap_url = f"https://web.archive.org/web/2/{url}"
+        html = fetch_url(snap_url, timeout=timeout)
+        if not html:
+            return None
+        # Wayback 未收录时返回的错误页特征（"Hrm." 页 / not archived 提示）
+        html_lower = html.lower()
+        if "has not archived that url" in html_lower or "wayback machine doesn't have that page" in html_lower:
+            return None
+        return extract_article_content(html, url)
+    except Exception as exc:
+        logger.warning("Wayback Machine 兜底失败 url=%s: %s", url, exc)
+        return None
