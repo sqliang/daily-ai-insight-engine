@@ -7,6 +7,7 @@ RSS 使用 feedparser, 正文抽取使用 trafilatura。
 """
 
 import logging
+import os
 import re
 import subprocess
 import tempfile
@@ -379,6 +380,12 @@ def fetch_via_jina(url: str, timeout: int = 60) -> Optional[str]:
     用于 Product Hunt 等被 Cloudflare 保护的页面，浏览器/curl 无法直接获取正文。
     Jina 在服务端渲染页面，通常能绕过反爬保护。
 
+    认证说明：
+        Jina 已收紧匿名访问策略——若出口 IP 信誉不佳（常见于代理出口），
+        匿名请求会直接返回 401 AuthenticationRequiredError。设置环境变量
+        JINA_API_KEY 后携带 Authorization: Bearer 头请求，可恢复兜底能力。
+        免费 key 在 https://jina.ai 控制台申请。未配置时保持匿名请求的旧行为。
+
     参数：
         url:   原始文章 URL
         timeout: 请求超时秒数
@@ -390,10 +397,12 @@ def fetch_via_jina(url: str, timeout: int = 60) -> Optional[str]:
 
     try:
         jina_url = f"{_JINA_READER_URL}/{url}"
-        req = urllib.request.Request(
-            jina_url,
-            headers={"User-Agent": "Googlebot/2.1", "Accept": "text/markdown"},
-        )
+        headers = {"User-Agent": "Googlebot/2.1", "Accept": "text/markdown"}
+        # 匿名访问被 401 拦截时，带 API key 的请求走独立配额不受 IP 信誉影响
+        jina_api_key = os.environ.get("JINA_API_KEY")
+        if jina_api_key:
+            headers["Authorization"] = f"Bearer {jina_api_key}"
+        req = urllib.request.Request(jina_url, headers=headers)
         resp = urllib.request.urlopen(req, timeout=timeout)
         raw = resp.read().decode("utf-8")
         if raw and len(raw.strip()) > 200:
