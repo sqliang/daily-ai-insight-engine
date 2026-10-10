@@ -449,7 +449,7 @@ def check_stage(stage: str, target: date):
           has_issues=bool(problems))
 
 
-def run_stage(stage: str, target: date, max_files: int = 100, allow_large: bool = False):
+def run_stage(stage: str, target: date, max_files: int = 200, allow_large: bool = False):
     """
     run-extract / run-analyze：日期隔离的阶段执行（单进程 + 预检熔断）。
 
@@ -459,6 +459,9 @@ def run_stage(stage: str, target: date, max_files: int = 100, allow_large: bool 
     2. 执行前预检：范围内文件数与待处理文件数（= check 口径的问题数）任一
        超过 max_files 即拒绝执行——即使日期过滤逻辑未来出 bug，大批量
        LLM 操作也会被物理拦下。确需大批量时显式传 --allow-large。
+
+    阈值默认 200：日常抓取量约 120 篇可直通；事故场景是数月积压
+    （数千篇量级），200 仍能物理拦截。
     """
     cfg = _STAGE_CFG[stage]
     up_dir = resolve_data_dir(cfg["upstream"])
@@ -542,8 +545,8 @@ def main():
     )
     parser.add_argument("--date", "-d", required=True, help="目标日期 YYYY-MM-DD")
     parser.add_argument(
-        "--max-files", type=int, default=100,
-        help="run-* 预检熔断阈值：范围内或待处理文件数超过该值即拒绝执行 (默认 100)",
+        "--max-files", type=int, default=200,
+        help="run-* 预检熔断阈值：范围内或待处理文件数超过该值即拒绝执行 (默认 200，日常量约 120 篇)",
     )
     parser.add_argument(
         "--allow-large", action="store_true",

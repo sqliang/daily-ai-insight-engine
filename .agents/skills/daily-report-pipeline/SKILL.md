@@ -39,7 +39,7 @@ description: >
 
 > 事故回放：阶段执行裸跑 `extract`/`analyze`，`skip-existing` 把两个月历史积压一并送进 LLM（extract 519 篇、analyze 1381 篇，目标日期仅占 16 篇），8 小时烧穿 API 余额（402）。
 
-1. **阶段执行只能走 gate 脚本的 `run-*`**：日期隔离已做进 pipeline CLI（`--target-date`），gate 在执行前还会预检熔断（范围内/待处理文件数超过 100 即拒绝，除非显式 `--allow-large`）
+1. **阶段执行只能走 gate 脚本的 `run-*`**：日期隔离已做进 pipeline CLI（`--target-date`），gate 在执行前还会预检熔断（范围内/待处理文件数超过 200 即拒绝，除非显式 `--allow-large`；日常量约 120 篇可直通，阈值针对的是数千篇级的历史积压事故）
 2. **禁止裸跑 `pipeline/run.py extract|analyze`**：CLI 在裸跑时会打印醒目警告；看到警告应停手改用 gate
 3. **大批量 LLM 操作必须先预检**：gate `run-*` 内置了工作量统计；任何绕过 gate 的手工操作，必须先 `--dry-run` 确认范围
 
@@ -63,7 +63,7 @@ uv run python $GATE check-ingest --date <date>     # exit 0 通过；exit 1 输�
 ### Phase 2 — extract 阶段
 
 ```bash
-uv run python $GATE run-extract --date <date>       # 单进程 --target-date + 预检熔断（超 100 篇拒跑）
+uv run python $GATE run-extract --date <date>       # 单进程 --target-date + 预检熔断（超 200 篇拒跑）
 uv run python $GATE check-extract --date <date>
 ```
 
@@ -83,18 +83,40 @@ uv run python $GATE check-analyze --date <date>
   - **大批量失败（≥10 篇，典型场景是模型/API 临时不可用导致的批量 SDK 报错）** → 直接重跑 `uv run python $GATE run-analyze --date <date>`：skip-existing 只处理剩余文件且并发执行，比串行 repair 快一个数量级（2026-08-23 实战：32 篇串行 repair 预计 2h+，并发重跑约 15 分钟跑完）。repair-analyze 的串行单文件语义只在小规模时有成本优势
 - 检查口径：缺 03_analyzed 对应文件 / `impact_score` 或 `sentiment` 缺失 / 正文与上游不一致（stale）
 
-### Phase 4 — synthesize
+### Phase 4 — synthesize + publish
 
 ```bash
 uv run python pipeline/run.py synthesize --target-date <date>
+uv run python pipeline/run.py publish --target-date <date>   # 幂等兜底
 ```
 
 `--target-date` 保证 aggregate 与日报生成都只取 `created == date` 的文章。
 
+synthesize 成功后会**自动 publish** 到 PostgreSQL（`daily_reports` / `manifests` / `articles` 三表，站点数据源）；auto-publish 失败仅记 warning 不阻断，因此显式补一条幂等的 `publish --target-date` 作为双保险。
+
 ### Phase 5 — 验证与汇报
 
 - 确认 `data/05_reports/daily-report-<date>.json` 与 `.md` 已生成
-- 汇报：各阶段检查/修复结果、遗留问题、日报路径
+- **DB 核验**（站点可见性的真实判据）：
+
+```bash
+docker compose exec -T postgres psql -U postgres -d ai_insight -t -A -c "
+  SELECT (SELECT count(*) FROM articles WHERE created='<date>'),
+         (SELECT count(*) FROM manifests WHERE date='<date>'),
+         (SELECT count(*) FROM daily_reports WHERE date='<date>');"
+```
+
+  预期：articles ≈ 当日 ingest 成功数（跨源同 URL 会去重合并，略少属正常）、manifests = 当日有内容的源数、daily_reports = 1
+- 汇报：各阶段检查/修复结果、遗留问题、日报路径与 DB 核验结果
+
+## 生产切换预案（Neon）
+
+当前 `DATABASE_URL` 指向本地 Docker PG（站点本地开发用）。切换到生产的步骤：
+
+1. 创建 Neon project，把连接串配置到 Vercel 环境变量 `DATABASE_URL`
+2. 本地将 `DATABASE_URL` 指向 Neon，执行一次 `uv run python pipeline/run.py publish --force` 全量 backfill
+3. 之后日常 synthesize 的 auto-publish 即直接写生产库，本地文件流程不变
+4. 如需保留"本地 + 生产"双库，可用环境变量前缀方式单次覆盖：`DATABASE_URL=<neon> uv run python pipeline/run.py publish --target-date <date>`
 
 ## 已知近似（如实告知用户）
 
@@ -102,3 +124,4 @@ uv run python pipeline/run.py synthesize --target-date <date>
 - 持续被反爬的文章（如 openai.com）可能 2 轮修复仍失败，属外部限制，跳过即可
 - 交互式页面（3D 演示、JS 地图应用等）本身无文字正文，会反复出现在 suspicious/still_failed 中（如 HN 的 3D 演示帖），属已知不可修复项，报告给用户后跳过
 - 周末 arxiv/nlp-elvis 等源无 manifest 属正常空窗，脚本已内置判定不会误报
+- 专题简报的跨天去重读取昨日日报，来源为 本地文件 → PostgreSQL 兜底；两者都缺失时去重降级（当日专题可能重复昨日条目），会在 synthesize 日志中以 warning 出现
