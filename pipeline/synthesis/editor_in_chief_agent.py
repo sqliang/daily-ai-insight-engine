@@ -113,18 +113,19 @@ def _extract_product_articles(articles: list[dict]) -> list[dict]:
     ]
 
 
-def _load_yesterday_github_keys(target_date: Optional[str]) -> set[str]:
+def _load_yesterday_report(target_date: Optional[str]) -> dict:
     """
-    读取昨日日报归档，获取已展示的 GitHub 项目去重键集合。
+    加载昨日日报的完整 JSON（跨天去重的数据源）。
 
-    当前使用 topProjects 中的 project_name 作为去重键（日报中未保存 project_url）。
-    若昨日日报不存在或解析失败，返回空集合。
+    三级降级：本地归档文件 → PostgreSQL daily_reports 表 → 空 dict。
+    本地历史文件可能已被清理（数据已迁入 DB），DB 兜底保证去重持续生效；
+    DB 也不可用（离线/未配置）时返回空 dict，去重退化为不去重。
 
     参数：
         target_date: 目标报告日期（YYYY-MM-DD），None 时使用今天
 
     返回：
-        昨日已展示的 GitHub 项目名集合
+        昨日日报 JSON dict；任何一步失败均返回 {}
     """
     try:
         if target_date:
@@ -132,24 +133,54 @@ def _load_yesterday_github_keys(target_date: Optional[str]) -> set[str]:
         else:
             yesterday = date.today() - timedelta(days=1)
     except (ValueError, TypeError):
-        return set()
+        return {}
 
     yesterday_str = yesterday.isoformat()
-    reports_dir = resolve_data_dir("reports")
-    report_path = reports_dir / f"daily-report-{yesterday_str}.json"
+    report_path = resolve_data_dir("reports") / f"daily-report-{yesterday_str}.json"
 
-    if not report_path.exists():
-        return set()
+    if report_path.exists():
+        try:
+            return read_json(report_path) or {}
+        except Exception as exc:
+            logger.warning("读取昨日日报文件失败 %s: %s", report_path, exc)
+            return {}
 
+    # 文件不存在（历史已迁库）→ 查 DB 兜底
     try:
-        data = read_json(report_path) or {}
-        gh = (data.get("specializedBrief") or {}).get("githubHighlights")
-        if not gh:
-            return set()
-        return set(gh.get("topProjects", []))
+        from ..publish.db import get_connection
+
+        with get_connection() as conn:
+            row = conn.execute(
+                "SELECT report FROM daily_reports WHERE date = %s",
+                (yesterday_str,),
+            ).fetchone()
+        if row:
+            logger.info("昨日日报文件不存在，已从 DB 读取 %s", yesterday_str)
+            return row[0] or {}
     except Exception as exc:
-        logger.warning("读取昨日日报失败 %s: %s", report_path, exc)
+        # DB 不可用不阻断主流程：去重降级为不去重
+        logger.warning("昨日日报 DB 兜底查询失败（%s）: %s", yesterday_str, exc)
+    return {}
+
+
+def _load_yesterday_github_keys(target_date: Optional[str]) -> set[str]:
+    """
+    读取昨日日报，获取已展示的 GitHub 项目去重键集合。
+
+    当前使用 topProjects 中的 project_name 作为去重键（日报中未保存 project_url）。
+    昨日日报不存在或解析失败时返回空集合（去重降级为不去重）。
+
+    参数：
+        target_date: 目标报告日期（YYYY-MM-DD），None 时使用今天
+
+    返回：
+        昨日已展示的 GitHub 项目名集合
+    """
+    data = _load_yesterday_report(target_date)
+    gh = (data.get("specializedBrief") or {}).get("githubHighlights")
+    if not gh:
         return set()
+    return set(gh.get("topProjects", []))
 
 
 def _dedup_github_articles(
@@ -203,10 +234,10 @@ def _dedup_github_articles(
 
 def _load_yesterday_product_keys(target_date: Optional[str]) -> set[str]:
     """
-    读取昨日日报归档，获取已展示的产品去重键集合。
+    读取昨日日报，获取已展示的产品去重键集合。
 
     当前使用 productHighlights.notableProducts 中的 product_name 作为去重键。
-    若昨日日报不存在或解析失败，返回空集合。
+    昨日日报不存在或解析失败时返回空集合（去重降级为不去重）。
 
     参数：
         target_date: 目标报告日期（YYYY-MM-DD），None 时使用今天
@@ -214,30 +245,11 @@ def _load_yesterday_product_keys(target_date: Optional[str]) -> set[str]:
     返回：
         昨日已展示的产品名集合
     """
-    try:
-        if target_date:
-            yesterday = date.fromisoformat(target_date) - timedelta(days=1)
-        else:
-            yesterday = date.today() - timedelta(days=1)
-    except (ValueError, TypeError):
+    data = _load_yesterday_report(target_date)
+    ph = (data.get("specializedBrief") or {}).get("productHighlights")
+    if not ph:
         return set()
-
-    yesterday_str = yesterday.isoformat()
-    reports_dir = resolve_data_dir("reports")
-    report_path = reports_dir / f"daily-report-{yesterday_str}.json"
-
-    if not report_path.exists():
-        return set()
-
-    try:
-        data = read_json(report_path) or {}
-        ph = (data.get("specializedBrief") or {}).get("productHighlights")
-        if not ph:
-            return set()
-        return set(ph.get("notableProducts", []))
-    except Exception as exc:
-        logger.warning("读取昨日日报失败 %s: %s", report_path, exc)
-        return set()
+    return set(ph.get("notableProducts", []))
 
 
 def _dedup_product_articles(
