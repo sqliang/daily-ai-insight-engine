@@ -178,13 +178,13 @@ uv run python pipeline/run.py synthesize --target-date 2026-06-10  # Generate re
 
 位置：`.agents/skills/daily-report-pipeline/`（`.claude/skills/` 下有完全相同的镜像副本，修改任一份后必须同步另一份）。
 
-用途：scout/ingest 由每日 17:30 定时任务完成后，从抓取完整性检查开始，按 **check → 定点 repair → 复检门禁** 的方式跑通 extract → analyze → synthesize，生成指定日期的日报。所有操作严格限定 frontmatter `created == 目标日期` 的文章；repair 为单文件粒度（控制 LLM 成本）；每阶段最多 2 轮修复循环。
+用途：scout/ingest 由每日 17:30 定时任务完成后，从抓取完整性检查开始，按 **check → 定点 repair → 复检门禁** 的方式跑通 extract → analyze → synthesize → publish，生成指定日期的日报并发布到 PostgreSQL。所有操作严格限定 frontmatter `created == 目标日期` 的文章；repair 为单文件粒度（控制 LLM 成本）；每阶段最多 2 轮修复循环。synthesize 成功后自动 publish（失败仅 warning），流程末尾再补一条幂等 `publish --target-date` 兜底，并以 DB 行数核验作为"站点可见"的判据。跨天去重的昨日日报来源为 本地文件 → DB 兜底。
 
 ```bash
 GATE=.agents/skills/daily-report-pipeline/scripts/pipeline_gate.py
 uv run python $GATE check-ingest --date 2026-07-21    # 抓取完整性检查（JSON 报告，exit 0/1）
 uv run python $GATE repair-ingest --date 2026-07-21   # 定点修复（浏览器重抓 + Jina 兜底 + 劣化回滚 + arxiv manifest 自动补建）
-uv run python $GATE run-extract --date 2026-07-21     # 日期隔离执行 extract（单进程 --target-date，超 100 篇预检熔断拒跑）
+uv run python $GATE run-extract --date 2026-07-21     # 日期隔离执行 extract（单进程 --target-date，超 200 篇预检熔断拒跑）
 uv run python $GATE check-extract --date 2026-07-21   # Stage 2 后验检查
 uv run python $GATE repair-extract --date 2026-07-21  # 单文件 extract --force
 uv run python $GATE run-analyze --date 2026-07-21     # 日期隔离执行 analyze（同上）
