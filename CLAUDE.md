@@ -172,7 +172,22 @@ uv run python pipeline/run.py aggregate --lookback-days 7  # Standalone: re-aggr
 uv run python pipeline/run.py synthesize --lookback-days 7  # Re-aggregate last 7 days before synthesis
 uv run python pipeline/run.py aggregate --target-date 2026-06-10  # Exact date: only articles with created==2026-06-10
 uv run python pipeline/run.py synthesize --target-date 2026-06-10  # Generate report for a specific past date
+
+# Weekly digest (standalone package, zero LLM — pure local template rendering):
+uv run python weekly_digest/run.py                          # github-trending + producthunt × 本 ISO 周 → weekly_reports/
+uv run python weekly_digest/run.py --week last              # 上一 ISO 周（别名 current/last，避免手算周数）
+uv run python weekly_digest/run.py --week 2026-W40          # 指定历史周
+uv run python weekly_digest/run.py --from 2026-10-01 --to 2026-10-12  # 跨周区间：按 ISO 周展开，逐周各生成一份
+uv run python weekly_digest/run.py --source github-trending # 只跑单源
+# 重复运行同一周为幂等全量重生成（不丢数据，已补 extract 的文章自动升级中文摘要），
+# 并输出"较上次：新增 N 条 / M 条升级为中文摘要"变更告知；周未结束时文档头标注"进行中快照"
 ```
+
+## 周报 skill（weekly-digest）
+
+位置：`.agents/skills/weekly-digest/`（`.claude/skills/` 下有完全相同的镜像副本，修改任一份后必须同步另一份）。
+
+用途：把"生成这周/上周/某区间的 GitHub Trending 与 Product Hunt 周报"封装为自然语言入口。skill 只做意图解析（映射到 `--week` / `--from` / `--to` / `--source`）与流程编排，业务逻辑全部在 `weekly_digest/` Python 层；含周初空数据保护与中文摘要覆盖率提示，不触发主 pipeline 任何阶段。
 
 ## 指定日期日报流水线 skill（daily-report-pipeline）
 
@@ -237,6 +252,14 @@ pipeline/
   synthesis/                # Stage 4b: Editor-in-Chief report generation（daily report + specialized briefs）
     prompts/                #   System + user prompts for report synthesis
   publish/                  # Stage 5: data/ → PostgreSQL upsert（db.py 连接 / publishers.py 映射+upsert / cli.py）
+
+weekly_digest/              # 周报生成器（独立包，零 LLM）：按 ISO 周汇总 data/ 信源 → weekly_reports/
+  run.py                    #   CLI 入口（--week / --source / --output-dir）
+  collector.py              #   扫描 02_extracted 优先 + 01_raw 补齐，周窗口过滤 + ID 去重 + 字段降级
+  render.py                 #   WeeklyDigest → 中英文对照 Markdown
+  models.py                 #   DigestItem / WeeklyDigest（Pydantic v2，预留为 web 站点周报数据源）
+
+weekly_reports/             # 周报输出（运行生成）：{source}/{iso_week}.md + .json，未 gitignore 可提交
 
 src/
   app/
