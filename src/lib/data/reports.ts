@@ -7,6 +7,7 @@
 // 数据源：PostgreSQL daily_reports 表（由 pipeline Stage 5 publish 写入）。
 // ============================================================================
 
+import { cache } from "react";
 import { and, desc, eq, gte, inArray, lte } from "drizzle-orm";
 
 import { dailyReportSchema, type DailyReport } from "@/lib/agent/schema";
@@ -96,6 +97,25 @@ export function detectSpecializedAvailability(
 // ============================================================================
 // 数据读取
 // ============================================================================
+
+/**
+ * 列出全部日报日期（仅 date 列，不搬运 JSONB）。
+ *
+ * 供各 [date] 动态段页面的 generateStaticParams 使用：构建期据此
+ * 预渲染已知日期（配合 revalidate 形成 ISR），新日期走按需生成。
+ * React cache() 包装：同一构建 worker 内多页面调用只查询一次。
+ *
+ * 返回：
+ *   日期数组（YYYY-MM-DD，降序）
+ */
+export const listReportDates = cache(async (): Promise<string[]> => {
+  const db = getDb();
+  const rows = await db
+    .select({ date: dailyReports.date })
+    .from(dailyReports)
+    .orderBy(desc(dailyReports.date));
+  return rows.map((r) => r.date);
+});
 
 /** listReports 的分页参数；缺省时返回范围内全部日报（兼容旧行为） */
 export interface ListReportsPagination {
@@ -205,6 +225,8 @@ export async function listReports(
 
 /**
  * 读取指定日期的完整日报数据。
+ * React cache() 包装：/report/[date] 等页面同一请求内会重复调用
+ * （如 getReportMarkdown 降级路径 + 页面直读），请求内只查询一次。
  *
  * 参数：
  *   date: 日报日期，格式 YYYY-MM-DD
@@ -212,29 +234,32 @@ export async function listReports(
  * 返回：
  *   DailyReport 或 null（该日期无报告或解析失败）
  */
-export async function getReport(date: string): Promise<DailyReport | null> {
-  const db = getDb();
-  const rows = await db
-    .select({ report: dailyReports.report })
-    .from(dailyReports)
-    .where(eq(dailyReports.date, date))
-    .limit(1);
+export const getReport = cache(
+  async (date: string): Promise<DailyReport | null> => {
+    const db = getDb();
+    const rows = await db
+      .select({ report: dailyReports.report })
+      .from(dailyReports)
+      .where(eq(dailyReports.date, date))
+      .limit(1);
 
-  const raw = rows[0]?.report;
-  if (raw === undefined) return null;
+    const raw = rows[0]?.report;
+    if (raw === undefined) return null;
 
-  try {
-    return dailyReportSchema.parse(raw);
-  } catch {
-    return null;
-  }
-}
+    try {
+      return dailyReportSchema.parse(raw);
+    } catch {
+      return null;
+    }
+  },
+);
 
 /**
  * 读取指定日期的日报 Markdown 全文。
  *
  * 优先读取 daily_reports.report_md（管道 Stage 4b 产出、publish 入库），
  * 为空时降级为 report JSON → generateMarkdown() 转换。
+ * React cache() 包装：请求内去重（issue #152）。
  *
  * 参数：
  *   date: 日报日期，格式 YYYY-MM-DD
@@ -242,22 +267,24 @@ export async function getReport(date: string): Promise<DailyReport | null> {
  * 返回：
  *   Markdown 字符串或 null（该日期无报告）
  */
-export async function getReportMarkdown(date: string): Promise<string | null> {
-  const db = getDb();
-  const rows = await db
-    .select({ reportMd: dailyReports.reportMd })
-    .from(dailyReports)
-    .where(eq(dailyReports.date, date))
-    .limit(1);
+export const getReportMarkdown = cache(
+  async (date: string): Promise<string | null> => {
+    const db = getDb();
+    const rows = await db
+      .select({ reportMd: dailyReports.reportMd })
+      .from(dailyReports)
+      .where(eq(dailyReports.date, date))
+      .limit(1);
 
-  // 优先返回入库的 .md 全文（publish 时已剥离 YAML frontmatter）
-  const md = rows[0]?.reportMd;
-  if (md) return md;
+    // 优先返回入库的 .md 全文（publish 时已剥离 YAML frontmatter）
+    const md = rows[0]?.reportMd;
+    if (md) return md;
 
-  // JSON → Markdown 降级
-  const report = await getReport(date);
-  if (!report) return null;
+    // JSON → Markdown 降级
+    const report = await getReport(date);
+    if (!report) return null;
 
-  const { generateMarkdown } = await import("@/lib/report/generate-markdown");
-  return generateMarkdown(report);
-}
+    const { generateMarkdown } = await import("@/lib/report/generate-markdown");
+    return generateMarkdown(report);
+  },
+);

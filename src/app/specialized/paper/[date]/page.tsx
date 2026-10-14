@@ -23,7 +23,8 @@ import type { PaperEntry } from '@/lib/data/specialized';
 import { RESEARCH_AREA_LABELS, RESEARCH_AREA_COLORS } from '@/components/sources/PaperCard';
 import { PageShell } from '@/components/layout/PageShell';
 
-export const dynamic = 'force-dynamic';
+// 日报数据一天只发布一两次，1 小时 ISR 足够新鲜（issue #152）
+export const revalidate = 3600;
 
 interface Props {
   params: Promise<{ date: string }>;

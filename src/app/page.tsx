@@ -2,12 +2,17 @@ import type { Metadata } from "next";
 import { PageShell } from "@/components/layout/PageShell";
 import { SourcesGrid } from "@/components/sources/SourcesGrid";
 import { SourcesHero } from "@/components/sources/SourcesHero";
-import { getSourcesViewData } from "@/lib/data/sources";
+import {
+  getSourcesViewData,
+  getTiersMeta,
+  type SourceStatus,
+} from "@/lib/data/sources";
+import type { TierMeta } from "@/lib/data/tiers";
 
-// Next.js App Router 的一个**路由段配置（Route Segment Config）**声明，
-// 作用是告诉 Next.js： 这个页面始终以动态模式渲染，不要进行静态生成（SSG） 
-// 确保每次用户访问都能拿到最新的数据,每次请求都重新渲染
-export const dynamic = "force-dynamic";
+// Next.js App Router 路由段配置：1 小时 ISR。
+// 数据（manifest / 日报）一天只由 pipeline 发布一两次，无需逐请求渲染；
+// 原 force-dynamic 零缓存是 Neon 出站流量耗尽的根因之一（issue #152）
+export const revalidate = 3600;
 
 // 页面元数据
 export const metadata: Metadata = {
@@ -15,10 +20,21 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  
-  // 调用 getSourcesViewData() 来获取数据源信息。
-  // 这些数据可能随时变化（比如数据库中新增了 source），所以需要 每次请求都从数据源拉取最新数据 ，而不是在构建时生成一份静态页面。
-  const { tiersMeta, sources, totalSources } = await getSourcesViewData();
+  // 数据获取 fail-soft：CI 无 DATABASE_URL、或 Neon 挂起导致 DB 不可达时，
+  // 用空数据兜底渲染，保证构建顺利完成（issue #152 后续修复）。
+  // 页面为 1h ISR，DB 恢复后下一次再验证即重新生成真实数据。
+  let tiersMeta: Record<string, TierMeta>;
+  let sources: SourceStatus[] = [];
+  let totalSources = 0;
+  try {
+    const data = await getSourcesViewData();
+    tiersMeta = data.tiersMeta;
+    sources = data.sources;
+    totalSources = data.totalSources;
+  } catch {
+    // tiersMeta 来自 config.yaml 文件读取（不依赖 DB），DB 故障时仍可正常展示
+    tiersMeta = await getTiersMeta();
+  }
 
   const tierSourceCounts: Record<string, number> = {};
   for (const s of sources) {

@@ -12,9 +12,7 @@
 // ============================================================================
 
 import { z } from "zod";
-import type { ProcessingStatus } from "@/lib/data/status";
-import { determineProcessingStatus } from "@/lib/data/status";
-import type { StructuredArticle } from "@/lib/data/status";
+import type { ProcessingStatus, StructuredArticle } from "@/lib/data/status";
 
 // -- 内部模块导入 --
 import type {
@@ -34,7 +32,13 @@ import {
   mergeArticlesFromManifests,
   normalizeUrl,
 } from "./manifests";
-import { loadStructuredData } from "./structured-data";
+import {
+  loadStructuredById,
+  loadStructuredByUrls,
+  loadStructuredSummaries,
+  summarizeStatus,
+  type StructuredArticleSummary,
+} from "./structured-data";
 import { decodeUrlSlug, normalizeArticleUrl } from "./article-route";
 import { paginate, PAGE_SIZE_ARTICLES } from "@/lib/utils/pagination";
 
@@ -67,23 +71,27 @@ function buildSourceListHref(sourceName: string, dateRange?: DateRange, sort?: s
   return qs ? `/sources/${sourceName}?${qs}` : `/sources/${sourceName}`;
 }
 
-function getImpactScore(article: EnrichedArticle): number {
-  return (
-    article.enriched?.impact_score?.score ??
-    article.enriched?.compound_value?.score ??
-    0
-  );
-}
+// ---------------------------------------------------------------------------
+// impact 排序 — 基于轻量摘要的排序分（不依赖完整 payload）
+// ---------------------------------------------------------------------------
 
 /**
  * 按影响力分数降序排序（返回新数组，不改原数组）。
  *
+ * 排序分来自 summaries（payload 的 JSON 路径在服务端提取），回退规则
+ * impactScore ?? compoundScore ?? 0 与旧的 enriched.impact_score?.score
+ * ?? enriched.compound_value?.score ?? 0 完全等价。
  * 共享 helper：getSourceDetailEnriched（服务端排序上移）与
  * getSourceArticleDetail（详情页 prev/next 排序）必须使用同一套
  * 排序逻辑，否则列表页与详情页的文章顺序会不一致。
  */
-function sortArticlesByImpact(articles: EnrichedArticle[]): EnrichedArticle[] {
-  return [...articles].sort((a, b) => getImpactScore(b) - getImpactScore(a));
+function sortArticlesByImpact(
+  articles: EnrichedArticle[],
+  sortScoreByUrl: Map<string, number>,
+): EnrichedArticle[] {
+  const scoreOf = (a: EnrichedArticle) =>
+    sortScoreByUrl.get(normalizeUrl(a.url)) ?? 0;
+  return [...articles].sort((a, b) => scoreOf(b) - scoreOf(a));
 }
 
 // 详情页兜底定位用的全量时间范围：覆盖所有 manifest 日期，确保任何
@@ -214,32 +222,45 @@ export interface SourceDetailQueryOptions {
   sort?: "impact" | null;
 }
 
+// ---------------------------------------------------------------------------
+// 内部：manifest + 轻量摘要的合并上下文（两个 public API 共用）
+//
+// 设计理由（issue #152）：articles.payload 平均 ~10KB/行，列表构建只需要
+// 状态标志与排序分，因此关联层一律使用 loadStructuredSummaries 的轻量
+// 摘要；完整 payload 只在分页切片后按当前页 URL（或详情页目标文章 id）
+// 取回。EnrichedArticle.enriched 在本层一律为 null（延迟加载）。
+// ---------------------------------------------------------------------------
+
 /**
- * 获取 source 详情，包含结构化 enrichment 数据。
+ * manifest 文章列表与轻量摘要的合并结果。
  *
- * 这是 source 详情页（/sources/[name]）的主要数据获取函数。
- * 执行以下步骤：
- *   1. 读取 config.yaml 获取 source 配置
- *   2. 加载最新 manifest（或 dateRange 内的所有 manifest）
- *   3. 通过 loadStructuredData 加载 enrichment（含 archive 分片）
- *   4. 将 manifest articles 与 enrichment 数据合并
- *   5. 计算处理阶段分布和可用日期列表
- *   6. （可选）按影响力排序并分页切片 —— articleCount 始终保持
- *      切片前的总数口径，articles 为当前页数据
- *
- * 参数：
- *     name:      source 名称
- *     dateRange: 可选的日期范围筛选
- *     options:   可选的分页与排序参数
- *
- * 返回：
- *     带 enrichment 的 source 详情，不存在时返回 null
+ * 供 getSourceDetailEnriched（排序→分页→当前页补 payload）与
+ * getSourceArticleDetail（定位→单篇补 payload）共用，保证两者看到的
+ * 列表顺序与排序分完全一致。
  */
-export async function getSourceDetailEnriched(
+interface ArticleListContext {
+  config: SourceConfig;
+  /** 合并后的文章列表；enriched 均为 null（延迟加载），status 来自摘要 */
+  articles: EnrichedArticle[];
+  /** normalizeUrl(url) → impact 排序分（impactScore ?? compoundScore ?? 0） */
+  sortScoreByUrl: Map<string, number>;
+  manifestDate: string | null;
+  manifestGeneratedAt: string | null;
+  availableDates: string[];
+  stageCounts: Record<ProcessingStatus, number>;
+}
+
+/**
+ * 构建文章列表上下文：加载 manifest 与轻量摘要，按 normalizeUrl 关联，
+ * 计算 status / stageCounts / availableDates。
+ *
+ * 指定 dateRange 时合并该范围内的全部 manifest（按 manifest.date 筛选），
+ * 否则只使用最新 manifest —— 与旧实现口径一致。
+ */
+async function buildArticleListContext(
   name: string,
   dateRange?: DateRange,
-  options?: SourceDetailQueryOptions,
-): Promise<EnrichedSourceDetail | null> {
+): Promise<ArticleListContext | null> {
   const [configs, latestManifests] = await Promise.all([
     getSourceConfigs(),
     loadManifests(),
@@ -249,13 +270,17 @@ export async function getSourceDetailEnriched(
   if (!config) return null;
 
   const latestManifest = latestManifests.get(name);
-  const structuredData = await loadStructuredData(name, dateRange);
+  const summaries = await loadStructuredSummaries(name, dateRange);
 
-  const structuredMap = new Map<string, StructuredArticle>();
-  for (const s of structuredData) {
-    const normalized = normalizeUrl(s.source);
-    if (!structuredMap.has(normalized)) {
-      structuredMap.set(normalized, s);
+  // 摘要关联 map 与排序分 map 同键（normalizeUrl），首见优先（与旧实现一致）
+  const summaryMap = new Map<string, StructuredArticleSummary>();
+  const sortScoreByUrl = new Map<string, number>();
+  for (const s of summaries) {
+    if (!s.url) continue;
+    const key = normalizeUrl(s.url);
+    if (!summaryMap.has(key)) {
+      summaryMap.set(key, s);
+      sortScoreByUrl.set(key, s.impactScore ?? s.compoundScore ?? 0);
     }
   }
 
@@ -302,10 +327,8 @@ export async function getSourceDetailEnriched(
     .map((m) => m.date)
     .filter((d): d is string => d !== null && d !== undefined);
 
-  const enrichedArticles: EnrichedArticle[] = manifestArticles.map((a) => {
-    const normalizedArticleUrl = normalizeUrl(a.url);
-    const enriched =
-      structuredMap.get(normalizedArticleUrl) ?? null;
+  const articles: EnrichedArticle[] = manifestArticles.map((a) => {
+    const summary = summaryMap.get(normalizeUrl(a.url)) ?? null;
     return {
       url: a.url,
       title: a.title,
@@ -313,10 +336,8 @@ export async function getSourceDetailEnriched(
       summary: a.summary ?? "",
       author: a.author ?? "",
       id: a.id,
-      enriched,
-      status: enriched
-        ? determineProcessingStatus(enriched)
-        : "scout",
+      enriched: null,
+      status: summary ? summarizeStatus(summary) : "scout",
     };
   });
 
@@ -325,26 +346,34 @@ export async function getSourceDetailEnriched(
     extracted: 0,
     analyzed: 0,
   };
-  for (const a of enrichedArticles) {
+  for (const a of articles) {
     stageCounts[a.status]++;
   }
 
-  // 排序 → 分页切片：articleCount 保持切片前总数口径（hero 统计、
-  // 列表徽标依赖），articles 仅为当前页数据，避免全量渲染导致卡顿
-  const sortedArticles =
-    options?.sort === "impact"
-      ? sortArticlesByImpact(enrichedArticles)
-      : enrichedArticles;
+  return {
+    config,
+    articles,
+    sortScoreByUrl,
+    manifestDate,
+    manifestGeneratedAt,
+    availableDates,
+    stageCounts,
+  };
+}
 
-  const paginated =
-    options?.page !== undefined || options?.pageSize !== undefined
-      ? paginate(
-          sortedArticles,
-          options.page ?? 1,
-          options.pageSize ?? PAGE_SIZE_ARTICLES,
-        )
-      : null;
-
+/**
+ * 将列表上下文组装为 EnrichedSourceDetail（两个 public API 共用）。
+ *
+ * articles 参数为最终对外暴露的列表（当前页切片或全量），
+ * articleCount 始终保持切片前总数口径（hero 统计、列表徽标依赖）。
+ */
+function contextToSourceDetail(
+  ctx: ArticleListContext,
+  articles: EnrichedArticle[],
+  dateRange: DateRange | undefined,
+  paginated: ReturnType<typeof paginate<EnrichedArticle>> | null,
+): EnrichedSourceDetail {
+  const { config } = ctx;
   return {
     name: config.name,
     type: config.type,
@@ -361,13 +390,13 @@ export async function getSourceDetailEnriched(
     max_age_hours: config.filter?.max_age_hours ?? 0,
     truncation: config.truncation,
     target_dir: config.target_dir,
-    manifestFound: manifestArticles.length > 0,
-    articleCount: enrichedArticles.length,
-    articles: paginated ? paginated.items : sortedArticles,
-    manifestDate,
-    manifestGeneratedAt,
-    stageCounts,
-    availableDates,
+    manifestFound: ctx.articles.length > 0,
+    articleCount: ctx.articles.length,
+    articles,
+    manifestDate: ctx.manifestDate,
+    manifestGeneratedAt: ctx.manifestGeneratedAt,
+    stageCounts: ctx.stageCounts,
+    availableDates: ctx.availableDates,
     dateRange: dateRange ?? null,
     pagination: paginated
       ? {
@@ -381,15 +410,86 @@ export async function getSourceDetailEnriched(
 }
 
 /**
+ * 获取 source 详情，包含结构化 enrichment 数据。
+ *
+ * 这是 source 详情页（/sources/[name]）的主要数据获取函数。
+ * 执行以下步骤：
+ *   1. 读取 config.yaml 获取 source 配置
+ *   2. 加载最新 manifest（或 dateRange 内的所有 manifest）
+ *   3. 通过 loadStructuredSummaries 加载轻量摘要（不搬运 payload）
+ *   4. 将 manifest articles 与摘要关联，得到 status 与排序分
+ *   5. 计算处理阶段分布和可用日期列表
+ *   6. （可选）按影响力排序并分页切片 —— articleCount 始终保持
+ *      切片前的总数口径，articles 为当前页数据
+ *   7. 分页模式下仅对当前页文章用 loadStructuredByUrls 补全 enriched
+ *      payload；未分页时（详情页定位场景）enriched 保持 null，由调用方
+ *      按需单篇补全 —— 避免整源 payload 全量传输（issue #152）
+ *
+ * 参数：
+ *     name:      source 名称
+ *     dateRange: 可选的日期范围筛选
+ *     options:   可选的分页与排序参数
+ *
+ * 返回：
+ *     带 enrichment 的 source 详情，不存在时返回 null
+ */
+export async function getSourceDetailEnriched(
+  name: string,
+  dateRange?: DateRange,
+  options?: SourceDetailQueryOptions,
+): Promise<EnrichedSourceDetail | null> {
+  const ctx = await buildArticleListContext(name, dateRange);
+  if (!ctx) return null;
+
+  // 排序 → 分页切片：articleCount 保持切片前总数口径（hero 统计、
+  // 列表徽标依赖），articles 仅为当前页数据，避免全量渲染导致卡顿
+  const sortedArticles =
+    options?.sort === "impact"
+      ? sortArticlesByImpact(ctx.articles, ctx.sortScoreByUrl)
+      : ctx.articles;
+
+  const paginated =
+    options?.page !== undefined || options?.pageSize !== undefined
+      ? paginate(
+          sortedArticles,
+          options.page ?? 1,
+          options.pageSize ?? PAGE_SIZE_ARTICLES,
+        )
+      : null;
+
+  let articles = paginated ? paginated.items : sortedArticles;
+
+  // 仅当前页补全 payload：ArticleCard 渲染需要 tldr/sentiment/评分等
+  // enriched 字段；非当前页文章不渲染，不需要 payload（流量优化核心）
+  if (paginated && paginated.items.length > 0) {
+    const payloadMap = await loadStructuredByUrls(
+      name,
+      paginated.items.map((a) => a.url),
+    );
+    articles = paginated.items.map((a) => ({
+      ...a,
+      enriched: payloadMap.get(normalizeUrl(a.url)) ?? null,
+    }));
+  }
+
+  return contextToSourceDetail(ctx, articles, dateRange, paginated);
+}
+
+/**
  * 获取单篇 source 文章详情。
  *
  * 文章定位优先使用 manifest 中的 article.id；缺 ID 的历史文章使用 url-* slug。
  * previous/next 基于当前日期筛选后的文章列表，并可按影响力排序。
  *
+ * 定位基于轻量摘要列表（不触发全量 payload 加载）；定位到目标文章后
+ * 只补全该篇的 enriched payload —— 优先按 articles 主键 id 精确查，
+ * 未命中时按 url 兜底。prev/next 条目只用于导航卡片（title/url/id），
+ * 不需要完整 payload，enriched 保持 null。
+ *
  * 定位兜底：dateRange 过滤后的列表找不到时，用全量时间范围再定位一次。
  * 详情页的 dateRange 默认值（近 14 天，见 page.tsx resolveDateRange）会裁掉
  * 老文章，而列表页默认"全部"可达任意历史文章——不兜底的话，从列表点进
- * 任何早于 14 天的文章都会 404（issue #147）。
+ * 任何早于 14 天的文章都会 404（issue #147）。摘要很轻，兜底成本低。
  */
 export async function getSourceArticleDetail(
   sourceName: string,
@@ -397,8 +497,8 @@ export async function getSourceArticleDetail(
   dateRange?: DateRange,
   sort?: "impact" | null,
 ): Promise<SourceArticleDetail | null> {
-  const source = await getSourceDetailEnriched(sourceName, dateRange);
-  if (!source) return null;
+  const ctx = await buildArticleListContext(sourceName, dateRange);
+  if (!ctx) return null;
 
   const fallbackUrl = articleIdOrSlug.startsWith("url-")
     ? decodeUrlSlug(articleIdOrSlug.slice(4))
@@ -412,27 +512,46 @@ export async function getSourceArticleDetail(
     });
 
   let articles =
-    sort === "impact" ? sortArticlesByImpact(source.articles) : source.articles;
+    sort === "impact"
+      ? sortArticlesByImpact(ctx.articles, ctx.sortScoreByUrl)
+      : ctx.articles;
   let index = locate(articles);
 
   // 筛选窗口内未命中：改用全量范围重新加载并定位。
   // 命中后 prev/next 也基于全量列表（"全部"上下文），保证导航可用
   if (index < 0) {
-    const fullSource = await getSourceDetailEnriched(
+    const fullCtx = await buildArticleListContext(
       sourceName,
       ARTICLE_LOCATE_FULL_RANGE,
     );
-    if (!fullSource) return null;
+    if (!fullCtx) return null;
     const fullArticles =
       sort === "impact"
-        ? sortArticlesByImpact(fullSource.articles)
-        : fullSource.articles;
+        ? sortArticlesByImpact(fullCtx.articles, fullCtx.sortScoreByUrl)
+        : fullCtx.articles;
     index = locate(fullArticles);
     if (index < 0) return null;
     articles = fullArticles;
   }
 
-  const article = articles[index];
+  const target = articles[index];
+
+  // 目标文章补全完整 payload（详情页正文渲染必须）：优先主键 id 精确查，
+  // id 缺失或未命中时按 url 兜底（历史 manifest 可能缺 id 字段）
+  let enriched: StructuredArticle | null = null;
+  if (target.id) {
+    enriched = await loadStructuredById(sourceName, target.id);
+  }
+  if (!enriched) {
+    const payloadMap = await loadStructuredByUrls(sourceName, [target.url]);
+    enriched = payloadMap.get(normalizeUrl(target.url)) ?? null;
+  }
+  const article: EnrichedArticle = { ...target, enriched };
+
+  // source 字段沿用首个 dateRange 上下文（与旧实现一致：兜底定位不改变
+  // hero 展示的统计口径）；articles 为定位上下文的全量列表
+  const source = contextToSourceDetail(ctx, ctx.articles, dateRange, null);
+
   return {
     source,
     article,

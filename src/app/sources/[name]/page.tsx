@@ -15,7 +15,10 @@ import {
 } from "@/lib/data/tiers";
 import { formatGeneratedAt } from "@/lib/utils/date";
 
-export const dynamic = "force-dynamic";
+// 数据一天只由 pipeline 发布一两次，1 小时 ISR 足够新鲜（issue #152）。
+// 注意：本页读取 searchParams（分页/日期筛选），含参 URL 仍为请求时渲染，
+// 但数据层已改为轻量摘要 + 当前页 payload，单次查询量大幅下降
+export const revalidate = 3600;
 
 /**
  * 生成数据源详情页面的元数据

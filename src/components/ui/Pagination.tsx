@@ -8,8 +8,8 @@
 // 保持 URL 干净。适用于所有服务端切片分页的列表页：
 //   - /sources/[name] 文章列表（anchorId="article-list"）
 //   - /dashboard 日报卡片列表（anchorId="report-list"）
-// 设计理由：项目无 API 层，页面为 force-dynamic 服务端组件，翻页状态放在
-// URL 中可分享、可后退，且与日期筛选、排序参数正交组合。
+// 设计理由：项目无 API 层，页面为服务端组件（ISR，见 issue #152），
+// 翻页状态放在 URL 中可分享、可后退，且与日期筛选、排序参数正交组合。
 // ============================================================================
 
 import { useRouter, useSearchParams } from "next/navigation";
