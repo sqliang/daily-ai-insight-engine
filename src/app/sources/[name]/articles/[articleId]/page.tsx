@@ -28,7 +28,10 @@ import {
 } from "@/lib/data/status";
 import { SOURCE_TYPE_LABELS } from "@/lib/data/tiers";
 
-export const dynamic = "force-dynamic";
+// 数据一天只由 pipeline 发布一两次，1 小时 ISR 足够新鲜（issue #152）。
+// 注意：本页读取 searchParams（列表上下文），含参 URL 仍为请求时渲染，
+// 但定位已改为轻量摘要 + 单篇 payload，不再全量加载
+export const revalidate = 3600;
 
 type PageProps = {
   params: Promise<{ name: string; articleId: string }>;

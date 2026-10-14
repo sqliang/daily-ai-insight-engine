@@ -2,7 +2,8 @@
 // client.ts — Drizzle 数据库客户端（postgres.js 驱动）
 //
 // 惰性初始化：模块加载不建立连接，首次查询时才读取 DATABASE_URL 建连。
-// 这样 build 阶段（force-dynamic 页面不会真正执行查询）无需数据库可达。
+// 注意：ISR 页面（revalidate = 3600，见 issue #152）在 build 预渲染与
+// 后台再验证时都会真正执行查询，因此构建环境必须配置可用的 DATABASE_URL。
 // postgres.js 单一驱动同时覆盖本地 Docker PG 与 Neon（-pooler + sslmode）。
 //
 // 消费方：src/lib/data/ 下各数据访问模块（reports / manifests /

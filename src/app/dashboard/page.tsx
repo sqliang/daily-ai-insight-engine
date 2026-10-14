@@ -16,7 +16,9 @@ import { listReports } from "@/lib/data/reports";
 import type { DateRange } from "@/lib/data/types";
 import { PAGE_SIZE_REPORTS, parsePageParam } from "@/lib/utils/pagination";
 
-export const dynamic = "force-dynamic";
+// 日报数据一天只发布一两次，1 小时 ISR 足够新鲜（issue #152：原
+// force-dynamic 零缓存导致每次访问全量查库，耗尽 Neon 出站流量额度）
+export const revalidate = 3600;
 
 // ---------------------------------------------------------------------------
 // Search params
