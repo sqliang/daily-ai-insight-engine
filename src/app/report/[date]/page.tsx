@@ -12,6 +12,7 @@ import type { Metadata } from "next";
 import { PageShell } from "@/components/layout/PageShell";
 import { ReportHeader } from "@/components/dashboard/ReportHeader";
 import { MarkdownRenderer } from "@/components/report/MarkdownRenderer";
+import { DataUnavailable } from "@/components/ui/DataUnavailable";
 import { getReport, getReportMarkdown, listReportDates } from "@/lib/data/reports";
 
 // 日报数据一天只发布一两次，1 小时 ISR 足够新鲜（issue #152）
@@ -48,13 +49,27 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function ReportByDatePage({ params }: PageProps) {
   const { date } = await params;
-  const report = await getReport(date);
+
+  // 运行时 fail-soft：DB 不可达时渲染降级提示页（issue #152）；
+  // 正常返回 null（该日期无报告/无 Markdown）仍走 404，语义不变
+  let report: Awaited<ReturnType<typeof getReport>>;
+  let markdown: Awaited<ReturnType<typeof getReportMarkdown>> = null;
+  try {
+    report = await getReport(date);
+    if (report) {
+      markdown = await getReportMarkdown(date);
+    }
+  } catch {
+    return (
+      <PageShell>
+        <DataUnavailable />
+      </PageShell>
+    );
+  }
 
   if (!report) {
     notFound();
   }
-
-  const markdown = await getReportMarkdown(date);
 
   if (!markdown) {
     notFound();

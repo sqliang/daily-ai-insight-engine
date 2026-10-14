@@ -10,6 +10,7 @@ import { notFound } from "next/navigation";
 
 import { PageShell } from "@/components/layout/PageShell";
 import { DashboardContent } from "@/components/dashboard/DashboardContent";
+import { DataUnavailable } from "@/components/ui/DataUnavailable";
 import { getReport, listReportDates } from "@/lib/data/reports";
 
 // 日报数据一天只发布一两次，1 小时 ISR 足够新鲜（issue #152）
@@ -38,7 +39,19 @@ interface PageProps {
 
 export default async function DashboardByDatePage({ params }: PageProps) {
   const { date } = await params;
-  const report = await getReport(date);
+
+  // 运行时 fail-soft：DB 不可达时渲染降级提示页（issue #152）；
+  // 注意与"该日期无报告"区分 —— 后者是正常返回 null，仍走 404
+  let report: Awaited<ReturnType<typeof getReport>>;
+  try {
+    report = await getReport(date);
+  } catch {
+    return (
+      <PageShell>
+        <DataUnavailable />
+      </PageShell>
+    );
+  }
 
   // 该日期无报告 → 404
   if (!report) {

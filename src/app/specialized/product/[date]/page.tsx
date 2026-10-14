@@ -21,6 +21,7 @@ import {
 } from "@/lib/data/specialized";
 import { listReportDates } from "@/lib/data/reports";
 import { PageShell } from "@/components/layout/PageShell";
+import { DataUnavailable } from "@/components/ui/DataUnavailable";
 import { SpecializedReportHero } from "@/components/reports/SpecializedReportHero";
 import {
   ensureSentencePunctuation,
@@ -60,7 +61,19 @@ const LAUNCH_CONTEXT_LABELS: Record<string, string> = {
 
 export default async function ProductSpecializedPage({ params }: Props) {
   const { date } = await params;
-  const brief = await loadProductBrief(date);
+
+  // 运行时 fail-soft：DB 不可达时渲染降级提示页（issue #152）；
+  // 正常返回 null（当日无产品简报）仍走下方空状态，语义不变
+  let brief: Awaited<ReturnType<typeof loadProductBrief>>;
+  try {
+    brief = await loadProductBrief(date);
+  } catch {
+    return (
+      <PageShell>
+        <DataUnavailable />
+      </PageShell>
+    );
+  }
 
   // 当日无产品简报 → 空状态页
   if (!brief || brief.articleCount === 0) {

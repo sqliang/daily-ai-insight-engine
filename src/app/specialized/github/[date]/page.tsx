@@ -22,6 +22,7 @@ import {
 } from "@/lib/data/specialized";
 import { listReportDates } from "@/lib/data/reports";
 import { PageShell } from "@/components/layout/PageShell";
+import { DataUnavailable } from "@/components/ui/DataUnavailable";
 import { SpecializedReportHero } from "@/components/reports/SpecializedReportHero";
 import {
   DOMAIN_LABELS,
@@ -72,7 +73,19 @@ function formatDistributionLabel(key: string): string {
 
 export default async function GithubSpecializedPage({ params }: Props) {
   const { date } = await params;
-  const brief = await loadGithubBrief(date);
+
+  // 运行时 fail-soft：DB 不可达时渲染降级提示页（issue #152）；
+  // 正常返回 null（当日无项目简报）仍走下方空状态，语义不变
+  let brief: Awaited<ReturnType<typeof loadGithubBrief>>;
+  try {
+    brief = await loadGithubBrief(date);
+  } catch {
+    return (
+      <PageShell>
+        <DataUnavailable />
+      </PageShell>
+    );
+  }
   const domainEntries = Object.entries(brief?.domainDistribution || {})
     .filter(([, count]) => count > 0)
     .sort((a, b) => b[1] - a[1]);
