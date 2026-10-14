@@ -12,7 +12,8 @@ import { DashboardHero } from "@/components/dashboard/DashboardHero";
 import { ReportCard } from "@/components/reports/ReportCard";
 import { DateFilterBar } from "@/components/sources/DateFilterBar";
 import { Pagination } from "@/components/ui/Pagination";
-import { listReports } from "@/lib/data/reports";
+import { DataUnavailable } from "@/components/ui/DataUnavailable";
+import { listReports, type ListReportsResult } from "@/lib/data/reports";
 import type { DateRange } from "@/lib/data/types";
 import { PAGE_SIZE_REPORTS, parsePageParam } from "@/lib/utils/pagination";
 
@@ -49,12 +50,25 @@ export default async function DashboardPage({
   }
   // 默认「全部」：dateRange=undefined，listReports 不做日期过滤
 
-  // 服务端分页：仅解析当前页命中的日报 JSON，避免全量 parse 导致卡顿
-  const { reports, totalCount, page, totalPages, oldestDate, latestDate } =
-    await listReports(dateRange, {
+  // 服务端分页：仅解析当前页命中的日报 JSON，避免全量 parse 导致卡顿。
+  // 运行时 fail-soft：DB 不可达（Neon 配额耗尽/维护）时渲染降级提示页，
+  // 而不是让流式渲染中途抛错产生"200 空壳"（issue #152）；降级页同样
+  // 受 revalidate=3600 约束，DB 恢复后最迟 1 小时自动回切真实内容
+  let result: ListReportsResult;
+  try {
+    result = await listReports(dateRange, {
       page: parsePageParam(sp.page),
       pageSize: PAGE_SIZE_REPORTS,
     });
+  } catch {
+    return (
+      <PageShell>
+        <DataUnavailable />
+      </PageShell>
+    );
+  }
+  const { reports, totalCount, page, totalPages, oldestDate, latestDate } =
+    result;
 
   // 空状态：尚无任何日报数据
   if (reports.length === 0) {

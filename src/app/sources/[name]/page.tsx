@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { getSourceDetailEnriched, type DateRange } from "@/lib/data/sources";
 import { PageShell } from "@/components/layout/PageShell";
+import { DataUnavailable } from "@/components/ui/DataUnavailable";
 import { ArticleList } from "@/components/sources/ArticleList";
 import { DateFilterBar } from "@/components/sources/DateFilterBar";
 import { Pagination } from "@/components/ui/Pagination";
@@ -61,12 +62,23 @@ export default async function SourceDetailPage({
     return { from: "2000-01-01", to };
   })();
 
-  // 分页 + 排序均在服务端完成：排序必须先于切片，否则跨页顺序错乱
-  const source = await getSourceDetailEnriched(name, dateRange, {
-    page: parsePageParam(sp.page),
-    pageSize: PAGE_SIZE_ARTICLES,
-    sort: sp.sort === "impact" ? "impact" : null,
-  });
+  // 分页 + 排序均在服务端完成：排序必须先于切片，否则跨页顺序错乱。
+  // 运行时 fail-soft：DB 不可达时渲染降级提示页（issue #152）；
+  // 正常返回 null（source 不存在）仍走 404，语义不变
+  let source: Awaited<ReturnType<typeof getSourceDetailEnriched>>;
+  try {
+    source = await getSourceDetailEnriched(name, dateRange, {
+      page: parsePageParam(sp.page),
+      pageSize: PAGE_SIZE_ARTICLES,
+      sort: sp.sort === "impact" ? "impact" : null,
+    });
+  } catch {
+    return (
+      <PageShell>
+        <DataUnavailable />
+      </PageShell>
+    );
+  }
   if (!source) notFound();
 
   const hasManifest = source.manifestFound && source.articleCount > 0;

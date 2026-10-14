@@ -9,6 +9,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PageShell } from "@/components/layout/PageShell";
+import { DataUnavailable } from "@/components/ui/DataUnavailable";
 import { ArticleDecisionAnalysis, ArticleImpactAnalysis } from "@/components/sources/ArticleDetailAnalysis";
 import { ArticleCardExtraction } from "@/components/sources/ArticleCardExtraction";
 import { EntityChips } from "@/components/sources/EntityChips";
@@ -562,7 +563,19 @@ export default async function SourceArticleDetailPage({ params, searchParams }: 
   const sp = await searchParams;
   const dateRange = resolveDateRange(sp);
   const sort = sp.sort === "impact" ? "impact" : null;
-  const detail = await getSourceArticleDetail(name, articleId, dateRange, sort);
+
+  // 运行时 fail-soft：DB 不可达时渲染降级提示页（issue #152）；
+  // 正常返回 null（文章不存在）仍走 404，语义不变
+  let detail: Awaited<ReturnType<typeof getSourceArticleDetail>>;
+  try {
+    detail = await getSourceArticleDetail(name, articleId, dateRange, sort);
+  } catch {
+    return (
+      <PageShell>
+        <DataUnavailable />
+      </PageShell>
+    );
+  }
   if (!detail) notFound();
 
   const { source, article, previousArticle, nextArticle, listHref, originalHref } = detail;

@@ -22,6 +22,7 @@ import {
 import type { PaperEntry } from '@/lib/data/specialized';
 import { RESEARCH_AREA_LABELS, RESEARCH_AREA_COLORS } from '@/components/sources/PaperCard';
 import { PageShell } from '@/components/layout/PageShell';
+import { DataUnavailable } from '@/components/ui/DataUnavailable';
 
 // 日报数据一天只发布一两次，1 小时 ISR 足够新鲜（issue #152）
 export const revalidate = 3600;
@@ -35,7 +36,18 @@ export default async function PaperSpecializedPage({ params, searchParams }: Pro
   const { date } = await params;
   const { area: filterArea } = await searchParams;
 
-  const papers = await loadPaperArticles(date);
+  // 运行时 fail-soft：DB 不可达时渲染降级提示页（issue #152）；
+  // 正常返回空数组（当日无论文数据）仍走下方空状态，语义不变
+  let papers: Awaited<ReturnType<typeof loadPaperArticles>>;
+  try {
+    papers = await loadPaperArticles(date);
+  } catch {
+    return (
+      <PageShell>
+        <DataUnavailable />
+      </PageShell>
+    );
+  }
 
   // 当日无数据 → 空状态页
   if (papers.length === 0) {
