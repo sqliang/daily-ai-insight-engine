@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { getSourceDetailEnriched, type DateRange } from "@/lib/data/sources";
+import { getSourceConfigs } from "@/lib/data/sources/config";
 import { PageShell } from "@/components/layout/PageShell";
 import { DataUnavailable } from "@/components/ui/DataUnavailable";
 import { ArticleList } from "@/components/sources/ArticleList";
@@ -22,10 +23,18 @@ import { formatGeneratedAt } from "@/lib/utils/date";
 export const revalidate = 3600;
 
 /**
- * 生成数据源详情页面的元数据
- * 
+ * 生成数据源详情页面的元数据，并在流式渲染开始前做 source 存在性检查。
+ *
+ * 设计理由：页面组件内 await 数据后再 notFound() 时，HTTP 状态码已被
+ * 固定为 200（"假 404"）。generateMetadata 在页面渲染前执行，此处
+ * notFound() 才能返回真正的 404 状态码。
+ *
+ * 本页 404 的唯一条件是 config.yaml 中不存在该 source（纯文件读取，
+ * 零 DB 开销），因此检查与页面组件的 notFound 判定完全等价，且不受
+ * DB 可用性影响 —— DB 不可达时 source 存在性判定依然准确。
+ *
  * @param params 数据源名称参数
- * 
+ *
  * @returns 页面元数据
  */
 export async function generateMetadata({
@@ -35,6 +44,8 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   // name 从 URL 中提取的数据源名称
   const { name } = await params;
+  const configs = await getSourceConfigs();
+  if (!configs.some((c) => c.name === name)) notFound();
   return { title: `${name} - 数据源详情` };
 }
 

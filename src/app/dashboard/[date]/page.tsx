@@ -7,6 +7,7 @@
 // ============================================================================
 
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 
 import { PageShell } from "@/components/layout/PageShell";
 import { DashboardContent } from "@/components/dashboard/DashboardContent";
@@ -35,6 +36,31 @@ export async function generateStaticParams() {
 
 interface PageProps {
   params: Promise<{ date: string }>;
+}
+
+/**
+ * 生成页面元数据，并在流式渲染开始前做日报存在性检查。
+ *
+ * 设计理由：页面组件内 await 数据后再 notFound() 时，HTTP 状态码已被
+ * 固定为 200（"假 404"，会被搜索引擎误收录）。generateMetadata 在页面
+ * 渲染前执行，此处 notFound() 才能返回真正的 404 状态码。
+ *
+ * getReport 已被 React cache() 包装，与页面组件在同请求内共享结果，
+ * 本检查不产生额外 DB 查询。
+ *
+ * 与 DB 不可达的交互：抛错时只返回通用标题、不做 notFound（数据可能
+ * 只是暂时拿不到，不能误判 404），降级提示由页面组件层负责渲染。
+ */
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { date } = await params;
+  let report: Awaited<ReturnType<typeof getReport>>;
+  try {
+    report = await getReport(date);
+  } catch {
+    return { title: `日报看板 ${date} - Daily AI Insight Engine` };
+  }
+  if (!report) notFound();
+  return { title: `日报看板 ${date} - Daily AI Insight Engine` };
 }
 
 export default async function DashboardByDatePage({ params }: PageProps) {
