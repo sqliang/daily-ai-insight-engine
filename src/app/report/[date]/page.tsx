@@ -39,8 +39,27 @@ interface PageProps {
   params: Promise<{ date: string }>;
 }
 
+/**
+ * 生成页面元数据，并在流式渲染开始前做日报存在性检查。
+ *
+ * 设计理由同 dashboard/[date]：页面组件内 await 后 notFound() 只能返回
+ * 200 假 404；generateMetadata 在渲染前执行，此处才能返回真正的 404。
+ * getReport 已被 React cache() 包装，与页面组件同请求共享结果，无额外
+ * DB 查询。DB 不可达（抛错）时不误判 404，返回通用标题，降级提示由
+ * 页面组件层负责。
+ */
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { date } = await params;
+  let report: Awaited<ReturnType<typeof getReport>>;
+  try {
+    report = await getReport(date);
+  } catch {
+    return {
+      title: `AI 情报日报 ${date} - Daily AI Insight Engine`,
+      description: `${date} AI 舆情分析日报完整报告`,
+    };
+  }
+  if (!report) notFound();
   return {
     title: `AI 情报日报 ${date} - Daily AI Insight Engine`,
     description: `${date} AI 舆情分析日报完整报告`,

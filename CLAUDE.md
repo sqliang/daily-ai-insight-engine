@@ -264,10 +264,13 @@ weekly_reports/             # 周报输出（运行生成）：{source}/{iso_wee
 src/
   app/
     layout.tsx              # Root layout with NavBar
-    page.tsx                # Sources page (homepage) — tier-grouped source inventory
-    loading.tsx             # Sources page skeleton loading state
+    (home)/                 # 路由组（URL 不变）：隔离骨架屏 Suspense，避免提前流式 flush 导致 notFound 状态码退化为 200
+      page.tsx              # Sources page (homepage) — tier-grouped source inventory
+      loading.tsx           # Sources page skeleton loading state
     dashboard/
-      page.tsx              # 日报卡片列表 — 扫描 daily-report-*.json，展示所有历史日报
+      (list)/               # 路由组（URL 不变）：骨架屏仅作用于列表页
+        page.tsx            # 日报卡片列表 — 扫描 daily-report-*.json，展示所有历史日报
+        loading.tsx         # 卡片列表页骨架屏
       [date]/
         page.tsx            # 指定日期的可视化仪表盘（KPI + 图表 + 事件 + 信号）
     report/
