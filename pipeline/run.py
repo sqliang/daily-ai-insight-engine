@@ -14,6 +14,7 @@ pipeline/run.py — Daily AI Insight Engine 管道入口
     uv run python pipeline/run.py aggregate          Stage 4a: Frontmatter 聚合 (独立运行，用于配置变更)
     uv run python pipeline/run.py synthesize         Stage 4b: 日报合成 (成功后自动 publish)
     uv run python pipeline/run.py publish            Stage 5: 发布站点数据到 PostgreSQL
+    uv run python pipeline/run.py snapshot           Stage 5: 生成站点快照（--push 推送 data-snapshot 分支）
 
 修复子命令（自动发现并修复失败文章）：
     uv run python pipeline/run.py repair             Stage 1c: 自动修复 ingest 失败的文章
@@ -299,6 +300,10 @@ if __name__ == "__main__":
   uv run python pipeline/run.py publish                     Stage 5: 发布站点数据（热数据）
   uv run python pipeline/run.py publish --force             全量历史 backfill（含 archive 冷数据）
   uv run python pipeline/run.py publish --target-date 2026-06-10  只发指定日期
+
+站点数据快照（DB 不可用时前端回退读取）:
+  uv run python pipeline/run.py snapshot                    只生成 data/snapshot/
+  uv run python pipeline/run.py snapshot --push             生成并推送 data-snapshot 分支
         """,
     )
     parser.add_argument(
@@ -316,6 +321,7 @@ if __name__ == "__main__":
     from pipeline.synthesis.cli import register_aggregate_subparser as _reg_aggregate
     from pipeline.synthesis.cli import register_synthesize_subparser as _reg_synthesize
     from pipeline.publish.cli import register_subparser as _reg_publish
+    from pipeline.publish.cli import register_snapshot_subparser as _reg_snapshot
 
     _reg_scout(subparsers)
     _reg_ingest(subparsers)
@@ -325,6 +331,7 @@ if __name__ == "__main__":
     _reg_aggregate(subparsers)
     _reg_synthesize(subparsers)
     _reg_publish(subparsers)
+    _reg_snapshot(subparsers)
     _register_repair(subparsers)  # 自动修复 ingest 失败的文章
     _register_extract_repair(subparsers)  # 自动修复 extract 失败的文章
     _register_schedule_status(subparsers)  # 定时任务状态查询（在 run.py 内定义）
