@@ -26,6 +26,7 @@ from typing import Optional
 SNAPSHOT_BRANCH = "data-snapshot"
 SNAPSHOT_REMOTE = "git@github.com:sqliang/daily-ai-insight-engine.git"
 _REPORT_NAME_RE = re.compile(r"^daily-report-(?P<date>\d{4}-\d{2}-\d{2})\.json$")
+_REPORT_MARKDOWN_NAME_RE = re.compile(r"^daily-report-(?P<date>\d{4}-\d{2}-\d{2})\.md$")
 _MANIFEST_NAME_RE = re.compile(r"^(?P<source>.+)_(?P<date>\d{4}-\d{2}-\d{2})\.json$")
 
 
@@ -63,7 +64,7 @@ def generate_snapshot(data_root: Path) -> dict:
     for output_dir in (reports_output, articles_output, manifests_output):
         output_dir.mkdir(parents=True, exist_ok=True)
 
-    report_dates = []
+    report_dates = set()
     report_files = 0
     reports_input = data_root / "05_reports"
     for report_path in sorted(reports_input.glob("daily-report-*.json")):
@@ -72,12 +73,15 @@ def generate_snapshot(data_root: Path) -> dict:
             continue
         shutil.copy2(report_path, reports_output / report_path.name)
         report_files += 1
-        report_dates.append(match.group("date"))
+        report_dates.add(match.group("date"))
 
-        markdown_path = report_path.with_suffix(".md")
-        if markdown_path.is_file():
-            shutil.copy2(markdown_path, reports_output / markdown_path.name)
-            report_files += 1
+    for markdown_path in sorted(reports_input.glob("daily-report-*.md")):
+        match = _REPORT_MARKDOWN_NAME_RE.fullmatch(markdown_path.name)
+        if not markdown_path.is_file() or match is None:
+            continue
+        shutil.copy2(markdown_path, reports_output / markdown_path.name)
+        report_files += 1
+        report_dates.add(match.group("date"))
 
     article_sources = set()
     article_files = 0
@@ -178,12 +182,13 @@ def push_snapshot(
         snapshot_root: generate_snapshot 生成的快照目录，内容映射到分支根目录。
         repo_root: 用于读取 git 作者信息的主仓库路径；默认按当前文件定位。
         remote_url: 快照推送目标，默认使用任务约定的 GitHub SSH 地址。
-        branch: 独立快照分支名，默认 data-snapshot。
+        branch: 独立快照分支名，仅允许 data-snapshot。
 
     返回：
         dict: 推送 branch、remote 与快照 commit hash。
 
     异常：
+        ValueError: branch 不是 data-snapshot 时抛出，阻止误 force push 代码分支。
         FileNotFoundError: 快照目录或 index.json 不存在时抛出。
         RuntimeError: 任一 git 初始化、提交或推送步骤失败时抛出。
 
@@ -191,6 +196,9 @@ def push_snapshot(
         临时仓库的首个提交天然没有父提交，配合 --orphan 明确分支语义；
         TemporaryDirectory 在成功或失败后都会清理，不让发布过程污染主工作区。
     """
+    if branch != SNAPSHOT_BRANCH:
+        raise ValueError(f"快照推送只允许 {SNAPSHOT_BRANCH} 分支，收到: {branch}")
+
     snapshot_root = Path(snapshot_root)
     if not snapshot_root.is_dir() or not (snapshot_root / "index.json").is_file():
         raise FileNotFoundError(f"快照目录不完整，缺少 index.json: {snapshot_root}")
