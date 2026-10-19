@@ -53,6 +53,8 @@ function hasControlCharacter(value: string): boolean {
 /**
  * 严格校验快照相对路径，防止路径穿越与 URL 注入。
  * 拒绝反斜杠、查询/片段分隔符、控制字符、绝对路径和 .. 点段。
+ * 同时直接拒绝 %：快照路径均为静态生成，无需百分号编码，可阻止
+ * %2e%2e、.%2e 经 WHATWG URL 规范化后变成点段的绕过方式。
  */
 function normalizeRelativePath(relPath: string): string {
   if (
@@ -60,6 +62,7 @@ function normalizeRelativePath(relPath: string): string {
     relPath.includes("\\") ||
     relPath.includes("?") ||
     relPath.includes("#") ||
+    relPath.includes("%") ||
     hasControlCharacter(relPath) ||
     path.posix.isAbsolute(relPath) ||
     path.win32.isAbsolute(relPath) ||
