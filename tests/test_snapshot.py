@@ -170,7 +170,7 @@ def test_generate_snapshot_merges_manifests_in_descending_date_order(tmp_path):
 
 
 def test_generate_snapshot_copies_markdown_only_report(tmp_path):
-    """带日期的 Markdown 日报无需同名 JSON，也应拷贝并进入 report_dates。"""
+    """Markdown-only 日报仍应拷贝，但没有 JSON 可展示，故不进入 report_dates。"""
     data_root = _make_mini_data(tmp_path)
     markdown_only = data_root / "05_reports" / "daily-report-2026-10-11.md"
     markdown_only.write_text("# 仅 Markdown 日报\n", encoding="utf-8")
@@ -180,7 +180,7 @@ def test_generate_snapshot_copies_markdown_only_report(tmp_path):
     snapshot_root = data_root / "snapshot"
     assert (snapshot_root / "reports" / markdown_only.name).read_bytes() == markdown_only.read_bytes()
     index = json.loads((snapshot_root / "index.json").read_text(encoding="utf-8"))
-    assert index["report_dates"] == ["2026-10-11", "2026-10-10", "2026-10-09"]
+    assert index["report_dates"] == ["2026-10-10", "2026-10-09"]
     assert stats["counts"]["reports"] == 4
 
 

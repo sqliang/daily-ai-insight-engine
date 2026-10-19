@@ -75,13 +75,14 @@ def generate_snapshot(data_root: Path) -> dict:
         report_files += 1
         report_dates.add(match.group("date"))
 
+    # report_dates 与 DB daily_reports 口径一致，只由 JSON 日报收集；
+    # Markdown-only 文件仍独立拷贝，供全文回退，但不用于日报卡片列表。
     for markdown_path in sorted(reports_input.glob("daily-report-*.md")):
         match = _REPORT_MARKDOWN_NAME_RE.fullmatch(markdown_path.name)
         if not markdown_path.is_file() or match is None:
             continue
         shutil.copy2(markdown_path, reports_output / markdown_path.name)
         report_files += 1
-        report_dates.add(match.group("date"))
 
     article_sources = set()
     article_files = 0
