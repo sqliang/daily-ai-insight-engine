@@ -156,6 +156,10 @@ uv run python pipeline/run.py publish            # Stage 5: upsert data/ → Pos
 uv run python pipeline/run.py publish --force    # Stage 5 full backfill: include archive cold-data shards
 uv run python pipeline/run.py publish --target-date 2026-07-21  # Stage 5: only that date's articles/manifests/report
 
+# 站点数据快照：DB 不可用时供前端回退读取，含 index、带日期日报、热文章与按源降序 manifest
+uv run python pipeline/run.py snapshot             # 全量重建 data/snapshot/，只在本地生成
+uv run python pipeline/run.py snapshot --push      # 临时目录构建并 force push data-snapshot orphan 分支；快照位于分支根目录，不切换主工作区
+
 # Standalone aggregate (for edge cases: config changes, --lookback-days, --hot-days, --target-date, --force):
 uv run python pipeline/run.py aggregate          # Stage 4a: extract frontmatter → all_articles.json
 
@@ -251,7 +255,7 @@ pipeline/
   aggregation/              # Stage 4a: Frontmatter aggregation + hot/cold split
   synthesis/                # Stage 4b: Editor-in-Chief report generation（daily report + specialized briefs）
     prompts/                #   System + user prompts for report synthesis
-  publish/                  # Stage 5: data/ → PostgreSQL upsert（db.py 连接 / publishers.py 映射+upsert / cli.py）
+  publish/                  # Stage 5: data/ → PostgreSQL upsert（db.py / publishers.py / cli.py）+ 站点快照（snapshot.py）
 
 weekly_digest/              # 周报生成器（独立包，零 LLM）：按 ISO 周汇总 data/ 信源 → weekly_reports/
   run.py                    #   CLI 入口（--week / --source / --output-dir）
