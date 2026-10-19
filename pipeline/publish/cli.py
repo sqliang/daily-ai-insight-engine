@@ -2,13 +2,14 @@
 pipeline/publish/cli.py — Stage 5 Publish 与站点快照 CLI 契约
 
 提供 register_*_subparser(subparsers) 供 pipeline/run.py 组装派发：
-- publish：把 data/ 目录中站点需要的数据 upsert 到 PostgreSQL。
+- publish：把 data/ 目录中站点需要的数据 upsert 到 PostgreSQL，成功后默认推送快照。
 - snapshot：生成前端 DB 故障回退快照，可选推送到 data-snapshot 分支。
 
 用法：
-    uv run python pipeline/run.py publish                     # 热数据文章 + 全部 manifest/日报
+    uv run python pipeline/run.py publish                     # 热数据文章 + 全部 manifest/日报 + 自动快照
     uv run python pipeline/run.py publish --force             # 全量历史 backfill（含 archive 冷数据）
     uv run python pipeline/run.py publish --target-date 2026-08-29  # 只发指定日期
+    uv run python pipeline/run.py publish --skip-snapshot     # 跳过 publish 成功后的自动快照
     uv run python pipeline/run.py snapshot                    # 只生成 data/snapshot/
     uv run python pipeline/run.py snapshot --push             # 生成并推送独立快照分支
 """
@@ -35,6 +36,10 @@ def register_subparser(subparsers):
         "--force", action="store_true",
         help="全量历史 backfill：文章扫描包含 archive 冷数据分片。"
              "默认行为已是 upsert 幂等，--force 的主要语义是覆盖冷数据",
+    )
+    parser.add_argument(
+        "--skip-snapshot", action="store_true",
+        help="跳过 publish 成功后的自动快照生成与 data-snapshot 推送",
     )
     parser.set_defaults(func=execute_publish)
 
@@ -68,7 +73,11 @@ def execute_publish(args) -> int:
 
     try:
         logger.info("Stage 5 Publish 开始 target_date=%s force=%s", target_date, args.force)
-        stats = publish_all(target_date=target_date, include_archive=include_archive)
+        stats = publish_all(
+            target_date=target_date,
+            include_archive=include_archive,
+            auto_snapshot=not getattr(args, "skip_snapshot", False),
+        )
 
         print("\n=== 发布完成 ===")
         print(f"  日报 (daily_reports): {stats['reports']}")
