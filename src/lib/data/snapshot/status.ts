@@ -41,8 +41,14 @@ export async function getSnapshotStatus(): Promise<SnapshotRequestStatus> {
     return { used: false, generatedAt: null };
   }
   if (!state.generatedAt) {
-    const index = await getSnapshotIndex();
-    state.generatedAt = index?.generated_at ?? null;
+    try {
+      const index = await getSnapshotIndex();
+      state.generatedAt = index?.generated_at ?? null;
+    } catch {
+      // 角标时间只是展示元数据：索引损坏/远程故障不能把已成功回退的
+      // 正文一并打挂。数据层的严格抛错语义不变，这里仅降级为未知时间
+      state.generatedAt = null;
+    }
   }
   return { ...state };
 }
