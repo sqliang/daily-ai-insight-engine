@@ -16,19 +16,28 @@ import {
 import type { DateRange } from "@/lib/data/types";
 import { paginate } from "@/lib/utils/pagination";
 import {
-  assertSnapshotAvailable,
   getSnapshotIndex,
   readSnapshotFile,
   readSnapshotJson,
+  SnapshotReadError,
 } from "./client";
 
-/** 读取单日日报 JSON；文件缺失时先确认快照整体是否可用，区分空数据与故障 */
+/**
+ * 读取单日日报 JSON。
+ *
+ * 合法 null 仅限"索引中不存在该日期且文件确认不存在"。若 index.report_dates
+ * 已包含日期而 JSON 缺失，说明快照不完整，必须抛错而不是误报 404/空页。
+ */
 async function readReportJson(date: string): Promise<unknown> {
   const raw = await readSnapshotJson(`reports/daily-report-${date}.json`);
-  if (raw === null) {
-    await assertSnapshotAvailable();
+  if (raw !== null) return raw;
+
+  const index = await getSnapshotIndex();
+  if (!index) {
+    throw new SnapshotReadError("本地与远程数据快照均不可用");
   }
-  return raw;
+  if (!index.report_dates.includes(date)) return null;
+  throw new SnapshotReadError(`索引包含 ${date}，但日报 JSON 确认缺失`);
 }
 
 /**
@@ -46,8 +55,9 @@ export async function listReportDates(): Promise<string[]> {
 /**
  * 查询快照日报列表（日期范围过滤 + 分页）。
  *
- * 与 DB 版一致：只解析当前页日期的报告；单份报告损坏时跳过该行，
- * totalCount / oldestDate / latestDate 仍按 index 中的日期集合计算。
+ * 与 DB 版一致：只解析当前页日期的报告；JSON 缺失/传输失败会抛错，
+ * 仅 schema 校验失败的单行才跳过。totalCount 与 oldest/latest 日期
+ * 仍按 index 中的日期集合计算。
  */
 export async function listReports(
   dateRange?: DateRange,
@@ -70,7 +80,11 @@ export async function listReports(
 
   const summaries: ReportSummary[] = [];
   for (const [index, raw] of rawReports.entries()) {
-    if (raw === null || raw === undefined) continue;
+    // index 只应包含带 JSON 的日期；分页命中却读不到 JSON 是快照故障，
+    // 不能静默跳过造成"有总数、无卡片"的空页（Markdown-only 不入 index）
+    if (raw === null || raw === undefined) {
+      throw new SnapshotReadError(`分页日报 JSON 读取失败：${paged.items[index]}`);
+    }
     try {
       const report = dailyReportSchema.parse(raw);
       summaries.push({
@@ -122,15 +136,29 @@ export async function getReportPayload(
 }
 
 /**
- * 读取日报 Markdown 全文；.md 缺失时回退为 JSON → Markdown 转换，
- * 与 DB 版的降级顺序一致。
+ * 剥离 Markdown 开头的 YAML frontmatter（首行 --- 到第二个 ---）。
+ * 与 pipeline/publish/publishers.py 的 strip_frontmatter 等价：
+ * 无 frontmatter 或缺少闭合标记时原样返回。
+ */
+function stripFrontmatter(text: string): string {
+  const lines = text.split(/(?<=\n)/);
+  if (!lines.length || lines[0].trim() !== "---") return text;
+  for (let i = 1; i < lines.length; i++) {
+    if (lines[i].trim() === "---") {
+      return lines.slice(i + 1).join("").replace(/^\n+/, "");
+    }
+  }
+  return text;
+}
+
+/**
+ * 读取日报 Markdown 全文；.md 缺失时回退为 JSON → Markdown 转换。
+ * 快照 .md 含 YAML frontmatter，返回前按 publish 入库口径剥离，
+ * 保证 /report/[date] 的 DB 与快照渲染一致。
  */
 export async function getReportMarkdown(date: string): Promise<string | null> {
   const markdown = await readSnapshotFile(`reports/daily-report-${date}.md`);
-  if (markdown === null) {
-    await assertSnapshotAvailable();
-  }
-  if (markdown) return markdown;
+  if (markdown) return stripFrontmatter(markdown);
 
   const report = await getReport(date);
   if (!report) return null;

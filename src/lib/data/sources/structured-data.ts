@@ -96,8 +96,8 @@ async function loadStructuredSummariesFromDb(
     .select({
       id: articles.id,
       url: articles.url,
-      // -> 对缺失键与 JSON null 均返回 SQL NULL，与 JS 中 null/undefined  falsy 语义一致
-      hasImpactScore: sql<boolean>`(${articles.payload} -> 'impact_score') IS NOT NULL`,
+      // ->> + NULLIF 与快照的 JS 文本真值口径一致：JSON null / 空串均判为无
+      hasImpactScore: sql<boolean>`NULLIF(${articles.payload} ->> 'impact_score', '') IS NOT NULL`,
       hasSentiment: sql<boolean>`NULLIF(${articles.payload} ->> 'sentiment', '') IS NOT NULL`,
       hasTldr: sql<boolean>`NULLIF(${articles.payload} ->> 'tldr', '') IS NOT NULL`,
       hasObjectiveSummary: sql<boolean>`NULLIF(${articles.payload} ->> 'objective_summary', '') IS NOT NULL`,

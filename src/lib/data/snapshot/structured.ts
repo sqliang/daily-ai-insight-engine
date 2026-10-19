@@ -74,10 +74,11 @@ function toSummary(article: SnapshotArticle): StructuredArticleSummary {
   return {
     id: typeof article.id === "string" ? article.id : "",
     url: typeof article.source === "string" ? article.source : null,
-    hasImpactScore: article.impact_score !== null && article.impact_score !== undefined,
-    hasSentiment: sentiment !== null && sentiment !== "",
-    hasTldr: tldr !== null && tldr !== "",
-    hasObjectiveSummary: objectiveSummary !== null && objectiveSummary !== "",
+    // 四个标志统一采用 JSON 文本的 JS 真值口径，与 DB 的 ->> + NULLIF 一致
+    hasImpactScore: Boolean(jsonText(article.impact_score)),
+    hasSentiment: Boolean(sentiment),
+    hasTldr: Boolean(tldr),
+    hasObjectiveSummary: Boolean(objectiveSummary),
     impactScore: extractNestedScore(article.impact_score),
     compoundScore: extractNestedScore(article.compound_value),
   };
