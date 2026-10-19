@@ -328,11 +328,12 @@ src/
 - `PRODUCTHUNT_API_TOKEN` — optional; Product Hunt GraphQL API developer token (create at https://www.producthunt.com/v2/oauth/applications, never expires). When set, producthunt article bodies are fetched via the official API, bypassing the site-wide Cloudflare managed challenge; without it the legacy browser/Jina fallback chain is used
 - `JINA_API_KEY` — optional; Jina AI Reader API key (https://jina.ai). Anonymous r.jina.ai access is rejected with 401 when the egress IP has bad reputation (common with proxy exits), and new accounts require prepaid balance (402) — when Jina is unavailable the repair chain falls back to Wayback Machine snapshots (free, no auth); set the key only if the account has balance
 - `DATABASE_URL` — required for Stage 5 `publish` (e.g. `postgresql://postgres:postgres@localhost:5433/ai_insight`); tables are managed by drizzle migrations, the pipeline only writes
+- `DATA_SNAPSHOT_BASE_URL` — optional; 前端快照回退的远程基址，默认 `https://raw.githubusercontent.com/sqliang/daily-ai-insight-engine/data-snapshot/`；本地 `data/snapshot/` 始终优先
 
 ## Data directories (all gitignored)
 
-> 自 PostgreSQL 迁移起，`data/` 全部目录为 pipeline 本地工作存储（含文章正文），站点不再读取。
-> 站点数据由 Stage 5 publish 写入 PostgreSQL（`daily_reports` / `manifests` / `articles` 三表，schema 见 `src/lib/db/schema.ts`）。
+> 自 PostgreSQL 迁移起，`data/` 主要作为 pipeline 本地工作存储（含文章正文）。
+> 站点正常由 Stage 5 publish 写入的 PostgreSQL 读取（`daily_reports` / `manifests` / `articles` 三表，schema 见 `src/lib/db/schema.ts`）；唯一例外是 DB 抛错时回退读取 `data/snapshot/`。
 
 - `data/00_manifest/{source}_{date}.json` — URL manifests from scout stage → publish → `manifests` 表
 - `data/01_raw/{source}/*.md` — cleaned article text with YAML frontmatter (after ingest)
@@ -342,6 +343,7 @@ src/
 - `data/04_structured/all_articles.json` — time-window filtered merge (controlled by `lookback_days`). Includes metadata: `aggregated_stages`, `lookback_days`, `coverage_period`, `skipped_old`, `sources`. Input to Stage 4b synthesize
 - `data/04_structured/archive/{source}/{source}_{YYYY-MM-DD}.json` — cold data date shards. Contains articles older than `hot_days`, grouped by `created` date. Consumed by Stage 5 publish (full backfill merges hot + shards, URL-dedup). Shards are overwritten each aggregate run. Expired shards (older than `max_history_days`, default 365) are cleaned up automatically
 - `data/05_reports/daily-report.json` + `daily-report.md` — latest report output，包含 `specializedBrief` 专题洞察块（`projectInsights` / `paperHighlights` / `productInsights`）。Archive copies `daily-report-{date}.json` / `.md` are written alongside → publish → `daily_reports` 表
+- `data/snapshot/` — 站点离线快照（不提交）：`index.json`、`reports/`、近 7 天 `articles/` 热窗口与按源降序 `manifests/`。前端数据层通过 `withDbFallback` 形成"PostgreSQL → 本地快照 → 远程 data-snapshot 分支"回退链；仅 DB 抛错触发，DB 返回 null/空数组不触发。回退成功时 `PageShell` 顶部显示带 `generated_at` 的离线角标；DB 与快照均不可用时沿用 `DataUnavailable`
 
 Each `.md` file has YAML frontmatter that accumulates fields across pipeline stages. Key fields: `id` (SHA-256 hash of source URL), `created` (ingestion date, set to `date.today()` at Stage 1b), `published` (original publication date), `tldr` / `objective_summary` (Stage 2 fields), `impact_score` / `sentiment` (Stage 3 fields), `specialized_tags` / `github_assessment` / `paper_assessment` / `product_assessment` (source-aware 专题标注与分析字段)。
 

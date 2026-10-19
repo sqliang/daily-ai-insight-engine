@@ -20,9 +20,9 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  // 数据获取 fail-soft：CI 无 DATABASE_URL、或 Neon 挂起导致 DB 不可达时，
-  // 用空数据兜底渲染，保证构建顺利完成（issue #152 后续修复）。
-  // 页面为 1h ISR，DB 恢复后下一次再验证即重新生成真实数据。
+  // 数据获取 fail-soft：loadManifests 已在数据层提供快照回退，因此 DB
+  // 抛错时会先展示真实快照数据；只有 DB 与快照均不可用才用空数据兜底，
+  // 保证构建顺利完成。页面为 1h ISR，DB 恢复后再验证即回切实时数据。
   let tiersMeta: Record<string, TierMeta>;
   let sources: SourceStatus[] = [];
   let totalSources = 0;

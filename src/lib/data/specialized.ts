@@ -5,6 +5,7 @@
 //   - 定义项目 / 论文 / 产品三类洞察的 TypeScript 类型
 //   - 从 daily_reports 表的 specializedBrief 块加载当日简报
 //   - 从 articles 表加载论文专题文章（source_dir = arxiv-cs-ai）
+//   - DB 抛错时经 withDbFallback 回退到 data/snapshot；空数据语义不变
 //
 // 设计理由：
 //   专题洞察与综合日报在 Stage 4b 由主编 Agent 统一生成，前端不应再次聚合原始文章。
@@ -21,6 +22,9 @@
 
 import { and, eq } from "drizzle-orm";
 
+import { withDbFallback } from "@/lib/data/snapshot/fallback";
+import { getReportPayload as getReportPayloadFromSnapshot } from "@/lib/data/snapshot/reports";
+import { readSnapshotArticles } from "@/lib/data/snapshot/structured";
 import { getDb } from "@/lib/db/client";
 import { articles, dailyReports } from "@/lib/db/schema";
 
@@ -28,13 +32,8 @@ import { articles, dailyReports } from "@/lib/db/schema";
 // 日报 payload 加载（专题简报共用）
 // ---------------------------------------------------------------------------
 
-/**
- * 读取指定日期日报的完整 JSON（未校验的原始 payload）。
- *
- * 专题简报只需 specializedBrief 子树，且要对新旧两套字段做兼容处理，
- * 因此这里不做 Zod 校验、返回原始 JSON，由各 load*Brief 自行提取。
- */
-async function loadReportPayload(
+/** 从 daily_reports 表读取原始日报 payload（专题简报共用） */
+async function loadReportPayloadFromDb(
   date: string,
 ): Promise<Record<string, unknown> | null> {
   const db = getDb();
@@ -45,6 +44,13 @@ async function loadReportPayload(
     .limit(1);
   return (rows[0]?.report as Record<string, unknown> | undefined) ?? null;
 }
+
+// 专题简报只需 specializedBrief 子树，因此保留原始 JSON、不做 Zod 校验；
+// DB 抛错时回退快照，DB 返回 null（无日报）时不回退
+const loadReportPayload = withDbFallback(
+  loadReportPayloadFromDb,
+  getReportPayloadFromSnapshot,
+);
 
 // ---------------------------------------------------------------------------
 // 类型定义
@@ -267,30 +273,10 @@ export interface PaperEntry {
 // 论文数据加载
 // ---------------------------------------------------------------------------
 
-/**
- * 加载指定日期的论文洞察文章。
- *
- * 从 articles 表筛选 source_dir = 'arxiv-cs-ai' 且 created = date 的文章
- * （Stage 2 specialized_tags.paper 标注 + Stage 3 paper_assessment 深度分析），
- * 提取论文标注字段与分析结果。
- *
- * 参数：
- *    date: 目标日期，格式 YYYY-MM-DD（按 frontmatter created 过滤）
- *
- * 返回：
- *    PaperEntry 数组，无数据时返回空数组
- */
-export async function loadPaperArticles(
-  date: string,
-): Promise<PaperEntry[]> {
-  const db = getDb();
-  const rows = await db
-    .select({ payload: articles.payload })
-    .from(articles)
-    .where(and(eq(articles.sourceDir, "arxiv-cs-ai"), eq(articles.created, date)));
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return (rows.map((r) => r.payload) as any[]).map((a) => {
+/** 将 DB / 快照同构的文章 payload 映射为论文专题条目 */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function mapPaperEntries(payloads: any[]): PaperEntry[] {
+  return payloads.map((a) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const paperTags: any = a.specialized_tags?.paper || {};
 
@@ -325,6 +311,36 @@ export async function loadPaperArticles(
     };
   });
 }
+
+/** 从 articles 表加载指定 created 日期的论文文章 */
+async function loadPaperArticlesFromDb(date: string): Promise<PaperEntry[]> {
+  const db = getDb();
+  const rows = await db
+    .select({ payload: articles.payload })
+    .from(articles)
+    .where(and(eq(articles.sourceDir, "arxiv-cs-ai"), eq(articles.created, date)));
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return mapPaperEntries(rows.map((r) => r.payload) as any[]);
+}
+
+/** 从快照 arxiv-cs-ai 热窗口文章加载指定 created 日期的论文文章 */
+async function loadPaperArticlesFromSnapshot(
+  date: string,
+): Promise<PaperEntry[]> {
+  const rows = await readSnapshotArticles("arxiv-cs-ai");
+  return mapPaperEntries(rows.filter((article) => article.created === date));
+}
+
+/**
+ * 加载指定日期的论文洞察文章（按 frontmatter created 过滤）。
+ * DB 抛错时回退到快照；DB 返回空数组或快照热窗口未覆盖时均返回 []，
+ * 保留专题页既有的空状态语义。
+ */
+export const loadPaperArticles = withDbFallback(
+  loadPaperArticlesFromDb,
+  loadPaperArticlesFromSnapshot,
+);
 
 // ---------------------------------------------------------------------------
 // 论文聚合统计

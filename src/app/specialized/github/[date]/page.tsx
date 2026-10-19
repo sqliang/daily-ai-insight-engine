@@ -39,8 +39,8 @@ export const revalidate = 3600;
  * 构建期预渲染所有已知日报日期（dynamicParams 默认开启，
  * 新发布的日期仍按需生成并按 revalidate 缓存）。
  *
- * fail-soft：CI 无 DATABASE_URL、或 Neon 挂起导致 DB 不可达时，
- * 返回空数组跳过构建期预渲染（页面降级为运行时按需 ISR），
+ * fail-soft：listReportDates 在 DB 抛错时会先回退到快照；只有 DB 与
+ * 快照均不可用才返回 []，跳过预渲染并降级为运行时按需 ISR，
  * 绝不让构建失败（issue #152 后续修复）。
  */
 export async function generateStaticParams() {

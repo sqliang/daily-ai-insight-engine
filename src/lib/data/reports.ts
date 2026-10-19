@@ -1,163 +1,73 @@
 // ============================================================================
-// reports.ts — 日报数据访问层
+// reports.ts — 日报数据访问层（PostgreSQL 主数据源 + 快照回退）
 //
 // 提供日报列表和按日期读取的能力，供 /dashboard（卡片列表）、
 // /dashboard/[date]（可视化仪表盘）、/report/[date]（Markdown 全文）消费。
 //
-// 数据源：PostgreSQL daily_reports 表（由 pipeline Stage 5 publish 写入）。
+// 正常读取 PostgreSQL daily_reports 表；只有 DB 抛错时才通过 withDbFallback
+// 读取 data/snapshot（本地优先、远程 data-snapshot 分支兜底）。DB 返回
+// null / 空数组表示数据不存在，不触发快照回退。
 // ============================================================================
 
 import { cache } from "react";
 import { and, desc, eq, gte, inArray, lte } from "drizzle-orm";
 
 import { dailyReportSchema, type DailyReport } from "@/lib/agent/schema";
+import {
+  detectSpecializedAvailability,
+  type ListReportsPagination,
+  type ListReportsResult,
+  type ReportSummary,
+  type SpecializedAvailability,
+} from "@/lib/data/report-shared";
+import { withDbFallback } from "@/lib/data/snapshot/fallback";
+import {
+  getReport as getReportFromSnapshot,
+  getReportMarkdown as getReportMarkdownFromSnapshot,
+  listReportDates as listReportDatesFromSnapshot,
+  listReports as listReportsFromSnapshot,
+} from "@/lib/data/snapshot/reports";
 import type { DateRange } from "@/lib/data/types";
 import { getDb } from "@/lib/db/client";
 import { dailyReports } from "@/lib/db/schema";
 import { paginate } from "@/lib/utils/pagination";
 
-// ============================================================================
-// 类型定义
-// ============================================================================
-
-/** 日报卡片摘要 — 仅包含列表页卡片展示所需的字段 */
-export interface ReportSummary {
-  date: string;
-  reportTitle: string;
-  executiveSummary: string;
-  totalArticles: number;
-  /** 覆盖的信源数量 */
-  sourceCount: number;
-  /** 覆盖的语言种类 */
-  languages: string[];
-  /** 当日专题报告可用性 */
-  specialized: SpecializedAvailability;
-}
-
-// ============================================================================
-// 专题报告可用性
-// ============================================================================
-
-/** 各专题报告类型在特定日期的数据可用性 */
-export interface SpecializedAvailability {
-  github: { count: number; domains: Record<string, number> } | null;
-  product: { count: number } | null;
-  paper: { count: number } | null;
-}
-
-/**
- * 从日报数据中提取各专题报告的可用性。
- *
- * 项目与产品洞察优先读取新 projectInsights/productInsights。
- * 历史报告没有新字段时，回退到 githubHighlights/productHighlights。
- *
- * 参数：
- *    report: 已解析的 DailyReport
- *
- * 返回：
- *    SpecializedAvailability 对象
- */
-export function detectSpecializedAvailability(
-  report: DailyReport,
-): SpecializedAvailability {
-  const projectInsights = report.specializedBrief?.projectInsights;
-  const gh = report.specializedBrief?.githubHighlights;
-  const github = projectInsights
-    ? {
-        count: projectInsights.items.length,
-        domains: projectInsights.distribution,
-      }
-    : gh
-    ? {
-        count: gh.articleCount,
-        domains: gh.domainDistribution,
-      }
-    : null;
-
-  const productInsights = report.specializedBrief?.productInsights;
-  const ph = report.specializedBrief?.productHighlights;
-  const product = productInsights
-    ? {
-        count: productInsights.items.length,
-      }
-    : ph
-    ? {
-        count: ph.articleCount,
-      }
-    : null;
-
-  return {
-    github,
-    product,
-    // 论文洞察暂不恢复
-    paper: null,
-  };
-}
+// 保持既有对外导入路径不变，共享类型与纯函数由 report-shared 提供
+export { detectSpecializedAvailability };
+export type {
+  ListReportsPagination,
+  ListReportsResult,
+  ReportSummary,
+  SpecializedAvailability,
+};
 
 // ============================================================================
 // 数据读取
 // ============================================================================
 
-/**
- * 列出全部日报日期（仅 date 列，不搬运 JSONB）。
- *
- * 供各 [date] 动态段页面的 generateStaticParams 使用：构建期据此
- * 预渲染已知日期（配合 revalidate 形成 ISR），新日期走按需生成。
- * React cache() 包装：同一构建 worker 内多页面调用只查询一次。
- *
- * 返回：
- *   日期数组（YYYY-MM-DD，降序）
- */
-export const listReportDates = cache(async (): Promise<string[]> => {
+/** 从 daily_reports 表列出全部日报日期（仅 date 列，不搬运 JSONB） */
+async function listReportDatesFromDb(): Promise<string[]> {
   const db = getDb();
   const rows = await db
     .select({ date: dailyReports.date })
     .from(dailyReports)
     .orderBy(desc(dailyReports.date));
   return rows.map((r) => r.date);
-});
-
-/** listReports 的分页参数；缺省时返回范围内全部日报（兼容旧行为） */
-export interface ListReportsPagination {
-  /** 目标页码（1-based），越界由 paginate() clamp */
-  page?: number;
-  /** 每页条数 */
-  pageSize?: number;
-}
-
-/** listReports 返回值：当前页卡片摘要 + 分页与日期跨度元信息 */
-export interface ListReportsResult {
-  /** 当前页的日报摘要（按日期降序） */
-  reports: ReportSummary[];
-  /** 范围内日报总份数（文件名计数，无需解析 JSON） */
-  totalCount: number;
-  /** 当前页码（clamp 后） */
-  page: number;
-  /** 每页条数 */
-  pageSize: number;
-  /** 总页数 */
-  totalPages: number;
-  /** 范围内最早日报日期（无日报时为 null） */
-  oldestDate: string | null;
-  /** 范围内最新日报日期（无日报时为 null） */
-  latestDate: string | null;
 }
 
 /**
- * 查询日报日期列表（按日期范围过滤 + 降序排序）。
+ * 列出全部日报日期（YYYY-MM-DD，降序）。
  *
- * 两阶段实现（性能考虑）：
- *   1. 仅查 date 列做范围过滤与排序 —— 不搬运 JSONB，
- *      totalCount 与 oldest/latest 日期都在这一阶段得出
- *   2. 只对当前页 slice 命中的日期取整行 JSONB + Zod parse
- * 全量范围（"全部"预设）下，旧文件实现需解析目录内每一个日报 JSON
- * （44+ 个、共数 MB）才能渲染卡片列表，是 /dashboard 卡顿的根因之一。
- *
- * 参数：
- *   dateRange:  可选日期范围过滤
- *   pagination: 可选分页参数；缺省时返回范围内全部日报
+ * 供各 [date] 动态段页面的 generateStaticParams 使用。DB 抛错时自动回退
+ * 到快照 index.json，因此构建期 DB 挂起也能预渲染真实日期；只有快照也
+ * 不可用才向调用方抛错。React cache() 保留请求内去重。
  */
-export async function listReports(
+export const listReportDates = cache(
+  withDbFallback(listReportDatesFromDb, listReportDatesFromSnapshot),
+);
+
+/** 从 PostgreSQL 查询日报列表（两阶段：日期过滤分页 → 当前页 JSONB） */
+async function listReportsFromDb(
   dateRange?: DateRange,
   pagination?: ListReportsPagination,
 ): Promise<ListReportsResult> {
@@ -224,67 +134,70 @@ export async function listReports(
 }
 
 /**
+ * 查询日报日期列表（按日期范围过滤 + 降序排序）。
+ *
+ * 保持两阶段实现与 ReportSummary 结构；DB 抛错时回退到快照，
+ * DB 返回空列表时不回退。
+ */
+export const listReports = withDbFallback(
+  listReportsFromDb,
+  listReportsFromSnapshot,
+);
+
+/** 从 daily_reports 表读取指定日期的完整日报 */
+async function getReportFromDb(date: string): Promise<DailyReport | null> {
+  const db = getDb();
+  const rows = await db
+    .select({ report: dailyReports.report })
+    .from(dailyReports)
+    .where(eq(dailyReports.date, date))
+    .limit(1);
+
+  const raw = rows[0]?.report;
+  if (raw === undefined) return null;
+
+  try {
+    return dailyReportSchema.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
+/**
  * 读取指定日期的完整日报数据。
- * React cache() 包装：/report/[date] 等页面同一请求内会重复调用
- * （如 getReportMarkdown 降级路径 + 页面直读），请求内只查询一次。
- *
- * 参数：
- *   date: 日报日期，格式 YYYY-MM-DD
- *
- * 返回：
- *   DailyReport 或 null（该日期无报告或解析失败）
+ * React cache() 保留请求内去重（generateMetadata 与页面组件共享结果）；
+ * 只有 DB 抛错才回退快照，DB 返回 null（该日期无报告）时不回退。
  */
 export const getReport = cache(
-  async (date: string): Promise<DailyReport | null> => {
-    const db = getDb();
-    const rows = await db
-      .select({ report: dailyReports.report })
-      .from(dailyReports)
-      .where(eq(dailyReports.date, date))
-      .limit(1);
-
-    const raw = rows[0]?.report;
-    if (raw === undefined) return null;
-
-    try {
-      return dailyReportSchema.parse(raw);
-    } catch {
-      return null;
-    }
-  },
+  withDbFallback(getReportFromDb, getReportFromSnapshot),
 );
+
+/** 从 daily_reports 表读取 Markdown；为空时经 getReport 降级为 JSON → Markdown */
+async function getReportMarkdownFromDb(date: string): Promise<string | null> {
+  const db = getDb();
+  const rows = await db
+    .select({ reportMd: dailyReports.reportMd })
+    .from(dailyReports)
+    .where(eq(dailyReports.date, date))
+    .limit(1);
+
+  // 优先返回入库的 .md 全文（publish 时已剥离 YAML frontmatter）
+  const md = rows[0]?.reportMd;
+  if (md) return md;
+
+  // JSON → Markdown 降级；getReport 自身保留请求级缓存与快照回退
+  const report = await getReport(date);
+  if (!report) return null;
+
+  const { generateMarkdown } = await import("@/lib/report/generate-markdown");
+  return generateMarkdown(report);
+}
 
 /**
  * 读取指定日期的日报 Markdown 全文。
- *
- * 优先读取 daily_reports.report_md（管道 Stage 4b 产出、publish 入库），
- * 为空时降级为 report JSON → generateMarkdown() 转换。
- * React cache() 包装：请求内去重（issue #152）。
- *
- * 参数：
- *   date: 日报日期，格式 YYYY-MM-DD
- *
- * 返回：
- *   Markdown 字符串或 null（该日期无报告）
+ * .md 优先，缺失时 JSON → Markdown；DB 抛错时回退快照，
+ * React cache() 保留请求内去重。
  */
 export const getReportMarkdown = cache(
-  async (date: string): Promise<string | null> => {
-    const db = getDb();
-    const rows = await db
-      .select({ reportMd: dailyReports.reportMd })
-      .from(dailyReports)
-      .where(eq(dailyReports.date, date))
-      .limit(1);
-
-    // 优先返回入库的 .md 全文（publish 时已剥离 YAML frontmatter）
-    const md = rows[0]?.reportMd;
-    if (md) return md;
-
-    // JSON → Markdown 降级
-    const report = await getReport(date);
-    if (!report) return null;
-
-    const { generateMarkdown } = await import("@/lib/report/generate-markdown");
-    return generateMarkdown(report);
-  },
+  withDbFallback(getReportMarkdownFromDb, getReportMarkdownFromSnapshot),
 );
