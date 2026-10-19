@@ -1,5 +1,5 @@
 """
-pipeline/publish/publishers.py — Stage 5 数据收集、字段映射与 upsert
+pipeline/publish/publishers.py — Stage 5 数据收集、字段映射、upsert 与自动快照
 
 数据流：
     data/05_reports/daily-report-*.json|.md  → daily_reports 表
@@ -12,6 +12,8 @@ pipeline/publish/publishers.py — Stage 5 数据收集、字段映射与 upsert
     - 文章冷热合并复刻前端语义（src/lib/data/sources/structured-data.ts:loadStructuredData）：
       同一 source 内热数据优先，冷数据中 normalize 后相同 URL 的跳过。
     - 全部 INSERT ... ON CONFLICT (主键) DO UPDATE，天然幂等。
+    - publish_all 是显式 publish 与 synthesize 自动 publish 的共同入口；事务成功后
+      默认生成并推送站点快照，快照异常只记 warning，不影响主发布结果。
 """
 
 import json
@@ -472,6 +474,36 @@ def upsert_articles(conn: "psycopg.Connection", rows: list[dict]) -> int:
 
 
 # ---------------------------------------------------------------------------
+# 自动站点快照（成功提交后执行，失败降级）
+# ---------------------------------------------------------------------------
+
+def _publish_snapshot_after_success(data_root: Path) -> None:
+    """
+    在 DB 事务成功提交后生成并推送站点快照，失败仅记录 warning。
+
+    参数：
+        data_root: pipeline 本地数据目录；快照输出固定为其 snapshot/ 子目录。
+
+    设计理由：
+        快照是 PostgreSQL 的兜底副本，不应反向影响主数据发布结果；因此这里
+        捕获所有业务异常，让调用方保持 publish 自身的退出码和统计输出。
+    """
+    from .snapshot import generate_snapshot, push_snapshot
+
+    try:
+        stats = generate_snapshot(data_root)
+        result = push_snapshot(data_root / "snapshot")
+        logger.info(
+            "自动快照推送完成 files=%s bytes=%s commit=%s",
+            stats.get("files"),
+            stats.get("total_bytes"),
+            result.get("commit"),
+        )
+    except Exception as exc:
+        logger.warning("自动快照失败（不影响 publish）: %s", exc)
+
+
+# ---------------------------------------------------------------------------
 # 编排入口
 # ---------------------------------------------------------------------------
 
@@ -480,6 +512,7 @@ def publish_all(
     conn: Optional["psycopg.Connection"] = None,
     target_date: Optional[str] = None,
     include_archive: bool = True,
+    auto_snapshot: bool = True,
 ) -> dict:
     """
     Stage 5 主编排：收集三组数据并 upsert 到 PostgreSQL。
@@ -489,13 +522,16 @@ def publish_all(
                          便于测试注入 mock 连接）
         target_date:     非空时只发布该日期（created/日期字段匹配）的数据
         include_archive: 是否包含 archive 冷数据文章（--force 全量 backfill）
+        auto_snapshot:   DB 事务成功后是否自动生成并推送 data-snapshot；
+                         CLI --skip-snapshot 传入 False
 
     返回：
         统计 dict：{"reports": n, "manifests": n, "articles": n}
 
     设计理由：
         三组 upsert 放在一个事务里——任一组失败整体回滚，避免 DB 出现
-        "报告已更新但文章是旧版" 的半一致状态。
+        "报告已更新但文章是旧版" 的半一致状态。自动快照挂在这个共同入口，
+        让显式 publish 与 synthesize 成功后的自动 publish 使用同一语义。
     """
     from ..core.config_loader import resolve_data_dir
     from .db import get_connection
@@ -527,4 +563,6 @@ def publish_all(
         target_date, include_archive,
         stats["reports"], stats["manifests"], stats["articles"],
     )
+    if auto_snapshot:
+        _publish_snapshot_after_success(structured_dir.parent)
     return stats

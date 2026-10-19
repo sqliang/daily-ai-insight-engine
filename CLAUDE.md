@@ -156,9 +156,11 @@ uv run python pipeline/run.py publish            # Stage 5: upsert data/ → Pos
 uv run python pipeline/run.py publish --force    # Stage 5 full backfill: include archive cold-data shards
 uv run python pipeline/run.py publish --target-date 2026-07-21  # Stage 5: only that date's articles/manifests/report
 
-# 站点数据快照：DB 不可用时供前端回退读取，含 index、带日期日报、热文章与按源降序 manifest
+# 站点数据快照：publish 成功后默认自动生成并推送 data-snapshot；快照失败只记 warning，不影响发布结果
+uv run python pipeline/run.py publish --skip-snapshot  # 跳过本次 publish 后的自动快照
+# snapshot 命令保留为手动重建/修复入口
 uv run python pipeline/run.py snapshot             # 全量重建 data/snapshot/，只在本地生成
-uv run python pipeline/run.py snapshot --push      # 临时目录构建并 force push data-snapshot orphan 分支；快照位于分支根目录，不切换主工作区
+uv run python pipeline/run.py snapshot --push      # 手动 force push data-snapshot orphan 分支；快照位于分支根目录，不切换主工作区
 
 # Standalone aggregate (for edge cases: config changes, --lookback-days, --hot-days, --target-date, --force):
 uv run python pipeline/run.py aggregate          # Stage 4a: extract frontmatter → all_articles.json
@@ -343,7 +345,7 @@ src/
 - `data/04_structured/all_articles.json` — time-window filtered merge (controlled by `lookback_days`). Includes metadata: `aggregated_stages`, `lookback_days`, `coverage_period`, `skipped_old`, `sources`. Input to Stage 4b synthesize
 - `data/04_structured/archive/{source}/{source}_{YYYY-MM-DD}.json` — cold data date shards. Contains articles older than `hot_days`, grouped by `created` date. Consumed by Stage 5 publish (full backfill merges hot + shards, URL-dedup). Shards are overwritten each aggregate run. Expired shards (older than `max_history_days`, default 365) are cleaned up automatically
 - `data/05_reports/daily-report.json` + `daily-report.md` — latest report output，包含 `specializedBrief` 专题洞察块（`projectInsights` / `paperHighlights` / `productInsights`）。Archive copies `daily-report-{date}.json` / `.md` are written alongside → publish → `daily_reports` 表
-- `data/snapshot/` — 站点离线快照（不提交）：`index.json`、`reports/`、近 7 天 `articles/` 热窗口与按源降序 `manifests/`。前端数据层通过 `withDbFallback` 形成"PostgreSQL → 本地快照 → 远程 data-snapshot 分支"回退链；仅 DB 抛错触发，DB 返回 null/空数组不触发。回退成功时 `PageShell` 顶部显示带 `generated_at` 的离线角标；DB 与快照均不可用时沿用 `DataUnavailable`
+- `data/snapshot/` — 站点离线快照（不提交）：`index.json`、`reports/`、近 7 天 `articles/` 热窗口与按源降序 `manifests/`；publish 成功后默认自动重建并推送（`--skip-snapshot` 可关闭，`snapshot` 命令保留手动修复）。前端数据层通过 `withDbFallback` 形成"PostgreSQL → 本地快照 → 远程 data-snapshot 分支"回退链；仅 DB 抛错触发，DB 返回 null/空数组不触发。回退成功时 `PageShell` 顶部显示带 `generated_at` 的离线角标；DB 与快照均不可用时沿用 `DataUnavailable`
 
 Each `.md` file has YAML frontmatter that accumulates fields across pipeline stages. Key fields: `id` (SHA-256 hash of source URL), `created` (ingestion date, set to `date.today()` at Stage 1b), `published` (original publication date), `tldr` / `objective_summary` (Stage 2 fields), `impact_score` / `sentiment` (Stage 3 fields), `specialized_tags` / `github_assessment` / `paper_assessment` / `product_assessment` (source-aware 专题标注与分析字段)。
 

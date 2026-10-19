@@ -1,15 +1,20 @@
 """
-tests/test_publish.py — Stage 5 publish 字段映射纯函数测试
+tests/test_publish.py — Stage 5 publish 字段映射与自动快照编排测试
 
 只测 map_* / parse_* / clean_* / strip_* 等纯函数（不连真实数据库），
 覆盖：author wiki-link 剥壳、impact_score 三种形态、created 日期截断、
 manifest 文件名解析兜底、frontmatter 剥离、URL 规范化去重。
+自动快照测试全部 mock generate/push 与 DB 连接，不触发文件快照或真实 git。
 """
 
+import logging
 from datetime import date, timezone
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import MagicMock
 
+import pipeline.publish.publishers as publishers_module
+from pipeline.publish.cli import execute_publish
 from pipeline.publish.publishers import (
     clean_author,
     map_article,
@@ -291,3 +296,82 @@ class TestParseIsoDatetime:
     def test_invalid(self):
         assert parse_iso_datetime("bad") is None
         assert parse_iso_datetime(None) is None
+
+
+# ---------------------------------------------------------------------------
+# 成功发布后的自动快照（全部 mock，不触真实 DB / git）
+# ---------------------------------------------------------------------------
+
+def _mock_publish_db_success(monkeypatch, tmp_path: Path):
+    """为 publish_all 编排测试提供空数据集与 mock 事务连接。"""
+    monkeypatch.setattr(
+        "pipeline.core.config_loader.resolve_data_dir",
+        lambda name: tmp_path / name,
+    )
+    monkeypatch.setattr(publishers_module, "collect_report_rows", MagicMock(return_value=[]))
+    monkeypatch.setattr(publishers_module, "collect_manifest_rows", MagicMock(return_value=[]))
+    monkeypatch.setattr(publishers_module, "collect_article_rows", MagicMock(return_value=[]))
+    return MagicMock(), tmp_path
+
+
+class TestAutoSnapshot:
+    def test_publish_success_auto_generates_and_pushes_snapshot(self, monkeypatch, tmp_path):
+        """publish_all 事务成功后，默认按 data 根目录生成并推送快照。"""
+        conn, data_root = _mock_publish_db_success(monkeypatch, tmp_path)
+        generate_snapshot = MagicMock(return_value={"files": 1, "total_bytes": 10})
+        push_snapshot = MagicMock(return_value={"commit": "snapshot-commit"})
+        monkeypatch.setattr("pipeline.publish.snapshot.generate_snapshot", generate_snapshot)
+        monkeypatch.setattr("pipeline.publish.snapshot.push_snapshot", push_snapshot)
+
+        stats = publishers_module.publish_all(
+            conn=conn,
+            target_date="2026-10-10",
+            include_archive=True,
+        )
+
+        assert stats == {"reports": 0, "manifests": 0, "articles": 0}
+        generate_snapshot.assert_called_once_with(data_root)
+        push_snapshot.assert_called_once_with(data_root / "snapshot")
+
+    def test_snapshot_failure_warns_without_changing_publish_result(
+        self, monkeypatch, tmp_path, caplog
+    ):
+        """快照异常只产生 warning，publish CLI 仍返回成功退出码。"""
+        conn, _ = _mock_publish_db_success(monkeypatch, tmp_path)
+        generate_snapshot = MagicMock(side_effect=RuntimeError("snapshot failed"))
+        push_snapshot = MagicMock()
+        monkeypatch.setattr("pipeline.publish.snapshot.generate_snapshot", generate_snapshot)
+        monkeypatch.setattr("pipeline.publish.snapshot.push_snapshot", push_snapshot)
+        monkeypatch.setattr(
+            "pipeline.publish.db.get_connection",
+            MagicMock(return_value=conn),
+        )
+        args = SimpleNamespace(target_date=None, force=False, skip_snapshot=False)
+
+        with caplog.at_level(logging.WARNING, logger="pipeline.publish.publishers"):
+            exit_code = execute_publish(args)
+
+        assert exit_code == 0
+        push_snapshot.assert_not_called()
+        assert "自动快照失败" in caplog.text
+        assert "不影响 publish" in caplog.text
+
+    def test_skip_snapshot_flag_disables_auto_snapshot(self, monkeypatch):
+        """CLI --skip-snapshot 向共同入口传递关闭参数，不调用生成或推送。"""
+        publish_all = MagicMock(return_value={"reports": 1, "manifests": 2, "articles": 3})
+        generate_snapshot = MagicMock()
+        push_snapshot = MagicMock()
+        monkeypatch.setattr(publishers_module, "publish_all", publish_all)
+        monkeypatch.setattr("pipeline.publish.snapshot.generate_snapshot", generate_snapshot)
+        monkeypatch.setattr("pipeline.publish.snapshot.push_snapshot", push_snapshot)
+        args = SimpleNamespace(target_date=None, force=False, skip_snapshot=True)
+
+        assert execute_publish(args) == 0
+
+        publish_all.assert_called_once_with(
+            target_date=None,
+            include_archive=False,
+            auto_snapshot=False,
+        )
+        generate_snapshot.assert_not_called()
+        push_snapshot.assert_not_called()
