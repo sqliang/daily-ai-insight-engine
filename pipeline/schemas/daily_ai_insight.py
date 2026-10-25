@@ -17,7 +17,7 @@
     - 后续多 Agent 协同调度的核心数据契约
 """
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from .base_info import BaseInfo
 from .fact_extraction import FactExtraction
@@ -70,5 +70,4 @@ class DailyAIInsight(BaseModel):
         description="Phase 2：前瞻行动。未来 —— 有什么风险，该做什么？",
     )
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)

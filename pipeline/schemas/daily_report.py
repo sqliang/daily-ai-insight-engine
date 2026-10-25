@@ -18,7 +18,7 @@ from __future__ import annotations
 from enum import Enum
 from typing import Literal, Optional
 
-from pydantic import BaseModel, Field, ValidationError
+from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
 from .fact_extraction import EventType
 from .deep_analysis import Sentiment
@@ -46,8 +46,7 @@ class DataSourceSummary(BaseModel):
     languages: list[LanguageLabel] = Field(default_factory=list, description="语言覆盖")
     selection_rationale: str = Field("", alias="selectionRationale", description="信源选择说明")
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class EvidenceSource(BaseModel):
@@ -57,8 +56,7 @@ class EvidenceSource(BaseModel):
     title: str = Field(..., description="文章标题")
     url: str = Field(..., description="原文 URL")
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class TopEvent(BaseModel):
@@ -79,8 +77,7 @@ class TopEvent(BaseModel):
         description="证据来源的可解析结构，由 pipeline 后处理从 articleIds 解析",
     )
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class DeepDive(BaseModel):
@@ -91,8 +88,7 @@ class DeepDive(BaseModel):
     impact: str = Field(..., description="行业影响")
     watch_next: str = Field(..., alias="watchNext", description="后续关注")
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class TrendInsight(BaseModel):
@@ -104,8 +100,7 @@ class TrendInsight(BaseModel):
         ..., min_length=1, max_length=5, alias="supportingSignals", description="支撑信号"
     )
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class Signal(BaseModel):
@@ -115,8 +110,7 @@ class Signal(BaseModel):
     severity: SeverityLabel = Field(..., description="严重程度")
     rationale: str = Field(..., description="判断依据（中文）")
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class DistributionItem(BaseModel):
@@ -133,8 +127,7 @@ class ImpactRankingItem(BaseModel):
     title: str = Field(..., description="文章标题")
     score: float = Field(..., ge=1, le=10, description="影响力评分")
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class EntityFrequencyItem(BaseModel):
@@ -161,8 +154,7 @@ class VisualizationData(BaseModel):
         default_factory=list, alias="entityFrequency", description="实体频率"
     )
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class DailyReport(BaseModel):
@@ -197,8 +189,7 @@ class DailyReport(BaseModel):
         description="专题洞察（GitHub/论文/产品）。由主编 Agent 在 Stage 4b 生成，仅当有专题文章时存在。",
     )
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 # =============================================================================
@@ -245,8 +236,7 @@ class GithubBrief(BaseModel):
         description="当日 github-trending 文章总数",
     )
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class ProductBrief(BaseModel):
@@ -280,8 +270,7 @@ class ProductBrief(BaseModel):
         description="当日产品类文章总数",
     )
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class PaperBrief(BaseModel):
@@ -315,8 +304,7 @@ class PaperBrief(BaseModel):
         description="当日论文类文章总数",
     )
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class SpecializedSource(BaseModel):
@@ -334,8 +322,7 @@ class SpecializedSource(BaseModel):
     source_dir: str = Field(..., alias="sourceDir", description="信源目录名")
     url: str = Field("", description="原文 URL")
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class SpecializedInsightItem(BaseModel):
@@ -370,8 +357,7 @@ class SpecializedInsightItem(BaseModel):
         description="证据片段。每条建议 40-140 个中文字符，需表达完整事实并保留句末标点。",
     )
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class ObjectInsightBrief(BaseModel):
@@ -393,8 +379,7 @@ class ObjectInsightBrief(BaseModel):
     distribution: dict = Field(default_factory=dict, description="对象分布统计（如领域、AI 子类别、发布上下文）")
     source_coverage: list[str] = Field(default_factory=list, alias="sourceCoverage", description="覆盖信源目录列表")
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class SpecializedBrief(BaseModel):
@@ -445,8 +430,7 @@ class SpecializedBrief(BaseModel):
         description="新版产品洞察（含完整条目、来源引用、分布统计）",
     )
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 # =============================================================================

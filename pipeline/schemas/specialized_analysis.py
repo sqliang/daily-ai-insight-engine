@@ -9,7 +9,7 @@ Phase 1 实现 GitHubProjectAnalysis，Phase 2/3 追加 ProductAnalysis 和 Pape
 
 from enum import Enum
 from typing import List, Literal, Optional
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from .fact_extraction import AiDetail
 
@@ -74,8 +74,7 @@ class ObjectInsight(BaseModel):
             return value
         return [value]
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class ObjectInsightBundle(BaseModel):
@@ -87,8 +86,7 @@ class ObjectInsightBundle(BaseModel):
         description="本篇文章中高置信项目/产品对象的轻量洞察。",
     )
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 # =============================================================================
@@ -106,8 +104,7 @@ class ProjectProfile(BaseModel):
     description: str = Field(..., description="一句话项目定位")
     created_date: Optional[str] = Field(default=None, alias="createdDate", description="项目首次创建日期")
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class ProjectClassification(BaseModel):
@@ -133,8 +130,7 @@ class ProjectClassification(BaseModel):
         description="AI 专项标注（仅 AI/ML 项目）",
     )
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class CodeQualityIndicators(BaseModel):
@@ -148,8 +144,7 @@ class CodeQualityIndicators(BaseModel):
         description="文档质量。可选值: comprehensive, adequate, minimal, none",
     )
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class TechAssessment(BaseModel):
@@ -176,8 +171,7 @@ class TechAssessment(BaseModel):
         description="关键依赖分析",
     )
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class CommunityHealth(BaseModel):
@@ -209,8 +203,7 @@ class CommunityHealth(BaseModel):
         description="核心贡献者集中度风险",
     )
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class CompetitiveLandscape(BaseModel):
@@ -231,8 +224,7 @@ class CompetitiveLandscape(BaseModel):
         description="护城河分析",
     )
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class AdoptionGuidance(BaseModel):
@@ -261,8 +253,7 @@ class AdoptionGuidance(BaseModel):
         description="生产就绪时间评估。可选值: ready_now, needs_1_3_months, needs_6_plus_months, not_recommended",
     )
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class GitHubProjectAnalysis(BaseModel):
@@ -309,8 +300,7 @@ class GitHubProjectAnalysis(BaseModel):
         description="采用建议",
     )
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 # =============================================================================
@@ -406,8 +396,7 @@ class PaperMetadata(BaseModel):
     code_url: Optional[str] = Field(default=None, alias="codeUrl", description="配套代码仓库 URL")
     dataset_url: Optional[str] = Field(default=None, alias="datasetUrl", description="配套数据集 URL")
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class ResearchProblem(BaseModel):
@@ -418,8 +407,7 @@ class ResearchProblem(BaseModel):
     significance: str = Field(..., description="研究意义。可选值: fundamental, practical, incremental, niche")
     gap_addressed: str = Field(..., alias="gapAddressed", description="填补了什么研究空白")
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class Methodology(BaseModel):
@@ -431,8 +419,7 @@ class Methodology(BaseModel):
     inspiration_sources: List[str] = Field(default_factory=list, alias="inspirationSources", description="方法的启发来源")
     technical_depth: str = Field(..., alias="technicalDepth", description="技术深度。可选值: deeply_technical, moderate, accessible")
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class ExperimentalRigor(BaseModel):
@@ -444,8 +431,7 @@ class ExperimentalRigor(BaseModel):
     reproducibility_level: str = Field(..., alias="reproducibilityLevel", description="可复现性。可选值: fully_reproducible, mostly_reproducible, partially, not_reproducible")
     claimed_improvement: str = Field(..., alias="claimedImprovement", description="论文声称的提升")
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class LimitationsAndHonesty(BaseModel):
@@ -456,8 +442,7 @@ class LimitationsAndHonesty(BaseModel):
     overclaiming_assessment: str = Field(..., alias="overclaimingAssessment", description="过度宣称评估。可选值: honest, mild_overclaim, significant_overclaim")
     generalization_concern: str = Field(..., alias="generalizationConcern", description="泛化性担忧")
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class IndustrialRelevance(BaseModel):
@@ -468,8 +453,7 @@ class IndustrialRelevance(BaseModel):
     integration_readiness: str = Field(..., alias="integrationReadiness", description="集成就绪度。可选值: ready_to_integrate, needs_engineering, needs_research, distant")
     cost_efficiency_analysis: str = Field(..., alias="costEfficiencyAnalysis", description="成本效益分析")
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class RelatedWorkContext(BaseModel):
@@ -480,8 +464,7 @@ class RelatedWorkContext(BaseModel):
     opens_new_direction: bool = Field(..., alias="opensNewDirection", description="是否开辟了新方向")
     potential_follow_ups: List[str] = Field(default_factory=list, alias="potentialFollowUps", description="可能的后续研究方向")
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class PaperAnalysis(BaseModel):
@@ -527,8 +510,7 @@ class PaperAnalysis(BaseModel):
         description="与相关工作的关系",
     )
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 # =============================================================================
@@ -608,8 +590,7 @@ class ProductProfile(BaseModel):
     launch_context: str = Field(..., alias="launchContext", description="发布上下文。可选值: new_launch, major_update, pivot, funding_announcement")
     pricing_model: str = Field(..., alias="pricingModel", description="定价模式。可选值: freemium, subscription, usage_based, open_source, free, enterprise, unknown")
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class Positioning(BaseModel):
@@ -620,8 +601,7 @@ class Positioning(BaseModel):
     value_proposition: str = Field(..., alias="valueProposition", description="一句话价值主张")
     competitive_positioning: str = Field(..., alias="competitivePositioning", description="与同类的定位差异")
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class CoreFeature(BaseModel):
@@ -631,8 +611,7 @@ class CoreFeature(BaseModel):
     description: str = Field(..., description="功能描述")
     innovation_level: str = Field(..., alias="innovationLevel", description="创新程度。可选值: breakthrough, incremental, me_too")
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class FeatureBreakdown(BaseModel):
@@ -643,8 +622,7 @@ class FeatureBreakdown(BaseModel):
     ux_pain_points: List[str] = Field(default_factory=list, alias="uxPainPoints", description="体验槽点/摩擦点")
     missing_features: List[str] = Field(default_factory=list, alias="missingFeatures", description="用户需要但缺失的关键功能")
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class BusinessModelAnalysis(BaseModel):
@@ -655,8 +633,7 @@ class BusinessModelAnalysis(BaseModel):
     growth_signals: str = Field(..., alias="growthSignals", description="增长信号。可选值: strong, moderate, early, unclear")
     defensibility: str = Field(..., description="壁垒分析")
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class UserSentimentSynthesis(BaseModel):
@@ -667,8 +644,7 @@ class UserSentimentSynthesis(BaseModel):
     complaint_themes: List[str] = Field(default_factory=list, alias="complaintThemes", description="用户高频吐槽的点")
     key_user_quotes: List[str] = Field(default_factory=list, alias="keyUserQuotes", description="代表性用户评论（1-3 条）")
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class MarketAssessment(BaseModel):
@@ -679,8 +655,7 @@ class MarketAssessment(BaseModel):
     differentiation_quality: str = Field(..., alias="differentiationQuality", description="差异化质量。可选值: unique, meaningful, marginal, none")
     pmf_signal: str = Field(..., alias="pmfSignal", description="PMF 信号。可选值: strong_pmf, finding_pmf, too_early_to_tell, no_signal")
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class ProductAnalysis(BaseModel):
@@ -698,5 +673,4 @@ class ProductAnalysis(BaseModel):
     user_sentiment_synthesis: UserSentimentSynthesis = Field(..., alias="userSentimentSynthesis", description="用户反馈综合分析")
     market_assessment: MarketAssessment = Field(..., alias="marketAssessment", description="市场与竞品评估")
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)

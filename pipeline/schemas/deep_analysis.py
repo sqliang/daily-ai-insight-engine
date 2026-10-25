@@ -13,7 +13,7 @@
 
 from enum import Enum
 from typing import List
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class Sentiment(str, Enum):
@@ -220,8 +220,7 @@ class DeveloperSentiment(BaseModel):
         description="开发者关注或争议的焦点（如'API 定价'、'开源协议'、'性能水分'）",
     )
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class HypeAssessment(BaseModel):
@@ -265,8 +264,7 @@ class DomainDisruption(BaseModel):
         description="对商业模式或 SaaS 生态的重塑力。若是纯学术论文，推演其潜在商业化路径；若确实无关则填'无'",
     )
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class CompoundValue(BaseModel):
@@ -398,8 +396,7 @@ class QualitativeAssessment(BaseModel):
         description="工程落地复杂度/技术成熟度。防忽悠机制。",
     )
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class ValueAssessment(BaseModel):
@@ -439,8 +436,7 @@ class ValueAssessment(BaseModel):
         description="竞争波及方/受损者。风险预警的关键指标。与 keyBeneficiaries 互补：一个看赢家，一个看输家。",
     )
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class ForesightAndActionability(BaseModel):
@@ -474,5 +470,4 @@ class ForesightAndActionability(BaseModel):
         description="可执行建议：分析做完后，读者应该做什么。",
     )
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)

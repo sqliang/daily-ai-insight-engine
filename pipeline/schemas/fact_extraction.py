@@ -15,7 +15,7 @@
 
 from enum import Enum
 from typing import List, Literal, Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class EventType(str, Enum):
@@ -85,8 +85,7 @@ class Entities(BaseModel):
         description="核心关键人物（如 Sergey Levine, Sam Altman）",
     )
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class ObjectMention(BaseModel):
@@ -144,8 +143,7 @@ class ObjectMention(BaseModel):
         description="文章来源 ID。Stage 2 可能尚不知道该字段时允许为空，聚合/合成阶段会回填。",
     )
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class FactExtraction(BaseModel):
@@ -197,8 +195,7 @@ class FactExtraction(BaseModel):
         description="文章中出现的项目/产品等对象候选，用于后续专题洞察合并与引用。",
     )
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 # =============================================================================
@@ -237,8 +234,7 @@ class AiDetail(BaseModel):
         description="AI 关键技术标签（如 RAG, vector-db, function-calling, RLHF, MoE）",
     )
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class GitHubTags(BaseModel):
@@ -296,8 +292,7 @@ class GitHubTags(BaseModel):
         description="AI 专项标注。仅当 domain == 'ai_ml' 时存在",
     )
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class ProductTags(BaseModel):
@@ -339,8 +334,7 @@ class ProductTags(BaseModel):
         description="目标用户画像",
     )
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class PaperTags(BaseModel):
@@ -384,8 +378,7 @@ class PaperTags(BaseModel):
         description="方法类型（如 transformer, diffusion, RL-based）",
     )
 
-    class Config:
-        populate_by_name = True
+    model_config = ConfigDict(populate_by_name=True)
 
 
 class SpecializedTags(BaseModel):
